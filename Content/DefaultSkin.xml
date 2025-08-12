@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Stylesheet>
+  <Panel>
+    <Background>
+      <SolidBrush Color="#FF202020" />
+    </Background>
+  </Panel>
+
+  <Label>
+    <TextColor>#FFFFFFFF</TextColor>
+  </Label>
+
+  <VerticalStackPanel StyleName="CardWidget">
+    <Padding Left="5" Right="5" Top="5" Bottom="5" />
+    <Background>
+      <SolidBrush Color="#FF404040" />
+    </Background>
+    <Border>
+      <SolidBrush Color="#FF808080" />
+    </Border>
+    <BorderThickness>1</BorderThickness>
+  </VerticalStackPanel>
+
+  <VerticalStackPanel StyleName="CardWidgetDragging">
+    <Padding Left="5" Right="5" Top="5" Bottom="5" />
+    <Background>
+      <SolidBrush Color="#FF808080" />
+    </Background>
+    <Opacity>0.7</Opacity>
+  </VerticalStackPanel>
+
+  <Panel StyleName="DropZoneWidget">
+    <Background>
+      <SolidBrush Color="#FF404040" />
+    </Background>
+    <Padding Left="5" Right="5" Top="5" Bottom="5" />
+  </Panel>
+
+  <Panel StyleName="DropZoneWidgetHover">
+    <Background>
+      <SolidBrush Color="#FF606060" />
+    </Background>
+    <Padding Left="5" Right="5" Top="5" Bottom="5" />
+  </Panel>
+
+  <HorizontalStackPanel>
+    <Padding Left="5" Right="5" Top="5" Bottom="5" />
+    <Background>
+      <SolidBrush Color="#FF404040" />
+    </Background>
+  </HorizontalStackPanel>
+
+  <Button>
+    <Background>
+      <SolidBrush Color="#FF606060" />
+    </Background>
+    <OverBackground>
+      <SolidBrush Color="#FF808080" />
+    </OverBackground>
+    <PressedBackground>
+      <SolidBrush Color="#FFB0B0B0" />
+    </PressedBackground>
+    <Label>
+      <TextColor>#FFFFFFFF</TextColor>
+    </Label>
+  </Button>
+
+  <TextBox>
+    <Background>
+      <SolidBrush Color="#FF303030" />
+    </Background>
+    <TextColor>#FFFFFFFF</TextColor>
+    <Border>
+      <SolidBrush Color="#FF808080" />
+    </Border>
+    <BorderThickness>1</BorderThickness>
+  </TextBox>
+
+  <ProgressBar>
+    <Background>
+      <SolidBrush Color="#FF303030" />
+    </Background>
+    <Filled>
+      <SolidBrush Color="#FF00FF00" />
+    </Filled>
+    <Border>
+      <SolidBrush Color="#FF808080" />
+    </Border>
+    <BorderThickness>1</BorderThickness>
+  </ProgressBar>
+
+  <ProgressBar StyleName="ProgressBarCompleted">
+    <Background>
+      <SolidBrush Color="#FF303030" />
+    </Background>
+    <Filled>
+      <SolidBrush Color="#FF008000" /> <!-- Darker green for completed -->
+    </Filled>
+    <Border>
+      <SolidBrush Color="#FF808080" />
+    </Border>
+    <BorderThickness>1</BorderThickness>
+  </ProgressBar>
+
+</Stylesheet>
