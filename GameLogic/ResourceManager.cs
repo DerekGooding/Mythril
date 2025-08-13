@@ -1,3 +1,4 @@
+using Mythril.GameLogic.Jobs;
 using Mythril.GameLogic.Materia;
 using Newtonsoft.Json;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ public class ResourceManager
     public List<CardData> Cards { get; private set; }
     public List<Character> Characters { get; private set; }
     public List<Materia.Materia> Materia { get; private set; }
+    public List<Job> Jobs { get; private set; }
 
     public ResourceManager()
     {
@@ -24,6 +26,7 @@ public class ResourceManager
         Cards = new List<CardData>();
         Characters = new List<Character>();
         Materia = new List<Materia.Materia>();
+        Jobs = new List<Job>();
 
         LoadData();
     }
@@ -32,7 +35,7 @@ public class ResourceManager
     {
         var settings = new JsonSerializerSettings
         {
-            Converters = new List<JsonConverter> { new MateriaConverter() }
+            Converters = new List<JsonConverter> { new MateriaConverter(), new JobConverter() }
         };
 
         var cardsData = JsonConvert.DeserializeObject<List<CardData>>(File.ReadAllText("Data/cards.json"));
@@ -51,6 +54,12 @@ public class ResourceManager
         if (materiaData != null)
         {
             Materia = materiaData;
+        }
+
+        var jobsData = JsonConvert.DeserializeObject<List<Job>>(File.ReadAllText("Data/jobs.json"), settings);
+        if (jobsData != null)
+        {
+            Jobs = jobsData;
         }
     }
 

@@ -44,7 +44,7 @@ namespace Mythril.Tests
             // Assert
             var character = resourceManager.Characters.FirstOrDefault(c => c.Name == "Hero");
             Assert.IsNotNull(character);
-            Assert.AreEqual("Squire", character.Job);
+            Assert.AreEqual("Squire", character.JobName);
         }
 
         [TestMethod]

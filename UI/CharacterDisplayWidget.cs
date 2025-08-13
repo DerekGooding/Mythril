@@ -16,7 +16,7 @@ namespace Mythril.UI
 
             var jobLabel = new Label
             {
-                Text = $"({character.Job})",
+                Text = $"({character.Job?.Name})",
             };
 
             Widgets.Add(nameLabel);
