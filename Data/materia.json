@@ -1,0 +1,34 @@
+[
+  {
+    "Type": "Magic",
+    "Name": "Fire",
+    "Description": "Casts Fire, Fire2, Fire3",
+    "MaxAP": 1000,
+    "MaxLevel": 3,
+    "Spells": [ "Fire", "Fire2", "Fire3" ]
+  },
+  {
+    "Type": "Magic",
+    "Name": "Ice",
+    "Description": "Casts Ice, Ice2, Ice3",
+    "MaxAP": 1000,
+    "MaxLevel": 3,
+    "Spells": [ "Ice", "Ice2", "Ice3" ]
+  },
+  {
+    "Type": "Magic",
+    "Name": "Barrier",
+    "Description": "Casts Barrier, MBarrier, Reflect, Wall",
+    "MaxAP": 1200,
+    "MaxLevel": 4,
+    "Spells": [ "Barrier", "MBarrier", "Reflect", "Wall" ]
+  },
+  {
+    "Type": "Summon",
+    "Name": "Shiva",
+    "Description": "Summons the ice queen Shiva.",
+    "MaxAP": 1500,
+    "MaxLevel": 3,
+    "SummonName": "Shiva"
+  }
+]

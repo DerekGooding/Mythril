@@ -30,7 +30,7 @@ public class MainLayout : Grid
         _desktop = desktop; // Assign Desktop instance
         _resourceManager = resourceManager; // Assign ResourceManager instance
         _gameManager = new GameManager(_resourceManager); // Pass ResourceManager to GameManager
-        _partyManager = new PartyManager();
+        _partyManager = new PartyManager(_resourceManager);
         _taskManager = taskManager; // Assign TaskManager
 
         DefineGrid();
@@ -175,30 +175,12 @@ public class MainLayout : Grid
 
     private void AddInitialCards()
     {
-        var card1Data = new CardData { Id = "card1", Title = "Forest Foraging", Description = "Gather herbs and berries from the forest.", DurationSeconds = 60, RewardValue = 10 };
-        var card2Data = new CardData { Id = "card2", Title = "Mine Exploration", Description = "Explore the abandoned mine for valuable ores.", DurationSeconds = 120, RewardValue = 25 };
-        var card3Data = new CardData { Id = "card3", Title = "River Fishing", Description = "Catch fresh fish from the river.", DurationSeconds = 90, RewardValue = 15 };
-        var card4Data = new CardData { Id = "card4", Title = "Pray", Description = "Generate Faith through prayer.", DurationSeconds = 30, RewardValue = 5 };
-        var card5Data = new CardData { Id = "card5", Title = "Build Shrine", Description = "Consume Faith and Gold to build a shrine.", DurationSeconds = 180, RewardValue = 100 };
-
-
-        var card1 = new CardWidget(card1Data, DropZone);
-        var card2 = new CardWidget(card2Data, DropZone);
-        var card3 = new CardWidget(card3Data, DropZone);
-        var card4 = new CardWidget(card4Data, DropZone);
-        var card5 = new CardWidget(card5Data, DropZone);
-
-        _handPanel.Widgets.Add(card1);
-        _handPanel.Widgets.Add(card2);
-        _handPanel.Widgets.Add(card3);
-        _handPanel.Widgets.Add(card4);
-        _handPanel.Widgets.Add(card5);
-
-        CardWidgets.Add(card1);
-        CardWidgets.Add(card2);
-        CardWidgets.Add(card3);
-        CardWidgets.Add(card4);
-        CardWidgets.Add(card5);
+        foreach (var cardData in _resourceManager.Cards)
+        {
+            var cardWidget = new CardWidget(cardData, DropZone);
+            _handPanel.Widgets.Add(cardWidget);
+            CardWidgets.Add(cardWidget);
+        }
     }
 
     public void HandleCardDrop(CardWidget draggedCard)

@@ -1,3 +1,8 @@
+using Mythril.GameLogic.Materia;
+using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.IO;
+
 namespace Mythril.GameLogic;
 
 public class ResourceManager
@@ -6,11 +11,47 @@ public class ResourceManager
     public int Mana { get; private set; }
     public int Faith { get; private set; }
 
+    public List<CardData> Cards { get; private set; }
+    public List<Character> Characters { get; private set; }
+    public List<Materia.Materia> Materia { get; private set; }
+
     public ResourceManager()
     {
         Gold = 0;
         Mana = 0;
         Faith = 0;
+
+        Cards = new List<CardData>();
+        Characters = new List<Character>();
+        Materia = new List<Materia.Materia>();
+
+        LoadData();
+    }
+
+    private void LoadData()
+    {
+        var settings = new JsonSerializerSettings
+        {
+            Converters = new List<JsonConverter> { new MateriaConverter() }
+        };
+
+        var cardsData = JsonConvert.DeserializeObject<List<CardData>>(File.ReadAllText("Data/cards.json"));
+        if (cardsData != null)
+        {
+            Cards = cardsData;
+        }
+
+        var charactersData = JsonConvert.DeserializeObject<List<Character>>(File.ReadAllText("Data/characters.json"));
+        if (charactersData != null)
+        {
+            Characters = charactersData;
+        }
+
+        var materiaData = JsonConvert.DeserializeObject<List<Materia.Materia>>(File.ReadAllText("Data/materia.json"), settings);
+        if (materiaData != null)
+        {
+            Materia = materiaData;
+        }
     }
 
     public void AddGold(int amount)
