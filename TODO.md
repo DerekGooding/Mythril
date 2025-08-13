@@ -5,6 +5,7 @@
 - Task progress needs to exist as a seperate window as not to squish other UI elements.
 - Flash the Log button and Progress button if new information has been added since last opened. 
 - Impliment visual representation of Characters in their respective UI element. 
+- Fullscreen mode changes monitor resolution. This is not intended. Simply resize the game window to fill the existing space. Do not change resolution.
 
 ## Extended content work
 
