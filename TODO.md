@@ -37,3 +37,5 @@ This document outlines potential improvements and enhancements for the game's us
 18. **Refactor `MainLayout.cs` into smaller methods:** Break down the large `MainLayout` constructor into smaller, more manageable and readable methods (e.g., `InitializeResourcesPanel`, `InitializeHandPanel`, `InitializeButtonsPanel`).
 19. **Add tooltips to UI elements:** Implement tooltips for interactive UI elements like buttons and cards to provide additional information on hover.
 20. **Implement a simple "Inventory" panel:** Add a new panel to the `MainLayout` to display collected items or resources beyond Gold and Mana, providing a visual inventory for the player.
+
+This is a silly additional comment so jules picks up the new commits
