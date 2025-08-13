@@ -145,6 +145,22 @@ public class MainLayout : Grid
         };
         buttonPanel.Widgets.Add(settingsButton);
 
+        var materiaButton = new Button { Content = new Label { Text = "Materia" } };
+        materiaButton.Click += (s, a) =>
+        {
+            var materiaScreen = new MateriaScreen(_resourceManager);
+            materiaScreen.ShowModal(_desktop);
+        };
+        buttonPanel.Widgets.Add(materiaButton);
+
+        var jobButton = new Button { Content = new Label { Text = "Jobs" } };
+        jobButton.Click += (s, a) =>
+        {
+            var jobScreen = new JobScreen(_resourceManager);
+            jobScreen.ShowModal(_desktop);
+        };
+        buttonPanel.Widgets.Add(jobButton);
+
         var pauseButton = new Button { Content = new Label { Text = "Pause" } };
         pauseButton.Click += (s, a) => _game.TogglePause(); // Will implement TogglePause in Game1
         buttonPanel.Widgets.Add(pauseButton);
