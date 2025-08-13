@@ -1,3 +1,6 @@
+using Microsoft.Xna.Framework;
+using Myra.Graphics2D;
+using Myra.Graphics2D.Brushes;
 using Myra.Graphics2D.UI;
 using Mythril.GameLogic;
 
@@ -20,6 +23,12 @@ public class CardWidget : VerticalStackPanel
     {
         CardData = cardData;
         _dropZone = dropZone;
+
+        // Appearance
+        Padding = new Thickness(10);
+        Background = new SolidBrush("#333333");
+        Border = new SolidBrush(Color.White);
+        BorderThickness = new Thickness(1);
 
         // Title
         Widgets.Add(new Label { Text = cardData.Title, HorizontalAlignment = HorizontalAlignment.Center });
@@ -47,7 +56,7 @@ public class CardWidget : VerticalStackPanel
         if (Desktop == null || Desktop.TouchPosition == null) return;
         _isDragging = true;
         _dragOffset = new Point(Desktop.TouchPosition.Value.X - Bounds.X, Desktop.TouchPosition.Value.Y - Bounds.Y);
-        StyleName = "CardWidgetDragging";
+        Opacity = 0.8f;
         //e.Handled = true;
     }
 
@@ -56,7 +65,7 @@ public class CardWidget : VerticalStackPanel
         if (_isDragging)
         {
             _isDragging = false;
-            StyleName = "CardWidget";
+            Opacity = 1.0f;
             OnDragEnd?.Invoke(this);
             //e.Handled = true;
         }

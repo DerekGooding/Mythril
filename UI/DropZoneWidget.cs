@@ -1,6 +1,7 @@
-using Myra.Graphics2D.UI;
-using Myra.Graphics2D.Brushes; // For SolidBrush
 using Microsoft.Xna.Framework; // For Color
+using Myra.Graphics2D;
+using Myra.Graphics2D.Brushes; // For SolidBrush
+using Myra.Graphics2D.UI;
 using Mythril.GameLogic;
 
 namespace Mythril.UI;
@@ -8,8 +9,8 @@ namespace Mythril.UI;
 public class DropZoneWidget : Panel
 {
     private readonly TaskManager _taskManager;
-    private Color _defaultBackgroundColor = Color.LightBlue;
-    private Color _hoverBackgroundColor = Color.CornflowerBlue;
+    private readonly Color _defaultBackgroundColor = Color.DarkGray;
+    private readonly Color _hoverBackgroundColor = Color.Gray;
 
     public DropZoneWidget(TaskManager taskManager) // Constructor now takes TaskManager
     {
@@ -19,15 +20,27 @@ public class DropZoneWidget : Panel
         Height = 150;
         HorizontalAlignment = HorizontalAlignment.Center;
         VerticalAlignment = VerticalAlignment.Center;
+        Padding = new Thickness(10);
+        Background = new SolidBrush(_defaultBackgroundColor);
 
         // Subscribe to mouse events
         MouseEntered += DropZoneWidget_MouseEntered;
         MouseLeft += DropZoneWidget_MouseExited;
     }
 
-    private void DropZoneWidget_MouseEntered(object? sender, EventArgs e) => Background = new SolidBrush(Color.CornflowerBlue); // Change color on hover
+    private void DropZoneWidget_MouseEntered(object? sender, EventArgs e)
+    {
+        Background = new SolidBrush(_hoverBackgroundColor); // Change color on hover
+        Border = new SolidBrush(Color.White);
+        BorderThickness = new Thickness(2);
+    }
 
-    private void DropZoneWidget_MouseExited(object? sender, EventArgs e) => Background = new SolidBrush(Color.LightBlue); // Revert color on leave
+    private void DropZoneWidget_MouseExited(object? sender, EventArgs e)
+    {
+        Background = new SolidBrush(_defaultBackgroundColor); // Revert color on leave
+        Border = null;
+        BorderThickness = new Thickness(0);
+    }
 
     public void HandleDrop(CardWidget cardWidget)
     {

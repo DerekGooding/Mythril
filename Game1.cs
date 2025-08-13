@@ -38,11 +38,9 @@ public class Game1 : Game
         MyraEnvironment.Game = this;
         _assetManager.Open("DefaultSkin.xml");
 
+        _desktop = new Desktop();
         _mainLayout = new MainLayout(this, _taskManager, _desktop, _resourceManager);
-        _desktop = new Desktop
-        {
-            Root = _mainLayout
-        };
+        _desktop.Root = _mainLayout;
 
         // Subscribe to OnDragEnd for all initial CardWidgets
         foreach (var cardWidget in _mainLayout.CardWidgets)

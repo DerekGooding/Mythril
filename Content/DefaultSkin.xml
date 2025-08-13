@@ -102,4 +102,17 @@
     <BorderThickness>1</BorderThickness>
   </ProgressBar>
 
+  <ProgressBar StyleName="ThemedProgressBar">
+    <Background>
+      <SolidBrush Color="#FF222222" />
+    </Background>
+    <Filled>
+      <SolidBrush Color="#FF00A0FF" />
+    </Filled>
+    <Border>
+      <SolidBrush Color="#FF808080" />
+    </Border>
+    <BorderThickness>1</BorderThickness>
+  </ProgressBar>
+
 </Stylesheet>
