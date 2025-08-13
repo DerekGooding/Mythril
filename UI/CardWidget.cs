@@ -57,6 +57,7 @@ public class CardWidget : VerticalStackPanel
         _isDragging = true;
         _dragOffset = new Point(Desktop.TouchPosition.Value.X - Bounds.X, Desktop.TouchPosition.Value.Y - Bounds.Y);
         Opacity = 0.8f;
+        ZIndex = 100;
         //e.Handled = true;
     }
 
@@ -67,6 +68,7 @@ public class CardWidget : VerticalStackPanel
             _isDragging = false;
             Opacity = 1.0f;
             OnDragEnd?.Invoke(this);
+            ZIndex = 0;
             //e.Handled = true;
         }
     }
