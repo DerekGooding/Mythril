@@ -65,4 +65,9 @@ public class TaskManager(ResourceManager resourceManager)
         _activeTasks.Clear();
         _isPaused = false;
     }
+
+    public IEnumerable<TaskProgress> GetActiveTasks()
+    {
+        return _activeTasks;
+    }
 }

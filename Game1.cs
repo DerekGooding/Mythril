@@ -1,3 +1,4 @@
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Myra;
@@ -5,33 +6,50 @@ using Myra.Graphics2D.UI;
 using Mythril.GameLogic;
 using Mythril.UI;
 using AssetManagementBase;
+using System.Collections.Generic;
 
 namespace Mythril;
 
 public class Game1 : Game
 {
+    public static Game1? Instance { get; private set; }
+
+    public bool NewLogAvailable { get; private set; }
+    public bool NewTaskAvailable { get; private set; }
+
+    private readonly GraphicsDeviceManager _graphics;
+    private Desktop? _desktop;
+    private MainLayout? _mainLayout;
+    private CardWidget? _draggedCard;
+
+    private static LogWindow? _logWindow;
+    private static readonly List<string> _logMessages = new();
+    private TaskProgressWindow? _taskProgressWindow;
+
+    private readonly ResourceManager _resourceManager;
+    private readonly TaskManager _taskManager;
+    private readonly GameManager _gameManager;
+    private readonly AssetManager _assetManager;
+
     public Game1()
     {
-        _graphics = new GraphicsDeviceManager(this);
+        Instance = this;
+        _graphics = new GraphicsDeviceManager(this)
+        {
+            HardwareModeSwitch = false
+        };
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
 
         _resourceManager = new ResourceManager();
         _taskManager = new TaskManager(_resourceManager);
-        _gameManager = new GameManager(_resourceManager); // Pass resourceManager to GameManager
+        _gameManager = new GameManager(_resourceManager);
         _assetManager =  AssetManager.CreateFileAssetManager("Content");
-        _gameManager.OnGameOver += HandleGameOver; // Subscribe to game over event
-    }
 
-    private readonly GraphicsDeviceManager _graphics;
-    private Desktop? _desktop;
-    private MainLayout? _mainLayout; // Reference to the main UI layout
-    private CardWidget? _draggedCard; // To track the currently dragged card
-    private static LogWindow? _logWindow; // Static for easy access
-    private readonly ResourceManager _resourceManager;
-    private readonly TaskManager _taskManager;
-    private readonly GameManager _gameManager; // Add GameManager field
-    private readonly AssetManager _assetManager;
+        _gameManager.OnGameOver += HandleGameOver;
+        _taskManager.OnTaskStarted += OnTaskStarted;
+        _taskManager.OnTaskCompleted += OnTaskCompleted;
+    }
 
     protected override void LoadContent()
     {
@@ -42,23 +60,24 @@ public class Game1 : Game
         _mainLayout = new MainLayout(this, _taskManager, _desktop, _resourceManager);
         _desktop.Root = _mainLayout;
 
-        // Subscribe to OnDragEnd for all initial CardWidgets
         foreach (var cardWidget in _mainLayout.CardWidgets)
         {
             cardWidget.OnDragEnd += HandleCardDragEnd;
         }
-
-        // Initialize log window
-        _logWindow = new LogWindow();
     }
 
     public static void Log(string message)
     {
         Console.WriteLine(message);
+        _logMessages.Add(message);
         _logWindow?.AddLog(message);
+        if (Instance != null) Instance.NewLogAvailable = true;
     }
 
     private void HandleCardDragEnd(CardWidget cardWidget) => _draggedCard = cardWidget;
+
+    private KeyboardState _lastKeyboardState;
+    private bool _isPaused = false;
 
     protected override void Update(GameTime gameTime)
     {
@@ -66,17 +85,16 @@ public class Game1 : Game
         {
             _taskManager.Update(gameTime);
             _mainLayout?.Update(gameTime);
+            _taskProgressWindow?.UpdateTasks();
             _mainLayout?.UpdateResources(_resourceManager);
         }
 
-        // Handle card drop
         if (_draggedCard != null && Mouse.GetState().LeftButton == ButtonState.Released)
         {
             _mainLayout?.HandleCardDrop(_draggedCard);
             _draggedCard = null;
         }
 
-        // Toggle fullscreen on F11 press
         if (Keyboard.GetState().IsKeyDown(Keys.F11) && _lastKeyboardState.IsKeyUp(Keys.F11))
         {
             ToggleFullscreen();
@@ -85,31 +103,72 @@ public class Game1 : Game
 
         base.Update(gameTime);
     }
+
     protected override void Draw(GameTime gameTime)
     {
         GraphicsDevice.Clear(Color.CornflowerBlue);
-
         _desktop?.Render();
-
         base.Draw(gameTime);
     }
 
-    private KeyboardState _lastKeyboardState;
-    private bool _isPaused = false;
-
-    public void ToggleFullscreen() => _graphics.ToggleFullScreen();
-
-    public void ToggleLogWindow()
+    public void ToggleFullscreen()
     {
-        if (_logWindow is null || _desktop is null) return;
-
-        if (_logWindow.IsModal)
+        if (_graphics.IsFullScreen)
         {
-            _logWindow.Close();
+            // Go windowed
+            _graphics.PreferredBackBufferWidth = 1280;
+            _graphics.PreferredBackBufferHeight = 720;
+            _graphics.IsFullScreen = false;
         }
         else
         {
-            _logWindow.ShowModal(_desktop);
+            // Go fullscreen borderless
+            _graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+            _graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+            _graphics.IsFullScreen = true;
+        }
+
+        _graphics.ApplyChanges();
+    }
+
+    public void ToggleLogWindow()
+    {
+        if (_desktop is null) return;
+
+        if (_logWindow is not null)
+        {
+            _logWindow.Close();
+            _logWindow = null;
+            return;
+        }
+
+        NewLogAvailable = false;
+        _logWindow = new LogWindow();
+        foreach (var message in _logMessages)
+        {
+            _logWindow.AddLog(message);
+        }
+        _logWindow.Show(_desktop);
+    }
+
+    public void ToggleTaskProgressWindow()
+    {
+        if (_desktop is null) return;
+
+        if (_taskProgressWindow is not null)
+        {
+            _taskProgressWindow.Close();
+            _taskProgressWindow = null;
+            return;
+        }
+
+        NewTaskAvailable = false;
+        _taskProgressWindow = new TaskProgressWindow();
+        _taskProgressWindow.Show(_desktop);
+
+        foreach (var task in _taskManager.GetActiveTasks())
+        {
+            _taskProgressWindow.AddTask(task);
         }
     }
 
@@ -123,7 +182,7 @@ public class Game1 : Game
     private void HandleGameOver()
     {
         Log("Game Over!");
-        _isPaused = true; // Pause the game on game over
+        _isPaused = true;
         var gameOverDialog = new GameOverDialog();
         gameOverDialog.OnRestartGame += RestartGame;
         gameOverDialog.ShowModal(_desktop);
@@ -131,11 +190,21 @@ public class Game1 : Game
 
     private void RestartGame()
     {
-        // Reset game state
         _resourceManager.Reset();
-        _taskManager.Reset(); // You'll need to implement a Reset method in TaskManager
-        _mainLayout?.ResetCards(); // Reset cards in MainLayout
+        _taskManager.Reset();
+        _mainLayout?.ResetCards();
         _isPaused = false;
         Log("Game Restarted!");
+    }
+
+    private void OnTaskStarted(TaskProgress task)
+    {
+        NewTaskAvailable = true;
+        _taskProgressWindow?.AddTask(task);
+    }
+
+    private void OnTaskCompleted(TaskProgress task)
+    {
+        _taskProgressWindow?.RemoveTask(task);
     }
 }
