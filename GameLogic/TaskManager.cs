@@ -39,8 +39,24 @@ public class TaskManager(ResourceManager resourceManager)
     private void HandleTaskCompleted(TaskProgress task)
     {
         _activeTasks.Remove(task);
-        _resourceManager.AddGold(task.CardData.RewardValue); // Example reward
-        Game1.Log($"Task '{task.CardData.Title}' completed. Gained {task.CardData.RewardValue} Gold.");
+
+        switch (task.CardData.Id)
+        {
+            case "card4": // Pray
+                _resourceManager.AddFaith(task.CardData.RewardValue);
+                Game1.Log($"Task '{task.CardData.Title}' completed. Gained {task.CardData.RewardValue} Faith.");
+                break;
+            case "card5": // Build Shrine
+                _resourceManager.AddFaith(-10); // Consume 10 Faith
+                _resourceManager.AddGold(-50); // Consume 50 Gold
+                Game1.Log($"Task '{task.CardData.Title}' completed. Shrine built.");
+                break;
+            default:
+                _resourceManager.AddGold(task.CardData.RewardValue); // Example reward
+                Game1.Log($"Task '{task.CardData.Title}' completed. Gained {task.CardData.RewardValue} Gold.");
+                break;
+        }
+
         OnTaskCompleted?.Invoke(task);
     }
 
