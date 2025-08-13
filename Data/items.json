@@ -1,0 +1,28 @@
+[
+  {
+    "Type": "Consumable",
+    "Name": "Potion",
+    "Description": "Restores a small amount of HP.",
+    "Value": 50
+  },
+  {
+    "Type": "Consumable",
+    "Name": "Phoenix Down",
+    "Description": "Revives a fallen ally.",
+    "Value": 300
+  },
+  {
+    "Type": "Equipment",
+    "Name": "Bronze Sword",
+    "Description": "A basic sword.",
+    "Value": 100,
+    "Slot": "Weapon"
+  },
+  {
+    "Type": "Equipment",
+    "Name": "Leather Armor",
+    "Description": "Simple leather armor.",
+    "Value": 150,
+    "Slot": "Armor"
+  }
+]

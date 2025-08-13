@@ -20,9 +20,9 @@
 ## UI (20 points)
 - [ ] 16. Redesign the main game screen to be more visually appealing.
 - [ ] 17. Create a dedicated inventory screen.
-- [ ] 18. Create a dedicated character status screen.
-- [ ] 19. Create a dedicated job screen for changing and viewing jobs.
-- [ ] 20. Create a dedicated materia screen for equipping and managing materia.
+- [x] 18. Create a dedicated character status screen.
+- [x] 19. Create a dedicated job screen for changing and viewing jobs.
+- [x] 20. Create a dedicated materia screen for equipping and managing materia.
 - [ ] 21. Create a dedicated shop screen for buying and selling items.
 - [ ] 22. Create a dedicated save/load screen.
 - [ ] 23. Create a dedicated quest log screen.
