@@ -1,3 +1,5 @@
+using System;
+using Microsoft.Xna.Framework;
 using Myra.Graphics2D;
 using Myra.Graphics2D.UI;
 using Mythril.GameLogic;
@@ -10,10 +12,12 @@ public class MainLayout : Grid
     public List<CardWidget> CardWidgets { get; }
 
     private GameManager _gameManager = null!;
+    private PartyManager _partyManager = null!;
     private TaskManager _taskManager = null!; // Added TaskManager
-    private VerticalStackPanel _taskProgressPanel = null!; // Panel to hold task progress widgets
     private Game1 _game = null!; // Reference to Game1 instance
     private Desktop _desktop = null!; // Reference to the Myra Desktop
+    private Button _logButton = null!;
+    private Button _progressButton = null!;
     private Label _goldLabel = null!;
     private Label _manaLabel = null!;
     private Label _faithLabel = null!;
@@ -26,18 +30,15 @@ public class MainLayout : Grid
         _desktop = desktop; // Assign Desktop instance
         _resourceManager = resourceManager; // Assign ResourceManager instance
         _gameManager = new GameManager(_resourceManager); // Pass ResourceManager to GameManager
+        _partyManager = new PartyManager();
         _taskManager = taskManager; // Assign TaskManager
-
-        // Subscribe to TaskManager events
-        _taskManager.OnTaskStarted += OnTaskStarted;
-        _taskManager.OnTaskCompleted += OnTaskCompleted;
 
         DefineGrid();
         InitializeResourcePanel();
         InitializeHandPanel();
         InitializeDropZone();
         InitializeButtonPanel();
-        InitializeTaskProgressPanel();
+        InitializePartyPanel();
 
         // Add some CardWidget instances
         CardWidgets = [];
@@ -50,7 +51,6 @@ public class MainLayout : Grid
         RowsProportions.Add(new Proportion(ProportionType.Auto)); // Top row for resources
         RowsProportions.Add(new Proportion(ProportionType.Fill)); // Middle row for hand panel
         RowsProportions.Add(new Proportion(ProportionType.Auto)); // Bottom row for buttons
-        RowsProportions.Add(new Proportion(ProportionType.Auto)); // New row for task progress
 
         // Define columns
         ColumnsProportions.Add(new Proportion(ProportionType.Fill)); // Left column for hand panel
@@ -149,25 +149,28 @@ public class MainLayout : Grid
         pauseButton.Click += (s, a) => _game.TogglePause(); // Will implement TogglePause in Game1
         buttonPanel.Widgets.Add(pauseButton);
 
-        var logButton = new Button { Content = new Label { Text = "Log" } };
-        logButton.Click += (s, a) => _game.ToggleLogWindow();
-        buttonPanel.Widgets.Add(logButton);
+        _logButton = new Button { Content = new Label { Text = "Log" } };
+        _logButton.Click += (s, a) => _game.ToggleLogWindow();
+        buttonPanel.Widgets.Add(_logButton);
+
+        _progressButton = new Button { Content = new Label { Text = "Progress" } };
+        _progressButton.Click += (s, a) => _game.ToggleTaskProgressWindow();
+        buttonPanel.Widgets.Add(_progressButton);
 
         SetRow(buttonPanel, 2);
         Widgets.Add(buttonPanel);
     }
 
-    private void InitializeTaskProgressPanel()
+    private void InitializePartyPanel()
     {
-        // Task Progress Panel
-        _taskProgressPanel = new VerticalStackPanel
+        var partyPanel = new PartyPanel(_partyManager)
         {
-            HorizontalAlignment = HorizontalAlignment.Stretch,
-            VerticalAlignment = VerticalAlignment.Top,
-            Spacing = 5
+            HorizontalAlignment = HorizontalAlignment.Center,
+            VerticalAlignment = VerticalAlignment.Center
         };
-        SetRow(_taskProgressPanel, 3); // Place in the new row
-        Widgets.Add(_taskProgressPanel);
+        SetRow(partyPanel, 1);
+        SetColumn(partyPanel, 2);
+        Widgets.Add(partyPanel);
     }
 
     private void AddInitialCards()
@@ -218,12 +221,24 @@ public class MainLayout : Grid
 
     public void Update(GameTime gameTime)
     {
-        foreach (var widget in _taskProgressPanel.Widgets)
+        var flashScale = 1.0f + 0.1f * (float)Math.Sin(gameTime.TotalGameTime.TotalSeconds * 5);
+
+        if (_game.NewLogAvailable)
         {
-            if (widget is TaskProgressWidget taskProgressWidget)
-            {
-                taskProgressWidget.UpdateProgress();
-            }
+            _logButton.Scale = new Vector2(flashScale, flashScale);
+        }
+        else
+        {
+            _logButton.Scale = Vector2.One;
+        }
+
+        if (_game.NewTaskAvailable)
+        {
+            _progressButton.Scale = new Vector2(flashScale, flashScale);
+        }
+        else
+        {
+            _progressButton.Scale = Vector2.One;
         }
     }
 
@@ -232,22 +247,5 @@ public class MainLayout : Grid
         _handPanel.Widgets.Clear();
         CardWidgets.Clear();
         AddInitialCards();
-    }
-
-    private void OnTaskStarted(TaskProgress task)
-    {
-        var widget = new TaskProgressWidget(task);
-        _taskProgressPanel.Widgets.Add(widget);
-    }
-
-    private void OnTaskCompleted(TaskProgress task)
-    {
-        // Find and remove the completed task's widget
-        var widgetToRemove = _taskProgressPanel.Widgets.OfType<TaskProgressWidget>()
-                                .FirstOrDefault(w => w.TaskProgress == task); // Assuming TaskProgressWidget has a public TaskProgress property
-        if (widgetToRemove != null)
-        {
-            _taskProgressPanel.Widgets.Remove(widgetToRemove);
-        }
     }
 }
