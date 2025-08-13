@@ -27,7 +27,7 @@ public class Game1 : Game
     private Desktop? _desktop;
     private MainLayout? _mainLayout; // Reference to the main UI layout
     private CardWidget? _draggedCard; // To track the currently dragged card
-    private static TextBox? _logTextBox; // Static for easy access
+    private static LogWindow? _logWindow; // Static for easy access
     private readonly ResourceManager _resourceManager;
     private readonly TaskManager _taskManager;
     private readonly GameManager _gameManager; // Add GameManager field
@@ -48,25 +48,14 @@ public class Game1 : Game
             cardWidget.OnDragEnd += HandleCardDragEnd;
         }
 
-        // Initialize log text box
-        _logTextBox = new TextBox
-        {
-            Width = 400,
-            Height = 150,
-            HorizontalAlignment = HorizontalAlignment.Right,
-            VerticalAlignment = VerticalAlignment.Bottom,
-            Multiline = true // Equivalent to Wrap for TextBox
-        };
-        _desktop.Widgets.Add(_logTextBox); // Add to desktop directly for now
+        // Initialize log window
+        _logWindow = new LogWindow();
     }
 
     public static void Log(string message)
     {
         Console.WriteLine(message);
-        if (_logTextBox != null)
-        {
-            _logTextBox.Text += message + "\n";
-        }
+        _logWindow?.AddLog(message);
     }
 
     private void HandleCardDragEnd(CardWidget cardWidget) => _draggedCard = cardWidget;
@@ -109,6 +98,20 @@ public class Game1 : Game
     private bool _isPaused = false;
 
     public void ToggleFullscreen() => _graphics.ToggleFullScreen();
+
+    public void ToggleLogWindow()
+    {
+        if (_logWindow is null || _desktop is null) return;
+
+        if (_logWindow.IsModal)
+        {
+            _logWindow.Close();
+        }
+        else
+        {
+            _logWindow.ShowModal(_desktop);
+        }
+    }
 
     public void TogglePause()
     {

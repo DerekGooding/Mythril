@@ -27,8 +27,8 @@ public class CardWidget : VerticalStackPanel
         // Appearance
         Padding = new Thickness(10);
         Background = new SolidBrush("#333333");
-        Border = new SolidBrush(Color.White);
-        BorderThickness = new Thickness(1);
+        Border = new SolidBrush(Color.Yellow);
+        BorderThickness = new Thickness(4);
 
         // Title
         Widgets.Add(new Label { Text = cardData.Title, HorizontalAlignment = HorizontalAlignment.Center });

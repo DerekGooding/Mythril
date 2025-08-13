@@ -1,3 +1,4 @@
+using Myra.Graphics2D;
 using Myra.Graphics2D.UI;
 using Mythril.GameLogic;
 
@@ -95,7 +96,8 @@ public class MainLayout : Grid
         {
             HorizontalAlignment = HorizontalAlignment.Stretch,
             VerticalAlignment = VerticalAlignment.Stretch,
-            Spacing = 10 // Add spacing between cards
+            Spacing = 20, // Add spacing between cards
+            Padding = new Thickness(10)
         };
         SetRow(_handPanel, 1);
         SetColumn(_handPanel, 0);
@@ -121,7 +123,7 @@ public class MainLayout : Grid
         var buttonPanel = new HorizontalStackPanel
         {
             HorizontalAlignment = HorizontalAlignment.Center,
-            Spacing = 10
+            Spacing = 20
         };
         var collectButton = new Button { Content = new Label { Text = "Collect" } };
         collectButton.Click += (s, a) => _gameManager.CollectRewards();
@@ -146,6 +148,10 @@ public class MainLayout : Grid
         var pauseButton = new Button { Content = new Label { Text = "Pause" } };
         pauseButton.Click += (s, a) => _game.TogglePause(); // Will implement TogglePause in Game1
         buttonPanel.Widgets.Add(pauseButton);
+
+        var logButton = new Button { Content = new Label { Text = "Log" } };
+        logButton.Click += (s, a) => _game.ToggleLogWindow();
+        buttonPanel.Widgets.Add(logButton);
 
         SetRow(buttonPanel, 2);
         Widgets.Add(buttonPanel);
