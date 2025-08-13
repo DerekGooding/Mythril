@@ -45,6 +45,6 @@ public class DropZoneWidget : Panel
     public void HandleDrop(CardWidget cardWidget)
     {
         _taskManager.StartTask(cardWidget.CardData);
-        Console.WriteLine($"Card {cardWidget.CardData.Title} dropped on DropZone.");
+        Game1.Log($"Card {cardWidget.CardData.Title} dropped on DropZone.");
     }
 }
