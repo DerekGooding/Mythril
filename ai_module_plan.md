@@ -1,123 +1,147 @@
-# AI Module Plan
+# AI Module Plan (Enhanced for Gemini-CLI & Jules)
 
 ## 1. Overview
 
-This document outlines a plan for creating a module that allows an LLM to interact with and test the Mythril MonoGame project. The module will enable the LLM to generate a series of test commands, have the game execute them, and then receive one or more screenshots of the game's state for review. This will create a powerful automated testing and validation loop.
+This module allows an AI agent (Gemini-CLI, Jules, or similar) to directly interact with and test the **Mythril MonoGame** project.  
+It supports generating commands, executing them in the running game, and returning screenshots for validation.  
+The architecture is **transport-agnostic**, meaning we can switch between TCP, named pipes, standard I/O, or even direct function calls depending on the environment.
+
+The goal is to enable a reliable, iterative testing loop between the AI and the game, without locking ourselves into a single IPC method.
+
+---
 
 ## 2. Architecture
 
-The module will consist of two main components:
+**Core components:**
 
-1.  **Game Instrumentation:** Code added to the existing `Mythril` project to allow it to be controlled by an external process.
-2.  **Controller Application:** A new console application within the `Mythril` solution that orchestrates the testing process.
+1. **Game Instrumentation** – Hooks inside `Mythril` to process structured commands and return responses.
+2. **Controller Application** – A console app that launches and controls the game process, manages the IPC transport, and mediates between the game and the AI agent.
+3. **Transport Layer** – Pluggable IPC implementation (TCP, named pipes, stdio) selected at runtime.
+4. **Agent Adapter** – Handles quirks of different AI agents (Gemini-CLI, Jules).
 
-Here is a diagram of the proposed architecture:
+**Simplified Flow:**  
+LLM / AI Agent → Agent Adapter → Controller App → Transport Layer → Mythril Game
 
-```
-+----------------------+
-|      LLM             |
-+----------------------+
-          ^
-          | (3. Get Commands, 7. Send Screenshot)
-          v
-+----------------------+
-| Controller App       |
-| (C# Console)         |
-+----------------------+
-          ^
-          | (4. Send Commands, 6. Receive Screenshot Path)
-          v
-+----------------------+
-| Mythril Game         |
-| (MonoGame)           |
-+----------------------+
+---
+
+## 3. Transport Layer
+
+We define a simple interface:
+
+```csharp
+public interface ICommandTransport
+{
+    Task SendAsync(string message);
+    Task<string> ReceiveAsync();
+}
 ```
 
-## 3. Game Instrumentation
+**Implementations:**
+- **StdIoTransport** → For agents that run the process interactively in the same shell (Gemini-CLI, Jules).
+- **NamedPipeTransport** → Local-only IPC, faster and more secure than TCP.
+- **TcpTransport** → For remote or cross-machine scenarios.
+
+Default: `StdIoTransport` for Gemini-CLI and Jules.
+
+---
+
+## 4. Command Protocol
+
+All communication uses **structured JSON**, not raw strings.  
+Example:
+```json
+{
+    "action": "CLICK_BUTTON",
+    "target": "Settings",
+    "args": {}
+}
+```
+
+**Benefits:**
+- Easy to extend.
+- Easier for LLMs to generate valid commands.
+- Safer to parse and validate.
+
+---
+
+## 5. Game Instrumentation
 
 ### Command Listener
-
-The game will listen for commands on a local TCP socket. This provides a simple and effective way for the controller application to send commands to the running game.
-
-*   **Implementation:** Use `System.Net.Sockets.TcpListener` to create a simple server within the `Game1` class.
-*   **Threading:** The listener will run on a separate thread to avoid blocking the game loop.
-
-### Command Parser
-
-The game will parse incoming command strings. The command format will be simple, with one command per line.
-
-*   **Format:** `COMMAND [ARG1] [ARG2] ...`
-*   **Example:** `CLICK_BUTTON Settings`
+- The game runs a background listener on the chosen transport.
+- Validates and queues incoming commands.
 
 ### Command Executor
+- Executes supported commands:
+    - `CLICK_BUTTON <label>` – Clicks a UI button by text.
+    - `CLICK_COORDS <x> <y>` – Clicks a specific point.
+    - `WAIT <seconds>` – Pauses execution.
+    - `SCREENSHOT [inline|path]` – Sends screenshot (base64 if inline).
+    - `PING` – Confirms game is alive.
+    - `EXIT` – Shuts down game.
 
-The game will execute the parsed commands. This will be handled by a new `CommandExecutor` class.
+---
 
-*   **Supported Commands:**
-    *   `CLICK_BUTTON <button_text>`: Clicks a UI button with the specified text.
-    *   `WAIT <seconds>`: Pauses execution for a specified number of seconds.
-    *   `SCREENSHOT <filename>`: Takes a screenshot and saves it to the specified file.
-    *   `EXIT`: Closes the game.
+## 6. Screenshot Handling
 
-## 4. Screenshot Utility
+Two modes:
+1. **Path Mode** – Saves to file, returns path (for local/human testers).
+2. **Inline Mode** – Encodes screenshot as base64, sends directly over transport (for remote/AI agents).
 
-The game will be able to take a screenshot of its current state.
+**Implementation:**  
+- Use `RenderTarget2D` → `Texture2D.SaveAsPng` → `FileStream` or in-memory stream.
 
-*   **Implementation:** Use `Microsoft.Xna.Framework.Graphics.RenderTarget2D` to render the current scene to a texture, then use `Texture2D.SaveAsPng` to save it to a file.
-*   **File Path:** The controller will specify the file path for the screenshot.
+---
 
-## 5. Controller Application
-
-The controller application will be a new C# console project in the `Mythril` solution.
+## 7. Controller Application
 
 ### Process Management
+- Starts the game as a child process.
+- Handles cleanup if the game crashes or stalls.
 
-The controller will start the `Mythril` game as a child process.
+### AI Agent Integration
+Interface:
+```csharp
+public interface IAgentAdapter
+{
+    Task<string[]> GetCommandsAsync(string prompt);
+    Task SendImageAsync(byte[] imageData);
+}
+```
+Adapters:
+- **GeminiCliAdapter**
+- **JulesAdapter**
 
-*   **Implementation:** Use `System.Diagnostics.Process` to start and manage the game process.
+### Workflow
+1. Detect which agent is active.
+2. Pick the right `ICommandTransport`.
+3. Launch the game with appropriate IPC mode.
+4. Loop:
+    - Get commands from AI.
+    - Send to game.
+    - Receive screenshots/responses.
+    - Send results back to AI.
+5. Exit gracefully.
 
-### LLM Integration
+---
 
-The controller will need to communicate with an LLM to get test commands. This will be abstracted behind an `ILlmProvider` interface.
+## 8. Configuration
 
-*   **Interface:**
-    ```csharp
-    public interface ILlmProvider
-    {
-        Task<string[]> GetTestCommandsAsync(string prompt);
-        Task SendScreenshotAsync(string screenshotPath);
-    }
-    ```
+**`ai_config.json` example:**
+```json
+{
+    "transport": "stdio",
+    "screenshotMode": "inline",
+    "pipeName": "mythril_ai",
+    "tcpPort": 5555
+}
+```
 
-### Command Generation
+---
 
-The controller will get commands from the LLM and send them to the game via the TCP socket.
+## 9. Best Practices
 
-### Screenshot Retrieval
-
-The controller will receive the path to the saved screenshot from the game and then pass it to the LLM.
-
-## 6. Workflow
-
-1.  The user starts the **Controller Application**.
-2.  The controller starts the **Mythril Game** as a child process.
-3.  The controller sends a prompt to the **LLM** to get a set of test commands.
-4.  The controller sends the commands to the game one by one over the TCP socket.
-5.  The game executes the commands. When it encounters a `SCREENSHOT` command, it takes a screenshot and saves it to a file.
-6.  When the game has finished executing all commands (or receives an `EXIT` command), it closes.
-7.  The controller sends the saved screenshot(s) to the **LLM** for review.
-
-## 7. Implementation Details
-
-### Project Structure
-
-*   A new project, `Mythril.Controller`, will be added to the `Mythril.sln` solution.
-*   New classes for command handling will be added to the `Mythril` project, likely in a new `GameLogic/AI` namespace.
-
-### Dependencies
-
-*   No new external dependencies are anticipated.
-
-### Configuration
-
-*   A new configuration file (e.g., `ai_config.json`) will be created to store settings for the controller application, such as the port for the TCP listener and any LLM API keys.
+- Default to **StdIO** for Gemini-CLI and Jules (no networking setup, safest).
+- Only enable TCP if you actually need remote testing, and bind to `127.0.0.1`.
+- Validate all incoming JSON before executing commands.
+- Include heartbeat checks so the controller knows the game is responsive.
+- Allow mid-run feedback from the AI, not just run-once-then-exit.
