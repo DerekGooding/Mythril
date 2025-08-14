@@ -1,0 +1,6 @@
+{
+    "transport": "stdio",
+    "screenshotMode": "inline",
+    "pipeName": "mythril_ai",
+    "tcpPort": 5555
+}

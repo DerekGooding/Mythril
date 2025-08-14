@@ -5,6 +5,8 @@ using Myra;
 using Myra.Graphics2D.UI;
 using Mythril.GameLogic;
 using Mythril.GameLogic.Audio;
+using Mythril.GameLogic.AI;
+using Mythril.Controller.Transport;
 using Mythril.UI;
 using AssetManagementBase;
 using System.Collections.Generic;
@@ -32,6 +34,9 @@ public class Game1 : Game
     private readonly GameManager _gameManager;
     private readonly AssetManager _assetManager;
     private readonly SoundManager _soundManager;
+    private readonly ScreenshotUtility _screenshotUtility;
+    private CommandListener? _commandListener;
+    private CommandExecutor? _commandExecutor;
 
     public SoundManager SoundManager => _soundManager;
 
@@ -50,6 +55,7 @@ public class Game1 : Game
         _gameManager = new GameManager(_resourceManager);
         _assetManager =  AssetManager.CreateFileAssetManager("Content");
         _soundManager = new SoundManager(Content);
+        _screenshotUtility = new ScreenshotUtility(GraphicsDevice);
 
         _gameManager.OnGameOver += HandleGameOver;
         _taskManager.OnTaskStarted += OnTaskStarted;
@@ -64,6 +70,12 @@ public class Game1 : Game
         _desktop = new Desktop();
         _mainLayout = new MainLayout(this, _taskManager, _desktop, _resourceManager, _soundManager);
         _desktop.Root = _mainLayout;
+
+        // AI Command Integration
+        var transport = new StdIoTransport(); // Default to StdIO for now
+        _commandListener = new CommandListener(transport);
+        _commandExecutor = new CommandExecutor(this, _desktop, _screenshotUtility);
+        _commandListener.StartListening();
 
         _soundManager.LoadMusic("main-theme", "Music/main-theme");
         _soundManager.PlayMusic("main-theme");
@@ -95,6 +107,15 @@ public class Game1 : Game
             _mainLayout?.Update(gameTime);
             _taskProgressWindow?.UpdateTasks();
             _mainLayout?.UpdateResources(_resourceManager);
+
+            // Process AI commands
+            if (_commandListener != null && _commandExecutor != null)
+            {
+                while (_commandListener.TryDequeueCommand(out var command))
+                {
+                    _ = _commandExecutor.ExecuteCommand(command); // Don't await to avoid blocking game loop
+                }
+            }
         }
 
         if (_draggedCard != null && Mouse.GetState().LeftButton == ButtonState.Released)
