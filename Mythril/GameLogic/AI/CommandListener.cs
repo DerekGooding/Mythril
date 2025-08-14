@@ -1,13 +1,14 @@
 using System.Collections.Concurrent;
 using Newtonsoft.Json;
-using Mythril.Controller.Transport;
+using Mythril.API;
+using Mythril.API.Transport;
 
 namespace Mythril.GameLogic.AI;
 
 public class CommandListener(ICommandTransport transport)
 {
     private readonly ICommandTransport _transport = transport;
-    private readonly ConcurrentQueue<Command> _commandQueue = new ConcurrentQueue<Command>();
+    private readonly ConcurrentQueue<Command> _commandQueue = new();
     private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
 
     public void StartListening() => Task.Run(async () => await ListenForCommands(_cancellationTokenSource.Token));
@@ -41,5 +42,5 @@ public class CommandListener(ICommandTransport transport)
         }
     }
 
-    public bool TryDequeueCommand(out Command command) => _commandQueue.TryDequeue(out command);
+    public bool TryDequeueCommand(out Command? command) => _commandQueue.TryDequeue(out command);
 }

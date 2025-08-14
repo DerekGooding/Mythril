@@ -19,6 +19,7 @@ public class ProcessManager(string gameExecutablePath)
             StartInfo = new ProcessStartInfo
             {
                 FileName = _gameExecutablePath,
+                Arguments = "--transport stdio",
                 UseShellExecute = false,
                 RedirectStandardInput = true,
                 RedirectStandardOutput = true,

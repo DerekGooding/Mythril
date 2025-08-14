@@ -1,6 +1,8 @@
 using System.Net;
 using System.Net.Sockets;
 
+using Mythril.API.Transport;
+
 namespace Mythril.Controller.Transport;
 
 public class TcpTransport : ICommandTransport
@@ -23,7 +25,7 @@ public class TcpTransport : ICommandTransport
         await _writer.FlushAsync();
     }
 
-    public async Task<string> ReceiveAsync(CancellationToken cancellationToken = default) => await _reader.ReadLineAsync();
+    public async Task<string> ReceiveAsync(CancellationToken cancellationToken = default) => await _reader.ReadLineAsync() ?? string.Empty;
 
     public static async Task<TcpTransport> CreateServer(int port, CancellationToken cancellationToken = default)
     {

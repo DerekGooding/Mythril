@@ -5,8 +5,9 @@ using Myra.Graphics2D.UI;
 using Mythril.GameLogic;
 using Mythril.UI;
 using AssetManagementBase;
+using Mythril.API;
+using Mythril.API.Transport;
 using Mythril.GameLogic.AI;
-using Mythril.Controller.Transport;
 
 namespace Mythril;
 
@@ -37,7 +38,7 @@ public class Game1 : Game
 
     public SoundManager SoundManager => _soundManager;
 
-    public Game1()
+    public Game1(ICommandTransport? transport = null)
     {
         Instance = this;
         _graphics = new GraphicsDeviceManager(this)
@@ -54,6 +55,11 @@ public class Game1 : Game
         _soundManager = new SoundManager(Content);
         _screenshotUtility = new ScreenshotUtility(GraphicsDevice);
 
+        if (transport is not null)
+        {
+            _commandListener = new CommandListener(transport);
+        }
+
         _gameManager.OnGameOver += HandleGameOver;
         _taskManager.OnTaskStarted += OnTaskStarted;
         _taskManager.OnTaskCompleted += OnTaskCompleted;
@@ -69,10 +75,11 @@ public class Game1 : Game
         _desktop.Root = _mainLayout;
 
         // AI Command Integration
-        var transport = new StdIoTransport(); // Default to StdIO for now
-        _commandListener = new CommandListener(transport);
-        _commandExecutor = new CommandExecutor(this, _desktop, _screenshotUtility);
-        _commandListener.StartListening();
+        if (_commandListener is not null)
+        {
+            _commandExecutor = new CommandExecutor(this, _desktop, _screenshotUtility);
+            _commandListener.StartListening();
+        }
 
         _soundManager.LoadMusic("main-theme", "Music/main-theme");
         _soundManager.PlayMusic("main-theme");
@@ -110,7 +117,10 @@ public class Game1 : Game
             {
                 while (_commandListener.TryDequeueCommand(out var command))
                 {
-                    _ = _commandExecutor.ExecuteCommand(command); // Don't await to avoid blocking game loop
+                    if (command is not null)
+                    {
+                        _ = _commandExecutor.ExecuteCommand(command); // Don't await to avoid blocking game loop
+                    }
                 }
             }
         }

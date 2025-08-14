@@ -1,4 +1,4 @@
-namespace Mythril.Controller.Transport;
+namespace Mythril.API.Transport;
 
 public interface ICommandTransport
 {

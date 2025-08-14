@@ -11,7 +11,7 @@ public class ShopScreen : Dialog
         var mainPanel = new VerticalStackPanel { Spacing = 10 };
 
         // Item list
-        var itemList = new ListBox();
+        var itemList = new ListView();
         mainPanel.Widgets.Add(itemList);
 
         // Buy button
