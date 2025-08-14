@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Myra.Graphics2D;
 using Myra.Graphics2D.UI;
 using Mythril.GameLogic;
+using Mythril.GameLogic.Combat;
 
 namespace Mythril.UI;
 
@@ -160,6 +161,17 @@ public class MainLayout : Grid
             jobScreen.ShowModal(_desktop);
         };
         buttonPanel.Widgets.Add(jobButton);
+
+        var testCombatButton = new Button { Content = new Label { Text = "Test Combat" } };
+        testCombatButton.Click += (s, a) =>
+        {
+            var combatManager = new CombatManager(_partyManager);
+            var enemies = new List<Character> { _resourceManager.Enemies[0], _resourceManager.Enemies[1] };
+            combatManager.StartCombat(enemies);
+            var combatScreen = new CombatScreen(combatManager);
+            combatScreen.ShowModal(_desktop);
+        };
+        buttonPanel.Widgets.Add(testCombatButton);
 
         var pauseButton = new Button { Content = new Label { Text = "Pause" } };
         pauseButton.Click += (s, a) => _game.TogglePause(); // Will implement TogglePause in Game1

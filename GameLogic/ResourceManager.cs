@@ -1,3 +1,4 @@
+using Mythril.GameLogic.Combat;
 using Mythril.GameLogic.Items;
 using Mythril.GameLogic.Jobs;
 using Mythril.GameLogic.Materia;
@@ -18,6 +19,7 @@ public class ResourceManager
     public List<Materia.Materia> Materia { get; private set; }
     public List<Job> Jobs { get; private set; }
     public List<Item> Items { get; private set; }
+    public List<Enemy> Enemies { get; private set; }
     public InventoryManager Inventory { get; private set; }
 
     public ResourceManager()
@@ -31,6 +33,7 @@ public class ResourceManager
         Materia = new List<Materia.Materia>();
         Jobs = new List<Job>();
         Items = new List<Item>();
+        Enemies = new List<Enemy>();
 
         LoadData();
 
@@ -72,6 +75,12 @@ public class ResourceManager
         if (itemsData != null)
         {
             Items = itemsData;
+        }
+
+        var enemiesData = JsonConvert.DeserializeObject<List<Enemy>>(File.ReadAllText("Data/enemies.json"));
+        if (enemiesData != null)
+        {
+            Enemies = enemiesData;
         }
     }
 
