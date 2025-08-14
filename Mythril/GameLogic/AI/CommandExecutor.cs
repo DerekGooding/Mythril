@@ -1,4 +1,5 @@
 using Myra.Graphics2D.UI;
+using Mythril.API;
 
 namespace Mythril.GameLogic.AI;
 
@@ -46,7 +47,7 @@ public class CommandExecutor(Game1 game, Desktop desktop, ScreenshotUtility scre
 
         // Find the button by its text and simulate a click
         // This is a simplified example and might need more robust UI traversal
-        var button = _desktop.Root.FindWidgetById(command.Target) as Button;
+        var button = _desktop.Root.FindChildById(command.Target) as Button;
         if (button == null)
         {
             // Try to find by label text
@@ -115,6 +116,11 @@ public class CommandExecutor(Game1 game, Desktop desktop, ScreenshotUtility scre
         }
 
         var filename = filenameObj.ToString();
+        if (filename is null)
+        {
+            Console.WriteLine("SCREENSHOT command requires a 'filename' argument that is a string.");
+            return;
+        }
         var inlineBase64 = command.Args.TryGetValue("inline", out var inlineObj) && (bool)inlineObj;
 
         Console.WriteLine($"Taking screenshot: {filename} (inline: {inlineBase64})");
