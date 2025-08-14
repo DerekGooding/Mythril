@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using Myra;
 using Myra.Graphics2D.UI;
 using Mythril.GameLogic;
+using Mythril.GameLogic.Audio;
 using Mythril.UI;
 using AssetManagementBase;
 using System.Collections.Generic;
@@ -30,6 +31,9 @@ public class Game1 : Game
     private readonly TaskManager _taskManager;
     private readonly GameManager _gameManager;
     private readonly AssetManager _assetManager;
+    private readonly SoundManager _soundManager;
+
+    public SoundManager SoundManager => _soundManager;
 
     public Game1()
     {
@@ -45,6 +49,7 @@ public class Game1 : Game
         _taskManager = new TaskManager(_resourceManager);
         _gameManager = new GameManager(_resourceManager);
         _assetManager =  AssetManager.CreateFileAssetManager("Content");
+        _soundManager = new SoundManager(Content);
 
         _gameManager.OnGameOver += HandleGameOver;
         _taskManager.OnTaskStarted += OnTaskStarted;
@@ -57,8 +62,11 @@ public class Game1 : Game
         _assetManager.Open("DefaultSkin.xml");
 
         _desktop = new Desktop();
-        _mainLayout = new MainLayout(this, _taskManager, _desktop, _resourceManager);
+        _mainLayout = new MainLayout(this, _taskManager, _desktop, _resourceManager, _soundManager);
         _desktop.Root = _mainLayout;
+
+        _soundManager.LoadMusic("main-theme", "Music/main-theme");
+        _soundManager.PlayMusic("main-theme");
 
         foreach (var cardWidget in _mainLayout.CardWidgets)
         {

@@ -24,9 +24,14 @@ public class MainLayout : Grid
     private Label _faithLabel = null!;
     private HorizontalStackPanel _handPanel = null!; // Reference to the hand panel
     private ResourceManager _resourceManager = null!; // Add ResourceManager field
+    private SoundManager _soundManager = null!; // Add SoundManager field
 
-    public MainLayout(Game1 game, TaskManager taskManager, Desktop desktop, ResourceManager resourceManager) // Constructor now takes Game1, TaskManager, Desktop, and ResourceManager
+    public MainLayout(Game1 game, TaskManager taskManager, Desktop desktop, ResourceManager resourceManager, SoundManager soundManager) // Constructor now takes Game1, TaskManager, Desktop, ResourceManager, and SoundManager
     {
+        _game = game; // Assign Game1 instance
+        _desktop = desktop; // Assign Desktop instance
+        _resourceManager = resourceManager; // Assign ResourceManager instance
+        _soundManager = soundManager; // Assign SoundManager instance
         _game = game; // Assign Game1 instance
         _desktop = desktop; // Assign Desktop instance
         _resourceManager = resourceManager; // Assign ResourceManager instance
@@ -127,20 +132,21 @@ public class MainLayout : Grid
             Spacing = 20
         };
         var collectButton = new Button { Content = new Label { Text = "Collect" } };
-        collectButton.Click += (s, a) => _gameManager.CollectRewards();
+        collectButton.Click += (s, a) => { _gameManager.CollectRewards(); _soundManager.PlaySound("button-click"); };
         buttonPanel.Widgets.Add(collectButton);
 
         var nextDayButton = new Button { Content = new Label { Text = "Next Day" } };
-        nextDayButton.Click += (s, a) => _gameManager.AdvanceTick();
+        nextDayButton.Click += (s, a) => { _gameManager.AdvanceTick(); _soundManager.PlaySound("button-click"); };
         buttonPanel.Widgets.Add(nextDayButton);
 
         var fullscreenButton = new Button { Content = new Label { Text = "Fullscreen" } };
-        fullscreenButton.Click += (s, a) => _game.ToggleFullscreen();
+        fullscreenButton.Click += (s, a) => { _game.ToggleFullscreen(); _soundManager.PlaySound("button-click"); };
         buttonPanel.Widgets.Add(fullscreenButton);
 
         var settingsButton = new Button { Content = new Label { Text = "Settings" } };
         settingsButton.Click += (s, a) =>
         {
+            _soundManager.PlaySound("button-click");
             var settingsDialog = new SettingsDialog();
             settingsDialog.ShowModal(_desktop);
         };
@@ -149,6 +155,7 @@ public class MainLayout : Grid
         var materiaButton = new Button { Content = new Label { Text = "Materia" } };
         materiaButton.Click += (s, a) =>
         {
+            _soundManager.PlaySound("button-click");
             var materiaScreen = new MateriaScreen(_resourceManager);
             materiaScreen.ShowModal(_desktop);
         };
@@ -157,14 +164,25 @@ public class MainLayout : Grid
         var jobButton = new Button { Content = new Label { Text = "Jobs" } };
         jobButton.Click += (s, a) =>
         {
+            _soundManager.PlaySound("button-click");
             var jobScreen = new JobScreen(_resourceManager);
             jobScreen.ShowModal(_desktop);
         };
         buttonPanel.Widgets.Add(jobButton);
 
+        var shopButton = new Button { Content = new Label { Text = "Shop" } };
+        shopButton.Click += (s, a) =>
+        {
+            _soundManager.PlaySound("button-click");
+            var shopScreen = new ShopScreen();
+            shopScreen.ShowModal(_desktop);
+        };
+        buttonPanel.Widgets.Add(shopButton);
+
         var testCombatButton = new Button { Content = new Label { Text = "Test Combat" } };
         testCombatButton.Click += (s, a) =>
         {
+            _soundManager.PlaySound("button-click");
             var combatManager = new CombatManager(_partyManager);
             var enemies = new List<Character> { _resourceManager.Enemies[0], _resourceManager.Enemies[1] };
             combatManager.StartCombat(enemies);
@@ -174,15 +192,15 @@ public class MainLayout : Grid
         buttonPanel.Widgets.Add(testCombatButton);
 
         var pauseButton = new Button { Content = new Label { Text = "Pause" } };
-        pauseButton.Click += (s, a) => _game.TogglePause(); // Will implement TogglePause in Game1
+        pauseButton.Click += (s, a) => { _game.TogglePause(); _soundManager.PlaySound("button-click"); };
         buttonPanel.Widgets.Add(pauseButton);
 
         _logButton = new Button { Content = new Label { Text = "Log" } };
-        _logButton.Click += (s, a) => _game.ToggleLogWindow();
+        _logButton.Click += (s, a) => { _game.ToggleLogWindow(); _soundManager.PlaySound("button-click"); };
         buttonPanel.Widgets.Add(_logButton);
 
         _progressButton = new Button { Content = new Label { Text = "Progress" } };
-        _progressButton.Click += (s, a) => _game.ToggleTaskProgressWindow();
+        _progressButton.Click += (s, a) => { _game.ToggleTaskProgressWindow(); _soundManager.PlaySound("button-click"); };
         buttonPanel.Widgets.Add(_progressButton);
 
         SetRow(buttonPanel, 2);

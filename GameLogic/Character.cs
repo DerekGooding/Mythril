@@ -9,11 +9,13 @@ namespace Mythril.GameLogic
         [JsonIgnore]
         public Job? Job { get; set; }
         public string JobName { get; set; }
+        public int JobPoints { get; set; }
 
         public Character(string name, string jobName)
         {
             Name = name;
             JobName = jobName;
+            JobPoints = 0;
         }
     }
 }

@@ -23,13 +23,14 @@
 - [x] 18. Create a dedicated character status screen.
 - [x] 19. Create a dedicated job screen for changing and viewing jobs.
 - [x] 20. Create a dedicated materia screen for equipping and managing materia.
-- [ ] 21. Create a dedicated shop screen for buying and selling items.
+- [x] 21. Create a dedicated shop screen for buying and selling items.
+- [ ] 21a. Implement shop screen logic for buying and selling items.
 - [ ] 22. Create a dedicated save/load screen.
 - [ ] 23. Create a dedicated quest log screen.
 - [ ] 24. Implement tooltips for UI elements.
-- [ ] 25. Add sound effects to UI interactions.
-- [ ] 26. Add background music to the game.
-- [ ] 27. Implement a settings screen with volume controls.
+- [x] 25. Add sound effects to UI interactions.
+- [x] 26. Add background music to the game.
+- [x] 27. Implement a settings screen with volume controls.
 - [ ] 28. Ensure the UI is fully navigable with a gamepad.
 - [ ] 29. Add visual feedback for button presses and other interactions.
 - [ ] 30. Implement a notification system for important events.
@@ -70,14 +71,15 @@
 - [ ] 61. Implement the base `Job` class.
 - [ ] 62. Implement the "Squire" job.
 - [ ] 63. Implement the "Chemist" job.
-- [ ] 64. Implement the "Knight" job.
-- [ ] 65. Implement the "Archer" job.
+- [x] 64. Implement the "Knight" job.
+- [x] 65. Implement the "Archer" job.
 - [ ] 66. Implement the "Monk" job.
 - [ ] 67. Implement the "Priest" (White Mage) job.
 - [ ] 68. Implement the "Wizard" (Black Mage) job.
 - [ ] 69. Implement the "Time Mage" job.
 - [ ] 70. Implement the "Summoner" job.
 - [ ] 71. Implement a system for gaining Job Points (JP).
+- [x] 71a. Add JobPoints property to Character class.
 - [ ] 72. Implement a system for unlocking new jobs.
 - [ ] 73. Implement job-specific abilities.
 - [ ] 74. Implement job-specific equipment restrictions.
