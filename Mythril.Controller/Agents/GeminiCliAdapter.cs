@@ -7,6 +7,9 @@ public class GeminiCliAdapter : IAgentAdapter
         Console.WriteLine($"[Gemini-CLI] Prompt: {prompt}");
         Console.Write("[Gemini-CLI] Enter commands (JSON array of strings): ");
         var input = Console.ReadLine();
+        if (string.IsNullOrEmpty(input))
+            return Task.FromResult(new string[0]);
+
         try
         {
             var commands = Newtonsoft.Json.JsonConvert.DeserializeObject<string[]>(input);

@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mythril.Controller", "Mythr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mythril", "Mythril\Mythril.csproj", "{24BCB32A-816D-55CF-4556-AFC84F4EFE8E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mythril.API", "Mythril.API\Mythril.API.csproj", "{207967E8-765E-4A1F-9788-841E0867D33B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,18 @@ Global
 		{24BCB32A-816D-55CF-4556-AFC84F4EFE8E}.Release|x64.Build.0 = Release|Any CPU
 		{24BCB32A-816D-55CF-4556-AFC84F4EFE8E}.Release|x86.ActiveCfg = Release|Any CPU
 		{24BCB32A-816D-55CF-4556-AFC84F4EFE8E}.Release|x86.Build.0 = Release|Any CPU
+		{207967E8-765E-4A1F-9788-841E0867D33B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{207967E8-765E-4A1F-9788-841E0867D33B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{207967E8-765E-4A1F-9788-841E0867D33B}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{207967E8-765E-4A1F-9788-841E0867D33B}.Debug|x64.Build.0 = Debug|Any CPU
+		{207967E8-765E-4A1F-9788-841E0867D33B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{207967E8-765E-4A1F-9788-841E0867D33B}.Debug|x86.Build.0 = Debug|Any CPU
+		{207967E8-765E-4A1F-9788-841E0867D33B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{207967E8-765E-4A1F-9788-841E0867D33B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{207967E8-765E-4A1F-9788-841E0867D33B}.Release|x64.ActiveCfg = Release|Any CPU
+		{207967E8-765E-4A1F-9788-841E0867D33B}.Release|x64.Build.0 = Release|Any CPU
+		{207967E8-765E-4A1F-9788-841E0867D33B}.Release|x86.ActiveCfg = Release|Any CPU
+		{207967E8-765E-4A1F-9788-841E0867D33B}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

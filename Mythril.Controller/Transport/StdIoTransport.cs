@@ -1,3 +1,5 @@
+using Mythril.API.Transport;
+
 namespace Mythril.Controller.Transport;
 
 public class StdIoTransport : ICommandTransport
@@ -17,5 +19,5 @@ public class StdIoTransport : ICommandTransport
         await _output.FlushAsync();
     }
 
-    public async Task<string> ReceiveAsync(CancellationToken cancellationToken = default) => await _input.ReadLineAsync();
+    public async Task<string> ReceiveAsync(CancellationToken cancellationToken = default) => await _input.ReadLineAsync() ?? string.Empty;
 }

@@ -38,4 +38,9 @@
     <Compile Remove="Mythril.Tests\**" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Mythril.API\Mythril.API.csproj" />
+    <ProjectReference Include="..\Mythril.Controller\Mythril.Controller.csproj" />
+  </ItemGroup>
+
 </Project>

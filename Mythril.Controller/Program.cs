@@ -1,5 +1,6 @@
+using Mythril.API;
+using Mythril.API.Transport;
 using Mythril.Controller.Transport;
-using Mythril.GameLogic.AI;
 using Newtonsoft.Json;
 
 namespace Mythril.Controller;
@@ -36,14 +37,14 @@ static class Program
             var commands = new Command[]
             {
                 new() { Action = "PING" },
-                new() { Action = "WAIT", Args = new { seconds = 2.0 } },
+                new() { Action = "WAIT", Args = new Dictionary<string, object> { { "seconds", 2.0 } } },
                 new() { Action = "CLICK_BUTTON", Target = "Settings" },
-                new() { Action = "WAIT", Args = new { seconds = 1.0 } },
-                new() { Action = "SCREENSHOT", Args = new { filename = "screenshot1.png", inline = true } },
-                new() { Action = "WAIT", Args = new { seconds = 1.0 } },
+                new() { Action = "WAIT", Args = new Dictionary<string, object> { { "seconds", 1.0 } } },
+                new() { Action = "SCREENSHOT", Args = new Dictionary<string, object> { { "filename", "screenshot1.png" }, { "inline", true } } },
+                new() { Action = "WAIT", Args = new Dictionary<string, object> { { "seconds", 1.0 } } },
                 new() { Action = "CLICK_BUTTON", Target = "Close" }, // Assuming Settings dialog has a Close button
-                new() { Action = "WAIT", Args = new { seconds = 1.0 } },
-                new() { Action = "SCREENSHOT", Args = new { filename = "screenshot2.png", inline = true } },
+                new() { Action = "WAIT", Args = new Dictionary<string, object> { { "seconds", 1.0 } } },
+                new() { Action = "SCREENSHOT", Args = new Dictionary<string, object> { { "filename", "screenshot2.png" }, { "inline", true } } },
                 new() { Action = "EXIT" }
             };
 

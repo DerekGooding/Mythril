@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace Mythril.GameLogic.AI;
+namespace Mythril.API;
 
 public class Command
 {

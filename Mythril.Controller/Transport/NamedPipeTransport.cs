@@ -1,5 +1,7 @@
 using System.IO.Pipes;
 
+using Mythril.API.Transport;
+
 namespace Mythril.Controller.Transport;
 
 public class NamedPipeTransport : ICommandTransport
@@ -21,7 +23,7 @@ public class NamedPipeTransport : ICommandTransport
         await _writer.FlushAsync();
     }
 
-    public async Task<string> ReceiveAsync(CancellationToken cancellationToken = default) => await _reader.ReadLineAsync();
+    public async Task<string> ReceiveAsync(CancellationToken cancellationToken = default) => await _reader.ReadLineAsync() ?? string.Empty;
     public static async Task<NamedPipeTransport> CreateServer(string pipeName, CancellationToken cancellationToken = default)
     {
         var pipeServer = new NamedPipeServerStream(pipeName, PipeDirection.InOut, 1, PipeTransmissionMode.Byte, PipeOptions.Asynchronous);
