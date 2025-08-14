@@ -17,13 +17,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Mythril.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Include="..\Data\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Mythril\Mythril.csproj" />
   </ItemGroup>
 
 </Project>

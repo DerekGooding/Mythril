@@ -1,86 +1,82 @@
-using System;
-using System.IO;
-using System.Threading.Tasks;
-using Mythril.Controller.Agents;
 using Mythril.Controller.Transport;
+using Mythril.GameLogic.AI;
 using Newtonsoft.Json;
 
-namespace Mythril.Controller
+namespace Mythril.Controller;
+
+static class Program
 {
-    class Program
+    static async Task Main()
     {
-        static async Task Main(string[] args)
+        Console.WriteLine("Mythril AI Controller Test Script Started.");
+
+        // 1. Load configuration (still useful for game executable path)
+        var config = ConfigLoader.LoadConfig();
+
+        // 2. Hardcode StdIoTransport for testing
+        ICommandTransport transport = new StdIoTransport();
+        Console.WriteLine($"Using Transport: {transport.GetType().Name}");
+
+        // 3. Launch the game
+        var gameExecutablePath = Path.Combine(
+            AppDomain.CurrentDomain.BaseDirectory,
+            "..", "..", "..", "..", "Mythril", "bin", "Debug", "net9.0", "Mythril.exe");
+        gameExecutablePath = Path.GetFullPath(gameExecutablePath);
+
+        var processManager = new ProcessManager(gameExecutablePath);
+
+        try
         {
-            Console.WriteLine("Mythril AI Controller Test Script Started.");
+            processManager.StartGame();
 
-            // 1. Load configuration (still useful for game executable path)
-            var config = ConfigLoader.LoadConfig();
+            // Give the game some time to start up and initialize
+            await Task.Delay(TimeSpan.FromSeconds(5));
 
-            // 2. Hardcode StdIoTransport for testing
-            ICommandTransport transport = new StdIoTransport();
-            Console.WriteLine($"Using Transport: {transport.GetType().Name}");
-
-            // 3. Launch the game
-            var gameExecutablePath = Path.Combine(
-                AppDomain.CurrentDomain.BaseDirectory,
-                "..", "..", "..", "..", "Mythril", "bin", "Debug", "net9.0", "Mythril.exe");
-            gameExecutablePath = Path.GetFullPath(gameExecutablePath);
-
-            var processManager = new ProcessManager(gameExecutablePath);
-
-            try
+            // 4. Define a sequence of commands
+            var commands = new Command[]
             {
-                processManager.StartGame();
+                new() { Action = "PING" },
+                new() { Action = "WAIT", Args = new { seconds = 2.0 } },
+                new() { Action = "CLICK_BUTTON", Target = "Settings" },
+                new() { Action = "WAIT", Args = new { seconds = 1.0 } },
+                new() { Action = "SCREENSHOT", Args = new { filename = "screenshot1.png", inline = true } },
+                new() { Action = "WAIT", Args = new { seconds = 1.0 } },
+                new() { Action = "CLICK_BUTTON", Target = "Close" }, // Assuming Settings dialog has a Close button
+                new() { Action = "WAIT", Args = new { seconds = 1.0 } },
+                new() { Action = "SCREENSHOT", Args = new { filename = "screenshot2.png", inline = true } },
+                new() { Action = "EXIT" }
+            };
 
-                // Give the game some time to start up and initialize
-                await Task.Delay(TimeSpan.FromSeconds(5)); 
+            // 5. Send commands and verify responses
+            foreach (var cmd in commands)
+            {
+                var jsonCommand = JsonConvert.SerializeObject(cmd);
+                Console.WriteLine($"Sending command: {jsonCommand}");
+                await transport.SendAsync(jsonCommand);
 
-                // 4. Define a sequence of commands
-                var commands = new[]
+                // Receive response from game
+                var gameResponse = await transport.ReceiveAsync();
+                Console.WriteLine($"Game response: {gameResponse}");
+
+                // Basic verification for screenshot
+                if (cmd.Action == "SCREENSHOT" && gameResponse.StartsWith("data:image/png;base64,"))
                 {
-                    new { action = "PING" },
-                    new { action = "WAIT", args = new { seconds = 2.0 } },
-                    new { action = "CLICK_BUTTON", target = "Settings" },
-                    new { action = "WAIT", args = new { seconds = 1.0 } },
-                    new { action = "SCREENSHOT", args = new { filename = "screenshot1.png", inline = true } },
-                    new { action = "WAIT", args = new { seconds = 1.0 } },
-                    new { action = "CLICK_BUTTON", target = "Close" }, // Assuming Settings dialog has a Close button
-                    new { action = "WAIT", args = new { seconds = 1.0 } },
-                    new { action = "SCREENSHOT", args = new { filename = "screenshot2.png", inline = true } },
-                    new { action = "EXIT" }
-                };
-
-                // 5. Send commands and verify responses
-                foreach (var cmd in commands)
-                {
-                    var jsonCommand = JsonConvert.SerializeObject(cmd);
-                    Console.WriteLine($"Sending command: {jsonCommand}");
-                    await transport.SendAsync(jsonCommand);
-
-                    // Receive response from game
-                    var gameResponse = await transport.ReceiveAsync();
-                    Console.WriteLine($"Game response: {gameResponse}");
-
-                    // Basic verification for screenshot
-                    if (cmd.action == "SCREENSHOT" && gameResponse.StartsWith("data:image/png;base64,"))
-                    {
-                        Console.WriteLine("Received inline base64 screenshot.");
-                        // In a real scenario, you would decode and save/process the image data
-                        var base64Image = gameResponse.Substring("data:image/png;base64,".Length);
-                        var imageData = Convert.FromBase64String(base64Image);
-                        Console.WriteLine($"Screenshot data length: {imageData.Length} bytes.");
-                    }
+                    Console.WriteLine("Received inline base64 screenshot.");
+                    // In a real scenario, you would decode and save/process the image data
+                    var base64Image = gameResponse.Substring("data:image/png;base64,".Length);
+                    var imageData = Convert.FromBase64String(base64Image);
+                    Console.WriteLine($"Screenshot data length: {imageData.Length} bytes.");
                 }
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"An error occurred: {ex.Message}");
-            }
-            finally
-            {
-                await processManager.StopGameAsync();
-                Console.WriteLine("Mythril AI Controller Test Script Finished.");
-            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"An error occurred: {ex.Message}");
+        }
+        finally
+        {
+            await processManager.StopGameAsync();
+            Console.WriteLine("Mythril AI Controller Test Script Finished.");
         }
     }
 }
