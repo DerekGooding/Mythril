@@ -1,0 +1,18 @@
+[
+  {
+    "Name": "Hero",
+    "JobName": "Squire"
+  },
+  {
+    "Name": "Healer",
+    "JobName": "Chemist"
+  },
+  {
+    "Name": "Mage",
+    "JobName": "Wizard"
+  },
+  {
+    "Name": "Ranger",
+    "JobName": "Archer"
+  }
+]

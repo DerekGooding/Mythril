@@ -3,11 +3,14 @@ using Mythril.GameLogic;
 
 namespace Mythril.UI
 {
-    public class CharacterDisplayWidget : HorizontalStackPanel
+    public class CharacterDisplayWidget : Button
     {
         public CharacterDisplayWidget(Character character)
         {
-            Spacing = 10;
+            var panel = new HorizontalStackPanel
+            {
+                Spacing = 10
+            };
 
             var nameLabel = new Label
             {
@@ -16,11 +19,19 @@ namespace Mythril.UI
 
             var jobLabel = new Label
             {
-                Text = $"({character.Job})",
+                Text = $"({character.Job?.Name})",
             };
 
-            Widgets.Add(nameLabel);
-            Widgets.Add(jobLabel);
+            panel.Widgets.Add(nameLabel);
+            panel.Widgets.Add(jobLabel);
+
+            Content = panel;
+
+            Click += (s, a) =>
+            {
+                var statusScreen = new CharacterStatusScreen(character);
+                statusScreen.ShowModal(Desktop);
+            };
         }
     }
 }

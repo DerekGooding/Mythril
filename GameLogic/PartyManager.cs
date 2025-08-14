@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Mythril.GameLogic
 {
@@ -6,13 +7,14 @@ namespace Mythril.GameLogic
     {
         public List<Character> PartyMembers { get; } = new();
 
-        public PartyManager()
+        public PartyManager(ResourceManager resourceManager)
         {
-            // Create a default party for now
-            PartyMembers.Add(new Character("Hero", "Squire"));
-            PartyMembers.Add(new Character("Healer", "Chemist"));
-            PartyMembers.Add(new Character("Mage", "Wizard"));
-            PartyMembers.Add(new Character("Ranger", "Archer"));
+            PartyMembers.AddRange(resourceManager.Characters);
+
+            foreach (var character in PartyMembers)
+            {
+                character.Job = resourceManager.Jobs.FirstOrDefault(j => j.Name == character.JobName);
+            }
         }
     }
 }

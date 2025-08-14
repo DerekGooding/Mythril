@@ -1,0 +1,37 @@
+[
+  {
+    "Id": "card1",
+    "Title": "Forest Foraging",
+    "Description": "Gather herbs and berries from the forest.",
+    "DurationSeconds": 60,
+    "RewardValue": 10
+  },
+  {
+    "Id": "card2",
+    "Title": "Mine Exploration",
+    "Description": "Explore the abandoned mine for valuable ores.",
+    "DurationSeconds": 120,
+    "RewardValue": 25
+  },
+  {
+    "Id": "card3",
+    "Title": "River Fishing",
+    "Description": "Catch fresh fish from the river.",
+    "DurationSeconds": 90,
+    "RewardValue": 15
+  },
+  {
+    "Id": "card4",
+    "Title": "Pray",
+    "Description": "Generate Faith through prayer.",
+    "DurationSeconds": 30,
+    "RewardValue": 5
+  },
+  {
+    "Id": "card5",
+    "Title": "Build Shrine",
+    "Description": "Consume Faith and Gold to build a shrine.",
+    "DurationSeconds": 180,
+    "RewardValue": 100
+  }
+]

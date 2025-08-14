@@ -1,14 +1,19 @@
+using Mythril.GameLogic.Jobs;
+using Newtonsoft.Json;
+
 namespace Mythril.GameLogic
 {
     public class Character
     {
         public string Name { get; set; }
-        public string Job { get; set; }
+        [JsonIgnore]
+        public Job? Job { get; set; }
+        public string JobName { get; set; }
 
-        public Character(string name, string job)
+        public Character(string name, string jobName)
         {
             Name = name;
-            Job = job;
+            JobName = jobName;
         }
     }
 }

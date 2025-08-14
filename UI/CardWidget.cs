@@ -12,6 +12,8 @@ public class CardWidget : VerticalStackPanel
 
     private bool _isDragging;
     private Point _dragOffset;
+    public Container? OriginalParent { get; private set; }
+    public int OriginalIndex { get; private set; }
 
     public bool IsDraggable { get; set; } = true;
 
@@ -53,12 +55,19 @@ public class CardWidget : VerticalStackPanel
 
     private void CardWidget_MouseDown(object? sender, EventArgs e)
     {
-        if (Desktop == null || Desktop.TouchPosition == null) return;
+        if (Desktop == null || Desktop.TouchPosition == null || Parent == null) return;
+
         _isDragging = true;
         _dragOffset = new Point(Desktop.TouchPosition.Value.X - Bounds.X, Desktop.TouchPosition.Value.Y - Bounds.Y);
         Opacity = 0.8f;
-        ZIndex = 100;
-        //e.Handled = true;
+
+        // Store original parent and index
+        OriginalParent = (Container)Parent;
+        OriginalIndex = OriginalParent.Widgets.IndexOf(this);
+
+        // Reparent to desktop
+        OriginalParent.Widgets.Remove(this);
+        Desktop.Widgets.Add(this);
     }
 
     private void CardWidget_MouseUp(object? sender, EventArgs e)
@@ -67,9 +76,9 @@ public class CardWidget : VerticalStackPanel
         {
             _isDragging = false;
             Opacity = 1.0f;
+
+            // The Game1 class will handle re-parenting or destroying the card
             OnDragEnd?.Invoke(this);
-            ZIndex = 0;
-            //e.Handled = true;
         }
     }
 

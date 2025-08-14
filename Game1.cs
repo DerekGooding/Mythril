@@ -91,7 +91,18 @@ public class Game1 : Game
 
         if (_draggedCard != null && Mouse.GetState().LeftButton == ButtonState.Released)
         {
-            _mainLayout?.HandleCardDrop(_draggedCard);
+            // Remove card from desktop
+            _desktop?.Widgets.Remove(_draggedCard);
+
+            if (_mainLayout != null && _mainLayout.DropZone.Bounds.Contains(Mouse.GetState().Position))
+            {
+                _mainLayout.DropZone.HandleDrop(_draggedCard);
+            }
+            else
+            {
+                // Return to original parent
+                _draggedCard.OriginalParent?.Widgets.Insert(_draggedCard.OriginalIndex, _draggedCard);
+            }
             _draggedCard = null;
         }
 
@@ -113,19 +124,19 @@ public class Game1 : Game
 
     public void ToggleFullscreen()
     {
-        if (_graphics.IsFullScreen)
+        if (Window.IsBorderless)
         {
             // Go windowed
+            Window.IsBorderless = false;
             _graphics.PreferredBackBufferWidth = 1280;
             _graphics.PreferredBackBufferHeight = 720;
-            _graphics.IsFullScreen = false;
         }
         else
         {
             // Go fullscreen borderless
+            Window.IsBorderless = true;
             _graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
             _graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
-            _graphics.IsFullScreen = true;
         }
 
         _graphics.ApplyChanges();
