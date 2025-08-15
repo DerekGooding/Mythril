@@ -185,8 +185,8 @@ public class MainLayout : Grid
             var enemies = new List<Character> { _resourceManager.Enemies[0], _resourceManager.Enemies[1] };
             combatManager.StartCombat(enemies);
             var combatScreen = new CombatScreen(combatManager);
-            Game1._combatScreen = combatScreen;
-            combatScreen.Closed += (s, e) => { Game1._combatScreen = null; };
+            _game.PushCommandExecutor(combatScreen);
+            combatScreen.Closed += (s, e) => { _game.PopCommandExecutor(); };
             combatScreen.ShowModal(_desktop);
         };
         buttonPanel.Widgets.Add(testCombatButton);

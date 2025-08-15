@@ -7,6 +7,7 @@ using Mythril.UI;
 using AssetManagementBase;
 using Mythril.API;
 using Mythril.API.Transport;
+using System.Collections.Generic;
 using Mythril.GameLogic.AI;
 using System.IO;
 
@@ -37,6 +38,7 @@ public class Game1 : Game
     private readonly AssetManager _assetManager;
     private readonly SoundManager _soundManager;
     private CommandListener? _commandListener;
+    private readonly Stack<ICommandExecutor> _commandExecutorStack = new();
     private CommandExecutor? _commandExecutor;
     private Action<string>? _screenshotCallback;
 
@@ -84,6 +86,7 @@ public class Game1 : Game
         if (_commandListener is not null)
         {
             _commandExecutor = new CommandExecutor(this, _desktop);
+            _commandExecutorStack.Push(_commandExecutor);
             _commandListener.StartListening();
         }
 
@@ -121,7 +124,7 @@ public class Game1 : Game
             _mainLayout?.UpdateResources(_resourceManager);
 
             // Process AI commands
-            if (_commandListener != null && _commandExecutor != null && !_isExecutingCommand)
+            if (_commandListener != null && _commandExecutorStack.Count > 0 && !_isExecutingCommand)
             {
                 if (_commandListener.TryDequeueCommand(out var command))
                 {
@@ -130,7 +133,10 @@ public class Game1 : Game
                         _isExecutingCommand = true;
                         Task.Run(async () =>
                         {
-                            await _commandExecutor.ExecuteCommand(command);
+                            if (_commandExecutorStack.TryPeek(out var executor))
+                            {
+                                await executor.ExecuteCommand(command);
+                            }
                             _isExecutingCommand = false;
                         });
                     }
@@ -221,6 +227,17 @@ public class Game1 : Game
     public void RequestScreenshot(Action<string> callback)
     {
         _screenshotCallback = callback;
+    }
+
+    public void PushCommandExecutor(ICommandExecutor executor)
+    {
+        _commandExecutorStack.Push(executor);
+    }
+
+    public void PopCommandExecutor()
+    {
+        if (_commandExecutorStack.Count > 1)
+            _commandExecutorStack.Pop();
     }
 
     public void ToggleLogWindow()

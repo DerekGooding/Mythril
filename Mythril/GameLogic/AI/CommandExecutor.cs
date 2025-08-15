@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Mythril.GameLogic.AI;
 
-public class CommandExecutor(Game1 game, Desktop desktop)
+public class CommandExecutor(Game1 game, Desktop desktop) : ICommandExecutor
 {
     private readonly Game1 _game = game;
     private readonly Desktop _desktop = desktop;
@@ -76,7 +76,6 @@ public class CommandExecutor(Game1 game, Desktop desktop)
 
         return FindButtonInTree(_desktop.Root, target);
     }
-
 
     private void HandleClickButton(Command command)
     {

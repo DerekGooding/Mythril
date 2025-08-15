@@ -1,9 +1,12 @@
 using Myra.Graphics2D.UI;
+using Mythril.API;
+using Mythril.GameLogic.AI;
 using Mythril.GameLogic.Combat;
+using System.Threading.Tasks;
 
 namespace Mythril.UI;
 
-public class CombatScreen : Dialog
+public class CombatScreen : Dialog, ICommandExecutor
 {
     private readonly CombatManager _combatManager;
     private readonly VerticalStackPanel _logPanel;
@@ -66,4 +69,27 @@ public class CombatScreen : Dialog
     }
 
     public void AddLogMessage(string message) => _logPanel.Widgets.Add(new Label { Text = message });
+
+    public async Task ExecuteCommand(Command command)
+    {
+        switch (command.Action.ToUpperInvariant())
+        {
+            case "CLICK_BUTTON":
+                HandleClickButton(command);
+                break;
+        }
+    }
+
+    private void HandleClickButton(Command command)
+    {
+        if (command.Target == "Attack")
+        {
+            if (_combatManager.EnemyParty.Count > 0)
+                _combatManager.PlayerTurn_Attack(_combatManager.EnemyParty[0]);
+        }
+        else if (command.Target == "Defend")
+        {
+            _combatManager.PlayerTurn_Defend();
+        }
+    }
 }

@@ -25,7 +25,7 @@ public class SettingsDialog : Dialog
         mainPanel.Widgets.Add(sfxPanel);
 
         // Close Button
-        var closeButton = new Button { Content = new Label { Text = "Close" }, HorizontalAlignment = HorizontalAlignment.Center };
+        var closeButton = new Button { Id = "Close", Content = new Label { Text = "Close" }, HorizontalAlignment = HorizontalAlignment.Center };
         closeButton.Click += (s, a) => Close();
         mainPanel.Widgets.Add(closeButton);
 
