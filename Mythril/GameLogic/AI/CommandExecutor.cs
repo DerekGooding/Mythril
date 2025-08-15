@@ -1,6 +1,5 @@
 using Myra.Graphics2D.UI;
 using Mythril.API;
-using System.Threading.Tasks;
 
 namespace Mythril.GameLogic.AI;
 
@@ -68,9 +67,10 @@ public class CommandExecutor(Game1 game, Desktop desktop) : ICommandExecutor
 
     private Button? FindButton(string target)
     {
-        if (_desktop.ModalWindow != null)
+        if (_desktop.HasModalWidget)
         {
-            var button = FindButtonInTree(_desktop.ModalWindow, target);
+            var modelWidget = _desktop.Widgets.First(x => x.IsModal);
+            var button = FindButtonInTree(modelWidget, target);
             if (button != null) return button;
         }
 
