@@ -1,13 +1,13 @@
 using Myra.Graphics2D.UI;
 using Mythril.API;
+using System.Threading.Tasks;
 
 namespace Mythril.GameLogic.AI;
 
-public class CommandExecutor(Game1 game, Desktop desktop, ScreenshotUtility screenshotUtility)
+public class CommandExecutor(Game1 game, Desktop desktop) : ICommandExecutor
 {
     private readonly Game1 _game = game;
     private readonly Desktop _desktop = desktop;
-    private readonly ScreenshotUtility _screenshotUtility = screenshotUtility;
 
     public async Task ExecuteCommand(Command command)
     {
@@ -23,7 +23,7 @@ public class CommandExecutor(Game1 game, Desktop desktop, ScreenshotUtility scre
                 await HandleWait(command);
                 break;
             case "SCREENSHOT":
-                HandleScreenshot(command);
+                await HandleScreenshot(command);
                 break;
             case "PING":
                 HandlePing();
@@ -41,25 +41,11 @@ public class CommandExecutor(Game1 game, Desktop desktop, ScreenshotUtility scre
     {
         if (command.Target == null)
         {
-            Console.WriteLine("CLICK_BUTTON command requires a 'target' (button text).");
+            Console.WriteLine("CLICK_BUTTON command requires a 'target' (button ID).");
             return;
         }
 
-        // Find the button by its text and simulate a click
-        // This is a simplified example and might need more robust UI traversal
         var button = _desktop.Root.FindChildById(command.Target) as Button;
-        if (button == null)
-        {
-            // Try to find by label text
-            foreach (var widget in _desktop.Root.GetChildren())
-            {
-                if (widget is Button btn && btn.Content is Label label && label.Text == command.Target)
-                {
-                    button = btn;
-                    break;
-                }
-            }
-        }
 
         if (button != null)
         {
@@ -107,28 +93,15 @@ public class CommandExecutor(Game1 game, Desktop desktop, ScreenshotUtility scre
         }
     }
 
-    private void HandleScreenshot(Command command)
+    private async Task HandleScreenshot(Command command)
     {
-        if (!command.Args.TryGetValue("filename", out var filenameObj))
-        {
-            Console.WriteLine("SCREENSHOT command requires a 'filename' argument.");
-            return;
-        }
-
-        var filename = filenameObj.ToString();
-        if (filename is null)
-        {
-            Console.WriteLine("SCREENSHOT command requires a 'filename' argument that is a string.");
-            return;
-        }
-        var inlineBase64 = command.Args.TryGetValue("inline", out var inlineObj) && (bool)inlineObj;
-
-        Console.WriteLine($"Taking screenshot: {filename} (inline: {inlineBase64})");
-        var result = _screenshotUtility.TakeScreenshot(filename, inlineBase64);
-        Console.WriteLine($"Screenshot result: {result}"); // This result should be sent back to the controller
+        var tcs = new TaskCompletionSource<string>();
+        _game.RequestScreenshot(tcs.SetResult);
+        var screenshotResult = await tcs.Task;
+        Console.WriteLine(screenshotResult);
     }
 
-    private void HandlePing() => Console.WriteLine("PONG");// In a real scenario, this would send a response back via the transport
+    private void HandlePing() => Console.WriteLine("PONG");
 
     private void HandleExit()
     {

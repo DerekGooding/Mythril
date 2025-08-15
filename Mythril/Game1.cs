@@ -7,7 +7,9 @@ using Mythril.UI;
 using AssetManagementBase;
 using Mythril.API;
 using Mythril.API.Transport;
+using System.Collections.Generic;
 using Mythril.GameLogic.AI;
+using System.IO;
 
 namespace Mythril;
 
@@ -21,6 +23,8 @@ public class Game1 : Game
     private readonly GraphicsDeviceManager _graphics;
     private Desktop? _desktop;
     private MainLayout? _mainLayout;
+    private SpriteBatch? _spriteBatch;
+    private RenderTarget2D? _finalRenderTarget;
     private CardWidget? _draggedCard;
 
     private static LogWindow? _logWindow;
@@ -32,9 +36,10 @@ public class Game1 : Game
     private readonly GameManager _gameManager;
     private readonly AssetManager _assetManager;
     private readonly SoundManager _soundManager;
-    private readonly ScreenshotUtility _screenshotUtility;
     private CommandListener? _commandListener;
+    private readonly Stack<ICommandExecutor> _commandExecutorStack = new();
     private CommandExecutor? _commandExecutor;
+    private Action<string>? _screenshotCallback;
 
     public SoundManager SoundManager => _soundManager;
 
@@ -53,7 +58,6 @@ public class Game1 : Game
         _gameManager = new GameManager(_resourceManager);
         _assetManager =  AssetManager.CreateFileAssetManager("Content");
         _soundManager = new SoundManager(Content);
-        _screenshotUtility = new ScreenshotUtility(GraphicsDevice);
 
         if (transport is not null)
         {
@@ -70,6 +74,9 @@ public class Game1 : Game
         MyraEnvironment.Game = this;
         _assetManager.Open("DefaultSkin.xml");
 
+        _spriteBatch = new SpriteBatch(GraphicsDevice);
+        _finalRenderTarget = new RenderTarget2D(GraphicsDevice, GraphicsDevice.PresentationParameters.BackBufferWidth, GraphicsDevice.PresentationParameters.BackBufferHeight, false, GraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24);
+
         _desktop = new Desktop();
         _mainLayout = new MainLayout(this, _taskManager, _desktop, _resourceManager, _soundManager);
         _desktop.Root = _mainLayout;
@@ -77,7 +84,8 @@ public class Game1 : Game
         // AI Command Integration
         if (_commandListener is not null)
         {
-            _commandExecutor = new CommandExecutor(this, _desktop, _screenshotUtility);
+            _commandExecutor = new CommandExecutor(this, _desktop);
+            _commandExecutorStack.Push(_commandExecutor);
             _commandListener.StartListening();
         }
 
@@ -102,6 +110,7 @@ public class Game1 : Game
 
     private KeyboardState _lastKeyboardState;
     private bool _isPaused = false;
+    private bool _isExecutingCommand = false;
 
     protected override void Update(GameTime gameTime)
     {
@@ -113,13 +122,21 @@ public class Game1 : Game
             _mainLayout?.UpdateResources(_resourceManager);
 
             // Process AI commands
-            if (_commandListener != null && _commandExecutor != null)
+            if (_commandListener != null && _commandExecutorStack.Count > 0 && !_isExecutingCommand)
             {
-                while (_commandListener.TryDequeueCommand(out var command))
+                if (_commandListener.TryDequeueCommand(out var command))
                 {
-                    if (command is not null)
+                    if (command != null)
                     {
-                        _ = _commandExecutor.ExecuteCommand(command); // Don't await to avoid blocking game loop
+                        _isExecutingCommand = true;
+                        Task.Run(async () =>
+                        {
+                            if (_commandExecutorStack.TryPeek(out var executor))
+                            {
+                                await executor.ExecuteCommand(command);
+                            }
+                            _isExecutingCommand = false;
+                        });
                     }
                 }
             }
@@ -153,8 +170,35 @@ public class Game1 : Game
 
     protected override void Draw(GameTime gameTime)
     {
-        GraphicsDevice.Clear(Color.CornflowerBlue);
-        _desktop?.Render();
+        // Draw scene to the render target
+        if (_finalRenderTarget is not null)
+        {
+            GraphicsDevice.SetRenderTarget(_finalRenderTarget);
+            GraphicsDevice.Clear(Color.CornflowerBlue);
+            _desktop?.Render();
+        }
+
+        // Handle screenshot request
+        if (_screenshotCallback is not null && _finalRenderTarget is not null)
+        {
+            using var stream = new MemoryStream();
+            _finalRenderTarget.SaveAsPng(stream, _finalRenderTarget.Width, _finalRenderTarget.Height);
+            var base64String = "data:image/png;base64," + Convert.ToBase64String(stream.ToArray());
+            _screenshotCallback(base64String);
+            _screenshotCallback = null;
+        }
+
+        // Draw the render target to the back buffer
+        GraphicsDevice.SetRenderTarget(null);
+        GraphicsDevice.Clear(Color.Black);
+
+        if (_spriteBatch is not null && _finalRenderTarget is not null)
+        {
+            _spriteBatch.Begin();
+            _spriteBatch.Draw(_finalRenderTarget, Vector2.Zero, Color.White);
+            _spriteBatch.End();
+        }
+
         base.Draw(gameTime);
     }
 
@@ -176,6 +220,22 @@ public class Game1 : Game
         }
 
         _graphics.ApplyChanges();
+    }
+
+    public void RequestScreenshot(Action<string> callback)
+    {
+        _screenshotCallback = callback;
+    }
+
+    public void PushCommandExecutor(ICommandExecutor executor)
+    {
+        _commandExecutorStack.Push(executor);
+    }
+
+    public void PopCommandExecutor()
+    {
+        if (_commandExecutorStack.Count > 1)
+            _commandExecutorStack.Pop();
     }
 
     public void ToggleLogWindow()

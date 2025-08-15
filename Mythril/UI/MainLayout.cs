@@ -141,7 +141,7 @@ public class MainLayout : Grid
         fullscreenButton.Click += (s, a) => { _game.ToggleFullscreen(); _soundManager.PlaySound("button-click"); };
         buttonPanel.Widgets.Add(fullscreenButton);
 
-        var settingsButton = new Button { Content = new Label { Text = "Settings" } };
+        var settingsButton = new Button { Id = "Settings", Content = new Label { Text = "Settings" } };
         settingsButton.Click += (s, a) =>
         {
             _soundManager.PlaySound("button-click");
@@ -177,7 +177,7 @@ public class MainLayout : Grid
         };
         buttonPanel.Widgets.Add(shopButton);
 
-        var testCombatButton = new Button { Content = new Label { Text = "Test Combat" } };
+        var testCombatButton = new Button { Id = "Test Combat", Content = new Label { Text = "Test Combat" } };
         testCombatButton.Click += (s, a) =>
         {
             _soundManager.PlaySound("button-click");
@@ -185,6 +185,8 @@ public class MainLayout : Grid
             var enemies = new List<Character> { _resourceManager.Enemies[0], _resourceManager.Enemies[1] };
             combatManager.StartCombat(enemies);
             var combatScreen = new CombatScreen(combatManager);
+            _game.PushCommandExecutor(combatScreen);
+            combatScreen.Closed += (s, e) => { _game.PopCommandExecutor(); };
             combatScreen.ShowModal(_desktop);
         };
         buttonPanel.Widgets.Add(testCombatButton);

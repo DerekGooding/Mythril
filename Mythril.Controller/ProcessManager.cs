@@ -23,7 +23,8 @@ public class ProcessManager(string gameExecutablePath)
                 UseShellExecute = false,
                 RedirectStandardInput = true,
                 RedirectStandardOutput = true,
-                CreateNoWindow = true
+                CreateNoWindow = true,
+                WorkingDirectory = Path.GetDirectoryName(_gameExecutablePath)
             }
         };
 

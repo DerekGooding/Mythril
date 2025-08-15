@@ -14,14 +14,10 @@ static class Program
         // 1. Load configuration (still useful for game executable path)
         var config = ConfigLoader.LoadConfig();
 
-        // 2. Hardcode StdIoTransport for testing
-        ICommandTransport transport = new StdIoTransport();
-        Console.WriteLine($"Using Transport: {transport.GetType().Name}");
-
-        // 3. Launch the game
+        // 2. Launch the game
         var gameExecutablePath = Path.Combine(
             AppDomain.CurrentDomain.BaseDirectory,
-            "..", "..", "..", "..", "Mythril", "bin", "Debug", "net9.0", "Mythril.exe");
+            "..", "..", "..", "..", "publish", "Mythril");
         gameExecutablePath = Path.GetFullPath(gameExecutablePath);
 
         var processManager = new ProcessManager(gameExecutablePath);
@@ -29,6 +25,10 @@ static class Program
         try
         {
             processManager.StartGame();
+
+            // 3. Create transport with game's I/O streams
+            var transport = new StdIoTransport(processManager.GetStandardOutput()!, processManager.GetStandardInput()!);
+            Console.WriteLine($"Using Transport: {transport.GetType().Name}");
 
             // Give the game some time to start up and initialize
             await Task.Delay(TimeSpan.FromSeconds(5));
