@@ -41,6 +41,27 @@ public class CombatScreen : Dialog
         };
         mainPanel.Widgets.Add(logScrollViewer);
 
+        // Action Panel
+        var actionPanel = new VerticalStackPanel { Spacing = 10 };
+        actionPanel.Widgets.Add(new Label { Text = "Actions" });
+
+        var attackButton = new Button { Id = "Attack", Content = new Label { Text = "Attack" } };
+        attackButton.Click += (s, a) =>
+        {
+            if (_combatManager.EnemyParty.Count > 0)
+                _combatManager.PlayerTurn_Attack(_combatManager.EnemyParty[0]);
+        };
+        actionPanel.Widgets.Add(attackButton);
+
+        var defendButton = new Button { Id = "Defend", Content = new Label { Text = "Defend" } };
+        defendButton.Click += (s, a) =>
+        {
+            _combatManager.PlayerTurn_Defend();
+        };
+        actionPanel.Widgets.Add(defendButton);
+
+        mainPanel.Widgets.Add(actionPanel);
+
         Content = mainPanel;
     }
 
