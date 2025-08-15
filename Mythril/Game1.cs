@@ -28,6 +28,7 @@ public class Game1 : Game
     private CardWidget? _draggedCard;
 
     private static LogWindow? _logWindow;
+    public static CombatScreen? _combatScreen;
     private static readonly List<string> _logMessages = new();
     private TaskProgressWindow? _taskProgressWindow;
 
@@ -103,6 +104,7 @@ public class Game1 : Game
         Console.WriteLine(message);
         _logMessages.Add(message);
         _logWindow?.AddLog(message);
+        _combatScreen?.AddLogMessage(message);
         if (Instance != null) Instance.NewLogAvailable = true;
     }
 

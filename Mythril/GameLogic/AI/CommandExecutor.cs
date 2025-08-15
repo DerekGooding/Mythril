@@ -37,6 +37,46 @@ public class CommandExecutor(Game1 game, Desktop desktop) : ICommandExecutor
         }
     }
 
+    private Button? FindButtonInTree(Widget? widget, string target)
+    {
+        if (widget == null) return null;
+
+        if (widget.Id == target && widget is Button buttonById)
+        {
+            return buttonById;
+        }
+
+        if (widget is Button button && button.Content is Label label && label.Text == target)
+        {
+            return button;
+        }
+
+        if (widget is Container container)
+        {
+            foreach (var child in container.Widgets)
+            {
+                var found = FindButtonInTree(child, target);
+                if (found != null)
+                {
+                    return found;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private Button? FindButton(string target)
+    {
+        if (_desktop.ModalWindow != null)
+        {
+            var button = FindButtonInTree(_desktop.ModalWindow, target);
+            if (button != null) return button;
+        }
+
+        return FindButtonInTree(_desktop.Root, target);
+    }
+
     private void HandleClickButton(Command command)
     {
         if (command.Target == null)
@@ -45,7 +85,7 @@ public class CommandExecutor(Game1 game, Desktop desktop) : ICommandExecutor
             return;
         }
 
-        var button = _desktop.Root.FindChildById(command.Target) as Button;
+        var button = FindButton(command.Target);
 
         if (button != null)
         {

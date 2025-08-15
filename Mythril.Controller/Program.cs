@@ -36,15 +36,11 @@ static class Program
             // 4. Define a sequence of commands
             var commands = new Command[]
             {
-                new() { Action = "PING" },
+                new() { Action = "CLICK_BUTTON", Target = "Test Combat" },
                 new() { Action = "WAIT", Args = new Dictionary<string, object> { { "seconds", 2.0 } } },
-                new() { Action = "CLICK_BUTTON", Target = "Settings" },
-                new() { Action = "WAIT", Args = new Dictionary<string, object> { { "seconds", 1.0 } } },
+                new() { Action = "CLICK_BUTTON", Target = "Attack" },
+                new() { Action = "WAIT", Args = new Dictionary<string, object> { { "seconds", 2.0 } } },
                 new() { Action = "SCREENSHOT", Args = new Dictionary<string, object> { { "filename", "screenshot1.png" }, { "inline", true } } },
-                new() { Action = "WAIT", Args = new Dictionary<string, object> { { "seconds", 1.0 } } },
-                new() { Action = "CLICK_BUTTON", Target = "Close" }, // Assuming Settings dialog has a Close button
-                new() { Action = "WAIT", Args = new Dictionary<string, object> { { "seconds", 1.0 } } },
-                new() { Action = "SCREENSHOT", Args = new Dictionary<string, object> { { "filename", "screenshot2.png" }, { "inline", true } } },
                 new() { Action = "EXIT" }
             };
 
@@ -63,6 +59,9 @@ static class Program
                 if (cmd.Action == "SCREENSHOT" && gameResponse.StartsWith("data:image/png;base64,"))
                 {
                     Console.WriteLine("Received inline base64 screenshot.");
+                    Console.WriteLine("JULES_SCREENSHOT_START");
+                    Console.WriteLine(gameResponse);
+                    Console.WriteLine("JULES_SCREENSHOT_END");
                     // In a real scenario, you would decode and save/process the image data
                     var base64Image = gameResponse.Substring("data:image/png;base64,".Length);
                     var imageData = Convert.FromBase64String(base64Image);
