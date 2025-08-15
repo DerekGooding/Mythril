@@ -7,10 +7,10 @@ public class StdIoTransport : ICommandTransport
     private readonly TextReader _input;
     private readonly TextWriter _output;
 
-    public StdIoTransport()
+    public StdIoTransport(TextReader input, TextWriter output)
     {
-        _input = Console.In;
-        _output = Console.Out;
+        _input = input;
+        _output = output;
     }
 
     public async Task SendAsync(string message, CancellationToken cancellationToken = default)
