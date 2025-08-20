@@ -14,9 +14,9 @@ public class ResourceManagerTests
 
         // Assert
         Assert.IsNotNull(resourceManager.Cards);
-        Assert.IsTrue(resourceManager.Cards.Count > 0);
+        Assert.IsGreaterThan(0, resourceManager.Cards.Count);
         Assert.IsNotNull(resourceManager.Characters);
-        Assert.IsTrue(resourceManager.Characters.Count > 0);
+        Assert.IsGreaterThan(0, resourceManager.Characters.Count);
     }
 
     [TestMethod]
@@ -53,12 +53,12 @@ public class ResourceManagerTests
 
         // Assert
         Assert.IsNotNull(resourceManager.Materia);
-        Assert.IsTrue(resourceManager.Materia.Count > 0);
+        Assert.IsGreaterThan(0, resourceManager.Materia.Count);
 
         var fireMateria = resourceManager.Materia.FirstOrDefault(m => m.Name == "Fire") as MagicMateria;
         Assert.IsNotNull(fireMateria);
         Assert.AreEqual(MateriaType.Magic, fireMateria.Type);
-        Assert.AreEqual(3, fireMateria.Spells.Count);
+        Assert.HasCount(3, fireMateria.Spells);
 
         var shivaMateria = resourceManager.Materia.FirstOrDefault(m => m.Name == "Shiva") as SummonMateria;
         Assert.IsNotNull(shivaMateria);

@@ -14,7 +14,7 @@ public class InventoryTests
 
         // Assert
         Assert.IsNotNull(resourceManager.Items);
-        Assert.IsTrue(resourceManager.Items.Count > 0);
+        Assert.IsGreaterThan(0, resourceManager.Items.Count);
 
         var potion = resourceManager.Items.FirstOrDefault(i => i.Name == "Potion") as ConsumableItem;
         Assert.IsNotNull(potion);

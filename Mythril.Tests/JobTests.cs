@@ -14,12 +14,12 @@ public class JobTests
 
         // Assert
         Assert.IsNotNull(resourceManager.Jobs);
-        Assert.IsTrue(resourceManager.Jobs.Count > 0);
+        Assert.IsGreaterThan(0, resourceManager.Jobs.Count);
 
         var squireJob = resourceManager.Jobs.FirstOrDefault(j => j.Name == "Squire") as Squire;
         Assert.IsNotNull(squireJob);
         Assert.AreEqual("A basic warrior in training.", squireJob.Description);
-        Assert.AreEqual(3, squireJob.Abilities.Count);
+        Assert.HasCount(3, squireJob.Abilities);
     }
 
     [TestMethod]
@@ -36,6 +36,6 @@ public class JobTests
         Assert.IsNotNull(hero);
         Assert.IsNotNull(hero.Job);
         Assert.AreEqual("Squire", hero.Job.Name);
-        Assert.IsInstanceOfType(hero.Job, typeof(Squire));
+        Assert.IsInstanceOfType<Squire>(hero.Job);
     }
 }

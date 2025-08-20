@@ -71,13 +71,13 @@ public class CombatManager(PartyManager partyManager)
 
     private bool IsCombatOver()
     {
-        if (!_playerParty.Any())
+        if (_playerParty.Count == 0)
         {
             Game1.Log("You have been defeated!");
             return true;
         }
 
-        if (!_enemyParty.Any())
+        if (_enemyParty.Count == 0)
         {
             Game1.Log("You are victorious!");
             return true;

@@ -62,7 +62,7 @@ static class Program
                     Console.WriteLine(gameResponse);
                     Console.WriteLine("JULES_SCREENSHOT_END");
                     // In a real scenario, you would decode and save/process the image data
-                    var base64Image = gameResponse.Substring("data:image/png;base64,".Length);
+                    var base64Image = gameResponse["data:image/png;base64,".Length..];
                     var imageData = Convert.FromBase64String(base64Image);
                     Console.WriteLine($"Screenshot data length: {imageData.Length} bytes.");
                 }

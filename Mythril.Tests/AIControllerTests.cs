@@ -43,7 +43,7 @@ public class AIControllerTests
         var response = await mockTransport.Object.ReceiveAsync(It.IsAny<CancellationToken>());
 
         // Assert
-        Assert.IsTrue(response.StartsWith("data:image/png;base64,"));
+        Assert.StartsWith("data:image/png;base64,", response);
     }
 
     [TestMethod]

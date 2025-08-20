@@ -14,7 +14,7 @@
             <DropZone OnCardDrop="CardDropped" />
         </div>
         <div class="col-4">
-            <PartyPanel Party="@partyManager.PartyMembers" />
+            <PartyPanel Party="@partyManager?.PartyMembers" />
         </div>
     </div>
     <div class="row">
@@ -32,8 +32,8 @@
 
 @code {
     private ResourceManager resourceManager = new();
-    private PartyManager partyManager;
-    private GameManager gameManager;
+    private PartyManager? partyManager;
+    private GameManager? gameManager;
 
     protected override void OnInitialized()
     {
@@ -43,13 +43,13 @@
 
     private void Collect()
     {
-        gameManager.CollectRewards();
+        gameManager?.CollectRewards();
         StateHasChanged();
     }
 
     private void NextDay()
     {
-        gameManager.AdvanceTick();
+        gameManager?.AdvanceTick();
         StateHasChanged();
     }
 

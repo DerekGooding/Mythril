@@ -3,15 +3,15 @@
 @inject DragDropService DragDropService
 
 <div class="card" draggable="true" @ondragstart="() => HandleDragStart()">
-    <div class="card-header">@CardData.Title</div>
+    <div class="card-header">@CardData?.Title</div>
     <div class="card-body">
-        <p>@CardData.Description</p>
+        <p>@CardData?.Description</p>
     </div>
 </div>
 
 @code {
     [Parameter]
-    public CardData CardData { get; set; }
+    public CardData? CardData { get; set; }
 
     private void HandleDragStart()
     {

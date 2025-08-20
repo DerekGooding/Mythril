@@ -19,8 +19,8 @@ public class CombatTests
         combatManager.StartCombat(enemies);
 
         // Assert
-        Assert.AreEqual(4, combatManager.PlayerParty.Count);
-        Assert.AreEqual(2, combatManager.EnemyParty.Count);
+        Assert.HasCount(4, combatManager.PlayerParty);
+        Assert.HasCount(2, combatManager.EnemyParty);
         Assert.AreEqual("Hero", combatManager.PlayerParty[0].Name);
         Assert.AreEqual("Goblin", combatManager.EnemyParty[0].Name);
     }
