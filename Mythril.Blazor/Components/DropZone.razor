@@ -1,0 +1,21 @@
+@using Mythril.GameLogic
+@using Mythril.Blazor.Services
+@inject DragDropService DragDropService
+
+<div class="drop-zone" @ondragover:preventDefault="true" @ondrop="HandleDrop">
+    <p>Drop a card here to play it.</p>
+</div>
+
+@code {
+    [Parameter]
+    public EventCallback<CardData> OnCardDrop { get; set; }
+
+    private void HandleDrop()
+    {
+        var card = DragDropService.Data as CardData;
+        if (card != null)
+        {
+            OnCardDrop.InvokeAsync(card);
+        }
+    }
+}
