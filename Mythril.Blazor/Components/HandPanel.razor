@@ -1,0 +1,13 @@
+@using Mythril.GameLogic;
+
+<div class="hand-panel">
+    @foreach (var card in Cards)
+    {
+        <Card CardData="card" />
+    }
+</div>
+
+@code {
+    [Parameter]
+    public List<CardData> Cards { get; set; }
+}

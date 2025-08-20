@@ -1,7 +1,62 @@
-﻿@page "/"
+@page "/"
 
-<PageTitle>Home</PageTitle>
+<PageTitle>Mythril</PageTitle>
 
-<h1>Hello, world!</h1>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <ResourcePanel Gold="@resourceManager.Gold" Mana="@resourceManager.Mana" Faith="@resourceManager.Faith" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-8">
+            <HandPanel Cards="@resourceManager.Cards" />
+            <DropZone OnCardDrop="CardDropped" />
+        </div>
+        <div class="col-4">
+            <PartyPanel Party="@partyManager.Party" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <ButtonPanel OnCollectClick="Collect" OnNextDayClick="NextDay" />
+        </div>
+    </div>
+</div>
 
-Welcome to your new app.
+@using Mythril.GameLogic
+@using Mythril.GameLogic.Combat
+@using Mythril.GameLogic.Items
+@using Mythril.GameLogic.Jobs
+@using Mythril.GameLogic.Materia
+
+@code {
+    private ResourceManager resourceManager = new();
+    private PartyManager partyManager;
+    private GameManager gameManager;
+
+    protected override void OnInitialized()
+    {
+        partyManager = new PartyManager(resourceManager);
+        gameManager = new GameManager(resourceManager);
+    }
+
+    private void Collect()
+    {
+        gameManager.CollectRewards();
+        StateHasChanged();
+    }
+
+    private void NextDay()
+    {
+        gameManager.AdvanceTick();
+        StateHasChanged();
+    }
+
+    private void CardDropped(CardData card)
+    {
+        resourceManager.Cards.Remove(card);
+        // In a real game, you would apply the card's effects here.
+        StateHasChanged();
+    }
+}

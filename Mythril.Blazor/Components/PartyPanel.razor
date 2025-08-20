@@ -1,0 +1,14 @@
+@using Mythril.GameLogic;
+
+<div class="party-panel">
+    <h3>Party</h3>
+    @foreach (var character in Party)
+    {
+        <div>@character.Name</div>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public List<Character> Party { get; set; }
+}
