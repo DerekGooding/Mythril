@@ -1,10 +1,6 @@
 using Mythril.Data;
 using Mythril.Data.Items;
 using Mythril.Data.Jobs;
-using Mythril.Data.Materia;
-using Newtonsoft.Json;
-using System.Collections.Generic;
-using System.IO;
 
 namespace Mythril.GameLogic;
 
@@ -28,12 +24,12 @@ public class ResourceManager
         Mana = 0;
         Faith = 0;
 
-        Cards = new List<CardData>();
-        Characters = new List<Character>();
-        Materia = new List<Mythril.Data.Materia.Materia>();
-        Jobs = new List<Job>();
-        Items = new List<Item>();
-        Enemies = new List<Enemy>();
+        Cards = [];
+        Characters = [];
+        Materia = [];
+        Jobs = [];
+        Items = [];
+        Enemies = [];
 
         Inventory = new InventoryManager(this);
     }
@@ -48,20 +44,11 @@ public class ResourceManager
         Enemies = enemies;
     }
 
-    public void AddGold(int amount)
-    {
-        Gold += amount;
-    }
+    public void AddGold(int amount) => Gold += amount;
 
-    public void AddMana(int amount)
-    {
-        Mana += amount;
-    }
+    public void AddMana(int amount) => Mana += amount;
 
-    public void AddFaith(int amount)
-    {
-        Faith += amount;
-    }
+    public void AddFaith(int amount) => Faith += amount;
 
     public void Reset()
     {

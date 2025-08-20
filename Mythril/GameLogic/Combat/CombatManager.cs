@@ -1,8 +1,4 @@
-using Microsoft.Xna.Framework;
 using Mythril.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Mythril.GameLogic.Combat;
 
@@ -13,22 +9,17 @@ public enum CombatState
     CombatOver
 }
 
-public class CombatManager
+public class CombatManager(PartyManager partyManager)
 {
     public CombatState State { get; private set; }
-    private readonly PartyManager _partyManager;
+    private readonly PartyManager _partyManager = partyManager;
     public IReadOnlyList<Character> PlayerParty => _playerParty;
     public IReadOnlyList<Character> EnemyParty => _enemyParty;
-    private readonly List<Character> _playerParty = new List<Character>();
-    private readonly List<Character> _enemyParty = new List<Character>();
-    private readonly List<Character> _turnOrder = new List<Character>();
+    private readonly List<Character> _playerParty = [];
+    private readonly List<Character> _enemyParty = [];
+    private readonly List<Character> _turnOrder = [];
     private int _turnIndex = 0;
     public Character CurrentCombatant => _turnOrder[_turnIndex];
-
-    public CombatManager(PartyManager partyManager)
-    {
-        _partyManager = partyManager;
-    }
 
     public void StartCombat(List<Character> enemies)
     {
@@ -76,20 +67,7 @@ public class CombatManager
         _turnIndex = (_turnIndex + 1) % _turnOrder.Count;
     }
 
-    private bool IsCombatOver()
-    {
-        if (_playerParty.Count == 0)
-        {
-            return true;
-        }
-
-        if (_enemyParty.Count == 0)
-        {
-            return true;
-        }
-
-        return false;
-    }
+    private bool IsCombatOver() => _playerParty.Count == 0 || _enemyParty.Count == 0;
 
     private void PerformAttack(Character attacker, Character target)
     {

@@ -1,7 +1,5 @@
-using Mythril.Data.Materia;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System;
 
 namespace Mythril.Data.Materia;
 

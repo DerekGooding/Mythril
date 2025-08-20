@@ -3,26 +3,15 @@ using Newtonsoft.Json;
 
 namespace Mythril.Data;
 
-public class Character
+public class Character(string name, string jobName)
 {
-    public string Name { get; set; }
+    public string Name { get; set; } = name;
     [JsonIgnore]
     public Job? Job { get; set; }
-    public string JobName { get; set; }
-    public int JobPoints { get; set; }
-    public int MaxHealth { get; set; }
-    public int Health { get; set; }
-    public int AttackPower { get; set; }
-    public int Defense { get; set; }
-
-    public Character(string name, string jobName)
-    {
-        Name = name;
-        JobName = jobName;
-        JobPoints = 0;
-        MaxHealth = 100;
-        Health = 100;
-        AttackPower = 10;
-        Defense = 5;
-    }
+    public string JobName { get; set; } = jobName;
+    public int JobPoints { get; set; } = 0;
+    public int MaxHealth { get; set; } = 100;
+    public int Health { get; set; } = 100;
+    public int AttackPower { get; set; } = 10;
+    public int Defense { get; set; } = 5;
 }

@@ -1,22 +1,14 @@
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Mythril.Data.Jobs;
 using Newtonsoft.Json;
-using System.Collections.Generic;
-using System.IO;
 
 namespace Mythril.WebAPI.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class JobsController : ControllerBase
+public class JobsController(IWebHostEnvironment hostingEnvironment) : ControllerBase
 {
-    private readonly IWebHostEnvironment _hostingEnvironment;
-
-    public JobsController(IWebHostEnvironment hostingEnvironment)
-    {
-        _hostingEnvironment = hostingEnvironment;
-    }
+    private readonly IWebHostEnvironment _hostingEnvironment = hostingEnvironment;
 
     [HttpGet]
     public ActionResult<List<Job>> Get()

@@ -2,17 +2,12 @@ using Mythril.Data.Items;
 
 namespace Mythril.GameLogic;
 
-public class InventoryManager
+public class InventoryManager(ResourceManager resourceManager)
 {
     private readonly List<Item> _items = [];
-    private readonly ResourceManager _resourceManager;
+    private readonly ResourceManager _resourceManager = resourceManager;
 
     public IReadOnlyList<Item> Items => _items.AsReadOnly();
-
-    public InventoryManager(ResourceManager resourceManager)
-    {
-        _resourceManager = resourceManager;
-    }
 
     public void AddItem(string itemName, int quantity = 1)
     {

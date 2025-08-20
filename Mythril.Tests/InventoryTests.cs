@@ -1,8 +1,5 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Mythril.Data.Items;
 using Mythril.GameLogic;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Mythril.Tests;
 
@@ -20,7 +17,7 @@ public class InventoryTests
             new ConsumableItem("Potion", "Restores HP", 50),
             new EquipmentItem("Bronze Sword", "A basic sword", 100, EquipmentSlot.Weapon)
         };
-        resourceManager.SetData(new List<Mythril.Data.CardData>(), new List<Mythril.Data.Character>(), new List<Mythril.Data.Materia.Materia>(), new List<Mythril.Data.Jobs.Job>(), items, new List<Mythril.Data.Enemy>());
+        resourceManager.SetData([], [], [], [], items, []);
     }
 
     [TestMethod]

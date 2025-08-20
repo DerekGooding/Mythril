@@ -1,9 +1,3 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Mythril.Data.Materia;
-using Mythril.GameLogic;
-using System.Collections.Generic;
-using System.Linq;
-
 namespace Mythril.Tests;
 
 [TestClass]

@@ -1,4 +1,3 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Mythril.Data.Materia;
 using Mythril.GameLogic.Materia;
 
@@ -7,12 +6,8 @@ namespace Mythril.Tests;
 [TestClass]
 public class MateriaLogicTests
 {
-    private class TestMateria : Data.Materia.Materia
+    private class TestMateria(string name, string description, int maxAP, int maxLevel) : Data.Materia.Materia(name, description, MateriaType.Magic, maxAP, maxLevel)
     {
-        public TestMateria(string name, string description, int maxAP, int maxLevel)
-            : base(name, description, MateriaType.Magic, maxAP, maxLevel)
-        {
-        }
     }
 
     [TestMethod]

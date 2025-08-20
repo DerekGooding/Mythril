@@ -3,38 +3,20 @@ using Mythril.Data.Items;
 using Mythril.Data.Jobs;
 using Mythril.Data.Materia;
 using Newtonsoft.Json;
-using System.Net.Http;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using System;
 
 namespace Mythril.Blazor.Services;
 
-public class GameDataService
+public class GameDataService(HttpClient httpClient)
 {
-    private readonly HttpClient _httpClient;
+    private readonly HttpClient _httpClient = httpClient;
 
-    public GameDataService(HttpClient httpClient)
-    {
-        _httpClient = httpClient;
-    }
+    public async Task<List<CardData>> GetCardsAsync() => await _httpClient.GetFromJsonAsync<List<CardData>>("api/cards");
 
-    public async Task<List<CardData>> GetCardsAsync()
-    {
-        return await _httpClient.GetFromJsonAsync<List<CardData>>("api/cards");
-    }
+    public async Task<List<Character>> GetCharactersAsync() => await _httpClient.GetFromJsonAsync<List<Character>>("api/characters");
 
-    public async Task<List<Character>> GetCharactersAsync()
-    {
-        return await _httpClient.GetFromJsonAsync<List<Character>>("api/characters");
-    }
+    public async Task<List<Enemy>> GetEnemiesAsync() => await _httpClient.GetFromJsonAsync<List<Enemy>>("api/enemies");
 
-    public async Task<List<Enemy>> GetEnemiesAsync()
-    {
-        return await _httpClient.GetFromJsonAsync<List<Enemy>>("api/enemies");
-    }
-
-    public async Task<List<Item>> GetItemsAsync()
+    public async Task<List<Item>?> GetItemsAsync()
     {
         var settings = new JsonSerializerSettings
         {
@@ -44,7 +26,7 @@ public class GameDataService
         return JsonConvert.DeserializeObject<List<Item>>(response, settings);
     }
 
-    public async Task<List<Job>> GetJobsAsync()
+    public async Task<List<Job>?> GetJobsAsync()
     {
         var settings = new JsonSerializerSettings
         {
@@ -54,7 +36,7 @@ public class GameDataService
         return JsonConvert.DeserializeObject<List<Job>>(response, settings);
     }
 
-    public async Task<List<Materia>> GetMateriaAsync()
+    public async Task<List<Materia>?> GetMateriaAsync()
     {
         var settings = new JsonSerializerSettings
         {
@@ -67,7 +49,7 @@ public class GameDataService
 
 public static class HttpClientExtensions
 {
-    public static async Task<T> GetFromJsonAsync<T>(this HttpClient client, string requestUri)
+    public static async Task<T?> GetFromJsonAsync<T>(this HttpClient client, string requestUri)
     {
         var response = await client.GetAsync(requestUri);
         response.EnsureSuccessStatusCode();

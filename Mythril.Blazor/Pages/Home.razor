@@ -24,7 +24,7 @@
             @if (resourceManager is not null)
             {
                 <HandPanel Cards="resourceManager.Cards" />
-                <DropZone OnCardDrop="CardDropped" />
+                <DropZone OnCardDrop="EventCallback.Factory.Create<CardData>(this, CardDropped)" />
             }
             else
             {

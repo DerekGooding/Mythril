@@ -1,5 +1,3 @@
-using Mythril.Data.Materia;
-
 namespace Mythril.GameLogic.Materia;
 
 public static class MateriaLogic

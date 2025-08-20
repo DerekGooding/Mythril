@@ -1,10 +1,8 @@
-using Microsoft.Xna.Framework;
 using Myra.Graphics2D;
 using Myra.Graphics2D.UI;
 using Mythril.Data;
 using Mythril.GameLogic;
 using Mythril.GameLogic.Combat;
-using System.Collections.Generic;
 
 namespace Mythril.UI;
 
@@ -48,7 +46,7 @@ public class MainLayout : Grid
         InitializePartyPanel();
 
         // Add some CardWidget instances
-        CardWidgets = new List<CardWidget>();
+        CardWidgets = [];
         AddInitialCards();
     }
 

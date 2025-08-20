@@ -1,9 +1,6 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Mythril.Data;
 using Mythril.GameLogic;
 using Mythril.GameLogic.Combat;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Mythril.Tests;
 
@@ -18,15 +15,15 @@ public class CombatTests
         resourceManager = new ResourceManager();
         var characters = new List<Character>
         {
-            new Character("Hero", "Squire"),
-            new Character("Ally", "Chemist")
+            new("Hero", "Squire"),
+            new("Ally", "Chemist")
         };
         var enemies = new List<Enemy>
         {
-            new Enemy("Goblin", "Warrior"),
-            new Enemy("Slime", "Monster")
+            new("Goblin", "Warrior"),
+            new("Slime", "Monster")
         };
-        resourceManager.SetData(new List<CardData>(), characters, new List<Data.Materia.Materia>(), new List<Data.Jobs.Job>(), new List<Data.Items.Item>(), enemies);
+        resourceManager.SetData([], characters, [], [], [], enemies);
     }
 
     [TestMethod]
@@ -41,8 +38,8 @@ public class CombatTests
         combatManager.StartCombat(enemies);
 
         // Assert
-        Assert.AreEqual(2, combatManager.PlayerParty.Count);
-        Assert.AreEqual(2, combatManager.EnemyParty.Count);
+        Assert.HasCount(2, combatManager.PlayerParty);
+        Assert.HasCount(2, combatManager.EnemyParty);
         Assert.AreEqual("Hero", combatManager.PlayerParty[0].Name);
         Assert.AreEqual("Goblin", combatManager.EnemyParty[0].Name);
     }

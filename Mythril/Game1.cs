@@ -1,4 +1,3 @@
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Myra;
@@ -13,11 +12,6 @@ using AssetManagementBase;
 using Mythril.API.Transport;
 using Mythril.GameLogic.AI;
 using Newtonsoft.Json;
-using System.Collections.Generic;
-using System.IO;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Mythril;
 
@@ -36,7 +30,7 @@ public class Game1 : Game
     private CardWidget? _draggedCard;
 
     private static LogWindow? _logWindow;
-    private static readonly List<string> _logMessages = new List<string>();
+    private static readonly List<string> _logMessages = [];
     private TaskProgressWindow? _taskProgressWindow;
 
     private readonly ResourceManager _resourceManager;
@@ -44,7 +38,7 @@ public class Game1 : Game
     private readonly GameManager _gameManager;
     private readonly AssetManager _assetManager;
     private readonly CommandListener? _commandListener;
-    private readonly Stack<ICommandExecutor> _commandExecutorStack = new Stack<ICommandExecutor>();
+    private readonly Stack<ICommandExecutor> _commandExecutorStack = new();
     private CommandExecutor? _commandExecutor;
     private Action<string>? _screenshotCallback;
 

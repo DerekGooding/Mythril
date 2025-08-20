@@ -1,22 +1,14 @@
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Mythril.Data.Items;
 using Newtonsoft.Json;
-using System.Collections.Generic;
-using System.IO;
 
 namespace Mythril.WebAPI.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class ItemsController : ControllerBase
+public class ItemsController(IWebHostEnvironment hostingEnvironment) : ControllerBase
 {
-    private readonly IWebHostEnvironment _hostingEnvironment;
-
-    public ItemsController(IWebHostEnvironment hostingEnvironment)
-    {
-        _hostingEnvironment = hostingEnvironment;
-    }
+    private readonly IWebHostEnvironment _hostingEnvironment = hostingEnvironment;
 
     [HttpGet]
     public ActionResult<List<Item>> Get()
