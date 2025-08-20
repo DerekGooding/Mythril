@@ -1,13 +1,24 @@
+using Microsoft.Xna.Framework;
+using Mythril.Data;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
 namespace Mythril.GameLogic;
 
-public class TaskManager(ResourceManager resourceManager)
+public class TaskManager
 {
-    private readonly List<TaskProgress> _activeTasks = [];
-    private readonly ResourceManager _resourceManager = resourceManager;
+    private readonly List<TaskProgress> _activeTasks = new List<TaskProgress>();
+    private readonly ResourceManager _resourceManager;
     private bool _isPaused = false;
 
     public event Action<TaskProgress>? OnTaskStarted;
     public event Action<TaskProgress>? OnTaskCompleted;
+
+    public TaskManager(ResourceManager resourceManager)
+    {
+        _resourceManager = resourceManager;
+    }
 
     public void SetPaused(bool paused) => _isPaused = paused;
 
@@ -16,7 +27,6 @@ public class TaskManager(ResourceManager resourceManager)
         var task = new TaskProgress(cardData);
         task.OnCompleted += HandleTaskCompleted;
         _activeTasks.Add(task);
-        Game1.Log($"Task '{cardData.Title}' started.");
         OnTaskStarted?.Invoke(task);
     }
 
@@ -44,16 +54,13 @@ public class TaskManager(ResourceManager resourceManager)
         {
             case "card4": // Pray
                 _resourceManager.AddFaith(task.CardData.RewardValue);
-                Game1.Log($"Task '{task.CardData.Title}' completed. Gained {task.CardData.RewardValue} Faith.");
                 break;
             case "card5": // Build Shrine
                 _resourceManager.AddFaith(-10); // Consume 10 Faith
                 _resourceManager.AddGold(-50); // Consume 50 Gold
-                Game1.Log($"Task '{task.CardData.Title}' completed. Shrine built.");
                 break;
             default:
                 _resourceManager.AddGold(task.CardData.RewardValue); // Example reward
-                Game1.Log($"Task '{task.CardData.Title}' completed. Gained {task.CardData.RewardValue} Gold.");
                 break;
         }
 

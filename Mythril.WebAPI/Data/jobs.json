@@ -1,0 +1,14 @@
+[
+  {
+    "Type": "Squire",
+    "Name": "Squire",
+    "Description": "A basic warrior in training.",
+    "Abilities": [ "Basic Skill", "Throw Stone", "Heal" ]
+  },
+  {
+    "Type": "Chemist",
+    "Name": "Chemist",
+    "Description": "An expert in mixing items.",
+    "Abilities": [ "Item", "Potion", "Phoenix Down" ]
+  }
+]

@@ -1,30 +1,52 @@
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Mythril.Data;
+using Mythril.Data.Materia;
 using Mythril.GameLogic;
-using Mythril.GameLogic.Materia;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Mythril.Tests;
 
 [TestClass]
 public class ResourceManagerTests
 {
-    [TestMethod]
-    public void ResourceManager_LoadsData_OnConstruction()
-    {
-        // Act
-        var resourceManager = new ResourceManager();
+    private ResourceManager resourceManager;
 
-        // Assert
-        Assert.IsNotNull(resourceManager.Cards);
-        Assert.IsGreaterThan(0, resourceManager.Cards.Count);
-        Assert.IsNotNull(resourceManager.Characters);
-        Assert.IsGreaterThan(0, resourceManager.Characters.Count);
+    [TestInitialize]
+    public void Setup()
+    {
+        resourceManager = new ResourceManager();
+        var cards = new List<CardData>
+        {
+            new CardData { Id = "card1", Title = "Forest Foraging", DurationSeconds = 60, RewardValue = 10 }
+        };
+        var characters = new List<Character>
+        {
+            new Character("Hero", "Squire")
+        };
+        var materia = new List<Materia>
+        {
+            new MagicMateria("Fire", "Casts Fire spell", 100, 3, new List<string> { "Fire1", "Fire2", "Fire3" }),
+            new SummonMateria("Shiva", "Summons Shiva", 500, 5, "Shiva")
+        };
+        resourceManager.SetData(cards, characters, materia, new List<Data.Jobs.Job>(), new List<Data.Items.Item>(), new List<Enemy>());
     }
 
     [TestMethod]
-    public void ResourceManager_LoadsCardData_Correctly()
+    public void ResourceManager_StoresAndRetrievesData_Correctly()
     {
-        // Act
-        var resourceManager = new ResourceManager();
+        // Assert
+        Assert.IsNotNull(resourceManager.Cards);
+        Assert.AreEqual(1, resourceManager.Cards.Count);
+        Assert.IsNotNull(resourceManager.Characters);
+        Assert.AreEqual(1, resourceManager.Characters.Count);
+        Assert.IsNotNull(resourceManager.Materia);
+        Assert.AreEqual(2, resourceManager.Materia.Count);
+    }
 
+    [TestMethod]
+    public void ResourceManager_RetrievesCardData_Correctly()
+    {
         // Assert
         var card = resourceManager.Cards.FirstOrDefault(c => c.Id == "card1");
         Assert.IsNotNull(card);
@@ -34,11 +56,8 @@ public class ResourceManagerTests
     }
 
     [TestMethod]
-    public void ResourceManager_LoadsCharacterData_Correctly()
+    public void ResourceManager_RetrievesCharacterData_Correctly()
     {
-        // Act
-        var resourceManager = new ResourceManager();
-
         // Assert
         var character = resourceManager.Characters.FirstOrDefault(c => c.Name == "Hero");
         Assert.IsNotNull(character);
@@ -46,19 +65,13 @@ public class ResourceManagerTests
     }
 
     [TestMethod]
-    public void ResourceManager_LoadsMateriaData_Correctly()
+    public void ResourceManager_RetrievesMateriaData_Correctly()
     {
-        // Act
-        var resourceManager = new ResourceManager();
-
         // Assert
-        Assert.IsNotNull(resourceManager.Materia);
-        Assert.IsGreaterThan(0, resourceManager.Materia.Count);
-
         var fireMateria = resourceManager.Materia.FirstOrDefault(m => m.Name == "Fire") as MagicMateria;
         Assert.IsNotNull(fireMateria);
         Assert.AreEqual(MateriaType.Magic, fireMateria.Type);
-        Assert.HasCount(3, fireMateria.Spells);
+        Assert.AreEqual(3, fireMateria.Spells.Count);
 
         var shivaMateria = resourceManager.Materia.FirstOrDefault(m => m.Name == "Shiva") as SummonMateria;
         Assert.IsNotNull(shivaMateria);
