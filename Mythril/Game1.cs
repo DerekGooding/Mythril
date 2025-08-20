@@ -1,12 +1,23 @@
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Myra;
 using Myra.Graphics2D.UI;
+using Mythril.Data;
+using Mythril.Data.Items;
+using Mythril.Data.Jobs;
+using Mythril.Data.Materia;
 using Mythril.GameLogic;
 using Mythril.UI;
 using AssetManagementBase;
 using Mythril.API.Transport;
 using Mythril.GameLogic.AI;
+using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.IO;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Mythril;
 
@@ -25,7 +36,7 @@ public class Game1 : Game
     private CardWidget? _draggedCard;
 
     private static LogWindow? _logWindow;
-    private static readonly List<string> _logMessages = [];
+    private static readonly List<string> _logMessages = new List<string>();
     private TaskProgressWindow? _taskProgressWindow;
 
     private readonly ResourceManager _resourceManager;
@@ -33,7 +44,7 @@ public class Game1 : Game
     private readonly GameManager _gameManager;
     private readonly AssetManager _assetManager;
     private readonly CommandListener? _commandListener;
-    private readonly Stack<ICommandExecutor> _commandExecutorStack = new();
+    private readonly Stack<ICommandExecutor> _commandExecutorStack = new Stack<ICommandExecutor>();
     private CommandExecutor? _commandExecutor;
     private Action<string>? _screenshotCallback;
 
@@ -70,6 +81,8 @@ public class Game1 : Game
         MyraEnvironment.Game = this;
         _assetManager.Open("DefaultSkin.xml");
 
+        LoadData();
+
         _spriteBatch = new SpriteBatch(GraphicsDevice);
         _finalRenderTarget = new RenderTarget2D(GraphicsDevice, GraphicsDevice.PresentationParameters.BackBufferWidth, GraphicsDevice.PresentationParameters.BackBufferHeight, false, GraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24);
 
@@ -92,6 +105,23 @@ public class Game1 : Game
         {
             cardWidget.OnDragEnd += HandleCardDragEnd;
         }
+    }
+
+    private void LoadData()
+    {
+        var settings = new JsonSerializerSettings
+        {
+            Converters = { new MateriaConverter(), new JobConverter(), new ItemConverter() }
+        };
+
+        var cards = JsonConvert.DeserializeObject<List<CardData>>(File.ReadAllText("Data/cards.json"));
+        var characters = JsonConvert.DeserializeObject<List<Character>>(File.ReadAllText("Data/characters.json"));
+        var materia = JsonConvert.DeserializeObject<List<Materia>>(File.ReadAllText("Data/materia.json"), settings);
+        var jobs = JsonConvert.DeserializeObject<List<Job>>(File.ReadAllText("Data/jobs.json"), settings);
+        var items = JsonConvert.DeserializeObject<List<Item>>(File.ReadAllText("Data/items.json"), settings);
+        var enemies = JsonConvert.DeserializeObject<List<Enemy>>(File.ReadAllText("Data/enemies.json"));
+
+        _resourceManager.SetData(cards, characters, materia, jobs, items, enemies);
     }
 
     public static void Log(string message)

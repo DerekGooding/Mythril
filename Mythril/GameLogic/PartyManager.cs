@@ -1,8 +1,12 @@
+using Mythril.Data;
+using System.Collections.Generic;
+using System.Linq;
+
 namespace Mythril.GameLogic;
 
 public class PartyManager
 {
-    public List<Character> PartyMembers { get; } = [];
+    public List<Character> PartyMembers { get; } = new List<Character>();
 
     public PartyManager(ResourceManager resourceManager)
     {

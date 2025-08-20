@@ -1,37 +1,32 @@
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Mythril.Data.Items;
 using Mythril.GameLogic;
-using Mythril.GameLogic.Items;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Mythril.Tests;
 
 [TestClass]
 public class InventoryTests
 {
-    [TestMethod]
-    public void ResourceManager_LoadsItemData_Correctly()
+    private ResourceManager resourceManager;
+
+    [TestInitialize]
+    public void Setup()
     {
-        // Act
-        var resourceManager = new ResourceManager();
-
-        // Assert
-        Assert.IsNotNull(resourceManager.Items);
-        Assert.IsGreaterThan(0, resourceManager.Items.Count);
-
-        var potion = resourceManager.Items.FirstOrDefault(i => i.Name == "Potion") as ConsumableItem;
-        Assert.IsNotNull(potion);
-        Assert.AreEqual(ItemType.Consumable, potion.Type);
-        Assert.AreEqual(50, potion.Value);
-
-        var sword = resourceManager.Items.FirstOrDefault(i => i.Name == "Bronze Sword") as EquipmentItem;
-        Assert.IsNotNull(sword);
-        Assert.AreEqual(ItemType.Equipment, sword.Type);
-        Assert.AreEqual(EquipmentSlot.Weapon, sword.Slot);
+        resourceManager = new ResourceManager();
+        var items = new List<Item>
+        {
+            new ConsumableItem("Potion", "Restores HP", 50),
+            new EquipmentItem("Bronze Sword", "A basic sword", 100, EquipmentSlot.Weapon)
+        };
+        resourceManager.SetData(new List<Mythril.Data.CardData>(), new List<Mythril.Data.Character>(), new List<Mythril.Data.Materia.Materia>(), new List<Mythril.Data.Jobs.Job>(), items, new List<Mythril.Data.Enemy>());
     }
 
     [TestMethod]
     public void InventoryManager_AddsAndRemovesItems_Correctly()
     {
         // Arrange
-        var resourceManager = new ResourceManager();
         var inventoryManager = resourceManager.Inventory;
 
         // Act

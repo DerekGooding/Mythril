@@ -1,20 +1,45 @@
 @page "/"
+@using Mythril.Blazor.Services
+@using Mythril.Data
+@using Mythril.GameLogic
+@using Mythril.Data.Items
+@using Mythril.Data.Jobs
+@using Mythril.Data.Materia
+
+@inject GameDataService GameDataService
 
 <PageTitle>Mythril</PageTitle>
 
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
-            <ResourcePanel Gold="@resourceManager.Gold" Mana="@resourceManager.Mana" Faith="@resourceManager.Faith" />
+            @if (resourceManager is not null)
+            {
+                <ResourcePanel Gold="@resourceManager.Gold" Mana="@resourceManager.Mana" Faith="@resourceManager.Faith" />
+            }
         </div>
     </div>
     <div class="row">
         <div class="col-8">
-            <HandPanel Cards="@resourceManager.Cards" />
-            <DropZone OnCardDrop="CardDropped" />
+            @if (resourceManager is not null)
+            {
+                <HandPanel Cards="resourceManager.Cards" />
+                <DropZone OnCardDrop="CardDropped" />
+            }
+            else
+            {
+                <p><em>Loading...</em></p>
+            }
         </div>
         <div class="col-4">
-            <PartyPanel Party="@partyManager?.PartyMembers" />
+             @if (resourceManager is not null)
+            {
+                <PartyPanel Party="resourceManager.Characters" />
+            }
+            else
+            {
+                <p><em>Loading...</em></p>
+            }
         </div>
     </div>
     <div class="row">
@@ -24,38 +49,37 @@
     </div>
 </div>
 
-@using Mythril.GameLogic
-@using Mythril.GameLogic.Combat
-@using Mythril.GameLogic.Items
-@using Mythril.GameLogic.Jobs
-@using Mythril.GameLogic.Materia
-
 @code {
-    private ResourceManager resourceManager = new();
-    private PartyManager? partyManager;
-    private GameManager? gameManager;
+    private ResourceManager? resourceManager;
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        partyManager = new PartyManager(resourceManager);
-        gameManager = new GameManager(resourceManager);
+        var cards = await GameDataService.GetCardsAsync();
+        var characters = await GameDataService.GetCharactersAsync();
+        var enemies = await GameDataService.GetEnemiesAsync();
+        var items = await GameDataService.GetItemsAsync();
+        var jobs = await GameDataService.GetJobsAsync();
+        var materia = await GameDataService.GetMateriaAsync();
+
+        resourceManager = new ResourceManager();
+        resourceManager.SetData(cards, characters, materia, jobs, items, enemies);
     }
 
     private void Collect()
     {
-        gameManager?.CollectRewards();
+        // This will be implemented later
         StateHasChanged();
     }
 
     private void NextDay()
     {
-        gameManager?.AdvanceTick();
+        // This will be implemented later
         StateHasChanged();
     }
 
     private void CardDropped(CardData card)
     {
-        resourceManager.Cards.Remove(card);
+        resourceManager?.Cards.Remove(card);
         // In a real game, you would apply the card's effects here.
         StateHasChanged();
     }

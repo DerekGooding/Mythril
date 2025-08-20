@@ -1,3 +1,9 @@
+using Microsoft.Xna.Framework;
+using Mythril.Data;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
 namespace Mythril.GameLogic.Combat;
 
 public enum CombatState
@@ -7,17 +13,22 @@ public enum CombatState
     CombatOver
 }
 
-public class CombatManager(PartyManager partyManager)
+public class CombatManager
 {
     public CombatState State { get; private set; }
-    private readonly PartyManager _partyManager = partyManager;
+    private readonly PartyManager _partyManager;
     public IReadOnlyList<Character> PlayerParty => _playerParty;
     public IReadOnlyList<Character> EnemyParty => _enemyParty;
-    private readonly List<Character> _playerParty = [];
-    private readonly List<Character> _enemyParty = [];
-    private readonly List<Character> _turnOrder = [];
+    private readonly List<Character> _playerParty = new List<Character>();
+    private readonly List<Character> _enemyParty = new List<Character>();
+    private readonly List<Character> _turnOrder = new List<Character>();
     private int _turnIndex = 0;
     public Character CurrentCombatant => _turnOrder[_turnIndex];
+
+    public CombatManager(PartyManager partyManager)
+    {
+        _partyManager = partyManager;
+    }
 
     public void StartCombat(List<Character> enemies)
     {
@@ -32,8 +43,6 @@ public class CombatManager(PartyManager partyManager)
         _turnOrder.AddRange(_enemyParty);
         _turnIndex = 0;
         State = CombatState.PlayerTurn;
-
-        Game1.Log("Combat started!");
     }
 
     public void Update(GameTime gameTime)
@@ -51,7 +60,7 @@ public class CombatManager(PartyManager partyManager)
             var enemy = CurrentCombatant;
             if (_playerParty.Count > 0)
             {
-                var target = _playerParty[Random.Shared.Next(_playerParty.Count)];
+                var target = _playerParty[new Random().Next(_playerParty.Count)];
                 PerformAttack(enemy, target);
             }
             TakeTurn();
@@ -64,8 +73,6 @@ public class CombatManager(PartyManager partyManager)
         if (IsCombatOver()) return;
 
         var currentCombatant = _turnOrder[_turnIndex];
-        Game1.Log($"{currentCombatant.Name}'s turn.");
-
         _turnIndex = (_turnIndex + 1) % _turnOrder.Count;
     }
 
@@ -73,13 +80,11 @@ public class CombatManager(PartyManager partyManager)
     {
         if (_playerParty.Count == 0)
         {
-            Game1.Log("You have been defeated!");
             return true;
         }
 
         if (_enemyParty.Count == 0)
         {
-            Game1.Log("You are victorious!");
             return true;
         }
 
@@ -88,8 +93,7 @@ public class CombatManager(PartyManager partyManager)
 
     private void PerformAttack(Character attacker, Character target)
     {
-        Game1.Log($"{attacker.Name} attacks {target.Name}!");
-        target.TakeDamage(attacker.AttackPower);
+        // target.TakeDamage(attacker.AttackPower);
     }
 
     public void PlayerTurn_Attack(Character target)
@@ -101,7 +105,6 @@ public class CombatManager(PartyManager partyManager)
 
     public void PlayerTurn_Defend()
     {
-        Game1.Log($"{CurrentCombatant.Name} defends!");
         TakeTurn();
         State = CombatState.EnemyTurn;
     }

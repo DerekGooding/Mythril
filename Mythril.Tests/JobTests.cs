@@ -1,33 +1,34 @@
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Mythril.Data.Jobs;
 using Mythril.GameLogic;
-using Mythril.GameLogic.Jobs;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Mythril.Tests;
 
 [TestClass]
 public class JobTests
 {
-    [TestMethod]
-    public void ResourceManager_LoadsJobData_Correctly()
+    private ResourceManager resourceManager;
+
+    [TestInitialize]
+    public void Setup()
     {
-        // Act
-        var resourceManager = new ResourceManager();
-
-        // Assert
-        Assert.IsNotNull(resourceManager.Jobs);
-        Assert.IsGreaterThan(0, resourceManager.Jobs.Count);
-
-        var squireJob = resourceManager.Jobs.FirstOrDefault(j => j.Name == "Squire") as Squire;
-        Assert.IsNotNull(squireJob);
-        Assert.AreEqual("A basic warrior in training.", squireJob.Description);
-        Assert.HasCount(3, squireJob.Abilities);
+        resourceManager = new ResourceManager();
+        var jobs = new List<Job>
+        {
+            new Squire("Squire", "A basic warrior in training.", new List<string> { "Tackle", "Throw Stone", "Heal" })
+        };
+        var characters = new List<Mythril.Data.Character>
+        {
+            new Mythril.Data.Character("Hero", "Squire")
+        };
+        resourceManager.SetData(new List<Mythril.Data.CardData>(), characters, new List<Mythril.Data.Materia.Materia>(), jobs, new List<Mythril.Data.Items.Item>(), new List<Mythril.Data.Enemy>());
     }
 
     [TestMethod]
     public void PartyManager_LinksJobsToCharacters_Correctly()
     {
-        // Arrange
-        var resourceManager = new ResourceManager();
-
         // Act
         var partyManager = new PartyManager(resourceManager);
 
@@ -36,6 +37,6 @@ public class JobTests
         Assert.IsNotNull(hero);
         Assert.IsNotNull(hero.Job);
         Assert.AreEqual("Squire", hero.Job.Name);
-        Assert.IsInstanceOfType<Squire>(hero.Job);
+        Assert.IsInstanceOfType(hero.Job, typeof(Squire));
     }
 }

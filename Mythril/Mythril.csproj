@@ -42,6 +42,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Mythril.API\Mythril.API.csproj" />
+    <ProjectReference Include="..\Mythril.Data\Mythril.Data.csproj" />
   </ItemGroup>
 
 </Project>

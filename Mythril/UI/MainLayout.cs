@@ -1,7 +1,10 @@
+using Microsoft.Xna.Framework;
 using Myra.Graphics2D;
 using Myra.Graphics2D.UI;
+using Mythril.Data;
 using Mythril.GameLogic;
 using Mythril.GameLogic.Combat;
+using System.Collections.Generic;
 
 namespace Mythril.UI;
 
@@ -45,7 +48,7 @@ public class MainLayout : Grid
         InitializePartyPanel();
 
         // Add some CardWidget instances
-        CardWidgets = [];
+        CardWidgets = new List<CardWidget>();
         AddInitialCards();
     }
 
@@ -183,7 +186,7 @@ public class MainLayout : Grid
             _soundManager.PlaySound("button-click");
             var combatManager = new CombatManager(_partyManager);
             var enemies = new List<Character> { _resourceManager.Enemies[0], _resourceManager.Enemies[1] };
-            combatManager.StartCombat(enemies);
+            combatManager.StartCombat(enemies.ConvertAll(e => (Character)e));
             var combatScreen = new CombatScreen(combatManager);
             _game.PushCommandExecutor(combatScreen);
             combatScreen.Closed += (s, e) => _game.PopCommandExecutor();
@@ -249,7 +252,7 @@ public class MainLayout : Grid
 
     public void Update(GameTime gameTime)
     {
-        var flashScale = 1.0f + (0.1f * (float)Math.Sin(gameTime.TotalGameTime.TotalSeconds * 5));
+        var flashScale = 1.0f + (0.1f * (float)System.Math.Sin(gameTime.TotalGameTime.TotalSeconds * 5));
 
         _logButton.Scale = _game.NewLogAvailable ? new Vector2(flashScale, flashScale) : Vector2.One;
 
