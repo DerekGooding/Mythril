@@ -9,30 +9,18 @@ public class ItemConverter : JsonConverter
 
     public override object? ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
     {
-        JObject jsonObject = JObject.Load(reader);
-        JToken? typeToken = jsonObject["Type"];
-        if (typeToken == null)
+        var jsonObject = JObject.Load(reader);
+        var typeToken = jsonObject["Type"] ?? throw new JsonSerializationException("Item type is not defined.");
+        var typeName = typeToken.Value<string>();
+        Item item = typeName switch
         {
-            throw new JsonSerializationException("Item type is not defined.");
-        }
-        string? typeName = typeToken.Value<string>();
-
-        Item item;
-        switch (typeName)
-        {
-            case "Consumable":
-                item = new ConsumableItem();
-                break;
-            case "Equipment":
-                item = new EquipmentItem();
-                break;
+            "Consumable" => new ConsumableItem(),
+            "Equipment" => new EquipmentItem(),
             // case "KeyItem":
             //     item = new KeyItem();
             //     break;
-            default:
-                throw new JsonSerializationException($"Unknown item type: {typeName}");
-        }
-
+            _ => throw new JsonSerializationException($"Unknown item type: {typeName}"),
+        };
         serializer.Populate(jsonObject.CreateReader(), item);
         return item;
     }

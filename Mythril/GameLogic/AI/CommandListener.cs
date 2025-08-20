@@ -9,7 +9,7 @@ public class CommandListener(ICommandTransport transport)
 {
     private readonly ICommandTransport _transport = transport;
     private readonly ConcurrentQueue<Command> _commandQueue = new();
-    private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
+    private readonly CancellationTokenSource _cancellationTokenSource = new();
 
     public void StartListening() => Task.Run(async () => await ListenForCommands(_cancellationTokenSource.Token));
 

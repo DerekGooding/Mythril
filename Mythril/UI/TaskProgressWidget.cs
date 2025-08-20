@@ -83,15 +83,5 @@ public class TaskProgressWidget : VerticalStackPanel
         }
     }
 
-    public void SetGlow(bool isGlowing)
-    {
-        if (isGlowing)
-        {
-            _glowPanel.Background = new SolidBrush("#8000A0FF");
-        }
-        else
-        {
-            _glowPanel.Background = null;
-        }
-    }
+    public void SetGlow(bool isGlowing) => _glowPanel.Background = isGlowing ? new SolidBrush("#8000A0FF") : (Myra.Graphics2D.IBrush?)null;
 }

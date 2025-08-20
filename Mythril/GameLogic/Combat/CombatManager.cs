@@ -13,9 +13,9 @@ public class CombatManager(PartyManager partyManager)
     private readonly PartyManager _partyManager = partyManager;
     public IReadOnlyList<Character> PlayerParty => _playerParty;
     public IReadOnlyList<Character> EnemyParty => _enemyParty;
-    private readonly List<Character> _playerParty = new List<Character>();
-    private readonly List<Character> _enemyParty = new List<Character>();
-    private readonly List<Character> _turnOrder = new List<Character>();
+    private readonly List<Character> _playerParty = [];
+    private readonly List<Character> _enemyParty = [];
+    private readonly List<Character> _turnOrder = [];
     private int _turnIndex = 0;
     public Character CurrentCombatant => _turnOrder[_turnIndex];
 

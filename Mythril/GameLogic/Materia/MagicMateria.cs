@@ -8,13 +8,7 @@ public class MagicMateria : Materia
 
     [JsonConstructor]
     public MagicMateria(string name, string description, int maxAP, int maxLevel, List<string> spells)
-        : base(name, description, MateriaType.Magic, maxAP, maxLevel)
-    {
-        Spells = spells;
-    }
+        : base(name, description, MateriaType.Magic, maxAP, maxLevel) => Spells = spells;
 
-    public MagicMateria()
-    {
-        Spells = new List<string>();
-    }
+    public MagicMateria() => Spells = [];
 }

@@ -6,9 +6,9 @@ namespace Mythril.GameLogic;
 
 public class SoundManager(ContentManager content)
 {
-    private Dictionary<string, SoundEffect> _sounds = new Dictionary<string, SoundEffect>();
-    private Dictionary<string, Song> _music = new Dictionary<string, Song>();
-    private ContentManager _content = content;
+    private readonly Dictionary<string, SoundEffect> _sounds = [];
+    private readonly Dictionary<string, Song> _music = [];
+    private readonly ContentManager _content = content;
 
     public void LoadSound(string soundName, string assetPath)
     {
@@ -19,7 +19,7 @@ public class SoundManager(ContentManager content)
     }
 
     public void PlaySound(string soundName)
-    { 
+    {
         // if (_sounds.ContainsKey(soundName))
         // {
         //    _sounds[soundName].Play();

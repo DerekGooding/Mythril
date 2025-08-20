@@ -1,10 +1,8 @@
 using Mythril.API;
-using System.Threading.Tasks;
 
-namespace Mythril.GameLogic.AI
+namespace Mythril.GameLogic.AI;
+
+public interface ICommandExecutor
 {
-    public interface ICommandExecutor
-    {
-        Task ExecuteCommand(Command command);
-    }
+    Task ExecuteCommand(Command command);
 }

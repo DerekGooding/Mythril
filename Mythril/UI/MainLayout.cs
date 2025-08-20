@@ -10,19 +10,19 @@ public class MainLayout : Grid
     public DropZoneWidget DropZone { get; private set; } = null!;
     public List<CardWidget> CardWidgets { get; }
 
-    private GameManager _gameManager = null!;
-    private PartyManager _partyManager = null!;
-    private TaskManager _taskManager = null!; // Added TaskManager
-    private Game1 _game = null!; // Reference to Game1 instance
-    private Desktop _desktop = null!; // Reference to the Myra Desktop
+    private readonly GameManager _gameManager = null!;
+    private readonly PartyManager _partyManager = null!;
+    private readonly TaskManager _taskManager = null!; // Added TaskManager
+    private readonly Game1 _game = null!; // Reference to Game1 instance
+    private readonly Desktop _desktop = null!; // Reference to the Myra Desktop
     private Button _logButton = null!;
     private Button _progressButton = null!;
     private Label _goldLabel = null!;
     private Label _manaLabel = null!;
     private Label _faithLabel = null!;
     private HorizontalStackPanel _handPanel = null!; // Reference to the hand panel
-    private ResourceManager _resourceManager = null!; // Add ResourceManager field
-    private SoundManager _soundManager = null!; // Add SoundManager field
+    private readonly ResourceManager _resourceManager = null!; // Add ResourceManager field
+    private readonly SoundManager _soundManager = null!; // Add SoundManager field
 
     public MainLayout(Game1 game, TaskManager taskManager, Desktop desktop, ResourceManager resourceManager, SoundManager soundManager) // Constructor now takes Game1, TaskManager, Desktop, ResourceManager, and SoundManager
     {
@@ -186,7 +186,7 @@ public class MainLayout : Grid
             combatManager.StartCombat(enemies);
             var combatScreen = new CombatScreen(combatManager);
             _game.PushCommandExecutor(combatScreen);
-            combatScreen.Closed += (s, e) => { _game.PopCommandExecutor(); };
+            combatScreen.Closed += (s, e) => _game.PopCommandExecutor();
             combatScreen.ShowModal(_desktop);
         };
         buttonPanel.Widgets.Add(testCombatButton);
@@ -249,25 +249,11 @@ public class MainLayout : Grid
 
     public void Update(GameTime gameTime)
     {
-        var flashScale = 1.0f + 0.1f * (float)Math.Sin(gameTime.TotalGameTime.TotalSeconds * 5);
+        var flashScale = 1.0f + (0.1f * (float)Math.Sin(gameTime.TotalGameTime.TotalSeconds * 5));
 
-        if (_game.NewLogAvailable)
-        {
-            _logButton.Scale = new Vector2(flashScale, flashScale);
-        }
-        else
-        {
-            _logButton.Scale = Vector2.One;
-        }
+        _logButton.Scale = _game.NewLogAvailable ? new Vector2(flashScale, flashScale) : Vector2.One;
 
-        if (_game.NewTaskAvailable)
-        {
-            _progressButton.Scale = new Vector2(flashScale, flashScale);
-        }
-        else
-        {
-            _progressButton.Scale = Vector2.One;
-        }
+        _progressButton.Scale = _game.NewTaskAvailable ? new Vector2(flashScale, flashScale) : Vector2.One;
     }
 
     public void ResetCards()

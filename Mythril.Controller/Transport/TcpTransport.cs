@@ -22,10 +22,10 @@ public class TcpTransport : ICommandTransport
     public async Task SendAsync(string message, CancellationToken cancellationToken = default)
     {
         await _writer.WriteLineAsync(message);
-        await _writer.FlushAsync();
+        await _writer.FlushAsync(cancellationToken);
     }
 
-    public async Task<string> ReceiveAsync(CancellationToken cancellationToken = default) => await _reader.ReadLineAsync() ?? string.Empty;
+    public async Task<string> ReceiveAsync(CancellationToken cancellationToken = default) => await _reader.ReadLineAsync(cancellationToken) ?? string.Empty;
 
     public static async Task<TcpTransport> CreateServer(int port, CancellationToken cancellationToken = default)
     {

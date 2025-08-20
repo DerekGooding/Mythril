@@ -15,7 +15,7 @@ public class MateriaScreen : Dialog
         grid.ColumnsProportions.Add(new Proportion(ProportionType.Auto));
         grid.ColumnsProportions.Add(new Proportion(ProportionType.Fill));
 
-        int row = 0;
+        var row = 0;
         foreach (var materia in resourceManager.Materia)
         {
             grid.RowsProportions.Add(new Proportion(ProportionType.Auto));

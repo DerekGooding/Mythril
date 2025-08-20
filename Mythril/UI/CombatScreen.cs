@@ -2,7 +2,6 @@ using Myra.Graphics2D.UI;
 using Mythril.API;
 using Mythril.GameLogic.AI;
 using Mythril.GameLogic.Combat;
-using System.Threading.Tasks;
 
 namespace Mythril.UI;
 
@@ -57,10 +56,7 @@ public class CombatScreen : Dialog, ICommandExecutor
         actionPanel.Widgets.Add(attackButton);
 
         var defendButton = new Button { Id = "Defend", Content = new Label { Text = "Defend" } };
-        defendButton.Click += (s, a) =>
-        {
-            _combatManager.PlayerTurn_Defend();
-        };
+        defendButton.Click += (s, a) => _combatManager.PlayerTurn_Defend();
         actionPanel.Widgets.Add(defendButton);
 
         mainPanel.Widgets.Add(actionPanel);

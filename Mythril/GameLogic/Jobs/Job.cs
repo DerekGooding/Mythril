@@ -20,6 +20,6 @@ public abstract class Job
     {
         Name = string.Empty;
         Description = string.Empty;
-        Abilities = new List<string>();
+        Abilities = [];
     }
 }

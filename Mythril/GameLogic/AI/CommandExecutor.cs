@@ -107,7 +107,9 @@ public class CommandExecutor(Game1 game, Desktop desktop) : ICommandExecutor
         }
 
         if (xObj is int x && yObj is int y)
+        {
             Console.WriteLine($"Clicking coordinates: ({x}, {y})");
+        }
         else
         {
             Console.WriteLine("Invalid 'x' or 'y' arguments for CLICK_COORDS. Must be integers.");

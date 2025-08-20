@@ -1,6 +1,4 @@
-using Mythril.API.Transport;
-
-namespace Mythril.Controller.Transport;
+namespace Mythril.API.Transport;
 
 public class StdIoTransport(TextReader input, TextWriter output) : ICommandTransport
 {

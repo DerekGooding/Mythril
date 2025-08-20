@@ -8,13 +8,7 @@ public class SummonMateria : Materia
 
     [JsonConstructor]
     public SummonMateria(string name, string description, int maxAP, int maxLevel, string summonName)
-        : base(name, description, MateriaType.Summon, maxAP, maxLevel)
-    {
-        SummonName = summonName;
-    }
+        : base(name, description, MateriaType.Summon, maxAP, maxLevel) => SummonName = summonName;
 
-    public SummonMateria()
-    {
-        SummonName = string.Empty;
-    }
+    public SummonMateria() => SummonName = string.Empty;
 }

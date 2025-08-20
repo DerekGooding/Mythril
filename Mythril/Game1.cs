@@ -5,11 +5,8 @@ using Myra.Graphics2D.UI;
 using Mythril.GameLogic;
 using Mythril.UI;
 using AssetManagementBase;
-using Mythril.API;
 using Mythril.API.Transport;
-using System.Collections.Generic;
 using Mythril.GameLogic.AI;
-using System.IO;
 
 namespace Mythril;
 
@@ -28,21 +25,20 @@ public class Game1 : Game
     private CardWidget? _draggedCard;
 
     private static LogWindow? _logWindow;
-    public static CombatScreen? _combatScreen;
-    private static readonly List<string> _logMessages = new();
+    private static CombatScreen? _combatScreen;
+    private static readonly List<string> _logMessages = [];
     private TaskProgressWindow? _taskProgressWindow;
 
     private readonly ResourceManager _resourceManager;
     private readonly TaskManager _taskManager;
     private readonly GameManager _gameManager;
     private readonly AssetManager _assetManager;
-    private readonly SoundManager _soundManager;
-    private CommandListener? _commandListener;
+    private readonly CommandListener? _commandListener;
     private readonly Stack<ICommandExecutor> _commandExecutorStack = new();
     private CommandExecutor? _commandExecutor;
     private Action<string>? _screenshotCallback;
 
-    public SoundManager SoundManager => _soundManager;
+    public SoundManager SoundManager { get; }
 
     public Game1(ICommandTransport? transport = null)
     {
@@ -58,7 +54,7 @@ public class Game1 : Game
         _taskManager = new TaskManager(_resourceManager);
         _gameManager = new GameManager(_resourceManager);
         _assetManager =  AssetManager.CreateFileAssetManager("Content");
-        _soundManager = new SoundManager(Content);
+        SoundManager = new SoundManager(Content);
 
         if (transport is not null)
         {
@@ -79,7 +75,7 @@ public class Game1 : Game
         _finalRenderTarget = new RenderTarget2D(GraphicsDevice, GraphicsDevice.PresentationParameters.BackBufferWidth, GraphicsDevice.PresentationParameters.BackBufferHeight, false, GraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24);
 
         _desktop = new Desktop();
-        _mainLayout = new MainLayout(this, _taskManager, _desktop, _resourceManager, _soundManager);
+        _mainLayout = new MainLayout(this, _taskManager, _desktop, _resourceManager, SoundManager);
         _desktop.Root = _mainLayout;
 
         // AI Command Integration
@@ -90,8 +86,8 @@ public class Game1 : Game
             _commandListener.StartListening();
         }
 
-        _soundManager.LoadMusic("main-theme", "Music/main-theme");
-        _soundManager.PlayMusic("main-theme");
+        SoundManager.LoadMusic("main-theme", "Music/main-theme");
+        SoundManager.PlayMusic("main-theme");
 
         foreach (var cardWidget in _mainLayout.CardWidgets)
         {
@@ -149,7 +145,7 @@ public class Game1 : Game
             // Remove card from desktop
             _desktop?.Widgets.Remove(_draggedCard);
 
-            if (_mainLayout != null && _mainLayout.DropZone.Bounds.Contains(Mouse.GetState().Position))
+            if (_mainLayout?.DropZone.Bounds.Contains(Mouse.GetState().Position) == true)
             {
                 _mainLayout.DropZone.HandleDrop(_draggedCard);
             }
@@ -224,15 +220,9 @@ public class Game1 : Game
         _graphics.ApplyChanges();
     }
 
-    public void RequestScreenshot(Action<string> callback)
-    {
-        _screenshotCallback = callback;
-    }
+    public void RequestScreenshot(Action<string> callback) => _screenshotCallback = callback;
 
-    public void PushCommandExecutor(ICommandExecutor executor)
-    {
-        _commandExecutorStack.Push(executor);
-    }
+    public void PushCommandExecutor(ICommandExecutor executor) => _commandExecutorStack.Push(executor);
 
     public void PopCommandExecutor()
     {

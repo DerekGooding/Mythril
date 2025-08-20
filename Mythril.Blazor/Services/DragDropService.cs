@@ -1,7 +1,6 @@
-namespace Mythril.Blazor.Services
+namespace Mythril.Blazor.Services;
+
+public class DragDropService
 {
-    public class DragDropService
-    {
-        public object Data { get; set; }
-    }
+    public object? Data { get; set; }
 }

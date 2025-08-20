@@ -2,7 +2,7 @@ namespace Mythril.GameLogic;
 
 public class PartyManager
 {
-    public List<Character> PartyMembers { get; } = new();
+    public List<Character> PartyMembers { get; } = [];
 
     public PartyManager(ResourceManager resourceManager)
     {

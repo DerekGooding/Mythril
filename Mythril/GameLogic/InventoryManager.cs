@@ -4,7 +4,7 @@ namespace Mythril.GameLogic;
 
 public class InventoryManager(ResourceManager resourceManager)
 {
-    private readonly List<Item> _items = new List<Item>();
+    private readonly List<Item> _items = [];
     private readonly ResourceManager _resourceManager = resourceManager;
 
     public IReadOnlyList<Item> Items => _items.AsReadOnly();
@@ -14,7 +14,7 @@ public class InventoryManager(ResourceManager resourceManager)
         var itemToAdd = _resourceManager.Items.FirstOrDefault(i => i.Name == itemName);
         if (itemToAdd != null)
         {
-            for (int i = 0; i < quantity; i++)
+            for (var i = 0; i < quantity; i++)
             {
                 // For simplicity, we'll add a new instance for each item.
                 // A more complex implementation might stack items.
@@ -26,7 +26,7 @@ public class InventoryManager(ResourceManager resourceManager)
 
     public void RemoveItem(string itemName, int quantity = 1)
     {
-        for (int i = 0; i < quantity; i++)
+        for (var i = 0; i < quantity; i++)
         {
             var itemToRemove = _items.FirstOrDefault(item => item.Name == itemName);
             if (itemToRemove != null)

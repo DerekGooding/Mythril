@@ -17,10 +17,7 @@ public class EquipmentItem : Item
 
     [JsonConstructor]
     public EquipmentItem(string name, string description, int value, EquipmentSlot slot)
-        : base(name, description, value, ItemType.Equipment)
-    {
-        Slot = slot;
-    }
+        : base(name, description, value, ItemType.Equipment) => Slot = slot;
 
     public EquipmentItem() : base() { }
 }

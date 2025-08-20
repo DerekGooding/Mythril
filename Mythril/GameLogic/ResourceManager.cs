@@ -18,7 +18,7 @@ public class ResourceManager
     public List<Job> Jobs { get; private set; }
     public List<Item> Items { get; private set; }
     public List<Enemy> Enemies { get; private set; }
-    public InventoryManager Inventory { get; private set; }
+    public InventoryManager Inventory { get; }
 
     public ResourceManager()
     {
@@ -26,12 +26,12 @@ public class ResourceManager
         Mana = 0;
         Faith = 0;
 
-        Cards = new List<CardData>();
-        Characters = new List<Character>();
-        Materia = new List<Materia.Materia>();
-        Jobs = new List<Job>();
-        Items = new List<Item>();
-        Enemies = new List<Enemy>();
+        Cards = [];
+        Characters = [];
+        Materia = [];
+        Jobs = [];
+        Items = [];
+        Enemies = [];
 
         LoadData();
 
@@ -42,7 +42,7 @@ public class ResourceManager
     {
         var settings = new JsonSerializerSettings
         {
-            Converters = new List<JsonConverter> { new MateriaConverter(), new JobConverter(), new ItemConverter() }
+            Converters = [new MateriaConverter(), new JobConverter(), new ItemConverter()]
         };
 
         var cardsData = JsonConvert.DeserializeObject<List<CardData>>(File.ReadAllText("Data/cards.json"));

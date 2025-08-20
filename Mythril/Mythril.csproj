@@ -1,11 +1,12 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
+    <OutputType>Library</OutputType>
+    <!--<RuntimeIdentifier>linux-x64</RuntimeIdentifier>-->
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+	
   </PropertyGroup>
 
   <ItemGroup>
@@ -41,7 +42,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Mythril.API\Mythril.API.csproj" />
-    <ProjectReference Include="..\Mythril.Controller\Mythril.Controller.csproj" />
   </ItemGroup>
 
 </Project>

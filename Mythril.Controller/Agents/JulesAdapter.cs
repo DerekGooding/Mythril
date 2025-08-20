@@ -2,12 +2,14 @@ namespace Mythril.Controller.Agents;
 
 public class JulesAdapter : IAgentAdapter
 {
+    private static readonly string[] _result = ["{\"action\": \"PING\"}"];
+
     public Task<string[]> GetCommandsAsync(string prompt)
     {
         Console.WriteLine($"[Jules] Prompt: {prompt}");
         // In a real scenario, this would call Jules' task API to get commands.
         // For now, returning a hardcoded command for demonstration.
-        return Task.FromResult(new string[] { "{\"action\": \"PING\"}" });
+        return Task.FromResult(_result);
     }
 
     public Task SendResponseAsync(string response)

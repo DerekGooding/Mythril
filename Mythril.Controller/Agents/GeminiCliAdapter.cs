@@ -8,17 +8,17 @@ public class GeminiCliAdapter : IAgentAdapter
         Console.Write("[Gemini-CLI] Enter commands (JSON array of strings): ");
         var input = Console.ReadLine();
         if (string.IsNullOrEmpty(input))
-            return Task.FromResult(new string[0]);
+            return Task.FromResult(Array.Empty<string>());
 
         try
         {
             var commands = Newtonsoft.Json.JsonConvert.DeserializeObject<string[]>(input);
-            return Task.FromResult(commands ?? new string[0]);
+            return Task.FromResult(commands ?? []);
         }
         catch (Newtonsoft.Json.JsonException ex)
         {
             Console.WriteLine($"[Gemini-CLI] Error parsing commands: {ex.Message}");
-            return Task.FromResult(new string[0]);
+            return Task.FromResult(Array.Empty<string>());
         }
     }
 
