@@ -1,14 +1,32 @@
 [
   {
     "Name": "Goblin",
-    "JobName": "Goblin"
+    "JobName": "Goblin",
+    "Zone": "Forest"
   },
   {
     "Name": "Slime",
-    "JobName": "Slime"
+    "JobName": "Slime",
+    "Zone": "Cave"
   },
   {
     "Name": "Wolf",
-    "JobName": "Wolf"
+    "JobName": "Wolf",
+    "Zone": "Forest"
+  },
+  {
+    "Name": "Bandit",
+    "JobName": "Bandit",
+    "Zone": "Forest"
+  },
+  {
+    "Name": "Imp",
+    "JobName": "Imp",
+    "Zone": "Cave"
+  },
+  {
+    "Name": "Golem",
+    "JobName": "Golem",
+    "Zone": "Mountains"
   }
 ]

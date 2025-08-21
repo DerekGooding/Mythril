@@ -45,9 +45,27 @@ public class ResourceManager
 
     public void AddGold(int amount) => Gold += amount;
 
+    public bool SpendGold(int amount)
+    {
+        if (Gold < amount) return false;
+        Gold -= amount;
+        return true;
+    }
+
     public void AddMana(int amount) => Mana += amount;
 
     public void AddFaith(int amount) => Faith += amount;
+
+    public bool UpgradeCharacterAttack(Character character)
+    {
+        var cost = character.AttackPower * 10;
+        if (SpendGold(cost))
+        {
+            character.AttackPower += 1;
+            return true;
+        }
+        return false;
+    }
 
     public void Reset()
     {

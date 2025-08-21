@@ -18,8 +18,8 @@ public class CombatTests
         };
         var enemies = new List<Enemy>
         {
-            new("Goblin", "Warrior"),
-            new("Slime", "Monster")
+            new("Goblin", "Warrior", "Test Zone"),
+            new("Slime", "Monster", "Test Zone")
         };
         resourceManager.SetData([], characters, [], [], [], enemies);
     }
@@ -29,8 +29,8 @@ public class CombatTests
     {
         // Arrange
         var partyManager = new PartyManager(resourceManager!);
-        var combatManager = new CombatManager(partyManager);
-        var enemies = new List<Character> { resourceManager!.Enemies[0], resourceManager.Enemies[1] };
+        var combatManager = new CombatManager(partyManager, resourceManager!);
+        var enemies = new List<Enemy> { resourceManager!.Enemies[0], resourceManager.Enemies[1] };
 
         // Act
         combatManager.StartCombat(enemies);
@@ -40,5 +40,29 @@ public class CombatTests
         Assert.HasCount(2, combatManager.EnemyParty);
         Assert.AreEqual("Hero", combatManager.PlayerParty[0].Name);
         Assert.AreEqual("Goblin", combatManager.EnemyParty[0].Name);
+    }
+
+    [TestMethod]
+    public void CombatManager_SimulateToEnd_PlayerWins()
+    {
+        // Arrange
+        var partyManager = new PartyManager(resourceManager!);
+        partyManager.PartyMembers.Clear();
+        partyManager.AddPartyMember(resourceManager!.Characters[0]);
+        var combatManager = new CombatManager(partyManager, resourceManager!);
+        var enemies = new List<Enemy> { resourceManager!.Enemies[0] };
+        resourceManager!.Characters[0].AttackPower = 100;
+        resourceManager!.Enemies[0].Health = 10;
+        resourceManager!.Enemies[0].AttackPower = 1;
+
+
+        // Act
+        combatManager.StartCombat(enemies);
+        combatManager.SimulateToEnd();
+
+        // Assert
+        Assert.AreEqual(CombatState.Victory, combatManager.State);
+        Assert.AreEqual(10, resourceManager!.Gold);
+        Assert.AreEqual(10, resourceManager!.Characters[0].JobPoints);
     }
 }

@@ -1,0 +1,98 @@
+@using Mythril.Data
+@using System.Timers
+@inject CombatManager CombatManager
+@inject ResourceManager ResourceManager
+@inject PartyManager PartyManager
+
+@inject NavigationManager NavigationManager
+
+<h3>Combat</h3>
+
+@if (Enemies is not null && Enemies.Any())
+{
+    <h4>Enemies</h4>
+    <ul class="list-group">
+        @foreach (var enemy in Enemies)
+        {
+            <li class="list-group-item">
+                @enemy.Name - <button class="btn btn-primary btn-sm" @onclick="() => StartNewCombat(enemy)">Fight</button>
+            </li>
+        }
+    </ul>
+}
+
+@if (CombatManager.State != CombatState.NotInCombat)
+{
+    <div class="row">
+        <div class="col-6">
+            <PartyStatus Party="CombatManager.PlayerParty" />
+        </div>
+        <div class="col-6">
+            <EnemyStatus Party="CombatManager.EnemyParty" />
+        </div>
+    </div>
+
+    @if (CombatManager.State == CombatState.InProgress)
+    {
+        <p>Combat in progress...</p>
+    }
+    else
+    {
+        <p>Combat is over. Player @(CombatManager.State == CombatState.Victory ? "won" : "lost").</p>
+    }
+}
+
+<div>
+    <h4>Combat Log</h4>
+    <ul>
+        @foreach (var log in combatLog)
+        {
+            <li>@log</li>
+        }
+    </ul>
+</div>
+
+<UpgradePanel Party="CombatManager.PlayerParty" />
+
+
+@code {
+    [Parameter]
+    public List<Enemy>? Enemies { get; set; }
+
+    private List<string> combatLog = new();
+    private Timer? timer;
+
+    protected override void OnInitialized()
+    {
+        PartyManager.PartyMembers.Clear();
+        PartyManager.PartyMembers.Add(ResourceManager.Characters[0]);
+
+        timer = new Timer(1000);
+        timer.Elapsed += (sender, args) => OnTimerElapsed();
+        timer.AutoReset = true;
+        timer.Enabled = true;
+    }
+
+    private void StartNewCombat(Enemy enemy)
+    {
+        var enemies = new List<Enemy> { enemy };
+        CombatManager.StartCombat(enemies);
+        combatLog.Clear();
+        combatLog.Add("Combat started!");
+    }
+
+    private void OnTimerElapsed()
+    {
+        if (CombatManager.State == CombatState.InProgress)
+        {
+            CombatManager.SimulateToEnd();
+            combatLog.Add("Combat resolved.");
+            InvokeAsync(StateHasChanged);
+        }
+    }
+
+    public void Dispose()
+    {
+        timer?.Dispose();
+    }
+}

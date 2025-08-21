@@ -17,6 +17,8 @@ public class GameDataService(HttpClient httpClient)
 
     public async Task<List<Enemy>> GetEnemiesAsync() => await _httpClient.GetFromJsonAsync<List<Enemy>>(_base + "api/enemies") ?? [];
 
+    public async Task<List<Enemy>> GetEnemiesAsync(string zone) => await _httpClient.GetFromJsonAsync<List<Enemy>>(_base + $"api/enemies?zone={zone}") ?? [];
+
     public async Task<List<Item>> GetItemsAsync()
     {
         var settings = new JsonSerializerSettings

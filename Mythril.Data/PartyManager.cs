@@ -13,4 +13,9 @@ public class PartyManager
             character.Job = resourceManager.Jobs.FirstOrDefault(j => j.Name == character.JobName);
         }
     }
+
+    public void AddPartyMember(Character character)
+    {
+        PartyMembers.Add(character);
+    }
 }
