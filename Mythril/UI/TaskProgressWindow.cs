@@ -24,13 +24,13 @@ public class TaskProgressWindow : Window
         };
     }
 
-    public void AddTask(TaskProgress task)
+    public void AddTask(GameTaskProgress task)
     {
         var widget = new TaskProgressWidget(task);
         _stackPanel.Widgets.Add(widget);
     }
 
-    public void RemoveTask(TaskProgress task)
+    public void RemoveTask(GameTaskProgress task)
     {
         var widgetToRemove = _stackPanel.Widgets.OfType<TaskProgressWidget>()
                             .FirstOrDefault(w => w.TaskProgress == task);

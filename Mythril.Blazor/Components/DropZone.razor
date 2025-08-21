@@ -3,19 +3,19 @@
 @inject DragDropService DragDropService
 
 <div class="drop-zone" @ondragover:preventDefault="true" @ondrop="HandleDrop">
-    <p>Drop a card here to play it.</p>
+    <p>Drop a task here to assign it.</p>
 </div>
 
 @code {
     [Parameter]
-    public EventCallback<CardData> OnCardDrop { get; set; }
+    public EventCallback<TaskData> OnTaskDrop { get; set; }
 
     private void HandleDrop()
     {
-        var card = DragDropService.Data as CardData;
-        if (card != null)
+        var task = DragDropService.Data as TaskData;
+        if (task != null)
         {
-            OnCardDrop.InvokeAsync(card);
+            OnTaskDrop.InvokeAsync(task);
         }
     }
 }

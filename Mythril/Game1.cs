@@ -27,7 +27,7 @@ public class Game1 : Game
     private MainLayout? _mainLayout;
     private SpriteBatch? _spriteBatch;
     private RenderTarget2D? _finalRenderTarget;
-    private CardWidget? _draggedCard;
+    private TaskWidget? _draggedTask;
 
     private static LogWindow? _logWindow;
     private static readonly List<string> _logMessages = [];
@@ -95,9 +95,9 @@ public class Game1 : Game
         SoundManager.LoadMusic("main-theme", "Music/main-theme");
         SoundManager.PlayMusic("main-theme");
 
-        foreach (var cardWidget in _mainLayout.CardWidgets)
+        foreach (var taskWidget in _mainLayout.TaskWidgets)
         {
-            cardWidget.OnDragEnd += HandleCardDragEnd;
+            taskWidget.OnDragEnd += HandleTaskDragEnd;
         }
     }
 
@@ -108,14 +108,14 @@ public class Game1 : Game
             Converters = { new MateriaConverter(), new JobConverter(), new ItemConverter() }
         };
 
-        var cards = JsonConvert.DeserializeObject<List<CardData>>(File.ReadAllText("Data/cards.json"));
+        var tasks = JsonConvert.DeserializeObject<List<TaskData>>(File.ReadAllText("Data/tasks.json"));
         var characters = JsonConvert.DeserializeObject<List<Character>>(File.ReadAllText("Data/characters.json"));
         var materia = JsonConvert.DeserializeObject<List<Materia>>(File.ReadAllText("Data/materia.json"), settings);
         var jobs = JsonConvert.DeserializeObject<List<Job>>(File.ReadAllText("Data/jobs.json"), settings);
         var items = JsonConvert.DeserializeObject<List<Item>>(File.ReadAllText("Data/items.json"), settings);
         var enemies = JsonConvert.DeserializeObject<List<Enemy>>(File.ReadAllText("Data/enemies.json"));
 
-        _resourceManager.SetData(cards, characters, materia, jobs, items, enemies);
+        _resourceManager.SetData(tasks, characters, materia, jobs, items, enemies);
     }
 
     public static void Log(string message)
@@ -127,7 +127,7 @@ public class Game1 : Game
         if (Instance != null) Instance.NewLogAvailable = true;
     }
 
-    private void HandleCardDragEnd(CardWidget cardWidget) => _draggedCard = cardWidget;
+    private void HandleTaskDragEnd(TaskWidget taskWidget) => _draggedTask = taskWidget;
 
     private KeyboardState _lastKeyboardState;
     private bool _isPaused = false;
@@ -163,21 +163,21 @@ public class Game1 : Game
             }
         }
 
-        if (_draggedCard != null && Mouse.GetState().LeftButton == ButtonState.Released)
+        if (_draggedTask != null && Mouse.GetState().LeftButton == ButtonState.Released)
         {
             // Remove card from desktop
-            _desktop?.Widgets.Remove(_draggedCard);
+            _desktop?.Widgets.Remove(_draggedTask);
 
             if (_mainLayout?.DropZone.Bounds.Contains(Mouse.GetState().Position) == true)
             {
-                _mainLayout.DropZone.HandleDrop(_draggedCard);
+                _mainLayout.DropZone.HandleDrop(_draggedTask);
             }
             else
             {
                 // Return to original parent
-                _draggedCard.OriginalParent?.Widgets.Insert(_draggedCard.OriginalIndex, _draggedCard);
+                _draggedTask.OriginalParent?.Widgets.Insert(_draggedTask.OriginalIndex, _draggedTask);
             }
-            _draggedCard = null;
+            _draggedTask = null;
         }
 
         if (Keyboard.GetState().IsKeyDown(Keys.F11) && _lastKeyboardState.IsKeyUp(Keys.F11))
@@ -314,16 +314,16 @@ public class Game1 : Game
     {
         _resourceManager.Reset();
         _taskManager.Reset();
-        _mainLayout?.ResetCards();
+        _mainLayout?.ResetTasks();
         _isPaused = false;
         Log("Game Restarted!");
     }
 
-    private void OnTaskStarted(TaskProgress task)
+    private void OnTaskStarted(GameTaskProgress task)
     {
         NewTaskAvailable = true;
         _taskProgressWindow?.AddTask(task);
     }
 
-    private void OnTaskCompleted(TaskProgress task) => _taskProgressWindow?.RemoveTask(task);
+    private void OnTaskCompleted(GameTaskProgress task) => _taskProgressWindow?.RemoveTask(task);
 }

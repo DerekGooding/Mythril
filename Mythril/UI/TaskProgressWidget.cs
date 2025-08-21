@@ -11,7 +11,7 @@ public class TaskProgressWidget : VerticalStackPanel
     private readonly Label _statusLabel;
     private readonly Panel _glowPanel;
 
-    public TaskProgressWidget(TaskProgress taskProgress)
+    public TaskProgressWidget(GameTaskProgress taskProgress)
     {
         TaskProgress = taskProgress;
 
@@ -35,7 +35,7 @@ public class TaskProgressWidget : VerticalStackPanel
         // Title Label
         _titleLabel = new Label
         {
-            Text = taskProgress.CardData.Title,
+            Text = taskProgress.TaskData.Title,
             HorizontalAlignment = HorizontalAlignment.Center
         };
         content.Widgets.Add(_titleLabel);
@@ -47,7 +47,7 @@ public class TaskProgressWidget : VerticalStackPanel
             Height = 20,
             HorizontalAlignment = HorizontalAlignment.Stretch,
             Minimum = 0,
-            Maximum = taskProgress.CardData.DurationSeconds,
+            Maximum = taskProgress.TaskData.DurationSeconds,
             Value = 0,
             StyleName = "ThemedProgressBar"
         };
@@ -65,7 +65,7 @@ public class TaskProgressWidget : VerticalStackPanel
         Widgets.Add(_glowPanel);
     }
 
-    public TaskProgress TaskProgress { get; }
+    public GameTaskProgress TaskProgress { get; }
 
     public void UpdateProgress()
     {

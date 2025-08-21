@@ -23,8 +23,7 @@
         <div class="col-8">
             @if (resourceManager is not null)
             {
-                <HandPanel Cards="resourceManager.Cards" />
-                <DropZone OnCardDrop="EventCallback.Factory.Create<CardData>(this, CardDropped)" />
+                <HandPanel Tasks="resourceManager.Tasks" />
             }
             else
             {
@@ -34,7 +33,7 @@
         <div class="col-4">
              @if (resourceManager is not null)
             {
-                <PartyPanel Party="resourceManager.Characters" />
+                <PartyPanel Party="resourceManager.Characters" TaskProgresses="taskProgresses" OnTaskDrop="EventCallback.Factory.Create<(TaskData, Character)>(this, TaskDropped)" />
             }
             else
             {
@@ -49,12 +48,19 @@
     </div>
 </div>
 
+@using System.Timers
 @code {
-    private ResourceManager? resourceManager;
+    [Parameter]
+    public EventCallback<TaskProgress> OnTaskCompleted { get; set; }
 
-    protected override async Task OnInitializedAsync()
+    private ResourceManager? resourceManager;
+    private List<TaskProgress> taskProgresses = new();
+    private Timer? timer;
+
+    protected override async System.Threading.Tasks.Task OnInitializedAsync()
     {
-        var cards = await GameDataService.GetCardsAsync();
+        OnTaskCompleted = EventCallback.Factory.Create<TaskProgress>(this, (p) => Console.WriteLine($"Task '{p.Task.Title}' completed by '{p.Character.Name}'"));
+        var tasks = await GameDataService.GetTasksAsync();
         var characters = await GameDataService.GetCharactersAsync();
         var enemies = await GameDataService.GetEnemiesAsync();
         var items = await GameDataService.GetItemsAsync();
@@ -62,7 +68,12 @@
         var materia = await GameDataService.GetMateriaAsync();
 
         resourceManager = new ResourceManager();
-        resourceManager.SetData(cards, characters, materia, jobs, items, enemies);
+        resourceManager.SetData(tasks, characters, materia, jobs, items, enemies);
+
+        timer = new Timer(100);
+        timer.Elapsed += (sender, args) => OnTimerElapsed();
+        timer.AutoReset = true;
+        timer.Enabled = true;
     }
 
     private void Collect()
@@ -77,10 +88,44 @@
         StateHasChanged();
     }
 
-    private void CardDropped(CardData card)
+    private void TaskDropped((TaskData task, Character character) args)
     {
-        resourceManager?.Cards.Remove(card);
-        // In a real game, you would apply the card's effects here.
+        resourceManager?.Tasks.Remove(args.task);
+        taskProgresses.Add(new TaskProgress(args.task, args.character));
         StateHasChanged();
+    }
+
+    private void OnTimerElapsed()
+    {
+        var newlyCompletedTasks = new List<TaskProgress>();
+        foreach (var progress in taskProgresses)
+        {
+            if (progress.Progress < 100)
+            {
+                var elapsed = (DateTime.Now - progress.StartTime).TotalSeconds;
+                progress.Progress = Math.Min(100, (elapsed / progress.Task.DurationSeconds) * 100);
+
+                if (progress.Progress >= 100)
+                {
+                    newlyCompletedTasks.Add(progress);
+                }
+            }
+        }
+
+        if (newlyCompletedTasks.Any())
+        {
+            foreach (var task in newlyCompletedTasks)
+            {
+                OnTaskCompleted.InvokeAsync(task);
+            }
+            taskProgresses.RemoveAll(p => p.Progress >= 100);
+        }
+
+        InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        timer?.Dispose();
     }
 }

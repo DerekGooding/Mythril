@@ -4,18 +4,18 @@ namespace Mythril.GameLogic;
 
 public class TaskManager(ResourceManager resourceManager)
 {
-    private readonly List<TaskProgress> _activeTasks = [];
+    private readonly List<GameTaskProgress> _activeTasks = [];
     private readonly ResourceManager _resourceManager = resourceManager;
     private bool _isPaused = false;
 
-    public event Action<TaskProgress>? OnTaskStarted;
-    public event Action<TaskProgress>? OnTaskCompleted;
+    public event Action<GameTaskProgress>? OnTaskStarted;
+    public event Action<GameTaskProgress>? OnTaskCompleted;
 
     public void SetPaused(bool paused) => _isPaused = paused;
 
-    public void StartTask(CardData cardData)
+    public void StartTask(TaskData taskData)
     {
-        var task = new TaskProgress(cardData);
+        var task = new GameTaskProgress(taskData);
         task.OnCompleted += HandleTaskCompleted;
         _activeTasks.Add(task);
         OnTaskStarted?.Invoke(task);
@@ -37,21 +37,21 @@ public class TaskManager(ResourceManager resourceManager)
         // Remove completed tasks (handled by HandleTaskCompleted)
     }
 
-    private void HandleTaskCompleted(TaskProgress task)
+    private void HandleTaskCompleted(GameTaskProgress task)
     {
         _activeTasks.Remove(task);
 
-        switch (task.CardData.Id)
+        switch (task.TaskData.Id)
         {
-            case "card4": // Pray
-                _resourceManager.AddFaith(task.CardData.RewardValue);
+            case "task4": // Pray
+                _resourceManager.AddFaith(task.TaskData.RewardValue);
                 break;
-            case "card5": // Build Shrine
+            case "task5": // Build Shrine
                 _resourceManager.AddFaith(-10); // Consume 10 Faith
                 _resourceManager.AddGold(-50); // Consume 50 Gold
                 break;
             default:
-                _resourceManager.AddGold(task.CardData.RewardValue); // Example reward
+                _resourceManager.AddGold(task.TaskData.RewardValue); // Example reward
                 break;
         }
 
@@ -64,5 +64,5 @@ public class TaskManager(ResourceManager resourceManager)
         _isPaused = false;
     }
 
-    public IEnumerable<TaskProgress> GetActiveTasks() => _activeTasks;
+    public IEnumerable<GameTaskProgress> GetActiveTasks() => _activeTasks;
 }
