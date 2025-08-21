@@ -1,8 +1,7 @@
-using Mythril.Data;
 using Mythril.Data.Items;
 using Mythril.Data.Jobs;
 
-namespace Mythril.GameLogic;
+namespace Mythril.Data;
 
 public class ResourceManager
 {

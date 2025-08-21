@@ -1,6 +1,4 @@
-using Mythril.Data;
-
-namespace Mythril.GameLogic.Combat;
+namespace Mythril.Data;
 
 public enum CombatState
 {
@@ -34,29 +32,6 @@ public class CombatManager(PartyManager partyManager)
         _turnOrder.AddRange(_enemyParty);
         _turnIndex = 0;
         State = CombatState.PlayerTurn;
-    }
-
-    public void Update(GameTime gameTime)
-    {
-        if (State == CombatState.CombatOver) return;
-
-        if (IsCombatOver())
-        {
-            State = CombatState.CombatOver;
-            return;
-        }
-
-        if (State == CombatState.EnemyTurn)
-        {
-            var enemy = CurrentCombatant;
-            if (_playerParty.Count > 0)
-            {
-                var target = _playerParty[new Random().Next(_playerParty.Count)];
-                PerformAttack(enemy, target);
-            }
-            TakeTurn();
-            State = CombatState.PlayerTurn;
-        }
     }
 
     private void TakeTurn()

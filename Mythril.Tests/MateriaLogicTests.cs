@@ -1,5 +1,4 @@
 using Mythril.Data.Materia;
-using Mythril.GameLogic.Materia;
 
 namespace Mythril.Tests;
 

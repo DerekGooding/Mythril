@@ -1,6 +1,6 @@
 using Mythril.Data.Items;
 
-namespace Mythril.GameLogic;
+namespace Mythril.Data;
 
 public class InventoryManager(ResourceManager resourceManager)
 {

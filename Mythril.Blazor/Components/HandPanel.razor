@@ -1,13 +1,17 @@
 @using Mythril.Data;
 
 <div class="hand-panel">
-    @foreach (var task in Tasks)
+    @if (Tasks is not null)
     {
-        <Task TaskData="task" />
+        @foreach (var task in Tasks)
+        {
+            <Task TaskData="task" />
+        }
+    }
     }
 </div>
 
 @code {
     [Parameter]
-    public List<TaskData> Tasks { get; set; }
+    public List<TaskData>? Tasks { get; set; }
 }

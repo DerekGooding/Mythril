@@ -38,4 +38,25 @@ public abstract class Materia
         Name = string.Empty;
         Description = string.Empty;
     }
+
+    public void AddAP(int amount)
+    {
+        if (Level >= MaxLevel)
+        {
+            AP = System.Math.Min(AP + amount, MaxAP);
+            return;
+        }
+
+        AP += amount;
+        while (AP >= MaxAP && Level < MaxLevel)
+        {
+            AP -= MaxAP;
+            Level++;
+        }
+
+        if (Level >= MaxLevel)
+        {
+            AP = System.Math.Min(AP, MaxAP);
+        }
+    }
 }

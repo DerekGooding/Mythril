@@ -1,6 +1,4 @@
-using Mythril.Data;
-
-namespace Mythril.GameLogic;
+namespace Mythril.Data;
 
 public class PartyManager
 {

@@ -1,13 +1,11 @@
 using Mythril.Data;
-using Mythril.GameLogic;
-using Mythril.GameLogic.Combat;
 
 namespace Mythril.Tests;
 
 [TestClass]
 public class CombatTests
 {
-    private ResourceManager resourceManager;
+    private ResourceManager? resourceManager;
 
     [TestInitialize]
     public void Setup()
@@ -30,9 +28,9 @@ public class CombatTests
     public void CombatManager_StartCombat_InitializesPartiesCorrectly()
     {
         // Arrange
-        var partyManager = new PartyManager(resourceManager);
+        var partyManager = new PartyManager(resourceManager!);
         var combatManager = new CombatManager(partyManager);
-        var enemies = new List<Character> { resourceManager.Enemies[0], resourceManager.Enemies[1] };
+        var enemies = new List<Character> { resourceManager!.Enemies[0], resourceManager.Enemies[1] };
 
         // Act
         combatManager.StartCombat(enemies);
