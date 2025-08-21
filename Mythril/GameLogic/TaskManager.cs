@@ -13,9 +13,9 @@ public class TaskManager(ResourceManager resourceManager)
 
     public void SetPaused(bool paused) => _isPaused = paused;
 
-    public void StartTask(CardData cardData)
+    public void StartTask(TaskData taskData)
     {
-        var task = new TaskProgress(cardData);
+        var task = new TaskProgress(taskData);
         task.OnCompleted += HandleTaskCompleted;
         _activeTasks.Add(task);
         OnTaskStarted?.Invoke(task);
@@ -41,17 +41,17 @@ public class TaskManager(ResourceManager resourceManager)
     {
         _activeTasks.Remove(task);
 
-        switch (task.CardData.Id)
+        switch (task.TaskData.Id)
         {
-            case "card4": // Pray
-                _resourceManager.AddFaith(task.CardData.RewardValue);
+            case "task4": // Pray
+                _resourceManager.AddFaith(task.TaskData.RewardValue);
                 break;
-            case "card5": // Build Shrine
+            case "task5": // Build Shrine
                 _resourceManager.AddFaith(-10); // Consume 10 Faith
                 _resourceManager.AddGold(-50); // Consume 50 Gold
                 break;
             default:
-                _resourceManager.AddGold(task.CardData.RewardValue); // Example reward
+                _resourceManager.AddGold(task.TaskData.RewardValue); // Example reward
                 break;
         }
 

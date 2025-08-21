@@ -11,7 +11,7 @@ public class GameDataService(HttpClient httpClient)
     private readonly HttpClient _httpClient = httpClient;
     private const string _base = "https://localhost:7244/";
 
-    public async Task<List<CardData>> GetCardsAsync() => await _httpClient.GetFromJsonAsync<List<CardData>>(_base + "api/cards") ?? [];
+    public async Task<List<TaskData>> GetTasksAsync() => await _httpClient.GetFromJsonAsync<List<TaskData>>(_base + "api/tasks") ?? [];
 
     public async Task<List<Character>> GetCharactersAsync() => await _httpClient.GetFromJsonAsync<List<Character>>(_base + "api/characters") ?? [];
 

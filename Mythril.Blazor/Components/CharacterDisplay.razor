@@ -1,0 +1,29 @@
+@using Mythril.Data
+
+<div class="character-display">
+    <h4>@Character.Name</h4>
+    @if (TaskProgress is not null)
+    {
+        <TaskProgressCard TaskProgress="TaskProgress" />
+    }
+    else
+    {
+        <DropZone OnTaskDrop="HandleTaskDrop" />
+    }
+</div>
+
+@code {
+    [Parameter]
+    public Character Character { get; set; }
+
+    [Parameter]
+    public TaskProgress? TaskProgress { get; set; }
+
+    [Parameter]
+    public EventCallback<TaskData> OnTaskDrop { get; set; }
+
+    private void HandleTaskDrop(TaskData task)
+    {
+        OnTaskDrop.InvokeAsync(task);
+    }
+}

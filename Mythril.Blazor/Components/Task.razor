@@ -1,0 +1,20 @@
+@using Mythril.Data
+@using Mythril.Blazor.Services
+@inject DragDropService DragDropService
+
+<div class="task" draggable="true" @ondragstart="() => HandleDragStart()">
+    <div class="task-header">@TaskData?.Title</div>
+    <div class="task-body">
+        <p>@TaskData?.Description</p>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public TaskData? TaskData { get; set; }
+
+    private void HandleDragStart()
+    {
+        DragDropService.Data = TaskData;
+    }
+}

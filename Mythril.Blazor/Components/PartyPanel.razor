@@ -1,14 +1,20 @@
-@using Mythril.Data;
+@using Mythril.Data
 
 <div class="party-panel">
     <h3>Party</h3>
     @foreach (var character in Party)
     {
-        <div>@character.Name</div>
+        <CharacterDisplay Character="character" TaskProgress="TaskProgresses.FirstOrDefault(p => p.Character == character)" OnTaskDrop="(task) => OnTaskDrop.InvokeAsync((task, character))" />
     }
 </div>
 
 @code {
     [Parameter]
     public List<Character> Party { get; set; }
+
+    [Parameter]
+    public List<TaskProgress> TaskProgresses { get; set; }
+
+    [Parameter]
+    public EventCallback<(TaskData, Character)> OnTaskDrop { get; set; }
 }

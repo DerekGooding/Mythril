@@ -5,9 +5,9 @@ using Mythril.Data;
 
 namespace Mythril.UI;
 
-public class CardWidget : VerticalStackPanel
+public class TaskWidget : VerticalStackPanel
 {
-    public event Action<CardWidget>? OnDragEnd;
+    public event Action<TaskWidget>? OnDragEnd;
 
     private bool _isDragging;
     private Point _dragOffset;
@@ -16,13 +16,13 @@ public class CardWidget : VerticalStackPanel
 
     public bool IsDraggable { get; set; } = true;
 
-    public CardData CardData { get; }
+    public TaskData TaskData { get; }
 
     private readonly DropZoneWidget _dropZone;
 
-    public CardWidget(CardData cardData, DropZoneWidget dropZone)
+    public TaskWidget(TaskData taskData, DropZoneWidget dropZone)
     {
-        CardData = cardData;
+        TaskData = taskData;
         _dropZone = dropZone;
 
         // Appearance
@@ -32,7 +32,7 @@ public class CardWidget : VerticalStackPanel
         BorderThickness = new Thickness(4);
 
         // Title
-        Widgets.Add(new Label { Text = cardData.Title, HorizontalAlignment = HorizontalAlignment.Center });
+        Widgets.Add(new Label { Text = taskData.Title, HorizontalAlignment = HorizontalAlignment.Center });
 
         // Image Placeholder
         var imagePlaceholder = new Panel
@@ -44,15 +44,15 @@ public class CardWidget : VerticalStackPanel
         Widgets.Add(imagePlaceholder);
 
         // Description
-        Widgets.Add(new Label { Text = cardData.Description, Wrap = true });
+        Widgets.Add(new Label { Text = taskData.Description, Wrap = true });
 
         // Subscribe to touch events
-        TouchDown += CardWidget_MouseDown;
-        TouchUp += CardWidget_MouseUp;
-        TouchMoved += CardWidget_MouseMove;
+        TouchDown += TaskWidget_MouseDown;
+        TouchUp += TaskWidget_MouseUp;
+        TouchMoved += TaskWidget_MouseMove;
     }
 
-    private void CardWidget_MouseDown(object? sender, EventArgs e)
+    private void TaskWidget_MouseDown(object? sender, EventArgs e)
     {
         if (Desktop == null || Desktop.TouchPosition == null || Parent == null) return;
 
@@ -69,7 +69,7 @@ public class CardWidget : VerticalStackPanel
         Desktop.Widgets.Add(this);
     }
 
-    private void CardWidget_MouseUp(object? sender, EventArgs e)
+    private void TaskWidget_MouseUp(object? sender, EventArgs e)
     {
         if (_isDragging)
         {
@@ -81,7 +81,7 @@ public class CardWidget : VerticalStackPanel
         }
     }
 
-    private void CardWidget_MouseMove(object? sender, EventArgs e)
+    private void TaskWidget_MouseMove(object? sender, EventArgs e)
     {
         if (Desktop == null || Desktop.TouchPosition == null) return;
         if (_isDragging)

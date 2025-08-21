@@ -1,6 +1,6 @@
 namespace Mythril.Data;
 
-public class CardData
+public class TaskData
 {
     public string? Id { get; set; }
     public string? Title { get; set; }
