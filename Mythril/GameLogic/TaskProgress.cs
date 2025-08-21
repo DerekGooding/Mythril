@@ -2,9 +2,9 @@ using Mythril.Data;
 
 namespace Mythril.GameLogic;
 
-public class TaskProgress(CardData cardData)
+public class TaskProgress(TaskData taskData)
 {
-    public CardData CardData { get; } = cardData;
+    public TaskData TaskData { get; } = taskData;
     public float ElapsedTime { get; private set; }
     public bool IsCompleted { get; private set; }
 
@@ -16,7 +16,7 @@ public class TaskProgress(CardData cardData)
 
         ElapsedTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-        if (ElapsedTime >= CardData.DurationSeconds)
+        if (ElapsedTime >= TaskData.DurationSeconds)
         {
             IsCompleted = true;
             OnCompleted?.Invoke(this);

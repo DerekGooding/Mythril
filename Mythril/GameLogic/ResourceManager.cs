@@ -10,7 +10,7 @@ public class ResourceManager
     public int Mana { get; private set; }
     public int Faith { get; private set; }
 
-    public List<CardData> Cards { get; private set; }
+    public List<TaskData> Tasks { get; private set; }
     public List<Character> Characters { get; private set; }
     public List<Mythril.Data.Materia.Materia> Materia { get; private set; }
     public List<Job> Jobs { get; private set; }
@@ -24,7 +24,7 @@ public class ResourceManager
         Mana = 0;
         Faith = 0;
 
-        Cards = [];
+        Tasks = [];
         Characters = [];
         Materia = [];
         Jobs = [];
@@ -34,9 +34,9 @@ public class ResourceManager
         Inventory = new InventoryManager(this);
     }
 
-    public void SetData(List<CardData> cards, List<Character> characters, List<Mythril.Data.Materia.Materia> materia, List<Job> jobs, List<Item> items, List<Enemy> enemies)
+    public void SetData(List<TaskData> tasks, List<Character> characters, List<Mythril.Data.Materia.Materia> materia, List<Job> jobs, List<Item> items, List<Enemy> enemies)
     {
-        Cards = cards;
+        Tasks = tasks;
         Characters = characters;
         Materia = materia;
         Jobs = jobs;

@@ -1,0 +1,16 @@
+@using Mythril.Data
+
+<div class="task-progress-card">
+    <div class="task-header">@TaskProgress.Task.Title</div>
+    <div class="task-body">
+        <p>@TaskProgress.Task.Description</p>
+        <div class="progress">
+            <div class="progress-bar" role="progressbar" style="width: @(TaskProgress.Progress)%;" aria-valuenow="@TaskProgress.Progress" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public TaskProgress TaskProgress { get; set; }
+}

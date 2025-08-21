@@ -6,16 +6,16 @@ namespace Mythril.WebAPI.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class CardsController(IWebHostEnvironment hostingEnvironment) : ControllerBase
+public class TasksController(IWebHostEnvironment hostingEnvironment) : ControllerBase
 {
     private readonly IWebHostEnvironment _hostingEnvironment = hostingEnvironment;
 
     [HttpGet]
-    public ActionResult<List<CardData>> Get()
+    public ActionResult<List<TaskData>> Get()
     {
-        var filePath = Path.Combine(_hostingEnvironment.ContentRootPath, "Data", "cards.json");
+        var filePath = Path.Combine(_hostingEnvironment.ContentRootPath, "Data", "tasks.json");
         var json = System.IO.File.ReadAllText(filePath);
-        var cards = JsonConvert.DeserializeObject<List<CardData>>(json);
-        return Ok(cards);
+        var tasks = JsonConvert.DeserializeObject<List<TaskData>>(json);
+        return Ok(tasks);
     }
 }

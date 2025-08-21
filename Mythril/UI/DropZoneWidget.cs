@@ -41,9 +41,9 @@ public class DropZoneWidget : Panel
         BorderThickness = new Thickness(0);
     }
 
-    public void HandleDrop(CardWidget cardWidget)
+    public void HandleDrop(TaskWidget taskWidget)
     {
-        _taskManager.StartTask(cardWidget.CardData);
-        Game1.Log($"Card {cardWidget.CardData.Title} dropped on DropZone.");
+        _taskManager.StartTask(taskWidget.TaskData);
+        Game1.Log($"Task {taskWidget.TaskData.Title} dropped on DropZone.");
     }
 }

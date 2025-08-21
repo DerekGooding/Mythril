@@ -9,7 +9,7 @@ namespace Mythril.UI;
 public class MainLayout : Grid
 {
     public DropZoneWidget DropZone { get; private set; } = null!;
-    public List<CardWidget> CardWidgets { get; }
+    public List<TaskWidget> TaskWidgets { get; }
 
     private readonly GameManager _gameManager = null!;
     private readonly PartyManager _partyManager = null!;
@@ -45,9 +45,9 @@ public class MainLayout : Grid
         InitializeButtonPanel();
         InitializePartyPanel();
 
-        // Add some CardWidget instances
-        CardWidgets = [];
-        AddInitialCards();
+        // Add some TaskWidget instances
+        TaskWidgets = [];
+        AddInitialTasks();
     }
 
     private void DefineGrid()
@@ -220,24 +220,24 @@ public class MainLayout : Grid
         Widgets.Add(partyPanel);
     }
 
-    private void AddInitialCards()
+    private void AddInitialTasks()
     {
-        foreach (var cardData in _resourceManager.Cards)
+        foreach (var taskData in _resourceManager.Tasks)
         {
-            var cardWidget = new CardWidget(cardData, DropZone);
-            _handPanel.Widgets.Add(cardWidget);
-            CardWidgets.Add(cardWidget);
+            var taskWidget = new TaskWidget(taskData, DropZone);
+            _handPanel.Widgets.Add(taskWidget);
+            TaskWidgets.Add(taskWidget);
         }
     }
 
-    public void HandleCardDrop(CardWidget draggedCard)
+    public void HandleTaskDrop(TaskWidget draggedTask)
     {
-        // Check if the dragged card is over the drop zone
-        if (draggedCard.Bounds.Intersects(DropZone.Bounds))
+        // Check if the dragged task is over the drop zone
+        if (draggedTask.Bounds.Intersects(DropZone.Bounds))
         {
-            DropZone.HandleDrop(draggedCard);
-            // Optionally, remove the card from the hand panel after dropping
-            // _handPanel.Widgets.Remove(draggedCard);
+            DropZone.HandleDrop(draggedTask);
+            // Optionally, remove the task from the hand panel after dropping
+            // _handPanel.Widgets.Remove(draggedTask);
         }
     }
 
@@ -257,10 +257,10 @@ public class MainLayout : Grid
         _progressButton.Scale = _game.NewTaskAvailable ? new Vector2(flashScale, flashScale) : Vector2.One;
     }
 
-    public void ResetCards()
+    public void ResetTasks()
     {
         _handPanel.Widgets.Clear();
-        CardWidgets.Clear();
-        AddInitialCards();
+        TaskWidgets.Clear();
+        AddInitialTasks();
     }
 }
