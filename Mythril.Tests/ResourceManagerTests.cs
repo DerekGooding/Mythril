@@ -74,4 +74,36 @@ public class ResourceManagerTests
         Assert.AreEqual(MateriaType.Summon, shivaMateria.Type);
         Assert.AreEqual("Shiva", shivaMateria.SummonName);
     }
+
+    [TestMethod]
+    public void UpgradeCharacterAttack_SufficientGold_UpgradesAttackAndDeductsGold()
+    {
+        // Arrange
+        var character = _resourceManager!.Characters[0];
+        _resourceManager.AddGold(100);
+
+        // Act
+        var result = _resourceManager.UpgradeCharacterAttack(character);
+
+        // Assert
+        Assert.IsTrue(result);
+        Assert.AreEqual(11, character.AttackPower);
+        Assert.AreEqual(0, _resourceManager.Gold);
+    }
+
+    [TestMethod]
+    public void UpgradeCharacterAttack_InsufficientGold_DoesNotUpgrade()
+    {
+        // Arrange
+        var character = _resourceManager!.Characters[0];
+        _resourceManager.AddGold(50);
+
+        // Act
+        var result = _resourceManager.UpgradeCharacterAttack(character);
+
+        // Assert
+        Assert.IsFalse(result);
+        Assert.AreEqual(10, character.AttackPower);
+        Assert.AreEqual(50, _resourceManager.Gold);
+    }
 }

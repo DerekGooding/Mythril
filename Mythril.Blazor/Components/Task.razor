@@ -2,9 +2,9 @@
 @using Mythril.Blazor.Services
 @inject DragDropService DragDropService
 
-<div class="task" draggable="true" @ondragstart="() => HandleDragStart()">
-    <div class="task-header">@TaskData?.Title</div>
-    <div class="task-body">
+<div class="card" draggable="true" @ondragstart="() => HandleDragStart()">
+    <div class="card-header">@TaskData?.Title</div>
+    <div class="card-body">
         <p>@TaskData?.Description</p>
     </div>
 </div>
