@@ -14,7 +14,7 @@ public class JobTests
         _resourceManager = new ResourceManager();
         var jobs = new List<Job>
         {
-            new Squire("Squire", "A basic warrior in training.", ["Tackle", "Throw Stone", "Heal"], 10, 2, 1, new List<int> { 100, 200 })
+            new Squire("Squire", "A basic warrior in training.", ["Tackle", "Throw Stone", "Heal"], 10, 2, 1, [100, 200])
         };
         var characters = new List<Mythril.Data.Character>
         {

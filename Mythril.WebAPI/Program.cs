@@ -1,11 +1,9 @@
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCors(options =>
-{
-    options.AddDefaultPolicy(policy => policy.WithOrigins("http://localhost:5078") // your Blazor client URL
+options.AddDefaultPolicy(policy => policy.WithOrigins("http://localhost:5078") // your Blazor client URL
               .AllowAnyHeader()
-              .AllowAnyMethod());
-});
+              .AllowAnyMethod()));
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

@@ -65,7 +65,8 @@
     protected override void OnInitialized()
     {
         PartyManager.PartyMembers.Clear();
-        PartyManager.PartyMembers.Add(ResourceManager.Characters[0]);
+        if(ResourceManager.Characters.Count > 0)
+            PartyManager.PartyMembers.Add(ResourceManager.Characters[0]);
 
         timer = new Timer(1000);
         timer.Elapsed += (sender, args) => OnTimerElapsed();

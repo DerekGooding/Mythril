@@ -1,14 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
 namespace Mythril.Data;
 
 public enum CombatState
 {
     InProgress,
     Victory,
-    Defeat
+    Defeat,
+    NotInCombat,
 }
 
 public class CombatManager(PartyManager partyManager, ResourceManager resourceManager)

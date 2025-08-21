@@ -61,7 +61,7 @@ public class ResourceManager
         var cost = character.AttackPower * 10;
         if (SpendGold(cost))
         {
-            character.AttackPower += 1;
+            character.AttackPower++;
             return true;
         }
         return false;

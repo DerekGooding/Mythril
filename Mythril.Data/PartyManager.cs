@@ -14,8 +14,5 @@ public class PartyManager
         }
     }
 
-    public void AddPartyMember(Character character)
-    {
-        PartyMembers.Add(character);
-    }
+    public void AddPartyMember(Character character) => PartyMembers.Add(character);
 }
