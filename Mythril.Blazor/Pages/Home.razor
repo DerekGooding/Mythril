@@ -1,7 +1,6 @@
 @page "/"
 @using Mythril.Blazor.Services
 @using Mythril.Data
-@using Mythril.GameLogic
 @using Mythril.Data.Items
 @using Mythril.Data.Jobs
 @using Mythril.Data.Materia
@@ -57,7 +56,7 @@
     private List<TaskProgress> taskProgresses = new();
     private Timer? timer;
 
-    protected override async Task OnInitializedAsync()
+    protected override async System.Threading.Tasks.Task OnInitializedAsync()
     {
         OnTaskCompleted = EventCallback.Factory.Create<TaskProgress>(this, (p) => Console.WriteLine($"Task '{p.Task.Title}' completed by '{p.Character.Name}'"));
         var tasks = await GameDataService.GetTasksAsync();

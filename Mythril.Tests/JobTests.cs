@@ -1,5 +1,5 @@
+using Mythril.Data;
 using Mythril.Data.Jobs;
-using Mythril.GameLogic;
 
 namespace Mythril.Tests;
 

@@ -1,12 +1,12 @@
+using Mythril.Data;
 using Mythril.Data.Items;
-using Mythril.GameLogic;
 
 namespace Mythril.Tests;
 
 [TestClass]
 public class InventoryTests
 {
-    private ResourceManager resourceManager;
+    private ResourceManager? resourceManager;
 
     [TestInitialize]
     public void Setup()
@@ -24,7 +24,8 @@ public class InventoryTests
     public void InventoryManager_AddsAndRemovesItems_Correctly()
     {
         // Arrange
-        var inventoryManager = resourceManager.Inventory;
+        var inventoryManager = resourceManager?.Inventory;
+        Assert.IsNotNull(inventoryManager);
 
         // Act
         inventoryManager.AddItem("Potion", 5);
