@@ -1,28 +1,35 @@
+using Mythril.Data.Items;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Mythril.Data.Jobs;
 
-public class JobConverter : JsonConverter
+public class JobConverter : JsonConverter<Job>
 {
-    public override bool CanConvert(Type objectType) => objectType == typeof(Job);
-
-    public override object? ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
+    public override Job? ReadJson(JsonReader reader, Type objectType, Job? existingValue, bool hasExistingValue, JsonSerializer serializer)
     {
         var jsonObject = JObject.Load(reader);
-        var typeToken = jsonObject["Type"] ?? throw new JsonSerializationException("Job type is not defined.");
-        var typeName = typeToken.Value<string>();
-        Job job = typeName switch
+        var typeToken = jsonObject.Properties()
+            .FirstOrDefault(p => string.Equals(p.Name, "Type", StringComparison.OrdinalIgnoreCase))
+            ?.Value
+            ?? throw new JsonSerializationException("Item type is not defined.");
+
+        var typeString = typeToken.Value<string>() ?? throw new JsonSerializationException("Item type is null.");
+        var typeEnum = Enum.TryParse<JobType>(typeString, true, out var typeInt)
+            ? typeInt
+            : throw new JsonSerializationException($"Unknown item type: {typeString}");
+
+        Job job = typeEnum switch
         {
-            "Squire" => new Squire(),
-            "Chemist" => new Chemist(),
-            "Knight" => new Knight(),
-            "Archer" => new Archer(),
-            _ => throw new JsonSerializationException($"Unknown job type: {typeName}"),
+            JobType.Squire => new Squire(),
+            JobType.Chemist => new Chemist(),
+            JobType.Knight => new Knight(),
+            JobType.Archer => new Archer(),
+            _ => throw new JsonSerializationException($"Unknown job type: {typeEnum}"),
         };
         serializer.Populate(jsonObject.CreateReader(), job);
         return job;
     }
 
-    public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer) => throw new NotImplementedException();
+    public override void WriteJson(JsonWriter writer, Job? value, JsonSerializer serializer) => throw new NotImplementedException();
 }

@@ -6,7 +6,7 @@ public class Chemist : Job
 {
     [JsonConstructor]
     public Chemist(string name, string description, List<string> abilities)
-        : base(name, description, abilities)
+        : base(name, description, abilities, JobType.Chemist)
     {
     }
 

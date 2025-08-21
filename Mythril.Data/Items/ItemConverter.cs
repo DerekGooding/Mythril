@@ -3,27 +3,33 @@ using Newtonsoft.Json.Linq;
 
 namespace Mythril.Data.Items;
 
-public class ItemConverter : JsonConverter
+public class ItemConverter : JsonConverter<Item>
 {
-    public override bool CanConvert(Type objectType) => objectType == typeof(Item);
-
-    public override object? ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
+    public override Item? ReadJson(JsonReader reader, Type objectType, Item? existingValue, bool hasExistingValue, JsonSerializer serializer)
     {
         var jsonObject = JObject.Load(reader);
-        var typeToken = jsonObject["Type"] ?? throw new JsonSerializationException("Item type is not defined.");
-        var typeName = typeToken.Value<string>();
-        Item item = typeName switch
+        var typeToken = jsonObject.Properties()
+            .FirstOrDefault(p => string.Equals(p.Name, "Type", StringComparison.OrdinalIgnoreCase))
+            ?.Value
+            ?? throw new JsonSerializationException("Item type is not defined.");
+
+        var typeString = typeToken.Value<string>() ?? throw new JsonSerializationException("Item type is null.");
+        var typeEnum = Enum.TryParse<ItemType>(typeString, true, out var typeInt)
+            ? typeInt
+            : throw new JsonSerializationException($"Unknown item type: {typeString}");
+
+        Item item = typeInt switch
         {
-            "Consumable" => new ConsumableItem(),
-            "Equipment" => new EquipmentItem(),
+            ItemType.Consumable => new ConsumableItem(),
+            ItemType.Equipment => new EquipmentItem(),
             // case "KeyItem":
             //     item = new KeyItem();
             //     break;
-            _ => throw new JsonSerializationException($"Unknown item type: {typeName}"),
+            _ => throw new JsonSerializationException($"Unknown item type: {typeInt}"),
         };
         serializer.Populate(jsonObject.CreateReader(), item);
         return item;
     }
 
-    public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer) => throw new NotImplementedException();
+    public override void WriteJson(JsonWriter writer, Item? value, JsonSerializer serializer) => throw new NotImplementedException();
 }

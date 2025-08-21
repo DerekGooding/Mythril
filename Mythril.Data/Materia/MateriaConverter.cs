@@ -3,27 +3,33 @@ using Newtonsoft.Json.Linq;
 
 namespace Mythril.Data.Materia;
 
-public class MateriaConverter : JsonConverter
+public class MateriaConverter : JsonConverter<Materia>
 {
-    public override bool CanConvert(Type objectType) => objectType == typeof(Materia);
-
-    public override object? ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
+    public override Materia? ReadJson(JsonReader reader, Type objectType, Materia? existingValue, bool hasExistingValue, JsonSerializer serializer)
     {
         var jsonObject = JObject.Load(reader);
-        var typeToken = jsonObject["Type"] ?? throw new JsonSerializationException("Materia type is not defined.");
-        var typeName = typeToken.Value<string>();
-        Materia materia = typeName switch
+        var typeToken = jsonObject.Properties()
+            .FirstOrDefault(p => string.Equals(p.Name, "Type", StringComparison.OrdinalIgnoreCase))
+            ?.Value
+            ?? throw new JsonSerializationException("Item type is not defined.");
+
+        var typeString = typeToken.Value<string>() ?? throw new JsonSerializationException("Item type is null.");
+        var typeEnum = Enum.TryParse<MateriaType>(typeString, true, out var typeInt)
+            ? typeInt
+            : throw new JsonSerializationException($"Unknown item type: {typeString}");
+
+        Materia materia = typeEnum switch
         {
-            "Magic" => new MagicMateria(),
-            "Summon" => new SummonMateria(),
-            "Command" => new CommandMateria(),
-            "Independent" => new IndependentMateria(),
-            "Support" => new SupportMateria(),
-            _ => throw new JsonSerializationException($"Unknown materia type: {typeName}"),
+            MateriaType.Magic => new MagicMateria(),
+            MateriaType.Summon => new SummonMateria(),
+            MateriaType.Command => new CommandMateria(),
+            MateriaType.Independent => new IndependentMateria(),
+            MateriaType.Support => new SupportMateria(),
+            _ => throw new JsonSerializationException($"Unknown materia type: {typeEnum}"),
         };
         serializer.Populate(jsonObject.CreateReader(), materia);
         return materia;
     }
 
-    public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer) => throw new NotImplementedException();
+    public override void WriteJson(JsonWriter writer, Materia? value, JsonSerializer serializer) => throw new NotImplementedException();
 }
