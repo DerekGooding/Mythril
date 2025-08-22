@@ -2,7 +2,7 @@
 
 <div class="inventory-item">
     <span class="item-name">@Item.Name</span>
-    <span class="item-quantity">x@Item.Quantity</span>
+    <span class="item-quantity">@Item.Quantity</span>
     @if (showAnimation)
     {
         <div class="floating-text @(quantityChange > 0 ? "positive" : "negative")">
@@ -33,7 +33,7 @@
             quantityChange = Item.Quantity - previousQuantity;
             showAnimation = true;
             StateHasChanged();
-            _ = Task.Delay(1000).ContinueWith(t =>
+            _ = System.Threading.Tasks.Task.Delay(1000).ContinueWith(t =>
             {
                 showAnimation = false;
                 StateHasChanged();

@@ -161,7 +161,7 @@
         {
             foreach (var task in newlyCompletedTasks)
             {
-                OnTaskCompleted.InvokeAsync(task);
+                await OnTaskCompleted.InvokeAsync(task);
             }
             taskProgresses.RemoveAll(p => p.Progress >= 100);
         }
