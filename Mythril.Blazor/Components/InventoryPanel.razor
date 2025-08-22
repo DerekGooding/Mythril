@@ -1,0 +1,19 @@
+@using Mythril.Data.Items
+
+<div class="inventory-panel">
+    <h5>Inventory</h5>
+    <div class="inventory-grid">
+        @if (Items is not null)
+        {
+            @foreach (var item in Items)
+            {
+                <InventoryItem Item="item" />
+            }
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public List<Item>? Items { get; set; }
+}

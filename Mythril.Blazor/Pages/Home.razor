@@ -15,7 +15,7 @@
         <div class="col-12">
             @if (resourceManager is not null)
             {
-                <ResourcePanel Gold="@resourceManager.Gold" Mana="@resourceManager.Mana" Faith="@resourceManager.Faith" />
+                <ResourcePanel Gold="@resourceManager.Gold" Mana="@resourceManager.Mana" Faith="@resourceManager.Faith" Items="resourceManager.Inventory.GetItems().ToList()" />
             }
         </div>
     </div>

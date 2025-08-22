@@ -3,7 +3,7 @@
 <div class="hand-panel">
     @if (Tasks is not null)
     {
-        @foreach (var task in Tasks)
+        @foreach (var task in Tasks.Take(5))
         {
             <div class="task-container">
                 <Task TaskData="task" />

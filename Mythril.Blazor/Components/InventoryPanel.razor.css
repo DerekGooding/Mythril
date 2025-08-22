@@ -1,0 +1,27 @@
+.inventory-panel {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin-top: 10px;
+}
+
+.inventory-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 10px;
+}
+
+.inventory-item {
+    border: 1px solid #eee;
+    border-radius: 3px;
+    padding: 5px;
+    text-align: center;
+}
+
+.item-name {
+    font-weight: bold;
+}
+
+.item-quantity {
+    color: #888;
+}

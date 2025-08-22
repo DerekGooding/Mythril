@@ -49,7 +49,10 @@ public class InventoryManager
         {
             var item = _resourceManager.Items.FirstOrDefault(i => i.Name == resource.Key);
             if (item != null)
+            {
+                item.Quantity = resource.Value;
                 items.Add(item);
+            }
         }
 
         return items;
