@@ -1,14 +1,23 @@
+@using Microsoft.AspNetCore.Components.Web
 @using Mythril.Data
 @using Mythril.Blazor.Services
 @inject DragDropService DragDropService
 
-<div class="drop-zone" @ondragover:preventDefault="true" @ondrop="HandleDrop">
+<div class="drop-zone" @ondragover="HandleDragOver" @ondragover:preventDefault @ondragenter:preventDefault="true" @ondrop="HandleDrop">
     <p>Drop a task here to assign it.</p>
 </div>
 
 @code {
     [Parameter]
     public EventCallback<TaskData> OnTaskDrop { get; set; }
+
+    private void HandleDragOver(DragEventArgs args)
+    {
+        if (DragDropService.Data is TaskData)
+        {
+            args.DataTransfer.DropEffect = "move";
+        }
+    }
 
     private void HandleDrop()
     {

@@ -1,8 +1,9 @@
+@using Microsoft.AspNetCore.Components.Web
 @using Mythril.Data
 @using Mythril.Blazor.Services
 @inject DragDropService DragDropService
 
-<div class="card" draggable="true" @ondragstart="() => HandleDragStart()">
+<div class="card" draggable="true" @ondragstart="HandleDragStart">
     <div class="card-header">@TaskData?.Title</div>
     <div class="card-body">
         <p>@TaskData?.Description</p>
@@ -13,8 +14,12 @@
     [Parameter]
     public TaskData? TaskData { get; set; }
 
-    private void HandleDragStart()
+    private void HandleDragStart(DragEventArgs args)
     {
-        DragDropService.Data = TaskData;
+        if (TaskData is not null)
+        {
+            args.DataTransfer.EffectAllowed = "move";
+            DragDropService.Data = TaskData;
+        }
     }
 }
