@@ -45,6 +45,8 @@ public class ResourceManager
 
     public void AddGold(int amount) => Gold += amount;
 
+    public void AddTask(TaskData task) => Tasks.Add(task);
+
     public bool SpendGold(int amount)
     {
         if (Gold < amount) return false;
