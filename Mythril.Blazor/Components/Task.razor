@@ -7,6 +7,26 @@
     <div class="card-header">@TaskData?.Title</div>
     <div class="card-body">
         <p>@TaskData?.Description</p>
+        @if (TaskData?.Requirements.Count > 0)
+        {
+            <h6>Requirements:</h6>
+            <ul>
+                @foreach (var requirement in TaskData.Requirements)
+                {
+                    <li>@requirement.Value @requirement.Key</li>
+                }
+            </ul>
+        }
+        @if (TaskData?.Rewards.Count > 0)
+        {
+            <h6>Rewards:</h6>
+            <ul>
+                @foreach (var reward in TaskData.Rewards)
+                {
+                    <li>@reward.Value @reward.Key</li>
+                }
+            </ul>
+        }
     </div>
 </div>
 

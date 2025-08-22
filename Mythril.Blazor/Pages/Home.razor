@@ -23,7 +23,7 @@
         <div class="col-8">
             @if (resourceManager is not null)
             {
-                <HandPanel Tasks="resourceManager.Tasks" />
+                <HandPanel Tasks="resourceManager.Tasks" OnTaskDiscard="EventCallback.Factory.Create<TaskData>(this, DiscardTask)" />
             }
             else
             {
@@ -72,7 +72,7 @@
 
     protected override async System.Threading.Tasks.Task OnInitializedAsync()
     {
-        OnTaskCompleted = EventCallback.Factory.Create<TaskProgress>(this, (p) => resourceManager.AddGold(p.Task.RewardValue));
+        OnTaskCompleted = EventCallback.Factory.Create<TaskProgress>(this, (p) => resourceManager.ReceiveRewards(p.Task));
         var tasks = await GameDataService.GetTasksAsync();
         var characters = await GameDataService.GetCharactersAsync();
         var enemies = await GameDataService.GetEnemiesAsync();
@@ -115,10 +115,28 @@
         StateHasChanged();
     }
 
-    private void TaskDropped((TaskData task, Character character) args)
+    private async System.Threading.Tasks.Task TaskDropped((TaskData task, Character character) args)
     {
-        resourceManager?.Tasks.Remove(args.task);
-        taskProgresses.Add(new TaskProgress(args.task, args.character));
+        if (resourceManager.CanAfford(args.task))
+        {
+            resourceManager.PayCosts(args.task);
+            resourceManager.Tasks.Remove(args.task);
+            taskProgresses.Add(new TaskProgress(args.task, args.character));
+
+            var allTasks = await GameDataService.GetTasksAsync();
+            var randomTask = allTasks[random.Next(allTasks.Count)];
+            resourceManager.AddTask(randomTask);
+
+            StateHasChanged();
+        }
+    }
+
+    private async System.Threading.Tasks.Task DiscardTask(TaskData task)
+    {
+        resourceManager.Tasks.Remove(task);
+        var allTasks = await GameDataService.GetTasksAsync();
+        var randomTask = allTasks[random.Next(allTasks.Count)];
+        resourceManager.AddTask(randomTask);
         StateHasChanged();
     }
 
@@ -141,12 +159,9 @@
 
         if (newlyCompletedTasks.Any())
         {
-            var allTasks = await GameDataService.GetTasksAsync();
             foreach (var task in newlyCompletedTasks)
             {
                 OnTaskCompleted.InvokeAsync(task);
-                var randomTask = allTasks[random.Next(allTasks.Count)];
-                resourceManager.AddTask(randomTask);
             }
             taskProgresses.RemoveAll(p => p.Progress >= 100);
         }

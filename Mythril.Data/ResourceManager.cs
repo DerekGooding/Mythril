@@ -5,9 +5,9 @@ namespace Mythril.Data;
 
 public class ResourceManager
 {
-    public int Gold { get; private set; }
-    public int Mana { get; private set; }
-    public int Faith { get; private set; }
+    public int Gold => Inventory.GetQuantity("Gold");
+    public int Mana => Inventory.GetQuantity("Mana");
+    public int Faith => Inventory.GetQuantity("Faith");
 
     public List<TaskData> Tasks { get; private set; }
     public List<Character> Characters { get; private set; }
@@ -19,10 +19,6 @@ public class ResourceManager
 
     public ResourceManager()
     {
-        Gold = 0;
-        Mana = 0;
-        Faith = 0;
-
         Tasks = [];
         Characters = [];
         Materia = [];
@@ -43,20 +39,15 @@ public class ResourceManager
         Enemies = enemies;
     }
 
-    public void AddGold(int amount) => Gold += amount;
+    public void AddGold(int amount) => Inventory.Add("Gold", amount);
 
     public void AddTask(TaskData task) => Tasks.Add(task);
 
-    public bool SpendGold(int amount)
-    {
-        if (Gold < amount) return false;
-        Gold -= amount;
-        return true;
-    }
+    public bool SpendGold(int amount) => Inventory.Remove("Gold", amount);
 
-    public void AddMana(int amount) => Mana += amount;
+    public void AddMana(int amount) => Inventory.Add("Mana", amount);
 
-    public void AddFaith(int amount) => Faith += amount;
+    public void AddFaith(int amount) => Inventory.Add("Faith", amount);
 
     public bool UpgradeCharacterAttack(Character character)
     {
@@ -71,8 +62,31 @@ public class ResourceManager
 
     public void Reset()
     {
-        Gold = 0;
-        Mana = 0;
-        Faith = 0;
+        // This will be more complex now, we need to clear the inventory.
+        // For now, let's just reset the main resources.
+        Inventory.Remove("Gold", Gold);
+        Inventory.Remove("Mana", Mana);
+        Inventory.Remove("Faith", Faith);
+    }
+
+    public bool CanAfford(TaskData task)
+    {
+        foreach (var requirement in task.Requirements)
+            if (!Inventory.Has(requirement.Key, requirement.Value))
+                return false;
+
+        return true;
+    }
+
+    public void PayCosts(TaskData task)
+    {
+        foreach (var requirement in task.Requirements)
+            Inventory.Remove(requirement.Key, requirement.Value);
+    }
+
+    public void ReceiveRewards(TaskData task)
+    {
+        foreach (var reward in task.Rewards)
+            Inventory.Add(reward.Key, reward.Value);
     }
 }

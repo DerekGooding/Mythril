@@ -5,7 +5,10 @@
     {
         @foreach (var task in Tasks)
         {
-            <Task TaskData="task" />
+            <div class="task-container">
+                <Task TaskData="task" />
+                <button class="btn btn-danger btn-sm" @onclick="() => OnTaskDiscard.InvokeAsync(task)">Discard</button>
+            </div>
         }
     }
 </div>
@@ -13,4 +16,7 @@
 @code {
     [Parameter]
     public List<TaskData>? Tasks { get; set; }
+
+    [Parameter]
+    public EventCallback<TaskData> OnTaskDiscard { get; set; }
 }

@@ -2,38 +2,56 @@ using Mythril.Data.Items;
 
 namespace Mythril.Data;
 
-public class InventoryManager(ResourceManager resourceManager)
+public class InventoryManager
 {
-    private readonly List<Item> _items = [];
-    private readonly ResourceManager _resourceManager = resourceManager;
+    private readonly Dictionary<string, int> _resources = new();
+    private readonly ResourceManager _resourceManager;
 
-    public IReadOnlyList<Item> Items => _items.AsReadOnly();
-
-    public void AddItem(string itemName, int quantity = 1)
+    public InventoryManager(ResourceManager resourceManager)
     {
-        var itemToAdd = _resourceManager.Items.FirstOrDefault(i => i.Name == itemName);
-        if (itemToAdd != null)
-        {
-            for (var i = 0; i < quantity; i++)
-            {
-                // For simplicity, we'll add a new instance for each item.
-                // A more complex implementation might stack items.
-                _items.Add(itemToAdd);
-            }
-        }
+        _resourceManager = resourceManager;
     }
 
-    public void RemoveItem(string itemName, int quantity = 1)
+    public void Add(string name, int quantity = 1)
     {
-        for (var i = 0; i < quantity; i++)
-        {
-            var itemToRemove = _items.FirstOrDefault(item => item.Name == itemName);
-            if (itemToRemove != null)
-            {
-                _items.Remove(itemToRemove);
-            }
-        }
+        if (_resources.ContainsKey(name))
+            _resources[name] += quantity;
+        else
+            _resources[name] = quantity;
     }
 
-    public int GetItemCount(string itemName) => _items.Count(i => i.Name == itemName);
+    public bool Remove(string name, int quantity = 1)
+    {
+        if (!_resources.ContainsKey(name) || _resources[name] < quantity)
+            return false;
+
+        _resources[name] -= quantity;
+        if (_resources[name] == 0)
+            _resources.Remove(name);
+
+        return true;
+    }
+
+    public bool Has(string name, int quantity = 1)
+    {
+        return _resources.ContainsKey(name) && _resources[name] >= quantity;
+    }
+
+    public int GetQuantity(string name)
+    {
+        return _resources.GetValueOrDefault(name);
+    }
+
+    public IEnumerable<Item> GetItems()
+    {
+        var items = new List<Item>();
+        foreach (var resource in _resources)
+        {
+            var item = _resourceManager.Items.FirstOrDefault(i => i.Name == resource.Key);
+            if (item != null)
+                items.Add(item);
+        }
+
+        return items;
+    }
 }
