@@ -25,7 +25,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Mythril.Data\Mythril.Data.csproj" />
-    <ProjectReference Include="..\Mythril.WebAPI\Mythril.WebAPI.csproj" />
   </ItemGroup>
 
 </Project>

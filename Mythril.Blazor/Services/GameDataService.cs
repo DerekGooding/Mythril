@@ -9,15 +9,14 @@ namespace Mythril.Blazor.Services;
 public class GameDataService(HttpClient httpClient)
 {
     private readonly HttpClient _httpClient = httpClient;
-    private const string _base = "https://localhost:7244/";
 
-    public async Task<List<TaskData>> GetTasksAsync() => await _httpClient.GetFromJsonAsync<List<TaskData>>(_base + "api/tasks") ?? [];
+    public async Task<List<TaskData>> GetTasksAsync() => await _httpClient.GetFromJsonAsync<List<TaskData>>("data/tasks.json") ?? [];
 
-    public async Task<List<Character>> GetCharactersAsync() => await _httpClient.GetFromJsonAsync<List<Character>>(_base + "api/characters") ?? [];
+    public async Task<List<Character>> GetCharactersAsync() => await _httpClient.GetFromJsonAsync<List<Character>>("data/characters.json") ?? [];
 
-    public async Task<List<Enemy>> GetEnemiesAsync() => await _httpClient.GetFromJsonAsync<List<Enemy>>(_base + "api/enemies") ?? [];
+    public async Task<List<Enemy>> GetEnemiesAsync() => await _httpClient.GetFromJsonAsync<List<Enemy>>("data/enemies.json") ?? [];
 
-    public async Task<List<Enemy>> GetEnemiesAsync(string zone) => await _httpClient.GetFromJsonAsync<List<Enemy>>(_base + $"api/enemies?zone={zone}") ?? [];
+    public async Task<List<Enemy>> GetEnemiesAsync(string zone) => await _httpClient.GetFromJsonAsync<List<Enemy>>($"data/enemies.json?zone={zone}") ?? [];
 
     public async Task<List<Item>> GetItemsAsync()
     {
@@ -25,7 +24,7 @@ public class GameDataService(HttpClient httpClient)
         {
             Converters = { new ItemConverter() }
         };
-        var response = await _httpClient.GetStringAsync(_base + "api/items");
+        var response = await _httpClient.GetStringAsync("data/items.json");
         return JsonConvert.DeserializeObject<List<Item>>(response, settings) ?? [];
     }
 
@@ -35,7 +34,7 @@ public class GameDataService(HttpClient httpClient)
         {
             Converters = { new JobConverter() }
         };
-        var response = await _httpClient.GetStringAsync(_base + "api/jobs");
+        var response = await _httpClient.GetStringAsync("data/jobs.json");
         return JsonConvert.DeserializeObject<List<Job>>(response, settings) ?? [];
     }
 
@@ -45,7 +44,7 @@ public class GameDataService(HttpClient httpClient)
         {
             Converters = { new MateriaConverter() }
         };
-        var response = await _httpClient.GetStringAsync(_base + "api/materia");
+        var response = await _httpClient.GetStringAsync("data/materia.json");
         return JsonConvert.DeserializeObject<List<Materia>>(response, settings) ?? [];
     }
 }

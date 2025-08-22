@@ -22,9 +22,7 @@ public class ItemConverter : JsonConverter<Item>
         {
             ItemType.Consumable => new ConsumableItem(),
             ItemType.Equipment => new EquipmentItem(),
-            // case "KeyItem":
-            //     item = new KeyItem();
-            //     break;
+            ItemType.Material => new MaterialItem(),
             _ => throw new JsonSerializationException($"Unknown item type: {typeInt}"),
         };
         serializer.Populate(jsonObject.CreateReader(), item);

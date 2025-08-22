@@ -1,6 +1,0 @@
-@Mythril.WebAPI_HostAddress = http://localhost:5143
-
-GET {{Mythril.WebAPI_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
