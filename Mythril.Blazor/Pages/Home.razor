@@ -68,6 +68,7 @@
     private List<string> zones = new();
     private List<Enemy> enemiesInZone = new();
     private Timer? timer;
+    private Random random = new Random();
 
     protected override async System.Threading.Tasks.Task OnInitializedAsync()
     {
@@ -83,7 +84,7 @@
         zones = enemies.Select(e => e.Zone).Distinct().ToList();
 
         timer = new Timer(100);
-        timer.Elapsed += (sender, args) => OnTimerElapsed();
+        timer.Elapsed += (sender, args) => { _ = System.Threading.Tasks.Task.Run(OnTimerElapsed); };
         timer.AutoReset = true;
         timer.Enabled = true;
     }
@@ -121,7 +122,7 @@
         StateHasChanged();
     }
 
-    private void OnTimerElapsed()
+    private async System.Threading.Tasks.Task OnTimerElapsed()
     {
         var newlyCompletedTasks = new List<TaskProgress>();
         foreach (var progress in taskProgresses)
@@ -140,14 +141,17 @@
 
         if (newlyCompletedTasks.Any())
         {
+            var allTasks = await GameDataService.GetTasksAsync();
             foreach (var task in newlyCompletedTasks)
             {
                 OnTaskCompleted.InvokeAsync(task);
+                var randomTask = allTasks[random.Next(allTasks.Count)];
+                resourceManager.AddTask(randomTask);
             }
             taskProgresses.RemoveAll(p => p.Progress >= 100);
         }
 
-        InvokeAsync(StateHasChanged);
+        await InvokeAsync(StateHasChanged);
     }
 
     public void Dispose()
