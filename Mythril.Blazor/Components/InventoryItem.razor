@@ -1,0 +1,44 @@
+@using Mythril.Data.Items
+
+<div class="inventory-item">
+    <span class="item-name">@Item.Name</span>
+    <span class="item-quantity">x@Item.Quantity</span>
+    @if (showAnimation)
+    {
+        <div class="floating-text @(quantityChange > 0 ? "positive" : "negative")">
+            @if (quantityChange > 0)
+            {
+                <span>+@quantityChange</span>
+            }
+            else
+            {
+                <span>-@Math.Abs(quantityChange)</span>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public Item Item { get; set; }
+
+    private int previousQuantity;
+    private int quantityChange;
+    private bool showAnimation;
+
+    protected override void OnParametersSet()
+    {
+        if (previousQuantity != 0 && previousQuantity != Item.Quantity)
+        {
+            quantityChange = Item.Quantity - previousQuantity;
+            showAnimation = true;
+            StateHasChanged();
+            _ = Task.Delay(1000).ContinueWith(t =>
+            {
+                showAnimation = false;
+                StateHasChanged();
+            });
+        }
+        previousQuantity = Item.Quantity;
+    }
+}

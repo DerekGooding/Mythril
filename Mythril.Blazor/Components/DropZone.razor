@@ -3,13 +3,19 @@
 @using Mythril.Blazor.Services
 @inject DragDropService DragDropService
 
-<div class="drop-zone" @ondragover="HandleDragOver" @ondragover:preventDefault @ondragenter:preventDefault="true" @ondrop="HandleDrop">
+<div class="drop-zone" @ondragover="HandleDragOver" @ondragover:preventDefault @ondrop="HandleDrop" @ondragenter="HandleDragEnter" @ondragenter:preventDefault>
     <p>Drop a task here to assign it.</p>
 </div>
 
 @code {
     [Parameter]
     public EventCallback<TaskData> OnTaskDrop { get; set; }
+
+    private void HandleDragEnter(DragEventArgs args)
+    {
+        if (DragDropService.Data is TaskData)
+            args.DataTransfer.DropEffect = "move";
+    }
 
     private void HandleDragOver(DragEventArgs args)
     {
@@ -22,9 +28,10 @@
     private void HandleDrop()
     {
         var task = DragDropService.Data as TaskData;
-        if (task != null)
+        if (task is not null)
         {
             OnTaskDrop.InvokeAsync(task);
+            DragDropService.Data = null;
         }
     }
 }

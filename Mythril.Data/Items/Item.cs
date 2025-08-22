@@ -16,6 +16,7 @@ public abstract class Item
     public string Description { get; set; }
     public int Value { get; set; } // Sell price
     public ItemType Type { get; set; }
+    public int Quantity { get; set; }
 
     [JsonConstructor]
     protected Item(string name, string description, int value, ItemType type)

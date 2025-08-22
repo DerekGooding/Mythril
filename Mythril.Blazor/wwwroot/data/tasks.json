@@ -112,5 +112,84 @@
     "DurationSeconds": 360,
     "Requirements": { "Mana": 50, "Silver Amulet": 1 },
     "Rewards": { "Enchanted Amulet": 1 }
+  },
+  {
+    "Id": "task16",
+    "Title": "Gather Rare Flowers",
+    "Description": "Gather rare flowers from the enchanted forest.",
+    "DurationSeconds": 180,
+    "Rewards": { "Moonpetal": 1, "Sungrass": 2 }
+  },
+  {
+    "Id": "task17",
+    "Title": "Mine for Silver",
+    "Description": "Mine for silver ore in the treacherous mountains.",
+    "DurationSeconds": 240,
+    "Requirements": { "Iron Pickaxe": 1 },
+    "Rewards": { "Silver Ore": 2 }
+  },
+  {
+    "Id": "task18",
+    "Title": "Smelt Silver Bar",
+    "Description": "Smelt silver ore into a pure bar.",
+    "DurationSeconds": 120,
+    "Requirements": { "Silver Ore": 2, "Coal": 1 },
+    "Rewards": { "Silver Bar": 1 }
+  },
+  {
+    "Id": "task19",
+    "Title": "Forge Iron Pickaxe",
+    "Description": "Forge a sturdy iron pickaxe.",
+    "DurationSeconds": 90,
+    "Requirements": { "Iron Bar": 3, "Wood": 1 },
+    "Rewards": { "Iron Pickaxe": 1 }
+  },
+  {
+    "Id": "task20",
+    "Title": "Create Parchment",
+    "Description": "Create parchment from wood pulp.",
+    "DurationSeconds": 60,
+    "Requirements": { "Wood": 2 },
+    "Rewards": { "Parchment": 3 }
+  },
+  {
+    "Id": "task21",
+    "Title": "Craft Silver Amulet",
+    "Description": "Craft a beautiful silver amulet.",
+    "DurationSeconds": 150,
+    "Requirements": { "Silver Bar": 1 },
+    "Rewards": { "Silver Amulet": 1 }
+  },
+  {
+    "Id": "task22",
+    "Title": "Brew Mana Potion",
+    "Description": "Brew a potion to restore mana.",
+    "DurationSeconds": 90,
+    "Requirements": { "Potion": 1, "Mana": 10 },
+    "Rewards": { "Mana Potion": 1 }
+  },
+  {
+    "Id": "task23",
+    "Title": "Forge Steel Ingot",
+    "Description": "Forge a strong steel ingot.",
+    "DurationSeconds": 300,
+    "Requirements": { "Iron Bar": 3, "Coal": 2, "Faith": 10 },
+    "Rewards": { "Steel Ingot": 1 }
+  },
+  {
+    "Id": "task24",
+    "Title": "Forge Steel Sword",
+    "Description": "Forge a powerful steel sword.",
+    "DurationSeconds": 480,
+    "Requirements": { "Steel Ingot": 2, "Tanned Leather": 1 },
+    "Rewards": { "Steel Sword": 1 }
+  },
+  {
+    "Id": "task25",
+    "Title": "Alchemical Transmutation",
+    "Description": "Attempt to transmute gold into a Philosopher's Stone fragment.",
+    "DurationSeconds": 600,
+    "Requirements": { "Gold": 1000, "Mana": 100 },
+    "Rewards": { "Philosopher's Stone Fragment": 1 }
   }
 ]

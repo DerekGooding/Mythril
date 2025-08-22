@@ -1,0 +1,43 @@
+.inventory-item {
+    position: relative;
+    border: 1px solid #eee;
+    border-radius: 3px;
+    padding: 5px;
+    text-align: center;
+}
+
+.item-name {
+    font-weight: bold;
+}
+
+.item-quantity {
+    color: #888;
+}
+
+.floating-text {
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: float-up 1s ease-out forwards;
+    font-weight: bold;
+}
+
+.floating-text.positive {
+    color: green;
+}
+
+.floating-text.negative {
+    color: red;
+}
+
+@keyframes float-up {
+    from {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+    to {
+        opacity: 0;
+        transform: translate(-50%, -30px);
+    }
+}
