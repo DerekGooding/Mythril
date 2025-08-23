@@ -8,6 +8,9 @@
             <div class="progress-bar" role="progressbar" style="width: @(TaskProgress?.Progress)%;" aria-valuenow="@TaskProgress?.Progress" aria-valuemin="0" aria-valuemax="100"></div>
         </div>
     </div>
+    <div class="task-duration">
+        @TaskProgress?.Task.DurationSeconds s
+    </div>
 </div>
 
 @code {
