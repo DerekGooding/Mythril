@@ -8,6 +8,8 @@ public class TaskData
     public int DurationSeconds { get; set; }
     public int RewardValue { get; set; }
 
-    public Dictionary<string, int> Requirements { get; set; } = new();
-    public Dictionary<string, int> Rewards { get; set; } = new();
+    public Dictionary<string, int> Requirements { get; set; } = [];
+    public Dictionary<string, int> Rewards { get; set; } = [];
+
+    public List<string> Prerequisites { get; set; } = [];
 }

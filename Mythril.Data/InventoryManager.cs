@@ -4,7 +4,7 @@ namespace Mythril.Data;
 
 public class InventoryManager
 {
-    private readonly Dictionary<string, int> _resources = new();
+    private readonly Dictionary<string, int> _resources = [];
     private readonly ResourceManager _resourceManager;
 
     public InventoryManager(ResourceManager resourceManager)
