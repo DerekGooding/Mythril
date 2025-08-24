@@ -9,23 +9,20 @@ public class ResourceManager
     public int Mana => Inventory.GetQuantity("Mana");
     public int Faith => Inventory.GetQuantity("Faith");
 
-    public List<TaskData> Tasks { get; private set; }
-    public List<Character> Characters { get; private set; }
-    public List<Materia.Materia> Materia { get; private set; }
-    public List<Job> Jobs { get; private set; }
-    public List<Item> Items { get; private set; }
-    public List<Enemy> Enemies { get; private set; }
+    public List<TaskData> Tasks { get; private set; } = [];
+
+    public List<TaskData> AvailableTasks { get; private set; } = [];
+    public List<Character> Characters { get; private set; } = [];
+    public List<Materia.Materia> Materia { get; private set; } = [];
+    public List<Job> Jobs { get; private set; } = [];
+    public List<Item> Items { get; private set; } = [];
+    public List<Enemy> Enemies { get; private set; } = [];
     public InventoryManager Inventory { get; }
+
+    public HashSet<string> CompletedTasks { get; } = [];
 
     public ResourceManager()
     {
-        Tasks = [];
-        Characters = [];
-        Materia = [];
-        Jobs = [];
-        Items = [];
-        Enemies = [];
-
         Inventory = new InventoryManager(this);
     }
 
@@ -37,6 +34,7 @@ public class ResourceManager
         Jobs = jobs;
         Items = items;
         Enemies = enemies;
+        UpdateAvailableTasks();
     }
 
     public void AddGold(int amount) => Inventory.Add("Gold", amount);
@@ -82,6 +80,11 @@ public class ResourceManager
         return true;
     }
 
+    public bool HasPrerequisites(TaskData task) => task.Prerequisites.All(CompletedTasks.Contains);
+
+    public void UpdateAvailableTasks()
+        => AvailableTasks = [.. Tasks.Where(HasPrerequisites)];
+
     public void PayCosts(TaskData task)
     {
         foreach (var requirement in task.Requirements)
@@ -92,5 +95,7 @@ public class ResourceManager
     {
         foreach (var reward in task.Rewards)
             Inventory.Add(reward.Key, reward.Value);
+        CompletedTasks.Add(task.Id ?? string.Empty);
+        UpdateAvailableTasks();
     }
 }

@@ -20,17 +20,17 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-8">
+        <div class="col-6">
             @if (resourceManager is not null)
             {
-                <HandPanel Tasks="resourceManager.Tasks" OnTaskDiscard="EventCallback.Factory.Create<TaskData>(this, DiscardTask)" />
+                <HandPanel Tasks="resourceManager.AvailableTasks" OnTaskDiscard="EventCallback.Factory.Create<TaskData>(this, DiscardTask)" />
             }
             else
             {
                 <p><em>Loading...</em></p>
             }
         </div>
-        <div class="col-4">
+        <div class="col-6">
              @if (resourceManager is not null)
             {
                 <PartyPanel Party="resourceManager.Characters" TaskProgresses="taskProgresses" OnTaskDrop="EventCallback.Factory.Create<(TaskData, Character)>(this, TaskDropped)" />
@@ -120,12 +120,12 @@
         if (resourceManager.CanAfford(args.task))
         {
             resourceManager.PayCosts(args.task);
-            resourceManager.Tasks.Remove(args.task);
+            //resourceManager.Tasks.Remove(args.task);
             taskProgresses.Add(new TaskProgress(args.task, args.character));
 
             var allTasks = await GameDataService.GetTasksAsync();
             var randomTask = allTasks[random.Next(allTasks.Count)];
-            resourceManager.AddTask(randomTask);
+            //resourceManager.AddTask(randomTask);
 
             StateHasChanged();
         }

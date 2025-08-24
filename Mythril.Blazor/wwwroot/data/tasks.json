@@ -3,14 +3,28 @@
     "Id": "task1",
     "Title": "Prologue",
     "Description": "Watch the intro cinematic.",
-    "DurationSeconds": 10
+    "DurationSeconds": 3
   },
   {
     "Id": "task2",
     "Title": "Tutorial Section",
     "Description": "Complete the tutorial section of the game.",
-    "DurationSeconds": 60,
+    "DurationSeconds": 3,
     "Rewards": { "Basic Gem": 1 },
-    "PrerequisiteTaskIds": [ "task1" ]
+    "Prerequisites": [ "task1" ]
+  },
+  {
+    "Id": "task3",
+    "Title": "Visit Starting Town",
+    "Description": "Time to see if there is anything useful here.",
+    "DurationSeconds": 3,
+    "Prerequisites": [ "task2" ]
+  },
+  {
+    "Id": "task4",
+    "Title": "Starting Grind Area",
+    "Description": "We got monsters to slay!",
+    "DurationSeconds": 3,
+    "Prerequisites": [ "task3" ]
   }
 ]
