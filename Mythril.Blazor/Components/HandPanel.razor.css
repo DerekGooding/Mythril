@@ -1,13 +1,13 @@
 .hand-panel {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+    flex-direction: column;
     padding: 1rem;
 }
 
 .task-container {
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-direction: row;
+    align-items: stretch;
     margin: 0.5rem;
+    width: 100%;
 }
