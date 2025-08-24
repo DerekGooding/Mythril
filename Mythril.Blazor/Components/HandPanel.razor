@@ -3,11 +3,11 @@
 <div class="hand-panel" >
     @if (Tasks is not null)
     {
-        @foreach (var task in Tasks.Take(5))
+        @foreach (var task in Tasks)
         {
             <div class="task-container">
                 <Task TaskData="task" />
-                <button class="btn btn-danger btn-sm" @onclick="() => OnTaskDiscard.InvokeAsync(task)">Discard</button>
+@*                 <button class="btn btn-danger btn-sm" @onclick="() => OnTaskDiscard.InvokeAsync(task)">Discard</button> *@
             </div>
         }
     }
