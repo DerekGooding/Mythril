@@ -25,13 +25,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="wwwroot\data\characters.json">
+    <Content Update="wwwroot\data\archive\characters.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Update="wwwroot\data\enemies.json">
+    <Content Update="wwwroot\data\archive\enemies.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Update="wwwroot\data\items_archive.json">
+    <Content Update="wwwroot\data\archive\items_archive.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Update="wwwroot\data\items.json">
@@ -40,13 +40,13 @@
     <Content Update="wwwroot\data\jobs.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Update="wwwroot\data\materia.json">
+    <Content Update="wwwroot\data\archive\materia.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Update="wwwroot\data\abilities.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Update="wwwroot\data\tasks_archive.json">
+    <Content Update="wwwroot\data\archive\tasks_archive.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Update="wwwroot\data\tasks.json">
