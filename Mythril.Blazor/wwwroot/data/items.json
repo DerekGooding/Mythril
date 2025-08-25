@@ -5,7 +5,7 @@
     "Description": "Restores a small amount of HP."
   },
   {
-    "Type": "Consumable",
+    "Type": "Material",
     "Name": "Basic Gem",
     "Description": "Is refined into the primary elemental magic."
   }

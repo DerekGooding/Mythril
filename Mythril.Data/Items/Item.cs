@@ -5,9 +5,7 @@ namespace Mythril.Data.Items;
 public enum ItemType
 {
     Consumable,
-    Equipment,
-    Material,
-    KeyItem
+    Material
 }
 
 public abstract class Item

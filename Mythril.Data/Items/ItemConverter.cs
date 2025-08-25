@@ -21,7 +21,6 @@ public class ItemConverter : JsonConverter<Item>
         Item item = typeInt switch
         {
             ItemType.Consumable => new ConsumableItem(),
-            ItemType.Equipment => new EquipmentItem(),
             ItemType.Material => new MaterialItem(),
             _ => throw new JsonSerializationException($"Unknown item type: {typeInt}"),
         };
