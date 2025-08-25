@@ -74,7 +74,7 @@
     {
         OnTaskCompleted = EventCallback.Factory.Create<TaskProgress>(this, (p) => resourceManager.ReceiveRewards(p.Task));
         var tasks = await GameDataService.GetTasksAsync();
-        var characters = await GameDataService.GetCharactersAsync();
+		var characters = new List<Character>() { new Character("Hero") };
         var enemies = await GameDataService.GetEnemiesAsync();
         var items = await GameDataService.GetItemsAsync();
         var jobs = await GameDataService.GetJobsAsync();

@@ -8,10 +8,10 @@ public class PartyManager
     {
         PartyMembers.AddRange(resourceManager.Characters);
 
-        foreach (var character in PartyMembers)
-        {
-            character.Job = resourceManager.Jobs.FirstOrDefault(j => j.Name == character.JobName);
-        }
+        //foreach (var character in PartyMembers)
+        //{
+        //    character.Job = resourceManager.Jobs.FirstOrDefault(j => j.Name == character.JobName);
+        //}
     }
 
     public void AddPartyMember(Character character) => PartyMembers.Add(character);
