@@ -3,7 +3,6 @@
 @using Mythril.Data
 @using Mythril.Data.Items
 @using Mythril.Data.Jobs
-@using Mythril.Data.Materia
 
 @inject GameDataService GameDataService
 @inject ResourceManager resourceManager
@@ -41,22 +40,6 @@
             }
         </div>
     </div>
-@*     <div class="row">
-        <div class="col-12">
-            <div class="row">
-                <div class="col-4">
-                    <select class="form-select" @onchange="OnZoneSelected">
-                        <option selected>Select a zone</option>
-                        @foreach (var zone in zones)
-                        {
-                            <option value="@zone">@zone</option>
-                        }
-                    </select>
-                </div>
-            </div>
-            <CombatView Enemies="enemiesInZone" />
-        </div>
-    </div> *@
 </div>
 
 @using System.Timers
@@ -65,23 +48,18 @@
     public EventCallback<TaskProgress> OnTaskCompleted { get; set; }
 
     private List<TaskProgress> taskProgresses = new();
-    private List<string> zones = new();
-    private List<Enemy> enemiesInZone = new();
     private Timer? timer;
-    private Random random = new Random();
+    private Random random = Random.Shared;
 
     protected override async System.Threading.Tasks.Task OnInitializedAsync()
     {
         OnTaskCompleted = EventCallback.Factory.Create<TaskProgress>(this, (p) => resourceManager.ReceiveRewards(p.Task));
         var tasks = await GameDataService.GetTasksAsync();
 		var characters = new List<Character>() { new Character("Hero") };
-        var enemies = await GameDataService.GetEnemiesAsync();
         var items = await GameDataService.GetItemsAsync();
         var jobs = await GameDataService.GetJobsAsync();
-        var materia = await GameDataService.GetMateriaAsync();
 
-        resourceManager.SetData(tasks, characters, materia, jobs, items, enemies);
-        zones = enemies.Select(e => e.Zone).Distinct().ToList();
+        resourceManager.SetData(tasks, characters, jobs, items);
 
         timer = new Timer(100);
         timer.Elapsed += (sender, args) => { _ = System.Threading.Tasks.Task.Run(OnTimerElapsed); };
@@ -89,16 +67,16 @@
         timer.Enabled = true;
     }
 
-    private async System.Threading.Tasks.Task OnZoneSelected(ChangeEventArgs e)
+    private void OnZoneSelected(ChangeEventArgs e)
     {
         var zone = e.Value?.ToString();
         if (zone is not null && zone is not "Select a zone")
         {
-            enemiesInZone = await GameDataService.GetEnemiesAsync(zone);
+            //enemiesInZone = await GameDataService.GetEnemiesAsync(zone);
         }
         else
         {
-            enemiesInZone = new();
+            //enemiesInZone = new();
         }
         StateHasChanged();
     }

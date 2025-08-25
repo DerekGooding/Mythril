@@ -12,7 +12,6 @@ builder.Services.AddScoped<DragDropService>();
 builder.Services.AddScoped<GameDataService>();
 builder.Services.AddSingleton<Mythril.Data.ResourceManager>();
 builder.Services.AddSingleton<Mythril.Data.PartyManager>();
-builder.Services.AddSingleton<Mythril.Data.CombatManager>();
 
 
 await builder.Build().RunAsync();

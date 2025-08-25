@@ -6,25 +6,25 @@ namespace Mythril.Tests;
 [TestClass]
 public class InventoryTests
 {
-    private ResourceManager? resourceManager;
+    private ResourceManager? _resourceManager;
 
     [TestInitialize]
     public void Setup()
     {
-        resourceManager = new ResourceManager();
+        _resourceManager = new ResourceManager();
         var items = new List<Item>
         {
             new ConsumableItem { Name = "Potion", Description = "Restores HP" },
             new EquipmentItem { Name = "Bronze Sword", Description = "A basic sword", Slot = EquipmentSlot.Weapon }
         };
-        resourceManager.SetData([], [], [], [], items, []);
+        _resourceManager.SetData([], [], [], items);
     }
 
     [TestMethod]
     public void InventoryManager_AddsAndRemovesItems_Correctly()
     {
         // Arrange
-        var inventoryManager = resourceManager?.Inventory;
+        var inventoryManager = _resourceManager?.Inventory;
         Assert.IsNotNull(inventoryManager);
 
         // Act
@@ -46,7 +46,7 @@ public class InventoryTests
     public void InventoryManager_Has_Correctly()
     {
         // Arrange
-        var inventoryManager = resourceManager?.Inventory;
+        var inventoryManager = _resourceManager?.Inventory;
         Assert.IsNotNull(inventoryManager);
 
         // Act

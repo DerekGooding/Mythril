@@ -10,15 +10,12 @@ public class ResourceManager
     public int Faith => Inventory.GetQuantity("Faith");
 
     public List<TaskData> Tasks { get; private set; } = [];
-
     public List<TaskData> AvailableTasks { get; private set; } = [];
+
     public List<Character> Characters { get; private set; } = [];
-    public List<Materia.Materia> Materia { get; private set; } = [];
     public List<Job> Jobs { get; private set; } = [];
     public List<Item> Items { get; private set; } = [];
-    public List<Enemy> Enemies { get; private set; } = [];
     public InventoryManager Inventory { get; }
-
     public HashSet<string> CompletedTasks { get; } = [];
 
     public ResourceManager()
@@ -27,14 +24,12 @@ public class ResourceManager
         Inventory.Add("Potion", 1); // Starting Inventory
     }
 
-    public void SetData(List<TaskData> tasks, List<Character> characters, List<Materia.Materia> materia, List<Job> jobs, List<Item> items, List<Enemy> enemies)
+    public void SetData(List<TaskData> tasks, List<Character> characters, List<Job> jobs, List<Item> items)
     {
         Tasks = tasks;
         Characters = characters;
-        Materia = materia;
         Jobs = jobs;
         Items = items;
-        Enemies = enemies;
         UpdateAvailableTasks();
     }
 

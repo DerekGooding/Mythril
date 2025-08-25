@@ -1,5 +1,4 @@
 using Mythril.Data;
-using Mythril.Data.Materia;
 
 namespace Mythril.Tests;
 
@@ -18,14 +17,9 @@ public class ResourceManagerTests
         };
         var characters = new List<Character>
         {
-            new("Hero", "Squire")
+            new("Hero")
         };
-        var materia = new List<Materia>
-        {
-            new MagicMateria("Fire", "Casts Fire spell", 100, 3, ["Fire1", "Fire2", "Fire3"]),
-            new SummonMateria("Shiva", "Summons Shiva", 500, 5, "Shiva")
-        };
-        _resourceManager.SetData(tasks, characters, materia, [], [], []);
+        _resourceManager.SetData(tasks, characters, [], []);
     }
 
     [TestMethod]
@@ -36,8 +30,6 @@ public class ResourceManagerTests
         Assert.HasCount(1, _resourceManager.Tasks);
         Assert.IsNotNull(_resourceManager.Characters);
         Assert.HasCount(1, _resourceManager.Characters);
-        Assert.IsNotNull(_resourceManager.Materia);
-        Assert.HasCount(2, _resourceManager.Materia);
     }
 
     [TestMethod]
@@ -58,21 +50,6 @@ public class ResourceManagerTests
         var character = _resourceManager!.Characters.FirstOrDefault(c => c.Name == "Hero");
         Assert.IsNotNull(character);
         Assert.AreEqual("Squire", character.JobName);
-    }
-
-    [TestMethod]
-    public void ResourceManager_RetrievesMateriaData_Correctly()
-    {
-        // Assert
-        var fireMateria = _resourceManager!.Materia.FirstOrDefault(m => m.Name == "Fire") as MagicMateria;
-        Assert.IsNotNull(fireMateria);
-        Assert.AreEqual(MateriaType.Magic, fireMateria.Type);
-        Assert.HasCount(3, fireMateria.Spells);
-
-        var shivaMateria = _resourceManager.Materia.FirstOrDefault(m => m.Name == "Shiva") as SummonMateria;
-        Assert.IsNotNull(shivaMateria);
-        Assert.AreEqual(MateriaType.Summon, shivaMateria.Type);
-        Assert.AreEqual("Shiva", shivaMateria.SummonName);
     }
 
     [TestMethod]

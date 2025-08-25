@@ -1,7 +1,6 @@
 using Mythril.Data;
 using Mythril.Data.Items;
 using Mythril.Data.Jobs;
-using Mythril.Data.Materia;
 using Newtonsoft.Json;
 
 namespace Mythril.Blazor.Services;
@@ -11,12 +10,6 @@ public class GameDataService(HttpClient httpClient)
     private readonly HttpClient _httpClient = httpClient;
 
     public async Task<List<TaskData>> GetTasksAsync() => await _httpClient.GetFromJsonAsync<List<TaskData>>("data/tasks.json") ?? [];
-
-    public async Task<List<Character>> GetCharactersAsync() => await _httpClient.GetFromJsonAsync<List<Character>>("data/characters.json") ?? [];
-
-    public async Task<List<Enemy>> GetEnemiesAsync() => await _httpClient.GetFromJsonAsync<List<Enemy>>("data/enemies.json") ?? [];
-
-    public async Task<List<Enemy>> GetEnemiesAsync(string zone) => await _httpClient.GetFromJsonAsync<List<Enemy>>($"data/enemies.json?zone={zone}") ?? [];
 
     public async Task<List<Item>> GetItemsAsync()
     {
@@ -36,16 +29,6 @@ public class GameDataService(HttpClient httpClient)
         };
         var response = await _httpClient.GetStringAsync("data/jobs.json");
         return JsonConvert.DeserializeObject<List<Job>>(response, settings) ?? [];
-    }
-
-    public async Task<List<Materia>> GetMateriaAsync()
-    {
-        var settings = new JsonSerializerSettings
-        {
-            Converters = { new MateriaConverter() }
-        };
-        var response = await _httpClient.GetStringAsync("data/materia.json");
-        return JsonConvert.DeserializeObject<List<Materia>>(response, settings) ?? [];
     }
 }
 

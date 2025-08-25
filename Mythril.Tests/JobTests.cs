@@ -16,11 +16,11 @@ public class JobTests
         {
             new Squire("Squire", "A basic warrior in training.", ["Tackle", "Throw Stone", "Heal"], 10, 2, 1, [100, 200])
         };
-        var characters = new List<Mythril.Data.Character>
+        var characters = new List<Character>
         {
-            new("Hero", "Squire")
+            new("Hero")
         };
-        _resourceManager.SetData([], characters, [], jobs, [], []);
+        _resourceManager.SetData([], characters, jobs, []);
     }
 
     [TestMethod]

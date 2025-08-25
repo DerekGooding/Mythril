@@ -27,15 +27,9 @@ public class InventoryManager(ResourceManager resourceManager)
         return true;
     }
 
-    public bool Has(string name, int quantity = 1)
-    {
-        return _resources.ContainsKey(name) && _resources[name] >= quantity;
-    }
+    public bool Has(string name, int quantity = 1) => _resources.ContainsKey(name) && _resources[name] >= quantity;
 
-    public int GetQuantity(string name)
-    {
-        return _resources.GetValueOrDefault(name);
-    }
+    public int GetQuantity(string name) => _resources.GetValueOrDefault(name);
 
     public IEnumerable<Item> GetItems()
     {
