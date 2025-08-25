@@ -38,5 +38,24 @@
     "Rewards": { "Potion": 1 },
     "Requirements": { "Gold": 250 },
     "Prerequisites": [ "task3" ]
+  },
+  {
+    "Id": "task6",
+    "Title": "Unlock Strength Junction",
+    "Description": "Purchase Strength Junctioning from the Old Man.",
+    "SingleUse": true,
+    "DurationSeconds": 3,
+    "Requirements": { "Gold": 1000 },
+    "Prerequisites": [ "task3" ]
+  },
+  {
+    "Id": "task7",
+    "Title": "Unlock Fire Refine Ability",
+    "Description": "Purchase the Fire Refinement ability from the Old Man.",
+    "SingleUse": true,
+    "DurationSeconds": 3,
+    "Requirements": { "Gold": 1000 },
+    "Prerequisites": [ "task3" ]
   }
+
 ]
