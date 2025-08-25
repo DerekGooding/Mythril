@@ -24,6 +24,7 @@ public class ResourceManager
     public ResourceManager()
     {
         Inventory = new InventoryManager(this);
+        Inventory.Add("Potion", 1); // Starting Inventory
     }
 
     public void SetData(List<TaskData> tasks, List<Character> characters, List<Materia.Materia> materia, List<Job> jobs, List<Item> items, List<Enemy> enemies)
@@ -96,6 +97,8 @@ public class ResourceManager
         foreach (var reward in task.Rewards)
             Inventory.Add(reward.Key, reward.Value);
         CompletedTasks.Add(task.Id ?? string.Empty);
+        if(task.SingleUse)
+            Tasks.Remove(task);
         UpdateAvailableTasks();
     }
 }

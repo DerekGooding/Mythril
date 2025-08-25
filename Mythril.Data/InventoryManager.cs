@@ -2,15 +2,10 @@ using Mythril.Data.Items;
 
 namespace Mythril.Data;
 
-public class InventoryManager
+public class InventoryManager(ResourceManager resourceManager)
 {
     private readonly Dictionary<string, int> _resources = [];
-    private readonly ResourceManager _resourceManager;
-
-    public InventoryManager(ResourceManager resourceManager)
-    {
-        _resourceManager = resourceManager;
-    }
+    private readonly ResourceManager _resourceManager = resourceManager;
 
     public void Add(string name, int quantity = 1)
     {
