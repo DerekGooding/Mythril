@@ -10,5 +10,5 @@ public class Knight : Job
     {
     }
 
-    public Knight() : base() { }
+    public Knight() { }
 }

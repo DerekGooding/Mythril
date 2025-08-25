@@ -17,7 +17,7 @@ public class InventoryManager(ResourceManager resourceManager)
 
     public bool Remove(string name, int quantity = 1)
     {
-        if (!_resources.ContainsKey(name) || _resources[name] < quantity)
+        if (!_resources.TryGetValue(name, out var value) || value < quantity)
             return false;
 
         _resources[name] -= quantity;

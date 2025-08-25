@@ -10,5 +10,5 @@ public class Squire : Job
     {
     }
 
-    public Squire() : base() { }
+    public Squire() { }
 }

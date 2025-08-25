@@ -15,7 +15,6 @@ public class InventoryTests
         var items = new List<Item>
         {
             new ConsumableItem { Name = "Potion", Description = "Restores HP" },
-            new EquipmentItem { Name = "Bronze Sword", Description = "A basic sword", Slot = EquipmentSlot.Weapon }
         };
         _resourceManager.SetData([], [], [], items);
     }

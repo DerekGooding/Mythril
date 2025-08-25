@@ -13,5 +13,5 @@ public class ConsumableItem : Item
     {
     }
 
-    public ConsumableItem() : base() { }
+    public ConsumableItem() { }
 }

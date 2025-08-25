@@ -13,5 +13,5 @@ public class MaterialItem : Item
     {
     }
 
-    public MaterialItem() : base() { }
+    public MaterialItem() { }
 }

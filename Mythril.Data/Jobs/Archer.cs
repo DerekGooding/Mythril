@@ -10,5 +10,5 @@ public class Archer : Job
     {
     }
 
-    public Archer() : base() { }
+    public Archer() { }
 }
