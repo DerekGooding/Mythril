@@ -9,7 +9,7 @@ public class GameDataService(HttpClient httpClient)
 {
     private readonly HttpClient _httpClient = httpClient;
 
-    public async Task<List<TaskData>> GetTasksAsync() => await _httpClient.GetFromJsonAsync<List<TaskData>>("data/tasks.json") ?? [];
+    public async Task<List<Location>> GetLocationsAsync() => await _httpClient.GetFromJsonAsync<List<Location>>("data/tasks.json") ?? [];
 
     public async Task<List<Item>> GetItemsAsync()
     {

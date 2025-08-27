@@ -31,6 +31,8 @@ public class InventoryManager(ResourceManager resourceManager)
 
     public int GetQuantity(string name) => _resources.GetValueOrDefault(name);
 
+    public void Clear() => _resources.Clear();
+
     public IEnumerable<Item> GetItems()
     {
         var items = new List<Item>();

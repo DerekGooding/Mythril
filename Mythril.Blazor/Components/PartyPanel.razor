@@ -1,4 +1,5 @@
 @using Mythril.Data
+@inject Mythril.Data.ResourceManager resourceManager
 
 <div class="party-panel">
     <h3>Party</h3>
@@ -6,7 +7,10 @@
     {
         @foreach (var character in Party)
         {
-            <CharacterDisplay Character="character" TaskProgress="TaskProgresses?.FirstOrDefault(p => p.Character == character)" OnTaskDrop="(task) => OnTaskDrop.InvokeAsync((task, character))" />
+            <CharacterDisplay Character="character"
+                                TaskProgress="TaskProgresses?.FirstOrDefault(p => p.Character == character)"
+                                OnTaskDrop="(task) => OnTaskDrop.InvokeAsync((task, character))"
+                                Accepts="resourceManager.CanAfford" />
         }
     }
 </div>

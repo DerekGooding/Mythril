@@ -18,7 +18,7 @@ public class JobTests
         };
         var characters = new List<Character>
         {
-            new("Hero")
+            new("Hero") { JobName = "Squire" }
         };
         _resourceManager.SetData([], characters, jobs, []);
     }
