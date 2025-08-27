@@ -8,8 +8,8 @@ public class MaterialItem : Item
     // For example, what effect does it have when used?
 
     [JsonConstructor]
-    public MaterialItem(string name, string description, int value)
-        : base(name, description, value, ItemType.Material)
+    public MaterialItem(string name, string description)
+        : base(name, description, ItemType.Material)
     {
     }
 

@@ -1,69 +1,69 @@
 [
   {
     "Name": "Village",
-    "Tasks": [
+    "Quests": [
       {
-        "Id": "task1",
+        "Id": "quest1",
         "Title": "Prologue",
         "Description": "Watch the intro cinematic.",
         "SingleUse": true,
         "DurationSeconds": 3
       },
       {
-        "Id": "task2",
+        "Id": "quest2",
         "Title": "Tutorial Section",
         "Description": "Complete the tutorial section of the game.",
         "DurationSeconds": 3,
         "Rewards": { "Basic Gem": 1 },
-        "Prerequisites": [ "task1" ]
+        "Prerequisites": [ "quest1" ]
       },
       {
-        "Id": "task3",
+        "Id": "quest3",
         "Title": "Visit Starting Town",
         "Description": "Time to see if there is anything useful here.",
         "SingleUse": true,
         "DurationSeconds": 3,
-        "Prerequisites": [ "task2" ]
+        "Prerequisites": [ "quest2" ]
       },
       {
-        "Id": "task5",
+        "Id": "quest4",
         "Title": "Buy Potion",
         "Description": "Get a potion from the town shop.",
         "DurationSeconds": 3,
         "Rewards": { "Potion": 1 },
         "Requirements": { "Gold": 250 },
-        "Prerequisites": [ "task3" ]
+        "Prerequisites": [ "quest3" ]
       },
       {
-        "Id": "task6",
+        "Id": "quest5",
         "Title": "Unlock Strength Junction",
         "Description": "Purchase Strength Junctioning from the Old Man.",
         "SingleUse": true,
         "DurationSeconds": 3,
         "Requirements": { "Gold": 1000 },
-        "Prerequisites": [ "task3" ]
+        "Prerequisites": [ "quest3" ]
       },
       {
-        "Id": "task7",
+        "Id": "quest6",
         "Title": "Unlock Fire Refine Ability",
         "Description": "Purchase the Fire Refinement ability from the Old Man.",
         "SingleUse": true,
         "DurationSeconds": 3,
         "Requirements": { "Gold": 1000 },
-        "Prerequisites": [ "task3" ]
+        "Prerequisites": [ "quest3" ]
       }
     ]
   },
   {
     "Name": "Forest",
-    "Tasks": [
+    "Quests": [
       {
-        "Id": "task4",
-        "Title": "Starting Grind Area",
-        "Description": "We got monsters to slay!",
+        "Id": "quest7",
+        "Title": "Farm Goblins",
+        "Description": "They got gold and we need it!",
         "DurationSeconds": 3,
         "Rewards": { "Gold": 100 },
-        "Prerequisites": [ "task3" ]
+        "Prerequisites": [ "quest3" ]
       }
     ]
   }

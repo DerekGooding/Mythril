@@ -1,21 +1,22 @@
 @using Microsoft.AspNetCore.Components.Web
 @using Mythril.Data
+@using Mythril.Blazor
 @using Mythril.Blazor.Services
 @inject DragDropService DragDropService
 
 <div class="card" draggable="true" @ondragstart="HandleDragStart">
-    <div class="card-header">@TaskData?.Title</div>
+    <div class="card-header">@Quest?.Title</div>
     <div class="card-content">
         <div class="card-main">
-            <p>@TaskData?.Description</p>
-            <p>@TaskData?.DurationSeconds seconds</p>
+            <p>@Quest?.Description</p>
+            <p>@Quest?.DurationSeconds seconds</p>
         </div>
         <div class="card-side">
-            @if (TaskData?.Requirements.Count > 0)
+            @if (Quest?.Requirements.Count > 0)
             {
                 <h6>Requirements:</h6>
                 <ul>
-                    @foreach (var requirement in TaskData.Requirements)
+                    @foreach (var requirement in Quest.Requirements)
                     {
                         <li>@requirement.Value @requirement.Key</li>
                     }
@@ -23,11 +24,11 @@
             }
         </div>
         <div class="card-side">
-            @if (TaskData?.Rewards.Count > 0)
+            @if (Quest?.Rewards.Count > 0)
             {
                 <h6>Rewards:</h6>
                 <ul>
-                    @foreach (var reward in TaskData.Rewards)
+                    @foreach (var reward in Quest.Rewards)
                     {
                         <li>@reward.Value @reward.Key</li>
                     }
@@ -39,14 +40,14 @@
 
 @code {
     [Parameter]
-    public TaskData? TaskData { get; set; }
+    public Quest? Quest { get; set; }
 
     private void HandleDragStart(DragEventArgs args)
     {
-        if (TaskData is not null)
+        if (Quest is not null)
         {
             args.DataTransfer.EffectAllowed = "move";
-            DragDropService.Data = TaskData;
+            DragDropService.Data = Quest;
         }
     }
 }

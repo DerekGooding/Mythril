@@ -3,13 +3,13 @@
 <div class="hand-panel">
     @if (Locations is not null)
     {
-        @foreach (var location in Locations.Where(l => l.Tasks.Any()))
+        @foreach (var location in Locations.Where(l => l.Quests.Any()))
         {
             <Expander Header="@location.Name">
-                @foreach (var task in location.Tasks)
+                @foreach (var quest in location.Quests)
                 {
                     <div class="task-container">
-                        <Task TaskData="task" />
+                        <QuestCard Quest="quest" />
                     </div>
                 }
             </Expander>

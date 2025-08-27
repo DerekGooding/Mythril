@@ -2,13 +2,13 @@
 
 <div class="character-display">
     <h4>@Character?.Name</h4>
-    @if (TaskProgress is not null)
+    @if (QuestProgress is not null)
     {
-        <TaskProgressCard TaskProgress="TaskProgress" />
+        <QuestProgressCard QuestProgress="QuestProgress" />
     }
     else
     {
-        <DropZone OnTaskDrop="HandleTaskDrop" Accepts="Accepts" />
+        <DropZone OnQuestDrop="HandleTaskDrop" Accepts="Accepts" />
     }
 </div>
 
@@ -17,16 +17,16 @@
     public Character? Character { get; set; }
 
     [Parameter]
-    public TaskProgress? TaskProgress { get; set; }
+    public QuestProgress? QuestProgress { get; set; }
 
     [Parameter]
-    public EventCallback<TaskData> OnTaskDrop { get; set; }
+    public EventCallback<Quest> OnQuestDrop { get; set; }
 
     [Parameter]
-    public Func<TaskData, bool>? Accepts { get; set; }
+    public Func<Quest, bool>? Accepts { get; set; }
 
-    private void HandleTaskDrop(TaskData task)
+    private void HandleTaskDrop(Quest task)
     {
-        OnTaskDrop.InvokeAsync(task);
+        OnQuestDrop.InvokeAsync(task);
     }
 }

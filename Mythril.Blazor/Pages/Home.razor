@@ -2,7 +2,7 @@
 @using Mythril.Blazor.Services
 @using Mythril.Data
 @using Mythril.Data.Items
-@using Mythril.Data.Jobs
+@using System.Threading.Tasks
 
 @inject GameDataService GameDataService
 @inject ResourceManager resourceManager
@@ -14,7 +14,7 @@
         <div class="col-12">
             @if (resourceManager is not null)
             {
-                <ResourcePanel Gold="@resourceManager.Gold" Mana="@resourceManager.Mana" Faith="@resourceManager.Faith" Items="resourceManager.Inventory.GetItems().ToList()" />
+                <ResourcePanel Gold="@resourceManager.Gold" Items="resourceManager.Inventory?.GetItems().ToList()" />
             }
         </div>
     </div>
@@ -26,15 +26,14 @@
             }
             else
             {
-                <p><em>Loading...</em></p>
             }
         </div>
         <div class="col-6">
-             @if (resourceManager is not null)
+            @if (resourceManager is not null)
             {
-                <PartyPanel Party="resourceManager.Characters" TaskProgresses="taskProgresses" OnTaskDrop="EventCallback.Factory.Create<(TaskData, Character)>(this, TaskDropped)" />
+                <PartyPanel Party="resourceManager.Characters" QuestProgresses="questProgresses" OnQuestDrop="EventCallback.Factory.Create<(Mythril.Data.Quest, Character)>(this, TaskDropped)" />
             }
-            else
+            else        
             {
                 <p><em>Loading...</em></p>
             }
@@ -45,19 +44,19 @@
 @using System.Timers
 @code {
     [Parameter]
-    public EventCallback<TaskProgress> OnTaskCompleted { get; set; }
+    public EventCallback<QuestProgress> OnTaskCompleted { get; set; }
 
-    private List<TaskProgress> taskProgresses = new();
+    private List<QuestProgress> questProgresses = new();
     private Timer? timer;
     private Random random = Random.Shared;
 
     protected override async System.Threading.Tasks.Task OnInitializedAsync()
     {
-        OnTaskCompleted = EventCallback.Factory.Create<TaskProgress>(this, (p) => resourceManager.ReceiveRewards(p.Task));
+        OnTaskCompleted = EventCallback.Factory.Create<QuestProgress>(this, (p) => resourceManager.ReceiveRewards(p.Quest));
         var locations = await GameDataService.GetLocationsAsync();
 		var characters = new List<Character>() { new Character("Hero") };
         var items = await GameDataService.GetItemsAsync();
-        var jobs = await GameDataService.GetJobsAsync();
+        var jobs = await GameDataService.GetCadencesAsync();
 
         resourceManager.SetData(locations, characters, jobs, items);
 
@@ -93,25 +92,25 @@
         StateHasChanged();
     }
 
-    private async System.Threading.Tasks.Task TaskDropped((TaskData task, Character character) args)
+    private async Task TaskDropped((Mythril.Data.Quest quest, Character character) args)
     {
-        if (resourceManager.CanAfford(args.task))
+        if (resourceManager.CanAfford(args.quest))
         {
-            resourceManager.PayCosts(args.task);
-            taskProgresses.Add(new TaskProgress(args.task, args.character));
+            resourceManager.PayCosts(args.quest);
+            questProgresses.Add(new QuestProgress(args.quest, args.character));
             await InvokeAsync(StateHasChanged);
         }
     }
 
-    private async System.Threading.Tasks.Task OnTimerElapsed()
+    private async Task OnTimerElapsed()
     {
-        var newlyCompletedTasks = new List<TaskProgress>();
-        foreach (var progress in taskProgresses)
+        var newlyCompletedTasks = new List<QuestProgress>();
+        foreach (var progress in questProgresses)
         {
             if (progress.Progress < 100)
             {
                 var elapsed = (DateTime.Now - progress.StartTime).TotalSeconds;
-                progress.Progress = Math.Min(100, (elapsed / progress.Task.DurationSeconds) * 100);
+                progress.Progress = Math.Min(100, (elapsed / progress.Quest.DurationSeconds) * 100);
 
                 if (progress.Progress >= 100)
                 {
@@ -126,7 +125,7 @@
             {
                 await OnTaskCompleted.InvokeAsync(task);
             }
-            taskProgresses.RemoveAll(p => p.Progress >= 100);
+            questProgresses.RemoveAll(p => p.Progress >= 100);
         }
 
         await InvokeAsync(StateHasChanged);

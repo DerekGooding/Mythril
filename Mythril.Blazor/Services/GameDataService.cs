@@ -1,6 +1,5 @@
 using Mythril.Data;
 using Mythril.Data.Items;
-using Mythril.Data.Jobs;
 using Newtonsoft.Json;
 
 namespace Mythril.Blazor.Services;
@@ -9,7 +8,7 @@ public class GameDataService(HttpClient httpClient)
 {
     private readonly HttpClient _httpClient = httpClient;
 
-    public async Task<List<Location>> GetLocationsAsync() => await _httpClient.GetFromJsonAsync<List<Location>>("data/tasks.json") ?? [];
+    public async Task<List<Location>> GetLocationsAsync() => await _httpClient.GetFromJsonAsync<List<Location>>("data/locations.json") ?? [];
 
     public async Task<List<Item>> GetItemsAsync()
     {
@@ -21,15 +20,7 @@ public class GameDataService(HttpClient httpClient)
         return JsonConvert.DeserializeObject<List<Item>>(response, settings) ?? [];
     }
 
-    public async Task<List<Job>> GetJobsAsync()
-    {
-        var settings = new JsonSerializerSettings
-        {
-            Converters = { new JobConverter() }
-        };
-        var response = await _httpClient.GetStringAsync("data/jobs.json");
-        return JsonConvert.DeserializeObject<List<Job>>(response, settings) ?? [];
-    }
+    public async Task<List<Cadence>> GetCadencesAsync() => await _httpClient.GetFromJsonAsync<List<Cadence>>("data/cadences.json") ?? [];
 }
 
 public static class HttpClientExtensions

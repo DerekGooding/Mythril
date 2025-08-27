@@ -11,7 +11,6 @@ builder.Services.AddScoped(_ => new HttpClient { BaseAddress = new Uri(builder.H
 builder.Services.AddScoped<DragDropService>();
 builder.Services.AddScoped<GameDataService>();
 builder.Services.AddSingleton<Mythril.Data.ResourceManager>();
-builder.Services.AddSingleton<Mythril.Data.PartyManager>();
 
 
 await builder.Build().RunAsync();

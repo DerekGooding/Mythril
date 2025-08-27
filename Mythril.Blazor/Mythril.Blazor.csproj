@@ -37,7 +37,7 @@
     <Content Update="wwwroot\data\items.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Update="wwwroot\data\jobs.json">
+    <Content Update="wwwroot\data\cadences.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Update="wwwroot\data\archive\materia.json">
@@ -49,7 +49,7 @@
     <Content Update="wwwroot\data\archive\tasks_archive.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Update="wwwroot\data\tasks.json">
+    <Content Update="wwwroot\data\locations.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

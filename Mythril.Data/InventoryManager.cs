@@ -2,10 +2,10 @@ using Mythril.Data.Items;
 
 namespace Mythril.Data;
 
-public class InventoryManager(ResourceManager resourceManager)
+public class InventoryManager(List<Item> items)
 {
     private readonly Dictionary<string, int> _resources = [];
-    private readonly ResourceManager _resourceManager = resourceManager;
+    private readonly List<Item> _items = items;
 
     public void Add(string name, int quantity = 1)
     {
@@ -38,7 +38,7 @@ public class InventoryManager(ResourceManager resourceManager)
         var items = new List<Item>();
         foreach (var resource in _resources)
         {
-            var item = _resourceManager.Items.FirstOrDefault(i => i.Name == resource.Key);
+            var item = _items.FirstOrDefault(i => i.Name == resource.Key);
             if (item != null)
             {
                 item.Quantity = resource.Value;

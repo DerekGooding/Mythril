@@ -1,6 +1,6 @@
 namespace Mythril.Data;
 
-public class TaskData
+public class Quest
 {
     public string? Id { get; set; }
     public string? Title { get; set; }

@@ -8,8 +8,8 @@ public class ConsumableItem : Item
     // For example, what effect does it have when used?
 
     [JsonConstructor]
-    public ConsumableItem(string name, string description, int value)
-        : base(name, description, value, ItemType.Consumable)
+    public ConsumableItem(string name, string description)
+        : base(name, description, ItemType.Consumable)
     {
     }
 

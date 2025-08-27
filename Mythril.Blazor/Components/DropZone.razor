@@ -12,16 +12,16 @@
 
 @code {
     [Parameter]
-    public EventCallback<TaskData> OnTaskDrop { get; set; }
+    public EventCallback<Quest> OnQuestDrop { get; set; }
 
     [Parameter]
-    public Func<TaskData, bool>? Accepts { get; set; }
+    public Func<Quest, bool>? Accepts { get; set; }
 
     private bool isShaking = false;
 
     private void HandleDragEnter(DragEventArgs args)
     {
-        if (DragDropService.Data is TaskData task)
+        if (DragDropService.Data is Quest task)
         {
             if (Accepts is null || Accepts(task))
                 args.DataTransfer.DropEffect = "move";
@@ -32,7 +32,7 @@
 
     private void HandleDragOver(DragEventArgs args)
     {
-        if (DragDropService.Data is TaskData task)
+        if (DragDropService.Data is Quest task)
         {
             if (Accepts is null || Accepts(task))
             {
@@ -47,17 +47,17 @@
 
     private async Task HandleDrop()
     {
-        var task = DragDropService.Data as TaskData;
+        var task = DragDropService.Data as Quest;
         if (task is not null)
         {
             if (Accepts is null || Accepts(task))
             {
-                await OnTaskDrop.InvokeAsync(task);
+                await OnQuestDrop.InvokeAsync(task);
             }
             else
             {
                 isShaking = true;
-                await Task.Delay(500);
+                await System.Threading.Tasks.Task.Delay(500);
                 isShaking = false;
             }
             DragDropService.Data = null;

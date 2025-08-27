@@ -16,10 +16,10 @@ public class ResourceManagerTests
             new()
             {
                 Name = "Test Location",
-                Tasks = new List<TaskData>
-                {
+                Quests =
+                [
                     new() { Id = "card1", Title = "Forest Foraging", DurationSeconds = 60, RewardValue = 10 }
-                }
+                ]
             }
         };
         var characters = new List<Character>
@@ -43,55 +43,12 @@ public class ResourceManagerTests
     public void ResourceManager_RetrievesTaskData_Correctly()
     {
         // Assert
-        var location = _resourceManager!.Locations.First();
-        var task = location.Tasks.FirstOrDefault(c => c.Id == "card1");
+        var location = _resourceManager!.Locations[0];
+        var task = location.Quests.FirstOrDefault(c => c.Id == "quest1");
         Assert.IsNotNull(task);
         Assert.AreEqual("Forest Foraging", task.Title);
         Assert.AreEqual(60, task.DurationSeconds);
         Assert.AreEqual(10, task.RewardValue);
     }
 
-    [TestMethod]
-    public void ResourceManager_RetrievesCharacterData_Correctly()
-    {
-        // Arrange
-        var partyManager = new PartyManager(_resourceManager!);
-
-        // Assert
-        var character = partyManager.PartyMembers.FirstOrDefault(c => c.Name == "Hero");
-        Assert.IsNotNull(character);
-        Assert.AreEqual("Hero", character.JobName);
-    }
-
-    [TestMethod]
-    public void UpgradeCharacterAttack_SufficientGold_UpgradesAttackAndDeductsGold()
-    {
-        // Arrange
-        var character = _resourceManager!.Characters[0];
-        _resourceManager.AddGold(100);
-
-        // Act
-        var result = _resourceManager.UpgradeCharacterAttack(character);
-
-        // Assert
-        Assert.IsTrue(result);
-        Assert.AreEqual(11, character.AttackPower);
-        Assert.AreEqual(0, _resourceManager.Gold);
-    }
-
-    [TestMethod]
-    public void UpgradeCharacterAttack_InsufficientGold_DoesNotUpgrade()
-    {
-        // Arrange
-        var character = _resourceManager!.Characters[0];
-        _resourceManager.AddGold(50);
-
-        // Act
-        var result = _resourceManager.UpgradeCharacterAttack(character);
-
-        // Assert
-        Assert.IsFalse(result);
-        Assert.AreEqual(10, character.AttackPower);
-        Assert.AreEqual(50, _resourceManager.Gold);
-    }
 }

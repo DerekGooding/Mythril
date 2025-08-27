@@ -12,16 +12,14 @@ public abstract class Item
 {
     public string Name { get; set; }
     public string Description { get; set; }
-    public int Value { get; set; } // Sell price
     public ItemType Type { get; set; }
     public int Quantity { get; set; }
 
     [JsonConstructor]
-    protected Item(string name, string description, int value, ItemType type)
+    protected Item(string name, string description, ItemType type)
     {
         Name = name;
         Description = description;
-        Value = value;
         Type = type;
     }
 

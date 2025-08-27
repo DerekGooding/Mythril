@@ -8,8 +8,8 @@
         @foreach (var character in Party)
         {
             <CharacterDisplay Character="character"
-                                TaskProgress="TaskProgresses?.FirstOrDefault(p => p.Character == character)"
-                                OnTaskDrop="(task) => OnTaskDrop.InvokeAsync((task, character))"
+                                QuestProgress="QuestProgresses?.FirstOrDefault(p => p.Character == character)"
+                                OnQuestDrop="(task) => OnQuestDrop.InvokeAsync((task, character))"
                                 Accepts="resourceManager.CanAfford" />
         }
     }
@@ -20,8 +20,8 @@
     public List<Character>? Party { get; set; }
 
     [Parameter]
-    public List<TaskProgress>? TaskProgresses { get; set; }
+    public List<QuestProgress>? QuestProgresses { get; set; }
 
     [Parameter]
-    public EventCallback<(TaskData, Character)> OnTaskDrop { get; set; }
+    public EventCallback<(Quest, Character)> OnQuestDrop { get; set; }
 }
