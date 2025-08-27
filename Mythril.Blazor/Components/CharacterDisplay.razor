@@ -8,7 +8,7 @@
     }
     else
     {
-        <DropZone OnTaskDrop="HandleTaskDrop" />
+        <DropZone OnTaskDrop="HandleTaskDrop" Accepts="Accepts" />
     }
 </div>
 
@@ -21,6 +21,9 @@
 
     [Parameter]
     public EventCallback<TaskData> OnTaskDrop { get; set; }
+
+    [Parameter]
+    public Func<TaskData, bool>? Accepts { get; set; }
 
     private void HandleTaskDrop(TaskData task)
     {

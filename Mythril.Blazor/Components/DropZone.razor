@@ -3,7 +3,10 @@
 @using Mythril.Blazor.Services
 @inject DragDropService DragDropService
 
-<div class="drop-zone" @ondragover="HandleDragOver" @ondragover:preventDefault @ondrop="HandleDrop" @ondragenter="HandleDragEnter" @ondragenter:preventDefault>
+<div class="drop-zone @(isShaking ? "shake" : "")"
+    @ondragover="HandleDragOver" @ondragover:preventDefault
+    @ondrop="HandleDrop"
+    @ondragenter="HandleDragEnter" @ondragenter:preventDefault>
     <p>Drop a task here to assign it.</p>
 </div>
 
@@ -11,26 +14,52 @@
     [Parameter]
     public EventCallback<TaskData> OnTaskDrop { get; set; }
 
+    [Parameter]
+    public Func<TaskData, bool>? Accepts { get; set; }
+
+    private bool isShaking = false;
+
     private void HandleDragEnter(DragEventArgs args)
     {
-        if (DragDropService.Data is TaskData)
-            args.DataTransfer.DropEffect = "move";
+        if (DragDropService.Data is TaskData task)
+        {
+            if (Accepts is null || Accepts(task))
+                args.DataTransfer.DropEffect = "move";
+            else
+                args.DataTransfer.DropEffect = "none";
+        }
     }
 
     private void HandleDragOver(DragEventArgs args)
     {
-        if (DragDropService.Data is TaskData)
+        if (DragDropService.Data is TaskData task)
         {
-            args.DataTransfer.DropEffect = "move";
+            if (Accepts is null || Accepts(task))
+            {
+                args.DataTransfer.DropEffect = "move";
+            }
+            else
+            {
+                args.DataTransfer.DropEffect = "none";
+            }
         }
     }
 
-    private void HandleDrop()
+    private async Task HandleDrop()
     {
         var task = DragDropService.Data as TaskData;
         if (task is not null)
         {
-            OnTaskDrop.InvokeAsync(task);
+            if (Accepts is null || Accepts(task))
+            {
+                await OnTaskDrop.InvokeAsync(task);
+            }
+            else
+            {
+                isShaking = true;
+                await Task.Delay(500);
+                isShaking = false;
+            }
             DragDropService.Data = null;
         }
     }

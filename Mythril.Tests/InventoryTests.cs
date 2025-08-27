@@ -12,6 +12,7 @@ public class InventoryTests
     public void Setup()
     {
         _resourceManager = new ResourceManager();
+        _resourceManager.Inventory.Clear();
         var items = new List<Item>
         {
             new ConsumableItem { Name = "Potion", Description = "Restores HP" },

@@ -22,7 +22,7 @@
         <div class="col-6">
             @if (resourceManager is not null)
             {
-                <HandPanel Tasks="resourceManager.AvailableTasks" OnTaskDiscard="EventCallback.Factory.Create<TaskData>(this, DiscardTask)" />
+                <HandPanel Locations="resourceManager.Locations" />
             }
             else
             {
@@ -54,12 +54,12 @@
     protected override async System.Threading.Tasks.Task OnInitializedAsync()
     {
         OnTaskCompleted = EventCallback.Factory.Create<TaskProgress>(this, (p) => resourceManager.ReceiveRewards(p.Task));
-        var tasks = await GameDataService.GetTasksAsync();
+        var locations = await GameDataService.GetLocationsAsync();
 		var characters = new List<Character>() { new Character("Hero") };
         var items = await GameDataService.GetItemsAsync();
         var jobs = await GameDataService.GetJobsAsync();
 
-        resourceManager.SetData(tasks, characters, jobs, items);
+        resourceManager.SetData(locations, characters, jobs, items);
 
         timer = new Timer(100);
         timer.Elapsed += (sender, args) => { _ = System.Threading.Tasks.Task.Run(OnTimerElapsed); };
@@ -98,24 +98,9 @@
         if (resourceManager.CanAfford(args.task))
         {
             resourceManager.PayCosts(args.task);
-            //resourceManager.Tasks.Remove(args.task);
             taskProgresses.Add(new TaskProgress(args.task, args.character));
-
-            var allTasks = await GameDataService.GetTasksAsync();
-            var randomTask = allTasks[random.Next(allTasks.Count)];
-            //resourceManager.AddTask(randomTask);
-
-            StateHasChanged();
+            await InvokeAsync(StateHasChanged);
         }
-    }
-
-    private async System.Threading.Tasks.Task DiscardTask(TaskData task)
-    {
-        resourceManager.Tasks.Remove(task);
-        var allTasks = await GameDataService.GetTasksAsync();
-        var randomTask = allTasks[random.Next(allTasks.Count)];
-        resourceManager.AddTask(randomTask);
-        StateHasChanged();
     }
 
     private async System.Threading.Tasks.Task OnTimerElapsed()

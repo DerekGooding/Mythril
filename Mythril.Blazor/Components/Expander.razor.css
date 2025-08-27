@@ -1,0 +1,26 @@
+.expander {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+.expander-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    cursor: pointer;
+    background-color: #f5f5f5;
+}
+
+.expander-icon {
+    transition: transform 0.2s;
+}
+
+.expander-icon.expanded {
+    transform: rotate(180deg);
+}
+
+.expander-content {
+    padding: 10px;
+}

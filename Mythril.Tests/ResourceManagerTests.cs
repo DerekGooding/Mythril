@@ -11,32 +11,40 @@ public class ResourceManagerTests
     public void Setup()
     {
         _resourceManager = new ResourceManager();
-        var tasks = new List<TaskData>
+        var locations = new List<Location>
         {
-            new() { Id = "card1", Title = "Forest Foraging", DurationSeconds = 60, RewardValue = 10 }
+            new()
+            {
+                Name = "Test Location",
+                Tasks = new List<TaskData>
+                {
+                    new() { Id = "card1", Title = "Forest Foraging", DurationSeconds = 60, RewardValue = 10 }
+                }
+            }
         };
         var characters = new List<Character>
         {
             new("Hero")
         };
-        _resourceManager.SetData(tasks, characters, [], []);
+        _resourceManager.SetData(locations, characters, [], []);
     }
 
     [TestMethod]
     public void ResourceManager_StoresAndRetrievesData_Correctly()
     {
         // Assert
-        Assert.IsNotNull(_resourceManager!.Tasks);
-        Assert.HasCount(1, _resourceManager.Tasks);
+        Assert.IsNotNull(_resourceManager!.Locations);
+        Assert.AreEqual(1, _resourceManager.Locations.Count);
         Assert.IsNotNull(_resourceManager.Characters);
-        Assert.HasCount(1, _resourceManager.Characters);
+        Assert.AreEqual(1, _resourceManager.Characters.Count);
     }
 
     [TestMethod]
     public void ResourceManager_RetrievesTaskData_Correctly()
     {
         // Assert
-        var task = _resourceManager!.Tasks.FirstOrDefault(c => c.Id == "card1");
+        var location = _resourceManager!.Locations.First();
+        var task = location.Tasks.FirstOrDefault(c => c.Id == "card1");
         Assert.IsNotNull(task);
         Assert.AreEqual("Forest Foraging", task.Title);
         Assert.AreEqual(60, task.DurationSeconds);
@@ -46,10 +54,13 @@ public class ResourceManagerTests
     [TestMethod]
     public void ResourceManager_RetrievesCharacterData_Correctly()
     {
+        // Arrange
+        var partyManager = new PartyManager(_resourceManager!);
+
         // Assert
-        var character = _resourceManager!.Characters.FirstOrDefault(c => c.Name == "Hero");
+        var character = partyManager.PartyMembers.FirstOrDefault(c => c.Name == "Hero");
         Assert.IsNotNull(character);
-        Assert.AreEqual("Squire", character.JobName);
+        Assert.AreEqual("Hero", character.JobName);
     }
 
     [TestMethod]

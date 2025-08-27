@@ -9,9 +9,7 @@ public class ResourceManager
     public int Mana => Inventory.GetQuantity("Mana");
     public int Faith => Inventory.GetQuantity("Faith");
 
-    public List<TaskData> Tasks { get; private set; } = [];
-    public List<TaskData> AvailableTasks { get; private set; } = [];
-
+    public List<Location> Locations { get; private set; } = [];
     public List<Character> Characters { get; private set; } = [];
     public List<Job> Jobs { get; private set; } = [];
     public List<Item> Items { get; private set; } = [];
@@ -24,9 +22,9 @@ public class ResourceManager
         Inventory.Add("Potion", 1); // Starting Inventory
     }
 
-    public void SetData(List<TaskData> tasks, List<Character> characters, List<Job> jobs, List<Item> items)
+    public void SetData(List<Location> locations, List<Character> characters, List<Job> jobs, List<Item> items)
     {
-        Tasks = tasks;
+        Locations = locations;
         Characters = characters;
         Jobs = jobs;
         Items = items;
@@ -35,7 +33,14 @@ public class ResourceManager
 
     public void AddGold(int amount) => Inventory.Add("Gold", amount);
 
-    public void AddTask(TaskData task) => Tasks.Add(task);
+    public void AddTask(string locationName, TaskData task)
+    {
+        var location = Locations.FirstOrDefault(l => l.Name == locationName);
+        if (location != null)
+        {
+            location.Tasks.Add(task);
+        }
+    }
 
     public bool SpendGold(int amount) => Inventory.Remove("Gold", amount);
 
@@ -79,7 +84,12 @@ public class ResourceManager
     public bool HasPrerequisites(TaskData task) => task.Prerequisites.All(CompletedTasks.Contains);
 
     public void UpdateAvailableTasks()
-        => AvailableTasks = [.. Tasks.Where(HasPrerequisites)];
+    {
+        foreach (var location in Locations)
+        {
+            location.Tasks = location.Tasks.Where(HasPrerequisites).ToList();
+        }
+    }
 
     public void PayCosts(TaskData task)
     {
@@ -92,8 +102,13 @@ public class ResourceManager
         foreach (var reward in task.Rewards)
             Inventory.Add(reward.Key, reward.Value);
         CompletedTasks.Add(task.Id ?? string.Empty);
-        if(task.SingleUse)
-            Tasks.Remove(task);
+        if (task.SingleUse)
+        {
+            foreach (var location in Locations)
+            {
+                location.Tasks.Remove(task);
+            }
+        }
         UpdateAvailableTasks();
     }
 }
