@@ -12,6 +12,6 @@ public partial class Items : IContent<Item>
     [
         new("Gold", "The currency of the realm."),
         new("Potion", "Restores a small amount of health."),
-        new("Basic Hem", "Is refined into the primary elemental magic.")
+        new("Basic Gem", "Is refined into the primary elemental magic.")
     ];
 }

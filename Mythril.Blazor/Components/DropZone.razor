@@ -47,12 +47,12 @@
 
     private async Task HandleDrop()
     {
-        var task = DragDropService.Data as Quest;
-        if (task is not null)
+        Quest quest = (Quest?)DragDropService.Data ?? new Quest();
+        if (!string.IsNullOrWhiteSpace(quest.Name))
         {
-            if (Accepts is null || Accepts(task))
+            if (Accepts is null || Accepts(quest))
             {
-                await OnQuestDrop.InvokeAsync(task);
+                await OnQuestDrop.InvokeAsync(quest);
             }
             else
             {

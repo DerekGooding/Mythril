@@ -18,7 +18,7 @@ public class ResourceManagerTests
                 Name = "Test Location",
                 Quests =
                 [
-                    new("Forest Foraging") { DurationSeconds = 60 }
+                    new("Forest Foraging", "", 60)
                 ]
             }
         };
@@ -44,9 +44,9 @@ public class ResourceManagerTests
     {
         // Assert
         var location = _resourceManager!.Locations[0];
-        var task = location.Quests.FirstOrDefault(c => c.Title == "quest1");
+        var task = location.Quests.FirstOrDefault(c => c.Name == "quest1");
         Assert.IsNotNull(task);
-        Assert.AreEqual("Forest Foraging", task.Title);
+        Assert.AreEqual("Forest Foraging", task.Name);
         Assert.AreEqual(60, task.DurationSeconds);
     }
 

@@ -5,14 +5,14 @@
 @inject DragDropService DragDropService
 
 <div class="card" draggable="true" @ondragstart="HandleDragStart">
-    <div class="card-header">@Quest?.Title</div>
+    <div class="card-header">@Quest.Name</div>
     <div class="card-content">
         <div class="card-main">
-            <p>@Quest?.Description</p>
-            <p>@Quest?.DurationSeconds seconds</p>
+            <p>@Quest.Description</p>
+            <p>@Quest.DurationSeconds seconds</p>
         </div>
         <div class="card-side">
-            @if (Quest?.Requirements.Count > 0)
+            @if (Quest.Requirements.Count > 0)
             {
                 <h6>Requirements:</h6>
                 <ul>
@@ -24,7 +24,7 @@
             }
         </div>
         <div class="card-side">
-            @if (Quest?.Rewards.Count > 0)
+            @if (Quest.Rewards.Count > 0)
             {
                 <h6>Rewards:</h6>
                 <ul>
@@ -40,11 +40,11 @@
 
 @code {
     [Parameter]
-    public Quest? Quest { get; set; }
+    public Quest Quest { get; set; }
 
     private void HandleDragStart(DragEventArgs args)
     {
-        if (Quest is not null)
+        if (!string.IsNullOrWhiteSpace(Quest.Name))
         {
             args.DataTransfer.EffectAllowed = "move";
             DragDropService.Data = Quest;
