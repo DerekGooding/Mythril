@@ -1,5 +1,3 @@
-using Mythril.Data.Items;
-
 namespace Mythril.Data;
 
 public class ResourceManager

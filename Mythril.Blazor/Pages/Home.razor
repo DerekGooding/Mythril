@@ -1,7 +1,6 @@
 @page "/"
 @using Mythril.Blazor.Services
 @using Mythril.Data
-@using Mythril.Data.Items
 @using System.Threading.Tasks
 
 @inject GameDataService GameDataService
@@ -44,7 +43,7 @@
 @using System.Timers
 @code {
     [Parameter]
-    public EventCallback<QuestProgress> OnTaskCompleted { get; set; }
+    public EventCallback<QuestProgress> OnQuestCompleted { get; set; }
 
     private List<QuestProgress> questProgresses = new();
     private Timer? timer;
@@ -52,7 +51,7 @@
 
     protected override async System.Threading.Tasks.Task OnInitializedAsync()
     {
-        OnTaskCompleted = EventCallback.Factory.Create<QuestProgress>(this, (p) => resourceManager.ReceiveRewards(p.Quest));
+        OnQuestCompleted = EventCallback.Factory.Create<QuestProgress>(this, (p) => resourceManager.ReceiveRewards(p.Quest));
         var locations = await GameDataService.GetLocationsAsync();
 		var characters = new List<Character>() { new Character("Hero") };
         var items = await GameDataService.GetItemsAsync();
@@ -105,8 +104,9 @@
     private async Task OnTimerElapsed()
     {
         var newlyCompletedTasks = new List<QuestProgress>();
-        foreach (var progress in questProgresses)
+        for (int i = 0; i < questProgresses.Count; i++)
         {
+            var progress = questProgresses[i];
             if (progress.Progress < 100)
             {
                 var elapsed = (DateTime.Now - progress.StartTime).TotalSeconds;
@@ -123,7 +123,7 @@
         {
             foreach (var task in newlyCompletedTasks)
             {
-                await OnTaskCompleted.InvokeAsync(task);
+                await OnQuestCompleted.InvokeAsync(task);
             }
             questProgresses.RemoveAll(p => p.Progress >= 100);
         }

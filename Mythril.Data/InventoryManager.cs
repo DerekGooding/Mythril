@@ -1,5 +1,3 @@
-using Mythril.Data.Items;
-
 namespace Mythril.Data;
 
 public class InventoryManager(List<Item> items)
@@ -38,9 +36,9 @@ public class InventoryManager(List<Item> items)
         var items = new List<Item>();
         foreach (var resource in _resources)
         {
-            var item = _items.FirstOrDefault(i => i.Name == resource.Key);
-            if (item != null)
+            if (_items.Any(i => i.Name == resource.Key))
             {
+                var item = _items.FirstOrDefault(i => i.Name == resource.Key);
                 item.Quantity = resource.Value;
                 items.Add(item);
             }

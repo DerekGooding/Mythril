@@ -1,5 +1,4 @@
 using Mythril.Data;
-using Mythril.Data.Items;
 
 namespace Mythril.Tests;
 
@@ -15,7 +14,7 @@ public class InventoryTests
         _resourceManager.Inventory.Clear();
         var items = new List<Item>
         {
-            new ConsumableItem { Name = "Potion", Description = "Restores HP" },
+            new() { Name = "Potion", Description = "Restores HP" },
         };
         _resourceManager.SetData([], [], [], items);
     }
