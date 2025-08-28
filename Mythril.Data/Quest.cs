@@ -6,8 +6,6 @@ public record struct Quest(string Name, string Description, int DurationSeconds)
 
     public Dictionary<string, int> Requirements { get; set; } = [];
     public Dictionary<string, int> Rewards { get; set; } = [];
-
-    public List<string> Prerequisites { get; set; } = [];
 }
 
 [Singleton]

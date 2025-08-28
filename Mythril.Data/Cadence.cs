@@ -1,6 +1,6 @@
 namespace Mythril.Data;
 
-public record struct Cadence(string Name, string Description, List<string> Abilities) : INamed;
+public readonly record struct Cadence(string Name, string Description, string[] Abilities) : INamed;
 
 [Singleton]
 public partial class Cadences : IContent<Cadence>

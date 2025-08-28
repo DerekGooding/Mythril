@@ -3,12 +3,12 @@
 
 <div class="party-panel">
     <h3>Party</h3>
-    @if (Party is not null)
+    @if (Party is not null && QuestProgresses is not null)
     {
         @foreach (var character in Party)
         {
             <CharacterDisplay Character="character"
-                                QuestProgress="QuestProgresses?.FirstOrDefault(p => p.Character == character)"
+                                QuestProgress="QuestProgresses.FirstOrDefault(p => p.Character == character)"
                                 OnQuestDrop="(task) => OnQuestDrop.InvokeAsync((task, character))"
                                 Accepts="resourceManager.CanAfford" />
         }

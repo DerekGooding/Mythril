@@ -2,7 +2,7 @@ namespace Mythril.Data;
 
 public record struct Item(string Name, string Description) : INamed
 {
-    public int Quantity { get; set; } = 0;
+    public int Quantity { get; set; }
 }
 
 [Singleton]

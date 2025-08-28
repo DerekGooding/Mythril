@@ -13,10 +13,10 @@
 
 @code {
     [Parameter]
-    public string Header { get; set; }
+    public string? Header { get; set; }
 
     [Parameter]
-    public RenderFragment ChildContent { get; set; }
+    public RenderFragment? ChildContent { get; set; }
 
     private bool isExpanded = true;
 

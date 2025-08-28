@@ -5,9 +5,8 @@
     <div class="task-body">
         <p>@QuestProgress?.Quest.Description</p>
         <div class="progress">
-            <div class="progress-bar" role="progressbar" style="width: @(QuestProgress?.Progress ?? 0)%;" aria-valuenow="@QuestProgress?.Progress" aria-valuemin="0" aria-valuemax="100"></div>
+            <div class="progress-bar" role="progressbar" style="width: @(QuestProgress?.Progress.ToString() ?? "")%;" aria-valuenow="@QuestProgress?.Progress" aria-valuemin="0" aria-valuemax="100"></div>
         </div>
-        <p>@(QuestProgress?.Progress ?? 0)%</p>
     </div>
     <div class="task-duration">
         @QuestProgress?.Quest.DurationSeconds s

@@ -46,7 +46,7 @@ public class ResourceManager
         return true;
     }
 
-    public bool HasPrerequisites(Quest quest) => quest.Prerequisites.All(CompletedTasks.Contains);
+    //public bool HasPrerequisites(Quest quest) => quest.Prerequisites.All(CompletedTasks.Contains);
 
     public void UpdateAvailableTasks()
     {

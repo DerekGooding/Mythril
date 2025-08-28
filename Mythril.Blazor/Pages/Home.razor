@@ -51,7 +51,7 @@
     protected override void OnInitialized()
     {
         OnQuestCompleted = EventCallback.Factory.Create<QuestProgress>(this, (p) => resourceManager.ReceiveRewards(p.Quest));
-		var characters = new Character[] { new Character("Hero") };
+		var characters = new Character[] { new Character("Protagonist"), new Character("Wifu"), new Character("Himbo") };
 
         resourceManager.SetData(characters);
 
