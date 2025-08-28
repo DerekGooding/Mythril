@@ -19,6 +19,7 @@ public class ResourceManager
         Cadences = cadences;
         Inventory = new InventoryManager(items);
         Inventory.Add("Potion"); // Starting Inventory
+        Inventory.Add("Gold", 100); // Starting Gold
         UpdateAvailableTasks();
     }
 

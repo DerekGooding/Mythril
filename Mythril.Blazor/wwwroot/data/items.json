@@ -1,5 +1,10 @@
 [
   {
+    "Type": "Material",
+    "Name": "Gold",
+    "Description": "This is how you buy things."
+  },
+  {
     "Type": "Consumable",
     "Name": "Potion",
     "Description": "Restores a small amount of HP."
