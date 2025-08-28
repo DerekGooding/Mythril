@@ -4,20 +4,20 @@ public class ResourceManager
 {
     public int Gold => Inventory.GetQuantity("Gold");
 
-    public List<Location> Locations { get; private set; } = [];
-    public List<Character> Characters { get; private set; } = [];
-    public List<Cadence> Cadences { get; private set; } = [];
-    public InventoryManager? Inventory { get; private set; }
+    public Location[] Locations { get; private set; } = [];
+    public Character[] Characters { get; private set; } = [];
+    public Cadence[] Cadences { get; private set; } = [];
+    public InventoryManager Inventory { get; } = new InventoryManager();
     public HashSet<string> CompletedTasks { get; } = [];
 
-    public void SetData(List<Location> locations, List<Character> characters, List<Cadence> cadences, List<Item> items)
+    public void SetData(Character[] characters)
     {
-        Locations = locations;
+        var items = ContentHost.GetContent<Items>();
+        Locations = ContentHost.GetContent<Locations>().All;
         Characters = characters;
-        Cadences = cadences;
-        Inventory = new InventoryManager(items);
-        Inventory.Add("Potion"); // Starting Inventory
-        Inventory.Add("Gold", 100); // Starting Gold
+        Cadences = ContentHost.GetContent<Cadences>().All;
+        Inventory.Add(items.Potion.Name); // Starting Inventory
+        Inventory.Add(items.Gold.Name, 100); // Starting Gold
         UpdateAvailableTasks();
     }
 
@@ -50,7 +50,7 @@ public class ResourceManager
 
     public void UpdateAvailableTasks()
     {
-        
+        //TODO        
     }
 
     public void PayCosts(Quest task)
@@ -59,16 +59,16 @@ public class ResourceManager
             Inventory.Remove(requirement.Key, requirement.Value);
     }
 
-    public void ReceiveRewards(Quest task)
+    public void ReceiveRewards(Quest quest)
     {
-        foreach (var reward in task.Rewards)
+        foreach (var reward in quest.Rewards)
             Inventory.Add(reward.Key, reward.Value);
-        CompletedTasks.Add(task.Id ?? string.Empty);
-        if (task.SingleUse)
+        CompletedTasks.Add(quest.Name ?? string.Empty);
+        if (quest.SingleUse)
         {
             foreach (var location in Locations)
             {
-                location.Quests.Remove(task);
+                location.Quests.Remove(quest);
             }
         }
         UpdateAvailableTasks();

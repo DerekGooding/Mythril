@@ -1,9 +1,9 @@
 namespace Mythril.Data;
 
-public class InventoryManager(List<Item> items)
+public class InventoryManager
 {
     private readonly Dictionary<string, int> _resources = [];
-    private readonly List<Item> _items = items;
+    private readonly Item[] _items = ContentHost.GetContent<Items>().All;
 
     public void Add(string name, int quantity = 1)
     {

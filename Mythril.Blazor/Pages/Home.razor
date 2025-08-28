@@ -3,7 +3,6 @@
 @using Mythril.Data
 @using System.Threading.Tasks
 
-@inject GameDataService GameDataService
 @inject ResourceManager resourceManager
 
 <PageTitle>Mythril</PageTitle>
@@ -49,46 +48,17 @@
     private Timer? timer;
     private Random random = Random.Shared;
 
-    protected override async System.Threading.Tasks.Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         OnQuestCompleted = EventCallback.Factory.Create<QuestProgress>(this, (p) => resourceManager.ReceiveRewards(p.Quest));
-        var locations = await GameDataService.GetLocationsAsync();
-		var characters = new List<Character>() { new Character("Hero") };
-        var items = await GameDataService.GetItemsAsync();
-        var jobs = await GameDataService.GetCadencesAsync();
+		var characters = new Character[] { new Character("Hero") };
 
-        resourceManager.SetData(locations, characters, jobs, items);
+        resourceManager.SetData(characters);
 
         timer = new Timer(100);
-        timer.Elapsed += (sender, args) => { _ = System.Threading.Tasks.Task.Run(OnTimerElapsed); };
+        timer.Elapsed += (sender, args) => { _ = Task.Run(OnTimerElapsed); };
         timer.AutoReset = true;
         timer.Enabled = true;
-    }
-
-    private void OnZoneSelected(ChangeEventArgs e)
-    {
-        var zone = e.Value?.ToString();
-        if (zone is not null && zone is not "Select a zone")
-        {
-            //enemiesInZone = await GameDataService.GetEnemiesAsync(zone);
-        }
-        else
-        {
-            //enemiesInZone = new();
-        }
-        StateHasChanged();
-    }
-
-    private void Collect()
-    {
-        // This will be implemented later
-        StateHasChanged();
-    }
-
-    private void NextDay()
-    {
-        // This will be implemented later
-        StateHasChanged();
     }
 
     private async Task TaskDropped((Mythril.Data.Quest quest, Character character) args)

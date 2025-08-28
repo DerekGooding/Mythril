@@ -18,15 +18,15 @@ public class ResourceManagerTests
                 Name = "Test Location",
                 Quests =
                 [
-                    new() { Id = "card1", Title = "Forest Foraging", DurationSeconds = 60, RewardValue = 10 }
+                    new("Forest Foraging") { DurationSeconds = 60 }
                 ]
             }
         };
-        var characters = new List<Character>
+        var characters = new Character[]
         {
             new("Hero")
         };
-        _resourceManager.SetData(locations, characters, [], []);
+        _resourceManager.SetData(characters);
     }
 
     [TestMethod]
@@ -34,9 +34,9 @@ public class ResourceManagerTests
     {
         // Assert
         Assert.IsNotNull(_resourceManager!.Locations);
-        Assert.AreEqual(1, _resourceManager.Locations.Count);
+        Assert.AreEqual(1, _resourceManager.Locations.Length);
         Assert.IsNotNull(_resourceManager.Characters);
-        Assert.AreEqual(1, _resourceManager.Characters.Count);
+        Assert.AreEqual(1, _resourceManager.Characters.Length);
     }
 
     [TestMethod]
@@ -44,11 +44,10 @@ public class ResourceManagerTests
     {
         // Assert
         var location = _resourceManager!.Locations[0];
-        var task = location.Quests.FirstOrDefault(c => c.Id == "quest1");
+        var task = location.Quests.FirstOrDefault(c => c.Title == "quest1");
         Assert.IsNotNull(task);
         Assert.AreEqual("Forest Foraging", task.Title);
         Assert.AreEqual(60, task.DurationSeconds);
-        Assert.AreEqual(10, task.RewardValue);
     }
 
 }
