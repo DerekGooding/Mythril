@@ -33,8 +33,8 @@ public class ResourceManagerTests
     public void ResourceManager_StoresAndRetrievesData_Correctly()
     {
         // Assert
-        Assert.IsNotNull(_resourceManager!.Locations);
-        Assert.AreEqual(1, _resourceManager.Locations.Length);
+        Assert.IsNotNull(_resourceManager!.UsableLocations);
+        Assert.AreEqual(1, _resourceManager.UsableLocations.Count());
         Assert.IsNotNull(_resourceManager.Characters);
         Assert.AreEqual(1, _resourceManager.Characters.Length);
     }
@@ -43,7 +43,7 @@ public class ResourceManagerTests
     public void ResourceManager_RetrievesTaskData_Correctly()
     {
         // Assert
-        var location = _resourceManager!.Locations[0];
+        var location = _resourceManager!.UsableLocations.First();
         var task = location.Quests.FirstOrDefault(c => c.Name == "quest1");
         Assert.IsNotNull(task);
         Assert.AreEqual("Forest Foraging", task.Name);

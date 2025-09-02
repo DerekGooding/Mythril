@@ -19,7 +19,7 @@ public class InventoryManager
             return false;
 
         _resources[name] -= quantity;
-        if (_resources[name] == 0)
+        if (_resources[name] == 0 && name != "Gold")
             _resources.Remove(name);
 
         return true;

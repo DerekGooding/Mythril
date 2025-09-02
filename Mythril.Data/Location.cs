@@ -25,3 +25,4 @@ public partial class Locations(Quests quests) : IContent<Location>
         )
     ];
 }
+
