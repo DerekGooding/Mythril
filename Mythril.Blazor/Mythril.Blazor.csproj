@@ -4,6 +4,8 @@
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <BlazorEnableCompression>false</BlazorEnableCompression>
+    <BlazorEnableBrotliCompression>false</BlazorEnableBrotliCompression>
     <!--
       Trimming is enabled by default for Release builds.
       This setting can be used to disable it if needed:
