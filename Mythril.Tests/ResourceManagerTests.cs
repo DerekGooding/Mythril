@@ -26,7 +26,6 @@ public class ResourceManagerTests
         {
             new("Hero")
         };
-        _resourceManager.SetData(characters);
     }
 
     [TestMethod]

@@ -6,16 +6,16 @@ public class ResourceManager
 
     private readonly Location[] _locations = ContentHost.GetContent<Locations>().All;
     private readonly QuestUnlocks _questUnlocks = ContentHost.GetContent<QuestUnlocks>();
-    public Character[] Characters { get; private set; } = [];
+
+    public readonly Character[] Characters = [new Character("Protagonist"), new Character("Wifu"), new Character("Himbo")];
     public Cadence[] Cadences { get; private set; } = ContentHost.GetContent<Cadences>().All;
     public InventoryManager Inventory { get; } = new InventoryManager();
     public HashSet<string> CompletedTasks { get; } = [];
 
     public IEnumerable<Location> UsableLocations = [];
 
-    public void SetData(Character[] characters)
+    public ResourceManager()
     {
-        Characters = characters;
         Inventory.Add("Gold", 100);
         UpdateAvailableTasks();
     }

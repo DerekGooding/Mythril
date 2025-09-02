@@ -16,7 +16,6 @@ public class InventoryTests
         {
             new() { Name = "Potion", Description = "Restores HP" },
         };
-        _resourceManager.SetData([]);
     }
 
     [TestMethod]
