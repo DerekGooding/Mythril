@@ -20,5 +20,13 @@ public partial class CadenceAbilities(Items items) : IContent<CadenceAbility>
         {
             Requirements = new Dictionary<string, int>() { { items.Gold.Name, 1000} }
         },
+        new ("Augment Health", "Augment health stat with magic"),
+        new ("Augment Vitality", "Augment vitality stat with magic"),
+        new ("Augment Speed", "Augment speed stat with magic"),
+        new ("Augment Magic", "Augment magic stat with magic"),
+        new ("Augment Spirit", "Augment spirit stat with magic"),
+        new ("Augment Luck", "Augment luck stat with magic"),
+        new ("Augment Hit", "Augment hit stat with magic"),
+        new ("Augment Evade", "Augment evade stat with magic"),
     ];
 }
