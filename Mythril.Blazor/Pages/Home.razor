@@ -4,10 +4,17 @@
 @using System.Threading.Tasks
 
 @inject ResourceManager resourceManager
+@inject ThemeService themeService
+@inject NavigationManager navigationManager
 
 <PageTitle>Mythril</PageTitle>
 
 <div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <button class="btn btn-primary" @onclick="ToggleTheme">Toggle Theme</button>
+        </div>
+    </div>
     <div class="row">
         <div class="col-12">
             @if (resourceManager is not null)
@@ -56,6 +63,14 @@
         timer.Elapsed += (sender, args) => { _ = Task.Run(OnTimerElapsed); };
         timer.AutoReset = true;
         timer.Enabled = true;
+
+        themeService.OnThemeChanged += StateHasChanged;
+    }
+
+    private async Task ToggleTheme()
+    {
+        await themeService.ToggleTheme();
+        navigationManager.NavigateTo(navigationManager.Uri, forceLoad: true);
     }
 
     private async Task TaskDropped((Mythril.Data.Quest quest, Character character) args)
@@ -101,5 +116,6 @@
     public void Dispose()
     {
         timer?.Dispose();
+        themeService.OnThemeChanged -= StateHasChanged;
     }
 }
