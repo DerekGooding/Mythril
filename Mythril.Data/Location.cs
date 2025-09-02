@@ -1,6 +1,6 @@
 namespace Mythril.Data;
 
-public readonly record struct Location(string Name, Quest[] Quests) : INamed;
+public readonly record struct Location(string Name, IEnumerable<Quest> Quests) : INamed;
 
 
 [Singleton]

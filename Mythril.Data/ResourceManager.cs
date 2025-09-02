@@ -4,10 +4,10 @@ public class ResourceManager
 {
     public int Gold => Inventory.GetQuantity("Gold");
 
-    private Location[] _locations = [];
-    private QuestUnlocks? _questUnlocks;
+    private readonly Location[] _locations = ContentHost.GetContent<Locations>().All;
+    private readonly QuestUnlocks _questUnlocks = ContentHost.GetContent<QuestUnlocks>();
     public Character[] Characters { get; private set; } = [];
-    public Cadence[] Cadences { get; private set; } = [];
+    public Cadence[] Cadences { get; private set; } = ContentHost.GetContent<Cadences>().All;
     public InventoryManager Inventory { get; } = new InventoryManager();
     public HashSet<string> CompletedTasks { get; } = [];
 
@@ -15,13 +15,8 @@ public class ResourceManager
 
     public void SetData(Character[] characters)
     {
-        var items = ContentHost.GetContent<Items>();
-        _locations = ContentHost.GetContent<Locations>().All;
-        _questUnlocks = ContentHost.GetContent<QuestUnlocks>();
         Characters = characters;
-        Cadences = ContentHost.GetContent<Cadences>().All;
-        Inventory.Add(items.Potion.Name); // Starting Inventory
-        Inventory.Add(items.Gold.Name, 100); // Starting Gold
+        Inventory.Add("Gold", 100);
         UpdateAvailableTasks();
     }
 
@@ -51,7 +46,7 @@ public class ResourceManager
     }
 
     public void UpdateAvailableTasks()
-        => UsableLocations = _locations.Select(x => new Location(x.Name, [.. x.Quests.Where(Include)])).Where(l => l.Quests.Length > 0);
+        => UsableLocations = _locations.Select(x => new Location(x.Name, x.Quests.Where(Include))).Where(l => l.Quests.Any());
 
     private bool Include(Quest quest)
     {
