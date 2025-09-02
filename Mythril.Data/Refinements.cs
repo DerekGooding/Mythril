@@ -6,7 +6,7 @@ public readonly record struct ItemAmount(Item Item, int Quantity = 1);
 public readonly record struct Recipe(CadenceAbility Ability, int OutputQuantity, ItemAmount[] Cost);
 
 [Singleton]
-public partial class ItemRefinements(CadenceAbilities abilities, Items items) : ISubContent<Item, Recipe[]>
+public class ItemRefinements(CadenceAbilities abilities, Items items) : ISubContent<Item, Recipe[]>
 {
     public Recipe[] this[Item key] => ByKey[key];
 
