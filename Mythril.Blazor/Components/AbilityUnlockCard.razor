@@ -1,0 +1,40 @@
+@using Microsoft.AspNetCore.Components.Web
+@using Mythril.Data
+@using Mythril.Blazor
+@using Mythril.Blazor.Services
+@inject DragDropService DragDropService
+
+<div class="card" draggable="true" @ondragstart="HandleDragStart">
+    <div class="card-header">@Ability.Name</div>
+    <div class="card-content">
+        <div class="card-main">
+            <p>@Ability.Description</p>
+        </div>
+        <div class="card-side">
+            @if (Ability.Requirements.Count > 0)
+            {
+                <h6>Requirements:</h6>
+                <ul>
+                    @foreach (var requirement in Ability.Requirements)
+                    {
+                        <li>@requirement.Value @requirement.Key</li>
+                    }
+                </ul>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public CadenceAbility Ability { get; set; }
+
+    private void HandleDragStart(DragEventArgs args)
+    {
+        if (!string.IsNullOrWhiteSpace(Ability.Name))
+        {
+            args.DataTransfer.EffectAllowed = "move";
+            DragDropService.Data = Ability;
+        }
+    }
+}

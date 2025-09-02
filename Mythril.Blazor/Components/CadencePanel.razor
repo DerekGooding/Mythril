@@ -1,0 +1,23 @@
+@using Mythril.Data
+
+<div class="hand-panel">
+    @if (Cadences is not null)
+    {
+        @foreach (var cadence in Cadences.Where(l => l.Abilities.Any()))
+        {
+            <Expander Header="@cadence.Name">
+                @foreach (var ability in cadence.Abilities)
+                {
+                    <div class="task-container">
+                        <AbilityUnlockCard Ability="ability" />
+                    </div>
+                }
+            </Expander>
+        }
+    }
+</div>
+
+@code {
+    [Parameter]
+    public Cadence[]? Cadences { get; set; }
+}

@@ -1,0 +1,16 @@
+.hand-panel {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    overflow: scroll;
+    overflow-x: hidden;
+    height: 750px;
+}
+
+.task-container {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    margin: 0.5rem;
+    width: 100%;
+}
