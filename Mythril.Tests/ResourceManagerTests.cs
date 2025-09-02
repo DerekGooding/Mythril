@@ -22,10 +22,10 @@ public class ResourceManagerTests
                 ]
             }
         };
-        var characters = new Character[]
-        {
-            new("Hero")
-        };
+        //var characters = new Character[]
+        //{
+        //    new("Hero")
+        //};
     }
 
     [TestMethod]
@@ -44,7 +44,6 @@ public class ResourceManagerTests
         // Assert
         var location = _resourceManager!.UsableLocations.First();
         var task = location.Quests.FirstOrDefault(c => c.Name == "quest1");
-        Assert.IsNotNull(task);
         Assert.AreEqual("Forest Foraging", task.Name);
         Assert.AreEqual(60, task.DurationSeconds);
     }

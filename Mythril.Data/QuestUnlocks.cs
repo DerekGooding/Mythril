@@ -11,8 +11,7 @@ public class QuestUnlocks(Quests quests) : ISubContent<Quest, Quest[]>
         { quests.TutorialSection, [ quests.Prologue ] },
         { quests.VisitStartingTown, [ quests.TutorialSection ] },
         { quests.BuyPotion, [ quests.VisitStartingTown ] },
-        { quests.UnlockStrengthJunction, [ quests.VisitStartingTown ] },
-        { quests.UnlockFireRefineAbility, [ quests.VisitStartingTown ] },
+        { quests.LearnAboutCadences, [ quests.VisitStartingTown ] },
         { quests.FarmGoblins, [ quests.VisitStartingTown ] },
     };
 }

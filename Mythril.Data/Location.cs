@@ -14,8 +14,7 @@ public partial class Locations(Quests quests) : IContent<Location>
                 quests.TutorialSection,
                 quests.VisitStartingTown,
                 quests.BuyPotion,
-                quests.UnlockStrengthJunction,
-                quests.UnlockFireRefineAbility
+                quests.LearnAboutCadences,
             ]
         ),
         new("Dark Forest",

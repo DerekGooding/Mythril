@@ -8,7 +8,7 @@ public class ResourceManager
     private readonly QuestUnlocks _questUnlocks = ContentHost.GetContent<QuestUnlocks>();
 
     public readonly Character[] Characters = [new Character("Protagonist"), new Character("Wifu"), new Character("Himbo")];
-    public Cadence[] Cadences { get; private set; } = ContentHost.GetContent<Cadences>().All;
+    public readonly Cadence[] Cadences = ContentHost.GetContent<Cadences>().All;
     public InventoryManager Inventory { get; } = new InventoryManager();
     public HashSet<string> CompletedTasks { get; } = [];
 
@@ -49,14 +49,9 @@ public class ResourceManager
         => UsableLocations = _locations.Select(x => new Location(x.Name, x.Quests.Where(Include))).Where(l => l.Quests.Any());
 
     private bool Include(Quest quest)
-    {
-        if(CompletedTasks.Contains(quest.Name) && quest.SingleUse)
-            return false;
-        if (_questUnlocks == null || _questUnlocks[quest].Length == 0)
-            return true;
-
-        return _questUnlocks[quest].All(r => CompletedTasks.Contains(r.Name));
-    }
+        => (!CompletedTasks.Contains(quest.Name) || !quest.SingleUse)
+            && (_questUnlocks == null || _questUnlocks[quest].Length == 0
+            || _questUnlocks[quest].All(r => CompletedTasks.Contains(r.Name)));
 
     public void PayCosts(Quest task)
     {

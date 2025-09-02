@@ -12,10 +12,10 @@ public class InventoryTests
     {
         _resourceManager = new ResourceManager();
         _resourceManager.Inventory.Clear();
-        var items = new List<Item>
-        {
-            new() { Name = "Potion", Description = "Restores HP" },
-        };
+        //var items = new List<Item>
+        //{
+        //    new() { Name = "Potion", Description = "Restores HP" },
+        //};
     }
 
     [TestMethod]

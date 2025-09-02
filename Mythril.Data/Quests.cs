@@ -30,15 +30,9 @@ public partial class Quests(Items items) : IContent<Quest>
             Rewards = new Dictionary<string, int>() { { items.Potion.Name, 1 } },
             Requirements = new Dictionary<string, int>() { { items.Gold.Name, 250} },
         },
-        new("Unlock Strength Junction", "Purchase Strength Junctioning from the Old Man.", 3)
+        new("Learn About Cadences", "The old man teaches you how to unlock your true potential.", 3)
         {
             SingleUse = true,
-            Requirements = new Dictionary<string, int>() { { items.Gold.Name, 1000} },
-        },
-        new("Unlock Fire Refine Ability", "Purchase the Fire Refinement ability from the Old Man.", 3)
-        {
-            SingleUse = true,
-            Requirements = new Dictionary<string, int>() { { items.Gold.Name, 1000} },
         },
         new("Farm Goblins", "They got gold and we need it!", 3)
         {
