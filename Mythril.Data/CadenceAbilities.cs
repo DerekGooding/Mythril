@@ -16,6 +16,15 @@ public partial class CadenceAbilities(Items items) : IContent<CadenceAbility>
         {
             Requirements = new Dictionary<string, int>() { { items.Gold.Name, 1000} }
         },
+        new ("Refine Wood", "The first crafting refinement. Turns materials into other materials or consumables.")
+        {
+            Requirements = new Dictionary<string, int>() { { items.Gold.Name, 1000} }
+        },
+        new("Refine Mixology", "Allows the creation of potions and elixirs from herbs and other ingredients.")
+        {
+            Requirements = new Dictionary<string, int>() { { items.Gold.Name, 1000} }
+        },
+
         new ("Augment Strength", "Augment strength stat with magic")
         {
             Requirements = new Dictionary<string, int>() { { items.Gold.Name, 1000} }
