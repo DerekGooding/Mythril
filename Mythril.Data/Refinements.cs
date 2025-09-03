@@ -1,4 +1,4 @@
-using static Mythril.Data.RefinementBuilder''
+using static Mythril.Data.RefinementBuilder;
 
 namespace Mythril.Data;
 
