@@ -30,6 +30,7 @@ public class ItemRefinements(CadenceAbilities abilities, Items items) : ISubCont
 
 public static class RefinementBuilder
 {
+    public static Dictionary<Item, Recipe> Recipes(params KeyValuePair<Item, Recipe>[] pairs) => new(pairs);
     public static IOutput Input(Item item, int quantity = 1) => new Builder(item, quantity);
     public interface IOutput
     {
