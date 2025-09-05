@@ -2,8 +2,7 @@ namespace Mythril.Data;
 
 public class ResourceManager
 {
-    public int Gold => Inventory.GetQuantity("Gold");
-
+    private readonly Items _items = ContentHost.GetContent<Items>();
     private readonly Location[] _locations = ContentHost.GetContent<Locations>().All;
     private readonly QuestUnlocks _questUnlocks = ContentHost.GetContent<QuestUnlocks>();
 
@@ -16,27 +15,15 @@ public class ResourceManager
 
     public ResourceManager()
     {
-        Inventory.Add("Gold", 100);
+        Inventory.Add(_items.Gold, 100);
         UpdateAvailableTasks();
-    }
-
-    public void AddGold(int amount) => Inventory.Add("Gold", amount);
-
-    public bool SpendGold(int amount)
-    {
-        if (Gold >= amount)
-        {
-            Inventory.Remove("Gold", amount);
-            return true;
-        }
-        return false;
     }
 
     public bool CanAfford(Quest quest)
     {
         foreach (var requirement in quest.Requirements)
         {
-            if (!Inventory.Has(requirement.Key, requirement.Value))
+            if (!Inventory.Has(requirement.Item, requirement.Quantity))
             {
                 return false;
             }
@@ -56,13 +43,13 @@ public class ResourceManager
     public void PayCosts(Quest task)
     {
         foreach (var requirement in task.Requirements)
-            Inventory.Remove(requirement.Key, requirement.Value);
+            Inventory.Remove(requirement.Item, requirement.Quantity);
     }
 
     public void ReceiveRewards(Quest quest)
     {
         foreach (var reward in quest.Rewards)
-            Inventory.Add(reward.Key, reward.Value);
+            Inventory.Add(reward.Item, reward.Quantity);
         CompletedTasks.Add(quest.Name);
 
         UpdateAvailableTasks();

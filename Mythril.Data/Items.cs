@@ -8,10 +8,9 @@ public enum ItemType
     Spell,
 }
 
-public record struct Item(string Name, string Description, ItemType ItemType) : INamed
-{
-    public int Quantity { get; set; }
-}
+public readonly record struct ItemQuantity(Item Item, int Quantity = 1);
+
+[Unique] public readonly partial record struct Item(string Name, string Description, ItemType ItemType) : INamed;
 
 [Singleton]
 public partial class Items : IContent<Item>

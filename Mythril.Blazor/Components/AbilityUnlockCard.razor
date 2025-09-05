@@ -11,13 +11,13 @@
             <p>@Ability.Description</p>
         </div>
         <div class="card-side">
-            @if (Ability.Requirements.Count > 0)
+            @if (Requirements.Length > 0)
             {
                 <h6>Requirements:</h6>
                 <ul>
-                    @foreach (var requirement in Ability.Requirements)
+                    @foreach (var requirement in Requirements)
                     {
-                        <li>@requirement.Value @requirement.Key</li>
+                        <li>@requirement.Item.Name @requirement.Amount</li>
                     }
                 </ul>
             }
@@ -28,6 +28,8 @@
 @code {
     [Parameter]
     public CadenceAbility Ability { get; set; }
+    [Parameter]
+    public ItemAmount[] Requirements { get; set; }
 
     private void HandleDragStart(DragEventArgs args)
     {

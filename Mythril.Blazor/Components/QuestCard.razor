@@ -12,25 +12,25 @@
             <p>@Quest.DurationSeconds seconds</p>
         </div>
         <div class="card-side">
-            @if (Quest.Requirements.Count > 0)
+            @if (Quest.Requirements.Length > 0)
             {
                 <h6>Requirements:</h6>
                 <ul>
                     @foreach (var requirement in Quest.Requirements)
                     {
-                        <li>@requirement.Value @requirement.Key</li>
+                        <li>@requirement.Item.Name @requirement.Quantity</li>
                     }
                 </ul>
             }
         </div>
         <div class="card-side">
-            @if (Quest.Rewards.Count > 0)
+            @if (Quest.Rewards.Length > 0)
             {
                 <h6>Rewards:</h6>
                 <ul>
                     @foreach (var reward in Quest.Rewards)
                     {
-                        <li>@reward.Value @reward.Key</li>
+                        <li>@reward.Item.Name @reward.Quantity</li>
                     }
                 </ul>
             }

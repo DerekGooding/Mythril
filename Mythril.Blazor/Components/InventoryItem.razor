@@ -1,5 +1,5 @@
 <div class="inventory-item">
-    <span class="item-name">@Item.Name</span>
+    <span class="item-name">@Item.Item.Name</span>
     <span class="item-quantity">@Item.Quantity</span>
     @if (showAnimation)
     {
@@ -18,7 +18,7 @@
 
 @code {
     [Parameter]
-    public Item Item { get; set; }
+    public ItemQuantity Item { get; set; }
 
     private int previousQuantity;
     private int quantityChange;

@@ -1,14 +1,41 @@
+using static Mythril.Data.CadenceBuilder;
+
 namespace Mythril.Data;
 
-[Unique] public readonly partial record struct Cadence(string Name, string Description, CadenceAbility[] Abilities) : INamed;
+public readonly record struct CadenceUnlock(CadenceAbility Ability, ItemAmount[] Requirements);
+
+public readonly record struct ItemAmount(Item Item, int Amount);
+
+[Unique] public readonly partial record struct Cadence(string Name, string Description, CadenceUnlock[] Abilities) : INamed;
 
 [Singleton]
-public partial class Cadences(CadenceAbilities abilities) : IContent<Cadence>
+public partial class Cadences(CadenceAbilities abilities, Items items) : IContent<Cadence>
 {
     public Cadence[] All { get; } =
     [
-        new ("Recruit", "Foundational adventuring cadence", [ abilities.AutoQuestI, abilities.AugmentStrength]),
-        new ("Tinker", "Has the foundational item refining abilities", [ abilities.AutoQuestI]),
-        new ("Acolyte", "Has the foundational magic refining abilities", [ abilities.AutoQuestI, abilities.RefineFire]),
+        new ("Recruit", "Foundational adventuring cadence",
+        [
+            new (abilities.AutoQuestI,      Requirements((items.Gold, 100))),
+            new (abilities.AugmentStrength, Requirements((items.Gold, 1000))),
+        ]),
+        new ("Apprentice", "Has the foundational item refining abilities",
+        [
+            new(abilities.AutoQuestI,       Requirements((items.Gold, 100))),
+        ]),
+        new ("Student", "Has the foundational magic refining abilities",
+        [
+            new(abilities.AutoQuestI,       Requirements((items.Gold, 100))),
+            new(abilities.RefineFire,       Requirements((items.Gold, 1000)))
+        ]),
     ];
+}
+
+public static class CadenceBuilder
+{
+    public static ItemAmount[] Requirements(params (Item Item, int Amount)[] req) => [.. req.Select(x => new ItemAmount(x.Item, x.Amount))];
+
+    private class Builder
+    {
+
+    }
 }

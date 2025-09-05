@@ -1,4 +1,5 @@
 using Mythril.Data;
+using SimpleInjection.Injection;
 
 namespace Mythril.Tests;
 
@@ -6,12 +7,16 @@ namespace Mythril.Tests;
 public class InventoryTests
 {
     private ResourceManager? _resourceManager;
+    private Items? _items;
+    private Host _contentHost;
 
     [TestInitialize]
     public void Setup()
     {
         _resourceManager = new ResourceManager();
         _resourceManager.Inventory.Clear();
+        _contentHost = Host.Initialize();
+        _items = _contentHost.Get<Items>();
         //var items = new List<Item>
         //{
         //    new() { Name = "Potion", Description = "Restores HP" },
@@ -21,38 +26,44 @@ public class InventoryTests
     [TestMethod]
     public void InventoryManager_AddsAndRemovesItems_Correctly()
     {
+        var potion = _items!.Potion;
+        var basicGem = _items.BasicGem;
+
         // Arrange
         var inventoryManager = _resourceManager?.Inventory;
         Assert.IsNotNull(inventoryManager);
 
         // Act
-        inventoryManager.Add("Potion", 5);
-        inventoryManager.Add("Bronze Sword");
+        inventoryManager.Add(potion ,5);
+        inventoryManager.Add(basicGem);
 
         // Assert
-        Assert.AreEqual(5, inventoryManager.GetQuantity("Potion"));
-        Assert.AreEqual(1, inventoryManager.GetQuantity("Bronze Sword"));
+        Assert.AreEqual(5, inventoryManager.GetQuantity(potion));
+        Assert.AreEqual(1, inventoryManager.GetQuantity(basicGem));
 
         // Act
-        inventoryManager.Remove("Potion", 2);
+        inventoryManager.Remove(potion, 2);
 
         // Assert
-        Assert.AreEqual(3, inventoryManager.GetQuantity("Potion"));
+        Assert.AreEqual(3, inventoryManager.GetQuantity(potion));
     }
 
     [TestMethod]
     public void InventoryManager_Has_Correctly()
     {
+        var potion = _items!.Potion;
+        var basicGem = _items.BasicGem;
+
         // Arrange
         var inventoryManager = _resourceManager?.Inventory;
         Assert.IsNotNull(inventoryManager);
 
         // Act
-        inventoryManager.Add("Potion", 5);
+        inventoryManager.Add(potion, 5);
 
         // Assert
-        Assert.IsTrue(inventoryManager.Has("Potion", 5));
-        Assert.IsFalse(inventoryManager.Has("Potion", 6));
-        Assert.IsFalse(inventoryManager.Has("Bronze Sword"));
+        Assert.IsTrue(inventoryManager.Has(potion, 5));
+        Assert.IsFalse(inventoryManager.Has(potion, 6));
+        Assert.IsFalse(inventoryManager.Has(basicGem));
     }
 }

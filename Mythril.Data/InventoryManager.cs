@@ -2,48 +2,33 @@ namespace Mythril.Data;
 
 public class InventoryManager
 {
-    private readonly Dictionary<string, int> _resources = [];
-    private readonly Item[] _items = ContentHost.GetContent<Items>().All;
+    private readonly Dictionary<Item, int> _inventory = [];
 
-    public void Add(string name, int quantity = 1)
+    public void Add(Item item, int quantity = 1)
     {
-        if (_resources.ContainsKey(name))
-            _resources[name] += quantity;
+        if (_inventory.ContainsKey(item))
+            _inventory[item] += quantity;
         else
-            _resources[name] = quantity;
+            _inventory[item] = quantity;
     }
 
-    public bool Remove(string name, int quantity = 1)
+    public bool Remove(Item item, int quantity = 1)
     {
-        if (!_resources.TryGetValue(name, out var value) || value < quantity)
+        if (!_inventory.TryGetValue(item, out var value) || value < quantity)
             return false;
 
-        _resources[name] -= quantity;
-        if (_resources[name] == 0 && name != "Gold")
-            _resources.Remove(name);
+        _inventory[item] -= quantity;
+        if (_inventory[item] == 0 && item.Name != "Gold")
+            _inventory.Remove(item);
 
         return true;
     }
 
-    public bool Has(string name, int quantity = 1) => _resources.ContainsKey(name) && _resources[name] >= quantity;
+    public bool Has(Item item, int quantity = 1) => _inventory.ContainsKey(item) && _inventory[item] >= quantity;
 
-    public int GetQuantity(string name) => _resources.GetValueOrDefault(name);
+    public int GetQuantity(Item item) => _inventory.GetValueOrDefault(item);
 
-    public void Clear() => _resources.Clear();
+    public void Clear() => _inventory.Clear();
 
-    public IEnumerable<Item> GetItems()
-    {
-        var items = new List<Item>();
-        foreach (var resource in _resources)
-        {
-            if (_items.Any(i => i.Name == resource.Key))
-            {
-                var item = _items.FirstOrDefault(i => i.Name == resource.Key);
-                item.Quantity = resource.Value;
-                items.Add(item);
-            }
-        }
-
-        return items;
-    }
+    public IEnumerable<ItemQuantity> GetItems() => _inventory.Select(x => new ItemQuantity(x.Key, x.Value));
 }
