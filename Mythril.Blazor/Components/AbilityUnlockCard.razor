@@ -11,7 +11,7 @@
             <p>@Ability.Description</p>
         </div>
         <div class="card-side">
-            @if (Requirements.Length > 0)
+            @if (Requirements is not null && Requirements.Length > 0)
             {
                 <h6>Requirements:</h6>
                 <ul>
@@ -29,7 +29,7 @@
     [Parameter]
     public CadenceAbility Ability { get; set; }
     [Parameter]
-    public ItemAmount[] Requirements { get; set; }
+    public ItemAmount[]? Requirements { get; set; }
 
     private void HandleDragStart(DragEventArgs args)
     {
