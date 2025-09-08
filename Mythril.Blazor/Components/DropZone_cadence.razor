@@ -12,16 +12,16 @@
 
 @code {
     [Parameter]
-    public EventCallback<ItemQuantity> OnItemDrop { get; set; }
+    public EventCallback<Cadence> OnCadenceDrop { get; set; }
 
     [Parameter]
-    public Func<ItemQuantity, bool>? Accepts { get; set; }
+    public Func<Cadence, bool>? Accepts { get; set; }
 
     private bool isShaking = false;
 
     private void HandleDragEnter(DragEventArgs args)
     {
-        if (DragDropService.Data is ItemQuantity task)
+        if (DragDropService.Data is Cadence task)
         {
             if (Accepts is null || Accepts(task))
                 args.DataTransfer.DropEffect = "move";
@@ -32,7 +32,7 @@
 
     private void HandleDragOver(DragEventArgs args)
     {
-        if (DragDropService.Data is ItemQuantity task)
+        if (DragDropService.Data is Cadence task)
         {
             if (Accepts is null || Accepts(task))
             {
@@ -47,11 +47,11 @@
 
     private async Task HandleDrop()
     {
-        if (DragDropService.Data is not ItemQuantity item || string.IsNullOrWhiteSpace(item.Item.Name)) return;
-
-        if (Accepts is null || Accepts(item))
+        if (DragDropService.Data is not Cadence cadence || string.IsNullOrWhiteSpace(cadence.Name)) return;
+        
+        if (Accepts is null || Accepts(cadence))
         {
-            await OnItemDrop.InvokeAsync(item);
+            await OnCadenceDrop.InvokeAsync(cadence);
         }
         else
         {

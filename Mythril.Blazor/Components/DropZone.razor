@@ -47,20 +47,18 @@
 
     private async Task HandleDrop()
     {
-        Quest quest = (Quest?)DragDropService.Data ?? new Quest();
-        if (!string.IsNullOrWhiteSpace(quest.Name))
+        if (DragDropService.Data is not Quest quest || string.IsNullOrWhiteSpace(quest.Name)) return;
+
+        if (Accepts is null || Accepts(quest))
         {
-            if (Accepts is null || Accepts(quest))
-            {
-                await OnQuestDrop.InvokeAsync(quest);
-            }
-            else
-            {
-                isShaking = true;
-                await System.Threading.Tasks.Task.Delay(500);
-                isShaking = false;
-            }
-            DragDropService.Data = null;
+            await OnQuestDrop.InvokeAsync(quest);
         }
+        else
+        {
+            isShaking = true;
+            await System.Threading.Tasks.Task.Delay(500);
+            isShaking = false;
+        }
+        DragDropService.Data = null;
     }
 }

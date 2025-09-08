@@ -36,7 +36,7 @@ public class ResourceManager
         => UsableLocations = _locations.Select(x => new Location(x.Name, x.Quests.Where(Include))).Where(l => l.Quests.Any());
 
     private bool Include(Quest quest)
-        => (!CompletedTasks.Contains(quest.Name) || !quest.SingleUse)
+        => (!CompletedTasks.Contains(quest.Name) || quest.Type != QuestType.Single)
             && (_questUnlocks == null || _questUnlocks[quest].Length == 0
             || _questUnlocks[quest].All(r => CompletedTasks.Contains(r.Name)));
 

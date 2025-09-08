@@ -18,7 +18,7 @@ public class ResourceManagerTests
                 Name = "Test Location",
                 Quests =
                 [
-                    new("Forest Foraging", "", 60, [], [])
+                    new("Forest Foraging", "", 60, [], [], QuestType.Recurring)
                 ]
             }
         };
