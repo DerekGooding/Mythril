@@ -13,5 +13,7 @@ public class QuestUnlocks(Quests quests) : ISubContent<Quest, Quest[]>
         { quests.BuyPotion, [ quests.VisitStartingTown ] },
         { quests.LearnAboutCadences, [ quests.VisitStartingTown ] },
         { quests.FarmGoblins, [ quests.VisitStartingTown ] },
+        { quests.FarmTrents, [ quests.VisitStartingTown ] },
+        { quests.FarmGolems, [ quests.VisitStartingTown ] },
     };
 }

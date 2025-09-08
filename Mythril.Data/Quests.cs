@@ -16,5 +16,9 @@ public partial class Quests(Items items) : IContent<Quest>
         new Quest("Learn About Cadences", "The old man teaches you how to unlock your true potential.", 3, [],[],true),
         new Quest("Farm Goblins", "They got gold and we need it!", 3, [],
         [new ItemQuantity(items.Gold, 100)]),
+        new Quest("Farm Trents", "If I had the chance, I wood!", 3, [],
+        [new ItemQuantity(items.Log, 1)]),
+        new Quest("Farm Golems", "Either Ore!", 3, [],
+        [new ItemQuantity(items.IronOre, 1)]),
     ];
 }

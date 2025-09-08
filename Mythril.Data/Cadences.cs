@@ -16,7 +16,7 @@ public partial class Cadences(CadenceAbilities abilities, Items items) : IConten
         new ("Recruit", "Foundational adventuring cadence",
         [
             new (abilities.AutoQuestI,      Requirements((items.Gold, 100))),
-            new (abilities.AugmentStrength, Requirements((items.Gold, 1000))),
+            new (abilities.AugmentStrength, Requirements((items.IronOre, 10))),
         ]),
         new ("Apprentice", "Has the foundational item refining abilities",
         [
@@ -25,7 +25,7 @@ public partial class Cadences(CadenceAbilities abilities, Items items) : IConten
         new ("Student", "Has the foundational magic refining abilities",
         [
             new(abilities.AutoQuestI,       Requirements((items.Gold, 100))),
-            new(abilities.RefineFire,       Requirements((items.Gold, 1000)))
+            new(abilities.RefineFire,       Requirements((items.Log, 10)))
         ]),
     ];
 }
