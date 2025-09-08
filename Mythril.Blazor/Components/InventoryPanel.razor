@@ -9,9 +9,20 @@
             }
         }
     </div>
+    <div class="inventory-grid">
+        @if (Spells is not null)
+        {
+            @foreach (var item in Spells)
+            {
+                <InventoryItem Item="item" />
+            }
+        }
+    </div>
 </div>
 
 @code {
     [Parameter]
-    public List<ItemQuantity>? Items { get; set; }
+    public IEnumerable<ItemQuantity>? Items { get; set; }
+    [Parameter]
+    public IEnumerable<ItemQuantity>? Spells { get; set; }
 }

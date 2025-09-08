@@ -30,5 +30,10 @@ public class InventoryManager
 
     public void Clear() => _inventory.Clear();
 
-    public IEnumerable<ItemQuantity> GetItems() => _inventory.Select(x => new ItemQuantity(x.Key, x.Value));
+    public IEnumerable<ItemQuantity> GetItems()
+        => _inventory.Where(x => x.Key.ItemType != ItemType.Spell)
+                     .Select(x => new ItemQuantity(x.Key, x.Value));
+    public IEnumerable<ItemQuantity> GetSpells()
+        => _inventory.Where(x => x.Key.ItemType == ItemType.Spell)
+                     .Select(x => new ItemQuantity(x.Key, x.Value));
 }

@@ -8,15 +8,14 @@ public class InventoryTests
 {
     private ResourceManager? _resourceManager;
     private Items? _items;
-    private Host _contentHost;
 
     [TestInitialize]
     public void Setup()
     {
         _resourceManager = new ResourceManager();
         _resourceManager.Inventory.Clear();
-        _contentHost = Host.Initialize();
-        _items = _contentHost.Get<Items>();
+        var host = Host.Initialize();
+        _items = host.Get<Items>();
         //var items = new List<Item>
         //{
         //    new() { Name = "Potion", Description = "Restores HP" },

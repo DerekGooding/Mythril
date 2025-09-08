@@ -1,4 +1,7 @@
-<div class="inventory-item">
+@using Mythril.Blazor.Services
+@inject DragDropService DragDropService
+
+<div class="inventory-item" draggable="true" @ondragstart="HandleDragStart">
     <span class="item-name">@Item.Item.Name</span>
     <span class="item-quantity">@Item.Quantity</span>
     @if (showAnimation)
@@ -38,5 +41,14 @@
             });
         }
         previousQuantity = Item.Quantity;
+    }
+
+    private void HandleDragStart(DragEventArgs args)
+    {
+        if (!string.IsNullOrWhiteSpace(Item.Item.Name))
+        {
+            args.DataTransfer.EffectAllowed = "move";
+            DragDropService.Data = Item;
+        }
     }
 }
