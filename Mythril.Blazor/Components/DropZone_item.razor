@@ -1,12 +1,14 @@
 @using Microsoft.AspNetCore.Components.Web
+@using Microsoft.JSInterop
 @using Mythril.Data
 @using Mythril.Blazor.Services
 @inject DragDropService DragDropService
+@inject IJSRuntime JS
 
 <div class="drop-zone @(isShaking ? "shake" : "")"
-    @ondragover="HandleDragOver" @ondragover:preventDefault
+    @ondragover="HandleDragOver"
     @ondrop="HandleDrop"
-    @ondragenter="HandleDragEnter" @ondragenter:preventDefault>
+    @ondragenter="HandleDragEnter">
     <p>Drop an item here to assign it.</p>
 </div>
 
@@ -19,24 +21,30 @@
 
     private bool isShaking = false;
 
-    private void HandleDragEnter(DragEventArgs args)
-    {
-        if (DragDropService.Data is ItemQuantity task)
-        {
-            if (Accepts is null || Accepts(task))
-                args.DataTransfer.DropEffect = "move";
-            else
-                args.DataTransfer.DropEffect = "none";
-        }
-    }
-
-    private void HandleDragOver(DragEventArgs args)
+    private async Task HandleDragEnter(DragEventArgs args)
     {
         if (DragDropService.Data is ItemQuantity task)
         {
             if (Accepts is null || Accepts(task))
             {
                 args.DataTransfer.DropEffect = "move";
+                await JS.InvokeVoidAsync("eval", "event.preventDefault()");
+            }
+            else
+            {
+                args.DataTransfer.DropEffect = "none";
+            }
+        }
+    }
+
+    private async Task HandleDragOver(DragEventArgs args)
+    {
+        if (DragDropService.Data is ItemQuantity task)
+        {
+            if (Accepts is null || Accepts(task))
+            {
+                args.DataTransfer.DropEffect = "move";
+                await JS.InvokeVoidAsync("eval", "event.preventDefault()");
             }
             else
             {
@@ -47,18 +55,23 @@
 
     private async Task HandleDrop()
     {
-        if (DragDropService.Data is not ItemQuantity item || string.IsNullOrWhiteSpace(item.Item.Name)) return;
+        if (DragDropService.Data is not ItemQuantity quest || string.IsNullOrWhiteSpace(quest.Item.Name)) return;
 
-        if (Accepts is null || Accepts(item))
+        if (Accepts is null || Accepts(quest))
         {
-            await OnItemDrop.InvokeAsync(item);
+            await OnItemDrop.InvokeAsync(quest);
         }
         else
         {
-            isShaking = true;
-            await System.Threading.Tasks.Task.Delay(500);
-            isShaking = false;
+            await Shake();
         }
         DragDropService.Data = null;
+    }
+
+    private async Task Shake()
+    {
+        isShaking = true;
+        await System.Threading.Tasks.Task.Delay(500);
+        isShaking = false;
     }
 }

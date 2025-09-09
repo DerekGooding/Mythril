@@ -1,5 +1,5 @@
 using Mythril.Data;
-using SimpleInjection.Injection;
+using Mythril.Data.Genenerated;
 
 namespace Mythril.Tests;
 

@@ -5,14 +5,14 @@
     {
         @foreach (var cadence in Cadences.Where(l => l.Abilities.Any()))
         {
-            <Expander Header="@cadence.Name">
+            <CadenceDragExpander Cadence="cadence">
                 @foreach (var ability in cadence.Abilities)
                 {
                     <div class="task-container">
                         <AbilityUnlockCard Ability="ability.Ability" Requirements="ability.Requirements" />
                     </div>
                 }
-            </Expander>
+            </CadenceDragExpander>
         }
     }
 </div>

@@ -5,6 +5,14 @@
     margin: 10px 0;
 }
 
+.drop-zone.allowed {
+    cursor: move;
+}
+
+.drop-zone.not-allowed {
+    cursor: not-allowed;
+}
+
 .shake {
     animation: shake 0.5s;
 }

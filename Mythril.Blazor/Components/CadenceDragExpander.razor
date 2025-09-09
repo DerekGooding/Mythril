@@ -1,0 +1,41 @@
+@using Mythril.Blazor.Services
+@inject DragDropService DragDropService
+
+<div class="expander">
+    <div class="expander-header" @onclick="Toggle">
+        <div class="inventory-item" draggable="true" @ondragstart="HandleDragStart">
+            <span class="item-name">@Cadence.Name</span>
+        </div>
+        <span class="expander-icon @(isExpanded ? "expanded" : "")">▼</span>
+    </div>
+    @if (isExpanded)
+    {
+        <div class="expander-content">
+            @ChildContent
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public Cadence Cadence { get; set; }
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    private bool isExpanded = true;
+
+    private void Toggle()
+    {
+        isExpanded = !isExpanded;
+    }
+
+    private void HandleDragStart(DragEventArgs args)
+    {
+        if (!string.IsNullOrWhiteSpace(Cadence.Name))
+        {
+            args.DataTransfer.EffectAllowed = "move";
+            DragDropService.Data = Cadence;
+        }
+    }
+}

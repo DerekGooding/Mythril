@@ -1,4 +1,5 @@
 ﻿namespace Mythril.Data;
+
 public static class ContentHost
 {
     private static readonly Host _host = Host.Initialize();
