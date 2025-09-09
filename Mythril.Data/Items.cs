@@ -32,5 +32,6 @@ public partial class Items : IContent<Item>
 
         //Spells
         new("Fire I", "A basic fire spell.", ItemType.Spell),
+        new("Ice I", "A basic ice spell.", ItemType.Spell),
     ];
 }

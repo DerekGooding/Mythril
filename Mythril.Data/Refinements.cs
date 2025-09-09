@@ -23,7 +23,7 @@ public class ItemRefinements(CadenceAbilities abilities, Items items) : ISubCont
         ]) },
         { abilities.RefineMixology, new Dictionary<Item, Recipe>
         ([
-            Input(items.Herb, 2).Output(items.Potion),
+            Input(items.Herb, 10).Output(items.Potion),
         ]) },
     };
 }
@@ -38,12 +38,12 @@ public static class RefinementBuilder
     }
     private class Builder(Item item, int quantity) : IOutput
     {
-        private readonly int inputQuantity = quantity;
-        private readonly Item inputItem = item;
+        private readonly int _inputQuantity = quantity;
+        private readonly Item _inputItem = item;
         public KeyValuePair<Item, Recipe> Output(Item item, int quantity = 1)
         {
-            var recipe = new Recipe(inputQuantity, item, quantity);
-            return new KeyValuePair<Item, Recipe>(inputItem, recipe);
+            var recipe = new Recipe(_inputQuantity, item, quantity);
+            return new KeyValuePair<Item, Recipe>(_inputItem, recipe);
         }
     }
 }

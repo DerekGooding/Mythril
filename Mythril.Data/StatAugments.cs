@@ -12,5 +12,6 @@ public class StatAugments(Stats stats, Items items) : ISubContent<Item, StatAugm
     public Dictionary<Item, StatAugment[]> ByKey { get; } = new()
     {
         { items.FireI, [ new(stats.Strength, 20) ] },
+        { items.IceI,  [ new(stats.Magic, 20) ]  },
     };
 }

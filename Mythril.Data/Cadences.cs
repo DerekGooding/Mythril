@@ -21,11 +21,14 @@ public partial class Cadences(CadenceAbilities abilities, Items items) : IConten
         new ("Apprentice", "Has the foundational item refining abilities",
         [
             new(abilities.AutoQuestI,       Requirements((items.Gold, 100))),
+            new(abilities.RefineScrap,      Requirements((items.Gold, 1000))),
+            new(abilities.RefineMixology,   Requirements((items.Herb, 30), (items.IronOre, 10))),
         ]),
         new ("Student", "Has the foundational magic refining abilities",
         [
             new(abilities.AutoQuestI,       Requirements((items.Gold, 100))),
-            new(abilities.RefineFire,       Requirements((items.Log, 10)))
+            new(abilities.RefineFire,       Requirements((items.Log, 10))),
+            new(abilities.RefineIce,        Requirements((items.Potion, 10))),
         ]),
     ];
 }
