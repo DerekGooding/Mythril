@@ -10,6 +10,7 @@ public class ResourceManager
     public readonly Cadence[] Cadences = ContentHost.GetContent<Cadences>().All;
     public InventoryManager Inventory { get; } = new InventoryManager();
     public HashSet<string> CompletedTasks { get; } = [];
+    public HashSet<string> LockedTasks { get; } = [];
 
     public IEnumerable<Location> UsableLocations = [];
 
@@ -37,11 +38,15 @@ public class ResourceManager
 
     private bool Include(Quest quest)
         => (!CompletedTasks.Contains(quest.Name) || quest.Type != QuestType.Single)
+            && !LockedTasks.Contains(quest.Name)
             && (_questUnlocks == null || _questUnlocks[quest].Length == 0
             || _questUnlocks[quest].All(r => CompletedTasks.Contains(r.Name)));
 
     public void PayCosts(Quest task)
     {
+        if(task.Type == QuestType.Single)
+            LockedTasks.Add(task.Name);
+
         foreach (var requirement in task.Requirements)
             Inventory.Remove(requirement.Item, requirement.Quantity);
     }
@@ -51,6 +56,7 @@ public class ResourceManager
         foreach (var reward in quest.Rewards)
             Inventory.Add(reward.Item, reward.Quantity);
         CompletedTasks.Add(quest.Name);
+        LockedTasks.Remove(quest.Name);
 
         UpdateAvailableTasks();
     }
