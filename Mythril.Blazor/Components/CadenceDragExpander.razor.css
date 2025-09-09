@@ -22,7 +22,14 @@
 }
 
 .expander-content {
-    padding: 10px;
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition: max-height 0.3s ease, opacity 0.3s ease, padding 0.3s ease;
+}
+
+.expander-content.open {
+    opacity: 1;
 }
 
 .inventory-item {

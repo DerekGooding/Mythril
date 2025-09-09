@@ -1,14 +1,14 @@
+@using Microsoft.JSInterop
+@inject IJSRuntime JS
+
 <div class="expander">
     <div class="expander-header" @onclick="Toggle">
         <span>@Header</span>
         <span class="expander-icon @(isExpanded ? "expanded" : "")">▼</span>
     </div>
-    @if (isExpanded)
-    {
-        <div class="expander-content">
-            @ChildContent
-        </div>
-    }
+    <div @ref="contentRef" class="expander-content @(isExpanded ? "open" : "closed")">
+        @ChildContent
+    </div>
 </div>
 
 @code {
@@ -18,10 +18,19 @@
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
 
-    private bool isExpanded = true;
+    private bool isExpanded = false;
+    private ElementReference contentRef;
 
-    private void Toggle()
+    private async Task Toggle()
     {
+        if (!isExpanded)
+        {
+            await JS.InvokeVoidAsync("expander.expand", contentRef);
+        }
+        else
+        {
+            await JS.InvokeVoidAsync("expander.collapse", contentRef);
+        }
         isExpanded = !isExpanded;
     }
 }
