@@ -51,12 +51,12 @@ public class ResourceManager
             Inventory.Remove(requirement.Item, requirement.Quantity);
     }
 
-    public void ReceiveRewards(Quest quest)
+    public void ReceiveRewards(IEnumerable<ItemQuantity> rewards, string name)
     {
-        foreach (var reward in quest.Rewards)
+        foreach (var reward in rewards)
             Inventory.Add(reward.Item, reward.Quantity);
-        CompletedTasks.Add(quest.Name);
-        LockedTasks.Remove(quest.Name);
+        CompletedTasks.Add(name);
+        LockedTasks.Remove(name);
 
         UpdateAvailableTasks();
     }

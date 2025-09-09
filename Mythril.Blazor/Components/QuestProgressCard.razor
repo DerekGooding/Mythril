@@ -1,15 +1,15 @@
 @using Mythril.Data
 
 <div class="task-progress-card">
-    <div class="task-header">@QuestProgress?.Quest.Name</div>
+    <div class="task-header">@QuestProgress?.Name</div>
     <div class="task-body">
-        <p>@QuestProgress?.Quest.Description</p>
+        <p>@QuestProgress?.Description</p>
         <div class="progress">
             <div class="progress-bar" role="progressbar" style="width: @(QuestProgress?.Progress.ToString() ?? "")%;" aria-valuenow="@QuestProgress?.Progress" aria-valuemin="0" aria-valuemax="100"></div>
         </div>
     </div>
     <div class="task-duration">
-        @QuestProgress?.Quest.DurationSeconds s
+        @QuestProgress?.DurationSeconds s
     </div>
 </div>
 

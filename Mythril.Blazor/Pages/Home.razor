@@ -82,7 +82,7 @@
 
     protected override void OnInitialized()
     {
-        OnQuestCompleted = EventCallback.Factory.Create<QuestProgress>(this, (p) => resourceManager.ReceiveRewards(p.Quest));
+        OnQuestCompleted = EventCallback.Factory.Create<QuestProgress>(this, (p) => resourceManager.ReceiveRewards(p.Rewards, p.Name));
 
         timer = new Timer(100);
         timer.Elapsed += (sender, args) => { _ = Task.Run(OnTimerElapsed); };
@@ -100,10 +100,11 @@
 
     private async Task TaskDropped((Mythril.Data.Quest quest, Character character) args)
     {
-        if (resourceManager.CanAfford(args.quest))
+        var quest = args.quest;
+        if (resourceManager.CanAfford(quest))
         {
-            resourceManager.PayCosts(args.quest);
-            questProgresses.Add(new QuestProgress(args.quest, args.character));
+            resourceManager.PayCosts(quest);
+            questProgresses.Add(new QuestProgress(quest.Name, quest.Description, quest.DurationSeconds, quest.Rewards, args.character));
             await InvokeAsync(StateHasChanged);
         }
     }
@@ -117,7 +118,7 @@
             if (progress.Progress < 100)
             {
                 var elapsed = (DateTime.Now - progress.StartTime).TotalSeconds;
-                progress.Progress = Math.Min(100, (elapsed / progress.Quest.DurationSeconds) * 100);
+                progress.Progress = Math.Min(100, (elapsed / progress.DurationSeconds) * 100);
 
                 if (progress.Progress >= 100)
                 {
