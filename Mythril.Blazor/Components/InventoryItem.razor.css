@@ -20,10 +20,12 @@
 
 .item-name {
     font-weight: bold;
+    display: block;
 }
 
 .item-quantity {
     color: #888;
+    display: block;
 }
 
 .floating-text {
