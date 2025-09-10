@@ -15,43 +15,46 @@
 
 @code {
     [Parameter]
-    public EventCallback<Quest> OnQuestDrop { get; set; }
+    public EventCallback<object> OnQuestDrop { get; set; }
 
     [Parameter]
-    public Func<Quest, bool>? Accepts { get; set; }
+    public Func<object, bool>? Accepts { get; set; }
 
     private bool isShaking = false;
 
     private async Task HandleDragEnter(DragEventArgs args)
     {
-        if (DragDropService.Data is Quest task)
+        if (DragDropService.Data is Quest || DragDropService.Data is CadenceUnlock)
         {
-                args.DataTransfer.DropEffect = "move";
-                await JS.InvokeVoidAsync("eval", "event.preventDefault()");
+            args.DataTransfer.DropEffect = "move";
+            await JS.InvokeVoidAsync("eval", "event.preventDefault()");
         }
     }
 
     private async Task HandleDragOver(DragEventArgs args)
     {
-        if (DragDropService.Data is Quest task)
+        if (DragDropService.Data is Quest || DragDropService.Data is CadenceUnlock)
         {
-                args.DataTransfer.DropEffect = "move";
-                await JS.InvokeVoidAsync("eval", "event.preventDefault()");
+            args.DataTransfer.DropEffect = "move";
+            await JS.InvokeVoidAsync("eval", "event.preventDefault()");
         }
     }
 
     private async Task HandleDrop()
     {
-        if (DragDropService.Data is not Quest quest || string.IsNullOrWhiteSpace(quest.Name)) return;
+        if (DragDropService.Data is Quest quest || DragDropService.Data is CadenceUnlock)
+        {
 
-        if (Accepts is null || Accepts(quest))
-        {
-            await OnQuestDrop.InvokeAsync(quest);
+            if (Accepts is null || Accepts(DragDropService.Data))
+            {
+                await OnQuestDrop.InvokeAsync(DragDropService.Data);
+            }
+            else
+            {
+                await Shake();
+            }
         }
-        else
-        {
-            await Shake();
-        }
+
         DragDropService.Data = null;
     }
 

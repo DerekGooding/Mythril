@@ -61,7 +61,7 @@
             {
                 <PartyPanel Party="resourceManager.Characters"
                             QuestProgresses="questProgresses"
-                            OnQuestDrop="EventCallback.Factory.Create<(Mythril.Data.Quest, Character)>(this, TaskDropped)" />
+                            OnQuestDrop="EventCallback.Factory.Create<(object, Character)>(this, TaskDropped)" />
             }
             else
             {
@@ -98,13 +98,15 @@
         navigationManager.NavigateTo(navigationManager.Uri, forceLoad: true);
     }
 
-    private async Task TaskDropped((Mythril.Data.Quest quest, Character character) args)
+    private async Task TaskDropped((object item, Character character) args)
     {
-        var quest = args.quest;
-        if (resourceManager.CanAfford(quest))
+        if (resourceManager.CanAfford(args.item))
         {
-            resourceManager.PayCosts(quest);
-            questProgresses.Add(new QuestProgress(quest.Name, quest.Description, quest.DurationSeconds, quest.Rewards, args.character));
+            resourceManager.PayCosts(args.item);
+            if(args.item is Quest quest)
+                questProgresses.Add(new QuestProgress(quest.Name, quest.Description, quest.DurationSeconds, quest.Rewards, args.character));
+            if(args.item is CadenceUnlock unlock)
+                questProgresses.Add(new QuestProgress(unlock.Ability.Name, unlock.Ability.Description, 3, [], args.character));
             await InvokeAsync(StateHasChanged);
         }
     }

@@ -23,5 +23,5 @@
     public List<QuestProgress>? QuestProgresses { get; set; }
 
     [Parameter]
-    public EventCallback<(Quest, Character)> OnQuestDrop { get; set; }
+    public EventCallback<(object, Character)> OnQuestDrop { get; set; }
 }

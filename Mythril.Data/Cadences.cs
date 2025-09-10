@@ -2,9 +2,7 @@ using static Mythril.Data.CadenceBuilder;
 
 namespace Mythril.Data;
 
-public readonly record struct CadenceUnlock(CadenceAbility Ability, ItemAmount[] Requirements);
-
-public readonly record struct ItemAmount(Item Item, int Amount);
+public readonly record struct CadenceUnlock(CadenceAbility Ability, ItemQuantity[] Requirements);
 
 [Unique] public readonly partial record struct Cadence(string Name, string Description, CadenceUnlock[] Abilities) : INamed;
 
@@ -35,7 +33,7 @@ public partial class Cadences(CadenceAbilities abilities, Items items) : IConten
 
 public static class CadenceBuilder
 {
-    public static ItemAmount[] Requirements(params (Item Item, int Amount)[] req) => [.. req.Select(x => new ItemAmount(x.Item, x.Amount))];
+    public static ItemQuantity[] Requirements(params (Item Item, int Amount)[] req) => [.. req.Select(x => new ItemQuantity(x.Item, x.Amount))];
 
     private class Builder
     {

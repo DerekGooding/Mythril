@@ -7,7 +7,12 @@ public enum QuestType
     Unlock
 }
 
-[Unique] public partial record struct Quest(string Name, string Description, int DurationSeconds, ItemQuantity[] Requirements, ItemQuantity[] Rewards,  QuestType Type) : INamed;
+[Unique] public partial record struct Quest(string Name,
+                                            string Description,
+                                            int DurationSeconds,
+                                            ItemQuantity[] Requirements,
+                                            ItemQuantity[] Rewards,
+                                            QuestType Type) : INamed;
 
 [Singleton]
 public partial class Quests(Items items) : IContent<Quest>

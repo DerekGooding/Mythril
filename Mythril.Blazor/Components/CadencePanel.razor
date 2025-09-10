@@ -9,7 +9,7 @@
                 @foreach (var ability in cadence.Abilities)
                 {
                     <div class="task-container">
-                        <AbilityUnlockCard Ability="ability.Ability" Requirements="ability.Requirements" />
+                        <AbilityUnlockCard Unlock="ability" />
                     </div>
                 }
             </CadenceDragExpander>

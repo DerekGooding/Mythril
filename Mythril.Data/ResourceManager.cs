@@ -20,13 +20,27 @@ public class ResourceManager
         UpdateAvailableTasks();
     }
 
-    public bool CanAfford(Quest quest)
+    public bool CanAfford(object item)
     {
-        foreach (var requirement in quest.Requirements)
+        if (item is Quest quest)
         {
-            if (!Inventory.Has(requirement.Item, requirement.Quantity))
+            foreach (var requirement in quest.Requirements)
             {
-                return false;
+                if (!Inventory.Has(requirement.Item, requirement.Quantity))
+                {
+                    return false;
+                }
+            }
+        }
+
+        if(item is CadenceUnlock ability)
+        {
+            foreach(var requirement in ability.Requirements)
+            {
+                if (!Inventory.Has(requirement.Item, requirement.Quantity))
+                {
+                    return false;
+                }
             }
         }
 
@@ -42,13 +56,21 @@ public class ResourceManager
             && (_questUnlocks == null || _questUnlocks[quest].Length == 0
             || _questUnlocks[quest].All(r => CompletedTasks.Contains(r.Name)));
 
-    public void PayCosts(Quest task)
+    public void PayCosts(object item)
     {
-        if(task.Type == QuestType.Single)
-            LockedTasks.Add(task.Name);
+        if (item is Quest quest)
+        {
+            if (quest.Type == QuestType.Single)
+                LockedTasks.Add(quest.Name);
 
-        foreach (var requirement in task.Requirements)
-            Inventory.Remove(requirement.Item, requirement.Quantity);
+            foreach (var requirement in quest.Requirements)
+                Inventory.Remove(requirement.Item, requirement.Quantity);
+        }
+        if(item is CadenceUnlock unlock)
+        {
+            foreach (var requirement in unlock.Requirements)
+                Inventory.Remove(requirement.Item, requirement.Quantity);
+        }
     }
 
     public void ReceiveRewards(IEnumerable<ItemQuantity> rewards, string name)
