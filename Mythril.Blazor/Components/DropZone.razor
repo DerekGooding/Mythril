@@ -26,15 +26,8 @@
     {
         if (DragDropService.Data is Quest task)
         {
-            if (Accepts is null || Accepts(task))
-            {
                 args.DataTransfer.DropEffect = "move";
                 await JS.InvokeVoidAsync("eval", "event.preventDefault()");
-            }
-            else
-            {
-                args.DataTransfer.DropEffect = "none";
-            }
         }
     }
 
@@ -42,15 +35,8 @@
     {
         if (DragDropService.Data is Quest task)
         {
-            if (Accepts is null || Accepts(task))
-            {
                 args.DataTransfer.DropEffect = "move";
                 await JS.InvokeVoidAsync("eval", "event.preventDefault()");
-            }
-            else
-            {
-                args.DataTransfer.DropEffect = "none";
-            }
         }
     }
 

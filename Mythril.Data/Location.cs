@@ -20,6 +20,8 @@ public partial class Locations(Quests quests) : IContent<Location>
         new("Dark Forest",
             [
                 quests.FarmGoblins,
+                quests.FarmTrents,
+                quests.FarmGolems,
             ]
         )
     ];

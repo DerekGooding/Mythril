@@ -25,15 +25,8 @@
     {
         if (DragDropService.Data is ItemQuantity task)
         {
-            if (Accepts is null || Accepts(task))
-            {
-                args.DataTransfer.DropEffect = "move";
-                await JS.InvokeVoidAsync("eval", "event.preventDefault()");
-            }
-            else
-            {
-                args.DataTransfer.DropEffect = "none";
-            }
+            args.DataTransfer.DropEffect = "move";
+            await JS.InvokeVoidAsync("eval", "event.preventDefault()");
         }
     }
 
@@ -41,15 +34,8 @@
     {
         if (DragDropService.Data is ItemQuantity task)
         {
-            if (Accepts is null || Accepts(task))
-            {
-                args.DataTransfer.DropEffect = "move";
-                await JS.InvokeVoidAsync("eval", "event.preventDefault()");
-            }
-            else
-            {
-                args.DataTransfer.DropEffect = "none";
-            }
+            args.DataTransfer.DropEffect = "move";
+            await JS.InvokeVoidAsync("eval", "event.preventDefault()");
         }
     }
 
