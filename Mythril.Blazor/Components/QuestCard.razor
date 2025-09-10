@@ -5,7 +5,13 @@
 @inject DragDropService DragDropService
 
 <div class="card" draggable="true" @ondragstart="HandleDragStart">
-    <div class="card-header">@Quest.Name</div>
+    <div class="card-header">
+        <span class="material-icons" style="color: green;">
+            @(Quest.Type == QuestType.Single ? "flag" : "repeat")
+        </span>
+        @Quest.Name
+    </div>
+
     <div class="card-content">
         <div class="card-main">
             <p>@Quest.Description</p>
