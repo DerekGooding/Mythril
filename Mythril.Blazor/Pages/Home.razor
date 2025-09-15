@@ -45,7 +45,7 @@
                         <HandPanel Locations="resourceManager.UsableLocations" />
                     </div>
                     <div class="tab-pane fade" id="cadence" role="tabpanel">
-                        <CadencePanel Cadences="resourceManager.Cadences" />
+                        <CadencePanel Cadences="resourceManager.UnlockedCadences" />
                     </div>
                 </div>
             }
@@ -78,11 +78,10 @@
 
     private List<QuestProgress> questProgresses = new();
     private Timer? timer;
-    private Random random = Random.Shared;
 
     protected override void OnInitialized()
     {
-        OnQuestCompleted = EventCallback.Factory.Create<QuestProgress>(this, (p) => resourceManager.ReceiveRewards(p.Rewards, p.Name));
+        OnQuestCompleted = EventCallback.Factory.Create<QuestProgress>(this, (p) => resourceManager.ReceiveRewards(p.Item));
 
         timer = new Timer(100);
         timer.Elapsed += (sender, args) => { _ = Task.Run(OnTimerElapsed); };
@@ -104,9 +103,9 @@
         {
             resourceManager.PayCosts(args.item);
             if(args.item is Quest quest)
-                questProgresses.Add(new QuestProgress(quest.Name, quest.Description, quest.DurationSeconds, quest.Rewards, args.character));
+                questProgresses.Add(new QuestProgress(quest, quest.Description, quest.DurationSeconds, args.character));
             if(args.item is CadenceUnlock unlock)
-                questProgresses.Add(new QuestProgress(unlock.Ability.Name, unlock.Ability.Description, 3, [], args.character));
+                questProgresses.Add(new QuestProgress(unlock, unlock.Ability.Description, 3, args.character));
             await InvokeAsync(StateHasChanged);
         }
     }

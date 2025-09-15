@@ -1,13 +1,18 @@
 namespace Mythril.Data;
 
-public class QuestProgress(string name, string description, int durationSeconds, IEnumerable<ItemQuantity> rewards, Character character)
+public class QuestProgress(object item, string description, int durationSeconds, Character character)
 {
-    public string Name { get; set; } = name;
+    public object Item { get; set; } = item;
+
+    public string Name { get; set; } =
+        item is Quest quest ? quest.Name :
+        item is CadenceUnlock unlock ? unlock.Ability.Name :
+        string.Empty;
+
     public string Description { get; set; } = description;
     public int DurationSeconds { get; set; } = durationSeconds;
     public Character Character { get; set; } = character;
     public DateTime StartTime { get; set; } = DateTime.Now;
 
-    public IEnumerable<ItemQuantity> Rewards {  get; set; } = rewards;
     public double Progress { get; set; } = 0;
 }

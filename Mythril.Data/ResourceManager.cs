@@ -5,21 +5,28 @@ public class ResourceManager
     private readonly Items _items = ContentHost.GetContent<Items>();
     private readonly Location[] _locations = ContentHost.GetContent<Locations>().All;
     private readonly QuestUnlocks _questUnlocks = ContentHost.GetContent<QuestUnlocks>();
+    private readonly QuestToCadenceUnlocks _questToCadenceUnlocks = ContentHost.GetContent<QuestToCadenceUnlocks>();
+
+    private readonly Dictionary<Cadence, Character?> _assignedCadences;
+    private readonly Dictionary<Cadence, bool> _lockedCadences;
 
     public readonly Character[] Characters = [new Character("Protagonist"), new Character("Wifu"), new Character("Himbo")];
-    public readonly Cadence[] Cadences = ContentHost.GetContent<Cadences>().All;
+    private readonly Cadence[] _cadences = ContentHost.GetContent<Cadences>().All;
 
-    public Dictionary<Cadence, Character?> AssignedCadences = [];
     public InventoryManager Inventory { get; } = new InventoryManager();
     public HashSet<string> CompletedTasks { get; } = [];
     public HashSet<string> LockedTasks { get; } = [];
 
     public IEnumerable<Location> UsableLocations = [];
 
+    public IEnumerable<Cadence> UnlockedCadences = [];
+
+
     public ResourceManager()
     {
         Inventory.Add(_items.Gold, 100);
-        AssignedCadences = Cadences.ToNamedDictionary(_ => (Character?)null);
+        _assignedCadences = _cadences.ToNamedDictionary(_ => (Character?)null);
+        _lockedCadences = _cadences.ToNamedDictionary(_ => true);
         UpdateAvailableTasks();
     }
 
@@ -52,6 +59,8 @@ public class ResourceManager
 
     public void UpdateAvailableTasks()
         => UsableLocations = _locations.Select(x => new Location(x.Name, x.Quests.Where(Include))).Where(l => l.Quests.Any());
+    public void UpdateAvaiableCadences()
+        => UnlockedCadences = _lockedCadences.Where(x => !x.Value).Select(x => x.Key);
 
     private bool Include(Quest quest)
         => (!CompletedTasks.Contains(quest.Name) || quest.Type != QuestType.Single)
@@ -76,19 +85,34 @@ public class ResourceManager
         }
     }
 
-    public void ReceiveRewards(IEnumerable<ItemQuantity> rewards, string name)
+    public void ReceiveRewards(object item)
     {
-        foreach (var reward in rewards)
-            Inventory.Add(reward.Item, reward.Quantity);
-        CompletedTasks.Add(name);
-        LockedTasks.Remove(name);
+        if (item is Quest quest)
+        {
+            foreach (var reward in quest.Rewards)
+                Inventory.Add(reward.Item, reward.Quantity);
+            CompletedTasks.Add(quest.Name);
+            LockedTasks.Remove(quest.Name);
 
-        UpdateAvailableTasks();
+            foreach (var cadence in _questToCadenceUnlocks[quest])
+                _lockedCadences[cadence] = false;
+
+            UpdateAvailableTasks();
+        }
+        if(item is CadenceUnlock unlock)
+        {
+            //TODO : Handle CadenceUnlock
+        }
     }
 
+    public void UnlockCadence(Cadence cadence)
+    {
+        _lockedCadences[cadence] = false;
+        UpdateAvaiableCadences();
+    }
 
-    public void AssignCadence(Cadence cadence, Character character) => AssignedCadences[cadence] = character;
-    public void Unassign(Cadence cadence) => AssignedCadences[cadence] = null;
+    public void AssignCadence(Cadence cadence, Character character) => _assignedCadences[cadence] = character;
+    public void Unassign(Cadence cadence) => _assignedCadences[cadence] = null;
     public IEnumerable<Cadence> CurrentlyAssigned(Character character)
-        => AssignedCadences.Where(x => x.Value == character).Select(x => x.Key);
+        => _assignedCadences.Where(x => x.Value == character).Select(x => x.Key);
 }
