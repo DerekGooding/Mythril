@@ -8,6 +8,8 @@ public class ResourceManager
 
     public readonly Character[] Characters = [new Character("Protagonist"), new Character("Wifu"), new Character("Himbo")];
     public readonly Cadence[] Cadences = ContentHost.GetContent<Cadences>().All;
+
+    public Dictionary<Cadence, Character?> AssignedCadences = [];
     public InventoryManager Inventory { get; } = new InventoryManager();
     public HashSet<string> CompletedTasks { get; } = [];
     public HashSet<string> LockedTasks { get; } = [];
@@ -17,6 +19,7 @@ public class ResourceManager
     public ResourceManager()
     {
         Inventory.Add(_items.Gold, 100);
+        AssignedCadences = Cadences.ToNamedDictionary(_ => (Character?)null);
         UpdateAvailableTasks();
     }
 
@@ -82,4 +85,10 @@ public class ResourceManager
 
         UpdateAvailableTasks();
     }
+
+
+    public void AssignCadence(Cadence cadence, Character character) => AssignedCadences[cadence] = character;
+    public void Unassign(Cadence cadence) => AssignedCadences[cadence] = null;
+    public IEnumerable<Cadence> CurrentlyAssigned(Character character)
+        => AssignedCadences.Where(x => x.Value == character).Select(x => x.Key);
 }
