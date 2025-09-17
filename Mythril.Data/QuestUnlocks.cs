@@ -3,7 +3,7 @@ namespace Mythril.Data;
 [Singleton]
 public class QuestUnlocks(Quests quests) : ISubContent<Quest, Quest[]>
 {
-    public Quest[] this[Quest key] => ByKey[key];
+    public Quest[] this[Quest key] => ByKey.TryGetValue(key, out var item) ? item : [];
 
     public Dictionary<Quest, Quest[]> ByKey { get; } = new()
     {

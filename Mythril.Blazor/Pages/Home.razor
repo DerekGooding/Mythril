@@ -73,16 +73,11 @@
 
 @using System.Timers
 @code {
-    [Parameter]
-    public EventCallback<QuestProgress> OnQuestCompleted { get; set; }
-
     private List<QuestProgress> questProgresses = new();
     private Timer? timer;
 
     protected override void OnInitialized()
     {
-        OnQuestCompleted = EventCallback.Factory.Create<QuestProgress>(this, (p) => resourceManager.ReceiveRewards(p.Item));
-
         timer = new Timer(100);
         timer.Elapsed += (sender, args) => { _ = Task.Run(OnTimerElapsed); };
         timer.AutoReset = true;
@@ -112,7 +107,7 @@
 
     private async Task OnTimerElapsed()
     {
-        var newlyCompletedTasks = new List<QuestProgress>();
+        var newlyCompletedQuests = new List<QuestProgress>();
         for (int i = 0; i < questProgresses.Count; i++)
         {
             var progress = questProgresses[i];
@@ -123,16 +118,16 @@
 
                 if (progress.Progress >= 100)
                 {
-                    newlyCompletedTasks.Add(progress);
+                    newlyCompletedQuests.Add(progress);
                 }
             }
         }
 
-        if (newlyCompletedTasks.Any())
+        if (newlyCompletedQuests.Any())
         {
-            foreach (var task in newlyCompletedTasks)
+            foreach (var progress in newlyCompletedQuests)
             {
-                await OnQuestCompleted.InvokeAsync(task);
+                await resourceManager.ReceiveRewards(progress.Item);
             }
             questProgresses.RemoveAll(p => p.Progress >= 100);
         }

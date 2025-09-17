@@ -85,7 +85,7 @@ public class ResourceManager
         }
     }
 
-    public void ReceiveRewards(object item)
+    public Task ReceiveRewards(object item)
     {
         if (item is Quest quest)
         {
@@ -103,6 +103,7 @@ public class ResourceManager
         {
             //TODO : Handle CadenceUnlock
         }
+        return Task.CompletedTask;
     }
 
     public void UnlockCadence(Cadence cadence)
