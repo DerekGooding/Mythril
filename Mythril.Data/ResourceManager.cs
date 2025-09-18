@@ -91,11 +91,12 @@ public class ResourceManager
         {
             foreach (var reward in quest.Rewards)
                 Inventory.Add(reward.Item, reward.Quantity);
+
             CompletedTasks.Add(quest.Name);
             LockedTasks.Remove(quest.Name);
 
             foreach (var cadence in _questToCadenceUnlocks[quest])
-                _lockedCadences[cadence] = false;
+                UnlockCadence(cadence);
 
             UpdateAvailableTasks();
         }
