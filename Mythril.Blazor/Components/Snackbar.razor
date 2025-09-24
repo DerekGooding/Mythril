@@ -3,7 +3,7 @@
 <div class="snackbar-container">
     @if (visible)
     {
-        <div class="snackbar @severity">
+        <div class="snackbar @severity" key="@message">
             @message
         </div>
     }
@@ -13,26 +13,39 @@
     private string message = string.Empty;
     private string severity = "info";
     private bool visible;
+    private bool isProcessing;
 
     protected override void OnInitialized()
     {
-        SnackbarService.OnShow += ShowSnackbar;
+        SnackbarService.OnChange += ProcessQueue;
     }
 
-    private async void ShowSnackbar(string msg, string sev)
+    private async Task ProcessQueue()
     {
-        message = msg;
-        severity = sev;
-        visible = true;
-        StateHasChanged();
+        if (isProcessing)
+            return;
 
-        await Task.Delay(3000); // auto-hide after 3s
-        visible = false;
-        StateHasChanged();
+        isProcessing = true;
+
+        while (SnackbarService.TryDequeue(out var item))
+        {
+            message = item.Message;
+            severity = item.Severity;
+            visible = true;
+            StateHasChanged();
+
+            await Task.Delay(3000); // show per message
+            visible = false;
+            StateHasChanged();
+
+            await Task.Delay(250); // gap between snackbars
+        }
+
+        isProcessing = false;
     }
 
     public void Dispose()
     {
-        SnackbarService.OnShow -= ShowSnackbar;
+        SnackbarService.OnChange -= ProcessQueue;
     }
 }
