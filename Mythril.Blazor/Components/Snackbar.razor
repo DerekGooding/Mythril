@@ -1,0 +1,38 @@
+@inject Services.SnackbarService SnackbarService
+
+<div class="snackbar-container">
+    @if (visible)
+    {
+        <div class="snackbar @severity">
+            @message
+        </div>
+    }
+</div>
+
+@code {
+    private string message = string.Empty;
+    private string severity = "info";
+    private bool visible;
+
+    protected override void OnInitialized()
+    {
+        SnackbarService.OnShow += ShowSnackbar;
+    }
+
+    private async void ShowSnackbar(string msg, string sev)
+    {
+        message = msg;
+        severity = sev;
+        visible = true;
+        StateHasChanged();
+
+        await Task.Delay(3000); // auto-hide after 3s
+        visible = false;
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        SnackbarService.OnShow -= ShowSnackbar;
+    }
+}

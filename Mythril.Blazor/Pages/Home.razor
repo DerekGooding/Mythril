@@ -6,6 +6,7 @@
 @inject ResourceManager resourceManager
 @inject ThemeService themeService
 @inject NavigationManager navigationManager
+@inject SnackbarService SnackbarService
 
 <PageTitle>Mythril</PageTitle>
 
@@ -101,6 +102,7 @@
                 questProgresses.Add(new QuestProgress(quest, quest.Description, quest.DurationSeconds, args.character));
             if(args.item is CadenceUnlock unlock)
                 questProgresses.Add(new QuestProgress(unlock, unlock.Ability.Description, 3, args.character));
+
             await InvokeAsync(StateHasChanged);
         }
     }
@@ -123,16 +125,17 @@
             }
         }
 
+        await InvokeAsync(StateHasChanged);
+
         if (newlyCompletedQuests.Any())
         {
             foreach (var progress in newlyCompletedQuests)
             {
                 await resourceManager.ReceiveRewards(progress.Item);
+                SnackbarService.Show($"Completed: {progress.Name}", "success");
             }
             questProgresses.RemoveAll(p => p.Progress >= 100);
         }
-
-        await InvokeAsync(StateHasChanged);
     }
 
     public void Dispose()

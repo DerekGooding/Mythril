@@ -22,6 +22,7 @@ public class ResourceManagerTests
                 ]
             }
         };
+        _ = locations;
         //var characters = new Character[]
         //{
         //    new("Hero")

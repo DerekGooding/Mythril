@@ -3,7 +3,6 @@ namespace Mythril.Data;
 public class ResourceManager
 {
     private readonly Items _items = ContentHost.GetContent<Items>();
-    private readonly Location[] _locations = ContentHost.GetContent<Locations>().All;
     private readonly QuestUnlocks _questUnlocks = ContentHost.GetContent<QuestUnlocks>();
     private readonly QuestToCadenceUnlocks _questToCadenceUnlocks = ContentHost.GetContent<QuestToCadenceUnlocks>();
 
@@ -14,12 +13,12 @@ public class ResourceManager
     private readonly Cadence[] _cadences = ContentHost.GetContent<Cadences>().All;
 
     public InventoryManager Inventory { get; } = new InventoryManager();
-    public HashSet<string> CompletedTasks { get; } = [];
-    public HashSet<string> LockedTasks { get; } = [];
 
-    public IEnumerable<Location> UsableLocations = [];
+    private readonly HashSet<Quest> _completedQuests = [];
 
-    public IEnumerable<Cadence> UnlockedCadences = [];
+    public List<LocationData> UsableLocations;
+
+    public List<Cadence> UnlockedCadences = [];
 
 
     public ResourceManager()
@@ -27,8 +26,11 @@ public class ResourceManager
         Inventory.Add(_items.Gold, 100);
         _assignedCadences = _cadences.ToNamedDictionary(_ => (Character?)null);
         _lockedCadences = _cadences.ToNamedDictionary(_ => true);
-        UpdateAvailableTasks();
+
+        UsableLocations = [.. ContentHost.GetContent<Locations>().All.Select(x => new LocationData(x, x.Quests.Where(IsNeverLocked)))];
     }
+
+    public bool IsNeverLocked(Quest quest) => _questUnlocks[quest].Length == 0;
 
     public bool CanAfford(object item)
     {
@@ -57,23 +59,48 @@ public class ResourceManager
         return true;
     }
 
-    public void UpdateAvailableTasks()
-        => UsableLocations = _locations.Select(x => new Location(x.Name, x.Quests.Where(Include))).Where(l => l.Quests.Any());
     public void UpdateAvaiableCadences()
-        => UnlockedCadences = _lockedCadences.Where(x => !x.Value).Select(x => x.Key);
+        => UnlockedCadences = [.. _lockedCadences.Where(x => !x.Value).Select(x => x.Key)];
 
-    private bool Include(Quest quest)
-        => (!CompletedTasks.Contains(quest.Name) || quest.Type != QuestType.Single)
-            && !LockedTasks.Contains(quest.Name)
-            && (_questUnlocks == null || _questUnlocks[quest].Length == 0
-            || _questUnlocks[quest].All(r => CompletedTasks.Contains(r.Name)));
+    //private bool Include(Quest quest)
+    //    => (!CompletedTasks.Contains(quest.Name) || quest.Type != QuestType.Single)
+    //        && !LockedTasks.Contains(quest.Name)
+    //        && (_questUnlocks == null || _questUnlocks[quest].Length == 0
+    //        || _questUnlocks[quest].All(r => CompletedTasks.Contains(r.Name)));
+
+    private void LockQuest(Quest quest)
+    {
+        foreach(var location in UsableLocations)
+        {
+            location.Quests.Remove(quest);
+        }
+    }
+
+    private void UnlockQuest(Quest quest)
+    {
+        _completedQuests.Add(quest);
+        foreach(var location in UsableLocations)
+        {
+            foreach(var data in location.LockedQuests)
+            {
+                if (data.Type == QuestType.Single && _completedQuests.Contains(data))
+                    continue;
+                if (IsComplete(_questUnlocks[data]))
+                    location.Quests.Add(data);
+            }
+        }
+    }
+
+    private bool IsComplete(Quest[] quests) => quests.All(_completedQuests.Contains);
 
     public void PayCosts(object item)
     {
         if (item is Quest quest)
         {
             if (quest.Type == QuestType.Single)
-                LockedTasks.Add(quest.Name);
+            {
+                LockQuest(quest);
+            }
 
             foreach (var requirement in quest.Requirements)
                 Inventory.Remove(requirement.Item, requirement.Quantity);
@@ -92,17 +119,17 @@ public class ResourceManager
             foreach (var reward in quest.Rewards)
                 Inventory.Add(reward.Item, reward.Quantity);
 
-            CompletedTasks.Add(quest.Name);
-            LockedTasks.Remove(quest.Name);
+            UnlockQuest(quest);
 
             foreach (var cadence in _questToCadenceUnlocks[quest])
                 UnlockCadence(cadence);
 
-            UpdateAvailableTasks();
+
         }
         if(item is CadenceUnlock unlock)
         {
             //TODO : Handle CadenceUnlock
+            _ = unlock;
         }
         return Task.CompletedTask;
     }

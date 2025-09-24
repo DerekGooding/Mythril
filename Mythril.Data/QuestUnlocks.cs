@@ -7,7 +7,6 @@ public class QuestUnlocks(Quests quests) : ISubContent<Quest, Quest[]>
 
     public Dictionary<Quest, Quest[]> ByKey { get; } = new()
     {
-        { quests.Prologue, [] },
         { quests.TutorialSection, [ quests.Prologue ] },
         { quests.VisitStartingTown, [ quests.TutorialSection ] },
         { quests.BuyPotion, [ quests.VisitStartingTown ] },

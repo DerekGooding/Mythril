@@ -35,8 +35,5 @@ public static class CadenceBuilder
 {
     public static ItemQuantity[] Requirements(params (Item Item, int Amount)[] req) => [.. req.Select(x => new ItemQuantity(x.Item, x.Amount))];
 
-    private class Builder
-    {
-
-    }
+    private class Builder;
 }
