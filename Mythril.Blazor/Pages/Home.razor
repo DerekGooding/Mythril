@@ -109,16 +109,17 @@
 
     private async Task OnTimerElapsed()
     {
+        const int completdThreshold = 105;
         var newlyCompletedQuests = new List<QuestProgress>();
         for (int i = 0; i < questProgresses.Count; i++)
         {
             var progress = questProgresses[i];
-            if (progress.Progress < 100)
+            if (progress.Progress < completdThreshold)
             {
                 var elapsed = (DateTime.Now - progress.StartTime).TotalSeconds;
-                progress.Progress = Math.Min(100, (elapsed / progress.DurationSeconds) * 100);
+                progress.Progress = Math.Min(completdThreshold, (elapsed / progress.DurationSeconds) * 100);
 
-                if (progress.Progress >= 100)
+                if (progress.Progress >= completdThreshold)
                 {
                     newlyCompletedQuests.Add(progress);
                 }
@@ -134,7 +135,7 @@
                 await resourceManager.ReceiveRewards(progress.Item);
                 SnackbarService.Show($"Completed: {progress.Name}", "success");
             }
-            questProgresses.RemoveAll(p => p.Progress >= 100);
+            questProgresses.RemoveAll(p => p.Progress >= completdThreshold);
         }
     }
 
