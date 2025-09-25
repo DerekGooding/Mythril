@@ -14,5 +14,11 @@ public class QuestUnlocks(Quests quests) : ISubContent<Quest, Quest[]>
         { quests.FarmGoblins, [ quests.VisitStartingTown ] },
         { quests.FarmTrents, [ quests.VisitStartingTown ] },
         { quests.FarmGolems, [ quests.VisitStartingTown ] },
+        { quests.LearnabouttheMines, [ quests.LearnAboutCadences ] },
+        { quests.FarmBats, [ quests.LearnabouttheMines ] },
+        { quests.FarmSpiders, [ quests.LearnabouttheMines ] },
+        { quests.FarmSlimes, [ quests.LearnabouttheMines ] },
+        { quests.UnlockMining, [ quests.LearnabouttheMines ] },
+        { quests.MineIronOre, [ quests.UnlockMining ] },
     };
 }

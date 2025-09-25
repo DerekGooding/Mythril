@@ -29,9 +29,13 @@ public partial class Items : IContent<Item>
         new("Herb", "A medicinal plant used in potions.", ItemType.Material),
         new("Leather", "Tough animal hide used in crafting.", ItemType.Material),
         new("Water", "Essential for life and potion-making.", ItemType.Material),
+        new("Web", "Sticky silk produced by spiders.", ItemType.Material),
+        new("Slime", "A gelatinous creature's residue.", ItemType.Material),
 
         //Spells
         new("Fire I", "A basic fire spell.", ItemType.Spell),
         new("Ice I", "A basic ice spell.", ItemType.Spell),
+        new("Lightning I", "A basic lightning spell.", ItemType.Spell),
+        new("Earth I", "A basic earth spell.", ItemType.Spell),
     ];
 }
