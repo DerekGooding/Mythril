@@ -4,7 +4,7 @@
     <h4>@Character.Name</h4>
     @if (QuestProgress is not null)
     {
-        <QuestProgressCard QuestProgress="QuestProgress" />
+        <QuestProgressCard QuestProgress="QuestProgress" OnCompletionAnimationEnd="() => OnCompletionAnimationEnd.InvokeAsync(QuestProgress)" />
     }
     else
     {
@@ -24,6 +24,9 @@
 
     [Parameter]
     public Func<object, bool>? Accepts { get; set; }
+
+    [Parameter]
+    public EventCallback<QuestProgress> OnCompletionAnimationEnd { get; set; }
 
     private void HandleTaskDrop(object task)
     {

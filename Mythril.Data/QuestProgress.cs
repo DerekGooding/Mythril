@@ -14,5 +14,6 @@ public class QuestProgress(object item, string description, int durationSeconds,
     public Character Character { get; set; } = character;
     public DateTime StartTime { get; set; } = DateTime.Now;
 
-    public double Progress { get; set; } = 0;
+    public double Progress { get; set; }
+    public bool IsCompleted { get; set; }
 }

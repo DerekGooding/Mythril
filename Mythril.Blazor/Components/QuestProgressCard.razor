@@ -1,6 +1,8 @@
+@using Microsoft.JSInterop
 @using Mythril.Data
+@inject IJSRuntime JS
 
-<div class="task-progress-card">
+<div class="task-progress-card @(QuestProgress?.IsCompleted == true ? "completed" : "")" @ref="cardElement">
     <div class="task-header">@QuestProgress?.Name</div>
     <div class="task-body">
         <p>@QuestProgress?.Description</p>
@@ -21,4 +23,24 @@
 @code {
     [Parameter]
     public QuestProgress? QuestProgress { get; set; }
+
+    [Parameter]
+    public EventCallback OnCompletionAnimationEnd { get; set; }
+
+    private ElementReference cardElement;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (QuestProgress?.IsCompleted == true)
+        {
+            await TriggerConfetti();
+            await Task.Delay(1000); // Duration of the gold flash animation
+            await OnCompletionAnimationEnd.InvokeAsync();
+        }
+    }
+
+    private async Task TriggerConfetti()
+    {
+        await JS.InvokeVoidAsync("triggerConfettiAt", cardElement);
+    }
 }

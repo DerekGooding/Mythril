@@ -62,7 +62,8 @@
             {
                 <PartyPanel Party="resourceManager.Characters"
                             QuestProgresses="questProgresses"
-                            OnQuestDrop="EventCallback.Factory.Create<(object, Character)>(this, TaskDropped)" />
+                            OnQuestDrop="EventCallback.Factory.Create<(object, Character)>(this, TaskDropped)"
+                            OnCompletionAnimationEnd="EventCallback.Factory.Create<QuestProgress>(this, OnCompletionAnimationEnd)" />
             }
             else
             {
@@ -121,6 +122,7 @@
 
                 if (progress.Progress >= completdThreshold)
                 {
+                    progress.IsCompleted = true;
                     newlyCompletedQuests.Add(progress);
                 }
             }
@@ -135,7 +137,6 @@
                 await resourceManager.ReceiveRewards(progress.Item);
                 SnackbarService.Show($"Completed: {progress.Name}", "success");
             }
-            questProgresses.RemoveAll(p => p.Progress >= completdThreshold);
         }
     }
 
@@ -144,4 +145,11 @@
         timer?.Dispose();
         themeService.OnThemeChanged -= StateHasChanged;
     }
+
+    protected void OnCompletionAnimationEnd(QuestProgress completedProgress)
+    {
+        questProgresses.Remove(completedProgress);
+        StateHasChanged();
+    }
 }
+

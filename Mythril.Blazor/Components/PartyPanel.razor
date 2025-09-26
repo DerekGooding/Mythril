@@ -10,6 +10,7 @@
             <CharacterDisplay Character="character"
                                 QuestProgress="QuestProgresses.FirstOrDefault(p => p.Character == character)"
                                 OnQuestDrop="(task) => OnQuestDrop.InvokeAsync((task, character))"
+                                OnCompletionAnimationEnd="(progress) => OnCompletionAnimationEnd.InvokeAsync(progress)"
                                 Accepts="resourceManager.CanAfford" />
         }
     }
@@ -24,4 +25,7 @@
 
     [Parameter]
     public EventCallback<(object, Character)> OnQuestDrop { get; set; }
+
+    [Parameter]
+    public EventCallback<QuestProgress> OnCompletionAnimationEnd { get; set; }
 }
