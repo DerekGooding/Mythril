@@ -8,33 +8,14 @@ public class ResourceManagerTests
     private ResourceManager? _resourceManager;
 
     [TestInitialize]
-    public void Setup()
-    {
-        _resourceManager = new ResourceManager();
-        var locations = new List<Location>
-        {
-            new()
-            {
-                Name = "Test Location",
-                Quests =
-                [
-                    new("Forest Foraging", "", 60, [], [], QuestType.Recurring)
-                ]
-            }
-        };
-        _ = locations;
-        //var characters = new Character[]
-        //{
-        //    new("Hero")
-        //};
-    }
+    public void Setup() => _resourceManager = new ResourceManager();
 
     [TestMethod]
     public void ResourceManager_StoresAndRetrievesData_Correctly()
     {
         // Assert
         Assert.IsNotNull(_resourceManager!.UsableLocations);
-        Assert.AreEqual(1, _resourceManager.UsableLocations.Count());
+        Assert.HasCount(1, _resourceManager.UsableLocations);
         Assert.IsNotNull(_resourceManager.Characters);
         Assert.AreEqual(1, _resourceManager.Characters.Length);
     }
@@ -43,10 +24,9 @@ public class ResourceManagerTests
     public void ResourceManager_RetrievesTaskData_Correctly()
     {
         // Assert
-        var location = _resourceManager!.UsableLocations.First();
+        var location = _resourceManager!.UsableLocations[0];
         var task = location.Quests.FirstOrDefault(c => c.Name == "quest1");
         Assert.AreEqual("Forest Foraging", task.Name);
-        Assert.AreEqual(60, task.DurationSeconds);
     }
 
 }

@@ -5,6 +5,9 @@ public class ResourceManager
     private readonly Items _items = ContentHost.GetContent<Items>();
     private readonly QuestUnlocks _questUnlocks = ContentHost.GetContent<QuestUnlocks>();
     private readonly QuestToCadenceUnlocks _questToCadenceUnlocks = ContentHost.GetContent<QuestToCadenceUnlocks>();
+    private readonly QuestDetails _questDetails = ContentHost.GetContent<QuestDetails>();
+
+    public QuestDetail GetQuestDetails(Quest quest) => _questDetails[quest];
 
     private readonly Dictionary<Cadence, Character?> _assignedCadences;
     private readonly Dictionary<Cadence, bool> _lockedCadences;
@@ -34,7 +37,7 @@ public class ResourceManager
 
     public bool CanAfford(object item)
     {
-        if (item is Quest quest)
+        if (item is QuestData quest)
         {
             foreach (var requirement in quest.Requirements)
             {
@@ -83,7 +86,7 @@ public class ResourceManager
         {
             foreach(var data in location.LockedQuests)
             {
-                if (data.Type == QuestType.Single && _completedQuests.Contains(data))
+                if (_questDetails[quest].Type == QuestType.Single && _completedQuests.Contains(data))
                     continue;
                 if (IsComplete(_questUnlocks[data]))
                     location.Quests.Add(data);
@@ -95,11 +98,11 @@ public class ResourceManager
 
     public void PayCosts(object item)
     {
-        if (item is Quest quest)
+        if (item is QuestData quest)
         {
             if (quest.Type == QuestType.Single)
             {
-                LockQuest(quest);
+                LockQuest(quest.Quest);
             }
 
             foreach (var requirement in quest.Requirements)
@@ -114,14 +117,14 @@ public class ResourceManager
 
     public Task ReceiveRewards(object item)
     {
-        if (item is Quest quest)
+        if (item is QuestData quest)
         {
             foreach (var reward in quest.Rewards)
                 Inventory.Add(reward.Item, reward.Quantity);
 
-            UnlockQuest(quest);
+            UnlockQuest(quest.Quest);
 
-            foreach (var cadence in _questToCadenceUnlocks[quest])
+            foreach (var cadence in _questToCadenceUnlocks[quest.Quest])
                 UnlockCadence(cadence);
 
 

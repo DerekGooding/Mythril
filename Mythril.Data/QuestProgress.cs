@@ -5,7 +5,7 @@ public class QuestProgress(object item, string description, int durationSeconds,
     public object Item { get; set; } = item;
 
     public string Name { get; set; } =
-        item is Quest quest ? quest.Name :
+        item is QuestData quest ? quest.Name :
         item is CadenceUnlock unlock ? unlock.Ability.Name :
         string.Empty;
 

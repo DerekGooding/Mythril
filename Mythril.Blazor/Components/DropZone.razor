@@ -24,7 +24,7 @@
 
     private async Task HandleDragEnter(DragEventArgs args)
     {
-        if (DragDropService.Data is Quest || DragDropService.Data is CadenceUnlock)
+        if (DragDropService.Data is QuestData || DragDropService.Data is CadenceUnlock)
         {
             args.DataTransfer.DropEffect = "move";
             await JS.InvokeVoidAsync("eval", "event.preventDefault()");
@@ -33,7 +33,7 @@
 
     private async Task HandleDragOver(DragEventArgs args)
     {
-        if (DragDropService.Data is Quest || DragDropService.Data is CadenceUnlock)
+        if (DragDropService.Data is QuestData || DragDropService.Data is CadenceUnlock)
         {
             args.DataTransfer.DropEffect = "move";
             await JS.InvokeVoidAsync("eval", "event.preventDefault()");
@@ -42,7 +42,7 @@
 
     private async Task HandleDrop()
     {
-        if (DragDropService.Data is Quest quest || DragDropService.Data is CadenceUnlock)
+        if (DragDropService.Data is QuestData quest || DragDropService.Data is CadenceUnlock)
         {
 
             if (Accepts is null || Accepts(DragDropService.Data))

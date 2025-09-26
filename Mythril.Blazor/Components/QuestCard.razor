@@ -7,22 +7,22 @@
 <div class="card" draggable="true" @ondragstart="HandleDragStart">
     <div class="card-header">
         <span class="material-icons" style="color: green;">
-            @(Quest.Type == QuestType.Single ? "flag" : "repeat")
+            @(QuestData!.Type == QuestType.Single ? "flag" : "repeat")
         </span>
-        @Quest.Name
+        @QuestData.Name
     </div>
 
     <div class="card-content">
         <div class="card-main">
-            <p>@Quest.Description</p>
-            <p>@Quest.DurationSeconds seconds</p>
+            <p>@QuestData.Description</p>
+            <p>@QuestData.DurationSeconds seconds</p>
         </div>
         <div class="card-side">
-            @if (Quest.Requirements.Length > 0)
+            @if (QuestData.Requirements.Length > 0)
             {
                 <h6>Requirements:</h6>
                 <ul>
-                    @foreach (var requirement in Quest.Requirements)
+                    @foreach (var requirement in QuestData.Requirements)
                     {
                         <li>@requirement.Item.Name @requirement.Quantity</li>
                     }
@@ -30,11 +30,11 @@
             }
         </div>
         <div class="card-side">
-            @if (Quest.Rewards.Length > 0)
+            @if (QuestData.Rewards.Length > 0)
             {
                 <h6>Rewards:</h6>
                 <ul>
-                    @foreach (var reward in Quest.Rewards)
+                    @foreach (var reward in QuestData.Rewards)
                     {
                         <li>@reward.Item.Name @reward.Quantity</li>
                     }
@@ -46,14 +46,14 @@
 
 @code {
     [Parameter]
-    public Quest Quest { get; set; }
+    public QuestData? QuestData { get; set; }
 
     private void HandleDragStart(DragEventArgs args)
     {
-        if (!string.IsNullOrWhiteSpace(Quest.Name))
+        if (!string.IsNullOrWhiteSpace(QuestData!.Name))
         {
             args.DataTransfer.EffectAllowed = "move";
-            DragDropService.Data = Quest;
+            DragDropService.Data = QuestData;
         }
     }
 }

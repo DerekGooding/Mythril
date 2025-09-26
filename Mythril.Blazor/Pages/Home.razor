@@ -98,7 +98,7 @@
         if (resourceManager.CanAfford(args.item))
         {
             resourceManager.PayCosts(args.item);
-            if(args.item is Quest quest)
+            if(args.item is QuestData quest)
                 questProgresses.Add(new QuestProgress(quest, quest.Description, quest.DurationSeconds, args.character));
             if(args.item is CadenceUnlock unlock)
                 questProgresses.Add(new QuestProgress(unlock, unlock.Ability.Description, 3, args.character));

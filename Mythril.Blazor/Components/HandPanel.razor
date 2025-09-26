@@ -1,5 +1,7 @@
 @using Mythril.Data
 
+@inject ResourceManager ResourceManager
+
 <div class="hand-panel">
     @if (Locations is not null)
     {
@@ -9,7 +11,7 @@
                 @foreach (var quest in location.Quests)
                 {
                     <div class="task-container">
-                        <QuestCard Quest="quest" />
+                        <QuestCard QuestData="@QuestToData(quest)" />
                     </div>
                 }
             </Expander>
@@ -20,4 +22,6 @@
 @code {
     [Parameter]
     public List<LocationData>? Locations { get; set; }
+
+    public QuestData QuestToData(Quest quest) => new QuestData(quest, ResourceManager.GetQuestDetails(quest));
 }
