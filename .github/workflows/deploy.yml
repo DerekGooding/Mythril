@@ -1,0 +1,31 @@
+name: Deploy Blazor to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore Mythril.Blazor/Mythril.Blazor.csproj
+
+      - name: Build Blazor App
+        run: dotnet publish Mythril.Blazor/Mythril.Blazor.csproj -c Release -o output
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v6
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./output/wwwroot
