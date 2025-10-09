@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "Mythril.Blazor",
   "resources": {
-    "hash": "sha256-GgINLRIDK0zgcWc3DCO5X3GRunsSG3ElWzn5gSlGReU=",
+    "hash": "sha256-9+xpP4xxQ6pkfMVTozFB/Cmv+/tCe/E58cMgDshjL9s=",
     "fingerprinting": {
       "Microsoft.AspNetCore.Components.spsws68luv.wasm": "Microsoft.AspNetCore.Components.wasm",
       "Microsoft.AspNetCore.Components.Web.5ilw7d57jz.wasm": "Microsoft.AspNetCore.Components.Web.wasm",
@@ -18,8 +18,8 @@
       "Microsoft.Extensions.Primitives.5pxr7nzxwe.wasm": "Microsoft.Extensions.Primitives.wasm",
       "Microsoft.JSInterop.7kva84rxiz.wasm": "Microsoft.JSInterop.wasm",
       "Microsoft.JSInterop.WebAssembly.imfqvv3x5h.wasm": "Microsoft.JSInterop.WebAssembly.wasm",
-      "Mythril.Blazor.8i0w6ogh0i.wasm": "Mythril.Blazor.wasm",
-      "Mythril.Data.h4ll7ofee0.wasm": "Mythril.Data.wasm",
+      "Mythril.Blazor.0rhbxy6rhe.wasm": "Mythril.Blazor.wasm",
+      "Mythril.Data.h5debzfwtw.wasm": "Mythril.Data.wasm",
       "Newtonsoft.Json.qkbufwhni2.wasm": "Newtonsoft.Json.wasm",
       "SimpleInjection.ig0jr9zxu6.wasm": "SimpleInjection.wasm",
       "System.Collections.Concurrent.hw0xfahs75.wasm": "System.Collections.Concurrent.wasm",
@@ -108,8 +108,8 @@
       "Microsoft.Extensions.Primitives.5pxr7nzxwe.wasm": "sha256-WXYpl64HUqc9+prJOz6dOEVvB8PFJhTdfqUMB3ZGRGA=",
       "Microsoft.JSInterop.7kva84rxiz.wasm": "sha256-ubnFa4Rtxgu4gPe/SRKYk17LxS0CtEOnEoPvT6ITOTo=",
       "Microsoft.JSInterop.WebAssembly.imfqvv3x5h.wasm": "sha256-mpyjzA6YBuV9Qx5BUC8YbXP9YjZlM+k7YTVawzXJFgk=",
-      "Mythril.Blazor.8i0w6ogh0i.wasm": "sha256-kDAb3hF3CHg4cWCs7/+6joZwIXjtudGI9mMSCr6LfRA=",
-      "Mythril.Data.h4ll7ofee0.wasm": "sha256-MZWZsQQmKNoO4Tn1ggF6vzpSk2ORg+g+JhM1iRGmxJE=",
+      "Mythril.Blazor.0rhbxy6rhe.wasm": "sha256-ZCi8phMJmZmL/3vS7hwz51cRPs3DpMi4lDJLWNCSUZY=",
+      "Mythril.Data.h5debzfwtw.wasm": "sha256-FYEP71CzujghlpPC48j1M6bJGB5npFQPbkqWiar8MUs=",
       "Newtonsoft.Json.qkbufwhni2.wasm": "sha256-GlXMWKvDs45M2pACoR3Y4Qh8mcrOZGljqmvJY+6JZ5s=",
       "SimpleInjection.ig0jr9zxu6.wasm": "sha256-7keDlcKbrYXsdVDSMO1S0HVnRsZcARma4U0frrqWY7o=",
       "System.Collections.Concurrent.hw0xfahs75.wasm": "sha256-L5ZzdkWoDeK/BGI5ohK5VavIcJI5kMxvRwMXimwOXts=",
