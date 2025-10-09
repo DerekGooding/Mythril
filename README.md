@@ -1,3 +1,3 @@
 # Mythril
 
-[Website](DerekGooding.Github.io/Mythril)
+[Website](https://DerekGooding.Github.io/Mythril)
