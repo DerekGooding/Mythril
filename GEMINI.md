@@ -4,7 +4,7 @@ This document contains foundational mandates for the AI assistant (Gemini) durin
 
 ## 1. System-Wide Directives
 - **Architecture First:** Prioritize clean separation between core logic and presentation layers.
-- **Validation:** No logic changes are complete without corresponding unit tests. For complex system interactions, utilize the `Mythril.Headless` project to run scenario-based tests via `test_scenario.json` and verify the output `state.json`.
+- **Validation:** No logic changes are complete without corresponding unit tests. For complex system interactions (e.g. quests, cadence, persistence), utilize the `Mythril.Headless` project to run scenario-based tests via `test_scenario.json` and verify the output `state.json`.
 - **Documentation:** Keep documentation synchronized with code changes.
 - **Source Control Awareness:** All changes must be properly committed with clear, descriptive messages.
 - **Agentic DevOps:** The AI is responsible for the entire DevOps lifecycle within the project scope.
