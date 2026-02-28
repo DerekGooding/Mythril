@@ -5,8 +5,12 @@
 - [x] Headless AI Testing Framework
 - [x] Core Logic Consolidation
 
-## Upcoming Goals
-*(Awaiting user greenlight from suggestions.md)*
-- [ ] Implement Assertion Engine for AI Tests
-- [ ] Add Persistence (LocalStorage)
-- [ ] Integrate CI Health Checks
+## Active Goals (Greenlighted)
+- [ ] **Headless Testing Assertion Engine**: Automate state verification in AI tests.
+- [ ] **Blazor State Persistence**: Implement `LocalStorage` save/load for game sessions.
+- [ ] **Continuous Health Monitoring (CI/CD)**: Integrate `check_health.py` into GitHub Actions.
+- [ ] **Asynchronous Quest Tick System**: Real-time progression and reward management.
+- [ ] **Cadence Visualizer Component**: Interactive UI for the Cadence progression tree.
+
+## Future Exploration
+*(Awaiting new suggestions)*
