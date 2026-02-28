@@ -2,9 +2,7 @@ using static Mythril.Data.CadenceBuilder;
 
 namespace Mythril.Data;
 
-public readonly record struct CadenceUnlock(CadenceAbility Ability, ItemQuantity[] Requirements);
-
-[Unique] public readonly partial record struct Cadence(string Name, string Description, CadenceUnlock[] Abilities) : INamed;
+[Unique] public readonly partial record struct Cadence;
 
 [Singleton]
 public partial class Cadences(CadenceAbilities abilities, Items items) : IContent<Cadence>

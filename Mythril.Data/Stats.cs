@@ -1,7 +1,6 @@
 namespace Mythril.Data;
 
-[Unique] public readonly partial record struct Stat(string Name, string Description) : INamed;
-
+[Unique] public readonly partial record struct Stat;
 
 [Singleton]
 public partial class Stats : IContent<Stat>

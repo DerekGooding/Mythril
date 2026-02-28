@@ -1,4 +1,4 @@
-﻿namespace Mythril.Data;
+namespace Mythril.Data;
 
 public class QuestData(Quest quest, QuestDetail detail)
 {

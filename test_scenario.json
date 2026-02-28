@@ -1,0 +1,8 @@
+{
+    "Commands": [
+        { "Action": "add_item", "Target": "Gold", "Quantity": 500 },
+        { "Action": "add_item", "Target": "Potion", "Quantity": 2 },
+        { "Action": "complete_quest", "Target": "Prologue" },
+        { "Action": "unlock_cadence", "Target": "Recruit" }
+    ]
+}

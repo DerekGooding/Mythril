@@ -1,6 +1,6 @@
 namespace Mythril.Data;
 
-[Unique] public readonly partial record struct Location(string Name, IEnumerable<Quest> Quests) : INamed;
+[Unique] public readonly partial record struct Location;
 
 [Singleton]
 public partial class Locations(Quests quests) : IContent<Location>
@@ -46,4 +46,3 @@ public partial class Locations(Quests quests) : IContent<Location>
 
     ];
 }
-

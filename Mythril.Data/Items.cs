@@ -1,16 +1,6 @@
 namespace Mythril.Data;
 
-public enum ItemType
-{
-    Currency,
-    Consumable,
-    Material,
-    Spell,
-}
-
-public readonly record struct ItemQuantity(Item Item, int Quantity = 1);
-
-[Unique] public readonly partial record struct Item(string Name, string Description, ItemType ItemType) : INamed;
+[Unique] public readonly partial record struct Item;
 
 [Singleton]
 public partial class Items : IContent<Item>

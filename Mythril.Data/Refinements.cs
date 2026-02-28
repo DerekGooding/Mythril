@@ -2,9 +2,6 @@ using static Mythril.Data.RefinementBuilder;
 
 namespace Mythril.Data;
 
-
-public readonly record struct Recipe(int InputQuantity, Item OutputItem, int OutputQuantity);
-
 [Singleton]
 public class ItemRefinements(CadenceAbilities abilities, Items items) : ISubContent<CadenceAbility, Dictionary<Item, Recipe>>
 {

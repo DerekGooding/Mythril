@@ -2,8 +2,6 @@ using static Mythril.Data.QuestDetailsBuilder;
 
 namespace Mythril.Data;
 
-public readonly record struct QuestDetail(int DurationSeconds, ItemQuantity[] Requirements, ItemQuantity[] Rewards, QuestType Type);
-
 [Singleton]
 public class QuestDetails(Quests quests, Items items) : ISubContent<Quest, QuestDetail>
 {
@@ -25,6 +23,6 @@ public class QuestDetails(Quests quests, Items items) : ISubContent<Quest, Quest
 
 public static class QuestDetailsBuilder
 {
-    
+
 
 }

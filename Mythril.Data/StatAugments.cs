@@ -1,9 +1,5 @@
 namespace Mythril.Data;
 
-
-public readonly record struct StatAugment(Stat Stat, int ModifierAtFull);
-
-
 [Singleton]
 public class StatAugments(Stats stats, Items items) : ISubContent<Item, StatAugment[]>
 {

@@ -1,3 +1,3 @@
-﻿global using SimpleInjection.Generator;
+global using SimpleInjection.Generator;
 global using SimpleInjection.Injection;
-global using Mythril.Data.Genenerated;
+global using Mythril.Data.Generated;

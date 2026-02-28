@@ -65,12 +65,6 @@ public class ResourceManager
     public void UpdateAvaiableCadences()
         => UnlockedCadences = [.. _lockedCadences.Where(x => !x.Value).Select(x => x.Key)];
 
-    //private bool Include(Quest quest)
-    //    => (!CompletedTasks.Contains(quest.Name) || quest.Type != QuestType.Single)
-    //        && !LockedTasks.Contains(quest.Name)
-    //        && (_questUnlocks == null || _questUnlocks[quest].Length == 0
-    //        || _questUnlocks[quest].All(r => CompletedTasks.Contains(r.Name)));
-
     private void LockQuest(Quest quest)
     {
         foreach(var location in UsableLocations)

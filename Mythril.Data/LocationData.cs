@@ -1,4 +1,4 @@
-﻿namespace Mythril.Data;
+namespace Mythril.Data;
 
 public class LocationData(Location location, IEnumerable<Quest> startingUnlockedQuests)
 {
