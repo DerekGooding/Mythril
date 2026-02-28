@@ -21,7 +21,7 @@ This document contains foundational mandates for the AI assistant (Gemini) durin
 - **Test Coverage:** Maintain overall coverage above **70%**.
 - **Monolith Prevention:** No single source file should exceed **250** lines.
 - **Documentation Staleness:** Documentation is considered "stale" if more than **8** source files have changed since its last update.
-- **Health Integrity:** Resolve staleness by providing actual content improvements.
+- **Health Integrity:** Resolve staleness by providing actual content improvements. Documentation must be fully reviewed and updated to reflect the current state of the project; simple line edits or "touching" files to reset staleness counters is strictly prohibited.
 - **Automated Checks:** Run `python scripts/check_health.py` before completing any significant feature.
 
 ### Resolving Health Failures

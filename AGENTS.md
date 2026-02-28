@@ -1,26 +1,33 @@
 # Mythril Agent Configuration
 
-## Project Overview
-This project is built with **.NET 9 (Blazor)** and is primarily developed by **AI agents**.  
-All code is written in C# and unit tests use **MSTest** with **Moq** and **Coverlet**.
+## 🧭 Project Ethos
+Mythril is an **agentically developed** project. Agents are not just contributors but primary architects. This document provides the necessary context for AI agents (Gemini CLI) to operate effectively within this workspace.
 
-## Agentic Mandates
-Agents must adhere to the [GEMINI.md](GEMINI.md) mandates, which include:
-- **Architecture First**: Clean separation of logic and presentation.
-- **Validation**: All logic changes must have corresponding unit tests.
-- **Health Checks**: Run `python scripts/check_health.py` before completing any significant feature.
+## 📜 Agentic Mandates
+All development must strictly adhere to [GEMINI.md](GEMINI.md). Key mandates include:
+- **Architecture First**: Prioritize clean separation of concerns.
+- **Validation**: No change is complete without passing unit tests and maintaining >70% coverage.
+- **Source Control**: Use descriptive commit messages and follow git best practices.
+- **Health Checks**: Always run `python scripts/check_health.py` before finalizing any significant task.
+- **PowerShell Mastery**: Use PowerShell syntax (e.g., `;` for command chaining) for all CLI operations on this Windows environment.
 
-## Technical Standards
-- **Framework**: .NET 9 (Blazor WebAssembly)
-- **OS**: Windows
-- **Shell**: PowerShell (use `;` for command chaining)
-- **Coverage**: Maintain overall coverage above 70%.
+## 🛠️ Technical Context
+- **Framework**: .NET 9 (Blazor WebAssembly frontend, C# 13 backend).
+- **Core Design**: Partial record structs and source-generated dependency injection (`SimpleInjection`).
+- **Data Management**: Centralized via `ContentHost` and various `IContent<T>`/`ISubContent<K, V>` implementations.
+- **Testing**: MSTest with `Parallelize` disabled (or set to `Workers = 1`) to avoid race conditions in source-generated host initialization.
 
-## Environment Setup
-Ensure you have the .NET 9 SDK and Python 3.x installed.
+## ⚙️ Operational Workflow
+1. **Research**: Map the codebase using `grep_search` and `glob`.
+2. **Strategy**: Formulate a plan and share it concisely.
+3. **Execution**: Implement changes surgicaly, avoiding unrelated refactoring.
+4. **Validation**: Run the health check script to ensure zero monoliths, >70% coverage, and fresh documentation.
 
-```powershell
-dotnet build
-dotnet test
-python scripts/check_health.py
-```
+## 🧬 Project Health Metrics
+- **Max Lines**: 250 per file (excluding `wwwroot/lib`).
+- **Min Coverage**: 70% overall.
+- **Docs Staleness**: 8 source file changes threshold.
+- **Health Resolution**: Fix root causes (refactor monoliths, add tests, or fully update stale docs). Do not perform trivial edits just to reset counters.
+
+---
+*Operationalize the above for maximum technical integrity.*

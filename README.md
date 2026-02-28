@@ -12,26 +12,36 @@
 **This project is heavily and primarily developed by AI agents.**  
 From architecture and core logic to the Blazor frontend and DevOps pipelines, Mythril is a testament to agentic software engineering. All changes, including this documentation, are managed and validated by agents to ensure technical integrity and adherence to the project's [AI Mandates](GEMINI.md).
 
-## ⚔️ About Mythril
-Mythril is an RPG-inspired web application built with **.NET 9** and **Blazor**. It features:
-- **Character Management**: Track stats, abilities, and progression.
-- **Quest System**: Explore locations and complete objectives.
-- **Inventory & Items**: Manage equipment and resources.
-- **Cadence System**: Unique gameplay mechanics for ability unlocking and progression.
+## ⚔️ Project Overview
+Mythril is an RPG-inspired web application built with **.NET 9** and **Blazor WebAssembly**. It serves as a sandbox for exploring agentic development patterns and modern C# architectures.
 
-## 🛠️ Tech Stack
+### Key Systems
+- **Character Core**: Implements a `partial record struct` for characters, allowing for distributed definition of properties and behaviors.
+- **Quest & Progression**: A multi-layered system including `Quests`, `QuestDetails`, and `QuestUnlocks` to manage complex progression trees.
+- **Inventory & Items**: A robust `InventoryManager` supporting various item types (Currency, Consumable, Material, Spell) and quantity tracking.
+- **Cadence System**: A unique progression mechanic where `Cadences` provide `CadenceAbilities` and `AbilityAugments`.
+- **Content Host**: A centralized `ContentHost` utilizing `SimpleInjection` for dependency-driven content management.
+
+## 🛠️ Technical Stack
 - **Frontend**: Blazor WebAssembly (.NET 9)
-- **Core Logic**: C# Class Libraries
-- **Styling**: Vanilla CSS (Custom Themes)
-- **Testing**: MSTest with Moq and Coverlet
-- **Automation**: Python-based health checks and GitHub Actions
+- **Core Logic**: C# 13 / .NET 9 Class Libraries
+- **Dependency Injection**: `SimpleInjection` (Source-generated)
+- **Testing**: MSTest, Moq, and Coverlet for coverage reporting
+- **Automation**: Python 3.x for custom health checks and CI integration
+- **CI/CD**: GitHub Actions for automated deployment to GitHub Pages
 
-## ⚖️ Project Health & Quality
-We maintain high standards through automated health checks (`scripts/check_health.py`) which monitor:
-- **Monolith Prevention**: Ensures files remain modular and maintainable.
-- **Test Coverage**: Targeting >70% overall coverage.
-- **Documentation Sync**: Tracks staleness of critical documents like `README.md` and `GEMINI.md`.
-- **System Integrity**: Validates the overall health of the codebase before every major update.
+## ⚖️ Quality Assurance & Health
+We maintain project health through a custom automated suite (`scripts/check_health.py`):
+- **Monolith Prevention**: Strict 250-line limit for source files to ensure modularity.
+- **Coverage**: Mandatory 70% unit test coverage for all core logic.
+- **Documentation Integrity**: Automated staleness tracking. Documentation is considered stale if it lags behind source changes by more than 8 files.
+- **Mandate Adherence**: All development must comply with the foundational directives in [GEMINI.md](GEMINI.md).
+
+## 🚀 Getting Started
+1. **Prerequisites**: .NET 9 SDK, Python 3.x, and a git-compatible shell (PowerShell recommended on Windows).
+2. **Build**: `dotnet build`
+3. **Test**: `dotnet test`
+4. **Health Check**: `python scripts/check_health.py`
 
 ---
 *Developed with 💖 by Gemini CLI.*
