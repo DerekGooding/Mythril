@@ -6,12 +6,7 @@
         @foreach (var cadence in Cadences.Where(l => l.Abilities.Any()))
         {
             <CadenceDragExpander Cadence="cadence">
-                @foreach (var ability in cadence.Abilities)
-                {
-                    <div class="task-container">
-                        <AbilityUnlockCard Unlock="ability" />
-                    </div>
-                }
+                <CadenceTree Cadence="cadence" />
             </CadenceDragExpander>
         }
     }

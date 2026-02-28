@@ -1,0 +1,101 @@
+@using Mythril.Data
+@inject ResourceManager resourceManager
+
+<div class="cadence-tree">
+    @foreach (var abilityUnlock in Cadence.Abilities)
+    {
+        var isUnlocked = resourceManager.UnlockedAbilities.Contains(abilityUnlock.Ability);
+        var canAfford = resourceManager.CanAfford(abilityUnlock);
+        var cardClass = isUnlocked ? "ability-card unlocked" : canAfford ? "ability-card affordable" : "ability-card locked";
+
+        <div class="@cardClass" title="@GetTooltip(abilityUnlock)">
+            <div class="card-header">@abilityUnlock.Ability.Name</div>
+            <div class="card-body">
+                @abilityUnlock.Ability.Description
+                @if (!isUnlocked)
+                {
+                    <div class="requirements">
+                        <small>Req: @string.Join(", ", abilityUnlock.Requirements.Select(r => $"{r.Quantity} {r.Item.Name}"))</small>
+                    </div>
+                }
+            </div>
+            @if (!isUnlocked)
+            {
+                 <DropZone_cadence Item="abilityUnlock">
+                    <div class="drop-target">
+                        <span>Drag Character Here to Unlock</span>
+                    </div>
+                </DropZone_cadence>
+            }
+        </div>
+    }
+</div>
+
+<style>
+    .cadence-tree {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+    }
+
+    .ability-card {
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        padding: 0.5rem;
+        background-color: #f9f9f9;
+        transition: all 0.3s ease;
+    }
+
+    .ability-card.unlocked {
+        border-color: #28a745;
+        background-color: #d4edda;
+        box-shadow: 0 0 10px rgba(40, 167, 69, 0.2);
+    }
+
+    .ability-card.affordable {
+        border-color: #ffc107;
+        background-color: #fff3cd;
+    }
+
+    .ability-card.locked {
+        opacity: 0.7;
+        background-color: #e9ecef;
+    }
+
+    .card-header {
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+    }
+
+    .requirements {
+        margin-top: 0.5rem;
+        color: #666;
+    }
+    
+    .drop-target {
+        border: 2px dashed #ccc;
+        padding: 10px;
+        text-align: center;
+        margin-top: 5px;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    
+    .drop-target:hover {
+        background-color: #eee;
+    }
+</style>
+
+@code {
+    [Parameter]
+    public Cadence Cadence { get; set; }
+
+    private string GetTooltip(CadenceUnlock unlock)
+    {
+        var reqs = string.Join("
+", unlock.Requirements.Select(r => $"- {r.Quantity} {r.Item.Name}"));
+        return $"Requirements:
+{reqs}";
+    }
+}

@@ -6,7 +6,7 @@ Mythril is an **agentically developed** project. Agents are not just contributor
 ## 📜 Agentic Mandates
 All development must strictly adhere to [GEMINI.md](GEMINI.md). Key mandates include:
 - **Architecture First**: Prioritize clean separation of concerns.
-- **Validation**: No change is complete without passing unit tests and maintaining >70% coverage.
+- **Validation**: No change is complete without passing unit tests and maintaining >70% coverage. Use `Mythril.Headless` for complex logic verification.
 - **Source Control**: Use descriptive commit messages and follow git best practices.
 - **Health Checks**: Always run `python scripts/check_health.py` before finalizing any significant task.
 - **PowerShell Mastery**: Use PowerShell syntax (e.g., `;` for command chaining) for all CLI operations on this Windows environment.
@@ -14,14 +14,15 @@ All development must strictly adhere to [GEMINI.md](GEMINI.md). Key mandates inc
 ## 🛠️ Technical Context
 - **Framework**: .NET 9 (Blazor WebAssembly frontend, C# 13 backend).
 - **Core Design**: Partial record structs and source-generated dependency injection (`SimpleInjection`).
-- **Data Management**: Centralized via `ContentHost` and various `IContent<T>`/`ISubContent<K, V>` implementations.
-- **Testing**: MSTest with `Parallelize` disabled (or set to `Workers = 1`) to avoid race conditions in source-generated host initialization.
+- **Data Management**: Centralized via `ContentHost` and various `IContent<T>`/`ISubContent<K, V>` implementations. Logic resides in `Mythril.Data` (merged Core).
+- **Testing**: MSTest with `Parallelize` disabled. `Mythril.Headless` for integration scenarios.
+- **Persistence**: `PersistenceService` manages `LocalStorage` saves.
 
 ## ⚙️ Operational Workflow
 1. **Research**: Map the codebase using `grep_search` and `glob`.
 2. **Strategy**: Formulate a plan and share it concisely.
 3. **Execution**: Implement changes surgicaly, avoiding unrelated refactoring.
-4. **Validation**: Run the health check script to ensure zero monoliths, >70% coverage, and fresh documentation.
+4. **Validation**: Run the health check script to ensure zero monoliths, >70% coverage, and fresh documentation. Run `.\run_ai_test.ps1` for logic changes.
 
 ## 🧬 Project Health Metrics
 - **Max Lines**: 250 per file (excluding `wwwroot/lib`).

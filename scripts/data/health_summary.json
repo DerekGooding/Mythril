@@ -1,7 +1,7 @@
 {
-    "is_healthy": true,
+    "is_healthy": false,
     "monoliths": 0,
-    "coverage": 79.89,
-    "docs_up_to_date": true,
+    "coverage": 77.41,
+    "docs_up_to_date": false,
     "tests_passing": true
 }

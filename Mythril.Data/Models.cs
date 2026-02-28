@@ -46,3 +46,12 @@ public readonly record struct QuestDetail(int DurationSeconds, ItemQuantity[] Re
 
 // Refinements
 public readonly record struct Recipe(int InputQuantity, Item OutputItem, int OutputQuantity);
+
+// Persistence
+public class SaveData
+{
+    public List<KeyValuePair<string, int>> Inventory { get; set; } = [];
+    public List<string> UnlockedCadences { get; set; } = [];
+    public List<string> UnlockedAbilities { get; set; } = [];
+    public List<string> CompletedQuests { get; set; } = [];
+}

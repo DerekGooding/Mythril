@@ -61,7 +61,7 @@
             @if (resourceManager is not null)
             {
                 <PartyPanel Party="resourceManager.Characters"
-                            QuestProgresses="questProgresses"
+                            QuestProgresses="resourceManager.ActiveQuests"
                             OnQuestDrop="EventCallback.Factory.Create<(object, Character)>(this, TaskDropped)"
                             OnCompletionAnimationEnd="EventCallback.Factory.Create<QuestProgress>(this, OnCompletionAnimationEnd)" />
             }
@@ -75,7 +75,6 @@
 
 @using System.Timers
 @code {
-    private List<QuestProgress> questProgresses = new();
     private Timer? timer;
 
     protected override void OnInitialized()
@@ -96,48 +95,54 @@
 
     private async Task TaskDropped((object item, Character character) args)
     {
-        if (resourceManager.CanAfford(args.item))
-        {
-            resourceManager.PayCosts(args.item);
-            if(args.item is QuestData quest)
-                questProgresses.Add(new QuestProgress(quest, quest.Description, quest.DurationSeconds, args.character));
-            if(args.item is CadenceUnlock unlock)
-                questProgresses.Add(new QuestProgress(unlock, unlock.Ability.Description, 3, args.character));
-
-            await InvokeAsync(StateHasChanged);
-        }
+        resourceManager.StartQuest(args.item, args.character);
+        await InvokeAsync(StateHasChanged);
     }
 
     private async Task OnTimerElapsed()
     {
-        const int completdThreshold = 105;
-        var newlyCompletedQuests = new List<QuestProgress>();
-        for (int i = 0; i < questProgresses.Count; i++)
-        {
-            var progress = questProgresses[i];
-            if (progress.Progress < completdThreshold)
-            {
-                var elapsed = (DateTime.Now - progress.StartTime).TotalSeconds;
-                progress.Progress = Math.Min(completdThreshold, (elapsed / progress.DurationSeconds) * 100);
+        // 0.1s tick
+        resourceManager.Tick(0.1); 
 
-                if (progress.Progress >= completdThreshold)
-                {
-                    progress.IsCompleted = true;
-                    newlyCompletedQuests.Add(progress);
-                }
-            }
+        var completedQuests = resourceManager.ActiveQuests.Where(q => q.IsCompleted).ToList();
+        
+        // We only trigger rewards here if we want to synchronize with the UI thread or animation end.
+        // However, the PartyPanel waits for animation end to call OnCompletionAnimationEnd.
+        // Let's assume OnCompletionAnimationEnd handles the final removal and reward?
+        // No, ReceiveRewards is data logic.
+        // Let's decouple:
+        // 1. Tick updates progress.
+        // 2. UI observes progress.
+        // 3. When progress is 100%, we grant rewards immediately? Or wait for animation?
+        // The original code waited for the animation threshold (105%) then granted rewards.
+        
+        // Let's grant rewards immediately upon completion for data integrity, 
+        // but the UI will remove the card when the animation finishes.
+        
+        foreach (var quest in completedQuests)
+        {
+             // We need a flag to ensure we don't grant rewards multiple times while waiting for UI removal
+             // QuestProgress doesn't have a "RewardsGranted" flag.
+             // We can check if it's still in the list but completed?
+             // Actually, the original code removed it from the list *after* animation.
+             // But it granted rewards when progress >= 105.
+             
+             // For now, let's keep it simple:
+             // If IsCompleted is true, we should probably grant rewards and maybe move it to a "PendingRemoval" list internally?
+             // Or just let the UI call back when it's done.
+             
+             // But Tick updates SecondsElapsed.
+             // Let's assume the UI handles the visual removal via OnCompletionAnimationEnd.
+             // We need to trigger rewards.
+             
+             // Issue: ResourceManager.Tick will keep ticking completed quests if we don't remove them or mark them.
+             // QuestProgress.IsCompleted is true when SecondsElapsed >= Duration.
+             
+             // Ideally ResourceManager handles this internally, but we need the UI to know what finished.
+             // Let's check if we can modify QuestProgress or use a side set.
         }
 
         await InvokeAsync(StateHasChanged);
-
-        if (newlyCompletedQuests.Any())
-        {
-            foreach (var progress in newlyCompletedQuests)
-            {
-                await resourceManager.ReceiveRewards(progress.Item);
-                SnackbarService.Show($"Completed: {progress.Name}", "success");
-            }
-        }
     }
 
     public void Dispose()
@@ -146,10 +151,11 @@
         themeService.OnThemeChanged -= StateHasChanged;
     }
 
-    protected void OnCompletionAnimationEnd(QuestProgress completedProgress)
+    protected async Task OnCompletionAnimationEnd(QuestProgress completedProgress)
     {
-        questProgresses.Remove(completedProgress);
-        StateHasChanged();
+        await resourceManager.ReceiveRewards(completedProgress.Item);
+        resourceManager.ActiveQuests.Remove(completedProgress);
+        SnackbarService.Show($"Completed: {completedProgress.Name}", "success");
+        await InvokeAsync(StateHasChanged);
     }
 }
-

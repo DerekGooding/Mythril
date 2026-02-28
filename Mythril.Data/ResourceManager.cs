@@ -22,7 +22,9 @@ public class ResourceManager
     public List<LocationData> UsableLocations;
 
     public List<Cadence> UnlockedCadences = [];
+    public List<CadenceAbility> UnlockedAbilities = [];
 
+    public List<QuestProgress> ActiveQuests { get; } = [];
 
     public ResourceManager()
     {
@@ -109,7 +111,30 @@ public class ResourceManager
         }
     }
 
-    public Task ReceiveRewards(object item)
+    public void StartQuest(object item, Character character)
+    {
+        if (CanAfford(item))
+        {
+            PayCosts(item);
+            if(item is QuestData quest)
+                ActiveQuests.Add(new QuestProgress(quest, quest.Description, quest.DurationSeconds, character));
+            if(item is CadenceUnlock unlock)
+                ActiveQuests.Add(new QuestProgress(unlock, unlock.Ability.Description, 3, character));
+        }
+    }
+
+    public void Tick(double deltaSeconds)
+    {
+        foreach (var progress in ActiveQuests)
+        {
+            if (!progress.IsCompleted)
+            {
+                progress.SecondsElapsed += (int)deltaSeconds; // Casting to int for simplicity based on QuestProgress definition
+            }
+        }
+    }
+
+    public async Task ReceiveRewards(object item)
     {
         if (item is QuestData quest)
         {
@@ -120,15 +145,12 @@ public class ResourceManager
 
             foreach (var cadence in _questToCadenceUnlocks[quest.Quest])
                 UnlockCadence(cadence);
-
-
         }
         if(item is CadenceUnlock unlock)
         {
-            //TODO : Handle CadenceUnlock
-            _ = unlock;
+            UnlockedAbilities.Add(unlock.Ability);
         }
-        return Task.CompletedTask;
+        await Task.CompletedTask;
     }
 
     public void UnlockCadence(Cadence cadence)

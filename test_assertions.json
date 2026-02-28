@@ -1,0 +1,8 @@
+{
+    "Commands": [
+        { "Action": "add_item", "Target": "Gold", "Quantity": 100 }
+    ],
+    "Assertions": [
+        { "Type": "InventoryCount", "Target": "Gold", "ExpectedValue": 500 }
+    ]
+}

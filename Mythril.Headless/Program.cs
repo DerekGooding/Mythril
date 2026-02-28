@@ -10,6 +10,7 @@ namespace Mythril.Headless;
 public class CommandFile
 {
     public List<Command> Commands { get; set; } = [];
+    public List<Assertion> Assertions { get; set; } = [];
 }
 
 public class Command
@@ -20,11 +21,17 @@ public class Command
     public string Character { get; set; } = string.Empty;
 }
 
+public class Assertion
+{
+    public string Type { get; set; } = string.Empty;
+    public string Target { get; set; } = string.Empty;
+    public int ExpectedValue { get; set; }
+}
+
 public class GameState
 {
     public List<KeyValuePair<string, int>> Inventory { get; set; } = [];
     public List<string> UnlockedCadences { get; set; } = [];
-    public List<string> CompletedQuests { get; set; } = [];
 }
 
 class Program
@@ -34,7 +41,7 @@ class Program
         if (args.Length < 1)
         {
             Console.WriteLine("Usage: Mythril.Headless <command_file.json> [output_state.json]");
-            return;
+            Environment.Exit(1);
         }
 
         string commandFilePath = args[0];
@@ -43,13 +50,12 @@ class Program
         if (!File.Exists(commandFilePath))
         {
             Console.WriteLine($"Error: File not found {commandFilePath}");
-            return;
+            Environment.Exit(1);
         }
 
         var resourceManager = new ResourceManager();
         var items = ContentHost.GetContent<Items>();
         var quests = ContentHost.GetContent<Quests>();
-        var cadenceAbilities = ContentHost.GetContent<CadenceAbilities>();
         var questDetails = ContentHost.GetContent<QuestDetails>();
 
         var json = File.ReadAllText(commandFilePath);
@@ -58,7 +64,7 @@ class Program
         if (commandFile == null)
         {
             Console.WriteLine("Error: Failed to parse command file.");
-            return;
+            Environment.Exit(1);
         }
 
         foreach (var cmd in commandFile.Commands)
@@ -70,6 +76,7 @@ class Program
                 case "add_item":
                     var item = items.All.FirstOrDefault(i => i.Name.Equals(cmd.Target, StringComparison.OrdinalIgnoreCase));
                     if (item.Name != null) resourceManager.Inventory.Add(item, cmd.Quantity);
+                    else Console.WriteLine($"Warning: Item '{cmd.Target}' not found.");
                     break;
                 
                 case "complete_quest":
@@ -80,12 +87,13 @@ class Program
                         var questData = new QuestData(quest, detail);
                         resourceManager.ReceiveRewards(questData).Wait();
                     }
+                    else Console.WriteLine($"Warning: Quest '{cmd.Target}' not found.");
                     break;
                 
                 case "unlock_cadence":
-                    // Simple unlock for testing
                     var cadence = ContentHost.GetContent<Cadences>().All.FirstOrDefault(c => c.Name.Equals(cmd.Target, StringComparison.OrdinalIgnoreCase));
                     if (cadence.Name != null) resourceManager.UnlockCadence(cadence);
+                    else Console.WriteLine($"Warning: Cadence '{cmd.Target}' not found.");
                     break;
             }
         }
@@ -94,10 +102,40 @@ class Program
         {
             Inventory = resourceManager.Inventory.GetItems().Select(i => new KeyValuePair<string, int>(i.Item.Name, i.Quantity)).ToList(),
             UnlockedCadences = resourceManager.UnlockedCadences.Select(c => c.Name).ToList(),
-            // Completed quests are private in RM, but we can see the results (rewards/unlocks)
         };
 
         File.WriteAllText(outputFilePath, JsonConvert.SerializeObject(finalState, Formatting.Indented));
         Console.WriteLine($"Final state saved to {outputFilePath}");
+
+        // Assertions
+        bool allPassed = true;
+        foreach (var assertion in commandFile.Assertions)
+        {
+            bool passed = false;
+            switch (assertion.Type.ToLower())
+            {
+                case "inventorycount":
+                    var item = items.All.FirstOrDefault(i => i.Name.Equals(assertion.Target, StringComparison.OrdinalIgnoreCase));
+                    int count = resourceManager.Inventory.GetQuantity(item);
+                    passed = count == assertion.ExpectedValue;
+                    Console.WriteLine($"Assertion: InventoryCount {assertion.Target} expected {assertion.ExpectedValue}, got {count} - {(passed ? "PASS" : "FAIL")}");
+                    break;
+                case "cadenceunlocked":
+                    bool unlocked = resourceManager.UnlockedCadences.Any(c => c.Name.Equals(assertion.Target, StringComparison.OrdinalIgnoreCase));
+                    passed = unlocked == (assertion.ExpectedValue == 1); // 1 for true, 0 for false
+                    Console.WriteLine($"Assertion: CadenceUnlocked {assertion.Target} expected {assertion.ExpectedValue == 1}, got {unlocked} - {(passed ? "PASS" : "FAIL")}");
+                    break;
+                default:
+                    Console.WriteLine($"Warning: Unknown assertion type '{assertion.Type}'");
+                    break;
+            }
+            if (!passed) allPassed = false;
+        }
+
+        if (!allPassed)
+        {
+            Console.WriteLine("One or more assertions failed.");
+            Environment.Exit(1);
+        }
     }
 }

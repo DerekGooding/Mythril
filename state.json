@@ -2,15 +2,8 @@
   "Inventory": [
     {
       "Key": "Gold",
-      "Value": 600
-    },
-    {
-      "Key": "Potion",
-      "Value": 2
+      "Value": 200
     }
   ],
-  "UnlockedCadences": [
-    "Recruit"
-  ],
-  "CompletedQuests": []
+  "UnlockedCadences": []
 }

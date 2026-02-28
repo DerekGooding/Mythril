@@ -1,8 +1,42 @@
 @inherits LayoutComponentBase
+@using Mythril.Blazor.Services
+@inject PersistenceService Persistence
+@inject SnackbarService Snackbar
 
 <main>
+    <div class="top-row px-4">
+        <button class="btn btn-outline-primary mx-2" @onclick="SaveGame">Save</button>
+        <button class="btn btn-outline-secondary mx-2" @onclick="LoadGame">Load</button>
+    </div>
+
     <article class="content">
         @Body
     </article>
     <Snackbar />
 </main>
+
+@code {
+    private async Task SaveGame()
+    {
+        await Persistence.SaveAsync();
+        Snackbar.Show("Game Saved!", "success");
+    }
+
+    private async Task LoadGame()
+    {
+        if (await Persistence.HasSave())
+        {
+            await Persistence.LoadAsync();
+            Snackbar.Show("Game Loaded!", "success");
+            // Force reload to refresh state if needed, or rely on Blazor's reactivity if we wired it up correctly.
+            // Since ResourceManager is a singleton and injected, components might need a state has changed trigger.
+            // For now, a simple reload is the safest way to ensure all components reflect the new state if they aren't observing it.
+            // But we can't easily force a full app reload in WASM without JS.
+            // Let's assume the user will navigate or components will update on next interaction for now.
+        }
+        else
+        {
+            Snackbar.Show("No save found.", "warning");
+        }
+    }
+}

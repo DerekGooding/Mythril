@@ -10,22 +10,39 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: write
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Needed for staleness check (git history)
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '9.0.x'
 
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
       - name: Restore dependencies
         run: dotnet restore Mythril.Blazor/Mythril.Blazor.csproj
 
+      - name: Health Check & Tests
+        run: |
+          # Ensure coverlet is installed for coverage if needed, though package ref should handle it
+          python scripts/check_health.py
+
       - name: Build Blazor App
+        if: success()
         run: dotnet publish Mythril.Blazor/Mythril.Blazor.csproj -c Release -o output
 
       - name: Deploy to GitHub Pages
+        if: success()
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}

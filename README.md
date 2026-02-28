@@ -17,24 +17,25 @@ Mythril is an RPG-inspired web application built with **.NET 9** and **Blazor We
 
 ### Key Systems
 - **Character Core**: Implements a `partial record struct` for characters, allowing for distributed definition of properties and behaviors.
-- **Quest & Progression**: A multi-layered system including `Quests`, `QuestDetails`, and `QuestUnlocks` to manage complex progression trees.
+- **Quest & Progression**: A real-time, asynchronous tick system managing quests, durations, and rewards.
 - **Inventory & Items**: A robust `InventoryManager` supporting various item types (Currency, Consumable, Material, Spell) and quantity tracking.
-- **Cadence System**: A unique progression mechanic where `Cadences` provide `CadenceAbilities` and `AbilityAugments`.
-- **Content Host**: A centralized `ContentHost` utilizing `SimpleInjection` for dependency-driven content management.
+- **Cadence System**: A unique progression mechanic where `Cadences` provide `CadenceAbilities` and `AbilityAugments`. Visualized via an interactive tree.
+- **Persistence**: Game state (Inventory, Unlocked Cadences) is automatically saved to browser `LocalStorage`.
+- **Headless Testing**: An automated scenario runner (`Mythril.Headless`) verifies complex game states and logic without a UI.
 
 ## 🛠️ Technical Stack
 - **Frontend**: Blazor WebAssembly (.NET 9)
-- **Core Logic**: C# 13 / .NET 9 Class Libraries
+- **Core Logic**: C# 13 / .NET 9 Class Libraries (Mythril.Data)
 - **Dependency Injection**: `SimpleInjection` (Source-generated)
 - **Testing**: MSTest, Moq, and Coverlet for coverage reporting
 - **Automation**: Python 3.x for custom health checks and CI integration
-- **CI/CD**: GitHub Actions for automated deployment to GitHub Pages
+- **CI/CD**: GitHub Actions for automated deployment and health monitoring
 
 ## ⚖️ Quality Assurance & Health
-We maintain project health through a custom automated suite (`scripts/check_health.py`):
+We maintain project health through a custom automated suite (`scripts/check_health.py`) which runs on every commit:
 - **Monolith Prevention**: Strict 250-line limit for source files to ensure modularity.
 - **Coverage**: Mandatory 70% unit test coverage for all core logic.
-- **Documentation Integrity**: Automated staleness tracking. Documentation is considered stale if it lags behind source changes by more than 8 files.
+- **Documentation Integrity**: Automated staleness tracking.
 - **Mandate Adherence**: All development must comply with the foundational directives in [GEMINI.md](GEMINI.md).
 
 ## 🚀 Getting Started
@@ -42,6 +43,7 @@ We maintain project health through a custom automated suite (`scripts/check_heal
 2. **Build**: `dotnet build`
 3. **Test**: `dotnet test`
 4. **Health Check**: `python scripts/check_health.py`
+5. **Headless Test**: `.\run_ai_test.ps1`
 
 ---
 *Developed with 💖 by Gemini CLI.*
