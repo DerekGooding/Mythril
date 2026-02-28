@@ -129,7 +129,23 @@ def export_results(monolith_count, coverage, docs_pass, tests_pass):
     os.makedirs("scripts/data", exist_ok=True)
     with open("scripts/data/health_summary.json", "w") as f:
         json.dump(summary, f, indent=4)
-    print(f"Results exported to scripts/data/health_summary.json")
+    
+    # Export individual shields for Shields.io endpoints
+    def save_shield(name, label, message, color):
+        with open(f"scripts/data/shield_{name}.json", "w") as f:
+            json.dump({
+                "schemaVersion": 1,
+                "label": label,
+                "message": str(message),
+                "color": color
+            }, f, indent=4)
+
+    save_shield("monoliths", "Monoliths", monolith_count, "brightgreen" if monolith_count == 0 else "red")
+    save_shield("coverage", "Coverage", f"{coverage:.2f}%", "brightgreen" if coverage >= MIN_OVERALL_COVERAGE else "yellow")
+    save_shield("docs", "Docs", "Up-to-date" if docs_pass else "Stale", "brightgreen" if docs_pass else "red")
+    save_shield("tests", "Tests", "Passing" if tests_pass else "Failing", "brightgreen" if tests_pass else "red")
+
+    print(f"Results and shields exported to scripts/data/")
 
 if __name__ == "__main__":
     skip_tests = "--skip-tests" in sys.argv

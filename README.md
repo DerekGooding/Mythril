@@ -1,9 +1,10 @@
 # Mythril
 
 [![Deploy Blazor to GitHub Pages](https://github.com/DerekGooding/Mythril/actions/workflows/deploy.yml/badge.svg)](https://github.com/DerekGooding/Mythril/actions/workflows/deploy.yml)
-![Build Success](https://img.shields.io/badge/Build-Passing-brightgreen)
-![Tests Passing](https://img.shields.io/badge/Tests-54.7%25%20Coverage-yellow)
-![Health Check](https://img.shields.io/badge/Health%20Check-Monitoring-blue)
+![Tests](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/DerekGooding/Mythril/main/scripts/data/shield_tests.json)
+![Coverage](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/DerekGooding/Mythril/main/scripts/data/shield_coverage.json)
+![Monoliths](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/DerekGooding/Mythril/main/scripts/data/shield_monoliths.json)
+![Docs](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/DerekGooding/Mythril/main/scripts/data/shield_docs.json)
 
 [**Live Website**](https://DerekGooding.Github.io/Mythril)
 
