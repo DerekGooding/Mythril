@@ -12,6 +12,7 @@ This document contains foundational mandates for the AI assistant (Gemini) durin
 ## 2. Technical Standards
 - **Framework/Stack:** .NET 9 (Blazor)
 - **Operating System:** Windows
+- **Shell:** Use PowerShell for all CLI operations (e.g., use `;` instead of `&&` for command chaining).
 - **Style:** Adhere to project-specific coding conventions and file-scoped structures.
 - **State Management:** Ensure state is manageable and, where applicable, serializable.
 - **Dependencies:** Avoid adding external packages unless essential or explicitly requested.
