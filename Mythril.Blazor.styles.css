@@ -521,8 +521,9 @@ main[b-uvgfdke93t] {
     bottom: 0;
     width: 400px;
     background-color: white;
-    box-shadow: -5px 0 15px rgba(0,0,0,0.1);
-    z-index: 1002;
+    border-left: 1px solid #dee2e6;
+    box-shadow: -5px 0 15px rgba(0,0,0,0.2);
+    z-index: 2000;
     display: flex;
     flex-direction: column;
     animation: slideIn-b-uvgfdke93t 0.3s ease-out;
@@ -549,8 +550,8 @@ main[b-uvgfdke93t] {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0,0,0,0.3);
-    z-index: 1001;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 1999;
 }
 
 @keyframes slideIn-b-uvgfdke93t {
