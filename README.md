@@ -1,6 +1,6 @@
 # Mythril
 
-A .NET 9 Blazor-based incremental RPG with a focus on job-based progression (Cadences) and tactical stat management (Junctioning).
+A .NET 10 Blazor-based incremental RPG with a focus on job-based progression (Cadences) and tactical stat management (Junctioning).
 
 ## Key Features
 - **Cadence System**: Unlock and equip different "Cadences" (jobs) to change your character's capabilities.
@@ -10,7 +10,7 @@ A .NET 9 Blazor-based incremental RPG with a focus on job-based progression (Cad
 - **Persistence**: Save and load your journey across sessions.
 
 ## Tech Stack
-- **Frontend**: Blazor WebAssembly (.NET 9)
+- **Frontend**: Blazor WebAssembly (.NET 10)
 - **Data**: JSON-driven content for easy modification.
 - **Testing**: MSTest for unit tests and a Headless CLI for scenario verification.
 

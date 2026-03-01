@@ -20,7 +20,7 @@ This document contains foundational mandates for the AI assistant (Gemini) durin
 - **Source Control Submission:** Always commit changes to the git repository **and push to the remote origin** upon completing a task. Use clear, descriptive commit messages. Push directly to the `main` branch; do not create feature branches unless explicitly requested.
 
 ## 2. Technical Standards
-- **Framework/Stack:** .NET 9 (Blazor)
+- **Framework/Stack:** .NET 10 (Blazor)
 - **Architecture**: Separated core logic into `ResourceManager`, `JunctionManager`, and `InventoryManager`.
 - **Operating System:** Windows
 - **Shell:** Use PowerShell for all CLI operations (e.g., use `;` instead of `&&` for command chaining).
