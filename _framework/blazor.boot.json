@@ -1,9 +1,9 @@
 {
   "mainAssemblyName": "Mythril.Blazor",
   "resources": {
-    "hash": "sha256-qcgD1GmcKxkcYWjN1nKjMuYjaT2nMEa/H+Nvq0W2Jo8=",
+    "hash": "sha256-D2fakZtJzevFc8K0dtkUWm8PBfRZU4JzrzKLBnHit38=",
     "fingerprinting": {
-      "Microsoft.AspNetCore.Components.eyo272fm9v.wasm": "Microsoft.AspNetCore.Components.wasm",
+      "Microsoft.AspNetCore.Components.8poas9e9p2.wasm": "Microsoft.AspNetCore.Components.wasm",
       "Microsoft.AspNetCore.Components.Web.5ilw7d57jz.wasm": "Microsoft.AspNetCore.Components.Web.wasm",
       "Microsoft.AspNetCore.Components.WebAssembly.rwpg67y8a3.wasm": "Microsoft.AspNetCore.Components.WebAssembly.wasm",
       "Microsoft.CSharp.fwly07rlr3.wasm": "Microsoft.CSharp.wasm",
@@ -18,8 +18,8 @@
       "Microsoft.Extensions.Primitives.5pxr7nzxwe.wasm": "Microsoft.Extensions.Primitives.wasm",
       "Microsoft.JSInterop.7kva84rxiz.wasm": "Microsoft.JSInterop.wasm",
       "Microsoft.JSInterop.WebAssembly.imfqvv3x5h.wasm": "Microsoft.JSInterop.WebAssembly.wasm",
-      "Mythril.Blazor.w609jhclq3.wasm": "Mythril.Blazor.wasm",
-      "Mythril.Data.tksspa41q6.wasm": "Mythril.Data.wasm",
+      "Mythril.Blazor.ko4ee3yl5s.wasm": "Mythril.Blazor.wasm",
+      "Mythril.Data.v3xb0dtspq.wasm": "Mythril.Data.wasm",
       "Newtonsoft.Json.jcjjiqe038.wasm": "Newtonsoft.Json.wasm",
       "SimpleInjection.frk3rn5p8t.wasm": "SimpleInjection.wasm",
       "System.7mkjnfwul0.wasm": "System.wasm",
@@ -94,7 +94,7 @@
       "System.Runtime.InteropServices.JavaScript.86ud3rg0f2.wasm": "sha256-AAnORgj9Ao176Q0otUTy5BKaRjOgxF7p4H8d6UP6Ks0="
     },
     "assembly": {
-      "Microsoft.AspNetCore.Components.eyo272fm9v.wasm": "sha256-1glbkA79mr1fZXHXYjNFPGeU07kmRtlQ4m33yeUwtZM=",
+      "Microsoft.AspNetCore.Components.8poas9e9p2.wasm": "sha256-dOTG+Az8hmmSFm5dnIUf1oTGHUDoVmjYbfLhAUnD0hg=",
       "Microsoft.AspNetCore.Components.Web.5ilw7d57jz.wasm": "sha256-IwD9GLf7TbCVN6KXKYo2STF0ZjTZKYO/D4HEMLBicDg=",
       "Microsoft.AspNetCore.Components.WebAssembly.rwpg67y8a3.wasm": "sha256-1bZXAq7xg/K+UZT3zZxmJHp4UKNJQBP+2ny+/lGkyHo=",
       "Microsoft.CSharp.fwly07rlr3.wasm": "sha256-Xw+M6aJWXPRDYTqVgXF0qrJbQp7g6X1yX6T+QlJGDc0=",
@@ -109,8 +109,8 @@
       "Microsoft.Extensions.Primitives.5pxr7nzxwe.wasm": "sha256-WXYpl64HUqc9+prJOz6dOEVvB8PFJhTdfqUMB3ZGRGA=",
       "Microsoft.JSInterop.7kva84rxiz.wasm": "sha256-ubnFa4Rtxgu4gPe/SRKYk17LxS0CtEOnEoPvT6ITOTo=",
       "Microsoft.JSInterop.WebAssembly.imfqvv3x5h.wasm": "sha256-mpyjzA6YBuV9Qx5BUC8YbXP9YjZlM+k7YTVawzXJFgk=",
-      "Mythril.Blazor.w609jhclq3.wasm": "sha256-OEAYVnQW105GHlVWE/uBnbpwju2AUhTZkqnh5TBhAYo=",
-      "Mythril.Data.tksspa41q6.wasm": "sha256-U9/jGA3czTezto1DOBCR3BHyFcPah1J6G5+UKOnXyAE=",
+      "Mythril.Blazor.ko4ee3yl5s.wasm": "sha256-zNY+CjfvGXHxkJAz2CzbLSbiUQsUgnXbduPEinpIkE8=",
+      "Mythril.Data.v3xb0dtspq.wasm": "sha256-W6DXgwd1N8h4JZEpLc7ElPrDcvSfGM7yvLhl+AHxIFc=",
       "Newtonsoft.Json.jcjjiqe038.wasm": "sha256-s8KVuknfxWl1cuDvQM/OnpBfnpM1rxzvzq21S1cF36U=",
       "SimpleInjection.frk3rn5p8t.wasm": "sha256-29J24RBa9d4RFOUT6LqzSLWhhDmzyqrIZ/uZQpQc7jM=",
       "System.7mkjnfwul0.wasm": "sha256-H4K9w0OHWwZCaMDfVwQjW0dSqnnS/iuCkysBB+Q2c3A=",
