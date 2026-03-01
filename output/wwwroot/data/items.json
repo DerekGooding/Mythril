@@ -1,0 +1,19 @@
+[
+  { "Name": "Gold", "Description": "The currency of the realm.", "ItemType": "Currency" },
+  { "Name": "Potion", "Description": "Restores a small amount of health.", "ItemType": "Consumable" },
+  { "Name": "Basic Gem", "Description": "Is refined into the primary elemental magic.", "ItemType": "Material" },
+  { "Name": "Log", "Description": "A basic piece of wood.", "ItemType": "Material" },
+  { "Name": "Iron Ore", "Description": "A common ore used in crafting.", "ItemType": "Material" },
+  { "Name": "Herb", "Description": "A medicinal plant used in potions.", "ItemType": "Material" },
+  { "Name": "Leather", "Description": "Tough animal hide used in crafting.", "ItemType": "Material" },
+  { "Name": "Water", "Description": "Essential for life and potion-making.", "ItemType": "Material" },
+  { "Name": "Web", "Description": "Sticky silk produced by spiders.", "ItemType": "Material" },
+  { "Name": "Slime", "Description": "A gelatinous creature's residue.", "ItemType": "Material" },
+  { "Name": "Moonberry", "Description": "A glowing berry from the Whispering Woods.", "ItemType": "Consumable" },
+  { "Name": "Ancient Bark", "Description": "Bark from the ancient trees.", "ItemType": "Material" },
+  { "Name": "Mythril Spark", "Description": "A legendary spark of ancient power.", "ItemType": "Material" },
+  { "Name": "Fire I", "Description": "A basic fire spell.", "ItemType": "Spell" },
+  { "Name": "Ice I", "Description": "A basic ice spell.", "ItemType": "Spell" },
+  { "Name": "Lightning I", "Description": "A basic lightning spell.", "ItemType": "Spell" },
+  { "Name": "Earth I", "Description": "A basic earth spell.", "ItemType": "Spell" }
+]

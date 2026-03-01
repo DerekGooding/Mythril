@@ -35,16 +35,20 @@ public class ResourceManager(
 
     public void Initialize()
     {
+        Console.WriteLine("ResourceManager initializing...");
         Inventory.Clear();
         var gold = _items.All.FirstOrDefault(x => x.Name == "Gold");
         if (gold.Name != null) Inventory.Add(gold, 100);
 
-        _assignedCadences = _cadences.All.ToNamedDictionary(_ => (Character?)null);
-        _lockedCadences = _cadences.All.ToNamedDictionary(_ => true);
+        Console.WriteLine("Initializing Cadences...");
+        _assignedCadences = _cadences.All.ToDictionary(x => x, _ => (Character?)null);
+        _lockedCadences = _cadences.All.ToDictionary(x => x, _ => true);
 
+        Console.WriteLine("Initializing Locations...");
         UsableLocations = [.. _locations.All.Select(x => new LocationData(x, x.Quests.Where(IsNeverLocked)))];
         
         UpdateAvaiableCadences();
+        Console.WriteLine("ResourceManager initialized.");
     }
 
     public bool IsNeverLocked(Quest quest) => _questUnlocks[quest].Length == 0;
