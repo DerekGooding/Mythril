@@ -31,7 +31,7 @@ All development must strictly adhere to [GEMINI.md](GEMINI.md). Key mandates inc
 - **Max Lines**: 250 per file (excluding `wwwroot/lib`).
 - **Min Coverage**: 70% overall.
 - **Docs Staleness**: 8 source file changes threshold.
-- **Health Resolution**: Fix root causes (refactor monoliths, add tests, or fully update stale docs). Do not perform trivial edits just to reset counters.
+- **Health Resolution**: Fix root causes (refactor monoliths, add tests, or fully update stale docs). Documentation is considered "stale" if it lags behind source changes; resolving this requires meaningful content updates that reflect the current project state.
 
 ---
 *Operationalize the above for maximum technical integrity.*
