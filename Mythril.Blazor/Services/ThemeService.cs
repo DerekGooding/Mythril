@@ -15,24 +15,12 @@ public class ThemeService(IJSRuntime jsRuntime, ILogger<ThemeService> logger)
     {
         try
         {
-            await _jsRuntime.InvokeVoidAsync("setTheme", theme);
+            await _jsRuntime.InvokeVoidAsync("window.setTheme", theme);
             OnThemeChanged?.Invoke();
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to set theme: {Theme}. Exception: {ExMsg}", theme, ex.Message);
-            
-            // Proactive diagnostics to target the "undefined" issue
-            try 
-            {
-                var diag = await _jsRuntime.InvokeAsync<string>("eval", 
-                    "typeof setTheme === 'function' ? 'Found (Function)' : (typeof setTheme === 'undefined' ? 'Undefined' : 'Found (Non-Function: ' + typeof setTheme + ')')");
-                _logger.LogWarning("Diagnostics: setTheme status in global scope: {Status}", diag);
-            }
-            catch (Exception diagEx)
-            {
-                _logger.LogError(diagEx, "Diagnostics failed to run.");
-            }
+            _logger.LogError(ex, "Failed to set theme: {Theme}", theme);
         }
     }
 

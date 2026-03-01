@@ -1,5 +1,12 @@
 [
   {
+    "Quest": "Prologue",
+    "DurationSeconds": 5,
+    "Type": "Single",
+    "Requirements": [],
+    "Rewards": [ { "Item": "Gold", "Quantity": 10 } ]
+  },
+  {
     "Quest": "Tutorial Section",
     "DurationSeconds": 30,
     "Type": "Recurring",
