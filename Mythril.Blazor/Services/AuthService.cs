@@ -4,7 +4,7 @@ namespace Mythril.Blazor.Services;
 
 public class AuthService(IJSRuntime js)
 {
-    private const string AUTH_KEY = "mythril_dev_auth";
+    private const string AUTH_KEY = "mythril_dev_mode";
     private bool? _isAuthenticated;
 
     public bool IsAuthenticated => _isAuthenticated ?? false;
@@ -12,25 +12,17 @@ public class AuthService(IJSRuntime js)
     public async Task InitializeAsync()
     {
         var stored = await js.InvokeAsync<string>("localStorage.getItem", AUTH_KEY);
-        // In a real app, you'd verify this against a hash or backend.
-        // For now, we check if the key matches a specific secret.
-        _isAuthenticated = !string.IsNullOrEmpty(stored) && stored == "MYTHRIL_ADMIN_KEY";
+        _isAuthenticated = stored == "true";
     }
 
-    public async Task<bool> Authenticate(string secret)
+    public async Task SetDevMode(bool enabled)
     {
-        if (secret == "MYTHRIL_ADMIN_KEY")
-        {
-            await js.InvokeVoidAsync("localStorage.setItem", AUTH_KEY, secret);
-            _isAuthenticated = true;
-            return true;
-        }
-        return false;
+        await js.InvokeVoidAsync("localStorage.setItem", AUTH_KEY, enabled.ToString().ToLower());
+        _isAuthenticated = enabled;
     }
 
     public async Task Logout()
     {
-        await js.InvokeVoidAsync("localStorage.removeItem", AUTH_KEY);
-        _isAuthenticated = false;
+        await SetDevMode(false);
     }
 }

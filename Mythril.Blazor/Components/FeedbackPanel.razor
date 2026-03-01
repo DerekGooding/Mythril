@@ -4,10 +4,11 @@
 @inject FeedbackService FeedbackService
 @inject SnackbarService SnackbarService
 @inject IJSRuntime JS
+@inject AuthService AuthService
 
 <div class="feedback-panel mt-4">
     <h4>Submit Feedback</h4>
-    <p class="small text-muted">A GitHub account is required to permanently record feedback.</p>
+    <p class="small text-muted">A GitHub account is required to record feedback publicly.</p>
     
     <div class="card p-3">
         <div class="mb-3">
@@ -28,22 +29,25 @@
             <textarea class="form-control" @bind="_description" rows="3" placeholder="Explain the issue or suggestion..."></textarea>
         </div>
         <div class="btn-group">
-            <a href="@GetManualGitHubUrl()" target="_blank" class="btn btn-primary @(CanSubmit ? "" : "disabled")" @onclick="RecordLocalAttempt">
+            <a href="@GetManualGitHubUrl()" target="_blank" class="btn btn-primary @(CanSubmit ? "" : "disabled")">
                 Submit to GitHub
             </a>
-            <button class="btn btn-outline-secondary" @onclick="SaveLocally" title="Save for later or if you don't have an account">
-                Save Locally
-            </button>
+            @if (AuthService.IsAuthenticated)
+            {
+                <button class="btn btn-outline-secondary" @onclick="SaveLocally">
+                    Save Locally (Dev)
+                </button>
+            }
         </div>
     </div>
 
-    @if (_pendingCount > 0)
+    @if (AuthService.IsAuthenticated && _pendingCount > 0)
     {
         <div class="alert alert-info mt-3">
-            <h6>Pending Items (@_pendingCount)</h6>
-            <p class="small">These items are saved in your browser. Click 'Submit to GitHub' for each to make them public.</p>
+            <h6>Local Backlog (@_pendingCount)</h6>
             <div class="btn-group">
-                <button class="btn btn-sm btn-outline-danger" @onclick="ClearFeedback">Clear All Local</button>
+                <button class="btn btn-sm btn-primary" @onclick="CopySyncString">Copy Sync String</button>
+                <button class="btn btn-sm btn-outline-danger" @onclick="ClearFeedback">Clear All</button>
             </div>
         </div>
 

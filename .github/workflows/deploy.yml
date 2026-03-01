@@ -40,11 +40,7 @@ jobs:
 
       - name: Build Blazor App
         if: success()
-        env:
-          ADMIN_KEY: ${{ secrets.ADMIN_KEY }}
         run: |
-          # Inject production key into AuthService
-          sed -i "s|MYTHRIL_ADMIN_KEY|$ADMIN_KEY|g" Mythril.Blazor/Services/AuthService.cs
           dotnet publish Mythril.Blazor/Mythril.Blazor.csproj -c Release -o output
           echo "{\"version\": \"${{ github.sha }}\", \"timestamp\": \"$(date -u +'%Y-%m-%dT%H:%M:%SZ')\"}" > output/wwwroot/version.json
 

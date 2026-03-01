@@ -8,7 +8,7 @@
 
 [**Live Website**](https://DerekGooding.Github.io/Mythril)
 
-**Documentation Status:** Last updated March 1, 2026. Implemented Developer Authentication mode to gate error reporting and test features.
+**Documentation Status:** Last updated March 1, 2026. Refined Developer Mode access (click version 3x) and public GitHub feedback flow.
 
 ## Project Structure
 **This project is heavily and primarily developed by AI agents.**  
