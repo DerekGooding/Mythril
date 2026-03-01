@@ -31,44 +31,77 @@ This document provides explicit implementation details for each active goal in t
 ## 4. Agentic "Status Report" Utility
 - **Objective**: Improve project visibility and onboarding for AI agents.
 - **Key Deliverables**:
-    - [ ] Create `scripts/generate_report.py`.
-    - [ ] Script should:
-        - [ ] Run `python scripts/check_health.py`.
-        - [ ] Run `.\run_ai_test.ps1`.
-        - [ ] Aggregate coverage, monolith counts, and headless test results.
-    - [ ] Output a consolidated `STATUS.md` in the project root.
-    - [ ] Update mandates to require running this script before ending a session.
+    - [x] Create `scripts/generate_report.py`.
+    - [x] Script should:
+        - [x] Run `python scripts/check_health.py`.
+        - [x] Run `.\run_ai_test.ps1`.
+        - [x] Aggregate coverage, monolith counts, and headless test results.
+    - [x] Output a consolidated `STATUS.md` in the project root.
+    - [x] Update mandates to require running this script before ending a session.
 
-## 5. Character Specialization & Stats UI
-- **Objective**: Make character differences meaningful through stat-based efficiency.
+## 5. Character Stats & Junctioning UI
+- **Objective**: Implement the core FF8-inspired stat-boosting mechanic.
 - **Key Deliverables**:
-    - [ ] Update `CharacterDisplay.razor` to show a breakdown of the character's current stats.
-    - [ ] Implement a "Stat Influence" formula in `ResourceManager.StartQuest`.
-    - [ ] Example: `EffectiveDuration = BaseDuration / (1 + (RelevantStat / 100))`.
-    - [ ] Add tooltips explaining which stat influences which quest types.
+    - [ ] Update `CharacterDisplay.razor` to show a breakdown of the character's current stats and active junctions.
+    - [ ] Create a "Junctioning" sub-menu:
+        - [ ] List available Stats (Strength, Magic, Vitality, etc.).
+        - [ ] Check if the current Cadence has the matching "J-Stat" ability (e.g., "J-Str").
+        - [ ] Allow assigning a Magic item (e.g., "Fire I") to an enabled Stat slot.
+    - [ ] Implement the "Junction" data model to track these character-specific mappings.
 
-## 6. Content: The Whispering Woods Biome
-- **Objective**: Expand the world map with a nature-themed zone.
+## 6. Linear Stat Augment Calculator
+- **Objective**: Calculate dynamic stat bonuses based on magic quantities.
+- **Key Deliverables**:
+    - [ ] Implement a `StatCalculator` that aggregates base stats + junction bonuses.
+    - [ ] Formula: `TotalStat = BaseStat + (MagicQuantity * StatMultiplierPerUnit)`.
+    - [ ] Ensure `ResourceManager` recalculates effective durations immediately when magic quantities change.
+
+## 7. Global Magic Capacity Enforcement
+- **Objective**: Enforce the strategic resource limitation of 30 per spell.
+- **Key Deliverables**:
+    - [ ] Update `InventoryManager.Add` to cap Magic items at the current `GlobalLimit` (default 30).
+    - [ ] Add "Capacity Expansion" abilities to the Cadence tree (e.g., "Magic Pocket I").
+    - [ ] Implement logic to update the `GlobalLimit` when these abilities are unlocked.
+
+## 8. Cadence Assignment UI: Exclusivity Logic
+- **Objective**: Enforce the rule that each Cadence is a unique entity.
+- **Key Deliverables**:
+    - [ ] Create a dedicated "Party Management" UI.
+    - [ ] Implement "Equip" logic:
+        - [ ] Check if the Cadence is already equipped by another character.
+        - [ ] If yes, prompt to "Swap" or deny.
+    - [ ] Implement "Unequip" logic:
+        - [ ] **Crucial**: Automatically clear all Junctions for the character when their Cadence is removed.
+
+## 9. Tutorial Questline: "The First Refinement"
+- **Objective**: A scripted sequence to onboard players to the core loop.
+- **Key Deliverables**:
+    - [ ] Phase 1: Quest "Tutorial Section" rewards "Basic Gem".
+    - [ ] Phase 2: Instruction to unlock "Refine Fire" in the Cadence tree.
+    - [ ] Phase 3: Instruction to use the Workshop to refine "Basic Gem" into "Fire I".
+    - [ ] Phase 4: Instruction to Junction "Fire I" to "Strength" (requires "J-Str" on starter cadence).
+
+## 10. Content: The Whispering Woods Biome
+- **Objective**: Expand the map with early-game nature materials.
 - **Key Deliverables**:
     - [ ] Add `Whispering Woods` to the `Locations` data.
-    - [ ] Define new quests: "Gather Moonberries" (Recurring), "Defeat Treant Guardian" (Single).
-    - [ ] Add new items: `Moonberry` (Consumable), `Ancient Bark` (Material).
-    - [ ] Update `QuestDetails` and `QuestUnlocks` to integrate the woods into the early-to-mid game progression.
+    - [ ] Add new items: `Mana Leaf` (Material), `Fire Shard` (Material).
+    - [ ] Define "Gathering" quests with related rewards.
 
-## 7. Content: Legendary Questline "The First Spark"
-- **Objective**: Implement multi-stage progression via sequential quests.
+## 11. Content: New Cadence "The Arcanist"
+- **Objective**: Introduce the first magic-specialized job.
 - **Key Deliverables**:
-    - [ ] Add a sequence of 3 quests: "Ancient Inscriptions", "Finding the Hearth", "Rekindling the Spark".
-    - [ ] Configure `QuestUnlocks` so each quest requires the completion of the previous one.
-    - [ ] Add `Mythril Spark` as a unique quest reward.
-    - [ ] Implement an unlock trigger that grants a specialized Cadence upon completion of the full chain.
+    - [ ] Define `The Arcanist` Cadence.
+    - [ ] Abilities: `Refine Ice`, `J-Magic`, `Magic Pocket I`.
+    - [ ] Requirements: `Gold x500`, `Mana Leaf x10`.
 
-## 8. Content: Master Cadence "Mythril Weaver"
-- **Objective**: Provide high-level endgame progression goals.
-- **Key Deliverables**:
-    - [ ] Define the `Mythril Weaver` Cadence with high-tier requirements (e.g., 1000 Gold, 50 Iron Ore, 10 Ancient Bark).
-    - [ ] Add unique abilities: `Mass Refine` (reduces refinement costs), `Essence Harvest` (increases drop rates).
-    - [ ] Update `CadenceTree` visualizer to support these high-tier nodes.
+---
+
+## Future Exploration
+- [ ] **Legendary Questline "The First Spark"**: Multi-stage ruins questline.
+- [ ] **Master Cadence "Mythril Weaver"**: Endgame progression path.
+- [ ] **Refinement Mastery**: Efficiency bonuses for repeated crafting.
+- [ ] **Infinite Scaling & Prestige**: Concepts for extreme long-term play.
 
 ---
 
@@ -81,3 +114,4 @@ This document provides explicit implementation details for each active goal in t
 - [x] **Continuous Health Monitoring (CI/CD)**: Integrated health checks into GitHub Actions.
 - [x] **Asynchronous Quest Tick System**: Refactored to real-time timer system.
 - [x] **Cadence Visualizer Component**: Built interactive progression tree.
+- [x] **Agentic "Status Report" Utility**: Implemented automated aggregation.
