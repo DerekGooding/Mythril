@@ -128,4 +128,38 @@ public class InventoryTests
         Assert.IsTrue(spells.Any(i => i.Item == fire));
         Assert.IsFalse(spells.Any(i => i.Item == potion));
     }
+
+    [TestMethod]
+    public void InventoryManager_GetQuantity_ReturnsZeroForMissingItem()
+    {
+        var potion = _items!.All.First(x => x.Name == "Potion");
+        var inventoryManager = _resourceManager?.Inventory;
+        Assert.AreEqual(0, inventoryManager!.GetQuantity(potion));
+    }
+
+    [TestMethod]
+    public void InventoryManager_Has_ReturnsTrueForZeroQuantity()
+    {
+        var potion = _items!.All.First(x => x.Name == "Potion");
+        var inventoryManager = _resourceManager?.Inventory;
+        Assert.IsTrue(inventoryManager!.Has(potion, 0));
+    }
+
+    [TestMethod]
+    public void InventoryManager_Add_DoesNothingWithZeroQuantity()
+    {
+        var potion = _items!.All.First(x => x.Name == "Potion");
+        var inventoryManager = _resourceManager?.Inventory;
+        inventoryManager!.Add(potion, 0);
+        Assert.AreEqual(0, inventoryManager.GetQuantity(potion));
+    }
+
+    [TestMethod]
+    public void InventoryManager_Remove_ReturnsFalseForMissingItem()
+    {
+        var potion = _items!.All.First(x => x.Name == "Potion");
+        var inventoryManager = _resourceManager?.Inventory;
+        var result = inventoryManager!.Remove(potion, 1);
+        Assert.IsFalse(result);
+    }
 }

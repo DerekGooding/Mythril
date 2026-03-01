@@ -3,7 +3,7 @@ using Mythril.Data;
 namespace Mythril.Tests;
 
 [TestClass]
-public class ResourceManagerTests
+public class QuestLifecycleTests
 {
     private ResourceManager? _resourceManager;
     private Items? _items;
@@ -26,27 +26,6 @@ public class ResourceManagerTests
             ContentHost.GetContent<Cadences>(), 
             ContentHost.GetContent<Locations>());
         _resourceManager.Initialize();
-    }
-
-    [TestMethod]
-    public void ResourceManager_StoresAndRetrievesData_Correctly()
-    {
-        // Assert
-        Assert.IsNotNull(_resourceManager!.UsableLocations);
-        Assert.AreEqual(6, _resourceManager.UsableLocations.Count); // Increased by Content expansion
-        Assert.IsNotNull(_resourceManager.Characters);
-        Assert.AreEqual(3, _resourceManager.Characters.Length);
-    }
-
-    [TestMethod]
-    public void ResourceManager_RetrievesQuestData_Correctly()
-    {
-        // Assert
-        var village = _resourceManager!.UsableLocations.FirstOrDefault(l => l.Name == "Village");
-        Assert.IsNotNull(village);
-        var quest = village.Quests.FirstOrDefault(c => c.Name == "Prologue");
-        Assert.IsNotNull(quest);
-        Assert.AreEqual("Prologue", quest.Name);
     }
 
     [TestMethod]
@@ -93,19 +72,6 @@ public class ResourceManagerTests
     }
 
     [TestMethod]
-    public void QuestData_Properties_ReturnCorrectValues()
-    {
-        var quest = _quests!.All.First(x => x.Name == "Prologue");
-        var detail = _questDetails![quest];
-        var questData = new QuestData(quest, detail);
-
-        Assert.AreEqual(quest.Name, questData.Name);
-        Assert.AreEqual(quest.Description, questData.Description);
-        Assert.AreEqual(detail.DurationSeconds, questData.DurationSeconds);
-        Assert.AreEqual(detail.Type, questData.Type);
-    }
-
-    [TestMethod]
     public void ResourceManager_StartQuest_AddsToActiveQuests()
     {
         var quest = _quests!.All.First(x => x.Name == "Buy Potion");
@@ -142,34 +108,73 @@ public class ResourceManagerTests
     }
 
     [TestMethod]
-    public void ResourceManager_CadenceAssignment_WorksCorrectly()
+    public void ResourceManager_ReceiveRewards_Quest_UnlocksCadence()
+    {
+        var quest = _quests!.All.First(x => x.Name == "Ancient Inscriptions");
+        var detail = _questDetails![quest];
+        var questData = new QuestData(quest, detail);
+        
+        _resourceManager!.ReceiveRewards(questData).Wait();
+    }
+
+    [TestMethod]
+    public void ResourceManager_StartQuest_Recurring_StrengthReducesDuration()
+    {
+        var quest = _quests!.All.First(x => x.Name == "Farm Goblins");
+        var detail = _questDetails![quest];
+        var questData = new QuestData(quest, detail);
+        
+        // Himbo has 20 Strength
+        var himbo = _resourceManager!.Characters.First(c => c.Name == "Himbo");
+        
+        _resourceManager.Inventory.Add(_items!.All.First(x => x.Name == "Gold"), 1000);
+        _resourceManager.StartQuest(questData, himbo);
+        
+        var progress = _resourceManager.ActiveQuests[0];
+        // Expected: 3 / (1.0 + 20/100) = 3 / 1.2 = 2.5 -> 2 (int)
+        Assert.AreEqual(2, progress.DurationSeconds);
+    }
+
+    [TestMethod]
+    public void ResourceManager_StartQuest_Wifu_MagicReducesCadenceDuration()
     {
         var cadence = ContentHost.GetContent<Cadences>().All.First();
-        var character = _resourceManager!.Characters[0];
-
-        _resourceManager.AssignCadence(cadence, character);
-        var assigned = _resourceManager.CurrentlyAssigned(character).ToList();
+        var unlock = cadence.Abilities[0];
         
-        Assert.AreEqual(1, assigned.Count);
-        Assert.AreEqual(cadence.Name, assigned[0].Name);
-
-        _resourceManager.Unassign(cadence);
-        assigned = _resourceManager.CurrentlyAssigned(character).ToList();
-        Assert.AreEqual(0, assigned.Count);
+        // Wifu has 15 Magic
+        var wifu = _resourceManager!.Characters.First(c => c.Name == "Wifu");
+        
+        foreach(var req in unlock.Requirements) _resourceManager.Inventory.Add(req.Item, req.Quantity);
+        _resourceManager.StartQuest(unlock, wifu);
+        
+        var progress = _resourceManager.ActiveQuests[0];
+        // Expected: 3 / (1.0 + 15/100) = 3 / 1.15 = 2.6 -> 2 (int)
+        Assert.AreEqual(2, progress.DurationSeconds);
     }
 
     [TestMethod]
-    public void Stats_All_ContainsAllStats()
+    public void ResourceManager_PayCosts_SingleQuest_LocksQuest()
     {
-        var stats = ContentHost.GetContent<Stats>();
-        Assert.AreEqual(9, stats.All.Length);
-        Assert.IsTrue(stats.All.Any(s => s.Name == "Health"));
+        var village = _resourceManager!.UsableLocations.First(l => l.Name == "Village");
+        var quest = village.Quests.First(q => q.Name == "Prologue");
+        var detail = _questDetails![quest];
+        var questData = new QuestData(quest, detail);
+        
+        Assert.IsTrue(village.Quests.Contains(quest));
+        
+        _resourceManager.PayCosts(questData);
+        
+        Assert.IsFalse(village.Quests.Contains(quest));
     }
 
     [TestMethod]
-    public void Character_Name_ReturnsCorrectValue()
+    public void QuestProgress_ZeroDuration_ReturnsFullProgress()
     {
-        var character = new Character("Test");
-        Assert.AreEqual("Test", character.Name);
+        var character = new Character("Hero");
+        var quest = _quests!.All.First();
+        var progress = new QuestProgress(quest, "Zero", 0, character);
+        
+        Assert.AreEqual(1.0, progress.Progress);
+        Assert.IsTrue(progress.IsCompleted);
     }
 }

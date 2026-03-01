@@ -14,8 +14,7 @@ public class ContentLoader(
     Cadences cadences,
     QuestDetails questDetails,
     QuestUnlocks questUnlocks,
-    ItemRefinements refinements,
-    QuestToCadenceUnlocks questToCadenceUnlocks)
+    ItemRefinements refinements)
 {
     private readonly JsonSerializerOptions _options = new()
     {

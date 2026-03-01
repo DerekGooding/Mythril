@@ -90,6 +90,34 @@ public class MiscDataTests
     }
 
     [TestMethod]
+    public void QuestProgress_WithCadenceUnlock_Properties_ReturnCorrectValues()
+    {
+        var character = new Character("Hero");
+        var cadence = ContentHost.GetContent<Cadences>().All.First();
+        var unlock = cadence.Abilities[0];
+
+        var progress = new QuestProgress(unlock, "Unlocking", 5, character);
+        
+        Assert.AreEqual(unlock.Ability.Name, progress.Name);
+        Assert.AreEqual("Unlocking", progress.Description);
+        Assert.AreEqual(5, progress.DurationSeconds);
+        Assert.AreEqual(character, progress.Character);
+    }
+
+    [TestMethod]
+    public void QuestData_RequirementsAndRewards_ReturnCorrectValues()
+    {
+        var quest = ContentHost.GetContent<Quests>().All.First(q => q.Name == "Buy Potion");
+        var detail = ContentHost.GetContent<QuestDetails>()[quest];
+        var questData = new QuestData(quest, detail);
+
+        Assert.AreEqual(1, questData.Requirements.Length);
+        Assert.AreEqual(1, questData.Rewards.Length);
+        Assert.AreEqual("Gold", questData.Requirements[0].Item.Name);
+        Assert.AreEqual("Potion", questData.Rewards[0].Item.Name);
+    }
+
+    [TestMethod]
     public void ItemQuantity_Properties_ReturnCorrectValues()
     {
         var items = ContentHost.GetContent<Items>();

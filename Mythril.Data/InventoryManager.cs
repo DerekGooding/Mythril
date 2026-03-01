@@ -6,6 +6,7 @@ public class InventoryManager
 
     public void Add(Item item, int quantity = 1)
     {
+        if (quantity <= 0) return;
         if (_inventory.ContainsKey(item))
             _inventory[item] += quantity;
         else
@@ -14,6 +15,7 @@ public class InventoryManager
 
     public bool Remove(Item item, int quantity = 1)
     {
+        if (quantity <= 0) return true;
         if (!_inventory.TryGetValue(item, out var value) || value < quantity)
             return false;
 
@@ -24,7 +26,11 @@ public class InventoryManager
         return true;
     }
 
-    public bool Has(Item item, int quantity = 1) => _inventory.ContainsKey(item) && _inventory[item] >= quantity;
+    public bool Has(Item item, int quantity = 1) 
+    {
+        if (quantity <= 0) return true;
+        return _inventory.ContainsKey(item) && _inventory[item] >= quantity;
+    }
 
     public int GetQuantity(Item item) => _inventory.GetValueOrDefault(item);
 

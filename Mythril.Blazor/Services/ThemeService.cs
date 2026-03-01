@@ -13,7 +13,7 @@ public class ThemeService(IJSRuntime jsRuntime)
 
     public async Task SetTheme(string theme)
     {
-        await _jsRuntime.InvokeVoidAsync("localStorage.setItem", _themeKey, theme);
+        await _jsRuntime.InvokeVoidAsync("setTheme", theme);
         OnThemeChanged?.Invoke();
     }
 

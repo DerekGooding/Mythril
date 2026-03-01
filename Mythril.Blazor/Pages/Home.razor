@@ -98,7 +98,6 @@
     private async Task ToggleTheme()
     {
         await themeService.ToggleTheme();
-        navigationManager.NavigateTo(navigationManager.Uri, forceLoad: true);
     }
 
     private async Task TaskDropped((object item, Character character) args)

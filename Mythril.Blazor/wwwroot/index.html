@@ -20,9 +20,13 @@
 
 <body>
     <script>
+        window.setTheme = function (theme) {
+            document.getElementById('theme').setAttribute('href', 'css/' + theme + '.css');
+            localStorage.setItem('theme', theme);
+        }
         (function () {
             var theme = localStorage.getItem('theme') || 'light-theme';
-            document.getElementById('theme').setAttribute('href', 'css/' + theme + '.css');
+            setTheme(theme);
         })();
     </script>
     <div id="app">
@@ -46,8 +50,8 @@
         function triggerConfettiAt(element) {
             var rect = element.getBoundingClientRect();
             confetti({
-                particleCount: 100,
-                spread: 70,
+                particleCount: 40,
+                spread: 50,
                 origin: {
                     x: (rect.left + rect.right) / 2 / window.innerWidth,
                     y: (rect.top + rect.bottom) / 2 / window.innerHeight
