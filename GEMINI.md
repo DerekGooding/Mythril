@@ -17,7 +17,7 @@ This document contains foundational mandates for the AI assistant (Gemini) durin
 - **Guidance & Strategy:** When facing architectural ambiguity or high-level project decisions, agents must create a guidance request in `docs/guidence/`. Agents are also responsible for distilling answered requests into the [Guidance Knowledge Base](docs/guidence_knowledge_base.md) and consulting it before starting any significant feature.
 - **Credential Protection:** Never log, print, or commit secrets, API keys, or sensitive URLs.
 - **Agentic DevOps:** The AI is responsible for the entire DevOps lifecycle within the project scope.
-- **Source Control Submission:** Always commit changes to the git repository upon completing a task. Use clear, descriptive commit messages. Push directly to the `main` branch; do not create feature branches unless explicitly requested.
+- **Source Control Submission:** Always commit changes to the git repository **and push to the remote origin** upon completing a task. Use clear, descriptive commit messages. Push directly to the `main` branch; do not create feature branches unless explicitly requested.
 
 ## 2. Technical Standards
 - **Framework/Stack:** .NET 9 (Blazor)
