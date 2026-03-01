@@ -34,11 +34,11 @@
         isExpanded = !isExpanded;
     }
 
-    // protected override async Task OnAfterRenderAsync(bool firstRender)
-    // {
-    //     if (isExpanded)
-    //     {
-    //         await JS.InvokeVoidAsync("expander.expand", contentRef);
-    //     }
-    // }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (isExpanded)
+        {
+            await JS.InvokeVoidAsync("expander.expand", contentRef);
+        }
+    }
 }

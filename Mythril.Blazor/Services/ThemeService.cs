@@ -9,12 +9,16 @@ public class ThemeService(IJSRuntime jsRuntime)
 
     public event Action? OnThemeChanged;
 
-    public async Task<string> GetTheme() => await _jsRuntime.InvokeAsync<string>("localStorage.getItem", _themeKey) ?? "light-theme";
-
     public async Task SetTheme(string theme)
     {
         await _jsRuntime.InvokeVoidAsync("setTheme", theme);
         OnThemeChanged?.Invoke();
+    }
+
+    public async Task<string> GetTheme()
+    {
+        var theme = await _jsRuntime.InvokeAsync<string>("localStorage.getItem", _themeKey);
+        return theme ?? "light-theme";
     }
 
     public async Task ToggleTheme()

@@ -29,10 +29,13 @@
 
     private ElementReference cardElement;
 
+    private bool _hasTriggeredCompletion = false;
+
     protected override async Task OnParametersSetAsync()
     {
-        if (QuestProgress?.IsCompleted == true)
+        if (QuestProgress?.IsCompleted == true && !_hasTriggeredCompletion)
         {
+            _hasTriggeredCompletion = true;
             await TriggerConfetti();
             await Task.Delay(1000); // Duration of the gold flash animation
             await OnCompletionAnimationEnd.InvokeAsync();
