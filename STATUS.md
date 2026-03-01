@@ -1,5 +1,5 @@
 # Agentic Status Report
-**Generated:** 2026-03-01 13:30:07
+**Generated:** 2026-03-01 13:35:09
 
 ## 1. System Integrity (check_health.py)
 ✅ **PASSED**
@@ -32,16 +32,16 @@ VSTest version 18.0.1 (x64)
 Starting test execution, please wait...
 A total of 1 test files matched the specified pattern.
 
-Passed!  - Failed:     0, Passed:    41, Skipped:     0, Total:    41, Duration: 255 ms - Mythril.Tests.dll (net9.0)
+Passed!  - Failed:     0, Passed:    41, Skipped:     0, Total:    41, Duration: 263 ms - Mythril.Tests.dll (net9.0)
 
 Attachments:
-  C:\Users\Derek\source\repos\Mythril\TestResults\08293f0d-04cb-4d64-87cc-08d8af08e621\coverage.cobertura.xml
+  C:\Users\Derek\source\repos\Mythril\TestResults\46470aac-5628-42c5-b0ee-4505a166f36d\coverage.cobertura.xml
 --- Generating Fresh Test Results ---
 [SUCCESS] Tests completed.
 --- Checking for Monoliths (> 250 lines) ---
 
 --- Checking Test Coverage ---
-Using coverage report: TestResults\08293f0d-04cb-4d64-87cc-08d8af08e621\coverage.cobertura.xml
+Using coverage report: TestResults\46470aac-5628-42c5-b0ee-4505a166f36d\coverage.cobertura.xml
 Overall Coverage: 70.45%
 
 --- Checking Documentation Staleness ---
@@ -49,9 +49,8 @@ README.md: 0 source files changed.
 GEMINI.md: 0 source files changed.
 AGENTS.md: 0 source files changed.
 
---- Checking User Feedback Backlog ---
-[SUCCESS] Feedback backlog is empty.
-Results and shields exported to scripts/data/
+--- Checking User Feedback & Error Backlog ---
+[SUCCESS] Feedback and error backlogs are empty.
 
 [SUCCESS] All health checks passed!
 
