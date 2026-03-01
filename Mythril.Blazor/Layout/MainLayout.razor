@@ -19,7 +19,7 @@
         {
             <div class="feedback-drawer">
                 <div class="drawer-header">
-                    <h5>User Feedback</h5>
+                    <h5>User Feedback (DEBUG: OPEN)</h5>
                     <button class="btn-close" @onclick="ToggleFeedback"></button>
                 </div>
                 <div class="drawer-content">
@@ -36,7 +36,11 @@
 @code {
     private bool _showFeedback = false;
 
-    private void ToggleFeedback() => _showFeedback = !_showFeedback;
+    private void ToggleFeedback() 
+    {
+        Console.WriteLine($"Toggling Feedback. Current state: {_showFeedback}");
+        _showFeedback = !_showFeedback;
+    }
 
     private async Task SaveGame()
     {
