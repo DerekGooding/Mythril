@@ -44,33 +44,46 @@ def main():
 
     synced_count = 0
     for entry in data:
-        title = entry.get("Title", "Untitled")
+        if not isinstance(entry, dict):
+            print(f"Skipping non-dict entry: {entry}")
+            continue
+            
+        # Create a lowercase mapping of keys
+        entry_low = {str(k).lower(): v for k, v in entry.items()}
+        
+        def get_val(key, default=""):
+            return entry_low.get(key.lower(), default)
+
+        title = get_val("Title", "Untitled")
         
         # Handle numeric or string Type
-        raw_type = entry.get("Type", "Suggestion")
+        raw_type = get_val("Type", "Suggestion")
         type_map = {0: "Bug", 1: "FeatureRequest", 2: "Suggestion", 3: "Error"}
         if isinstance(raw_type, int) and raw_type in type_map:
             fb_type = type_map[raw_type]
         else:
             fb_type = str(raw_type)
 
-        description = entry.get("Description", "")
-        source = entry.get("Source", "In-Game UI")
-        stack = entry.get("StackTrace", "")
-        logs = entry.get("ConsoleLog", "")
-        date_str = entry.get("Date", datetime.now().isoformat())[:10]
+        description = get_val("Description", "")
+        source = get_val("Source", "In-Game UI")
+        stack = get_val("StackTrace", "")
+        logs = get_val("ConsoleLog", "")
+        date_str = get_val("Date", datetime.now().isoformat())[:10]
 
         is_error = fb_type == "Error"
         target_dir = errors_dir if is_error else feedback_dir
 
-        # For errors, we want to ensure description is the primary source of info
+        # Combine info for description as requested
+        final_description = description
         if is_error:
-            # If description is empty or very short, try to use title or first line of stack
-            if not description or description == "Automated Error Report":
-                if stack:
-                    description = stack.split('\n')[0]
-                else:
-                    description = "An unknown runtime error occurred."
+            if not final_description or final_description == "Automated Error Report":
+                final_description = stack.split('\n')[0] if stack else "An unknown runtime error occurred."
+            
+            # Append stack and logs to description area
+            if stack:
+                final_description += f"\n\n### Stack Trace\n```\n{stack}\n```"
+            if logs:
+                final_description += f"\n\n### Console Logs\n```\n{logs}\n```"
 
         template = f"""# {'Error' if is_error else 'Feedback'}: {title}
 
@@ -79,19 +92,13 @@ def main():
 **Source:** {source}
 
 ## Description
-{description}
+{final_description}
 
 ## Status
 - [ ] Investigated
 - [ ] Implemented
 - [ ] Verified
 """
-        if stack:
-            template += f"\n## Stack Trace\n```\n{stack}\n```\n"
-        
-        if logs:
-            template += f"\n## Console Logs\n```\n{logs}\n```\n"
-
         base_name = f"{date_str}_{slugify(title[:30])}"
         filename = f"{base_name}.md"
         filepath = os.path.join(target_dir, filename)

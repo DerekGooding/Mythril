@@ -17,12 +17,12 @@ public class FeedbackEntry
 {
     public string Id { get; set; } = Guid.NewGuid().ToString();
     public DateTime Date { get; set; } = DateTime.UtcNow;
-    public FeedbackType Type { get; set; }
-    public string Title { get; set; } = "";
+    public FeedbackType Type { get; set; } = FeedbackType.Suggestion;
+    public string Title { get; set; } = "Untitled";
     public string Description { get; set; } = "";
     public string Source { get; set; } = "In-Game UI";
-    public string? StackTrace { get; set; }
-    public string? ConsoleLog { get; set; }
+    public string StackTrace { get; set; } = "";
+    public string ConsoleLog { get; set; } = "";
 }
 
 public class FeedbackService(IJSRuntime js, AuthService auth, HttpClient http)
@@ -48,27 +48,32 @@ public class FeedbackService(IJSRuntime js, AuthService auth, HttpClient http)
         {
             Console.WriteLine($"[FeedbackService] Syncing {entry.Type} to bridge...");
             
-            // Use custom options to ensure Enum is serialized as string
+            // Explicitly set options to ensure PascalCase and String Enums
             var options = new System.Text.Json.JsonSerializerOptions
             {
+                PropertyNamingPolicy = null, // PascalCase (default for properties)
                 Converters = { new System.Text.Json.Serialization.JsonStringEnumConverter() }
             };
 
             // The dev bridge runs on a fixed local port during development
-            await http.PostAsJsonAsync("http://localhost:8080/report", entry, options);
+            var response = await http.PostAsJsonAsync("http://localhost:8080/report", entry, options);
+            if (!response.IsSuccessStatusCode)
+            {
+                Console.WriteLine($"[FeedbackService] Bridge sync failed with status: {response.StatusCode}");
+            }
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[FeedbackService] Bridge sync failed: {ex.Message}");
+            Console.WriteLine($"[FeedbackService] Bridge sync exception: {ex.Message}");
         }
     }
 
     public async Task CaptureError(string message, string? stackTrace = null)
     {
-        string? logs = null;
+        string logs = "";
         try 
         {
-            logs = await js.InvokeAsync<string>("window.getRecentLogs");
+            logs = await js.InvokeAsync<string>("window.getRecentLogs") ?? "";
         }
         catch (Exception ex)
         {
@@ -80,7 +85,7 @@ public class FeedbackService(IJSRuntime js, AuthService auth, HttpClient http)
             Type = FeedbackType.Error,
             Title = "Automated Error Report",
             Description = message,
-            StackTrace = stackTrace,
+            StackTrace = stackTrace ?? "",
             ConsoleLog = logs
         });
     }
