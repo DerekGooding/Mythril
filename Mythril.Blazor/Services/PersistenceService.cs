@@ -120,7 +120,7 @@ public class PersistenceService(
 
         // Restore Active Quests
         resourceManager.ActiveQuests.Clear();
-        int bonusDeciseconds = (int)((DateTime.Now - saveData.LastSaveTime).TotalSeconds * 10);
+        double bonusSeconds = (DateTime.Now - saveData.LastSaveTime).TotalSeconds;
         foreach (var dto in saveData.ActiveQuests)
         {
             var character = resourceManager.Characters.FirstOrDefault(c => c.Name == dto.CharacterName);
@@ -148,7 +148,7 @@ public class PersistenceService(
 
             if (qp != null)
             {
-                qp.SecondsElapsed = dto.SecondsElapsed + bonusDeciseconds;
+                qp.SecondsElapsed = dto.SecondsElapsed + bonusSeconds;
                 qp.StartTime = dto.StartTime;
                 resourceManager.ActiveQuests.Add(qp);
             }

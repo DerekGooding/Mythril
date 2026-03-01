@@ -107,8 +107,8 @@ public class QuestLifecycleTests
         var progress = _resourceManager.ActiveQuests[0];
         Assert.AreEqual(0, progress.SecondsElapsed);
 
-        _resourceManager.Tick(0.1); // 1 tick = 1 second in implementation
-        Assert.AreEqual(1, progress.SecondsElapsed);
+        _resourceManager.Tick(1.0); 
+        Assert.AreEqual(1.0, progress.SecondsElapsed);
     }
 
     [TestMethod]
@@ -152,8 +152,8 @@ public class QuestLifecycleTests
         _resourceManager.StartQuest(unlock, wifu);
         
         var progress = _resourceManager.ActiveQuests[0];
-        // Expected: 10 / (1.0 + 10/100) = 10 / 1.1 = 9.09 -> 9 (int)
-        Assert.AreEqual(9, progress.DurationSeconds);
+        // Expected: 30 / (1.0 + 10/100) = 30 / 1.1 = 27.27 -> 27 (int)
+        Assert.AreEqual(27, progress.DurationSeconds);
     }
 
     [TestMethod]

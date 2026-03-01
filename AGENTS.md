@@ -10,7 +10,14 @@ This project uses agentic workflows to maintain its health and quality.
 - **Monolith Prevention**: Files must be under 250 lines. (Enforced by `check_health.py`)
 - **Test Coverage**: Minimum 70%.
 - **Documentation**: Must be updated every 8 file changes.
+- **Feedback Integrity**: Every cleared item in `docs/feedback/` or `docs/errors/` must have a corresponding technical resolution file in `docs/resolution/` explaining the fix.
 
-## Persistence & State
-Agents should be aware of the `JunctionManager` and `ResourceManager` separation when modifying core logic or UI.
-Data-driven content is located in `Mythril.Blazor/wwwroot/data/*.json`.
+## Architecture & State
+- **ResourceManager**: Core game engine managing quests, locations, and global state.
+- **JunctionManager**: Handles character-cadence assignments and stat calculations (Junction system).
+- **InventoryManager**: Manages items, spells, and capacity enforcement.
+- **Data-Driven**: Content is located in `Mythril.Blazor/wwwroot/data/*.json`.
+
+## Versioning
+Upgraded to .NET 10 (Blazor WebAssembly).
+- Last Review: March 1, 2026.

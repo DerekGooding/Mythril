@@ -15,7 +15,7 @@ public class ThemeService(IJSRuntime jsRuntime, ILogger<ThemeService> logger)
     {
         try
         {
-            await _jsRuntime.InvokeVoidAsync("setTheme", theme);
+            await _jsRuntime.InvokeVoidAsync("window.setTheme", theme);
             OnThemeChanged?.Invoke();
         }
         catch (Exception ex)

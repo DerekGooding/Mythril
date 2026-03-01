@@ -14,8 +14,8 @@ public class QuestProgress(object item, string description, int durationSeconds,
     public Character Character { get; set; } = character;
     public DateTime StartTime { get; set; } = DateTime.Now;
 
-    public int SecondsElapsed { get; set; } = 0;
+    public double SecondsElapsed { get; set; } = 0;
 
-    public double Progress => DurationSeconds > 0 ? Math.Clamp((double)SecondsElapsed / DurationSeconds, 0, 1) : 1;
+    public double Progress => DurationSeconds > 0 ? Math.Clamp(SecondsElapsed / DurationSeconds, 0, 1) : 1;
     public bool IsCompleted => SecondsElapsed >= DurationSeconds;
 }

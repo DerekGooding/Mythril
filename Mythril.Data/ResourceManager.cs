@@ -132,26 +132,37 @@ public class ResourceManager(
         if (CanAfford(item))
         {
             PayCosts(item);
-            int duration = 3;
+            double duration = 10; // Default
             if (item is QuestData quest)
             {
                 duration = IsTestMode ? 3 : quest.DurationSeconds;
-                if (!IsTestMode && quest.Type == QuestType.Recurring)
+                if (!IsTestMode)
                 {
-                    int strength = JunctionManager.GetStatValue(character, "Strength");
-                    duration = (int)(duration / (1.0 + (strength / 100.0)));
+                    // Strength reduces recurring quest duration
+                    if (quest.Type == QuestType.Recurring)
+                    {
+                        int strength = JunctionManager.GetStatValue(character, "Strength");
+                        duration /= (1.0 + (strength / 100.0));
+                    }
+                    // Vitality reduces single quest duration
+                    else if (quest.Type == QuestType.Single)
+                    {
+                        int vitality = JunctionManager.GetStatValue(character, "Vitality");
+                        duration /= (1.0 + (vitality / 100.0));
+                    }
                 }
-                ActiveQuests.Add(new QuestProgress(quest, quest.Description, duration, character));
+                ActiveQuests.Add(new QuestProgress(quest, quest.Description, (int)Math.Max(1, duration), character));
             }
             if(item is CadenceUnlock unlock)
             {
-                duration = IsTestMode ? 3 : 10;
+                duration = IsTestMode ? 3 : 30; // Increased base duration for Cadence unlocks
                 if (!IsTestMode)
                 {
+                    // Magic reduces cadence unlock duration
                     int magic = JunctionManager.GetStatValue(character, "Magic");
-                    duration = (int)(duration / (1.0 + (magic / 100.0)));
+                    duration /= (1.0 + (magic / 100.0));
                 }
-                ActiveQuests.Add(new QuestProgress(unlock, unlock.Ability.Description, duration, character));
+                ActiveQuests.Add(new QuestProgress(unlock, unlock.Ability.Description, (int)Math.Max(1, duration), character));
             }
         }
     }
@@ -162,7 +173,7 @@ public class ResourceManager(
         {
             if (!progress.IsCompleted)
             {
-                progress.SecondsElapsed += (int)(deltaSeconds * 10);
+                progress.SecondsElapsed += deltaSeconds;
             }
         }
     }

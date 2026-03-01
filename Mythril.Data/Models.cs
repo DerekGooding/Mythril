@@ -84,7 +84,7 @@ public class QuestProgressDTO
     public string ItemName { get; set; } = string.Empty;
     public string ItemType { get; set; } = string.Empty; // "Quest" or "CadenceUnlock"
     public string CharacterName { get; set; } = string.Empty;
-    public int SecondsElapsed { get; set; }
+    public double SecondsElapsed { get; set; }
     public DateTime StartTime { get; set; }
 }
 
