@@ -12,6 +12,7 @@ This document contains foundational mandates for the AI assistant (Gemini) durin
 - **Validation:** No logic changes are complete without corresponding unit tests. For complex system interactions (e.g. quests, cadence, persistence), utilize the `Mythril.Headless` project to run scenario-based tests via `test_scenario.json` and verify the output `state.json`.
 - **Documentation:** Keep documentation synchronized with code changes.
 - **Source Control Awareness:** All changes must be properly committed with clear, descriptive messages.
+- **Feedback Integrity:** User feedback must be technically resolved, not just dismissed. Every cleared item in `docs/feedback/` must have a corresponding technical resolution file in `docs/resolution/` explaining the fix.
 - **Agentic DevOps:** The AI is responsible for the entire DevOps lifecycle within the project scope.
 - **Source Control Submission:** Always commit changes to the git repository upon completing a task. Use clear, descriptive commit messages.
 
