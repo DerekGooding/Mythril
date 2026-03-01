@@ -1,5 +1,5 @@
 # Agentic Status Report
-**Generated:** 2026-03-01 11:52:38
+**Generated:** 2026-03-01 11:57:04
 
 ## 1. System Integrity (check_health.py)
 ❌ **FAILED**
@@ -32,24 +32,24 @@ VSTest version 18.0.1 (x64)
 Starting test execution, please wait...
 A total of 1 test files matched the specified pattern.
 
-Passed!  - Failed:     0, Passed:    41, Skipped:     0, Total:    41, Duration: 326 ms - Mythril.Tests.dll (net9.0)
+Passed!  - Failed:     0, Passed:    41, Skipped:     0, Total:    41, Duration: 302 ms - Mythril.Tests.dll (net9.0)
 
 Attachments:
-  C:\Users\Derek\source\repos\Mythril\TestResults\504ddebb-81ee-4824-bd3e-be1647e47008\coverage.cobertura.xml
+  C:\Users\Derek\source\repos\Mythril\TestResults\16188872-1925-4463-82f2-102bd563e43a\coverage.cobertura.xml
 --- Generating Fresh Test Results ---
 [SUCCESS] Tests completed.
 --- Checking for Monoliths (> 250 lines) ---
 
 --- Checking Test Coverage ---
-Using coverage report: TestResults\504ddebb-81ee-4824-bd3e-be1647e47008\coverage.cobertura.xml
+Using coverage report: TestResults\16188872-1925-4463-82f2-102bd563e43a\coverage.cobertura.xml
 Overall Coverage: 70.45%
 
 --- Checking Documentation Staleness ---
-README.md: 15 source files changed.
+README.md: 13 source files changed.
 [FAIL] README.md is stale!
-GEMINI.md: 13 source files changed.
+GEMINI.md: 12 source files changed.
 [FAIL] GEMINI.md is stale!
-AGENTS.md: 15 source files changed.
+AGENTS.md: 13 source files changed.
 [FAIL] AGENTS.md is stale!
 
 --- Checking User Feedback Backlog ---
