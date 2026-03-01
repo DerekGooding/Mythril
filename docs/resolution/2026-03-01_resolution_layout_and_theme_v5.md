@@ -16,10 +16,10 @@
 ### 2. Theme System Overhaul
 - **Modular JavaScript**: Extracted all theme-related JS logic from `index.html` into a dedicated `wwwroot/theme.js` file. This ensures cleaner separation and more reliable loading.
 - **Robust Scoping**: Updated `ThemeService.cs` to call `window.setTheme` explicitly.
-- **Diagnostics Project**: Created `Mythril.ThemeTest`, a standalone Blazor WebAssembly project. Its sole purpose is to validate the theme-switching Interop logic in a clean environment and provide detailed on-screen diagnostics. This project is now part of the `Mythril.sln` solution.
+- **Diagnostics Project**: Created `Mythril.ThemeTest`, a standalone Blazor WebAssembly project. Its sole purpose is to validate the theme-switching Interop logic in a clean environment and provide detailed on-screen diagnostics. This project is now part of the `Mythril.sln` solution and verified to build/run correctly.
 
 ### 3. Verification
 - Verified that the `Party` section is on the right side of the screen.
 - Verified that characters are stacked vertically.
 - Verified that stats are strictly horizontal within each character card.
-- Theme switching logic verified in `Mythril.ThemeTest`.
+- Theme switching logic verified via code review and successful build of the `ThemeTest` project.
