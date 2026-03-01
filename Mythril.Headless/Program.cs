@@ -57,6 +57,7 @@ class Program
         var questUnlocks = ContentHost.GetContent<QuestUnlocks>();
         var questToCadenceUnlocks = ContentHost.GetContent<QuestToCadenceUnlocks>();
         var cadences = ContentHost.GetContent<Cadences>();
+        var statAugments = ContentHost.GetContent<StatAugments>();
 
         string currentDir = AppDomain.CurrentDomain.BaseDirectory;
         string? rootDir = currentDir;
@@ -103,8 +104,23 @@ class Program
             d => d.Requires.Select(rn => quests.All.First(q => q.Name == rn)).ToArray()
         ));
 
+        var questCadenceDTOs = JsonConvert.DeserializeObject<List<QuestCadenceUnlockDTO>>(File.ReadAllText(Path.Combine(dataDir, "quest_cadence_unlocks.json"))) ?? [];
+        questToCadenceUnlocks.Load(questCadenceDTOs.ToDictionary(
+            d => quests.All.First(q => q.Name == d.Quest),
+            d => d.Cadences.Select(cn => cadences.All.First(c => c.Name == cn)).ToArray()
+        ));
+
+        var statAugmentDTOs = JsonConvert.DeserializeObject<List<StatAugmentItemDTO>>(File.ReadAllText(Path.Combine(dataDir, "stat_augments.json"))) ?? [];
+        statAugments.Load(statAugmentDTOs.ToDictionary(
+            d => items.All.First(i => i.Name == d.Item),
+            d => d.Augments.Select(a => new StatAugment(stats.All.First(s => s.Name == a.Stat), a.ModifierAtFull)).ToArray()
+        ));
+
         // 2. Initialize Engine
-        var resourceManager = new ResourceManager(items, questUnlocks, questToCadenceUnlocks, questDetails, cadences, locations);
+        var inventory = new InventoryManager();
+        var junctionManager = new JunctionManager(inventory, statAugments, cadences);
+        var resourceManager = new ResourceManager(items, questUnlocks, questToCadenceUnlocks, questDetails, cadences, locations, junctionManager, inventory);
+        
         resourceManager.Initialize();
 
         var json = File.ReadAllText(commandFilePath);

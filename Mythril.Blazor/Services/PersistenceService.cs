@@ -7,6 +7,7 @@ namespace Mythril.Blazor.Services;
 public class PersistenceService(
     IJSRuntime js, 
     ResourceManager resourceManager, 
+    JunctionManager junctionManager,
     Items items, 
     Cadences cadences, 
     CadenceAbilities abilities,
@@ -19,6 +20,7 @@ public class PersistenceService(
     {
         var saveData = new SaveData
         {
+            LastSaveTime = DateTime.Now,
             Inventory = resourceManager.Inventory.GetItems()
                 .Concat(resourceManager.Inventory.GetSpells())
                 .Select(x => new KeyValuePair<string, int>(x.Item.Name, x.Quantity))
@@ -26,18 +28,23 @@ public class PersistenceService(
             UnlockedCadences = resourceManager.UnlockedCadences.Select(c => c.Name).ToList(),
             UnlockedAbilities = resourceManager.UnlockedAbilities.Select(a => a.Name).ToList(),
             CompletedQuests = resourceManager.GetCompletedQuests().Select(q => q.Name).ToList(),
-            Junctions = resourceManager.Junctions.Select(j => new JunctionDTO
+            Junctions = junctionManager.Junctions.Select(j => new JunctionDTO
             {
                 CharacterName = j.Character.Name,
                 StatName = j.Stat.Name,
                 MagicName = j.Magic.Name
             }).ToList(),
+            AssignedCadences = resourceManager.Characters.Select(c => new { Char = c, Cad = junctionManager.CurrentlyAssigned(c).FirstOrDefault() })
+                .Where(x => x.Cad.Name != null)
+                .Select(x => new AssignedCadenceDTO { CharacterName = x.Char.Name, CadenceName = x.Cad.Name })
+                .ToList(),
             ActiveQuests = resourceManager.ActiveQuests.Select(q => new QuestProgressDTO
             {
                 ItemName = q.Item is QuestData qd ? qd.Name : (q.Item is CadenceUnlock cu ? cu.Ability.Name : ""),
                 ItemType = q.Item is QuestData ? "Quest" : "CadenceUnlock",
                 CharacterName = q.Character.Name,
-                SecondsElapsed = q.SecondsElapsed
+                SecondsElapsed = q.SecondsElapsed,
+                StartTime = q.StartTime
             }).ToList()
         };
 
@@ -76,6 +83,7 @@ public class PersistenceService(
             var ability = abilities.All.FirstOrDefault(x => x.Name == name);
             if (ability.Name != null) resourceManager.UnlockedAbilities.Add(ability);
         }
+        resourceManager.UpdateMagicCapacity();
 
         // Restore Completed Quests
         resourceManager.ClearCompletedQuests();
@@ -85,8 +93,20 @@ public class PersistenceService(
             if (quest.Name != null) resourceManager.RestoreCompletedQuest(quest);
         }
 
+        // Restore Assignments
+        junctionManager.Initialize(); 
+        foreach(var dto in saveData.AssignedCadences)
+        {
+            var character = resourceManager.Characters.FirstOrDefault(c => c.Name == dto.CharacterName);
+            var cadence = cadences.All.FirstOrDefault(c => c.Name == dto.CadenceName);
+            if (character.Name != null && cadence.Name != null)
+            {
+                junctionManager.RestoreAssignment(cadence, character);
+            }
+        }
+
         // Restore Junctions
-        resourceManager.Junctions.Clear();
+        junctionManager.Junctions.Clear();
         foreach(var dto in saveData.Junctions)
         {
             var character = resourceManager.Characters.FirstOrDefault(c => c.Name == dto.CharacterName);
@@ -94,28 +114,26 @@ public class PersistenceService(
             var magic = items.All.FirstOrDefault(i => i.Name == dto.MagicName);
             if (character.Name != null && stat.Name != null && magic.Name != null)
             {
-                resourceManager.Junctions.Add(new Junction(character, stat, magic));
+                junctionManager.Junctions.Add(new Junction(character, stat, magic));
             }
         }
 
         // Restore Active Quests
         resourceManager.ActiveQuests.Clear();
+        int bonusDeciseconds = (int)((DateTime.Now - saveData.LastSaveTime).TotalSeconds * 10);
         foreach (var dto in saveData.ActiveQuests)
         {
             var character = resourceManager.Characters.FirstOrDefault(c => c.Name == dto.CharacterName);
             if (character.Name == null) continue;
 
+            QuestProgress? qp = null;
             if (dto.ItemType == "Quest")
             {
                 var quest = quests.All.FirstOrDefault(q => q.Name == dto.ItemName);
                 if (quest.Name != null)
                 {
                     var detail = resourceManager.GetQuestDetails(quest);
-                    var qp = new QuestProgress(new QuestData(quest, detail), quest.Description, detail.DurationSeconds, character)
-                    {
-                        SecondsElapsed = dto.SecondsElapsed
-                    };
-                    resourceManager.ActiveQuests.Add(qp);
+                    qp = new QuestProgress(new QuestData(quest, detail), quest.Description, detail.DurationSeconds, character);
                 }
             }
             else if (dto.ItemType == "CadenceUnlock")
@@ -124,12 +142,15 @@ public class PersistenceService(
                 var unlock = cadence.Abilities.FirstOrDefault(a => a.Ability.Name == dto.ItemName);
                 if (unlock.Ability.Name != null)
                 {
-                    var qp = new QuestProgress(unlock, unlock.Ability.Description, 3, character)
-                    {
-                        SecondsElapsed = dto.SecondsElapsed
-                    };
-                    resourceManager.ActiveQuests.Add(qp);
+                    qp = new QuestProgress(unlock, unlock.Ability.Description, 10, character);
                 }
+            }
+
+            if (qp != null)
+            {
+                qp.SecondsElapsed = dto.SecondsElapsed + bonusDeciseconds;
+                qp.StartTime = dto.StartTime;
+                resourceManager.ActiveQuests.Add(qp);
             }
         }
     }

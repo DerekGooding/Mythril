@@ -4,6 +4,7 @@
 @using System.Threading.Tasks
 
 @inject ResourceManager resourceManager
+@inject JunctionManager JunctionManager
 @inject ThemeService themeService
 @inject NavigationManager navigationManager
 @inject SnackbarService SnackbarService
@@ -115,7 +116,15 @@
 
     private async Task TaskDropped((object item, Character character) args)
     {
-        resourceManager.StartQuest(args.item, args.character);
+        if (args.item is Cadence cadence)
+        {
+            JunctionManager.AssignCadence(cadence, args.character, resourceManager.UnlockedAbilities);
+            SnackbarService.Show($"{args.character.Name} equipped {cadence.Name}", "info");
+        }
+        else
+        {
+            resourceManager.StartQuest(args.item, args.character);
+        }
         await InvokeAsync(StateHasChanged);
     }
 

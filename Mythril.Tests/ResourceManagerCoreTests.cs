@@ -18,13 +18,17 @@ public class ResourceManagerCoreTests
         _quests = ContentHost.GetContent<Quests>();
         _questDetails = ContentHost.GetContent<QuestDetails>();
         
+        var inventory = new InventoryManager();
+        var junctionManager = new JunctionManager(inventory, ContentHost.GetContent<StatAugments>(), ContentHost.GetContent<Cadences>());
         _resourceManager = new ResourceManager(
             _items, 
             ContentHost.GetContent<QuestUnlocks>(), 
             ContentHost.GetContent<QuestToCadenceUnlocks>(), 
             _questDetails, 
             ContentHost.GetContent<Cadences>(), 
-            ContentHost.GetContent<Locations>());
+            ContentHost.GetContent<Locations>(),
+            junctionManager,
+            inventory);
         _resourceManager.Initialize();
     }
 
@@ -68,14 +72,14 @@ public class ResourceManagerCoreTests
         var cadence = ContentHost.GetContent<Cadences>().All.First();
         var character = _resourceManager!.Characters[0];
 
-        _resourceManager.AssignCadence(cadence, character);
-        var assigned = _resourceManager.CurrentlyAssigned(character).ToList();
+        _resourceManager.JunctionManager.AssignCadence(cadence, character, _resourceManager.UnlockedAbilities);
+        var assigned = _resourceManager.JunctionManager.CurrentlyAssigned(character).ToList();
         
         Assert.AreEqual(1, assigned.Count);
         Assert.AreEqual(cadence.Name, assigned[0].Name);
 
-        _resourceManager.Unassign(cadence);
-        assigned = _resourceManager.CurrentlyAssigned(character).ToList();
+        _resourceManager.JunctionManager.Unassign(cadence);
+        assigned = _resourceManager.JunctionManager.CurrentlyAssigned(character).ToList();
         Assert.AreEqual(0, assigned.Count);
     }
 

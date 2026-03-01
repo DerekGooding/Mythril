@@ -60,6 +60,14 @@ public class SaveData
     public List<string> CompletedQuests { get; set; } = [];
     public List<QuestProgressDTO> ActiveQuests { get; set; } = [];
     public List<JunctionDTO> Junctions { get; set; } = [];
+    public List<AssignedCadenceDTO> AssignedCadences { get; set; } = [];
+    public DateTime LastSaveTime { get; set; }
+}
+
+public class AssignedCadenceDTO
+{
+    public string CadenceName { get; set; } = "";
+    public string CharacterName { get; set; } = "";
 }
 
 public record Junction(Character Character, Stat Stat, Item Magic);
@@ -77,6 +85,7 @@ public class QuestProgressDTO
     public string ItemType { get; set; } = string.Empty; // "Quest" or "CadenceUnlock"
     public string CharacterName { get; set; } = string.Empty;
     public int SecondsElapsed { get; set; }
+    public DateTime StartTime { get; set; }
 }
 
 // Data Transfer Objects for JSON Loading
@@ -89,3 +98,5 @@ public class QuestUnlockDTO { public string Quest { get; set; } = ""; public Lis
 public class QuestCadenceUnlockDTO { public string Quest { get; set; } = ""; public List<string> Cadences { get; set; } = []; }
 public class RecipeDTO { public string InputItem { get; set; } = ""; public int InputQuantity { get; set; } = 1; public string OutputItem { get; set; } = ""; public int OutputQuantity { get; set; } = 1; }
 public class RefinementDTO { public string Ability { get; set; } = ""; public List<RecipeDTO> Recipes { get; set; } = []; }
+public class StatAugmentEntryDTO { public string Stat { get; set; } = ""; public int ModifierAtFull { get; set; } = 0; }
+public class StatAugmentItemDTO { public string Item { get; set; } = ""; public List<StatAugmentEntryDTO> Augments { get; set; } = []; }

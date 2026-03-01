@@ -18,5 +18,6 @@
   { "Name": "Fire I", "Description": "A basic fire spell.", "ItemType": "Spell" },
   { "Name": "Ice I", "Description": "A basic ice spell.", "ItemType": "Spell" },
   { "Name": "Lightning I", "Description": "A basic lightning spell.", "ItemType": "Spell" },
-  { "Name": "Earth I", "Description": "A basic earth spell.", "ItemType": "Spell" }
+  { "Name": "Earth I", "Description": "A basic earth spell.", "ItemType": "Spell" },
+  { "Name": "Cure I", "Description": "A basic healing spell.", "ItemType": "Spell" }
 ]

@@ -7,20 +7,27 @@ public class InventoryTests
 {
     private ResourceManager? _resourceManager;
     private Items? _items;
+    private QuestDetails? _questDetails;
 
     [TestInitialize]
     public void Setup()
     {
         TestContentLoader.Load();
         _items = ContentHost.GetContent<Items>();
+        _questDetails = ContentHost.GetContent<QuestDetails>();
         
+        var inventory = new InventoryManager();
+        var junctionManager = new JunctionManager(inventory, ContentHost.GetContent<StatAugments>(), ContentHost.GetContent<Cadences>());
         _resourceManager = new ResourceManager(
             _items, 
             ContentHost.GetContent<QuestUnlocks>(), 
             ContentHost.GetContent<QuestToCadenceUnlocks>(), 
-            ContentHost.GetContent<QuestDetails>(), 
+            _questDetails, 
             ContentHost.GetContent<Cadences>(), 
-            ContentHost.GetContent<Locations>());
+            ContentHost.GetContent<Locations>(),
+            junctionManager,
+            inventory);
+
         _resourceManager.Initialize();
         
         _resourceManager.Inventory.Clear();

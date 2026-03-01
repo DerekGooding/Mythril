@@ -57,25 +57,40 @@ def check_feedback_backlog():
         print("[SUCCESS] Feedback and error backlogs are empty.")
     return total_count
 
-def get_git_changes_since_file(file_path):
-    try:
-        last_commit = subprocess.check_output(["git", "log", "-1", "--format=%H", "--", file_path]).decode().strip()
-        if not last_commit: return 0
-        changes = subprocess.check_output(["git", "diff", "--name-only", last_commit, "HEAD", "--", SOURCE_DIR]).decode().strip()
-        return len(set(changes.splitlines())) if changes else 0
-    except:
-        return 0
+def get_local_changes_since_file(doc_file_path):
+    if not os.path.exists(doc_file_path):
+        return 999 
+    
+    doc_mtime = os.path.getmtime(doc_file_path)
+    changed_count = 0
+    
+    EXCLUDE_DIRS = {"obj", "bin", ".git", "lib", "node_modules", "wwwroot/lib", "TestResults", ".gemini", ".vs"}
+    for root, dirs, files in os.walk(SOURCE_DIR):
+        dirs[:] = [d for d in dirs if d not in EXCLUDE_DIRS]
+        for file in files:
+            if any(file.endswith(ext) for ext in SOURCE_EXTENSIONS):
+                file_path = os.path.join(root, file)
+                if os.path.abspath(file_path) == os.path.abspath(doc_file_path):
+                    continue
+                try:
+                    if os.path.getmtime(file_path) > doc_mtime:
+                        changed_count += 1
+                except Exception:
+                    continue
+    return changed_count
 
 def check_docs_staleness():
     print("\n--- Checking Documentation Staleness ---")
     all_up_to_date = True
     for doc in DOC_FILES:
         if os.path.exists(doc):
-            changes = get_git_changes_since_file(doc)
-            print(f"{doc}: {changes} source files changed.")
+            changes = get_local_changes_since_file(doc)
+            print(f"{doc}: {changes} source files changed since its last update.")
             if changes > DOCS_STALENESS_THRESHOLD:
                 print(f"[FAIL] {doc} is stale!")
                 all_up_to_date = False
+        else:
+            print(f"[WARNING] Documentation file {doc} not found.")
     return all_up_to_date
 
 def check_monoliths():

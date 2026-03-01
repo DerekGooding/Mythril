@@ -14,7 +14,9 @@ public class ContentLoader(
     Cadences cadences,
     QuestDetails questDetails,
     QuestUnlocks questUnlocks,
-    ItemRefinements refinements)
+    ItemRefinements refinements,
+    StatAugments statAugments,
+    QuestToCadenceUnlocks questToCadenceUnlocks)
 {
     private readonly JsonSerializerOptions _options = new()
     {
@@ -156,6 +158,23 @@ public class ContentLoader(
             }
             questToCadenceUnlocks.Load(questCadenceDict);
         } catch (Exception ex) { Console.WriteLine($"Error loading quest-to-cadence unlocks: {ex.Message}"); throw; }
+
+        try {
+            var statAugmentDTOs = await http.GetFromJsonAsync<List<StatAugmentItemDTO>>("data/stat_augments.json", _options) ?? [];
+            Console.WriteLine($"Loaded {statAugmentDTOs.Count} stat augments.");
+            var statAugmentsDict = new Dictionary<Item, StatAugment[]>();
+            foreach (var d in statAugmentDTOs)
+            {
+                var i = items.All.FirstOrDefault(x => x.Name == d.Item);
+                if (i.Name == null) { Console.WriteLine($"WARNING: Item '{d.Item}' not found for stat augments"); continue; }
+                statAugmentsDict[i] = d.Augments.Select(a => {
+                    var s = stats.All.FirstOrDefault(x => x.Name == a.Stat);
+                    if (s.Name == null) Console.WriteLine($"WARNING: Stat '{a.Stat}' not found for item '{d.Item}' augments");
+                    return new StatAugment(s, a.ModifierAtFull);
+                }).Where(x => x.Stat.Name != null).ToArray();
+            }
+            statAugments.Load(statAugmentsDict);
+        } catch (Exception ex) { Console.WriteLine($"Error loading stat augments: {ex.Message}"); }
         
         Console.WriteLine("Content Load Complete.");
     }

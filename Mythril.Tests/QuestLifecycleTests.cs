@@ -18,13 +18,17 @@ public class QuestLifecycleTests
         _quests = ContentHost.GetContent<Quests>();
         _questDetails = ContentHost.GetContent<QuestDetails>();
         
+        var inventory = new InventoryManager();
+        var junctionManager = new JunctionManager(inventory, ContentHost.GetContent<StatAugments>(), ContentHost.GetContent<Cadences>());
         _resourceManager = new ResourceManager(
             _items, 
             ContentHost.GetContent<QuestUnlocks>(), 
             ContentHost.GetContent<QuestToCadenceUnlocks>(), 
             _questDetails, 
             ContentHost.GetContent<Cadences>(), 
-            ContentHost.GetContent<Locations>());
+            ContentHost.GetContent<Locations>(),
+            junctionManager,
+            inventory);
         _resourceManager.Initialize();
     }
 

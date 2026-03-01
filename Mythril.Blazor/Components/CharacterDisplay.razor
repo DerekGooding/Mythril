@@ -1,20 +1,21 @@
 @using Mythril.Data
 @inject Stats statsContent
 @inject ResourceManager resourceManager
+@inject JunctionManager JunctionManager
 
 <div class="character-display">
     <div class="character-header">
         <div class="d-flex flex-column">
             <h4>@Character.Name</h4>
             <div class="cadence-info small text-muted">
-                Cadence: @(resourceManager.CurrentlyAssigned(Character).FirstOrDefault().Name ?? "None")
+                Cadence: @(JunctionManager.CurrentlyAssigned(Character).FirstOrDefault().Name ?? "None")
             </div>
         </div>
         <div class="stats-mini">
-            @foreach (var stat in statsContent.All.Take(4))
+            @foreach (var stat in statsContent.All.Take(9))
             {
-                var val = resourceManager.GetStatValue(Character, stat.Name);
-                var junction = resourceManager.Junctions.FirstOrDefault(j => j.Character.Name == Character.Name && j.Stat.Name == stat.Name);
+                var val = JunctionManager.GetStatValue(Character, stat.Name);
+                var junction = JunctionManager.Junctions.FirstOrDefault(j => j.Character.Name == Character.Name && j.Stat.Name == stat.Name);
                 
                 <span class="stat-badge @(junction != null ? "junctioned" : "")" title="@stat.Description @(junction != null ? $"(J: {junction.Magic.Name})" : "")">
                     @stat.Name[0]: @val
@@ -23,7 +24,7 @@
         </div>
     </div>
 
-    @if (resourceManager.CurrentlyAssigned(Character).Any())
+    @if (JunctionManager.CurrentlyAssigned(Character).Any())
     {
         <div class="junction-controls mb-2">
             <button class="btn btn-sm btn-outline-primary" @onclick="ToggleJunctionMenu">Junction</button>
@@ -35,10 +36,10 @@
         <div class="junction-menu card p-2 mb-2">
             <h6>Junction Magic</h6>
             <div class="junction-grid">
-                @foreach (var stat in statsContent.All.Take(4))
+                @foreach (var stat in statsContent.All.Take(9))
                 {
                     bool canJunction = CanJunction(stat);
-                    var currentJ = resourceManager.Junctions.FirstOrDefault(j => j.Character.Name == Character.Name && j.Stat.Name == stat.Name);
+                    var currentJ = JunctionManager.Junctions.FirstOrDefault(j => j.Character.Name == Character.Name && j.Stat.Name == stat.Name);
                     
                     <div class="junction-row d-flex justify-content-between align-items-center mb-1">
                         <span class="small @(canJunction ? "" : "text-muted")">@stat.Name</span>
@@ -90,7 +91,9 @@
     }
     .stats-mini {
         display: flex;
+        flex-wrap: wrap;
         gap: 0.5rem;
+        max-width: 200px;
     }
     .stat-badge {
         font-size: 0.75rem;
@@ -109,6 +112,8 @@
     .junction-menu {
         background: #f8f9fa;
         border: 1px solid #dee2e6;
+        max-height: 300px;
+        overflow-y: auto;
     }
 </style>
 
@@ -134,12 +139,13 @@
 
     private bool CanJunction(Stat stat)
     {
-        var cadence = resourceManager.CurrentlyAssigned(Character).FirstOrDefault();
+        var cadence = JunctionManager.CurrentlyAssigned(Character).FirstOrDefault();
         if (cadence.Name == null) return false;
         
         string abilityName = "J-" + stat.Name;
         if (stat.Name == "Health") abilityName = "J-HP";
         if (stat.Name == "Vitality") abilityName = "J-Vit";
+        if (stat.Name == "Strength") abilityName = "J-Str";
 
         return cadence.Abilities.Any(a => resourceManager.UnlockedAbilities.Contains(a.Ability) && a.Ability.Name == abilityName);
     }
@@ -148,7 +154,7 @@
     {
         string magicName = e.Value?.ToString() ?? "";
         var magic = resourceManager.Inventory.GetSpells().FirstOrDefault(s => s.Item.Name == magicName).Item;
-        resourceManager.JunctionMagic(Character, stat, magic);
+        JunctionManager.JunctionMagic(Character, stat, magic, resourceManager.UnlockedAbilities);
         StateHasChanged();
     }
 
