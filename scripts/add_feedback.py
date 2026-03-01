@@ -22,8 +22,9 @@ def main():
     print("1. Bug")
     print("2. Feature Request")
     print("3. Suggestion")
-    type_choice = get_input("Choice (1-3)", "1")
-    type_map = {"1": "Bug", "2": "Feature Request", "3": "Suggestion"}
+    print("4. Error")
+    type_choice = get_input("Choice (1-4)", "1")
+    type_map = {"1": "Bug", "2": "Feature Request", "3": "Suggestion", "4": "Error"}
     fb_type = type_map.get(type_choice, "Bug")
     
     source = get_input("Source (e.g., Discord / User Name)")
@@ -31,7 +32,8 @@ def main():
     impact = get_input("Impact (How it affects experience)")
     solution = get_input("Proposed Solution (Optional)")
     
-    template = f"""# Feedback: {title}
+    is_error = fb_type == "Error"
+    template = f"""# {'Error' if is_error else 'Feedback'}: {title}
 
 **Date:** {date_str}
 **Type:** {fb_type}
@@ -53,24 +55,26 @@ def main():
 """
 
     # Generate filename
-    base_name = f"{date_str}_{slugify(title)}"
-    feedback_dir = "docs/feedback"
-    os.makedirs(feedback_dir, exist_ok=True)
+    base_name = f"{date_str}_{slugify(title[:30])}"
+    target_dir = "docs/errors" if is_error else "docs/feedback"
+    os.makedirs(target_dir, exist_ok=True)
     
     filename = f"{base_name}.md"
-    filepath = os.path.join(feedback_dir, filename)
+    filepath = os.path.join(target_dir, filename)
     
     counter = 1
     while os.path.exists(filepath):
         filename = f"{base_name}_{counter}.md"
-        filepath = os.path.join(feedback_dir, filename)
+        filepath = os.path.join(target_dir, filename)
         counter += 1
         
     with open(filepath, "w", encoding="utf-8") as f:
         f.write(template)
         
-    print(f"\n[SUCCESS] Feedback saved to: {filepath}")
-    print("Note: The health check will now fail until this feedback is resolved/deleted.")
+    abs_path = os.path.abspath(filepath)
+    print(f"\n[CREATED] {abs_path}")
+    print(f"[SUCCESS] Feedback saved to: {filepath}")
+    print("Note: The health check will now fail until this item is resolved/deleted.")
 
 if __name__ == "__main__":
     main()

@@ -2,7 +2,6 @@ import os
 import sys
 import json
 import re
-import urllib.request
 from datetime import datetime
 
 def slugify(text):
@@ -11,64 +10,39 @@ def slugify(text):
     text = re.sub(r'[\s_-]+', '_', text).strip('_')
     return text
 
-def fetch_from_remote(url):
-    try:
-        print(f"Fetching from remote endpoint...")
-        with urllib.request.urlopen(url) as response:
-            csv_data = response.read().decode('utf-8')
-            lines = csv_data.strip().split('\n')
-            if not lines: return []
-            
-            # Google Apps Script doGet returns CSV: Timestamp, Type, Title, Description, Source, StackTrace
-            entries = []
-            for line in lines[1:]: # Skip header
-                # Simple comma split
-                parts = line.split(',')
-                if len(parts) >= 6:
-                    entries.append({
-                        "Date": parts[0],
-                        "Type": parts[1],
-                        "Title": parts[2],
-                        "Description": parts[3],
-                        "Source": parts[4],
-                        "StackTrace": parts[5]
-                    })
-            return entries
-    except Exception as e:
-        print(f"Error fetching remote feedback: {e}")
-        return []
-
 def main():
+    if len(sys.argv) < 2:
+        print("Usage: python scripts/sync_feedback.py '<json_string_or_file_path>'")
+        sys.exit(1)
+
+    input_data = sys.argv[1]
     data = []
-    if "--remote" in sys.argv:
-        # Try to find --url argument
-        url = ""
-        if "--url" in sys.argv:
-            idx = sys.argv.index("--url")
-            if idx + 1 < len(sys.argv):
-                url = sys.argv[idx + 1]
-        
-        if not url:
-            print("Error: --remote requires --url <WEB_APP_URL>")
-            sys.exit(1)
-            
-        data = fetch_from_remote(url)
-    elif len(sys.argv) >= 2:
+
+    # Check if input is a file path
+    if os.path.exists(input_data):
         try:
-            data = json.loads(sys.argv[1])
+            with open(input_data, 'r', encoding='utf-8') as f:
+                data = json.load(f)
         except Exception as e:
-            print(f"Error parsing JSON: {e}")
+            print(f"Error reading file: {e}")
             sys.exit(1)
     else:
-        print("Usage: python scripts/sync_feedback.py '<json_string>' OR python scripts/sync_feedback.py --remote")
-        sys.exit(1)
+        # Assume it's a JSON string
+        try:
+            data = json.loads(input_data)
+        except Exception as e:
+            print(f"Error parsing JSON string: {e}")
+            sys.exit(1)
 
     if not isinstance(data, list):
         data = [data]
 
     feedback_dir = "docs/feedback"
+    errors_dir = "docs/errors"
     os.makedirs(feedback_dir, exist_ok=True)
+    os.makedirs(errors_dir, exist_ok=True)
 
+    synced_count = 0
     for entry in data:
         title = entry.get("Title", "Untitled")
         fb_type = entry.get("Type", "Suggestion")
@@ -77,7 +51,12 @@ def main():
         stack = entry.get("StackTrace", "")
         date_str = entry.get("Date", datetime.now().isoformat())[:10]
 
-        template = f"""# Feedback: {title}
+        # Determine target directory
+        # Type is 3 for Error in the enum (Error=3) or the string "Error"
+        is_error = fb_type == "Error" or fb_type == 3
+        target_dir = errors_dir if is_error else feedback_dir
+
+        template = f"""# {'Error' if is_error else 'Feedback'}: {title}
 
 **Date:** {date_str}
 **Type:** {fb_type}
@@ -85,12 +64,6 @@ def main():
 
 ## Description
 {description}
-
-## Impact
-Captured from In-Game UI.
-
-## Proposed Solution (Optional)
-N/A
 
 ## Status
 - [ ] Investigated
@@ -100,19 +73,24 @@ N/A
         if stack:
             template += f"\n## Stack Trace\n```\n{stack}\n```\n"
 
-        base_name = f"{date_str}_{slugify(title)}"
+        base_name = f"{date_str}_{slugify(title[:30])}"
         filename = f"{base_name}.md"
-        filepath = os.path.join(feedback_dir, filename)
+        filepath = os.path.join(target_dir, filename)
         
         counter = 1
         while os.path.exists(filepath):
             filename = f"{base_name}_{counter}.md"
-            filepath = os.path.join(feedback_dir, filename)
+            filepath = os.path.join(target_dir, filename)
             counter += 1
 
         with open(filepath, "w", encoding="utf-8") as f:
             f.write(template)
-        print(f"Synced: {filename}")
+        
+        abs_path = os.path.abspath(filepath)
+        print(f"[CREATED] {abs_path}")
+        synced_count += 1
+    
+    print(f"\n[SUCCESS] Synced {synced_count} items.")
 
 if __name__ == "__main__":
     main()

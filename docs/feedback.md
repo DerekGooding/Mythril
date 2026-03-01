@@ -1,28 +1,23 @@
 # User Feedback Management
 
-## GitHub Synchronization
-The primary method for collecting feedback, bug reports, and feature requests is via **GitHub Issues**. 
+## Feedback Synchronization
+The primary method for an agent to ingest feedback and error reports is via a **Sync String** provided from the in-game developer console.
 
-To pull open issues from the remote repository into this workspace for processing:
+To ingest and sort reports into `docs/feedback/` and `docs/errors/`:
 ```bash
-python scripts/sync_github_issues.py
+python scripts/sync_feedback.py '<json_string_or_file_path>'
 ```
-This script converts all open GitHub issues (excluding PRs) into Markdown files in `docs/feedback/`.
+This script will automatically detect the report type and place it in the correct directory, printing the full path of each created file to the console.
 
-## Manual Synchronization
-If a user provides a "Sync String" (JSON array) directly from the in-game UI, use:
-```bash
-python scripts/sync_feedback.py '<json_string>'
-```
+## Health Check Mandate
+The `docs/feedback/` and `docs/errors/` directories are "Zero-Backlog" zones. If any files exist in these directories, the automated health check will fail.
 
-## Closing Feedback
-To resolve a feedback item and pass the health check:
-1. **Sync:** Run `python scripts/sync_github_issues.py` to ensure all remote items are tracked.
-2. **Analyze:** Understand the issue or request.
-3. **Implement:** Apply the necessary code changes, tests, or content updates.
-4. **Verify:** Ensure the fix or feature works as expected and passes all tests.
-5. **Resolve:** Create a resolution file in `docs/resolution/` (naming: `YYYY-MM-DD_resolution_short_description.md`) explaining the technical solution.
-6. **Archive:** Delete the feedback file from `docs/feedback/` and close the GitHub Issue manually.
+To resolve an item and pass the health check:
+1. **Analyze:** Understand the issue or request.
+2. **Implement:** Apply the necessary code changes, tests, or content updates.
+3. **Verify:** Ensure the fix or feature works as expected and passes all tests.
+4. **Resolve:** Create a resolution file in `docs/resolution/` (naming: `YYYY-MM-DD_resolution_short_description.md`) explaining the technical solution.
+5. **Archive:** Delete the original file from `docs/feedback/` or `docs/errors/`.
 
 ## Resolution Template
 All files in `docs/resolution/` must use this template:
@@ -32,7 +27,7 @@ All files in `docs/resolution/` must use this template:
 
 **Date:** YYYY-MM-DD
 **Resolved By:** [Agent Name / Human Name]
-**Feedback Source:** [Reference original source, e.g., GitHub Issue #123]
+**Feedback Source:** [Reference original item]
 
 ## Technical Solution
 [Detailed explanation of how the problem was solved or feature implemented]

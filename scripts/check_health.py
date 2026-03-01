@@ -20,6 +20,7 @@ RESULTS_DIR = config.get("RESULTS_DIR", "TestResults")
 SOURCE_EXTENSIONS = config.get("SOURCE_EXTENSIONS", [".cs"])
 DOC_FILES = config.get("DOC_FILES", [])
 FEEDBACK_DIR = config.get("FEEDBACK_DIR", "docs/feedback")
+ERRORS_DIR = "docs/errors"
 TEST_COMMAND = config.get("TEST_COMMAND", ["dotnet", "test"])
 COVERAGE_REPORT_PATTERN = config.get("COVERAGE_REPORT_PATTERN", r"coverage\.cobertura\.xml")
 
@@ -40,21 +41,21 @@ def run_tests():
         return False
 
 def check_feedback_backlog():
-    print("\n--- Checking User Feedback Backlog ---")
-    if not os.path.exists(FEEDBACK_DIR):
-        print(f"[WARNING] Feedback directory {FEEDBACK_DIR} not found.")
-        return 0
+    print("\n--- Checking User Feedback & Error Backlog ---")
+    total_count = 0
+    for d in [FEEDBACK_DIR, ERRORS_DIR]:
+        if not os.path.exists(d):
+            continue
+        items = [f for f in os.listdir(d) if os.path.isfile(os.path.join(d, f)) and not f.startswith(".")]
+        total_count += len(items)
+        if len(items) > 0:
+            print(f"[FAIL] {len(items)} unresolved items found in {d}!")
+            for item in items:
+                print(f"  - {item}")
     
-    # List all files except hidden/system files if any
-    items = [f for f in os.listdir(FEEDBACK_DIR) if os.path.isfile(os.path.join(FEEDBACK_DIR, f)) and not f.startswith(".")]
-    count = len(items)
-    if count > 0:
-        print(f"[FAIL] {count} unresolved feedback items found in {FEEDBACK_DIR}!")
-        for item in items:
-            print(f"  - {item}")
-    else:
-        print("[SUCCESS] Feedback backlog is empty.")
-    return count
+    if total_count == 0:
+        print("[SUCCESS] Feedback and error backlogs are empty.")
+    return total_count
 
 def get_git_changes_since_file(file_path):
     try:
@@ -82,8 +83,7 @@ def check_monoliths():
     monolith_count = 0
     EXCLUDE_DIRS = {"obj", "bin", ".git", "lib", "node_modules", "wwwroot/lib", "TestResults"}
     for root, dirs, files in os.walk(SOURCE_DIR):
-        # Filter out excluded directories
-        dirs[:] = [d for d in dirs if d not in EXCLUDE_DIRS and not any(root.endswith(ed) for ed in EXCLUDE_DIRS)]
+        dirs[:] = [d for d in dirs if d not in EXCLUDE_DIRS]
         if any(ex in root.replace("\\", "/") for ex in ["/obj/", "/bin/", "/.git/", "/lib/", "/node_modules/", "/wwwroot/lib/", "/TestResults/"]):
             continue
         
@@ -123,14 +123,7 @@ def parse_coverage():
         root = tree.getroot()
         overall_line_rate = float(root.attrib["line-rate"]) * 100
         print(f"Overall Coverage: {overall_line_rate:.2f}%")
-
-        pass_requirements = overall_line_rate >= MIN_OVERALL_COVERAGE
-        for package in root.findall(".//package"):
-            for cls in package.findall(".//class"):
-                if float(cls.attrib["line-rate"]) * 100 < MIN_FILE_COVERAGE:
-                    # Pass file-specific failures don't fail the whole check unless configured
-                    pass
-        return overall_line_rate, pass_requirements
+        return overall_line_rate, overall_line_rate >= MIN_OVERALL_COVERAGE
     except Exception as e:
         print(f"[ERROR] Could not parse coverage: {e}")
         return 0.0, False
@@ -149,7 +142,6 @@ def export_results(monolith_count, coverage, docs_pass, tests_pass, feedback_cou
     with open("scripts/data/health_summary.json", "w") as f:
         json.dump(summary, f, indent=4)
     
-    # Export individual shields for Shields.io endpoints
     def save_shield(name, label, message, color):
         with open(f"scripts/data/shield_{name}.json", "w") as f:
             json.dump({
@@ -165,28 +157,17 @@ def export_results(monolith_count, coverage, docs_pass, tests_pass, feedback_cou
     save_shield("tests", "Tests", "Passing" if tests_pass else "Failing", "brightgreen" if tests_pass else "red")
     save_shield("feedback", "Feedback", "Clear" if feedback_count == 0 else f"{feedback_count} Pending", "brightgreen" if feedback_count == 0 else "orange")
 
-    print(f"Results and shields exported to scripts/data/")
-
 if __name__ == "__main__":
     skip_tests = "--skip-tests" in sys.argv
-    
-    tests_passed = True
-    if not skip_tests:
-        tests_passed = run_tests()
-
+    tests_passed = True if skip_tests else run_tests()
     m_count = check_monoliths()
     cov_val, cov_pass = parse_coverage()
     d_pass = check_docs_staleness()
     f_count = check_feedback_backlog()
-    
-    # Final pass logic
-    all_pass = m_count == 0 and cov_pass and d_pass and (tests_passed or skip_tests) and f_count == 0
-    
+    all_pass = m_count == 0 and cov_pass and d_pass and tests_passed and f_count == 0
     export_results(m_count, cov_val, d_pass, tests_passed, f_count)
-
     if not all_pass:
         print("\n[FAIL] Health checks failed.")
         sys.exit(1)
-    
     print("\n[SUCCESS] All health checks passed!")
     sys.exit(0)
