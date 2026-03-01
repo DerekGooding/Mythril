@@ -9,49 +9,53 @@
     @ondragover="HandleDragOver"
     @ondrop="HandleDrop"
     @ondragenter="HandleDragEnter">
-    <p>Drop an item here to assign it.</p>
+    @ChildContent
 </div>
 
 @code {
     [Parameter]
-    public EventCallback<Cadence> OnCadenceDrop { get; set; }
+    public EventCallback<Character> OnCharacterDrop { get; set; }
 
     [Parameter]
-    public Func<Cadence, bool>? Accepts { get; set; }
+    public RenderFragment? ChildContent { get; set; }
+
+    [Parameter]
+    public Func<Character, bool>? Accepts { get; set; }
 
     private bool isShaking = false;
 
     private async Task HandleDragEnter(DragEventArgs args)
     {
-        if (DragDropService.Data is Cadence task)
+        if (DragDropService.Data is Character)
         {
             args.DataTransfer.DropEffect = "move";
-            await JS.InvokeVoidAsync("eval", "event.preventDefault()");
+            await JS.InvokeVoidAsync("window.eval", "event.preventDefault()");
         }
     }
 
     private async Task HandleDragOver(DragEventArgs args)
     {
-        if (DragDropService.Data is Cadence task)
+        if (DragDropService.Data is Character)
         {
             args.DataTransfer.DropEffect = "move";
-            await JS.InvokeVoidAsync("eval", "event.preventDefault()");
+            await JS.InvokeVoidAsync("window.eval", "event.preventDefault()");
         }
     }
 
     private async Task HandleDrop()
     {
-        if (DragDropService.Data is not Cadence quest || string.IsNullOrWhiteSpace(quest.Name)) return;
-
-        if (Accepts is null || Accepts(quest))
+        if (DragDropService.Data is Character character)
         {
-            await OnCadenceDrop.InvokeAsync(quest);
+            if (Accepts is null || Accepts(character))
+            {
+                await OnCharacterDrop.InvokeAsync(character);
+            }
+            else
+            {
+                await Shake();
+            }
+            DragDropService.Data = null;
         }
-        else
-        {
-            await Shake();
-        }
-        DragDropService.Data = null;
     }
 
     private async Task Shake()

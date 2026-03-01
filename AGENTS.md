@@ -18,6 +18,9 @@ This project uses agentic workflows to maintain its health and quality.
 - **InventoryManager**: Manages items, spells, and capacity enforcement.
 - **Data-Driven**: Content is located in `Mythril.Blazor/wwwroot/data/*.json`.
 
-## Diagnostics & Resilience
-- **Theme Diagnostics**: Proactive C# eval-based status checks for `setTheme` in global scope.
-- **JS Resilience**: Script-level `try-catch` blocks in `index.html` with console logging for interop setup.
+## Recent Improvements (March 1, 2026)
+- **Quest Progression**: Fixed 10x speed bug and implemented stat-influenced durations.
+- **Single-Quest Protection**: Prevented repeatable quests from re-unlocking completed single-time quests.
+- **Layout Refinement**: Fixed parent window scrolling issues and character card overflow.
+- **Theme Resilience**: Optimized JS Interop for theme switching.
+- **Cadence Unlocks**: Fixed character-to-cadence drag logic and restored cadence unlock persistence.

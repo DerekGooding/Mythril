@@ -16,6 +16,13 @@ html, body, #app {
     min-height: 0;
 }
 
+.stats-mini {
+    display: flex;
+    flex-wrap: nowrap !important;
+    overflow-x: auto;
+    gap: 0.25rem;
+}
+
 main, .content {
     height: 100%;
 }

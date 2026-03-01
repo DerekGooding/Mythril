@@ -1,5 +1,5 @@
 # Environment Knowledge
-- **Last Reviewed:** March 1, 2026 (Junctioning System Update).
+- **Last Reviewed:** March 1, 2026 (Junctioning & UI Layout Update).
 - **Shell:** PowerShell is used. Standard Unix utilities like `grep` and `cat` are not available. Use `grep_search` tool or PowerShell equivalents (e.g., `Select-String`, `Get-Content`).
 - **Formatting:** `cat -n` equivalent in PowerShell is `Get-Content <file> | ForEach-Object { "$($_.ReadCount) $_" }`.
 

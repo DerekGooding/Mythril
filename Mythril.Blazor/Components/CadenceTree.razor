@@ -21,8 +21,9 @@
             </div>
             @if (!isUnlocked)
             {
-                 <DropZone_cadence Item="abilityUnlock">
-                    <div class="drop-target">
+                 <DropZone_cadence OnCharacterDrop="(c) => resourceManager.StartQuest(abilityUnlock, c)"
+                                   Accepts="(c) => resourceManager.CanAfford(abilityUnlock)">
+                    <div class="drop-target @(canAfford ? "active" : "")">
                         <span>Drag Character Here to Unlock</span>
                     </div>
                 </DropZone_cadence>

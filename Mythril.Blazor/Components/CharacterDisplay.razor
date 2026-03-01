@@ -1,17 +1,19 @@
 @using Mythril.Data
+@using Mythril.Blazor.Services
 @inject Stats statsContent
 @inject ResourceManager resourceManager
 @inject JunctionManager JunctionManager
+@inject DragDropService DragDropService
 
 <div class="character-display">
     <div class="character-header">
         <div class="d-flex flex-column">
-            <h4>@Character.Name</h4>
+            <h4 draggable="true" @ondragstart="HandleCharacterDragStart" class="draggable-name">@Character.Name</h4>
             <div class="cadence-info small text-muted">
                 Cadence: @(JunctionManager.CurrentlyAssigned(Character).FirstOrDefault().Name ?? "None")
             </div>
         </div>
-        <div class="stats-mini">
+        <div class="stats-mini flex-nowrap overflow-auto">
             @foreach (var stat in statsContent.All.Take(9))
             {
                 var val = JunctionManager.GetStatValue(Character, stat.Name);
@@ -91,17 +93,20 @@
     }
     .stats-mini {
         display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-        max-width: 200px;
+        flex-wrap: nowrap;
+        gap: 0.25rem;
+        max-width: none;
+        overflow-x: auto;
     }
     .stat-badge {
-        font-size: 0.75rem;
+        font-size: 0.7rem;
         background: #eee;
-        padding: 2px 4px;
-        border-radius: 4px;
+        padding: 1px 3px;
+        border-radius: 3px;
         cursor: help;
         transition: all 0.2s;
+        white-space: nowrap;
+        flex-shrink: 0;
     }
     .stat-badge.junctioned {
         background: #d1e7ff;
@@ -112,8 +117,24 @@
     .junction-menu {
         background: #f8f9fa;
         border: 1px solid #dee2e6;
-        max-height: 300px;
+        max-height: 250px;
         overflow-y: auto;
+        position: absolute;
+        z-index: 100;
+        width: 250px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    .junction-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+    .draggable-name {
+        cursor: grab;
+        user-select: none;
+    }
+    .draggable-name:active {
+        cursor: grabbing;
     }
 </style>
 
@@ -136,6 +157,11 @@
     private bool _showJunctionMenu = false;
 
     private void ToggleJunctionMenu() => _showJunctionMenu = !_showJunctionMenu;
+
+    private void HandleCharacterDragStart(DragEventArgs args)
+    {
+        DragDropService.Data = Character;
+    }
 
     private bool CanJunction(Stat stat)
     {

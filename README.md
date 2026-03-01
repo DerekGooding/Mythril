@@ -18,12 +18,12 @@ From architecture and core logic to the Blazor frontend and DevOps pipelines, My
 Mythril is an RPG-inspired web application built with **.NET 10** and **Blazor WebAssembly**. It serves as a sandbox for exploring agentic development patterns and modern C# architectures.
 
 ### Key Systems
-- **Character Core**: Modular system where characters share baseline stats, differentiated by assigned Cadences and junctioned magic.
+- **Character Core**: Modular system where characters share baseline stats, differentiated by assigned Cadences and junctioned magic. Character cards feature a horizontal stat layout for optimal space usage.
 - **Junctioning**: Assign magic items to character stats to gain powerful bonuses, inspired by classic RPG mechanics.
-- **Cadence System**: Progression mechanic where `Cadences` provide `CadenceAbilities` and `AbilityAugments`. Visualized via an interactive tree.
+- **Cadence System**: Progression mechanic where `Cadences` provide `CadenceAbilities`. Unlocking is performed by assigning characters to specific ability nodes.
 - **Quest & Progression**: Real-time asynchronous tick system managing quests, durations, and rewards, with offline progress continuity.
 - **Item Refinement**: Craft new items and magic through specialized abilities in the Workshop.
-- **Quality Assurance**: Automated health checks for monolith prevention, test coverage (>90%), and documentation integrity.
+- **Quality Assurance**: Automated health checks for monolith prevention, test coverage (>89%), and documentation integrity.
 
 ## 🛠️ Technical Stack
 - **Frontend**: Blazor WebAssembly (.NET 10)
@@ -37,7 +37,7 @@ Mythril is an RPG-inspired web application built with **.NET 10** and **Blazor W
 ## ⚖️ Quality Assurance & Health
 We maintain project health through a custom automated suite (`scripts/check_health.py`) which runs on every commit:
 - **Monolith Prevention**: Strict 250-line limit for source files to ensure modularity.
-- **Coverage**: Mandatory 70% unit test coverage for all core logic (currently >90%).
+- **Coverage**: Mandatory 70% unit test coverage for all core logic (currently >89%).
 - **Documentation Integrity**: Automated staleness tracking via local file modification times.
 - **Feedback Integrity**: Every resolved item must have a corresponding resolution file in `docs/resolution/`.
 
