@@ -2,12 +2,27 @@
 @using Mythril.Blazor.Services
 @inject PersistenceService Persistence
 @inject SnackbarService Snackbar
+@inject VersionService VersionService
+@inject NavigationManager Navigation
 
 <main>
-    <div class="top-row px-4">
-        <button class="btn btn-outline-primary mx-2" @onclick="SaveGame">Save</button>
-        <button class="btn btn-outline-secondary mx-2" @onclick="LoadGame">Load</button>
-        <button class="btn btn-outline-info mx-2" @onclick="ToggleFeedback">Feedback</button>
+    <div class="top-row px-4 justify-content-between">
+        <div class="d-flex align-items-center">
+            <button class="btn btn-outline-primary mx-2" @onclick="SaveGame">Save</button>
+            <button class="btn btn-outline-secondary mx-2" @onclick="LoadGame">Load</button>
+            <button class="btn btn-outline-info mx-2" @onclick="ToggleFeedback">Feedback</button>
+        </div>
+        
+        <div class="version-info d-flex align-items-center">
+            <span class="text-muted small mx-2">v: @(VersionService.CurrentVersion?.Substring(0, 7) ?? "local")</span>
+            @if (VersionService.IsUpdateAvailable)
+            {
+                <button class="btn btn-sm btn-warning animate-pulse" @onclick="RefreshPage">
+                    <span class="material-icons-outlined small" style="font-size: 1rem; vertical-align: middle;">refresh</span>
+                    Update Available
+                </button>
+            }
+        </div>
     </div>
 
     <div class="main-container">
@@ -36,11 +51,18 @@
 @code {
     private bool _showFeedback = false;
 
+    protected override void OnInitialized()
+    {
+        VersionService.OnUpdateAvailable += async () => await InvokeAsync(StateHasChanged);
+    }
+
     private void ToggleFeedback() 
     {
         Console.WriteLine($"Toggling Feedback. Current state: {_showFeedback}");
         _showFeedback = !_showFeedback;
     }
+
+    private void RefreshPage() => Navigation.NavigateTo(Navigation.Uri, forceLoad: true);
 
     private async Task SaveGame()
     {
