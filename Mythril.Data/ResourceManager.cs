@@ -19,6 +19,8 @@ public class ResourceManager(
     public JunctionManager JunctionManager { get; } = junctionManager;
     public InventoryManager Inventory { get; } = inventory;
 
+    private readonly object _questLock = new();
+
     public QuestDetail GetQuestDetails(Quest quest) => _questDetails[quest];
 
     private Dictionary<Cadence, bool> _lockedCadences = [];
@@ -45,6 +47,10 @@ public class ResourceManager(
 
         Console.WriteLine("Initializing Cadences...");
         _lockedCadences = _cadences.All.ToNamedDictionary(_ => true);
+
+        // Pre-unlock "Test" cadence
+        var testCadence = _cadences.All.FirstOrDefault(c => c.Name == "Test");
+        if (testCadence.Name != null) _lockedCadences[testCadence] = false;
 
         Console.WriteLine("Initializing Locations...");
         UsableLocations = [.. _locations.All.Select(x => new LocationData(x, x.Quests.Where(IsNeverLocked)))];
@@ -151,7 +157,10 @@ public class ResourceManager(
                         duration /= (1.0 + (vitality / 100.0));
                     }
                 }
-                ActiveQuests.Add(new QuestProgress(quest, quest.Description, (int)Math.Max(1, duration), character));
+                lock(_questLock)
+                {
+                    ActiveQuests.Add(new QuestProgress(quest, quest.Description, (int)Math.Max(1, duration), character));
+                }
             }
             if(item is CadenceUnlock unlock)
             {
@@ -162,18 +171,24 @@ public class ResourceManager(
                     int magic = JunctionManager.GetStatValue(character, "Magic");
                     duration /= (1.0 + (magic / 100.0));
                 }
-                ActiveQuests.Add(new QuestProgress(unlock, unlock.Ability.Description, (int)Math.Max(1, duration), character));
+                lock(_questLock)
+                {
+                    ActiveQuests.Add(new QuestProgress(unlock, unlock.Ability.Description, (int)Math.Max(1, duration), character));
+                }
             }
         }
     }
 
     public void Tick(double deltaSeconds)
     {
-        foreach (var progress in ActiveQuests)
+        lock(_questLock)
         {
-            if (!progress.IsCompleted)
+            foreach (var progress in ActiveQuests)
             {
-                progress.SecondsElapsed += deltaSeconds;
+                if (!progress.IsCompleted)
+                {
+                    progress.SecondsElapsed += deltaSeconds;
+                }
             }
         }
     }
@@ -205,6 +220,14 @@ public class ResourceManager(
     {
         _lockedCadences[cadence] = false;
         UpdateAvaiableCadences();
+    }
+
+    public void RemoveActiveQuest(QuestProgress progress)
+    {
+        lock(_questLock)
+        {
+            ActiveQuests.Remove(progress);
+        }
     }
 
     public IEnumerable<Quest> GetCompletedQuests() => _completedQuests;

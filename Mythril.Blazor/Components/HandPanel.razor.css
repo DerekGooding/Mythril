@@ -2,9 +2,8 @@
     display: flex;
     flex-direction: column;
     padding: 1rem;
-    overflow: scroll;
+    overflow-y: auto;
     overflow-x: hidden;
-    height: 750px;
 }
 
 .task-container {

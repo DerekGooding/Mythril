@@ -13,13 +13,14 @@ This project uses agentic workflows to maintain its health and quality.
 - **Feedback Integrity**: Every cleared item in `docs/feedback/` or `docs/errors/` must have a corresponding technical resolution file in `docs/resolution/` explaining the fix.
 
 ## Architecture & State
-- **ResourceManager**: Core game engine managing quests, locations, and global state.
+- **ResourceManager**: Core game engine managing quests, locations, and global state. Uses thread-safe locking for active tasks.
 - **JunctionManager**: Handles character-cadence assignments and stat calculations (Junction system).
 - **InventoryManager**: Manages items, spells, and capacity enforcement.
 - **Data-Driven**: Content is located in `Mythril.Blazor/wwwroot/data/*.json`.
 
 ## Recent Improvements (March 1, 2026)
+- **Stability**: Implemented thread-safe quest management in `ResourceManager`.
+- **Expander Logic**: Robust JS-driven height transitions with `display: none` support for full container collapse.
 - **Quest Progression**: Fixed 10x speed bug and implemented stat-influenced durations.
-- **Layout Refinement**: Restored 2-column sidebar layout. Optimized character cards with vertical stacking and strictly horizontal, scrolling stats.
+- **Layout Refinement**: Restored 2-column sidebar layout. Optimized character cards with horizontal, scrolling stats.
 - **Theme Resilience**: Extracted JS logic to `theme.js`. Implemented `Mythril.ThemeTest` for isolated Interop validation.
-- **Cadence Unlocks**: Fixed character-to-cadence drag logic and restored cadence unlock persistence.

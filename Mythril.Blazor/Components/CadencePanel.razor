@@ -3,7 +3,7 @@
 <div class="hand-panel">
     @if (Cadences is not null)
     {
-        @foreach (var cadence in Cadences.Where(l => l.Abilities.Any()))
+        @foreach (var cadence in Cadences)
         {
             <CadenceDragExpander Cadence="cadence">
                 <CadenceTree CadenceData="cadence" />

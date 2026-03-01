@@ -155,7 +155,7 @@
     protected async Task OnCompletionAnimationEnd(QuestProgress completedProgress)
     {
         await resourceManager.ReceiveRewards(completedProgress.Item);
-        resourceManager.ActiveQuests.Remove(completedProgress);
+        resourceManager.RemoveActiveQuest(completedProgress);
         SnackbarService.Show($"Completed: {completedProgress.Name}", "success");
         await InvokeAsync(StateHasChanged);
     }

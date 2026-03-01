@@ -84,5 +84,10 @@
         "Requirements": [ { "Item": "Gold", "Quantity": 2000 } ]
       }
     ]
+  },
+  {
+    "Name": "Test",
+    "Description": "An example cadence for testing assignment.",
+    "Abilities": []
   }
 ]
