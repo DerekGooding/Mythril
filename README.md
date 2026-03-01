@@ -18,36 +18,31 @@ From architecture and core logic to the Blazor frontend and DevOps pipelines, My
 Mythril is an RPG-inspired web application built with **.NET 10** and **Blazor WebAssembly**. It serves as a sandbox for exploring agentic development patterns and modern C# architectures.
 
 ### Key Systems
-- **Character Core**: Modular system where characters share baseline stats, differentiated by assigned Cadences and junctioned magic. Character cards feature a horizontal stat layout for optimal space usage.
+- **Character Core**: Modular system where characters share baseline stats, differentiated by assigned Cadences and junctioned magic. Character cards feature a strictly horizontal stat layout for optimal vertical space.
 - **Junctioning**: Assign magic items to character stats to gain powerful bonuses, inspired by classic RPG mechanics.
 - **Cadence System**: Progression mechanic where `Cadences` provide `CadenceAbilities`. Unlocking is performed by assigning characters to specific ability nodes.
 - **Quest & Progression**: Real-time asynchronous tick system managing quests, durations, and rewards, with offline progress continuity.
-- **Item Refinement**: Craft new items and magic through specialized abilities in the Workshop.
-- **Quality Assurance**: Automated health checks for monolith prevention, test coverage (>89%), and documentation integrity.
+- **Diagnostics**: Includes specialized testing projects like `Mythril.ThemeTest` for validating isolated system behaviors like theme switching.
 
 ## 🛠️ Technical Stack
 - **Frontend**: Blazor WebAssembly (.NET 10)
 - **Core Logic**: C# 13 / .NET 10 Class Libraries
 - **Data**: JSON-driven content for easy modification and agentic updates.
-- **Dependency Injection**: `SimpleInjection` (Source-generated)
-- **Testing**: MSTest, Moq, and Coverlet for coverage reporting
-- **Automation**: Python 3.x for custom health checks and CI integration
-- **CI/CD**: GitHub Actions for automated deployment and health monitoring
+- **Testing**: MSTest, Moq, and Coverlet for coverage reporting.
+- **Automation**: Python 3.x for custom health checks and CI integration.
 
 ## ⚖️ Quality Assurance & Health
 We maintain project health through a custom automated suite (`scripts/check_health.py`) which runs on every commit:
 - **Monolith Prevention**: Strict 250-line limit for source files to ensure modularity.
-- **Coverage**: Mandatory 70% unit test coverage for all core logic (currently >89%).
+- **Coverage**: Mandatory 70% unit test coverage for all core logic.
 - **Documentation Integrity**: Automated staleness tracking via local file modification times.
 - **Feedback Integrity**: Every resolved item must have a corresponding resolution file in `docs/resolution/`.
 
 ## 🚀 Getting Started
-1. **Prerequisites**: .NET 10 SDK, Python 3.x, and a git-compatible shell (PowerShell recommended on Windows).
-2. **Build**: `dotnet build`
-3. **Test**: `dotnet test`
-4. **Health Check**: `python scripts/check_health.py`
-5. **Headless Test**: `.\run_ai_test.ps1`
-6. **Run**: `dotnet run --project Mythril.Blazor` (then open `https://localhost:5001`)
+1. **Build**: `dotnet build`
+2. **Test**: `dotnet test`
+3. **Health Check**: `python scripts/check_health.py`
+4. **Run**: `dotnet run --project Mythril.Blazor` (then open `https://localhost:5001`)
 
 ---
 *Developed with 💖 by Gemini CLI.*

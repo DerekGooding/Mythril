@@ -7,35 +7,50 @@
 
 <div class="character-display">
     <div class="character-header">
-        <div class="d-flex flex-column">
-            <h4 draggable="true" @ondragstart="HandleCharacterDragStart" class="draggable-name">@Character.Name</h4>
-            <div class="cadence-info small text-muted">
+        <div class="d-flex flex-column flex-grow-1 min-width-0">
+            <h4 draggable="true" @ondragstart="HandleCharacterDragStart" class="draggable-name text-truncate">@Character.Name</h4>
+            <div class="cadence-info small text-muted text-truncate">
                 Cadence: @(JunctionManager.CurrentlyAssigned(Character).FirstOrDefault().Name ?? "None")
             </div>
         </div>
-        <div class="stats-mini flex-nowrap overflow-auto">
-            @foreach (var stat in statsContent.All.Take(9))
-            {
-                var val = JunctionManager.GetStatValue(Character, stat.Name);
-                var junction = JunctionManager.Junctions.FirstOrDefault(j => j.Character.Name == Character.Name && j.Stat.Name == stat.Name);
-                
-                <span class="stat-badge @(junction != null ? "junctioned" : "")" title="@stat.Description @(junction != null ? $"(J: {junction.Magic.Name})" : "")">
-                    @stat.Name[0]: @val
-                </span>
-            }
+        <div class="stats-container">
+            <div class="stats-mini">
+                @foreach (var stat in statsContent.All.Take(9))
+                {
+                    var val = JunctionManager.GetStatValue(Character, stat.Name);
+                    var junction = JunctionManager.Junctions.FirstOrDefault(j => j.Character.Name == Character.Name && j.Stat.Name == stat.Name);
+                    
+                    <span class="stat-badge @(junction != null ? "junctioned" : "")" title="@stat.Description @(junction != null ? $"(J: {junction.Magic.Name})" : "")">
+                        @stat.Name[0]: @val
+                    </span>
+                }
+            </div>
         </div>
     </div>
 
-    @if (JunctionManager.CurrentlyAssigned(Character).Any())
-    {
-        <div class="junction-controls mb-2">
-            <button class="btn btn-sm btn-outline-primary" @onclick="ToggleJunctionMenu">Junction</button>
+    <div class="d-flex justify-content-between align-items-center mt-2">
+        @if (JunctionManager.CurrentlyAssigned(Character).Any())
+        {
+            <div class="junction-controls">
+                <button class="btn btn-xs btn-outline-primary" @onclick="ToggleJunctionMenu">Junction</button>
+            </div>
+        }
+        
+        <div class="flex-grow-1 ms-2">
+            @if (QuestProgress is not null)
+            {
+                <QuestProgressCard QuestProgress="QuestProgress" OnCompletionAnimationEnd="() => OnCompletionAnimationEnd.InvokeAsync(QuestProgress)" />
+            }
+            else
+            {
+                <DropZone OnQuestDrop="HandleTaskDrop" Accepts="Accepts" />
+            }
         </div>
-    }
+    </div>
     
     @if (_showJunctionMenu)
     {
-        <div class="junction-menu card p-2 mb-2">
+        <div class="junction-menu card p-2">
             <h6>Junction Magic</h6>
             <div class="junction-grid">
                 @foreach (var stat in statsContent.All.Take(9))
@@ -66,42 +81,41 @@
             </div>
         </div>
     }
-    
-    @if (QuestProgress is not null)
-    {
-        <QuestProgressCard QuestProgress="QuestProgress" OnCompletionAnimationEnd="() => OnCompletionAnimationEnd.InvokeAsync(QuestProgress)" />
-    }
-    else
-    {
-        <DropZone OnQuestDrop="HandleTaskDrop" Accepts="Accepts" />
-    }
 </div>
 
 <style>
     .character-display {
         border: 1px solid #ddd;
         border-radius: 8px;
-        padding: 1rem;
-        margin-bottom: 1rem;
+        padding: 0.75rem;
         background: #fdfdfd;
+        position: relative;
     }
     .character-header {
         display: flex;
         justify-content: space-between;
-        align-items: center;
-        margin-bottom: 0.5rem;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    .stats-container {
+        flex-shrink: 0;
+        background: #f0f0f0;
+        padding: 4px;
+        border-radius: 6px;
+        max-width: 60%;
     }
     .stats-mini {
         display: flex;
-        flex-wrap: nowrap;
+        flex-wrap: nowrap !important;
         gap: 0.25rem;
-        max-width: none;
         overflow-x: auto;
+        padding-bottom: 2px; /* For scrollbar space if needed */
     }
     .stat-badge {
-        font-size: 0.7rem;
-        background: #eee;
-        padding: 1px 3px;
+        font-size: 0.65rem;
+        background: #fff;
+        padding: 1px 4px;
+        border: 1px solid #eee;
         border-radius: 3px;
         cursor: help;
         transition: all 0.2s;
@@ -120,9 +134,12 @@
         max-height: 250px;
         overflow-y: auto;
         position: absolute;
-        z-index: 100;
-        width: 250px;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        bottom: 100%;
+        left: 0;
+        z-index: 1000;
+        width: 280px;
+        box-shadow: 0 -4px 12px rgba(0,0,0,0.15);
+        margin-bottom: 5px;
     }
     .junction-grid {
         display: flex;
@@ -132,9 +149,19 @@
     .draggable-name {
         cursor: grab;
         user-select: none;
+        margin: 0;
+        font-size: 1.1rem;
+    }
+    .draggable-name:hover {
+        color: #007bff;
+        text-decoration: underline;
     }
     .draggable-name:active {
         cursor: grabbing;
+    }
+    .btn-xs {
+        padding: 0.1rem 0.3rem;
+        font-size: 0.7rem;
     }
 </style>
 

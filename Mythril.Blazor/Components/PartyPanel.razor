@@ -1,9 +1,9 @@
 @using Mythril.Data
 @inject Mythril.Data.ResourceManager resourceManager
 
-<div class="party-panel">
-    <h3>Party</h3>
-    <div class="d-flex flex-row flex-wrap gap-2">
+<div class="party-panel d-flex flex-column h-100 overflow-hidden">
+    <h3 class="flex-shrink-0">Party</h3>
+    <div class="d-flex flex-column flex-grow-1 overflow-auto gap-2">
         @if (Party is not null && QuestProgresses is not null)
         {
             @foreach (var character in Party)

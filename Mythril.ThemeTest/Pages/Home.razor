@@ -1,0 +1,43 @@
+@page "/"
+@inject IJSRuntime JS
+
+<h1>Theme Test Project</h1>
+
+<button class="btn btn-primary" @onclick="ToggleTheme">Toggle Theme</button>
+
+<div class="mt-4">
+    <h3>Diagnostics</h3>
+    <pre>@_log</pre>
+</div>
+
+@code {
+    private string _log = "Initializing...";
+    private bool _isDark = false;
+
+    private async Task ToggleTheme()
+    {
+        _isDark = !_isDark;
+        var theme = _isDark ? "dark-theme" : "light-theme";
+        
+        try 
+        {
+            await JS.InvokeVoidAsync("setTheme", theme);
+            _log += $"\n[{DateTime.Now:HH:mm:ss}] Success: set to {theme}";
+        }
+        catch (Exception ex)
+        {
+            _log += $"\n[{DateTime.Now:HH:mm:ss}] ERROR: {ex.Message}";
+            
+            // Proactive diagnostic
+            try 
+            {
+                var type = await JS.InvokeAsync<string>("eval", "typeof setTheme");
+                _log += $"\n[{DateTime.Now:HH:mm:ss}] Diagnostic: typeof setTheme is '{type}'";
+            }
+            catch (Exception diagEx)
+            {
+                _log += $"\n[{DateTime.Now:HH:mm:ss}] Diagnostic FAILED: {diagEx.Message}";
+            }
+        }
+    }
+}

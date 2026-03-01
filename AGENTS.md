@@ -20,7 +20,6 @@ This project uses agentic workflows to maintain its health and quality.
 
 ## Recent Improvements (March 1, 2026)
 - **Quest Progression**: Fixed 10x speed bug and implemented stat-influenced durations.
-- **Single-Quest Protection**: Prevented repeatable quests from re-unlocking completed single-time quests.
-- **Layout Refinement**: Fixed parent window scrolling issues and character card overflow.
-- **Theme Resilience**: Optimized JS Interop for theme switching.
+- **Layout Refinement**: Restored 2-column sidebar layout. Optimized character cards with vertical stacking and strictly horizontal, scrolling stats.
+- **Theme Resilience**: Extracted JS logic to `theme.js`. Implemented `Mythril.ThemeTest` for isolated Interop validation.
 - **Cadence Unlocks**: Fixed character-to-cadence drag logic and restored cadence unlock persistence.

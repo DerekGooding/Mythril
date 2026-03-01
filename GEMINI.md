@@ -1,5 +1,5 @@
 # Environment Knowledge
-- **Last Reviewed:** March 1, 2026 (Junctioning & UI Layout Update).
+- **Last Reviewed:** March 1, 2026 (Layout Restoration & Theme Resilience Update).
 - **Shell:** PowerShell is used. Standard Unix utilities like `grep` and `cat` are not available. Use `grep_search` tool or PowerShell equivalents (e.g., `Select-String`, `Get-Content`).
 - **Formatting:** `cat -n` equivalent in PowerShell is `Get-Content <file> | ForEach-Object { "$($_.ReadCount) $_" }`.
 
@@ -21,7 +21,7 @@ This document contains foundational mandates for the AI assistant (Gemini) durin
 
 ## 2. Technical Standards
 - **Framework/Stack:** .NET 10 (Blazor)
-- **Architecture**: Separated core logic into `ResourceManager`, `JunctionManager`, and `InventoryManager`.
+- **Architecture**: Separated core logic into `ResourceManager`, `JunctionManager`, and `InventoryManager`. UI uses explicit JS scoping for Interop.
 - **Operating System:** Windows
 - **Shell:** Use PowerShell for all CLI operations (e.g., use `;` instead of `&&` for command chaining).
 - **Style:** Adhere to project-specific coding conventions and file-scoped structures.

@@ -31,54 +31,61 @@
         </div>
     </div>
 
-    <!-- Party Row (Horizontal Stacks) -->
-    <div class="party-row flex-shrink-0 p-2 bg-light border-bottom">
-        @if (resourceManager is not null)
-        {
-            <PartyPanel Party="resourceManager.Characters"
-                        QuestProgresses="resourceManager.ActiveQuests"
-                        OnQuestDrop="EventCallback.Factory.Create<(object, Character)>(this, TaskDropped)"
-                        OnCompletionAnimationEnd="EventCallback.Factory.Create<QuestProgress>(this, OnCompletionAnimationEnd)" />
-        }
-    </div>
+    <!-- Main Content Area: Two Columns -->
+    <div class="row home-columns-row flex-grow-1 min-height-0 m-0">
+        <!-- Left column with tabs -->
+        <div class="col-8 d-flex flex-column h-100 p-2">
+            @if (resourceManager is not null)
+            {
+                <ul class="nav nav-tabs flex-shrink-0" id="myTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="hand-tab" data-bs-toggle="tab" data-bs-target="#hand" type="button" role="tab">
+                            Locations
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="cadence-tab" data-bs-toggle="tab" data-bs-target="#cadence" type="button" role="tab">
+                            Cadence
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="workshop-tab" data-bs-toggle="tab" data-bs-target="#workshop" type="button" role="tab">
+                            Workshop
+                        </button>
+                    </li>
+                </ul>
+                <div class="tab-content flex-grow-1 min-height-0 border border-top-0 d-flex flex-column overflow-hidden">
+                    <div class="tab-pane fade show active flex-grow-1 overflow-hidden d-flex flex-column" id="hand" role="tabpanel">
+                        <HandPanel Locations="resourceManager.UsableLocations" />
+                    </div>
+                    <div class="tab-pane fade flex-grow-1 overflow-hidden d-flex flex-column" id="cadence" role="tabpanel">
+                        <CadencePanel Cadences="resourceManager.UnlockedCadences" />
+                    </div>
+                    <div class="tab-pane fade flex-grow-1 overflow-hidden d-flex flex-column" id="workshop" role="tabpanel">
+                        <Workshop />
+                    </div>
+                </div>
+            }
+            else
+            {
+                <p><em>Loading...</em></p>
+            }
+        </div>
 
-    <!-- Main Content Row (Tabs) -->
-    <div class="main-row flex-grow-1 min-height-0 d-flex flex-column p-2">
-        @if (resourceManager is not null)
-        {
-            <ul class="nav nav-tabs flex-shrink-0" id="myTab" role="tablist">
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="hand-tab" data-bs-toggle="tab" data-bs-target="#hand" type="button" role="tab">
-                        Locations
-                    </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="cadence-tab" data-bs-toggle="tab" data-bs-target="#cadence" type="button" role="tab">
-                        Cadence
-                    </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="workshop-tab" data-bs-toggle="tab" data-bs-target="#workshop" type="button" role="tab">
-                        Workshop
-                    </button>
-                </li>
-            </ul>
-            <div class="tab-content flex-grow-1 min-height-0 border border-top-0 d-flex flex-column overflow-hidden">
-                <div class="tab-pane fade show active flex-grow-1 overflow-hidden d-flex flex-column" id="hand" role="tabpanel">
-                    <HandPanel Locations="resourceManager.UsableLocations" />
-                </div>
-                <div class="tab-pane fade flex-grow-1 overflow-hidden d-flex flex-column" id="cadence" role="tabpanel">
-                    <CadencePanel Cadences="resourceManager.UnlockedCadences" />
-                </div>
-                <div class="tab-pane fade flex-grow-1 overflow-hidden d-flex flex-column" id="workshop" role="tabpanel">
-                    <Workshop />
-                </div>
-            </div>
-        }
-        else
-        {
-            <p><em>Loading...</em></p>
-        }
+        <!-- Right column with PartyPanel (Vertical listing) -->
+        <div class="col-4 d-flex flex-column h-100 p-2 border-start bg-light">
+            @if (resourceManager is not null)
+            {
+                <PartyPanel Party="resourceManager.Characters"
+                            QuestProgresses="resourceManager.ActiveQuests"
+                            OnQuestDrop="EventCallback.Factory.Create<(object, Character)>(this, TaskDropped)"
+                            OnCompletionAnimationEnd="EventCallback.Factory.Create<QuestProgress>(this, OnCompletionAnimationEnd)" />
+            }
+            else
+            {
+                <p><em>Loading...</em></p>
+            }
+        </div>
     </div>
 </div>
 
@@ -89,7 +96,6 @@
     .tab-content {
         background-color: var(--bs-body-bg);
     }
-    /* Ensure internal panels handle their own scrolling */
     .tab-pane > * {
         flex-grow: 1;
         min-height: 0;
