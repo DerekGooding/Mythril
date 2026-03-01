@@ -8,7 +8,7 @@
 
 [**Live Website**](https://DerekGooding.Github.io/Mythril)
 
-**Documentation Status:** Last updated March 1, 2026. Refined Junctioning rules and updated project suggestions for core-loop onboarding.
+**Documentation Status:** Last updated March 1, 2026. Refined roadmap to prioritize core mechanics and onboarding experience.
 
 ## Project Structure
 **This project is heavily and primarily developed by AI agents.**  
