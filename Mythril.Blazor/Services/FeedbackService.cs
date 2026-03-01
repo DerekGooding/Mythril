@@ -1,5 +1,6 @@
 using Microsoft.JSInterop;
 using Newtonsoft.Json;
+using System.Net.Http.Json;
 
 namespace Mythril.Blazor.Services;
 
@@ -22,7 +23,7 @@ public class FeedbackEntry
     public string? StackTrace { get; set; }
 }
 
-public class FeedbackService(IJSRuntime js)
+public class FeedbackService(IJSRuntime js, AuthService auth, HttpClient http)
 {
     private const string STORAGE_KEY = "mythril_pending_feedback";
 
@@ -31,6 +32,25 @@ public class FeedbackService(IJSRuntime js)
         var all = await GetPendingFeedback();
         all.Add(entry);
         await SaveAll(all);
+
+        if (auth.IsAuthenticated)
+        {
+            // Auto-sync to local dev bridge if it exists
+            _ = Task.Run(() => SyncToDevBridge(entry));
+        }
+    }
+
+    private async Task SyncToDevBridge(FeedbackEntry entry)
+    {
+        try
+        {
+            // The dev bridge runs on a fixed local port during development
+            await http.PostAsJsonAsync("http://localhost:8080/report", entry);
+        }
+        catch
+        {
+            // Silently fail if bridge isn't running
+        }
     }
 
     public async Task CaptureError(string message, string? stackTrace = null)

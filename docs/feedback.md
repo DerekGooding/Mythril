@@ -1,5 +1,14 @@
 # User Feedback Management
 
+## Developer Mode Bridge
+For local development, you can start a bridge server that automatically captures runtime errors and feedback from the browser and writes them to the filesystem immediately.
+1. Unlock Developer Mode in the browser (click version 3x).
+2. Start the bridge:
+```bash
+python scripts/dev_bridge.py
+```
+When an error occurs or you click "Save Locally" in the game, the bridge will print the created file path to your console.
+
 ## Feedback Synchronization
 The primary method for an agent to ingest feedback and error reports is via a **Sync String** provided from the in-game developer console.
 
