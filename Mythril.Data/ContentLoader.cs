@@ -44,54 +44,91 @@ public class ContentLoader(
         try {
             var locationDTOs = await http.GetFromJsonAsync<List<LocationDTO>>("data/locations.json") ?? [];
             Console.WriteLine($"Loaded {locationDTOs.Count} locations.");
-            var locationsList = locationDTOs.Select(d => new Location(d.Name, d.Quests.Select(qn => quests.All.First(q => q.Name == qn)))).ToList();
+            var locationsList = locationDTOs.Select(d => new Location(d.Name, d.Quests.Select(qn => {
+                var q = quests.All.FirstOrDefault(x => x.Name == qn);
+                if (q.Name == null) Console.WriteLine($"WARNING: Quest '{qn}' not found for location '{d.Name}'");
+                return q;
+            }).Where(x => x.Name != null))).ToList();
             locations.Load(locationsList);
         } catch (Exception ex) { Console.WriteLine($"Error loading locations: {ex.Message}"); throw; }
 
         try {
             var cadenceDTOs = await http.GetFromJsonAsync<List<CadenceDTO>>("data/cadences.json") ?? [];
             Console.WriteLine($"Loaded {cadenceDTOs.Count} cadences.");
-            var cadencesList = cadenceDTOs.Select(d => new Cadence(d.Name, d.Description, d.Abilities.Select(a => new CadenceUnlock(
-                abilities.All.First(ab => ab.Name == a.Ability),
-                a.Requirements.Select(r => new ItemQuantity(items.All.First(i => i.Name == r.Item), r.Quantity)).ToArray()
-            )).ToArray())).ToList();
+            var cadencesList = cadenceDTOs.Select(d => new Cadence(d.Name, d.Description, d.Abilities.Select(a => {
+                var ab = abilities.All.FirstOrDefault(x => x.Name == a.Ability);
+                if (ab.Name == null) Console.WriteLine($"WARNING: Ability '{a.Ability}' not found for cadence '{d.Name}'");
+                return new CadenceUnlock(
+                    ab,
+                    a.Requirements.Select(r => {
+                        var i = items.All.FirstOrDefault(x => x.Name == r.Item);
+                        if (i.Name == null) Console.WriteLine($"WARNING: Item '{r.Item}' not found for ability '{a.Ability}' in cadence '{d.Name}'");
+                        return new ItemQuantity(i, r.Quantity);
+                    }).Where(x => x.Item.Name != null).ToArray()
+                );
+            }).Where(x => x.Ability.Name != null).ToArray())).ToList();
             cadences.Load(cadencesList);
         } catch (Exception ex) { Console.WriteLine($"Error loading cadences: {ex.Message}"); throw; }
 
         try {
             var detailDTOs = await http.GetFromJsonAsync<List<QuestDetailDTO>>("data/quest_details.json") ?? [];
             Console.WriteLine($"Loaded {detailDTOs.Count} quest details.");
-            var detailsDict = detailDTOs.ToDictionary(
-                d => quests.All.First(q => q.Name == d.Quest),
-                d => new QuestDetail(d.DurationSeconds, 
-                    d.Requirements.Select(r => new ItemQuantity(items.All.First(i => i.Name == r.Item), r.Quantity)).ToArray(),
-                    d.Rewards.Select(r => new ItemQuantity(items.All.First(i => i.Name == r.Item), r.Quantity)).ToArray(),
+            var detailsDict = new Dictionary<Quest, QuestDetail>();
+            foreach (var d in detailDTOs)
+            {
+                var q = quests.All.FirstOrDefault(x => x.Name == d.Quest);
+                if (q.Name == null) { Console.WriteLine($"WARNING: Quest '{d.Quest}' not found for details"); continue; }
+                detailsDict[q] = new QuestDetail(d.DurationSeconds, 
+                    d.Requirements.Select(r => {
+                        var i = items.All.FirstOrDefault(x => x.Name == r.Item);
+                        if (i.Name == null) Console.WriteLine($"WARNING: Item '{r.Item}' not found for quest requirements '{d.Quest}'");
+                        return new ItemQuantity(i, r.Quantity);
+                    }).Where(x => x.Item.Name != null).ToArray(),
+                    d.Rewards.Select(r => {
+                        var i = items.All.FirstOrDefault(x => x.Name == r.Item);
+                        if (i.Name == null) Console.WriteLine($"WARNING: Item '{r.Item}' not found for quest rewards '{d.Quest}'");
+                        return new ItemQuantity(i, r.Quantity);
+                    }).Where(x => x.Item.Name != null).ToArray(),
                     Enum.Parse<QuestType>(d.Type)
-                )
-            );
+                );
+            }
             questDetails.Load(detailsDict);
         } catch (Exception ex) { Console.WriteLine($"Error loading quest details: {ex.Message}"); throw; }
 
         try {
             var unlockDTOs = await http.GetFromJsonAsync<List<QuestUnlockDTO>>("data/quest_unlocks.json") ?? [];
             Console.WriteLine($"Loaded {unlockDTOs.Count} quest unlocks.");
-            var unlocksDict = unlockDTOs.ToDictionary(
-                d => quests.All.First(q => q.Name == d.Quest),
-                d => d.Requires.Select(rn => quests.All.First(q => q.Name == rn)).ToArray()
-            );
+            var unlocksDict = new Dictionary<Quest, Quest[]>();
+            foreach (var d in unlockDTOs)
+            {
+                var q = quests.All.FirstOrDefault(x => x.Name == d.Quest);
+                if (q.Name == null) { Console.WriteLine($"WARNING: Quest '{d.Quest}' not found for unlocks"); continue; }
+                unlocksDict[q] = d.Requires.Select(rn => {
+                    var rq = quests.All.FirstOrDefault(x => x.Name == rn);
+                    if (rq.Name == null) Console.WriteLine($"WARNING: Required quest '{rn}' not found for quest '{d.Quest}'");
+                    return rq;
+                }).Where(x => x.Name != null).ToArray();
+            }
             questUnlocks.Load(unlocksDict);
         } catch (Exception ex) { Console.WriteLine($"Error loading quest unlocks: {ex.Message}"); throw; }
 
         try {
             var refinementDTOs = await http.GetFromJsonAsync<List<RefinementDTO>>("data/refinements.json") ?? [];
             Console.WriteLine($"Loaded {refinementDTOs.Count} refinements.");
-            var refinementsDict = refinementDTOs.ToDictionary(
-                d => abilities.All.First(a => a.Name == d.Ability),
-                d => d.Recipes.ToDictionary(
-                    r => items.All.First(i => i.Name == r.InputItem),
-                    r => new Recipe(r.InputQuantity, items.All.First(i => i.Name == r.OutputItem), r.OutputQuantity)
-                )
-            );
+            var refinementsDict = new Dictionary<CadenceAbility, Dictionary<Item, Recipe>>();
+            foreach (var d in refinementDTOs)
+            {
+                var ab = abilities.All.FirstOrDefault(x => x.Name == d.Ability);
+                if (ab.Name == null) { Console.WriteLine($"WARNING: Ability '{d.Ability}' not found for refinements"); continue; }
+                refinementsDict[ab] = d.Recipes.Select(r => {
+                    var ii = items.All.FirstOrDefault(x => x.Name == r.InputItem);
+                    var oi = items.All.FirstOrDefault(x => x.Name == r.OutputItem);
+                    if (ii.Name == null) Console.WriteLine($"WARNING: Input item '{r.InputItem}' not found for refinement '{d.Ability}'");
+                    if (oi.Name == null) Console.WriteLine($"WARNING: Output item '{r.OutputItem}' not found for refinement '{d.Ability}'");
+                    return new { Input = ii, Output = oi, r.InputQuantity, r.OutputQuantity };
+                }).Where(x => x.Input.Name != null && x.Output.Name != null)
+                .ToDictionary(x => x.Input, x => new Recipe(x.InputQuantity, x.Output, x.OutputQuantity));
+            }
             refinements.Load(refinementsDict);
         } catch (Exception ex) { Console.WriteLine($"Error loading refinements: {ex.Message}"); throw; }
         
