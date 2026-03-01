@@ -511,7 +511,9 @@ main[b-uvgfdke93t] {
 
 .content[b-uvgfdke93t] {
     flex-grow: 1;
-    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
 }
 
 .feedback-drawer[b-uvgfdke93t] {
