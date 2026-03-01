@@ -19,6 +19,7 @@ SOURCE_DIR = config.get("SOURCE_DIR", "src")
 RESULTS_DIR = config.get("RESULTS_DIR", "TestResults")
 SOURCE_EXTENSIONS = config.get("SOURCE_EXTENSIONS", [".cs"])
 DOC_FILES = config.get("DOC_FILES", [])
+FEEDBACK_DIR = config.get("FEEDBACK_DIR", "docs/feedback")
 TEST_COMMAND = config.get("TEST_COMMAND", ["dotnet", "test"])
 COVERAGE_REPORT_PATTERN = config.get("COVERAGE_REPORT_PATTERN", r"coverage\.cobertura\.xml")
 
@@ -37,6 +38,23 @@ def run_tests():
     except subprocess.CalledProcessError:
         print("[ERROR] Tests failed during health check.")
         return False
+
+def check_feedback_backlog():
+    print("\n--- Checking User Feedback Backlog ---")
+    if not os.path.exists(FEEDBACK_DIR):
+        print(f"[WARNING] Feedback directory {FEEDBACK_DIR} not found.")
+        return 0
+    
+    # List all files except hidden/system files if any
+    items = [f for f in os.listdir(FEEDBACK_DIR) if os.path.isfile(os.path.join(FEEDBACK_DIR, f)) and not f.startswith(".")]
+    count = len(items)
+    if count > 0:
+        print(f"[FAIL] {count} unresolved feedback items found in {FEEDBACK_DIR}!")
+        for item in items:
+            print(f"  - {item}")
+    else:
+        print("[SUCCESS] Feedback backlog is empty.")
+    return count
 
 def get_git_changes_since_file(file_path):
     try:
@@ -117,13 +135,14 @@ def parse_coverage():
         print(f"[ERROR] Could not parse coverage: {e}")
         return 0.0, False
 
-def export_results(monolith_count, coverage, docs_pass, tests_pass):
+def export_results(monolith_count, coverage, docs_pass, tests_pass, feedback_count):
     summary = {
-        "is_healthy": (monolith_count == 0 and docs_pass and tests_pass),
+        "is_healthy": (monolith_count == 0 and docs_pass and tests_pass and feedback_count == 0),
         "monoliths": monolith_count,
         "coverage": coverage,
         "docs_up_to_date": docs_pass,
-        "tests_passing": tests_pass
+        "tests_passing": tests_pass,
+        "feedback_backlog": feedback_count
     }
     
     os.makedirs("scripts/data", exist_ok=True)
@@ -144,6 +163,7 @@ def export_results(monolith_count, coverage, docs_pass, tests_pass):
     save_shield("coverage", "Coverage", f"{coverage:.2f}%", "brightgreen" if coverage >= MIN_OVERALL_COVERAGE else "yellow")
     save_shield("docs", "Docs", "Up-to-date" if docs_pass else "Stale", "brightgreen" if docs_pass else "red")
     save_shield("tests", "Tests", "Passing" if tests_pass else "Failing", "brightgreen" if tests_pass else "red")
+    save_shield("feedback", "Feedback", "Clear" if feedback_count == 0 else f"{feedback_count} Pending", "brightgreen" if feedback_count == 0 else "orange")
 
     print(f"Results and shields exported to scripts/data/")
 
@@ -157,11 +177,12 @@ if __name__ == "__main__":
     m_count = check_monoliths()
     cov_val, cov_pass = parse_coverage()
     d_pass = check_docs_staleness()
+    f_count = check_feedback_backlog()
     
     # Final pass logic
-    all_pass = m_count == 0 and cov_pass and d_pass and (tests_passed or skip_tests)
+    all_pass = m_count == 0 and cov_pass and d_pass and (tests_passed or skip_tests) and f_count == 0
     
-    export_results(m_count, cov_val, d_pass, tests_passed)
+    export_results(m_count, cov_val, d_pass, tests_passed, f_count)
 
     if not all_pass:
         print("\n[FAIL] Health checks failed.")
