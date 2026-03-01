@@ -6,7 +6,7 @@
         @foreach (var cadence in Cadences.Where(l => l.Abilities.Any()))
         {
             <CadenceDragExpander Cadence="cadence">
-                <CadenceTree Cadence="cadence" />
+                <CadenceTree CadenceData="cadence" />
             </CadenceDragExpander>
         }
     }

@@ -1,0 +1,66 @@
+[
+  {
+    "Name": "Recruit",
+    "Description": "Foundational adventuring cadence",
+    "Abilities": [
+      {
+        "Ability": "AutoQuest I",
+        "Requirements": [ { "Item": "Gold", "Quantity": 100 } ]
+      },
+      {
+        "Ability": "Augment Strength",
+        "Requirements": [ { "Item": "Iron Ore", "Quantity": 10 } ]
+      }
+    ]
+  },
+  {
+    "Name": "Apprentice",
+    "Description": "Has the foundational item refining abilities",
+    "Abilities": [
+      {
+        "Ability": "AutoQuest I",
+        "Requirements": [ { "Item": "Gold", "Quantity": 100 } ]
+      },
+      {
+        "Ability": "Refine Scrap",
+        "Requirements": [ { "Item": "Gold", "Quantity": 1000 } ]
+      },
+      {
+        "Ability": "Refine Mixology",
+        "Requirements": [ { "Item": "Herb", "Quantity": 30 }, { "Item": "Iron Ore", "Quantity": 10 } ]
+      }
+    ]
+  },
+  {
+    "Name": "Student",
+    "Description": "Has the foundational magic refining abilities",
+    "Abilities": [
+      {
+        "Ability": "AutoQuest I",
+        "Requirements": [ { "Item": "Gold", "Quantity": 100 } ]
+      },
+      {
+        "Ability": "Refine Fire",
+        "Requirements": [ { "Item": "Log", "Quantity": 10 } ]
+      },
+      {
+        "Ability": "Refine Ice",
+        "Requirements": [ { "Item": "Potion", "Quantity": 10 } ]
+      }
+    ]
+  },
+  {
+    "Name": "Mythril Weaver",
+    "Description": "A master of the arcane and material arts.",
+    "Abilities": [
+      {
+        "Ability": "Mass Refine",
+        "Requirements": [ { "Item": "Gold", "Quantity": 5000 }, { "Item": "Mythril Spark", "Quantity": 1 } ]
+      },
+      {
+        "Ability": "Essence Harvest",
+        "Requirements": [ { "Item": "Ancient Bark", "Quantity": 20 }, { "Item": "Moonberry", "Quantity": 50 } ]
+      }
+    ]
+  }
+]

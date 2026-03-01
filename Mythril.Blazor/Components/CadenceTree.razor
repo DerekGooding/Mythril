@@ -2,7 +2,7 @@
 @inject ResourceManager resourceManager
 
 <div class="cadence-tree">
-    @foreach (var abilityUnlock in Cadence.Abilities)
+    @foreach (var abilityUnlock in CadenceData.Abilities)
     {
         var isUnlocked = resourceManager.UnlockedAbilities.Contains(abilityUnlock.Ability);
         var canAfford = resourceManager.CanAfford(abilityUnlock);
@@ -89,11 +89,11 @@
 
 @code {
     [Parameter]
-    public Cadence Cadence { get; set; }
+    public Cadence CadenceData { get; set; }
 
     private string GetTooltip(CadenceUnlock unlock)
     {
         var reqs = string.Join("\n", unlock.Requirements.Select(r => $"- {r.Quantity} {r.Item.Name}"));
-        return $"Requirements:\n{reqs}";
+        return "Requirements:\n" + reqs;
     }
 }
