@@ -1,6 +1,9 @@
 @using Mythril.Data
 @inject ContentLoader ContentLoader
 @inject ResourceManager ResourceManager
+@inject VersionService VersionService
+@inject FeedbackService FeedbackService
+@inject SnackbarService SnackbarService
 
 @if (_isLoaded)
 {
@@ -32,6 +35,11 @@ else
 
     protected override async Task OnInitializedAsync()
     {
+        VersionService.Initialize();
+        VersionService.OnUpdateAvailable += () => {
+            SnackbarService.Show("New Update Available! Refresh to see changes.", "info");
+        };
+
         await Task.Delay(1);
         try
         {
@@ -41,6 +49,7 @@ else
         }
         catch (Exception ex)
         {
+            await FeedbackService.CaptureError(ex.Message, ex.StackTrace);
             Console.WriteLine($"Critical Load Error: {ex.Message}");
             Console.WriteLine(ex.StackTrace);
         }

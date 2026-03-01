@@ -1,0 +1,98 @@
+@using Mythril.Blazor.Services
+@using Microsoft.JSInterop
+@using Newtonsoft.Json
+@inject FeedbackService FeedbackService
+@inject SnackbarService SnackbarService
+@inject IJSRuntime JS
+
+<div class="feedback-panel mt-4">
+    <h4>Send Feedback</h4>
+    <div class="card p-3">
+        <div class="mb-3">
+            <label class="form-label">Title</label>
+            <input type="text" class="form-control" @bind="_title" placeholder="Short summary..." />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Type</label>
+            <select class="form-select" @bind="_type">
+                @foreach (var type in Enum.GetValues<FeedbackType>().Where(t => t != FeedbackType.Error))
+                {
+                    <option value="@type">@type</option>
+                }
+            </select>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Description</label>
+            <textarea class="form-control" @bind="_description" rows="3"></textarea>
+        </div>
+        <button class="btn btn-success" @onclick="SubmitFeedback">Submit Locally</button>
+    </div>
+
+    @if (_pendingCount > 0)
+    {
+        <div class="alert alert-info mt-3">
+            <p>You have @_pendingCount pending feedback items saved locally.</p>
+            <div class="btn-group">
+                <button class="btn btn-sm btn-primary" @onclick="CopySyncString">Copy Sync String</button>
+                <button class="btn btn-sm btn-outline-danger" @onclick="ClearFeedback">Clear All</button>
+            </div>
+            <p class="mt-2"><small>Give this string to the agent to permanently record your feedback.</small></p>
+        </div>
+    }
+</div>
+
+@code {
+    private string _title = "";
+    private string _description = "";
+    private FeedbackType _type = FeedbackType.Suggestion;
+    private int _pendingCount = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await UpdateCount();
+    }
+
+    private async Task UpdateCount()
+    {
+        var all = await FeedbackService.GetPendingFeedback();
+        _pendingCount = all.Count;
+    }
+
+    private async Task SubmitFeedback()
+    {
+        if (string.IsNullOrWhiteSpace(_title) || string.IsNullOrWhiteSpace(_description))
+        {
+            SnackbarService.Show("Please fill out all fields.", "warning");
+            return;
+        }
+
+        var entry = new FeedbackEntry
+        {
+            Title = _title,
+            Description = _description,
+            Type = _type,
+            Date = DateTime.Now
+        };
+
+        await FeedbackService.AddFeedback(entry);
+        _title = "";
+        _description = "";
+        await UpdateCount();
+        SnackbarService.Show("Feedback saved locally! Thank you.", "success");
+    }
+
+    private async Task CopySyncString()
+    {
+        var all = await FeedbackService.GetPendingFeedback();
+        var json = JsonConvert.SerializeObject(all);
+        await JS.InvokeVoidAsync("navigator.clipboard.writeText", json);
+        SnackbarService.Show("Sync string copied to clipboard!", "success");
+    }
+
+    private async Task ClearFeedback()
+    {
+        await FeedbackService.ClearFeedback();
+        await UpdateCount();
+        SnackbarService.Show("Local feedback cleared.", "info");
+    }
+}

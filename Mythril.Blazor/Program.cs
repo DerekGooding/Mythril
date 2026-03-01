@@ -11,6 +11,8 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 builder.Services.AddScoped(_ => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 builder.Services.AddScoped<DragDropService>();
 builder.Services.AddScoped<ThemeService>();
+builder.Services.AddScoped<VersionService>();
+builder.Services.AddScoped<FeedbackService>();
 builder.Services.AddSingleton<SnackbarService>();
 
 // Register Content (Singletons)

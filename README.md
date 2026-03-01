@@ -8,7 +8,7 @@
 
 [**Live Website**](https://DerekGooding.Github.io/Mythril)
 
-**Documentation Status:** Last updated March 1, 2026. Refined UI performance, dynamic theme switching, and live list updates verified.
+**Documentation Status:** Last updated March 1, 2026. Added In-Game Feedback system, global error reporting, and live update notifications.
 
 ## Project Structure
 **This project is heavily and primarily developed by AI agents.**  
