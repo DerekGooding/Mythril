@@ -2,7 +2,7 @@
     "is_healthy": false,
     "monoliths": 0,
     "coverage": 70.45,
-    "docs_up_to_date": false,
+    "docs_up_to_date": true,
     "tests_passing": true,
-    "feedback_backlog": 0
+    "feedback_backlog": 3
 }
