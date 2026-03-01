@@ -1,8 +1,0 @@
-[
-  { "Name": "Village", "Quests": ["Prologue", "Tutorial Section", "Visit Starting Town", "Buy Potion", "Learn About Cadences", "Learn about the Mines"] },
-  { "Name": "Dark Forest", "Quests": ["Farm Goblins", "Farm Trents", "Farm Golems"] },
-  { "Name": "Iron Mines", "Quests": ["Farm Bats", "Farm Spiders", "Farm Slimes", "Unlock Mining", "Mine Iron Ore"] },
-  { "Name": "Whispering Woods", "Quests": ["Gather Moonberries", "Defeat Treant Guardian"] },
-  { "Name": "Ancient Ruins", "Quests": ["Ancient Inscriptions", "Finding the Hearth", "Rekindling the Spark"] },
-  { "Name": "Dragon's Lair", "Quests": [] }
-]
