@@ -1,6 +1,6 @@
 {
     "schemaVersion": 1,
     "label": "Feedback",
-    "message": "Clear",
-    "color": "brightgreen"
+    "message": "1 Pending",
+    "color": "orange"
 }

@@ -1,11 +1,11 @@
 # Agentic Status Report
-**Generated:** 2026-03-01 16:47:49
+**Generated:** 2026-03-01 17:00:14
 
 ## 1. System Integrity (check_health.py)
-✅ **PASSED**
+❌ **FAILED**
 - **Monoliths:** 0
 - **Coverage:** 91.52%
-- **Docs Stale:** False
+- **Docs Stale:** True
 
 ## 2. Functional Verification (run_ai_test.ps1)
 ✅ **PASSED**
@@ -26,33 +26,35 @@
 <summary>Health Check Output</summary>
 
 ```
-Test run for C:\Users\Derek\source\repos\Mythril\Mythril.Tests\bin\Debug\net9.0\Mythril.Tests.dll (.NETCoreApp,Version=v9.0)
+Test run for C:\Users\Derek\source\repos\Mythril\Mythril.Tests\bin\Debug\net10.0\Mythril.Tests.dll (.NETCoreApp,Version=v10.0)
 VSTest version 18.0.1 (x64)
 
 Starting test execution, please wait...
 A total of 1 test files matched the specified pattern.
 
-Passed!  - Failed:     0, Passed:    56, Skipped:     0, Total:    56, Duration: 600 ms - Mythril.Tests.dll (net9.0)
+Passed!  - Failed:     0, Passed:    56, Skipped:     0, Total:    56, Duration: 649 ms - Mythril.Tests.dll (net10.0)
 
 Attachments:
-  C:\Users\Derek\source\repos\Mythril\TestResults\02f355b7-ca50-4adc-a4b2-cd0110af5244\coverage.cobertura.xml
+  C:\Users\Derek\source\repos\Mythril\TestResults\a36eed3b-8223-4510-a9a4-51a1412f9549\coverage.cobertura.xml
 --- Generating Fresh Test Results ---
 [SUCCESS] Tests completed.
 --- Checking for Monoliths (> 250 lines) ---
 
 --- Checking Test Coverage ---
-Using coverage report: TestResults\02f355b7-ca50-4adc-a4b2-cd0110af5244\coverage.cobertura.xml
+Using coverage report: TestResults\a36eed3b-8223-4510-a9a4-51a1412f9549\coverage.cobertura.xml
 Overall Coverage: 91.52%
 
 --- Checking Documentation Staleness ---
-README.md: 8 source files changed since its last update.
-GEMINI.md: 4 source files changed since its last update.
-AGENTS.md: 8 source files changed since its last update.
+README.md: 2 source files changed since its last update.
+GEMINI.md: 2 source files changed since its last update.
+AGENTS.md: 9 source files changed since its last update.
+[FAIL] AGENTS.md is stale!
 
 --- Checking User Feedback & Error Backlog ---
-[SUCCESS] Feedback and error backlogs are empty.
+[FAIL] 1 unresolved items found in docs/feedback!
+  - 2026-03-01_untitled.md
 
-[SUCCESS] All health checks passed!
+[FAIL] Health checks failed.
 
 ```
 </details>

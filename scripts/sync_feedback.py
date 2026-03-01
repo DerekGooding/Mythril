@@ -45,16 +45,32 @@ def main():
     synced_count = 0
     for entry in data:
         title = entry.get("Title", "Untitled")
-        fb_type = entry.get("Type", "Suggestion")
+        
+        # Handle numeric or string Type
+        raw_type = entry.get("Type", "Suggestion")
+        type_map = {0: "Bug", 1: "FeatureRequest", 2: "Suggestion", 3: "Error"}
+        if isinstance(raw_type, int) and raw_type in type_map:
+            fb_type = type_map[raw_type]
+        else:
+            fb_type = str(raw_type)
+
         description = entry.get("Description", "")
         source = entry.get("Source", "In-Game UI")
         stack = entry.get("StackTrace", "")
+        logs = entry.get("ConsoleLog", "")
         date_str = entry.get("Date", datetime.now().isoformat())[:10]
 
-        # Determine target directory
-        # Type is 3 for Error in the enum (Error=3) or the string "Error"
-        is_error = fb_type == "Error" or fb_type == 3
+        is_error = fb_type == "Error"
         target_dir = errors_dir if is_error else feedback_dir
+
+        # For errors, we want to ensure description is the primary source of info
+        if is_error:
+            # If description is empty or very short, try to use title or first line of stack
+            if not description or description == "Automated Error Report":
+                if stack:
+                    description = stack.split('\n')[0]
+                else:
+                    description = "An unknown runtime error occurred."
 
         template = f"""# {'Error' if is_error else 'Feedback'}: {title}
 
@@ -72,6 +88,9 @@ def main():
 """
         if stack:
             template += f"\n## Stack Trace\n```\n{stack}\n```\n"
+        
+        if logs:
+            template += f"\n## Console Logs\n```\n{logs}\n```\n"
 
         base_name = f"{date_str}_{slugify(title[:30])}"
         filename = f"{base_name}.md"
