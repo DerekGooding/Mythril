@@ -15,6 +15,8 @@ builder.Services.AddScoped<VersionService>();
 builder.Services.AddScoped<FeedbackService>();
 builder.Services.AddSingleton<SnackbarService>();
 
+builder.Logging.AddProvider(new FeedbackLoggerProvider(ContentHost.GetContent<FeedbackService>()));
+
 // Register Content (Singletons)
 builder.Services.AddSingleton(ContentHost.GetContent<Items>());
 builder.Services.AddSingleton(ContentHost.GetContent<Quests>());

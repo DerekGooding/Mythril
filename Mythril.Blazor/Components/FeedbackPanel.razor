@@ -38,6 +38,25 @@
             </div>
             <p class="mt-2"><small>Give this string to the agent to permanently record your feedback.</small></p>
         </div>
+
+        <div class="feedback-list mt-3">
+            <h6>Recent Items</h6>
+            <div class="list-group">
+                @foreach (var entry in _recentEntries)
+                {
+                    <div class="list-group-item list-group-item-action flex-column align-items-start">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1 @(entry.Type == FeedbackType.Error ? "text-danger" : "")">
+                                @entry.Title
+                            </h6>
+                            <small>@entry.Date.ToShortTimeString()</small>
+                        </div>
+                        <p class="mb-1 small">@entry.Description</p>
+                        <a href="@FeedbackService.GetGitHubIssueUrl(entry)" target="_blank" class="btn btn-sm btn-link p-0">Submit to GitHub</a>
+                    </div>
+                }
+            </div>
+        </div>
     }
 </div>
 
@@ -46,6 +65,7 @@
     private string _description = "";
     private FeedbackType _type = FeedbackType.Suggestion;
     private int _pendingCount = 0;
+    private List<FeedbackEntry> _recentEntries = [];
 
     protected override async Task OnInitializedAsync()
     {
@@ -56,6 +76,7 @@
     {
         var all = await FeedbackService.GetPendingFeedback();
         _pendingCount = all.Count;
+        _recentEntries = all.OrderByDescending(x => x.Date).Take(5).ToList();
     }
 
     private async Task SubmitFeedback()

@@ -61,4 +61,24 @@ public class FeedbackService(IJSRuntime js)
     {
         await js.InvokeVoidAsync("localStorage.removeItem", STORAGE_KEY);
     }
+
+    public string GetGitHubIssueUrl(FeedbackEntry entry)
+    {
+        var baseUrl = "https://github.com/DerekGooding/Mythril/issues/new";
+        var title = Uri.EscapeDataString($"[{entry.Type}] {entry.Title}");
+        var body = Uri.EscapeDataString($"""
+**Date:** {entry.Date}
+**Type:** {entry.Type}
+**Source:** {entry.Source}
+
+## Description
+{entry.Description}
+
+## Stack Trace
+```
+{entry.StackTrace}
+```
+""");
+        return $"{baseUrl}?title={title}&body={body}";
+    }
 }
