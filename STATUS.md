@@ -1,10 +1,10 @@
 # Agentic Status Report
-**Generated:** 2026-03-01 11:10:46
+**Generated:** 2026-03-01 11:18:11
 
 ## 1. System Integrity (check_health.py)
 ❌ **FAILED**
 - **Monoliths:** 0
-- **Coverage:** 70.26%
+- **Coverage:** 70.45%
 - **Docs Stale:** True
 
 ## 2. Functional Verification (run_ai_test.ps1)
@@ -32,31 +32,27 @@ VSTest version 18.0.1 (x64)
 Starting test execution, please wait...
 A total of 1 test files matched the specified pattern.
 
-Passed!  - Failed:     0, Passed:    41, Skipped:     0, Total:    41, Duration: 291 ms - Mythril.Tests.dll (net9.0)
+Passed!  - Failed:     0, Passed:    41, Skipped:     0, Total:    41, Duration: 296 ms - Mythril.Tests.dll (net9.0)
 
 Attachments:
-  C:\Users\Derek\source\repos\Mythril\TestResults\ec306222-eab9-4223-ace0-29d1690f9d9b\coverage.cobertura.xml
+  C:\Users\Derek\source\repos\Mythril\TestResults\a25c9762-331b-4315-ab63-c670f2fb0382\coverage.cobertura.xml
 --- Generating Fresh Test Results ---
 [SUCCESS] Tests completed.
 --- Checking for Monoliths (> 250 lines) ---
 
 --- Checking Test Coverage ---
-Using coverage report: TestResults\ec306222-eab9-4223-ace0-29d1690f9d9b\coverage.cobertura.xml
-Overall Coverage: 70.26%
+Using coverage report: TestResults\a25c9762-331b-4315-ab63-c670f2fb0382\coverage.cobertura.xml
+Overall Coverage: 70.45%
 
 --- Checking Documentation Staleness ---
-README.md: 12 source files changed.
-[FAIL] README.md is stale!
-GEMINI.md: 0 source files changed.
-AGENTS.md: 12 source files changed.
+README.md: 0 source files changed.
+GEMINI.md: 17 source files changed.
+[FAIL] GEMINI.md is stale!
+AGENTS.md: 11 source files changed.
 [FAIL] AGENTS.md is stale!
 
 --- Checking User Feedback Backlog ---
-[FAIL] 4 unresolved feedback items found in docs/feedback!
-  - 2026-03-01_celebration_lag.md
-  - 2026-03-01_location_lists_dont_automatically_update.md
-  - 2026-03-01_toggle_dark_mode_doesnt_do_anything.md
-  - 2026-03-01_too_easy.md
+[SUCCESS] Feedback backlog is empty.
 Results and shields exported to scripts/data/
 
 [FAIL] Health checks failed.
