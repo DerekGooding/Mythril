@@ -6,7 +6,9 @@
 @inject IJSRuntime JS
 
 <div class="feedback-panel mt-4">
-    <h4>Send Feedback</h4>
+    <h4>Submit Feedback</h4>
+    <p class="small text-muted">A GitHub account is required to permanently record feedback.</p>
+    
     <div class="card p-3">
         <div class="mb-3">
             <label class="form-label">Title</label>
@@ -23,24 +25,29 @@
         </div>
         <div class="mb-3">
             <label class="form-label">Description</label>
-            <textarea class="form-control" @bind="_description" rows="3"></textarea>
+            <textarea class="form-control" @bind="_description" rows="3" placeholder="Explain the issue or suggestion..."></textarea>
         </div>
-        <button class="btn btn-success" @onclick="SubmitFeedback">Submit Locally</button>
+        <div class="btn-group">
+            <a href="@GetManualGitHubUrl()" target="_blank" class="btn btn-primary @(CanSubmit ? "" : "disabled")" @onclick="RecordLocalAttempt">
+                Submit to GitHub
+            </a>
+            <button class="btn btn-outline-secondary" @onclick="SaveLocally" title="Save for later or if you don't have an account">
+                Save Locally
+            </button>
+        </div>
     </div>
 
     @if (_pendingCount > 0)
     {
         <div class="alert alert-info mt-3">
-            <p>You have @_pendingCount pending feedback items saved locally.</p>
+            <h6>Pending Items (@_pendingCount)</h6>
+            <p class="small">These items are saved in your browser. Click 'Submit to GitHub' for each to make them public.</p>
             <div class="btn-group">
-                <button class="btn btn-sm btn-primary" @onclick="CopySyncString">Copy Sync String</button>
-                <button class="btn btn-sm btn-outline-danger" @onclick="ClearFeedback">Clear All</button>
+                <button class="btn btn-sm btn-outline-danger" @onclick="ClearFeedback">Clear All Local</button>
             </div>
-            <p class="mt-2"><small>Give this string to the agent to permanently record your feedback.</small></p>
         </div>
 
-        <div class="feedback-list mt-3">
-            <h6>Recent Items</h6>
+        <div class="feedback-list mt-2">
             <div class="list-group">
                 @foreach (var entry in _recentEntries)
                 {
@@ -51,7 +58,7 @@
                             </h6>
                             <small>@entry.Date.ToShortTimeString()</small>
                         </div>
-                        <p class="mb-1 small">@entry.Description</p>
+                        <p class="mb-1 small text-truncate">@entry.Description</p>
                         <a href="@FeedbackService.GetGitHubIssueUrl(entry)" target="_blank" class="btn btn-sm btn-link p-0">Submit to GitHub</a>
                     </div>
                 }
@@ -67,25 +74,40 @@
     private int _pendingCount = 0;
     private List<FeedbackEntry> _recentEntries = [];
 
+    private bool CanSubmit => !string.IsNullOrWhiteSpace(_title) && !string.IsNullOrWhiteSpace(_description);
+
     protected override async Task OnInitializedAsync()
     {
         await UpdateCount();
+    }
+
+    private string GetManualGitHubUrl()
+    {
+        if (!CanSubmit) return "#";
+        return FeedbackService.GetGitHubIssueUrl(new FeedbackEntry { 
+            Title = _title, 
+            Description = _description, 
+            Type = _type,
+            Date = DateTime.Now
+        });
+    }
+
+    private async Task RecordLocalAttempt()
+    {
+        // When they click the link, also save it locally just in case they close the tab or it fails
+        await SaveLocally();
     }
 
     private async Task UpdateCount()
     {
         var all = await FeedbackService.GetPendingFeedback();
         _pendingCount = all.Count;
-        _recentEntries = all.OrderByDescending(x => x.Date).Take(5).ToList();
+        _recentEntries = all.OrderByDescending(x => x.Date).Take(10).ToList();
     }
 
-    private async Task SubmitFeedback()
+    private async Task SaveLocally()
     {
-        if (string.IsNullOrWhiteSpace(_title) || string.IsNullOrWhiteSpace(_description))
-        {
-            SnackbarService.Show("Please fill out all fields.", "warning");
-            return;
-        }
+        if (!CanSubmit) return;
 
         var entry = new FeedbackEntry
         {
@@ -99,21 +121,13 @@
         _title = "";
         _description = "";
         await UpdateCount();
-        SnackbarService.Show("Feedback saved locally! Thank you.", "success");
-    }
-
-    private async Task CopySyncString()
-    {
-        var all = await FeedbackService.GetPendingFeedback();
-        var json = JsonConvert.SerializeObject(all);
-        await JS.InvokeVoidAsync("navigator.clipboard.writeText", json);
-        SnackbarService.Show("Sync string copied to clipboard!", "success");
+        SnackbarService.Show("Saved to local backlog.", "success");
     }
 
     private async Task ClearFeedback()
     {
         await FeedbackService.ClearFeedback();
         await UpdateCount();
-        SnackbarService.Show("Local feedback cleared.", "info");
+        SnackbarService.Show("Local backlog cleared.", "info");
     }
 }

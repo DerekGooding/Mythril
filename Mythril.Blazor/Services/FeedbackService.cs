@@ -1,7 +1,5 @@
 using Microsoft.JSInterop;
-using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
-using System.Net.Http.Json;
 
 namespace Mythril.Blazor.Services;
 
@@ -24,34 +22,15 @@ public class FeedbackEntry
     public string? StackTrace { get; set; }
 }
 
-public class FeedbackService(IJSRuntime js, IConfiguration config, HttpClient http)
+public class FeedbackService(IJSRuntime js)
 {
     private const string STORAGE_KEY = "mythril_pending_feedback";
-    private readonly string _remoteUrl = config["Feedback:WebAppUrl"] ?? "";
 
     public async Task AddFeedback(FeedbackEntry entry)
     {
         var all = await GetPendingFeedback();
         all.Add(entry);
         await SaveAll(all);
-        
-        // Background attempt to submit to remote
-        _ = Task.Run(() => SubmitToRemote(entry));
-    }
-
-    private async Task SubmitToRemote(FeedbackEntry entry)
-    {
-        if (string.IsNullOrEmpty(_remoteUrl) || _remoteUrl == "PLACEHOLDER_URL") return;
-
-        try
-        {
-            // Simple POST to Google Apps Script
-            await http.PostAsJsonAsync(_remoteUrl, entry);
-        }
-        catch
-        {
-            // Fail silently, it's still saved locally
-        }
     }
 
     public async Task CaptureError(string message, string? stackTrace = null)
