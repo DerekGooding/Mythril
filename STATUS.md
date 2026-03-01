@@ -1,11 +1,11 @@
 # Agentic Status Report
-**Generated:** 2026-03-01 12:00:53
+**Generated:** 2026-03-01 12:25:09
 
 ## 1. System Integrity (check_health.py)
-✅ **PASSED**
+❌ **FAILED**
 - **Monoliths:** 0
 - **Coverage:** 70.45%
-- **Docs Stale:** False
+- **Docs Stale:** True
 
 ## 2. Functional Verification (run_ai_test.ps1)
 ✅ **PASSED**
@@ -32,28 +32,30 @@ VSTest version 18.0.1 (x64)
 Starting test execution, please wait...
 A total of 1 test files matched the specified pattern.
 
-Passed!  - Failed:     0, Passed:    41, Skipped:     0, Total:    41, Duration: 325 ms - Mythril.Tests.dll (net9.0)
+Passed!  - Failed:     0, Passed:    41, Skipped:     0, Total:    41, Duration: 266 ms - Mythril.Tests.dll (net9.0)
 
 Attachments:
-  C:\Users\Derek\source\repos\Mythril\TestResults\1d189228-f6ff-4aa4-ac45-f33748424a38\coverage.cobertura.xml
+  C:\Users\Derek\source\repos\Mythril\TestResults\47bea5b9-e1ea-4af8-b0d0-c371b2ff29da\coverage.cobertura.xml
 --- Generating Fresh Test Results ---
 [SUCCESS] Tests completed.
 --- Checking for Monoliths (> 250 lines) ---
 
 --- Checking Test Coverage ---
-Using coverage report: TestResults\1d189228-f6ff-4aa4-ac45-f33748424a38\coverage.cobertura.xml
+Using coverage report: TestResults\47bea5b9-e1ea-4af8-b0d0-c371b2ff29da\coverage.cobertura.xml
 Overall Coverage: 70.45%
 
 --- Checking Documentation Staleness ---
-README.md: 0 source files changed.
+README.md: 10 source files changed.
+[FAIL] README.md is stale!
 GEMINI.md: 0 source files changed.
-AGENTS.md: 0 source files changed.
+AGENTS.md: 10 source files changed.
+[FAIL] AGENTS.md is stale!
 
 --- Checking User Feedback Backlog ---
 [SUCCESS] Feedback backlog is empty.
 Results and shields exported to scripts/data/
 
-[SUCCESS] All health checks passed!
+[FAIL] Health checks failed.
 
 ```
 </details>
