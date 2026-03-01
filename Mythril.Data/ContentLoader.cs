@@ -11,10 +11,7 @@ public class ContentLoader(
     Cadences cadences,
     QuestDetails questDetails,
     QuestUnlocks questUnlocks,
-    ItemRefinements refinements,
-    QuestToCadenceUnlocks questToCadenceUnlocks,
-    StatAugments statAugments,
-    AbilityAugments abilityAugments)
+    ItemRefinements refinements)
 {
     public async Task LoadAllAsync()
     {
