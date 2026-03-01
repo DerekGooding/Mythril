@@ -75,8 +75,6 @@ public class JunctionManager(
     public int GetStatValue(Character character, string statName)
     {
         int baseValue = 10;
-        if (character.Name == "Wifu" && statName == "Magic") baseValue = 15;
-        if (character.Name == "Himbo" && statName == "Strength") baseValue = 20;
 
         var junction = Junctions.FirstOrDefault(j => j.Character.Name == character.Name && (j.Stat.Name == statName || (statName == "Health" && j.Stat.Name == "HP")));
         if (junction != null)

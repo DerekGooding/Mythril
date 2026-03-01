@@ -44,7 +44,7 @@ public class JunctionTests
 
         var wifu = _resourceManager.Characters.First(c => c.Name == "Wifu");
         var magic = _junctionManager.GetStatValue(wifu, "Magic");
-        Assert.AreEqual(15, magic);
+        Assert.AreEqual(10, magic);
     }
 
     [TestMethod]
@@ -125,14 +125,6 @@ public class JunctionTests
         _junctionManager.Unassign(cadence);
         
         Assert.IsFalse(_junctionManager.CurrentlyAssigned(character).Any());
-    }
-
-    [TestMethod]
-    public void JunctionManager_GetStatValue_CharacterSpecific()
-    {
-        var himbo = _resourceManager!.Characters.First(c => c.Name == "Himbo");
-        var strength = _junctionManager!.GetStatValue(himbo, "Strength");
-        Assert.AreEqual(20, strength);
     }
 
     [TestMethod]

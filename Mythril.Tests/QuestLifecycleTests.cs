@@ -128,15 +128,15 @@ public class QuestLifecycleTests
         var detail = _questDetails![quest];
         var questData = new QuestData(quest, detail);
         
-        // Himbo has 20 Strength
+        // Himbo has 10 Strength baseline now
         var himbo = _resourceManager!.Characters.First(c => c.Name == "Himbo");
         
         _resourceManager.Inventory.Add(_items!.All.First(x => x.Name == "Gold"), 1000);
         _resourceManager.StartQuest(questData, himbo);
         
         var progress = _resourceManager.ActiveQuests[0];
-        // Expected: 20 / (1.0 + 20/100) = 20 / 1.2 = 16.66 -> 16 (int)
-        Assert.AreEqual(16, progress.DurationSeconds);
+        // Expected: 20 / (1.0 + 10/100) = 20 / 1.1 = 18.18 -> 18 (int)
+        Assert.AreEqual(18, progress.DurationSeconds);
     }
 
     [TestMethod]
@@ -145,15 +145,15 @@ public class QuestLifecycleTests
         var cadence = ContentHost.GetContent<Cadences>().All.First();
         var unlock = cadence.Abilities[0];
         
-        // Wifu has 15 Magic
+        // Wifu has 10 Magic baseline now
         var wifu = _resourceManager!.Characters.First(c => c.Name == "Wifu");
         
         foreach(var req in unlock.Requirements) _resourceManager.Inventory.Add(req.Item, req.Quantity);
         _resourceManager.StartQuest(unlock, wifu);
         
         var progress = _resourceManager.ActiveQuests[0];
-        // Expected: 10 / (1.0 + 15/100) = 10 / 1.15 = 8.69 -> 8 (int)
-        Assert.AreEqual(8, progress.DurationSeconds);
+        // Expected: 10 / (1.0 + 10/100) = 10 / 1.1 = 9.09 -> 9 (int)
+        Assert.AreEqual(9, progress.DurationSeconds);
     }
 
     [TestMethod]
