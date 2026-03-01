@@ -11,16 +11,26 @@ public class InventoryTests
     [TestInitialize]
     public void Setup()
     {
-        _resourceManager = new ResourceManager();
-        _resourceManager.Inventory.Clear();
+        TestContentLoader.Load();
         _items = ContentHost.GetContent<Items>();
+        
+        _resourceManager = new ResourceManager(
+            _items, 
+            ContentHost.GetContent<QuestUnlocks>(), 
+            ContentHost.GetContent<QuestToCadenceUnlocks>(), 
+            ContentHost.GetContent<QuestDetails>(), 
+            ContentHost.GetContent<Cadences>(), 
+            ContentHost.GetContent<Locations>());
+        _resourceManager.Initialize();
+        
+        _resourceManager.Inventory.Clear();
     }
 
     [TestMethod]
     public void InventoryManager_AddsAndRemovesItems_Correctly()
     {
-        var potion = _items!.Potion;
-        var basicGem = _items.BasicGem;
+        var potion = _items!.All.First(x => x.Name == "Potion");
+        var basicGem = _items!.All.First(x => x.Name == "Basic Gem");
 
         // Arrange
         var inventoryManager = _resourceManager?.Inventory;
@@ -45,7 +55,7 @@ public class InventoryTests
     [TestMethod]
     public void InventoryManager_Remove_FailsWhenInsufficient()
     {
-        var potion = _items!.Potion;
+        var potion = _items!.All.First(x => x.Name == "Potion");
         var inventoryManager = _resourceManager?.Inventory;
 
         inventoryManager!.Add(potion, 5);
@@ -58,7 +68,7 @@ public class InventoryTests
     [TestMethod]
     public void InventoryManager_Remove_RemovesFromDictionaryWhenZero()
     {
-        var potion = _items!.Potion;
+        var potion = _items!.All.First(x => x.Name == "Potion");
         var inventoryManager = _resourceManager?.Inventory;
 
         inventoryManager!.Add(potion, 5);
@@ -71,7 +81,7 @@ public class InventoryTests
     [TestMethod]
     public void InventoryManager_Remove_DoesNotRemoveGoldWhenZero()
     {
-        var gold = _items!.Gold;
+        var gold = _items!.All.First(x => x.Name == "Gold");
         var inventoryManager = _resourceManager?.Inventory;
 
         inventoryManager!.Add(gold, 5);
@@ -84,8 +94,8 @@ public class InventoryTests
     [TestMethod]
     public void InventoryManager_Has_Correctly()
     {
-        var potion = _items!.Potion;
-        var basicGem = _items.BasicGem;
+        var potion = _items!.All.First(x => x.Name == "Potion");
+        var basicGem = _items!.All.First(x => x.Name == "Basic Gem");
 
         // Arrange
         var inventoryManager = _resourceManager?.Inventory;
@@ -103,8 +113,8 @@ public class InventoryTests
     [TestMethod]
     public void InventoryManager_GetItemsAndSpells_FilterCorrectly()
     {
-        var potion = _items!.Potion;
-        var fire = _items.FireI;
+        var potion = _items!.All.First(x => x.Name == "Potion");
+        var fire = _items!.All.First(x => x.Name == "Fire I");
         var inventoryManager = _resourceManager?.Inventory;
 
         inventoryManager!.Add(potion, 1);

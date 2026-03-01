@@ -40,6 +40,11 @@
                             Cadence
                         </button>
                     </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="workshop-tab" data-bs-toggle="tab" data-bs-target="#workshop" type="button" role="tab">
+                            Workshop
+                        </button>
+                    </li>
                 </ul>
                 <div class="tab-content p-2 border border-top-0">
                     <div class="tab-pane fade show active" id="hand" role="tabpanel">
@@ -47,6 +52,9 @@
                     </div>
                     <div class="tab-pane fade" id="cadence" role="tabpanel">
                         <CadencePanel Cadences="resourceManager.UnlockedCadences" />
+                    </div>
+                    <div class="tab-pane fade" id="workshop" role="tabpanel">
+                        <Workshop />
                     </div>
                 </div>
             }
@@ -101,47 +109,7 @@
 
     private async Task OnTimerElapsed()
     {
-        // 0.1s tick
         resourceManager.Tick(0.1); 
-
-        var completedQuests = resourceManager.ActiveQuests.Where(q => q.IsCompleted).ToList();
-        
-        // We only trigger rewards here if we want to synchronize with the UI thread or animation end.
-        // However, the PartyPanel waits for animation end to call OnCompletionAnimationEnd.
-        // Let's assume OnCompletionAnimationEnd handles the final removal and reward?
-        // No, ReceiveRewards is data logic.
-        // Let's decouple:
-        // 1. Tick updates progress.
-        // 2. UI observes progress.
-        // 3. When progress is 100%, we grant rewards immediately? Or wait for animation?
-        // The original code waited for the animation threshold (105%) then granted rewards.
-        
-        // Let's grant rewards immediately upon completion for data integrity, 
-        // but the UI will remove the card when the animation finishes.
-        
-        foreach (var quest in completedQuests)
-        {
-             // We need a flag to ensure we don't grant rewards multiple times while waiting for UI removal
-             // QuestProgress doesn't have a "RewardsGranted" flag.
-             // We can check if it's still in the list but completed?
-             // Actually, the original code removed it from the list *after* animation.
-             // But it granted rewards when progress >= 105.
-             
-             // For now, let's keep it simple:
-             // If IsCompleted is true, we should probably grant rewards and maybe move it to a "PendingRemoval" list internally?
-             // Or just let the UI call back when it's done.
-             
-             // But Tick updates SecondsElapsed.
-             // Let's assume the UI handles the visual removal via OnCompletionAnimationEnd.
-             // We need to trigger rewards.
-             
-             // Issue: ResourceManager.Tick will keep ticking completed quests if we don't remove them or mark them.
-             // QuestProgress.IsCompleted is true when SecondsElapsed >= Duration.
-             
-             // Ideally ResourceManager handles this internally, but we need the UI to know what finished.
-             // Let's check if we can modify QuestProgress or use a side set.
-        }
-
         await InvokeAsync(StateHasChanged);
     }
 

@@ -1,3 +1,3 @@
 namespace Mythril.Data;
 
-[Unique] public readonly partial record struct Character;
+public readonly partial record struct Character;

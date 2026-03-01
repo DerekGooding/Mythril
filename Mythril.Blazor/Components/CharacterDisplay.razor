@@ -1,7 +1,19 @@
 @using Mythril.Data
+@inject Stats statsContent
 
 <div class="character-display">
-    <h4>@Character.Name</h4>
+    <div class="character-header">
+        <h4>@Character.Name</h4>
+        <div class="stats-mini">
+            @foreach (var stat in statsContent.All.Take(4))
+            {
+                <span class="stat-badge" title="@stat.Description">
+                    @stat.Name[0]: @GetStatValue(stat)
+                </span>
+            }
+        </div>
+    </div>
+    
     @if (QuestProgress is not null)
     {
         <QuestProgressCard QuestProgress="QuestProgress" OnCompletionAnimationEnd="() => OnCompletionAnimationEnd.InvokeAsync(QuestProgress)" />
@@ -11,6 +23,33 @@
         <DropZone OnQuestDrop="HandleTaskDrop" Accepts="Accepts" />
     }
 </div>
+
+<style>
+    .character-display {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        background: #fdfdfd;
+    }
+    .character-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.5rem;
+    }
+    .stats-mini {
+        display: flex;
+        gap: 0.5rem;
+    }
+    .stat-badge {
+        font-size: 0.75rem;
+        background: #eee;
+        padding: 2px 4px;
+        border-radius: 4px;
+        cursor: help;
+    }
+</style>
 
 @code {
     [Parameter]
@@ -31,5 +70,14 @@
     private void HandleTaskDrop(object task)
     {
         OnQuestDrop.InvokeAsync(task);
+    }
+
+    private int GetStatValue(Stat stat)
+    {
+        // Simple derived stats for now based on character name to give them flavor
+        if (Character.Name == "Protagonist") return 10;
+        if (Character.Name == "Wifu" && stat.Name == "Magic") return 15;
+        if (Character.Name == "Himbo" && stat.Name == "Strength") return 20;
+        return 5;
     }
 }

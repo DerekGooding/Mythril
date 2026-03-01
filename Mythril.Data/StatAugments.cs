@@ -1,13 +1,15 @@
 namespace Mythril.Data;
 
 [Singleton]
-public class StatAugments(Stats stats, Items items) : ISubContent<Item, StatAugment[]>
+public class StatAugments : ISubContent<Item, StatAugment[]>
 {
-    public StatAugment[] this[Item key] => ByKey[key];
+    public StatAugment[] this[Item key] => ByKey.TryGetValue(key, out var item) ? item : [];
 
-    public Dictionary<Item, StatAugment[]> ByKey { get; } = new()
+    public Dictionary<Item, StatAugment[]> ByKey { get; } = [];
+
+    public void Load(Dictionary<Item, StatAugment[]> data)
     {
-        { items.FireI, [ new(stats.Strength, 20) ] },
-        { items.IceI,  [ new(stats.Magic, 20) ]  },
-    };
+        ByKey.Clear();
+        foreach (var kvp in data) ByKey[kvp.Key] = kvp.Value;
+    }
 }

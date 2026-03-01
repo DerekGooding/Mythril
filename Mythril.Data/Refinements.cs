@@ -1,46 +1,21 @@
-using static Mythril.Data.RefinementBuilder;
-
 namespace Mythril.Data;
 
 [Singleton]
-public class ItemRefinements(CadenceAbilities abilities, Items items) : ISubContent<CadenceAbility, Dictionary<Item, Recipe>>
+public class ItemRefinements : ISubContent<CadenceAbility, Dictionary<Item, Recipe>>
 {
-    public Dictionary<Item, Recipe> this[CadenceAbility key] => ByKey[key];
+    public Dictionary<Item, Recipe> this[CadenceAbility key] => ByKey.TryGetValue(key, out var item) ? item : [];
 
-    public Dictionary<CadenceAbility, Dictionary<Item, Recipe>> ByKey { get; } = new()
+    public Dictionary<CadenceAbility, Dictionary<Item, Recipe>> ByKey { get; } = [];
+
+    public void Load(Dictionary<CadenceAbility, Dictionary<Item, Recipe>> data)
     {
-        { abilities.RefineFire, new Dictionary<Item, Recipe>
-        ([
-            Input(items.BasicGem).Output(items.FireI, 5),
-            Input(items.IronOre).Output(items.FireI, 5),
-        ]) },
-        { abilities.RefineWood, new Dictionary<Item, Recipe>
-        ([
-            Input(items.Log).Output(items.Herb, 2),
-        ]) },
-        { abilities.RefineMixology, new Dictionary<Item, Recipe>
-        ([
-            Input(items.Herb, 10).Output(items.Potion),
-        ]) },
-    };
+        ByKey.Clear();
+        foreach (var kvp in data) ByKey[kvp.Key] = kvp.Value;
+    }
 }
 
 public static class RefinementBuilder
 {
+    // Keeping builder for legacy or manual additions if needed, but not used for JSON loading
     public static Dictionary<Item, Recipe> Recipes(params KeyValuePair<Item, Recipe>[] pairs) => new(pairs);
-    public static IOutput Input(Item item, int quantity = 1) => new Builder(item, quantity);
-    public interface IOutput
-    {
-        public KeyValuePair<Item, Recipe> Output(Item item, int quantity = 1);
-    }
-    private class Builder(Item item, int quantity) : IOutput
-    {
-        private readonly int _inputQuantity = quantity;
-        private readonly Item _inputItem = item;
-        public KeyValuePair<Item, Recipe> Output(Item item, int quantity = 1)
-        {
-            var recipe = new Recipe(_inputQuantity, item, quantity);
-            return new KeyValuePair<Item, Recipe>(_inputItem, recipe);
-        }
-    }
 }

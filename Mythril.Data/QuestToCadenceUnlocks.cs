@@ -1,12 +1,15 @@
 namespace Mythril.Data;
 
 [Singleton]
-public class QuestToCadenceUnlocks(Quests quests, Cadences cadences) : ISubContent<Quest, Cadence[]>
+public class QuestToCadenceUnlocks : ISubContent<Quest, Cadence[]>
 {
     public Cadence[] this[Quest key] => ByKey.TryGetValue(key, out var item) ? item : [];
 
-    public Dictionary<Quest, Cadence[]> ByKey { get; } = new()
+    public Dictionary<Quest, Cadence[]> ByKey { get; } = [];
+
+    public void Load(Dictionary<Quest, Cadence[]> data)
     {
-        { quests.LearnAboutCadences, [ cadences.Recruit, cadences.Apprentice, cadences.Student] },
-    };
+        ByKey.Clear();
+        foreach (var kvp in data) ByKey[kvp.Key] = kvp.Value;
+    }
 }

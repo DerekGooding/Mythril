@@ -1,12 +1,46 @@
-﻿<Router AppAssembly="@typeof(App).Assembly">
-    <Found Context="routeData">
-        <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
-        <FocusOnNavigate RouteData="@routeData" Selector="h1" />
-    </Found>
-    <NotFound>
-        <PageTitle>Not found</PageTitle>
-        <LayoutView Layout="@typeof(MainLayout)">
-            <p role="alert">Sorry, there's nothing at this address.</p>
-        </LayoutView>
-    </NotFound>
-</Router>
+@using Mythril.Data
+@inject ContentLoader ContentLoader
+@inject ResourceManager ResourceManager
+
+@if (_isLoaded)
+{
+    <Router AppAssembly="@typeof(App).Assembly">
+        <Found Context="routeData">
+            <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
+            <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+        </Found>
+        <NotFound>
+            <PageTitle>Not found</PageTitle>
+            <LayoutView Layout="@typeof(MainLayout)">
+                <p role="alert">Sorry, there's nothing at this address.</p>
+            </LayoutView>
+        </NotFound>
+    </Router>
+}
+else
+{
+    <div style="display:flex; justify-content:center; align-items:center; height:100vh; flex-direction:column;">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <p style="margin-top:1rem;">Initializing Mythril World...</p>
+    </div>
+}
+
+@code {
+    private bool _isLoaded = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            await ContentLoader.LoadAllAsync();
+            ResourceManager.Initialize();
+            _isLoaded = true;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Critical Load Error: {ex.Message}");
+        }
+    }
+}

@@ -1,8 +1,11 @@
 {
     "Commands": [
-        { "Action": "add_item", "Target": "Gold", "Quantity": 500 },
-        { "Action": "add_item", "Target": "Potion", "Quantity": 2 },
-        { "Action": "complete_quest", "Target": "Prologue" },
-        { "Action": "unlock_cadence", "Target": "Recruit" }
+        { "Action": "add_item", "Target": "Ancient Bark", "Quantity": 10 },
+        { "Action": "complete_quest", "Target": "Gather Moonberries" },
+        { "Action": "unlock_cadence", "Target": "Mythril Weaver" }
+    ],
+    "Assertions": [
+        { "Type": "InventoryCount", "Target": "Ancient Bark", "ExpectedValue": 10 },
+        { "Type": "CadenceUnlocked", "Target": "Mythril Weaver", "ExpectedValue": 1 }
     ]
 }

@@ -13,10 +13,19 @@ public class ResourceManagerTests
     [TestInitialize]
     public void Setup()
     {
-        _resourceManager = new ResourceManager();
+        TestContentLoader.Load();
         _items = ContentHost.GetContent<Items>();
         _quests = ContentHost.GetContent<Quests>();
         _questDetails = ContentHost.GetContent<QuestDetails>();
+        
+        _resourceManager = new ResourceManager(
+            _items, 
+            ContentHost.GetContent<QuestUnlocks>(), 
+            ContentHost.GetContent<QuestToCadenceUnlocks>(), 
+            _questDetails, 
+            ContentHost.GetContent<Cadences>(), 
+            ContentHost.GetContent<Locations>());
+        _resourceManager.Initialize();
     }
 
     [TestMethod]
@@ -24,7 +33,7 @@ public class ResourceManagerTests
     {
         // Assert
         Assert.IsNotNull(_resourceManager!.UsableLocations);
-        Assert.AreEqual(5, _resourceManager.UsableLocations.Count);
+        Assert.AreEqual(6, _resourceManager.UsableLocations.Count); // Increased by Content expansion
         Assert.IsNotNull(_resourceManager.Characters);
         Assert.AreEqual(3, _resourceManager.Characters.Length);
     }
@@ -43,36 +52,36 @@ public class ResourceManagerTests
     [TestMethod]
     public void ResourceManager_CanAfford_ReturnsCorrectValue()
     {
-        var quest = _quests!.BuyPotion;
+        var quest = _quests!.All.First(x => x.Name == "Buy Potion");
         var detail = _questDetails![quest];
         var questData = new QuestData(quest, detail);
 
         _resourceManager!.Inventory.Clear();
         Assert.IsFalse(_resourceManager.CanAfford(questData));
 
-        _resourceManager.Inventory.Add(_items!.Gold, 1000);
+        _resourceManager.Inventory.Add(_items!.All.First(x => x.Name == "Gold"), 1000);
         Assert.IsTrue(_resourceManager.CanAfford(questData));
     }
 
     [TestMethod]
     public void ResourceManager_PayCosts_RemovesItems()
     {
-        var quest = _quests!.BuyPotion;
+        var quest = _quests!.All.First(x => x.Name == "Buy Potion");
         var detail = _questDetails![quest];
         var questData = new QuestData(quest, detail);
 
         _resourceManager!.Inventory.Clear();
-        _resourceManager.Inventory.Add(_items!.Gold, 1000);
+        _resourceManager.Inventory.Add(_items!.All.First(x => x.Name == "Gold"), 1000);
         
         _resourceManager.PayCosts(questData);
         
-        Assert.AreEqual(750, _resourceManager.Inventory.GetQuantity(_items.Gold));
+        Assert.AreEqual(750, _resourceManager.Inventory.GetQuantity(_items.All.First(x => x.Name == "Gold")));
     }
 
     [TestMethod]
     public void ResourceManager_ReceiveRewards_AddsItems()
     {
-        var quest = _quests!.BuyPotion;
+        var quest = _quests!.All.First(x => x.Name == "Buy Potion");
         var detail = _questDetails![quest];
         var questData = new QuestData(quest, detail);
 
@@ -80,13 +89,13 @@ public class ResourceManagerTests
         
         _resourceManager.ReceiveRewards(questData).Wait();
         
-        Assert.AreEqual(1, _resourceManager.Inventory.GetQuantity(_items!.Potion));
+        Assert.AreEqual(1, _resourceManager.Inventory.GetQuantity(_items!.All.First(x => x.Name == "Potion")));
     }
 
     [TestMethod]
     public void QuestData_Properties_ReturnCorrectValues()
     {
-        var quest = _quests!.Prologue;
+        var quest = _quests!.All.First(x => x.Name == "Prologue");
         var detail = _questDetails![quest];
         var questData = new QuestData(quest, detail);
 
@@ -94,6 +103,59 @@ public class ResourceManagerTests
         Assert.AreEqual(quest.Description, questData.Description);
         Assert.AreEqual(detail.DurationSeconds, questData.DurationSeconds);
         Assert.AreEqual(detail.Type, questData.Type);
+    }
+
+    [TestMethod]
+    public void ResourceManager_StartQuest_AddsToActiveQuests()
+    {
+        var quest = _quests!.All.First(x => x.Name == "Buy Potion");
+        var detail = _questDetails![quest];
+        var questData = new QuestData(quest, detail);
+        var character = _resourceManager!.Characters[0];
+
+        _resourceManager.Inventory.Clear();
+        _resourceManager.Inventory.Add(_items!.All.First(x => x.Name == "Gold"), 1000);
+        
+        _resourceManager.StartQuest(questData, character);
+        
+        Assert.AreEqual(1, _resourceManager.ActiveQuests.Count);
+        Assert.AreEqual("Buy Potion", _resourceManager.ActiveQuests[0].Name);
+    }
+
+    [TestMethod]
+    public void ResourceManager_Tick_IncrementsProgress()
+    {
+        var quest = _quests!.All.First(x => x.Name == "Buy Potion");
+        var detail = _questDetails![quest];
+        var questData = new QuestData(quest, detail);
+        var character = _resourceManager!.Characters[0];
+
+        _resourceManager.Inventory.Clear();
+        _resourceManager.Inventory.Add(_items!.All.First(x => x.Name == "Gold"), 1000);
+        _resourceManager.StartQuest(questData, character);
+        
+        var progress = _resourceManager.ActiveQuests[0];
+        Assert.AreEqual(0, progress.SecondsElapsed);
+
+        _resourceManager.Tick(0.1); // 1 tick = 1 second in implementation
+        Assert.AreEqual(1, progress.SecondsElapsed);
+    }
+
+    [TestMethod]
+    public void ResourceManager_CadenceAssignment_WorksCorrectly()
+    {
+        var cadence = ContentHost.GetContent<Cadences>().All.First();
+        var character = _resourceManager!.Characters[0];
+
+        _resourceManager.AssignCadence(cadence, character);
+        var assigned = _resourceManager.CurrentlyAssigned(character).ToList();
+        
+        Assert.AreEqual(1, assigned.Count);
+        Assert.AreEqual(cadence.Name, assigned[0].Name);
+
+        _resourceManager.Unassign(cadence);
+        assigned = _resourceManager.CurrentlyAssigned(character).ToList();
+        Assert.AreEqual(0, assigned.Count);
     }
 
     [TestMethod]

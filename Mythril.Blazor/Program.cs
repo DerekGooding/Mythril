@@ -12,14 +12,24 @@ builder.Services.AddScoped(_ => new HttpClient { BaseAddress = new Uri(builder.H
 builder.Services.AddScoped<DragDropService>();
 builder.Services.AddScoped<ThemeService>();
 builder.Services.AddSingleton<SnackbarService>();
-builder.Services.AddSingleton<Mythril.Data.ResourceManager>();
 
-// Register Content
+// Register Content (Singletons)
 builder.Services.AddSingleton(ContentHost.GetContent<Items>());
 builder.Services.AddSingleton(ContentHost.GetContent<Quests>());
 builder.Services.AddSingleton(ContentHost.GetContent<Cadences>());
+builder.Services.AddSingleton(ContentHost.GetContent<Locations>());
 builder.Services.AddSingleton(ContentHost.GetContent<QuestDetails>());
+builder.Services.AddSingleton(ContentHost.GetContent<QuestUnlocks>());
 builder.Services.AddSingleton(ContentHost.GetContent<CadenceAbilities>());
+builder.Services.AddSingleton(ContentHost.GetContent<QuestToCadenceUnlocks>());
+builder.Services.AddSingleton(ContentHost.GetContent<Stats>());
+builder.Services.AddSingleton(ContentHost.GetContent<StatAugments>());
+builder.Services.AddSingleton(ContentHost.GetContent<AbilityAugments>());
+builder.Services.AddSingleton(ContentHost.GetContent<ItemRefinements>());
+
+// Register Loader & Engine
+builder.Services.AddScoped<ContentLoader>();
+builder.Services.AddSingleton<ResourceManager>();
 
 // Register Persistence
 builder.Services.AddScoped<PersistenceService>();

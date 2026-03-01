@@ -9,6 +9,7 @@ All development must strictly adhere to [GEMINI.md](GEMINI.md). Key mandates inc
 - **Validation**: No change is complete without passing unit tests and maintaining >70% coverage. Use `Mythril.Headless` for complex logic verification.
 - **Source Control**: Use descriptive commit messages and follow git best practices.
 - **Health Checks**: Always run `python scripts/check_health.py` before finalizing any significant task.
+- **Status Report**: Run `python scripts/generate_report.py` at the end of a session to leave a clean state record (`STATUS.md`).
 - **PowerShell Mastery**: Use PowerShell syntax (e.g., `;` for command chaining) for all CLI operations on this Windows environment.
 
 ## 🛠️ Technical Context

@@ -1,3 +1,7 @@
+# Environment Knowledge
+- **Shell:** PowerShell is used. Standard Unix utilities like `grep` and `cat` are not available. Use `grep_search` tool or PowerShell equivalents (e.g., `Select-String`, `Get-Content`).
+- **Formatting:** `cat -n` equivalent in PowerShell is `Get-Content <file> | ForEach-Object { "$($_.ReadCount) $_" }`.
+
 # AI Mandates
 
 This document contains foundational mandates for the AI assistant (Gemini) during development.
@@ -8,6 +12,7 @@ This document contains foundational mandates for the AI assistant (Gemini) durin
 - **Documentation:** Keep documentation synchronized with code changes.
 - **Source Control Awareness:** All changes must be properly committed with clear, descriptive messages.
 - **Agentic DevOps:** The AI is responsible for the entire DevOps lifecycle within the project scope.
+- **Source Control Submission:** Always commit changes to the git repository upon completing a task. Use clear, descriptive commit messages.
 
 ## 2. Technical Standards
 - **Framework/Stack:** .NET 9 (Blazor)

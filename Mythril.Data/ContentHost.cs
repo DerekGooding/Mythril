@@ -1,4 +1,4 @@
-﻿namespace Mythril.Data;
+namespace Mythril.Data;
 
 public static class ContentHost
 {

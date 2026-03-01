@@ -1,38 +1,50 @@
 namespace Mythril.Data;
 
-public class ResourceManager
+public class ResourceManager(
+    Items items, 
+    QuestUnlocks questUnlocks, 
+    QuestToCadenceUnlocks questToCadenceUnlocks, 
+    QuestDetails questDetails,
+    Cadences cadences,
+    Locations locations)
 {
-    private readonly Items _items = ContentHost.GetContent<Items>();
-    private readonly QuestUnlocks _questUnlocks = ContentHost.GetContent<QuestUnlocks>();
-    private readonly QuestToCadenceUnlocks _questToCadenceUnlocks = ContentHost.GetContent<QuestToCadenceUnlocks>();
-    private readonly QuestDetails _questDetails = ContentHost.GetContent<QuestDetails>();
+    private readonly Items _items = items;
+    private readonly QuestUnlocks _questUnlocks = questUnlocks;
+    private readonly QuestToCadenceUnlocks _questToCadenceUnlocks = questToCadenceUnlocks;
+    private readonly QuestDetails _questDetails = questDetails;
+    private readonly Cadences _cadences = cadences;
+    private readonly Locations _locations = locations;
 
     public QuestDetail GetQuestDetails(Quest quest) => _questDetails[quest];
 
-    private readonly Dictionary<Cadence, Character?> _assignedCadences;
-    private readonly Dictionary<Cadence, bool> _lockedCadences;
+    private Dictionary<Cadence, Character?> _assignedCadences = [];
+    private Dictionary<Cadence, bool> _lockedCadences = [];
 
     public readonly Character[] Characters = [new Character("Protagonist"), new Character("Wifu"), new Character("Himbo")];
-    private readonly Cadence[] _cadences = ContentHost.GetContent<Cadences>().All;
 
     public InventoryManager Inventory { get; } = new InventoryManager();
 
     private readonly HashSet<Quest> _completedQuests = [];
 
-    public List<LocationData> UsableLocations;
+    public List<LocationData> UsableLocations = [];
 
     public List<Cadence> UnlockedCadences = [];
     public List<CadenceAbility> UnlockedAbilities = [];
 
     public List<QuestProgress> ActiveQuests { get; } = [];
 
-    public ResourceManager()
+    public void Initialize()
     {
-        Inventory.Add(_items.Gold, 100);
-        _assignedCadences = _cadences.ToNamedDictionary(_ => (Character?)null);
-        _lockedCadences = _cadences.ToNamedDictionary(_ => true);
+        Inventory.Clear();
+        var gold = _items.All.FirstOrDefault(x => x.Name == "Gold");
+        if (gold.Name != null) Inventory.Add(gold, 100);
 
-        UsableLocations = [.. ContentHost.GetContent<Locations>().All.Select(x => new LocationData(x, x.Quests.Where(IsNeverLocked)))];
+        _assignedCadences = _cadences.All.ToNamedDictionary(_ => (Character?)null);
+        _lockedCadences = _cadences.All.ToNamedDictionary(_ => true);
+
+        UsableLocations = [.. _locations.All.Select(x => new LocationData(x, x.Quests.Where(IsNeverLocked)))];
+        
+        UpdateAvaiableCadences();
     }
 
     public bool IsNeverLocked(Quest quest) => _questUnlocks[quest].Length == 0;
@@ -116,11 +128,36 @@ public class ResourceManager
         if (CanAfford(item))
         {
             PayCosts(item);
-            if(item is QuestData quest)
-                ActiveQuests.Add(new QuestProgress(quest, quest.Description, quest.DurationSeconds, character));
+            
+            int duration = 3;
+            if (item is QuestData quest)
+            {
+                duration = quest.DurationSeconds;
+                // Stat influence: Strength reduces recurring quest duration
+                if (quest.Type == QuestType.Recurring)
+                {
+                    int strength = GetStatValue(character, "Strength");
+                    duration = (int)(duration / (1.0 + (strength / 100.0)));
+                }
+                ActiveQuests.Add(new QuestProgress(quest, quest.Description, duration, character));
+            }
             if(item is CadenceUnlock unlock)
-                ActiveQuests.Add(new QuestProgress(unlock, unlock.Ability.Description, 3, character));
+            {
+                duration = 3;
+                // Magic reduces cadence unlock duration
+                int magic = GetStatValue(character, "Magic");
+                duration = (int)(duration / (1.0 + (magic / 100.0)));
+                ActiveQuests.Add(new QuestProgress(unlock, unlock.Ability.Description, duration, character));
+            }
         }
+    }
+
+    private int GetStatValue(Character character, string statName)
+    {
+        if (character.Name == "Protagonist") return 10;
+        if (character.Name == "Wifu" && statName == "Magic") return 15;
+        if (character.Name == "Himbo" && statName == "Strength") return 20;
+        return 5;
     }
 
     public void Tick(double deltaSeconds)
@@ -129,7 +166,7 @@ public class ResourceManager
         {
             if (!progress.IsCompleted)
             {
-                progress.SecondsElapsed += (int)deltaSeconds; // Casting to int for simplicity based on QuestProgress definition
+                progress.SecondsElapsed += (int)(deltaSeconds * 10); // Adjusting for 0.1s ticks
             }
         }
     }

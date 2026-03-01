@@ -93,9 +93,7 @@
 
     private string GetTooltip(CadenceUnlock unlock)
     {
-        var reqs = string.Join("
-", unlock.Requirements.Select(r => $"- {r.Quantity} {r.Item.Name}"));
-        return $"Requirements:
-{reqs}";
+        var reqs = string.Join("\n", unlock.Requirements.Select(r => $"- {r.Quantity} {r.Item.Name}"));
+        return $"Requirements:\n{reqs}";
     }
 }
