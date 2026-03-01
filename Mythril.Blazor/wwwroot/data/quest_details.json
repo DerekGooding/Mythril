@@ -7,6 +7,13 @@
     "Rewards": [ { "Item": "Basic Gem", "Quantity": 1 } ]
   },
   {
+    "Quest": "Visit Starting Town",
+    "DurationSeconds": 5,
+    "Type": "Single",
+    "Requirements": [],
+    "Rewards": [ { "Item": "Gold", "Quantity": 100 } ]
+  },
+  {
     "Quest": "Buy Potion",
     "DurationSeconds": 15,
     "Type": "Recurring",
@@ -14,11 +21,25 @@
     "Rewards": [ { "Item": "Potion", "Quantity": 1 } ]
   },
   {
+    "Quest": "Recover the Ancient Tome",
+    "DurationSeconds": 20,
+    "Type": "Single",
+    "Requirements": [ { "Item": "Gold", "Quantity": 500 } ],
+    "Rewards": [ { "Item": "Basic Gem", "Quantity": 5 } ]
+  },
+  {
+    "Quest": "Learn About Cadences",
+    "DurationSeconds": 10,
+    "Type": "Single",
+    "Requirements": [],
+    "Rewards": []
+  },
+  {
     "Quest": "Farm Goblins",
     "DurationSeconds": 20,
     "Type": "Recurring",
     "Requirements": [],
-    "Rewards": [ { "Item": "Gold", "Quantity": 100 } ]
+    "Rewards": [ { "Item": "Gold", "Quantity": 100 }, { "Item": "Fire Shard", "Quantity": 1 } ]
   },
   {
     "Quest": "Farm Trents",
@@ -33,6 +54,13 @@
     "Type": "Recurring",
     "Requirements": [],
     "Rewards": [ { "Item": "Iron Ore", "Quantity": 1 } ]
+  },
+  {
+    "Quest": "Learn about the Mines",
+    "DurationSeconds": 10,
+    "Type": "Single",
+    "Requirements": [],
+    "Rewards": []
   },
   {
     "Quest": "Farm Bats",
@@ -56,6 +84,13 @@
     "Rewards": [ { "Item": "Slime", "Quantity": 1 } ]
   },
   {
+    "Quest": "Unlock Mining",
+    "DurationSeconds": 30,
+    "Type": "Single",
+    "Requirements": [ { "Item": "Gold", "Quantity": 1000 } ],
+    "Rewards": []
+  },
+  {
     "Quest": "Mine Iron Ore",
     "DurationSeconds": 45,
     "Type": "Recurring",
@@ -67,7 +102,7 @@
     "DurationSeconds": 60,
     "Type": "Recurring",
     "Requirements": [],
-    "Rewards": [ { "Item": "Moonberry", "Quantity": 2 } ]
+    "Rewards": [ { "Item": "Moonberry", "Quantity": 2 }, { "Item": "Mana Leaf", "Quantity": 1 } ]
   },
   {
     "Quest": "Defeat Treant Guardian",

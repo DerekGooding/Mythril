@@ -33,6 +33,8 @@ public class ResourceManager(
 
     public List<QuestProgress> ActiveQuests { get; } = [];
 
+    public List<Junction> Junctions { get; } = [];
+
     public bool IsTestMode { get; set; } = false;
 
     public void Initialize()
@@ -205,8 +207,69 @@ public class ResourceManager(
         UpdateAvaiableCadences();
     }
 
-    public void AssignCadence(Cadence cadence, Character character) => _assignedCadences[cadence] = character;
-    public void Unassign(Cadence cadence) => _assignedCadences[cadence] = null;
+    public void AssignCadence(Cadence cadence, Character character)
+    {
+        // Enforce exclusivity: check if another character has it
+        var existingOwner = _assignedCadences.GetValueOrDefault(cadence);
+        if (existingOwner != null && existingOwner.Value.Name != character.Name)
+        {
+            // Unassign from old owner
+            Unassign(cadence);
+        }
+        
+        // Remove ANY cadence from current character if they already have one
+        foreach (var c in _assignedCadences.Where(x => x.Value?.Name == character.Name).ToList())
+        {
+            Unassign(c.Key);
+        }
+
+        _assignedCadences[cadence] = character;
+    }
+
+    public void Unassign(Cadence cadence)
+    {
+        if (_assignedCadences.TryGetValue(cadence, out var owner) && owner != null)
+        {
+            // Clear junctions for this character
+            Junctions.RemoveAll(j => j.Character.Name == owner.Value.Name);
+        }
+        _assignedCadences[cadence] = null;
+    }
+
     public IEnumerable<Cadence> CurrentlyAssigned(Character character)
-        => _assignedCadences.Where(x => x.Value == character).Select(x => x.Key);
+        => _assignedCadences.Where(x => x.Value?.Name == character.Name).Select(x => x.Key);
+
+    public IEnumerable<Quest> GetCompletedQuests() => _completedQuests;
+    public void ClearCompletedQuests() => _completedQuests.Clear();
+    public void RestoreCompletedQuest(Quest quest) => UnlockQuest(quest);
+
+    public void JunctionMagic(Character character, Stat stat, Item magic)
+    {
+        var cadence = CurrentlyAssigned(character).FirstOrDefault();
+        if (cadence.Name == null) return;
+
+        if (!cadence.Abilities.Any(a => UnlockedAbilities.Contains(a.Ability) && (a.Ability.Name == "J-" + stat.Name || (stat.Name == "Health" && a.Ability.Name == "J-HP")))) return;
+
+        Junctions.RemoveAll(j => j.Character.Name == character.Name && j.Stat.Name == stat.Name);
+        if (magic.Name != null)
+        {
+            Junctions.Add(new Junction(character, stat, magic));
+        }
+    }
+
+    public int GetStatValue(Character character, string statName)
+    {
+        int baseValue = 10;
+        if (character.Name == "Wifu" && statName == "Magic") baseValue = 15;
+        if (character.Name == "Himbo" && statName == "Strength") baseValue = 20;
+
+        var junction = Junctions.FirstOrDefault(j => j.Character.Name == character.Name && (j.Stat.Name == statName || (statName == "Health" && j.Stat.Name == "HP")));
+        if (junction != null)
+        {
+            int qty = Inventory.GetQuantity(junction.Magic);
+            baseValue += qty / 5;
+        }
+
+        return baseValue;
+    }
 }

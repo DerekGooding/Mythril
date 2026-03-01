@@ -10,7 +10,8 @@ public class PersistenceService(
     Items items, 
     Cadences cadences, 
     CadenceAbilities abilities,
-    Quests quests)
+    Quests quests,
+    Stats stats)
 {
     private const string STORAGE_KEY = "mythril_save_v1";
 
@@ -24,6 +25,13 @@ public class PersistenceService(
                 .ToList(),
             UnlockedCadences = resourceManager.UnlockedCadences.Select(c => c.Name).ToList(),
             UnlockedAbilities = resourceManager.UnlockedAbilities.Select(a => a.Name).ToList(),
+            CompletedQuests = resourceManager.GetCompletedQuests().Select(q => q.Name).ToList(),
+            Junctions = resourceManager.Junctions.Select(j => new JunctionDTO
+            {
+                CharacterName = j.Character.Name,
+                StatName = j.Stat.Name,
+                MagicName = j.Magic.Name
+            }).ToList(),
             ActiveQuests = resourceManager.ActiveQuests.Select(q => new QuestProgressDTO
             {
                 ItemName = q.Item is QuestData qd ? qd.Name : (q.Item is CadenceUnlock cu ? cu.Ability.Name : ""),
@@ -67,6 +75,27 @@ public class PersistenceService(
         {
             var ability = abilities.All.FirstOrDefault(x => x.Name == name);
             if (ability.Name != null) resourceManager.UnlockedAbilities.Add(ability);
+        }
+
+        // Restore Completed Quests
+        resourceManager.ClearCompletedQuests();
+        foreach(var name in saveData.CompletedQuests)
+        {
+            var quest = quests.All.FirstOrDefault(q => q.Name == name);
+            if (quest.Name != null) resourceManager.RestoreCompletedQuest(quest);
+        }
+
+        // Restore Junctions
+        resourceManager.Junctions.Clear();
+        foreach(var dto in saveData.Junctions)
+        {
+            var character = resourceManager.Characters.FirstOrDefault(c => c.Name == dto.CharacterName);
+            var stat = stats.All.FirstOrDefault(s => s.Name == dto.StatName);
+            var magic = items.All.FirstOrDefault(i => i.Name == dto.MagicName);
+            if (character.Name != null && stat.Name != null && magic.Name != null)
+            {
+                resourceManager.Junctions.Add(new Junction(character, stat, magic));
+            }
         }
 
         // Restore Active Quests

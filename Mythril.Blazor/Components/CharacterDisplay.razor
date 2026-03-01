@@ -1,18 +1,68 @@
 @using Mythril.Data
 @inject Stats statsContent
+@inject ResourceManager resourceManager
 
 <div class="character-display">
     <div class="character-header">
-        <h4>@Character.Name</h4>
+        <div class="d-flex flex-column">
+            <h4>@Character.Name</h4>
+            <div class="cadence-info small text-muted">
+                Cadence: @(resourceManager.CurrentlyAssigned(Character).FirstOrDefault().Name ?? "None")
+            </div>
+        </div>
         <div class="stats-mini">
             @foreach (var stat in statsContent.All.Take(4))
             {
-                <span class="stat-badge" title="@stat.Description">
-                    @stat.Name[0]: @GetStatValue(stat)
+                var val = resourceManager.GetStatValue(Character, stat.Name);
+                var junction = resourceManager.Junctions.FirstOrDefault(j => j.Character.Name == Character.Name && j.Stat.Name == stat.Name);
+                
+                <span class="stat-badge @(junction != null ? "junctioned" : "")" title="@stat.Description @(junction != null ? $"(J: {junction.Magic.Name})" : "")">
+                    @stat.Name[0]: @val
                 </span>
             }
         </div>
     </div>
+
+    @if (resourceManager.CurrentlyAssigned(Character).Any())
+    {
+        <div class="junction-controls mb-2">
+            <button class="btn btn-sm btn-outline-primary" @onclick="ToggleJunctionMenu">Junction</button>
+        </div>
+    }
+    
+    @if (_showJunctionMenu)
+    {
+        <div class="junction-menu card p-2 mb-2">
+            <h6>Junction Magic</h6>
+            <div class="junction-grid">
+                @foreach (var stat in statsContent.All.Take(4))
+                {
+                    bool canJunction = CanJunction(stat);
+                    var currentJ = resourceManager.Junctions.FirstOrDefault(j => j.Character.Name == Character.Name && j.Stat.Name == stat.Name);
+                    
+                    <div class="junction-row d-flex justify-content-between align-items-center mb-1">
+                        <span class="small @(canJunction ? "" : "text-muted")">@stat.Name</span>
+                        @if (canJunction)
+                        {
+                            <select class="form-select form-select-sm w-auto" @onchange="(e) => HandleJunctionChange(stat, e)">
+                                <option value="">None</option>
+                                @foreach (var spell in resourceManager.Inventory.GetSpells())
+                                {
+                                    <option value="@spell.Item.Name" selected="@(currentJ?.Magic.Name == spell.Item.Name)">
+                                        @spell.Item.Name (@spell.Quantity)
+                                    </option>
+                                }
+                            </select>
+                        }
+                        else
+                        {
+                            <span class="badge bg-light text-dark small">Locked</span>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    }
     
     @if (QuestProgress is not null)
     {
@@ -48,6 +98,17 @@
         padding: 2px 4px;
         border-radius: 4px;
         cursor: help;
+        transition: all 0.2s;
+    }
+    .stat-badge.junctioned {
+        background: #d1e7ff;
+        color: #0056b3;
+        font-weight: bold;
+        border: 1px solid #0056b3;
+    }
+    .junction-menu {
+        background: #f8f9fa;
+        border: 1px solid #dee2e6;
     }
 </style>
 
@@ -67,17 +128,32 @@
     [Parameter]
     public EventCallback<QuestProgress> OnCompletionAnimationEnd { get; set; }
 
+    private bool _showJunctionMenu = false;
+
+    private void ToggleJunctionMenu() => _showJunctionMenu = !_showJunctionMenu;
+
+    private bool CanJunction(Stat stat)
+    {
+        var cadence = resourceManager.CurrentlyAssigned(Character).FirstOrDefault();
+        if (cadence.Name == null) return false;
+        
+        string abilityName = "J-" + stat.Name;
+        if (stat.Name == "Health") abilityName = "J-HP";
+        if (stat.Name == "Vitality") abilityName = "J-Vit";
+
+        return cadence.Abilities.Any(a => resourceManager.UnlockedAbilities.Contains(a.Ability) && a.Ability.Name == abilityName);
+    }
+
+    private void HandleJunctionChange(Stat stat, ChangeEventArgs e)
+    {
+        string magicName = e.Value?.ToString() ?? "";
+        var magic = resourceManager.Inventory.GetSpells().FirstOrDefault(s => s.Item.Name == magicName).Item;
+        resourceManager.JunctionMagic(Character, stat, magic);
+        StateHasChanged();
+    }
+
     private void HandleTaskDrop(object task)
     {
         OnQuestDrop.InvokeAsync(task);
-    }
-
-    private int GetStatValue(Stat stat)
-    {
-        // Simple derived stats for now based on character name to give them flavor
-        if (Character.Name == "Protagonist") return 10;
-        if (Character.Name == "Wifu" && stat.Name == "Magic") return 15;
-        if (Character.Name == "Himbo" && stat.Name == "Strength") return 20;
-        return 5;
     }
 }

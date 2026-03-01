@@ -3,14 +3,21 @@ namespace Mythril.Data;
 public class InventoryManager
 {
     private readonly Dictionary<Item, int> _inventory = [];
+    public int MagicCapacity { get; set; } = 30;
 
     public void Add(Item item, int quantity = 1)
     {
         if (quantity <= 0) return;
-        if (_inventory.ContainsKey(item))
-            _inventory[item] += quantity;
-        else
-            _inventory[item] = quantity;
+        
+        int current = _inventory.GetValueOrDefault(item);
+        int next = current + quantity;
+
+        if (item.ItemType == ItemType.Spell && next > MagicCapacity)
+        {
+            next = MagicCapacity;
+        }
+
+        _inventory[item] = next;
     }
 
     public bool Remove(Item item, int quantity = 1)

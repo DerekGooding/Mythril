@@ -59,6 +59,16 @@ public class SaveData
     public List<string> UnlockedAbilities { get; set; } = [];
     public List<string> CompletedQuests { get; set; } = [];
     public List<QuestProgressDTO> ActiveQuests { get; set; } = [];
+    public List<JunctionDTO> Junctions { get; set; } = [];
+}
+
+public record Junction(Character Character, Stat Stat, Item Magic);
+
+public class JunctionDTO
+{
+    public string CharacterName { get; set; } = "";
+    public string StatName { get; set; } = "";
+    public string MagicName { get; set; } = "";
 }
 
 public class QuestProgressDTO
@@ -76,5 +86,6 @@ public class CadenceAbilityUnlockDTO { public string Ability { get; set; } = "";
 public class CadenceDTO { public string Name { get; set; } = ""; public string Description { get; set; } = ""; public List<CadenceAbilityUnlockDTO> Abilities { get; set; } = []; }
 public class QuestDetailDTO { public string Quest { get; set; } = ""; public int DurationSeconds { get; set; } = 3; public string Type { get; set; } = "Single"; public List<ItemQuantityDTO> Requirements { get; set; } = []; public List<ItemQuantityDTO> Rewards { get; set; } = []; }
 public class QuestUnlockDTO { public string Quest { get; set; } = ""; public List<string> Requires { get; set; } = []; }
+public class QuestCadenceUnlockDTO { public string Quest { get; set; } = ""; public List<string> Cadences { get; set; } = []; }
 public class RecipeDTO { public string InputItem { get; set; } = ""; public int InputQuantity { get; set; } = 1; public string OutputItem { get; set; } = ""; public int OutputQuantity { get; set; } = 1; }
 public class RefinementDTO { public string Ability { get; set; } = ""; public List<RecipeDTO> Recipes { get; set; } = []; }

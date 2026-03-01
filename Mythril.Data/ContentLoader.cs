@@ -139,6 +139,23 @@ public class ContentLoader(
             }
             refinements.Load(refinementsDict);
         } catch (Exception ex) { Console.WriteLine($"Error loading refinements: {ex.Message}"); throw; }
+
+        try {
+            var questCadenceDTOs = await http.GetFromJsonAsync<List<QuestCadenceUnlockDTO>>("data/quest_cadence_unlocks.json", _options) ?? [];
+            Console.WriteLine($"Loaded {questCadenceDTOs.Count} quest-to-cadence unlocks.");
+            var questCadenceDict = new Dictionary<Quest, Cadence[]>();
+            foreach (var d in questCadenceDTOs)
+            {
+                var q = quests.All.FirstOrDefault(x => x.Name == d.Quest);
+                if (q.Name == null) { Console.WriteLine($"WARNING: Quest '{d.Quest}' not found for cadence unlocks"); continue; }
+                questCadenceDict[q] = d.Cadences.Select(cn => {
+                    var c = cadences.All.FirstOrDefault(x => x.Name == cn);
+                    if (c.Name == null) Console.WriteLine($"WARNING: Cadence '{cn}' not found for quest '{d.Quest}'");
+                    return c;
+                }).Where(x => x.Name != null).ToArray();
+            }
+            questToCadenceUnlocks.Load(questCadenceDict);
+        } catch (Exception ex) { Console.WriteLine($"Error loading quest-to-cadence unlocks: {ex.Message}"); throw; }
         
         Console.WriteLine("Content Load Complete.");
     }
