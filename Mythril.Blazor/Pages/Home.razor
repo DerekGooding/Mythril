@@ -14,6 +14,10 @@
     <div class="row">
         <div class="col-12">
             <button class="btn btn-primary" @onclick="ToggleTheme">Toggle Theme</button>
+            <button class="btn @(resourceManager.IsTestMode ? "btn-warning" : "btn-outline-secondary")" 
+                    @onclick="ToggleTestMode">
+                Test Mode: @(resourceManager.IsTestMode ? "ON" : "OFF")
+            </button>
         </div>
     </div>
     <div class="row">
@@ -98,6 +102,11 @@
     private async Task ToggleTheme()
     {
         await themeService.ToggleTheme();
+    }
+
+    private void ToggleTestMode()
+    {
+        resourceManager.IsTestMode = !resourceManager.IsTestMode;
     }
 
     private async Task TaskDropped((object item, Character character) args)

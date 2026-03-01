@@ -33,6 +33,8 @@ public class ResourceManager(
 
     public List<QuestProgress> ActiveQuests { get; } = [];
 
+    public bool IsTestMode { get; set; } = false;
+
     public void Initialize()
     {
         Console.WriteLine("ResourceManager initializing...");
@@ -136,9 +138,9 @@ public class ResourceManager(
             int duration = 3;
             if (item is QuestData quest)
             {
-                duration = quest.DurationSeconds;
+                duration = IsTestMode ? 3 : quest.DurationSeconds;
                 // Stat influence: Strength reduces recurring quest duration
-                if (quest.Type == QuestType.Recurring)
+                if (!IsTestMode && quest.Type == QuestType.Recurring)
                 {
                     int strength = GetStatValue(character, "Strength");
                     duration = (int)(duration / (1.0 + (strength / 100.0)));
@@ -147,10 +149,13 @@ public class ResourceManager(
             }
             if(item is CadenceUnlock unlock)
             {
-                duration = 3;
-                // Magic reduces cadence unlock duration
-                int magic = GetStatValue(character, "Magic");
-                duration = (int)(duration / (1.0 + (magic / 100.0)));
+                duration = IsTestMode ? 3 : 10; // Default cadence unlock duration
+                if (!IsTestMode)
+                {
+                    // Magic reduces cadence unlock duration
+                    int magic = GetStatValue(character, "Magic");
+                    duration = (int)(duration / (1.0 + (magic / 100.0)));
+                }
                 ActiveQuests.Add(new QuestProgress(unlock, unlock.Ability.Description, duration, character));
             }
         }

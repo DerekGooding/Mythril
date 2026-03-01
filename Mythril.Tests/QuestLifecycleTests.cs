@@ -131,8 +131,8 @@ public class QuestLifecycleTests
         _resourceManager.StartQuest(questData, himbo);
         
         var progress = _resourceManager.ActiveQuests[0];
-        // Expected: 3 / (1.0 + 20/100) = 3 / 1.2 = 2.5 -> 2 (int)
-        Assert.AreEqual(2, progress.DurationSeconds);
+        // Expected: 20 / (1.0 + 20/100) = 20 / 1.2 = 16.66 -> 16 (int)
+        Assert.AreEqual(16, progress.DurationSeconds);
     }
 
     [TestMethod]
@@ -148,8 +148,8 @@ public class QuestLifecycleTests
         _resourceManager.StartQuest(unlock, wifu);
         
         var progress = _resourceManager.ActiveQuests[0];
-        // Expected: 3 / (1.0 + 15/100) = 3 / 1.15 = 2.6 -> 2 (int)
-        Assert.AreEqual(2, progress.DurationSeconds);
+        // Expected: 10 / (1.0 + 15/100) = 10 / 1.15 = 8.69 -> 8 (int)
+        Assert.AreEqual(8, progress.DurationSeconds);
     }
 
     [TestMethod]
