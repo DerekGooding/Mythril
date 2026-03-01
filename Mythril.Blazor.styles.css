@@ -340,6 +340,7 @@
     border: 1px solid #ccc;
     border-radius: 8px;
     padding: 1rem;
+    flex-shrink: 0;
 }
 /* /Components/QuestCard.razor.rz.scp.css */
 .card[b-mekdh8e00x] {
