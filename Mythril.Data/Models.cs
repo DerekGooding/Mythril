@@ -1,6 +1,9 @@
+using System.Text.Json.Serialization;
+
 namespace Mythril.Data;
 
 // Quest types
+[JsonConverter(typeof(JsonStringEnumConverter))]
 public enum QuestType
 {
     Single,
@@ -11,6 +14,7 @@ public enum QuestType
 public partial record struct Quest(string Name, string Description) : INamed;
 
 // Item types
+[JsonConverter(typeof(JsonStringEnumConverter))]
 public enum ItemType
 {
     Currency,

@@ -41,8 +41,8 @@ public class ResourceManager(
         if (gold.Name != null) Inventory.Add(gold, 100);
 
         Console.WriteLine("Initializing Cadences...");
-        _assignedCadences = _cadences.All.ToDictionary(x => x, _ => (Character?)null);
-        _lockedCadences = _cadences.All.ToDictionary(x => x, _ => true);
+        _assignedCadences = _cadences.All.ToNamedDictionary(_ => (Character?)null);
+        _lockedCadences = _cadences.All.ToNamedDictionary(_ => true);
 
         Console.WriteLine("Initializing Locations...");
         UsableLocations = [.. _locations.All.Select(x => new LocationData(x, x.Quests.Where(IsNeverLocked)))];
