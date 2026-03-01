@@ -12,9 +12,9 @@
 
 <PageTitle>Mythril</PageTitle>
 
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-12">
+<div class="container-fluid d-flex flex-column h-100">
+    <div class="row flex-shrink-0">
+        <div class="col-12 p-2">
             <button class="btn btn-primary" @onclick="ToggleTheme">Toggle Theme</button>
             @if (AuthService.IsAuthenticated)
             {
@@ -25,20 +25,20 @@
             }
         </div>
     </div>
-    <div class="row">
-        <div class="col-12">
+    <div class="row flex-shrink-0">
+        <div class="col-12 p-2">
             @if (resourceManager is not null)
             {
                 <InventoryPanel Items="resourceManager.Inventory?.GetItems().ToList()" />
             }
         </div>
     </div>
-    <div class="row home-columns-row">
+    <div class="row home-columns-row flex-grow-1 min-height-0">
         <!-- Left column with tabs -->
-        <div class="col-6">
+        <div class="col-6 d-flex flex-column h-100">
             @if (resourceManager is not null)
             {
-                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <ul class="nav nav-tabs flex-shrink-0" id="myTab" role="tablist">
                     <li class="nav-item" role="presentation">
                         <button class="nav-link active" id="hand-tab" data-bs-toggle="tab" data-bs-target="#hand" type="button" role="tab">
                             Locations
@@ -55,14 +55,14 @@
                         </button>
                     </li>
                 </ul>
-                <div class="tab-content p-2 border border-top-0">
-                    <div class="tab-pane fade show active" id="hand" role="tabpanel">
+                <div class="tab-content p-2 border border-top-0 flex-grow-1 overflow-hidden d-flex flex-column">
+                    <div class="tab-pane fade show active flex-grow-1 overflow-hidden" id="hand" role="tabpanel">
                         <HandPanel Locations="resourceManager.UsableLocations" />
                     </div>
-                    <div class="tab-pane fade" id="cadence" role="tabpanel">
+                    <div class="tab-pane fade flex-grow-1 overflow-hidden" id="cadence" role="tabpanel">
                         <CadencePanel Cadences="resourceManager.UnlockedCadences" />
                     </div>
-                    <div class="tab-pane fade" id="workshop" role="tabpanel">
+                    <div class="tab-pane fade flex-grow-1 overflow-hidden" id="workshop" role="tabpanel">
                         <Workshop />
                     </div>
                 </div>
@@ -74,7 +74,7 @@
         </div>
 
         <!-- Right column with PartyPanel -->
-        <div class="col-6">
+        <div class="col-6 d-flex flex-column h-100">
             @if (resourceManager is not null)
             {
                 <PartyPanel Party="resourceManager.Characters"

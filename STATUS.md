@@ -1,11 +1,11 @@
 # Agentic Status Report
-**Generated:** 2026-03-01 17:00:14
+**Generated:** 2026-03-01 17:26:35
 
 ## 1. System Integrity (check_health.py)
 ❌ **FAILED**
 - **Monoliths:** 0
-- **Coverage:** 91.52%
-- **Docs Stale:** True
+- **Coverage:** 90.78%
+- **Docs Stale:** False
 
 ## 2. Functional Verification (run_ai_test.ps1)
 ✅ **PASSED**
@@ -32,27 +32,32 @@ VSTest version 18.0.1 (x64)
 Starting test execution, please wait...
 A total of 1 test files matched the specified pattern.
 
-Passed!  - Failed:     0, Passed:    56, Skipped:     0, Total:    56, Duration: 649 ms - Mythril.Tests.dll (net10.0)
+Passed!  - Failed:     0, Passed:    56, Skipped:     0, Total:    56, Duration: 666 ms - Mythril.Tests.dll (net10.0)
 
 Attachments:
-  C:\Users\Derek\source\repos\Mythril\TestResults\a36eed3b-8223-4510-a9a4-51a1412f9549\coverage.cobertura.xml
+  C:\Users\Derek\source\repos\Mythril\TestResults\2c3d114b-531b-45dc-96a0-8af162e50424\coverage.cobertura.xml
 --- Generating Fresh Test Results ---
 [SUCCESS] Tests completed.
 --- Checking for Monoliths (> 250 lines) ---
 
 --- Checking Test Coverage ---
-Using coverage report: TestResults\a36eed3b-8223-4510-a9a4-51a1412f9549\coverage.cobertura.xml
-Overall Coverage: 91.52%
+Using coverage report: TestResults\2c3d114b-531b-45dc-96a0-8af162e50424\coverage.cobertura.xml
+Overall Coverage: 90.78%
 
 --- Checking Documentation Staleness ---
-README.md: 2 source files changed since its last update.
-GEMINI.md: 2 source files changed since its last update.
-AGENTS.md: 9 source files changed since its last update.
-[FAIL] AGENTS.md is stale!
+README.md: 0 source files changed since its last update.
+GEMINI.md: 0 source files changed since its last update.
+AGENTS.md: 0 source files changed since its last update.
 
 --- Checking User Feedback & Error Backlog ---
-[FAIL] 1 unresolved items found in docs/feedback!
-  - 2026-03-01_untitled.md
+[FAIL] 4 unresolved items found in docs/feedback!
+  - 2026-03-01_game_too_easy.md
+  - 2026-03-01_toggle_theme.md
+  - 2026-03-01_tutorial_section.md
+  - 2026-03-01_window_scrolling.md
+[FAIL] 2 unresolved items found in docs/errors!
+  - 2026-03-01_automated_error_report.md
+  - 2026-03-01_automated_error_report_1.md
 
 [FAIL] Health checks failed.
 

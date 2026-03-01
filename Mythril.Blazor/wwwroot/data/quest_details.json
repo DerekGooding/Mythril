@@ -1,133 +1,133 @@
 [
   {
     "Quest": "Tutorial Section",
-    "DurationSeconds": 10,
+    "DurationSeconds": 30,
     "Type": "Recurring",
     "Requirements": [],
     "Rewards": [ { "Item": "Basic Gem", "Quantity": 1 } ]
   },
   {
     "Quest": "Visit Starting Town",
-    "DurationSeconds": 5,
+    "DurationSeconds": 15,
     "Type": "Single",
     "Requirements": [],
     "Rewards": [ { "Item": "Gold", "Quantity": 100 } ]
   },
   {
     "Quest": "Buy Potion",
-    "DurationSeconds": 15,
+    "DurationSeconds": 45,
     "Type": "Recurring",
     "Requirements": [ { "Item": "Gold", "Quantity": 250 } ],
     "Rewards": [ { "Item": "Potion", "Quantity": 1 } ]
   },
   {
     "Quest": "Recover the Ancient Tome",
-    "DurationSeconds": 20,
+    "DurationSeconds": 60,
     "Type": "Single",
     "Requirements": [ { "Item": "Gold", "Quantity": 500 } ],
     "Rewards": [ { "Item": "Basic Gem", "Quantity": 5 } ]
   },
   {
     "Quest": "Learn About Cadences",
-    "DurationSeconds": 10,
+    "DurationSeconds": 30,
     "Type": "Single",
     "Requirements": [],
     "Rewards": []
   },
   {
     "Quest": "Farm Goblins",
-    "DurationSeconds": 20,
+    "DurationSeconds": 60,
     "Type": "Recurring",
     "Requirements": [],
     "Rewards": [ { "Item": "Gold", "Quantity": 100 }, { "Item": "Fire Shard", "Quantity": 1 } ]
   },
   {
     "Quest": "Farm Trents",
-    "DurationSeconds": 25,
+    "DurationSeconds": 75,
     "Type": "Recurring",
     "Requirements": [],
     "Rewards": [ { "Item": "Log", "Quantity": 1 } ]
   },
   {
     "Quest": "Farm Golems",
-    "DurationSeconds": 30,
+    "DurationSeconds": 90,
     "Type": "Recurring",
     "Requirements": [],
     "Rewards": [ { "Item": "Iron Ore", "Quantity": 1 } ]
   },
   {
     "Quest": "Learn about the Mines",
-    "DurationSeconds": 10,
+    "DurationSeconds": 30,
     "Type": "Single",
     "Requirements": [],
     "Rewards": []
   },
   {
     "Quest": "Farm Bats",
-    "DurationSeconds": 20,
+    "DurationSeconds": 60,
     "Type": "Recurring",
     "Requirements": [],
     "Rewards": [ { "Item": "Gold", "Quantity": 150 } ]
   },
   {
     "Quest": "Farm Spiders",
-    "DurationSeconds": 25,
+    "DurationSeconds": 75,
     "Type": "Recurring",
     "Requirements": [],
     "Rewards": [ { "Item": "Web", "Quantity": 1 } ]
   },
   {
     "Quest": "Farm Slimes",
-    "DurationSeconds": 30,
+    "DurationSeconds": 90,
     "Type": "Recurring",
     "Requirements": [],
     "Rewards": [ { "Item": "Slime", "Quantity": 1 } ]
   },
   {
     "Quest": "Unlock Mining",
-    "DurationSeconds": 30,
+    "DurationSeconds": 120,
     "Type": "Single",
     "Requirements": [ { "Item": "Gold", "Quantity": 1000 } ],
     "Rewards": []
   },
   {
     "Quest": "Mine Iron Ore",
-    "DurationSeconds": 45,
+    "DurationSeconds": 180,
     "Type": "Recurring",
     "Requirements": [],
     "Rewards": [ { "Item": "Iron Ore", "Quantity": 5 } ]
   },
   {
     "Quest": "Gather Moonberries",
-    "DurationSeconds": 60,
+    "DurationSeconds": 240,
     "Type": "Recurring",
     "Requirements": [],
     "Rewards": [ { "Item": "Moonberry", "Quantity": 2 }, { "Item": "Mana Leaf", "Quantity": 1 } ]
   },
   {
     "Quest": "Defeat Treant Guardian",
-    "DurationSeconds": 120,
+    "DurationSeconds": 600,
     "Type": "Single",
     "Requirements": [ { "Item": "Potion", "Quantity": 5 } ],
     "Rewards": [ { "Item": "Ancient Bark", "Quantity": 5 } ]
   },
   {
     "Quest": "Ancient Inscriptions",
-    "DurationSeconds": 30,
+    "DurationSeconds": 120,
     "Type": "Single",
     "Requirements": [],
     "Rewards": [ { "Item": "Gold", "Quantity": 500 } ]
   },
   {
     "Quest": "Finding the Hearth",
-    "DurationSeconds": 60,
+    "DurationSeconds": 300,
     "Type": "Single",
     "Requirements": [],
     "Rewards": [ { "Item": "Basic Gem", "Quantity": 10 } ]
   },
   {
     "Quest": "Rekindling the Spark",
-    "DurationSeconds": 300,
+    "DurationSeconds": 1200,
     "Type": "Single",
     "Requirements": [ { "Item": "Ancient Bark", "Quantity": 10 }, { "Item": "Iron Ore", "Quantity": 20 } ],
     "Rewards": [ { "Item": "Mythril Spark", "Quantity": 1 } ]

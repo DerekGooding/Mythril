@@ -18,6 +18,8 @@ This project uses agentic workflows to maintain its health and quality.
 - **InventoryManager**: Manages items, spells, and capacity enforcement.
 - **Data-Driven**: Content is located in `Mythril.Blazor/wwwroot/data/*.json`.
 
-## Versioning
-Upgraded to .NET 10 (Blazor WebAssembly).
-- Last Review: March 1, 2026.
+## Recent Improvements (March 1, 2026)
+- **Quest Progression**: Fixed 10x speed bug and implemented stat-influenced durations.
+- **Single-Quest Protection**: Prevented repeatable quests from re-unlocking completed single-time quests.
+- **Layout Refinement**: Fixed parent window scrolling issues via flexbox constraints.
+- **Theme Resilience**: Optimized JS Interop for theme switching.

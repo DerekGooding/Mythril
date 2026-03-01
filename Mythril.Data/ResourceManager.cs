@@ -101,7 +101,7 @@ public class ResourceManager(
         {
             foreach(var data in location.LockedQuests)
             {
-                if (_questDetails[quest].Type == QuestType.Single && _completedQuests.Contains(data))
+                if (_questDetails[data].Type == QuestType.Single && _completedQuests.Contains(data))
                     continue;
                 if (IsComplete(_questUnlocks[data]))
                     location.Quests.Add(data);

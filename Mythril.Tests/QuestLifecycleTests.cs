@@ -135,8 +135,8 @@ public class QuestLifecycleTests
         _resourceManager.StartQuest(questData, himbo);
         
         var progress = _resourceManager.ActiveQuests[0];
-        // Expected: 20 / (1.0 + 10/100) = 20 / 1.1 = 18.18 -> 18 (int)
-        Assert.AreEqual(18, progress.DurationSeconds);
+        // Expected: 60 / (1.0 + 10/100) = 60 / 1.1 = 54.54 -> 54 (int)
+        Assert.AreEqual(54, progress.DurationSeconds);
     }
 
     [TestMethod]
