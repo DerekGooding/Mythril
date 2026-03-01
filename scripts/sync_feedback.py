@@ -2,6 +2,7 @@ import os
 import sys
 import json
 import re
+import urllib.request
 from datetime import datetime
 
 def slugify(text):
@@ -10,15 +11,53 @@ def slugify(text):
     text = re.sub(r'[\s_-]+', '_', text).strip('_')
     return text
 
-def main():
-    if len(sys.argv) < 2:
-        print("Usage: python scripts/sync_feedback.py '<json_string>'")
-        sys.exit(1)
-
+def fetch_from_remote():
+    url_file = "FEEDBACK_URL.txt"
+    if not os.path.exists(url_file):
+        print(f"Error: {url_file} not found. Please create it with your Web App URL.")
+        return []
+    
+    with open(url_file, "r") as f:
+        url = f.read().strip()
+    
     try:
-        data = json.loads(sys.argv[1])
+        print(f"Fetching from {url}...")
+        with urllib.request.urlopen(url) as response:
+            csv_data = response.read().decode('utf-8')
+            lines = csv_data.strip().split('\n')
+            if not lines: return []
+            
+            # Google Apps Script doGet returns CSV: Timestamp, Type, Title, Description, Source, StackTrace
+            entries = []
+            for line in lines[1:]: # Skip header
+                # Simple comma split (won't handle commas in text, but good enough for now)
+                parts = line.split(',')
+                if len(parts) >= 6:
+                    entries.append({
+                        "Date": parts[0],
+                        "Type": parts[1],
+                        "Title": parts[2],
+                        "Description": parts[3],
+                        "Source": parts[4],
+                        "StackTrace": parts[5]
+                    })
+            return entries
     except Exception as e:
-        print(f"Error parsing JSON: {e}")
+        print(f"Error fetching remote feedback: {e}")
+        return []
+
+def main():
+    data = []
+    if "--remote" in sys.argv:
+        data = fetch_from_remote()
+    elif len(sys.argv) >= 2:
+        try:
+            data = json.loads(sys.argv[1])
+        except Exception as e:
+            print(f"Error parsing JSON: {e}")
+            sys.exit(1)
+    else:
+        print("Usage: python scripts/sync_feedback.py '<json_string>' OR python scripts/sync_feedback.py --remote")
         sys.exit(1)
 
     if not isinstance(data, list):
@@ -56,12 +95,7 @@ N/A
 - [ ] Verified
 """
         if stack:
-            template += f"
-## Stack Trace
-```
-{stack}
-```
-"
+            template += f"\n## Stack Trace\n```\n{stack}\n```\n"
 
         base_name = f"{date_str}_{slugify(title)}"
         filename = f"{base_name}.md"

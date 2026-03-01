@@ -8,11 +8,16 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
+await builder.Configuration.AddJsonFile("appsettings.json").BuildAsync();
+
 builder.Services.AddScoped(_ => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 builder.Services.AddScoped<DragDropService>();
 builder.Services.AddScoped<ThemeService>();
 builder.Services.AddScoped<VersionService>();
-builder.Services.AddSingleton<FeedbackService>();
+builder.Services.AddSingleton(sp => new FeedbackService(
+    sp.GetRequiredService<IJSRuntime>(),
+    sp.GetRequiredService<IConfiguration>(),
+    sp.GetRequiredService<HttpClient>()));
 builder.Services.AddSingleton<SnackbarService>();
 
 builder.Logging.AddProvider(new FeedbackLoggerProvider(builder.Services.BuildServiceProvider().GetRequiredService<FeedbackService>()));
