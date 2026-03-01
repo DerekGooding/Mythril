@@ -11,17 +11,9 @@ def slugify(text):
     text = re.sub(r'[\s_-]+', '_', text).strip('_')
     return text
 
-def fetch_from_remote():
-    url_file = "FEEDBACK_URL.txt"
-    if not os.path.exists(url_file):
-        print(f"Error: {url_file} not found. Please create it with your Web App URL.")
-        return []
-    
-    with open(url_file, "r") as f:
-        url = f.read().strip()
-    
+def fetch_from_remote(url):
     try:
-        print(f"Fetching from {url}...")
+        print(f"Fetching from remote endpoint...")
         with urllib.request.urlopen(url) as response:
             csv_data = response.read().decode('utf-8')
             lines = csv_data.strip().split('\n')
@@ -30,7 +22,7 @@ def fetch_from_remote():
             # Google Apps Script doGet returns CSV: Timestamp, Type, Title, Description, Source, StackTrace
             entries = []
             for line in lines[1:]: # Skip header
-                # Simple comma split (won't handle commas in text, but good enough for now)
+                # Simple comma split
                 parts = line.split(',')
                 if len(parts) >= 6:
                     entries.append({
@@ -49,7 +41,18 @@ def fetch_from_remote():
 def main():
     data = []
     if "--remote" in sys.argv:
-        data = fetch_from_remote()
+        # Try to find --url argument
+        url = ""
+        if "--url" in sys.argv:
+            idx = sys.argv.index("--url")
+            if idx + 1 < len(sys.argv):
+                url = sys.argv[idx + 1]
+        
+        if not url:
+            print("Error: --remote requires --url <WEB_APP_URL>")
+            sys.exit(1)
+            
+        data = fetch_from_remote(url)
     elif len(sys.argv) >= 2:
         try:
             data = json.loads(sys.argv[1])

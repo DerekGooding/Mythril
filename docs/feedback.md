@@ -31,12 +31,11 @@ All files in `docs/resolution/` must use this template:
 ```
 
 ## Remote Synchronization
-The game UI automatically submits feedback to a remote Google Sheet if configured. To sync these items to this repository:
-1. Ensure `FEEDBACK_URL.txt` exists in the root directory and contains the Google Apps Script Web App URL.
-2. Run the sync command:
+The game UI automatically submits feedback to a remote Google Sheet if configured. To sync these items to this repository, provide the Web App URL at runtime:
 ```bash
-python scripts/sync_feedback.py --remote
+python scripts/sync_feedback.py --remote --url "<WEB_APP_URL>"
 ```
+*Note: The URL is never stored in the repository for security.*
 
 ## Interactive Collector
 You can use the automated script to add new feedback entries:

@@ -1,5 +1,5 @@
 # Environment Knowledge
-- **Last Reviewed:** March 1, 2026 (DevOps & Versioning).
+- **Last Reviewed:** March 1, 2026 (Security audit).
 - **Shell:** PowerShell is used. Standard Unix utilities like `grep` and `cat` are not available. Use `grep_search` tool or PowerShell equivalents (e.g., `Select-String`, `Get-Content`).
 - **Formatting:** `cat -n` equivalent in PowerShell is `Get-Content <file> | ForEach-Object { "$($_.ReadCount) $_" }`.
 
@@ -12,7 +12,8 @@ This document contains foundational mandates for the AI assistant (Gemini) durin
 - **Validation:** No logic changes are complete without corresponding unit tests. For complex system interactions (e.g. quests, cadence, persistence), utilize the `Mythril.Headless` project to run scenario-based tests via `test_scenario.json` and verify the output `state.json`.
 - **Documentation:** Keep documentation synchronized with code changes.
 - **Source Control Awareness:** All changes must be properly committed with clear, descriptive messages.
-- **Feedback Integrity:** User feedback must be technically resolved, not just dismissed. Every cleared item in `docs/feedback/` must have a corresponding technical resolution file in `docs/resolution/` explaining the fix. This process ensures a transparent and permanent record of project improvements.
+- **Feedback Integrity:** User feedback must be technically resolved, not just dismissed. Every cleared item in `docs/feedback/` must have a corresponding technical resolution file in `docs/resolution/` explaining the fix. This process ensures a transparent and permanent record of project improvements. Use `scripts/sync_feedback.py --remote --url "<URL>"` to pull items without ever storing the URL in the filesystem.
+- **Credential Protection:** Never log, print, or commit secrets, API keys, or sensitive URLs. Only use sensitive keys provided at runtime via environment variables or CLI arguments.
 - **Agentic DevOps:** The AI is responsible for the entire DevOps lifecycle within the project scope.
 - **Source Control Submission:** Always commit changes to the git repository upon completing a task. Use clear, descriptive commit messages. Push directly to the `main` branch; do not create feature branches unless explicitly requested.
 
