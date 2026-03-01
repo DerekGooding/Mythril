@@ -21,12 +21,15 @@
 <body>
     <script>
         window.setTheme = function (theme) {
-            document.getElementById('theme').setAttribute('href', 'css/' + theme + '.css');
+            var link = document.getElementById('theme');
+            if (link) {
+                link.setAttribute('href', 'css/' + theme + '.css');
+            }
             localStorage.setItem('theme', theme);
-        }
+        };
         (function () {
             var theme = localStorage.getItem('theme') || 'light-theme';
-            setTheme(theme);
+            window.setTheme(theme);
         })();
     </script>
     <div id="app">
