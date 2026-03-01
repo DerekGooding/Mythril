@@ -1,5 +1,5 @@
 # Agentic Status Report
-**Generated:** 2026-03-01 14:01:30
+**Generated:** 2026-03-01 14:10:36
 
 ## 1. System Integrity (check_health.py)
 ✅ **PASSED**
@@ -32,16 +32,16 @@ VSTest version 18.0.1 (x64)
 Starting test execution, please wait...
 A total of 1 test files matched the specified pattern.
 
-Passed!  - Failed:     0, Passed:    41, Skipped:     0, Total:    41, Duration: 291 ms - Mythril.Tests.dll (net9.0)
+Passed!  - Failed:     0, Passed:    41, Skipped:     0, Total:    41, Duration: 287 ms - Mythril.Tests.dll (net9.0)
 
 Attachments:
-  C:\Users\Derek\source\repos\Mythril\TestResults\d1d80c58-5811-4c66-b8b2-0536e0e0d1f6\coverage.cobertura.xml
+  C:\Users\Derek\source\repos\Mythril\TestResults\9953b2c2-ad80-4d2f-8022-507b538e6155\coverage.cobertura.xml
 --- Generating Fresh Test Results ---
 [SUCCESS] Tests completed.
 --- Checking for Monoliths (> 250 lines) ---
 
 --- Checking Test Coverage ---
-Using coverage report: TestResults\d1d80c58-5811-4c66-b8b2-0536e0e0d1f6\coverage.cobertura.xml
+Using coverage report: TestResults\9953b2c2-ad80-4d2f-8022-507b538e6155\coverage.cobertura.xml
 Overall Coverage: 70.45%
 
 --- Checking Documentation Staleness ---
