@@ -6,7 +6,7 @@
     "SOURCE_DIR": ".",
     "RESULTS_DIR": "TestResults",
     "SOURCE_EXTENSIONS": [".cs", ".py", ".js", ".ts", ".razor"],
-    "DOC_FILES": ["README.md", "GEMINI.md", "AGENTS.md", "docs/roadmap.md", "docs/suggestions.md"],
+    "DOC_FILES": ["README.md", "GEMINI.md", "AGENTS.md"],
     "FEEDBACK_DIR": "docs/feedback",
     "TEST_COMMAND": ["dotnet", "test", "--collect:XPlat Code Coverage", "--results-directory", "TestResults", "--verbosity", "quiet"],
     "COVERAGE_REPORT_PATTERN": "coverage\\.cobertura\\.xml"
