@@ -18,8 +18,7 @@ def main():
     title = get_input("Short Title (e.g., Inventory UI lag)")
     date_str = datetime.now().strftime("%Y-%m-%d")
     
-    print("
-Select Type:")
+    print("\nSelect Type:")
     print("1. Bug")
     print("2. Feature Request")
     print("3. Suggestion")
@@ -70,8 +69,7 @@ Select Type:")
     with open(filepath, "w", encoding="utf-8") as f:
         f.write(template)
         
-    print(f"
-[SUCCESS] Feedback saved to: {filepath}")
+    print(f"\n[SUCCESS] Feedback saved to: {filepath}")
     print("Note: The health check will now fail until this feedback is resolved/deleted.")
 
 if __name__ == "__main__":
