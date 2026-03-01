@@ -17,48 +17,63 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
     <script>
-        // Console log interceptor for error reporting
-        (function() {
-            var originalLog = console.log;
-            var originalWarn = console.warn;
-            var originalError = console.error;
-            var logs = [];
-            var maxLogs = 50;
-
-            function addLog(type, args) {
-                var message = Array.from(args).map(arg => {
-                    try {
-                        return typeof arg === 'object' ? JSON.stringify(arg) : String(arg);
-                    } catch(e) {
-                        return String(arg);
-                    }
-                }).join(' ');
-                logs.push(`[${new Date().toISOString()}] [${type}] ${message}`);
-                if (logs.length > maxLogs) logs.shift();
-            }
-
-            console.log = function() { addLog('LOG', arguments); originalLog.apply(console, arguments); };
-            console.warn = function() { addLog('WARN', arguments); originalWarn.apply(console, arguments); };
-            console.error = function() { addLog('ERROR', arguments); originalError.apply(console, arguments); };
-
-            window.getRecentLogs = function() {
-                return logs.join('\n');
+        // High-priority script block
+        try {
+            // Define setTheme early and robustly
+            window.setTheme = function (theme) {
+                console.log("JS: Setting theme to " + theme);
+                var link = document.getElementById('theme');
+                if (link) {
+                    link.setAttribute('href', 'css/' + theme + '.css');
+                } else {
+                    console.warn("JS: Theme link element not found!");
+                }
+                localStorage.setItem('theme', theme);
             };
-        })();
 
-        window.setTheme = function (theme) {
-            console.log("JS: Setting theme to " + theme);
-            var link = document.getElementById('theme');
-            if (link) {
-                link.setAttribute('href', 'css/' + theme + '.css');
-            }
-            localStorage.setItem('theme', theme);
-        };
-        // Initial load
-        (function () {
-            var theme = localStorage.getItem('theme') || 'light-theme';
-            window.setTheme(theme);
-        })();
+            // Console log interceptor for error reporting
+            (function() {
+                var originalLog = console.log;
+                var originalWarn = console.warn;
+                var originalError = console.error;
+                var logs = [];
+                var maxLogs = 50;
+
+                function addLog(type, args) {
+                    var message = Array.from(args).map(arg => {
+                        try {
+                            if (arg === null) return "null";
+                            if (arg === undefined) return "undefined";
+                            return typeof arg === 'object' ? JSON.stringify(arg) : String(arg);
+                        } catch(e) {
+                            return "[Unserializable Object]";
+                        }
+                    }).join(' ');
+                    logs.push(`[${new Date().toISOString()}] [${type}] ${message}`);
+                    if (logs.length > maxLogs) logs.shift();
+                }
+
+                console.log = function() { addLog('LOG', arguments); originalLog.apply(console, arguments); };
+                console.warn = function() { addLog('WARN', arguments); originalWarn.apply(console, arguments); };
+                console.error = function() { addLog('ERROR', arguments); originalError.apply(console, arguments); };
+
+                window.getRecentLogs = function() {
+                    return logs.join('\n');
+                };
+            })();
+
+            // Initial load
+            (function () {
+                var theme = localStorage.getItem('theme') || 'light-theme';
+                window.setTheme(theme);
+            })();
+
+            console.log("JS: Global scripts initialized successfully.");
+        } catch (e) {
+            console.error("JS: Critical initialization error: " + e.message);
+            // Fallback to ensure setTheme exists even if interceptor fails
+            window.setTheme = window.setTheme || function(t) { console.error("setTheme fallback: " + t); };
+        }
     </script>
 </head>
 
