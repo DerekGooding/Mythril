@@ -14,7 +14,7 @@ This document contains foundational mandates for the AI assistant (Gemini) durin
 - **Source Control Awareness:** All changes must be properly committed with clear, descriptive messages.
 - **Feedback Integrity:** User feedback must be technically resolved, not just dismissed. Every cleared item in `docs/feedback/` must have a corresponding technical resolution file in `docs/resolution/` explaining the fix. This process ensures a transparent and permanent record of project improvements.
 - **Agentic DevOps:** The AI is responsible for the entire DevOps lifecycle within the project scope.
-- **Source Control Submission:** Always commit changes to the git repository upon completing a task. Use clear, descriptive commit messages.
+- **Source Control Submission:** Always commit changes to the git repository upon completing a task. Use clear, descriptive commit messages. Push directly to the `main` branch; do not create feature branches unless explicitly requested.
 
 ## 2. Technical Standards
 - **Framework/Stack:** .NET 9 (Blazor)
