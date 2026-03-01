@@ -13,4 +13,10 @@ Following the FF8/FFT inspiration, I am planning the implementation of the Junct
 4. **Junction Overlap:** If a character switches Cadences, do they lose their Junctions, or should the "J-Str" knowledge persist if they unlocked it elsewhere?
 
 ## Human Guidance
-[BLANK - To be filled by developer]
+Magic is global and limited to only 30. There will be future cadence unlocks that improve that limitation. 
+
+Scaling is linear, similar to FF8
+
+Cadences are limited to one per character like the GF system. 
+
+If a character loses a cadence, they lose their junctions. Just like in FF8

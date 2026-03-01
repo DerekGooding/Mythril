@@ -8,7 +8,7 @@
 
 [**Live Website**](https://DerekGooding.Github.io/Mythril)
 
-**Documentation Status:** Last updated March 1, 2026. Aligned suggestions and guidance with the FF8/FFT project vision.
+**Documentation Status:** Last updated March 1, 2026. Refined Junctioning rules and updated project suggestions for core-loop onboarding.
 
 ## Project Structure
 **This project is heavily and primarily developed by AI agents.**  

@@ -3,7 +3,19 @@
 This file contains distilled architectural and project guidance provided by human developers. All agents must consult this base to ensure alignment with long-term project goals.
 
 ---
-## [2026-03-01] Core Mechanics & Content Strategy (FF8/FFT Inspiration)
+## [2026-03-01] Junctioning Specifics & Cadence Sharing Rules
+
+### **Resource Limits**
+- **Magic:** Shared as a global inventory resource.
+- **Capacity:** Initial limit is **30** of any single spell. This limit can be expanded via future Cadence ability unlocks.
+
+### **Junction Scaling**
+- **Formula:** Linear scaling (e.g., +1 Stat per fixed amount of Magic), modeled after the FF8 system.
+
+### **Equipping & Persistence**
+- **Exclusivity:** Each Cadence is a unique entity. A single Cadence can only be equipped by **one character** at a time (FF8 GF model).
+- **Dependency:** Junctions are tied to the equipped Cadence. If a Cadence is unequipped, the character **loses all associated Junctions**. Junction knowledge does not persist across Cadence swaps unless the new Cadence also provides the required junction ability (e.g., "J-Str").
+
 
 ### **Vision**
 The game is inspired by the **FF8 Junction System** and the **FF Tactics Job System**.
