@@ -21,6 +21,7 @@ public class FeedbackEntry
     public string Description { get; set; } = "";
     public string Source { get; set; } = "In-Game UI";
     public string? StackTrace { get; set; }
+    public string? ConsoleLog { get; set; }
 }
 
 public class FeedbackService(IJSRuntime js, AuthService auth, HttpClient http)
@@ -29,6 +30,17 @@ public class FeedbackService(IJSRuntime js, AuthService auth, HttpClient http)
 
     public async Task AddFeedback(FeedbackEntry entry)
     {
+        // Enrich description for Errors if it contains logs or stack trace
+        if (entry.Type == FeedbackType.Error)
+        {
+            var enriched = entry.Description;
+            if (!string.IsNullOrEmpty(entry.ConsoleLog))
+            {
+                enriched += "\n\n## Console Logs\n```\n" + entry.ConsoleLog + "\n```";
+            }
+            entry.Description = enriched;
+        }
+
         var all = await GetPendingFeedback();
         all.Add(entry);
         await SaveAll(all);
@@ -56,12 +68,23 @@ public class FeedbackService(IJSRuntime js, AuthService auth, HttpClient http)
 
     public async Task CaptureError(string message, string? stackTrace = null)
     {
+        string? logs = null;
+        try 
+        {
+            logs = await js.InvokeAsync<string>("window.getRecentLogs");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Failed to get logs: {ex.Message}");
+        }
+
         await AddFeedback(new FeedbackEntry
         {
             Type = FeedbackType.Error,
             Title = "Automated Error Report",
             Description = message,
-            StackTrace = stackTrace
+            StackTrace = stackTrace,
+            ConsoleLog = logs
         });
     }
 
