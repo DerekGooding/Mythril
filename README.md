@@ -8,6 +8,8 @@
 
 [**Live Website**](https://DerekGooding.Github.io/Mythril)
 
+**Documentation Status:** Last updated Feb 28, 2026. Reviewed for accuracy after record equality fix and syntax cleanup.
+
 ## 🤖 Agentic Development
 **This project is heavily and primarily developed by AI agents.**  
 From architecture and core logic to the Blazor frontend and DevOps pipelines, Mythril is a testament to agentic software engineering. All changes, including this documentation, are managed and validated by agents to ensure technical integrity and adherence to the project's [AI Mandates](GEMINI.md).

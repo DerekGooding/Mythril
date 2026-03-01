@@ -1,5 +1,7 @@
 # Mythril Agent Configuration
 
+**Documentation Status:** Last reviewed Feb 28, 2026. Consistent with recent record struct and Blazor fixes.
+
 ## 🧭 Project Ethos
 Mythril is an **agentically developed** project. Agents are not just contributors but primary architects. This document provides the necessary context for AI agents (Gemini CLI) to operate effectively within this workspace.
 
