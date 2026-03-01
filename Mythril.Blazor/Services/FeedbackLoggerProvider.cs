@@ -25,6 +25,7 @@ public class FeedbackLoggerProvider(FeedbackService feedbackService, AuthService
             if (!IsEnabled(logLevel)) return;
 
             var message = formatter(state, exception);
+            Console.WriteLine($"[FeedbackLogger] Capturing Error: {message}");
             // Fire and forget to avoid blocking UI thread
             _ = _feedbackService.CaptureError(message, exception?.StackTrace);
         }

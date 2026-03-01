@@ -16,22 +16,24 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
-</head>
-
-<body>
     <script>
         window.setTheme = function (theme) {
+            console.log("JS: Setting theme to " + theme);
             var link = document.getElementById('theme');
             if (link) {
                 link.setAttribute('href', 'css/' + theme + '.css');
             }
             localStorage.setItem('theme', theme);
         };
+        // Initial load
         (function () {
             var theme = localStorage.getItem('theme') || 'light-theme';
             window.setTheme(theme);
         })();
     </script>
+</head>
+
+<body>
     <div id="app">
         <svg class="loading-progress">
             <circle r="40%" cx="50%" cy="50%" />

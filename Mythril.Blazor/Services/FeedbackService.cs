@@ -44,12 +44,13 @@ public class FeedbackService(IJSRuntime js, AuthService auth, HttpClient http)
     {
         try
         {
+            Console.WriteLine($"[FeedbackService] Syncing {entry.Type} to bridge...");
             // The dev bridge runs on a fixed local port during development
             await http.PostAsJsonAsync("http://localhost:8080/report", entry);
         }
-        catch
+        catch (Exception ex)
         {
-            // Silently fail if bridge isn't running
+            Console.WriteLine($"[FeedbackService] Bridge sync failed: {ex.Message}");
         }
     }
 

@@ -17,10 +17,8 @@ builder.Services.AddSingleton<AuthService>();
 builder.Services.AddSingleton<FeedbackService>();
 builder.Services.AddSingleton<SnackbarService>();
 
-var sp = builder.Services.BuildServiceProvider();
-builder.Logging.AddProvider(new FeedbackLoggerProvider(
-    sp.GetRequiredService<FeedbackService>(),
-    sp.GetRequiredService<AuthService>()));
+// Register the logger provider correctly within the service collection
+builder.Logging.Services.AddSingleton<ILoggerProvider, FeedbackLoggerProvider>();
 
 // Register Content (Singletons)
 builder.Services.AddSingleton(ContentHost.GetContent<Items>());

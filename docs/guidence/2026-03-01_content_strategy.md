@@ -12,4 +12,6 @@ As we expand from the initial "World Building" phase into broader "Additional Co
 3. Should new Biomes (like "Sunken Grotto") introduce entirely new mechanics (e.g., oxygen timers) or rely on existing resource/duration patterns?
 
 ## Human Guidance
-[BLANK - To be filled by developer]
+The game is based off the FF8 junction system and combine with the FF tactics job system. Cadences ARE jobs. Cadences ARE GFs. 
+
+Completing quests needs to reward items. 
