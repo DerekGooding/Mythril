@@ -209,5 +209,12 @@ public class ResourceManager(
 
     public IEnumerable<Quest> GetCompletedQuests() => _completedQuests;
     public void ClearCompletedQuests() => _completedQuests.Clear();
-    public void RestoreCompletedQuest(Quest quest) => UnlockQuest(quest);
+    public void RestoreCompletedQuest(Quest quest)
+    {
+        UnlockQuest(quest);
+        foreach (var cadence in _questToCadenceUnlocks[quest])
+        {
+            UnlockCadence(cadence);
+        }
+    }
 }

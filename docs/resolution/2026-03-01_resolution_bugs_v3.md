@@ -16,11 +16,13 @@
 
 ### 2. Layout & Scrolling
 - **Viewport Constraints**: Hardened `app.css` by adding `width: 100vw` and `overflow: hidden` to the `html, body, #app` chain.
+- **Horizontal Character Stacks**: Updated `PartyPanel.razor` to use `d-flex flex-row` and `flex-wrap`, and refactored `Home.razor` into a 3-row vertical layout (Header, Party, Main) to ensure character items no longer overflow the bottom of the page.
 - **Internal Scrolling**: Ensured that the `Home.razor` container and its columns use `flex-grow: 1` and `min-height: 0` to correctly delegate scrolling to the sub-panels (Hand, Party, etc.) rather than the parent window.
 
-### 3. Theme System Resilience
+### 3. Theme System Resilience & Cadence Fixes
 - **Explicit Scoping**: Updated `ThemeService.cs` to call `window.setTheme` instead of the implicit `setTheme`.
 - **Initialization Order**: Moved global script blocks to the end of `<body>` in `index.html` and added a `setTimeout` guard to the initial theme load to ensure the DOM is fully constructed before JS Interop attempts to access the CSS link element.
+- **Cadence Restoration**: Fixed a bug where cadences were not being re-unlocked when loading a save. `ResourceManager.RestoreCompletedQuest` now correctly re-triggers cadence unlocks associated with restored quests.
 - **Logging**: Added verbose console logging to the JS layer to track exact execution state during theme changes.
 
 ## Verification

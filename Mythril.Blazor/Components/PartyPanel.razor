@@ -3,17 +3,19 @@
 
 <div class="party-panel">
     <h3>Party</h3>
-    @if (Party is not null && QuestProgresses is not null)
-    {
-        @foreach (var character in Party)
+    <div class="d-flex flex-row flex-wrap gap-2">
+        @if (Party is not null && QuestProgresses is not null)
         {
-            <CharacterDisplay Character="character"
-                                QuestProgress="QuestProgresses.FirstOrDefault(p => p.Character == character)"
-                                OnQuestDrop="(task) => OnQuestDrop.InvokeAsync((task, character))"
-                                OnCompletionAnimationEnd="(progress) => OnCompletionAnimationEnd.InvokeAsync(progress)"
-                                Accepts="resourceManager.CanAfford" />
+            @foreach (var character in Party)
+            {
+                <CharacterDisplay Character="character"
+                                    QuestProgress="QuestProgresses.FirstOrDefault(p => p.Character == character)"
+                                    OnQuestDrop="(task) => OnQuestDrop.InvokeAsync((task, character))"
+                                    OnCompletionAnimationEnd="(progress) => OnCompletionAnimationEnd.InvokeAsync(progress)"
+                                    Accepts="resourceManager.CanAfford" />
+            }
         }
-    }
+    </div>
 </div>
 
 @code {
