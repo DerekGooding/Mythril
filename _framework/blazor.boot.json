@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "Mythril.Blazor",
   "resources": {
-    "hash": "sha256-D2fakZtJzevFc8K0dtkUWm8PBfRZU4JzrzKLBnHit38=",
+    "hash": "sha256-8x0FsSUWdZTe7Q2ppGl2OGrDpf2t9wl+ajWUfSk5+7Q=",
     "fingerprinting": {
       "Microsoft.AspNetCore.Components.8poas9e9p2.wasm": "Microsoft.AspNetCore.Components.wasm",
       "Microsoft.AspNetCore.Components.Web.5ilw7d57jz.wasm": "Microsoft.AspNetCore.Components.Web.wasm",
@@ -18,8 +18,8 @@
       "Microsoft.Extensions.Primitives.5pxr7nzxwe.wasm": "Microsoft.Extensions.Primitives.wasm",
       "Microsoft.JSInterop.7kva84rxiz.wasm": "Microsoft.JSInterop.wasm",
       "Microsoft.JSInterop.WebAssembly.imfqvv3x5h.wasm": "Microsoft.JSInterop.WebAssembly.wasm",
-      "Mythril.Blazor.ko4ee3yl5s.wasm": "Mythril.Blazor.wasm",
-      "Mythril.Data.v3xb0dtspq.wasm": "Mythril.Data.wasm",
+      "Mythril.Blazor.f16sq8fj8l.wasm": "Mythril.Blazor.wasm",
+      "Mythril.Data.0rg3fvtam7.wasm": "Mythril.Data.wasm",
       "Newtonsoft.Json.jcjjiqe038.wasm": "Newtonsoft.Json.wasm",
       "SimpleInjection.frk3rn5p8t.wasm": "SimpleInjection.wasm",
       "System.7mkjnfwul0.wasm": "System.wasm",
@@ -109,8 +109,8 @@
       "Microsoft.Extensions.Primitives.5pxr7nzxwe.wasm": "sha256-WXYpl64HUqc9+prJOz6dOEVvB8PFJhTdfqUMB3ZGRGA=",
       "Microsoft.JSInterop.7kva84rxiz.wasm": "sha256-ubnFa4Rtxgu4gPe/SRKYk17LxS0CtEOnEoPvT6ITOTo=",
       "Microsoft.JSInterop.WebAssembly.imfqvv3x5h.wasm": "sha256-mpyjzA6YBuV9Qx5BUC8YbXP9YjZlM+k7YTVawzXJFgk=",
-      "Mythril.Blazor.ko4ee3yl5s.wasm": "sha256-zNY+CjfvGXHxkJAz2CzbLSbiUQsUgnXbduPEinpIkE8=",
-      "Mythril.Data.v3xb0dtspq.wasm": "sha256-W6DXgwd1N8h4JZEpLc7ElPrDcvSfGM7yvLhl+AHxIFc=",
+      "Mythril.Blazor.f16sq8fj8l.wasm": "sha256-bcg/KFlxu4GOVdcYg5Xx4V2AeqoahEfrGcfxWK2zWCw=",
+      "Mythril.Data.0rg3fvtam7.wasm": "sha256-dO0t7oFnqoTfQ1dTSzBfJ2gjXEUyhyuS47oxV/Q2nNg=",
       "Newtonsoft.Json.jcjjiqe038.wasm": "sha256-s8KVuknfxWl1cuDvQM/OnpBfnpM1rxzvzq21S1cF36U=",
       "SimpleInjection.frk3rn5p8t.wasm": "sha256-29J24RBa9d4RFOUT6LqzSLWhhDmzyqrIZ/uZQpQc7jM=",
       "System.7mkjnfwul0.wasm": "sha256-H4K9w0OHWwZCaMDfVwQjW0dSqnnS/iuCkysBB+Q2c3A=",
