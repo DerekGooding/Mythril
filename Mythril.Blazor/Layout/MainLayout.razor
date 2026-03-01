@@ -7,15 +7,37 @@
     <div class="top-row px-4">
         <button class="btn btn-outline-primary mx-2" @onclick="SaveGame">Save</button>
         <button class="btn btn-outline-secondary mx-2" @onclick="LoadGame">Load</button>
+        <button class="btn btn-outline-info mx-2" @onclick="ToggleFeedback">Feedback</button>
     </div>
 
-    <article class="content">
-        @Body
-    </article>
+    <div class="main-container">
+        <article class="content">
+            @Body
+        </article>
+
+        @if (_showFeedback)
+        {
+            <div class="feedback-drawer">
+                <div class="drawer-header">
+                    <h5>User Feedback</h5>
+                    <button class="btn-close" @onclick="ToggleFeedback"></button>
+                </div>
+                <div class="drawer-content">
+                    <FeedbackPanel />
+                </div>
+            </div>
+            <div class="drawer-backdrop" @onclick="ToggleFeedback"></div>
+        }
+    </div>
+    
     <Snackbar />
 </main>
 
 @code {
+    private bool _showFeedback = false;
+
+    private void ToggleFeedback() => _showFeedback = !_showFeedback;
+
     private async Task SaveGame()
     {
         await Persistence.SaveAsync();
