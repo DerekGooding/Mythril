@@ -7,6 +7,7 @@
 @inject ThemeService themeService
 @inject NavigationManager navigationManager
 @inject SnackbarService SnackbarService
+@inject AuthService AuthService
 
 <PageTitle>Mythril</PageTitle>
 
@@ -14,10 +15,13 @@
     <div class="row">
         <div class="col-12">
             <button class="btn btn-primary" @onclick="ToggleTheme">Toggle Theme</button>
-            <button class="btn @(resourceManager.IsTestMode ? "btn-warning" : "btn-outline-secondary")" 
-                    @onclick="ToggleTestMode">
-                Test Mode: @(resourceManager.IsTestMode ? "ON" : "OFF")
-            </button>
+            @if (AuthService.IsAuthenticated)
+            {
+                <button class="btn @(resourceManager.IsTestMode ? "btn-warning" : "btn-outline-secondary")" 
+                        @onclick="ToggleTestMode">
+                    Test Mode: @(resourceManager.IsTestMode ? "ON" : "OFF")
+                </button>
+            }
         </div>
     </div>
     <div class="row">

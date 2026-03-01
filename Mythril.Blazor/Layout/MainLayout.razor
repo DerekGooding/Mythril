@@ -4,13 +4,21 @@
 @inject SnackbarService Snackbar
 @inject VersionService VersionService
 @inject NavigationManager Navigation
+@inject AuthService AuthService
 
 <main>
     <div class="top-row px-4 justify-content-between">
         <div class="d-flex align-items-center">
             <button class="btn btn-outline-primary mx-2" @onclick="SaveGame">Save</button>
             <button class="btn btn-outline-secondary mx-2" @onclick="LoadGame">Load</button>
-            <button class="btn btn-outline-info mx-2" @onclick="ToggleFeedback">Feedback</button>
+            @if (AuthService.IsAuthenticated)
+            {
+                <button class="btn btn-outline-info mx-2" @onclick="ToggleFeedback">Feedback</button>
+            }
+            else
+            {
+                <button class="btn btn-sm btn-link text-muted" @onclick="ToggleFeedback">Admin</button>
+            }
         </div>
         
         <div class="version-info d-flex align-items-center">
@@ -34,11 +42,24 @@
         {
             <div class="feedback-drawer">
                 <div class="drawer-header">
-                    <h5>User Feedback (DEBUG: OPEN)</h5>
+                    <h5>@(AuthService.IsAuthenticated ? "Developer Console" : "Admin Login")</h5>
                     <button class="btn-close" @onclick="ToggleFeedback"></button>
                 </div>
                 <div class="drawer-content">
-                    <FeedbackPanel />
+                    @if (AuthService.IsAuthenticated)
+                    {
+                        <FeedbackPanel />
+                        <hr />
+                        <button class="btn btn-sm btn-outline-danger w-100" @onclick="Logout">Logout</button>
+                    }
+                    else
+                    {
+                        <div class="p-3">
+                            <label class="form-label">Developer Key</label>
+                            <input type="password" class="form-control mb-3" @bind="_secretKey" @bind:event="oninput" @onkeyup="HandleKeyUp" />
+                            <button class="btn btn-primary w-100" @onclick="Login">Login</button>
+                        </div>
+                    }
                 </div>
             </div>
             <div class="drawer-backdrop" @onclick="ToggleFeedback"></div>
@@ -50,6 +71,7 @@
 
 @code {
     private bool _showFeedback = false;
+    private string _secretKey = "";
 
     protected override void OnInitialized()
     {
@@ -58,8 +80,32 @@
 
     private void ToggleFeedback() 
     {
-        Console.WriteLine($"Toggling Feedback. Current state: {_showFeedback}");
         _showFeedback = !_showFeedback;
+    }
+
+    private async Task Login()
+    {
+        if (await AuthService.Authenticate(_secretKey))
+        {
+            _secretKey = "";
+            Snackbar.Show("Developer mode enabled.", "success");
+        }
+        else
+        {
+            Snackbar.Show("Invalid key.", "danger");
+        }
+    }
+
+    private async Task HandleKeyUp(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter") await Login();
+    }
+
+    private async Task Logout()
+    {
+        await AuthService.Logout();
+        _showFeedback = false;
+        Snackbar.Show("Developer mode disabled.", "info");
     }
 
     private void RefreshPage() => Navigation.NavigateTo(Navigation.Uri, forceLoad: true);
@@ -76,11 +122,6 @@
         {
             await Persistence.LoadAsync();
             Snackbar.Show("Game Loaded!", "success");
-            // Force reload to refresh state if needed, or rely on Blazor's reactivity if we wired it up correctly.
-            // Since ResourceManager is a singleton and injected, components might need a state has changed trigger.
-            // For now, a simple reload is the safest way to ensure all components reflect the new state if they aren't observing it.
-            // But we can't easily force a full app reload in WASM without JS.
-            // Let's assume the user will navigate or components will update on next interaction for now.
         }
         else
         {

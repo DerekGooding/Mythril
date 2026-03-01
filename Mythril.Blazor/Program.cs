@@ -12,10 +12,14 @@ builder.Services.AddScoped(_ => new HttpClient { BaseAddress = new Uri(builder.H
 builder.Services.AddScoped<DragDropService>();
 builder.Services.AddScoped<ThemeService>();
 builder.Services.AddScoped<VersionService>();
+builder.Services.AddSingleton<AuthService>();
 builder.Services.AddSingleton<FeedbackService>();
 builder.Services.AddSingleton<SnackbarService>();
 
-builder.Logging.AddProvider(new FeedbackLoggerProvider(builder.Services.BuildServiceProvider().GetRequiredService<FeedbackService>()));
+var sp = builder.Services.BuildServiceProvider();
+builder.Logging.AddProvider(new FeedbackLoggerProvider(
+    sp.GetRequiredService<FeedbackService>(),
+    sp.GetRequiredService<AuthService>()));
 
 // Register Content (Singletons)
 builder.Services.AddSingleton(ContentHost.GetContent<Items>());

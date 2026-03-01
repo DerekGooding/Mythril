@@ -3,6 +3,7 @@
 @inject ResourceManager ResourceManager
 @inject VersionService VersionService
 @inject FeedbackService FeedbackService
+@inject AuthService AuthService
 @inject SnackbarService SnackbarService
 
 @if (_isLoaded)
@@ -35,6 +36,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
+        await AuthService.InitializeAsync();
         VersionService.Initialize();
         VersionService.OnUpdateAvailable += () => {
             SnackbarService.Show("New Update Available! Refresh to see changes.", "info");
@@ -49,7 +51,10 @@ else
         }
         catch (Exception ex)
         {
-            await FeedbackService.CaptureError(ex.Message, ex.StackTrace);
+            if (AuthService.IsAuthenticated)
+            {
+                await FeedbackService.CaptureError(ex.Message, ex.StackTrace);
+            }
             Console.WriteLine($"Critical Load Error: {ex.Message}");
             Console.WriteLine(ex.StackTrace);
         }
