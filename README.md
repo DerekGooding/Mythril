@@ -8,7 +8,7 @@
 
 [**Live Website**](https://DerekGooding.Github.io/Mythril)
 
-**Documentation Status:** Last updated March 1, 2026. Fixed theme JS Interop and enabled continuous automated error reporting via Dev Bridge.
+**Documentation Status:** Last updated March 1, 2026. Aligned suggestions and guidance with the FF8/FFT project vision.
 
 ## Project Structure
 **This project is heavily and primarily developed by AI agents.**  
