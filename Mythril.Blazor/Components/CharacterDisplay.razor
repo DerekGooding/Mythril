@@ -85,10 +85,11 @@
 
 <style>
     .character-display {
-        border: 1px solid #ddd;
+        border: 1px solid var(--card-border);
         border-radius: 8px;
         padding: 0.75rem;
-        background: #fdfdfd;
+        background: var(--card-bg);
+        color: var(--text-color);
         position: relative;
     }
     .character-header {
@@ -99,7 +100,7 @@
     }
     .stats-container {
         flex-shrink: 0;
-        background: #f0f0f0;
+        background: var(--stats-bg);
         padding: 4px;
         border-radius: 6px;
         max-width: 60%;
@@ -113,9 +114,10 @@
     }
     .stat-badge {
         font-size: 0.65rem;
-        background: #fff;
+        background: var(--badge-bg);
+        color: var(--badge-text);
         padding: 1px 4px;
-        border: 1px solid #eee;
+        border: 1px solid var(--card-border);
         border-radius: 3px;
         cursor: help;
         transition: all 0.2s;
@@ -123,14 +125,15 @@
         flex-shrink: 0;
     }
     .stat-badge.junctioned {
-        background: #d1e7ff;
-        color: #0056b3;
+        background: var(--junction-badge-bg);
+        color: var(--junction-badge-text);
         font-weight: bold;
-        border: 1px solid #0056b3;
+        border: 1px solid var(--junction-badge-border);
     }
     .junction-menu {
-        background: #f8f9fa;
-        border: 1px solid #dee2e6;
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        color: var(--text-color);
         max-height: 250px;
         overflow-y: auto;
         position: absolute;
@@ -151,9 +154,10 @@
         user-select: none;
         margin: 0;
         font-size: 1.1rem;
+        color: var(--text-color);
     }
     .draggable-name:hover {
-        color: #007bff;
+        color: var(--primary-color);
         text-decoration: underline;
     }
     .draggable-name:active {
@@ -162,6 +166,9 @@
     .btn-xs {
         padding: 0.1rem 0.3rem;
         font-size: 0.7rem;
+    }
+    .text-muted {
+        color: var(--text-muted) !important;
     }
 </style>
 

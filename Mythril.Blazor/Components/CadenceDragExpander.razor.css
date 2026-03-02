@@ -1,5 +1,5 @@
 .expander {
-    border: 1px solid #ccc;
+    border: 1px solid var(--panel-border);
     border-radius: 4px;
     margin-bottom: 10px;
 }
@@ -10,7 +10,8 @@
     align-items: center;
     padding: 10px;
     cursor: pointer;
-    background-color: #f5f5f5;
+    background-color: var(--tab-inactive-bg);
+    color: var(--text-color);
 }
 
 .expander-icon {
@@ -26,6 +27,7 @@
     max-height: 0;
     opacity: 0;
     transition: max-height 0.3s ease-out, opacity 0.2s ease-out;
+    background-color: var(--panel-bg);
 }
 
 .expander-content.open {
@@ -35,13 +37,15 @@
 
 .inventory-item {
     position: relative;
-    border: 1px solid #eee;
+    border: 1px solid var(--item-border);
     border-radius: 3px;
     padding: 5px;
     text-align: center;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     transition: all 0.2s ease-in-out;
     cursor: grab;
+    background-color: var(--item-bg);
+    color: var(--text-color);
 }
 
 .inventory-item:active {

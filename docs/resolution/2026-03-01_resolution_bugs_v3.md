@@ -20,11 +20,12 @@
 - **Expander Fix**: Replaced JS-driven expansion logic with pure CSS transitions using `max-height` and `opacity`. Additionally, implemented `@key` directives in all `@foreach` loops within `HandPanel.razor` and `CadencePanel.razor`. This ensures Blazor preserves the component state (including `isExpanded`) during rapid data updates, eliminating the "expand and unexpand" flickering bug. Removed obsolete `expander.js`.
 - **Character Stacks**: Enforced strictly horizontal stat listing within cards using `flex-nowrap` and `overflow-x: auto`.
 
-### 3. Theme System Resilience & Cadence Fixes
+### 3. Theme System Overhaul
+- **CSS Variables Implementation**: Standardized the entire UI by moving hardcoded colors into a shared set of CSS variables defined in `:root` within `light-theme.css` and `dark-theme.css`. This ensures that when the theme stylesheet is swapped, all components (Character Cards, Inventory, Quest Cards, Workshop, etc.) update their colors correctly and instantly.
+- **Component Styling**: Updated all `.razor.css` and internal `<style>` blocks to use these variables, eliminating theme-inconsistent "pockets" of hardcoded light colors.
 - **Explicit Scoping**: Updated `ThemeService.cs` to call `window.setTheme` instead of the implicit `setTheme`.
 - **Initialization Order**: Moved global script blocks to the end of `<body>` in `index.html` and added a `setTimeout` guard to the initial theme load to ensure the DOM is fully constructed before JS Interop attempts to access the CSS link element.
 - **Cadence Restoration**: Fixed a bug where cadences were not being re-unlocked when loading a save. `ResourceManager.RestoreCompletedQuest` now correctly re-triggers cadence unlocks associated with restored quests.
-- **Logging**: Added verbose console logging to the JS layer to track exact execution state during theme changes.
 
 ## Verification
 - Quest logic verified via unit tests.

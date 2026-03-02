@@ -1,8 +1,10 @@
 .drop-zone {
-    border: 2px dashed #ccc;
+    border: 2px dashed var(--drop-zone-border);
     padding: 20px;
     text-align: center;
     margin: 10px 0;
+    background-color: var(--drop-zone-bg);
+    color: var(--text-color);
 }
 
 .drop-zone.allowed {

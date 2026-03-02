@@ -1,8 +1,10 @@
 .inventory-panel {
-    border: 1px solid #ccc;
+    border: 1px solid var(--panel-border);
     border-radius: 5px;
     padding: 10px;
     margin-top: 10px;
+    background-color: var(--panel-bg);
+    color: var(--text-color);
 }
 
 .inventory-grid {
@@ -12,16 +14,18 @@
 }
 
 .inventory-item {
-    border: 1px solid #eee;
+    border: 1px solid var(--item-border);
     border-radius: 3px;
     padding: 5px;
     text-align: center;
+    background-color: var(--item-bg);
 }
 
 .item-name {
     font-weight: bold;
+    color: var(--text-color);
 }
 
 .item-quantity {
-    color: #888;
+    color: var(--text-muted);
 }

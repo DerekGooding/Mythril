@@ -44,10 +44,12 @@
 <style>
     .workshop {
         padding: 1rem;
+        background-color: var(--bg-color);
+        color: var(--text-color);
     }
     .refinement-group {
         margin-bottom: 2rem;
-        border-bottom: 1px solid #eee;
+        border-bottom: 1px solid var(--border-color);
         padding-bottom: 1rem;
     }
     .refinement-group.locked {
@@ -60,13 +62,14 @@
         gap: 1rem;
     }
     .recipe-card {
-        border: 1px solid #ddd;
+        border: 1px solid var(--card-border);
         border-radius: 8px;
         padding: 0.75rem;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        background: white;
+        background: var(--card-bg);
+        color: var(--text-color);
     }
     .recipe-details {
         display: flex;
@@ -76,7 +79,7 @@
     }
     .arrow {
         font-weight: bold;
-        color: #888;
+        color: var(--text-muted);
     }
 </style>
 

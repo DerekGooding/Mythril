@@ -93,10 +93,12 @@
 
 <style>
     .header-row {
-        background-color: var(--bs-body-bg);
+        background-color: var(--header-bg);
+        border-bottom-color: var(--header-border);
     }
     .tab-content {
-        background-color: var(--bs-body-bg);
+        background-color: var(--tab-bg);
+        color: var(--text-color);
     }
     .tab-pane > * {
         flex-grow: 1;
@@ -104,6 +106,10 @@
     }
     .home-columns-row {
         height: 0; /* Important for flex-grow-1 inside flex-column to correctly bound children */
+    }
+    .party-row {
+        background-color: var(--tab-inactive-bg) !important;
+        border-bottom-color: var(--header-border) !important;
     }
 </style>
 
