@@ -61,7 +61,7 @@ window.triggerConfettiAt = function(element) {
 // Initial load check
 document.addEventListener('DOMContentLoaded', function() {
     console.log("JS: DOMContentLoaded, performing initial theme sync.");
-    var savedTheme = localStorage.getItem('theme') || 'light-theme';
+    var savedTheme = localStorage.getItem('theme') || 'dark-theme';
     window.setTheme(savedTheme);
 });
 
