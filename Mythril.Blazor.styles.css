@@ -64,10 +64,11 @@
     overflow: hidden;
     max-height: 0;
     opacity: 0;
-    transition: max-height 0.3s ease, opacity 0.3s ease, padding 0.3s ease;
+    transition: max-height 0.3s ease-out, opacity 0.2s ease-out;
 }
 
 .expander-content.open[b-4838z82fju] {
+    max-height: 1000px;
     opacity: 1;
 }
 
@@ -225,10 +226,11 @@
     overflow: hidden;
     max-height: 0;
     opacity: 0;
-    transition: max-height 0.3s ease, opacity 0.3s ease, padding 0.3s ease;
+    transition: max-height 0.3s ease-out, opacity 0.2s ease-out;
 }
 
 .expander-content.open[b-h1r0ru8wr5] {
+    max-height: 1000px; /* Large enough for content */
     opacity: 1;
 }
 /* /Components/HandPanel.razor.rz.scp.css */
