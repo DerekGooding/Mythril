@@ -4,19 +4,47 @@ using Microsoft.JSInterop;
 using Moq;
 using Mythril.Blazor.Components;
 using Mythril.Data;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Mythril.Tests;
 
 [TestClass]
-public class UIComponentTests : BunitTestContext
+public class UIComponentTests : BunitTestBase
 {
+    [TestMethod]
+    public void InventoryPanel_RendersCorrectly()
+    {
+        // Arrange
+        var items = new List<ItemQuantity>
+        {
+            new ItemQuantity(new Item("Potion", "Heals 50 HP", ItemType.Consumable), 5),
+            new ItemQuantity(new Item("Ether", "Restores 20 MP", ItemType.Consumable), 2)
+        };
+        var spells = new List<ItemQuantity>
+        {
+            new ItemQuantity(new Item("Fire", "Fire damage", ItemType.Spell), 10)
+        };
+
+        // Act
+        var cut = RenderComponent<InventoryPanel>(parameters => parameters
+            .Add(p => p.Items, items)
+            .Add(p => p.Spells, spells)
+        );
+
+        // Assert
+        var itemElements = cut.FindComponents<InventoryItem>();
+        Assert.AreEqual(3, itemElements.Count);
+        
+        var potion = itemElements.FirstOrDefault(i => i.Instance.Item.Item.Name == "Potion");
+        Assert.IsNotNull(potion);
+        Assert.AreEqual(5, potion.Instance.Item.Quantity);
+    }
+
     [TestMethod]
     public void QuestProgressCard_RendersCorrectly()
     {
         // Arrange
-        var mockJs = new Mock<IJSRuntime>();
-        Services.AddSingleton(mockJs.Object);
-
         var character = new Character("Hero");
         var quest = new Quest("Test Quest", "Description");
         var detail = new QuestDetail(10, [], [], QuestType.Single);
@@ -44,9 +72,6 @@ public class UIComponentTests : BunitTestContext
     public void QuestProgressCard_ZeroProgress_RendersCorrectly()
     {
         // Arrange
-        var mockJs = new Mock<IJSRuntime>();
-        Services.AddSingleton(mockJs.Object);
-
         var character = new Character("Hero");
         var quest = new Quest("Test Quest", "Description");
         var detail = new QuestDetail(10, [], [], QuestType.Single);
@@ -64,13 +89,23 @@ public class UIComponentTests : BunitTestContext
         Assert.IsNotNull(style);
         Assert.IsTrue(style.Contains("width: 0%"), $"Expected width: 0%, got {style}");
     }
-}
 
-public abstract class BunitTestContext : TestContextWrapper
-{
-    [TestInitialize]
-    public void Setup() => TestContext = new Bunit.TestContext();
+    [TestMethod]
+    public void CharacterDisplay_RendersCorrectly()
+    {
+        // Arrange
+        var character = new Character("Hero");
+        
+        // Act
+        var cut = RenderComponent<CharacterDisplay>(parameters => parameters
+            .Add(p => p.Character, character)
+        );
 
-    [TestCleanup]
-    public void TearDown() => TestContext?.Dispose();
+        // Assert
+        var nameHeader = cut.Find("h4");
+        Assert.AreEqual("Hero", nameHeader.TextContent.Trim());
+        
+        var cadenceInfo = cut.Find(".cadence-info");
+        Assert.IsTrue(cadenceInfo.TextContent.Contains("Cadence: None"));
+    }
 }

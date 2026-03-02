@@ -36,5 +36,118 @@ This document contains foundational mandates for the AI assistant (Gemini) durin
 3. **Staleness**: Review source changes and update the corresponding documentation with actual content improvements.
 4. **Build/Test Errors**: Fix root causes immediately.
 
+## 4. UI Contracts & Determinism
+
+### UI Contract Enforcement
+- Every interactive component must have at least **one bUnit rendering test**.
+- All conditional rendering branches must have test coverage.
+- All user-triggered state transitions must have event-driven tests.
+- All public component parameters must use explicit types and nullable annotations.
+- Components must expose stable DOM anchors using `data-testid` attributes.
+- Tests must target `data-testid` selectors instead of CSS classes or DOM hierarchy.
+
+### Markup Stability Rules
+- All list-based UI loops must use `@key`.
+- Do not generate dynamic wrapper elements that change DOM hierarchy between renders.
+- Avoid inline complex `RenderFragment` lambdas. Extract into named components.
+- Maintain a stable structural shell for each page. Conditional content must not alter the outer layout tree.
+- Do not rely on implicit DOM structure for styling or scripting.
+
+---
+
+## 5. Component Architecture Rules
+
+### ViewModel Separation
+- Razor components must not contain business logic.
+- Components may only:
+  - Bind to ViewModel properties
+  - Raise UI events
+  - Render state
+- All state mutation logic must exist in a ViewModel or application service.
+- ViewModels must have MSTest coverage.
+
+### State Ownership
+- Each stateful component must explicitly declare one of:
+  - Local ephemeral state
+  - Cascading state
+  - PersistenceService state
+- Components must not directly mutate cascading state.
+- Shared state changes must flow through services.
+- State transitions must be deterministic and testable.
+
+---
+
+## 6. UI Regression Protection
+
+### bUnit Requirements
+- All core pages must have at least one rendering test.
+- All forms must have:
+  - Validation tests
+  - Submission tests
+  - Error state tests
+- Snapshot testing (`MarkupMatches`) may be used for stable UI regions.
+
+### Playwright Requirements
+- All major pages must have a Playwright load test.
+- Critical flows must have interaction tests.
+- Playwright must assert:
+  - Successful page load
+  - No console errors
+  - No unhandled promise rejections
+- Snapshot comparisons must only be updated intentionally with justification in commit message.
+
+---
+
+## 7. Layout & CSS Determinism
+
+### Layout Rules
+- Use flexbox or grid for layout.
+- Avoid absolute positioning unless explicitly justified.
+- Do not rely on implicit parent height. All viewport layouts must declare explicit height chains.
+- No JavaScript-based layout manipulation.
+- Animations must use `transform` or `opacity` only.
+
+### CSS Stability
+- Avoid deeply nested selectors.
+- Do not style elements based on DOM depth.
+- Component styles must not rely on fragile parent-child assumptions.
+- CSS changes must not alter structural layout without corresponding test updates.
+
+---
+
+## 8. Razor Strictness & Compile-Time Safety
+
+- Enable nullable reference types.
+- Treat warnings as errors.
+- Do not use `dynamic`.
+- Avoid implicit `object` parameters.
+- All component parameters must declare explicit types.
+- Avoid complex logic inside lifecycle methods. Extract to testable classes.
+
+---
+
+## 9. UI Change Protocol
+
+When modifying UI:
+
+1. Run `dotnet build`.
+2. Run `dotnet test`.
+3. Run Playwright suite.
+4. If snapshot changes occur:
+   - Confirm change is intentional.
+   - Update snapshot with explanation in commit message.
+5. Do not commit UI changes if any UI test fails.
+
+---
+
+## 10. Component Complexity Limits
+
+- No component may exceed:
+  - 150 lines of markup
+  - 100 lines of code-behind
+- Components exceeding this limit must be decomposed.
+- No component may inject more than 5 services.
+- Large forms must be split into subcomponents.
+
 ---
 *Follow these mandates strictly. If a request conflicts with these mandates, clarify with the user.*

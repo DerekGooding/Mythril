@@ -1,188 +1,225 @@
 import os
 import sys
-import xml.etree.ElementTree as ET
 import re
-import subprocess
 import json
 import shutil
+import subprocess
+import xml.etree.ElementTree as ET
+from pathlib import Path
 
-# Load configuration
-CONFIG_PATH = os.path.join(os.path.dirname(__file__), "config.json")
+CONFIG_PATH = Path(__file__).parent / "config.json"
+
 with open(CONFIG_PATH, "r") as f:
     config = json.load(f)
 
 MAX_LINES_PER_FILE = config.get("MAX_LINES_PER_FILE", 250)
 MIN_OVERALL_COVERAGE = config.get("MIN_OVERALL_COVERAGE", 70.0)
 MIN_FILE_COVERAGE = config.get("MIN_FILE_COVERAGE", 50.0)
+MIN_BRANCH_COVERAGE = config.get("MIN_BRANCH_COVERAGE", 50.0)
 DOCS_STALENESS_THRESHOLD = config.get("DOCS_STALENESS_THRESHOLD", 8)
-SOURCE_DIR = config.get("SOURCE_DIR", "src")
-RESULTS_DIR = config.get("RESULTS_DIR", "TestResults")
+
+SOURCE_DIR = Path(config.get("SOURCE_DIR", "src"))
+RESULTS_DIR = Path(config.get("RESULTS_DIR", "TestResults"))
 SOURCE_EXTENSIONS = config.get("SOURCE_EXTENSIONS", [".cs"])
-DOC_FILES = config.get("DOC_FILES", [])
-FEEDBACK_DIR = config.get("FEEDBACK_DIR", "docs/feedback")
-ERRORS_DIR = "docs/errors"
 TEST_COMMAND = config.get("TEST_COMMAND", ["dotnet", "test"])
-COVERAGE_REPORT_PATTERN = config.get("COVERAGE_REPORT_PATTERN", r"coverage\.cobertura\.xml")
+COVERAGE_PATTERN = re.compile(config.get("COVERAGE_REPORT_PATTERN", r"coverage\.cobertura\.xml"))
+
+FAILURES = []
+
+# -----------------------
+# Utilities
+# -----------------------
+
+def record_failure(category, message, metadata=None):
+    FAILURES.append({
+        "category": category,
+        "message": message,
+        "metadata": metadata or {}
+    })
+    print(f"[FAIL] {category}: {message}")
 
 def run_tests():
-    print("--- Generating Fresh Test Results ---")
-    if os.path.exists(RESULTS_DIR):
-        try:
-            shutil.rmtree(RESULTS_DIR)
-        except Exception as e:
-            print(f"[WARNING] Could not remove {RESULTS_DIR}: {e}")
-    
+    print("--- Running Tests ---")
+
+    if RESULTS_DIR.exists():
+        shutil.rmtree(RESULTS_DIR, ignore_errors=True)
+
     try:
         subprocess.check_call(TEST_COMMAND)
-        print("[SUCCESS] Tests completed.")
         return True
     except subprocess.CalledProcessError:
-        print("[ERROR] Tests failed during health check.")
+        record_failure("tests", "dotnet test failed")
         return False
 
-def check_feedback_backlog():
-    print("\n--- Checking User Feedback & Error Backlog ---")
-    total_count = 0
-    for d in [FEEDBACK_DIR, ERRORS_DIR]:
-        if not os.path.exists(d):
-            continue
-        items = [f for f in os.listdir(d) if os.path.isfile(os.path.join(d, f)) and not f.startswith(".")]
-        total_count += len(items)
-        if len(items) > 0:
-            print(f"[FAIL] {len(items)} unresolved items found in {d}!")
-            for item in items:
-                print(f"  - {item}")
-    
-    if total_count == 0:
-        print("[SUCCESS] Feedback and error backlogs are empty.")
-    return total_count
-
-def get_local_changes_since_file(doc_file_path):
-    if not os.path.exists(doc_file_path):
-        return 999 
-    
-    doc_mtime = os.path.getmtime(doc_file_path)
-    changed_count = 0
-    
-    EXCLUDE_DIRS = {"obj", "bin", ".git", "lib", "node_modules", "wwwroot/lib", "TestResults", ".gemini", ".vs", "output"}
-    for root, dirs, files in os.walk(SOURCE_DIR):
-        dirs[:] = [d for d in dirs if d not in EXCLUDE_DIRS]
-        for file in files:
-            if any(file.endswith(ext) for ext in SOURCE_EXTENSIONS):
-                file_path = os.path.join(root, file)
-                if os.path.abspath(file_path) == os.path.abspath(doc_file_path):
-                    continue
-                try:
-                    if os.path.getmtime(file_path) > doc_mtime:
-                        changed_count += 1
-                except Exception:
-                    continue
-    return changed_count
-
-def check_docs_staleness():
-    print("\n--- Checking Documentation Staleness ---")
-    all_up_to_date = True
-    for doc in DOC_FILES:
-        if os.path.exists(doc):
-            changes = get_local_changes_since_file(doc)
-            print(f"{doc}: {changes} source files changed since its last update.")
-            if changes > DOCS_STALENESS_THRESHOLD:
-                print(f"[FAIL] {doc} is stale!")
-                all_up_to_date = False
-        else:
-            print(f"[WARNING] Documentation file {doc} not found.")
-    return all_up_to_date
+# -----------------------
+# Monolith Check
+# -----------------------
 
 def check_monoliths():
-    print(f"--- Checking for Monoliths (> {MAX_LINES_PER_FILE} lines) ---")
-    monolith_count = 0
-    EXCLUDE_DIRS = {"obj", "bin", ".git", "lib", "node_modules", "wwwroot/lib", "TestResults", "output"}
-    for root, dirs, files in os.walk(SOURCE_DIR):
-        dirs[:] = [d for d in dirs if d not in EXCLUDE_DIRS]
-        if any(ex in root.replace("\\", "/") for ex in ["/obj/", "/bin/", "/.git/", "/lib/", "/node_modules/", "/wwwroot/lib/", "/TestResults/", "/output/"]):
-            continue
-        
+    print("--- Checking Monoliths ---")
+    for path in SOURCE_DIR.rglob("*"):
+        if path.suffix in SOURCE_EXTENSIONS and path.is_file():
+            lines = sum(1 for _ in open(path, encoding="utf-8"))
+            if lines > MAX_LINES_PER_FILE:
+                record_failure(
+                    "monolith",
+                    f"{path} exceeds {MAX_LINES_PER_FILE} lines",
+                    {"lines": lines}
+                )
+
+# -----------------------
+# Coverage Parsing
+# -----------------------
+
+def find_latest_coverage():
+    candidates = []
+    search_root = RESULTS_DIR if RESULTS_DIR.exists() else Path(".")
+    for root, _, files in os.walk(search_root):
         for file in files:
-            if any(file.endswith(ext) for ext in SOURCE_EXTENSIONS):
-                path = os.path.join(root, file)
-                try:
-                    with open(path, "r", encoding="utf-8") as f:
-                        lines = len(f.readlines())
-                        if lines > MAX_LINES_PER_FILE:
-                            print(f"[FAIL] {path} has {lines} lines.")
-                            monolith_count += 1
-                except Exception as e:
-                    print(f"[WARNING] Could not read {path}: {e}")
-    return monolith_count
+            if COVERAGE_PATTERN.match(file):
+                full = Path(root) / file
+                candidates.append((full, full.stat().st_mtime))
+
+    if not candidates:
+        record_failure("coverage", "Coverage report not found")
+        return None
+
+    candidates.sort(key=lambda x: x[1], reverse=True)
+    return candidates[0][0]
 
 def parse_coverage():
-    print("\n--- Checking Test Coverage ---")
-    coverage_files = []
-    search_dir = RESULTS_DIR if os.path.exists(RESULTS_DIR) else "."
-    for root, _, files in os.walk(search_dir):
-        for file in files:
-            if re.match(COVERAGE_REPORT_PATTERN, file):
-                path = os.path.join(root, file)
-                coverage_files.append((path, os.path.getmtime(path)))
-    
-    if not coverage_files:
-        print("[ERROR] Coverage report not found.")
-        return 0.0, False
+    print("--- Checking Coverage ---")
 
-    coverage_files.sort(key=lambda x: x[1], reverse=True)
-    coverage_file = coverage_files[0][0]
-    print(f"Using coverage report: {coverage_file}")
+    coverage_file = find_latest_coverage()
+    if not coverage_file:
+        return
 
-    try:
-        tree = ET.parse(coverage_file)
-        root = tree.getroot()
-        overall_line_rate = float(root.attrib["line-rate"]) * 100
-        print(f"Overall Coverage: {overall_line_rate:.2f}%")
-        return overall_line_rate, overall_line_rate >= MIN_OVERALL_COVERAGE
-    except Exception as e:
-        print(f"[ERROR] Could not parse coverage: {e}")
-        return 0.0, False
+    tree = ET.parse(coverage_file)
+    root = tree.getroot()
 
-def export_results(monolith_count, coverage, docs_pass, tests_pass, feedback_count):
+    overall_line = float(root.attrib.get("line-rate", 0)) * 100
+    overall_branch = float(root.attrib.get("branch-rate", 0)) * 100
+
+    if overall_line < MIN_OVERALL_COVERAGE:
+        record_failure(
+            "coverage",
+            "Overall line coverage below threshold",
+            {"actual": overall_line, "required": MIN_OVERALL_COVERAGE}
+        )
+
+    if overall_branch < MIN_BRANCH_COVERAGE:
+        record_failure(
+            "coverage",
+            "Overall branch coverage below threshold",
+            {"actual": overall_branch, "required": MIN_BRANCH_COVERAGE}
+        )
+
+    # Per-file enforcement
+    for cls in root.findall(".//class"):
+        filename = cls.attrib.get("filename")
+        line_rate = float(cls.attrib.get("line-rate", 0)) * 100
+
+        if line_rate < MIN_FILE_COVERAGE:
+            record_failure(
+                "file_coverage",
+                f"{filename} below minimum coverage",
+                {"actual": line_rate, "required": MIN_FILE_COVERAGE}
+            )
+
+# -----------------------
+# Razor Enforcement
+# -----------------------
+
+def razor_files():
+    return list(SOURCE_DIR.rglob("*.razor"))
+
+def check_razor_has_test():
+    print("--- Checking Razor Test Presence ---")
+
+    test_files = list(Path(".").rglob("*.cs"))
+
+    for razor in razor_files():
+        component_name = razor.stem
+        found = False
+        for test in test_files:
+            try:
+                content = test.read_text(encoding="utf-8")
+                if f"RenderComponent<{component_name}>" in content:
+                    found = True
+                    break
+            except:
+                continue
+
+        if not found:
+            record_failure(
+                "razor_test",
+                f"No bUnit test found for {component_name}"
+            )
+
+def check_key_usage():
+    print("--- Checking @key Usage ---")
+    loop_pattern = re.compile(r"@foreach\s*\(")
+
+    for razor in razor_files():
+        content = razor.read_text(encoding="utf-8")
+        if loop_pattern.search(content):
+            if "@key" not in content:
+                record_failure(
+                    "razor_key",
+                    f"@foreach without @key in {razor}"
+                )
+
+def check_data_testid():
+    print("--- Checking data-testid Usage ---")
+
+    interactive_pattern = re.compile(r"<(button|input|form|select)")
+
+    for razor in razor_files():
+        content = razor.read_text(encoding="utf-8")
+        if interactive_pattern.search(content):
+            if "data-testid" not in content:
+                record_failure(
+                    "razor_testid",
+                    f"Interactive elements missing data-testid in {razor}"
+                )
+
+# -----------------------
+# Export Results
+# -----------------------
+
+def export_results():
     summary = {
-        "is_healthy": (monolith_count == 0 and docs_pass and tests_pass and feedback_count == 0),
-        "monoliths": monolith_count,
-        "coverage": coverage,
-        "docs_up_to_date": docs_pass,
-        "tests_passing": tests_pass,
-        "feedback_backlog": feedback_count
+        "is_healthy": len(FAILURES) == 0,
+        "failure_count": len(FAILURES),
+        "failures": FAILURES
     }
-    
+
     os.makedirs("scripts/data", exist_ok=True)
+
     with open("scripts/data/health_summary.json", "w") as f:
         json.dump(summary, f, indent=4)
-    
-    def save_shield(name, label, message, color):
-        with open(f"scripts/data/shield_{name}.json", "w") as f:
-            json.dump({
-                "schemaVersion": 1,
-                "label": label,
-                "message": str(message),
-                "color": color
-            }, f, indent=4)
 
-    save_shield("monoliths", "Monoliths", monolith_count, "brightgreen" if monolith_count == 0 else "red")
-    save_shield("coverage", "Coverage", f"{coverage:.2f}%", "brightgreen" if coverage >= MIN_OVERALL_COVERAGE else "yellow")
-    save_shield("docs", "Docs", "Up-to-date" if docs_pass else "Stale", "brightgreen" if docs_pass else "red")
-    save_shield("tests", "Tests", "Passing" if tests_pass else "Failing", "brightgreen" if tests_pass else "red")
-    save_shield("feedback", "Feedback", "Clear" if feedback_count == 0 else f"{feedback_count} Pending", "brightgreen" if feedback_count == 0 else "orange")
+# -----------------------
+# Entry
+# -----------------------
 
 if __name__ == "__main__":
     skip_tests = "--skip-tests" in sys.argv
-    tests_passed = True if skip_tests else run_tests()
-    m_count = check_monoliths()
-    cov_val, cov_pass = parse_coverage()
-    d_pass = check_docs_staleness()
-    f_count = check_feedback_backlog()
-    all_pass = m_count == 0 and cov_pass and d_pass and tests_passed and f_count == 0
-    export_results(m_count, cov_val, d_pass, tests_passed, f_count)
-    if not all_pass:
+
+    if not skip_tests:
+        run_tests()
+
+    check_monoliths()
+    parse_coverage()
+    check_razor_has_test()
+    check_key_usage()
+    check_data_testid()
+
+    export_results()
+
+    if FAILURES:
         print("\n[FAIL] Health checks failed.")
         sys.exit(1)
-    print("\n[SUCCESS] All health checks passed!")
+
+    print("\n[SUCCESS] All health checks passed.")
     sys.exit(0)

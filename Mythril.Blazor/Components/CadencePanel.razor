@@ -1,6 +1,5 @@
 @using Mythril.Data
 @using Mythril.Blazor.Services
-@inject ResourceManager resourceManager
 @inject DragDropService DragDropService
 
 <div class="hand-panel d-flex flex-column h-100">
@@ -17,9 +16,9 @@
     </div>
 
     <div class="flex-grow-1 overflow-auto mt-2">
-        @if (resourceManager.UnlockedCadences is not null && resourceManager.UnlockedCadences.Any())
+        @if (UnlockedCadences is not null && UnlockedCadences.Any())
         {
-            @foreach (var cadence in resourceManager.UnlockedCadences)
+            @foreach (var cadence in UnlockedCadences)
             {
                 <CadenceDragExpander Cadence="cadence" @key="@cadence.Name">
                     <CadenceTree CadenceData="cadence" />
@@ -29,13 +28,19 @@
         else
         {
             <div class="alert alert-warning">
-                No Cadences Unlocked. Unlocked names count: @resourceManager.UnlockedCadenceNames.Count
+                No Cadences Unlocked. Unlocked names count: @UnlockedCadenceNamesCount
             </div>
         }
     </div>
 </div>
 
 @code {
+    [Parameter]
+    public IEnumerable<Cadence>? UnlockedCadences { get; set; }
+
+    [Parameter]
+    public int UnlockedCadenceNamesCount { get; set; }
+
     [Parameter]
     public EventCallback<Cadence> OnUnequip { get; set; }
 
@@ -45,10 +50,5 @@
         {
             await OnUnequip.InvokeAsync(cadence);
         }
-    }
-
-    protected override void OnInitialized()
-    {
-        Console.WriteLine("CadencePanel Initialized.");
     }
 }
