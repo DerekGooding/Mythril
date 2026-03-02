@@ -88,6 +88,19 @@
   {
     "Name": "Test",
     "Description": "An example cadence for testing assignment.",
-    "Abilities": []
+    "Abilities": [
+      {
+        "Ability": "Test Gold",
+        "Requirements": [ { "Item": "Gold", "Quantity": 100 } ]
+      },
+      {
+        "Ability": "Test Gem",
+        "Requirements": [ { "Item": "Basic Gem", "Quantity": 1 } ]
+      },
+      {
+        "Ability": "Test Free",
+        "Requirements": []
+      }
+    ]
   }
 ]
