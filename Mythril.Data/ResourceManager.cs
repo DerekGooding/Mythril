@@ -1,6 +1,6 @@
 namespace Mythril.Data;
 
-public class ResourceManager(
+public partial class ResourceManager(
     Items items, 
     QuestUnlocks questUnlocks, 
     QuestToCadenceUnlocks questToCadenceUnlocks, 
@@ -68,127 +68,11 @@ public class ResourceManager(
         Console.WriteLine("ResourceManager initialized.");
     }
 
-    public bool IsNeverLocked(Quest quest) => _questUnlocks[quest].Length == 0;
-
-    public bool CanAfford(object item)
-    {
-        if (item is QuestData quest)
-        {
-            foreach (var requirement in quest.Requirements)
-            {
-                if (!Inventory.Has(requirement.Item, requirement.Quantity))
-                {
-                    return false;
-                }
-            }
-        }
-
-        if(item is CadenceUnlock ability)
-        {
-            foreach(var requirement in ability.Requirements)
-            {
-                if (!Inventory.Has(requirement.Item, requirement.Quantity))
-                {
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    }
-
     public void UpdateAvaiableCadences()
     {
         UnlockedCadences = [.. _lockedCadences.Where(x => !x.Value).Select(x => x.Key)];
         UnlockedCadenceNames = [.. UnlockedCadences.Select(c => c.Name)];
         Console.WriteLine($"Unlocked Cadences Updated: {string.Join(", ", UnlockedCadenceNames)}");
-    }
-
-    private void LockQuest(Quest quest)
-    {
-        foreach(var location in UsableLocations)
-        {
-            location.Quests.Remove(quest);
-        }
-    }
-
-    private void UnlockQuest(Quest quest)
-    {
-        _completedQuests.Add(quest);
-        foreach(var location in UsableLocations)
-        {
-            foreach(var data in location.LockedQuests)
-            {
-                if (_questDetails[data].Type == QuestType.Single && _completedQuests.Contains(data))
-                    continue;
-                if (IsComplete(_questUnlocks[data]))
-                    location.Quests.Add(data);
-            }
-        }
-    }
-
-    private bool IsComplete(Quest[] quests) => quests.All(_completedQuests.Contains);
-
-    public void PayCosts(object item)
-    {
-        if (item is QuestData quest)
-        {
-            if (quest.Type == QuestType.Single) LockQuest(quest.Quest);
-
-            foreach (var requirement in quest.Requirements)
-                Inventory.Remove(requirement.Item, requirement.Quantity);
-        }
-        if(item is CadenceUnlock unlock)
-        {
-            foreach (var requirement in unlock.Requirements)
-                Inventory.Remove(requirement.Item, requirement.Quantity);
-        }
-    }
-
-    public void StartQuest(object item, Character character)
-    {
-        if (CanAfford(item))
-        {
-            PayCosts(item);
-            double duration = 10; // Default
-            if (item is QuestData quest)
-            {
-                duration = IsTestMode ? 3 : quest.DurationSeconds;
-                if (!IsTestMode)
-                {
-                    // Strength reduces recurring quest duration
-                    if (quest.Type == QuestType.Recurring)
-                    {
-                        int strength = JunctionManager.GetStatValue(character, "Strength");
-                        duration /= (1.0 + (strength / 100.0));
-                    }
-                    // Vitality reduces single quest duration
-                    else if (quest.Type == QuestType.Single)
-                    {
-                        int vitality = JunctionManager.GetStatValue(character, "Vitality");
-                        duration /= (1.0 + (vitality / 100.0));
-                    }
-                }
-                lock(_questLock)
-                {
-                    ActiveQuests.Add(new QuestProgress(quest, quest.Description, (int)Math.Max(1, duration), character));
-                }
-            }
-            if(item is CadenceUnlock unlock)
-            {
-                duration = IsTestMode ? 3 : 30; // Increased base duration for Cadence unlocks
-                if (!IsTestMode)
-                {
-                    // Magic reduces cadence unlock duration
-                    int magic = JunctionManager.GetStatValue(character, "Magic");
-                    duration /= (1.0 + (magic / 100.0));
-                }
-                lock(_questLock)
-                {
-                    ActiveQuests.Add(new QuestProgress(unlock, unlock.Ability.Description, (int)Math.Max(1, duration), character));
-                }
-            }
-        }
     }
 
     public void Tick(double deltaSeconds)
@@ -203,22 +87,6 @@ public class ResourceManager(
                 }
             }
         }
-    }
-
-    public async Task ReceiveRewards(object item)
-    {
-        if (item is QuestData quest)
-        {
-            foreach (var reward in quest.Rewards) Inventory.Add(reward.Item, reward.Quantity);
-            UnlockQuest(quest.Quest);
-            foreach (var cadence in _questToCadenceUnlocks[quest.Quest]) UnlockCadence(cadence);
-        }
-        if(item is CadenceUnlock unlock)
-        {
-            UnlockedAbilities.Add(unlock.Ability);
-            UpdateMagicCapacity();
-        }
-        await Task.CompletedTask;
     }
 
     public void UpdateMagicCapacity()
@@ -244,12 +112,4 @@ public class ResourceManager(
 
     public IEnumerable<Quest> GetCompletedQuests() => _completedQuests;
     public void ClearCompletedQuests() => _completedQuests.Clear();
-    public void RestoreCompletedQuest(Quest quest)
-    {
-        UnlockQuest(quest);
-        foreach (var cadence in _questToCadenceUnlocks[quest])
-        {
-            UnlockCadence(cadence);
-        }
-    }
 }
