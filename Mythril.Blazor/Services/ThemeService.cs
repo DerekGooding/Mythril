@@ -47,12 +47,12 @@ public class ThemeService(IJSRuntime jsRuntime, ILogger<ThemeService> logger)
         try
         {
             var theme = await _jsRuntime.InvokeAsync<string>("localStorage.getItem", _themeKey);
-            return theme ?? "light-theme";
+            return theme ?? "dark-theme";
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to get theme from localStorage");
-            return "light-theme";
+            return "dark-theme";
         }
     }
 

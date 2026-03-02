@@ -26,5 +26,6 @@ This project uses agentic workflows to maintain its health and quality.
 ## Recent Improvements (March 1, 2026)
 - **UI Stability**: Migrated expanders to CSS Grid and stabilized progress bars by removing problematic transitions.
 - **Layout Integrity**: Standardized the 2-column layout and enforced horizontal stats.
-- **Theming**: Completed a universal theme variable audit, including the Party section and progress bars.
+- **Integrated Progress**: Integrated UI progress bars directly onto character cards for assigned tasks, providing better visibility for active character states.
+- **Theming**: Completed a universal theme variable audit and switched the system-wide default theme to dark-mode.
 - **Drag-and-Drop**: Fixed Cadence equipping/unequipping logic and UI.

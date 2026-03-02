@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="css/app.css" />
     <link rel="stylesheet" href="css/completion-effects.css" />
     <link rel="icon" type="image/png" href="favicon.png" />
-    <link id="theme" rel="stylesheet" href="css/light-theme.css" />
+    <link id="theme" rel="stylesheet" href="css/dark-theme.css" />
     <link href="Mythril.Blazor.styles.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
@@ -87,7 +87,7 @@
 
         // Run initial theme sync
         (function() {
-            var savedTheme = localStorage.getItem('theme') || 'light-theme';
+            var savedTheme = localStorage.getItem('theme') || 'dark-theme';
             window.setTheme(savedTheme);
         })();
     </script>
