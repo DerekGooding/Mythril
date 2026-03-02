@@ -9,6 +9,7 @@
 @inject NavigationManager navigationManager
 @inject SnackbarService SnackbarService
 @inject AuthService AuthService
+@inject PersistenceService persistenceService
 
 <PageTitle>Mythril</PageTitle>
 
@@ -22,6 +23,7 @@
                     @onclick="ToggleTestMode">
                 Test Mode: @(resourceManager.IsTestMode ? "ON" : "OFF")
             </button>
+            <button class="btn btn-outline-success" @onclick="SaveGame">Save Game</button>
         }
         <div class="flex-grow-1">
             @if (resourceManager is not null)
@@ -105,9 +107,12 @@
 @using System.Timers
 @code {
     private Timer? timer;
+    private int saveCounter = 0;
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
+        await persistenceService.LoadAsync();
+        
         timer = new Timer(100);
         timer.Elapsed += (sender, args) => { _ = Task.Run(OnTimerElapsed); };
         timer.AutoReset = true;
@@ -124,6 +129,12 @@
     private void ToggleTestMode()
     {
         resourceManager.IsTestMode = !resourceManager.IsTestMode;
+    }
+
+    private async Task SaveGame()
+    {
+        await persistenceService.SaveAsync();
+        SnackbarService.Show("Game Saved", "info");
     }
 
     private async Task TaskDropped((object item, Character character) args)
@@ -143,6 +154,14 @@
     private async Task OnTimerElapsed()
     {
         resourceManager.Tick(0.1); 
+        
+        saveCounter++;
+        if (saveCounter >= 300) // Save every 30 seconds
+        {
+            saveCounter = 0;
+            await persistenceService.SaveAsync();
+        }
+
         await InvokeAsync(StateHasChanged);
     }
 

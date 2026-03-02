@@ -75,6 +75,9 @@ public class PersistenceService(
             var cadence = cadences.All.FirstOrDefault(x => x.Name == name);
             if (cadence.Name != null) resourceManager.UnlockCadence(cadence);
         }
+        // Ensure Test is always unlocked
+        var testCadence = cadences.All.FirstOrDefault(c => c.Name == "Test");
+        if (testCadence.Name != null) resourceManager.UnlockCadence(testCadence);
 
         // Restore Abilities
         resourceManager.UnlockedAbilities.Clear();

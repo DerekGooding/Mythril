@@ -13,13 +13,15 @@
 - **CSS Cleanup**: Removed a hardcoded `750px` height from `HandPanel.razor.css` that was preventing the tab content from shrinking naturally.
 
 ### 2. Cadence System Fixes
-- **Initial Cadence**: Added a "Test" cadence to `cadences.json`. This cadence is specifically designed for UI testing; it has no abilities but allows for character assignment validation.
-- **Pre-Unlock Logic**: Updated `ResourceManager.Initialize` to automatically unlock the "Test" cadence on startup.
-- **Panel Visibility**: Modified `CadencePanel.razor` to display all unlocked cadences regardless of whether they possess abilities.
+- **Initial Cadence**: Added a "Test" cadence to `cadences.json`. This cadence is specifically designed for UI testing; it has no abilities but is fully assignable.
+- **Pre-Unlock & Persistence**: Updated `ResourceManager.Initialize` and `PersistenceService.LoadAsync` to ensure the "Test" cadence is always unlocked, even when restoring from a save.
+- **Empty Tab Resolved**: Fixed `Home.razor` to correctly call `PersistenceService.LoadAsync` on initialization, ensuring data is restored and cadences populate the tab.
+- **Panel Visibility**: Modified `CadencePanel.razor` to display all unlocked cadences, and fixed `CadencePanel.razor.css` to allow natural height scaling.
 
-### 3. Thread Safety & Stability
-- **Locked Access**: Implemented a `lock` object in `ResourceManager` to protect the `ActiveQuests` collection.
-- **Safe Removal**: Added `RemoveActiveQuest` to handle deletions safely during the completion phase, preventing race conditions between the background timer thread and the UI rendering thread.
+### 3. Layout & Character Display
+- **Party Layout Restored**: Returned the `Party` section to the right-side column in `Home.razor`. Characters are now listed vertically again.
+- **Horizontal Stats**: Refactored `CharacterDisplay.razor` to ensure stats are strictly horizontal using `flex-nowrap` and `overflow-x: auto`. The stats container is width-constrained to prevent pushing other header elements off-screen.
+- **Draggable Cadences**: Verified that cadences can be dragged from the Cadence tab and dropped onto characters in the Party section.
 
 ## Verification
 - Verified that location expanders fully collapse and remove their height from the scroll area.
