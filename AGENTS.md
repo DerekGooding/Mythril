@@ -18,9 +18,12 @@ This project uses agentic workflows to maintain its health and quality.
 - **InventoryManager**: Manages items, spells, and capacity enforcement.
 - **Data-Driven**: Content is located in `Mythril.Blazor/wwwroot/data/*.json`.
 
+## Testing Infrastructure
+- **Headless Testing**: `Mythril.Headless` verifies game logic and data integrity without a UI.
+- **Theme Testing**: `Mythril.ThemeTest` isolates and validates theme switching interop.
+- **Live Diagnostics**: `TestRunner.razor` provides runtime state snapshots and JS eval capabilities for debugging.
+
 ## Recent Improvements (March 1, 2026)
-- **Stability**: Implemented thread-safe quest management in `ResourceManager`.
-- **Expander Logic**: Robust JS-driven height transitions with `display: none` support for full container collapse.
-- **Quest Progression**: Fixed 10x speed bug and implemented stat-influenced durations.
-- **Layout Refinement**: Restored 2-column sidebar layout. Optimized character cards with horizontal, scrolling stats.
-- **Theme Resilience**: Extracted JS logic to `theme.js`. Implemented `Mythril.ThemeTest` for isolated Interop validation.
+- **Data Integrity**: Verified "Test" cadence presence via headless test.
+- **Theme Resilience**: Inlined theme switching logic in `index.html` to eliminate race conditions.
+- **UI Diagnostics**: Added `TestRunner` page and logging to `CadencePanel`.

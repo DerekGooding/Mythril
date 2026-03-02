@@ -15,4 +15,9 @@
 @code {
     [Parameter]
     public IEnumerable<Cadence>? Cadences { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        Console.WriteLine($"CadencePanel: Received {Cadences?.Count() ?? 0} cadences.");
+    }
 }

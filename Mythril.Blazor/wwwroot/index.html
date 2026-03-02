@@ -16,7 +16,23 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
-    <script src="theme.js"></script>
+    
+    <script>
+        // Critical Theme Logic - Inlined for synchronous execution
+        (function() {
+            window.setTheme = function (theme) {
+                var link = document.getElementById('theme');
+                if (link) {
+                    link.setAttribute('href', 'css/' + theme + '.css');
+                }
+                localStorage.setItem('theme', theme);
+            };
+            
+            // Initial load
+            var savedTheme = localStorage.getItem('theme') || 'light-theme';
+            window.setTheme(savedTheme);
+        })();
+    </script>
 </head>
 
 <body>
@@ -38,6 +54,21 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="expander.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script>
+        window.triggerConfettiAt = function(element) {
+            var rect = element.getBoundingClientRect();
+            confetti({
+                particleCount: 40,
+                spread: 50,
+                origin: {
+                    x: (rect.left + rect.right) / 2 / window.innerWidth,
+                    y: (rect.top + rect.bottom) / 2 / window.innerHeight
+                }
+            });
+        };
+        
+        window.getRecentLogs = function() { return "Logs not available in release mode."; };
+    </script>
 </body>
 
 </html>

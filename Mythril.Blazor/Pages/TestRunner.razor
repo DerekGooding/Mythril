@@ -1,0 +1,72 @@
+@page "/test-runner"
+@using Mythril.Data
+@inject ResourceManager resourceManager
+@inject IJSRuntime JS
+
+<div class="container p-4">
+    <h1>AI-Driven Live Testing</h1>
+    
+    <div class="card mb-4">
+        <div class="card-header">State Snapshot</div>
+        <div class="card-body">
+            <pre>@_snapshotJson</pre>
+        </div>
+        <div class="card-footer">
+            <button class="btn btn-primary" @onclick="TakeSnapshot">Refresh Snapshot</button>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header">Theme Test</div>
+        <div class="card-body">
+            <p>Current Theme Link Href: <strong>@_currentThemeHref</strong></p>
+            <p>JS setTheme Type: <strong>@_jsSetThemeType</strong></p>
+            <button class="btn btn-warning" @onclick="RunThemeTest">Run Theme Interop Test</button>
+        </div>
+    </div>
+</div>
+
+@code {
+    private string _snapshotJson = "Loading...";
+    private string _currentThemeHref = "Unknown";
+    private string _jsSetThemeType = "Unknown";
+
+    protected override async Task OnInitializedAsync()
+    {
+        await TakeSnapshot();
+    }
+
+    private async Task TakeSnapshot()
+    {
+        var state = new
+        {
+            UnlockedCadencesCount = resourceManager.UnlockedCadences.Count,
+            UnlockedCadences = resourceManager.UnlockedCadences.Select(c => c.Name).ToList(),
+            ActiveQuestsCount = resourceManager.ActiveQuests.Count,
+            InventoryCount = resourceManager.Inventory.GetItems().Count(),
+            IsTestMode = resourceManager.IsTestMode
+        };
+
+        _snapshotJson = System.Text.Json.JsonSerializer.Serialize(state, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
+        
+        try {
+            _currentThemeHref = await JS.InvokeAsync<string>("eval", "document.getElementById('theme') ? document.getElementById('theme').getAttribute('href') : 'null'");
+            _jsSetThemeType = await JS.InvokeAsync<string>("eval", "typeof window.setTheme");
+        } catch (Exception ex) {
+            _currentThemeHref = "Error: " + ex.Message;
+        }
+    }
+
+    private async Task RunThemeTest()
+    {
+        try {
+            await JS.InvokeVoidAsync("window.setTheme", "dark-theme");
+            await Task.Delay(500);
+            await TakeSnapshot();
+        } catch (Exception ex) {
+            _snapshotJson += "
+
+Theme Test Error: " + ex.Message;
+        }
+    }
+}
