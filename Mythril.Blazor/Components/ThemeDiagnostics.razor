@@ -12,7 +12,7 @@
                 <div class="alert alert-secondary small overflow-auto" style="max-height: 200px;">
                     @foreach (var log in _logs)
                     {
-                        <div>@log</div>
+                        <div @key="log">@log</div>
                     }
                 </div>
             </div>
@@ -23,7 +23,7 @@
                     <div class="list-group small">
                         @foreach (var snap in _snapshots)
                         {
-                            <div class="list-group-item">
+                            <div @key="snap.Key" class="list-group-item">
                                 <strong>@snap.Key</strong><br />
                                 Bg: @snap.Value.BodyBg | Text: @snap.Value.BodyText<br />
                                 CardBg: @snap.Value.CardBg | PartyBg: @snap.Value.PartyBg<br />
@@ -39,7 +39,7 @@
             </div>
         </div>
 
-        <button class="btn btn-sm btn-primary mt-2" @onclick="RunDiagnostic" disabled="@_isRunning">
+        <button class="btn btn-sm btn-primary mt-2" data-testid="run-audit-button" @onclick="RunDiagnostic" disabled="@_isRunning">
             Run Absolute Theme Audit
         </button>
     </div>

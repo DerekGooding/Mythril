@@ -24,7 +24,7 @@
                 <ul>
                     @foreach (var requirement in QuestData.Requirements)
                     {
-                        <li>@requirement.Item.Name @requirement.Quantity</li>
+                        <li @key="requirement">@requirement.Item.Name @requirement.Quantity</li>
                     }
                 </ul>
             }
@@ -36,7 +36,7 @@
                 <ul>
                     @foreach (var reward in QuestData.Rewards)
                     {
-                        <li>@reward.Item.Name @reward.Quantity</li>
+                        <li @key="reward">@reward.Item.Name @reward.Quantity</li>
                     }
                 </ul>
             }

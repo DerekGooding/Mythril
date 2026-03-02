@@ -17,11 +17,12 @@
 <div class="container-fluid d-flex flex-column h-100 p-0 overflow-hidden">
     <!-- Header Row -->
     <div class="header-row flex-shrink-0 p-2 border-bottom d-flex align-items-center gap-2">
-        <button class="btn btn-primary" @onclick="ToggleTheme">Toggle Theme</button>
-        <button class="btn btn-outline-danger" @onclick="ResetGame">Reset Game</button>
+        <button class="btn btn-primary" data-testid="theme-toggle" @onclick="ToggleTheme">Toggle Theme</button>
+        <button class="btn btn-outline-danger" data-testid="reset-game" @onclick="ResetGame">Reset Game</button>
         @if (AuthService.IsAuthenticated)
         {
             <button class="btn @(resourceManager.IsTestMode ? "btn-warning" : "btn-outline-secondary")" 
+                    data-testid="test-mode-toggle"
                     @onclick="ToggleTestMode">
                 Test Mode: @(resourceManager.IsTestMode ? "ON" : "OFF")
             </button>
@@ -42,17 +43,17 @@
             {
                 <ul class="nav nav-tabs flex-shrink-0" id="myTab" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="hand-tab" data-bs-toggle="tab" data-bs-target="#hand" type="button" role="tab">
+                        <button class="nav-link active" id="hand-tab" data-testid="locations-tab" data-bs-toggle="tab" data-bs-target="#hand" type="button" role="tab">
                             Locations
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="cadence-tab" data-bs-toggle="tab" data-bs-target="#cadence" type="button" role="tab">
+                        <button class="nav-link" id="cadence-tab" data-testid="cadence-tab" data-bs-toggle="tab" data-bs-target="#cadence" type="button" role="tab">
                             Cadence
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="workshop-tab" data-bs-toggle="tab" data-bs-target="#workshop" type="button" role="tab">
+                        <button class="nav-link" id="workshop-tab" data-testid="workshop-tab" data-bs-toggle="tab" data-bs-target="#workshop" type="button" role="tab">
                             Workshop
                         </button>
                     </li>
@@ -62,7 +63,9 @@
                         <HandPanel Locations="resourceManager.UsableLocations" />
                     </div>
                     <div class="tab-pane fade flex-grow-1 min-height-0 d-flex flex-column overflow-hidden" id="cadence" role="tabpanel">
-                        <CadencePanel OnUnequip="UnassignCadence" />
+                        <CadencePanel UnlockedCadences="resourceManager.UnlockedCadences" 
+                                      UnlockedCadenceNamesCount="resourceManager.UnlockedCadenceNames.Count"
+                                      OnUnequip="UnassignCadence" />
                     </div>
                     <div class="tab-pane fade flex-grow-1 min-height-0 d-flex flex-column overflow-hidden" id="workshop" role="tabpanel">
                         <Workshop />

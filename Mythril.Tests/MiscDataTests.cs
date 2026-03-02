@@ -30,7 +30,7 @@ public class MiscDataTests
         var augs = statAugments[potion];
         Assert.AreEqual(1, augs.Length);
         Assert.AreEqual("Health", augs[0].Stat.Name);
-        Assert.AreEqual(10, augs[0].ModifierAtFull);
+        Assert.AreEqual(20, augs[0].ModifierAtFull);
     }
 
     [TestMethod]

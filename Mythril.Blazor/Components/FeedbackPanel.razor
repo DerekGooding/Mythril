@@ -13,20 +13,20 @@
     <div class="card p-3">
         <div class="mb-3">
             <label class="form-label">Title</label>
-            <input type="text" class="form-control" @bind="_title" placeholder="Short summary..." />
+            <input type="text" class="form-control" data-testid="feedback-title" @bind="_title" placeholder="Short summary..." />
         </div>
         <div class="mb-3">
             <label class="form-label">Type</label>
-            <select class="form-select" @bind="_type">
+            <select class="form-select" data-testid="feedback-type" @bind="_type">
                 @foreach (var type in Enum.GetValues<FeedbackType>().Where(t => t != FeedbackType.Error))
                 {
-                    <option value="@type">@type</option>
+                    <option @key="type" value="@type">@type</option>
                 }
             </select>
         </div>
         <div class="mb-3">
             <label class="form-label">Description</label>
-            <textarea class="form-control" @bind="_description" rows="3" placeholder="Explain the issue or suggestion..."></textarea>
+            <textarea class="form-control" data-testid="feedback-description" @bind="_description" rows="3" placeholder="Explain the issue or suggestion..."></textarea>
         </div>
         <div class="btn-group">
             <a href="@GetManualGitHubUrl()" target="_blank" class="btn btn-primary @(CanSubmit ? "" : "disabled")">
@@ -34,7 +34,7 @@
             </a>
             @if (AuthService.IsAuthenticated)
             {
-                <button class="btn btn-outline-secondary" @onclick="SaveLocally">
+                <button class="btn btn-outline-secondary" data-testid="feedback-save-local" @onclick="SaveLocally">
                     Save Locally (Dev)
                 </button>
             }
@@ -46,8 +46,8 @@
         <div class="alert alert-info mt-3">
             <h6>Local Backlog (@_pendingCount)</h6>
             <div class="btn-group">
-                <button class="btn btn-sm btn-primary" @onclick="CopySyncString">Copy Sync String</button>
-                <button class="btn btn-sm btn-outline-danger" @onclick="ClearFeedback">Clear All</button>
+                <button class="btn btn-sm btn-primary" data-testid="feedback-copy-sync" @onclick="CopySyncString">Copy Sync String</button>
+                <button class="btn btn-sm btn-outline-danger" data-testid="feedback-clear" @onclick="ClearFeedback">Clear All</button>
             </div>
         </div>
 
@@ -55,7 +55,7 @@
             <div class="list-group">
                 @foreach (var entry in _recentEntries)
                 {
-                    <div class="list-group-item list-group-item-action flex-column align-items-start">
+                    <div @key="entry.Date.Ticks" class="list-group-item list-group-item-action flex-column align-items-start">
                         <div class="d-flex w-100 justify-content-between">
                             <h6 class="mb-1 @(entry.Type == FeedbackType.Error ? "text-danger" : "")">
                                 @entry.Title

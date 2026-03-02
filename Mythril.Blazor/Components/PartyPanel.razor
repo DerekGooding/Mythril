@@ -8,7 +8,8 @@
         {
             @foreach (var character in Party)
             {
-                <CharacterDisplay Character="character"
+                <CharacterDisplay @key="character.Name"
+                                    Character="character"
                                     QuestProgress="QuestProgresses.FirstOrDefault(p => p.Character == character)"
                                     OnQuestDrop="(task) => OnQuestDrop.InvokeAsync((task, character))"
                                     OnCompletionAnimationEnd="(progress) => OnCompletionAnimationEnd.InvokeAsync(progress)"

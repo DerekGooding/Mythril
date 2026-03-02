@@ -33,7 +33,7 @@
                     var val = JunctionManager.GetStatValue(Character, stat.Name);
                     var junction = JunctionManager.Junctions.FirstOrDefault(j => j.Character.Name == Character.Name && j.Stat.Name == stat.Name);
                     
-                    <span class="stat-badge @(junction != null ? "junctioned" : "")" title="@stat.Description @(junction != null ? $"(J: {junction.Magic.Name})" : "")">
+                    <span @key="stat.Name" class="stat-badge @(junction != null ? "junctioned" : "")" title="@stat.Description @(junction != null ? $"(J: {junction.Magic.Name})" : "")">
                         @stat.Name[0]: @val
                     </span>
                 }
@@ -45,7 +45,7 @@
         @if (JunctionManager.CurrentlyAssigned(Character).Any())
         {
             <div class="junction-controls">
-                <button class="btn btn-xs btn-outline-primary" @onclick="ToggleJunctionMenu">Junction</button>
+                <button class="btn btn-xs btn-outline-primary" data-testid="junction-toggle" @onclick="ToggleJunctionMenu">Junction</button>
             </div>
         }
         
@@ -84,15 +84,15 @@
                     bool canJunction = CanJunction(stat);
                     var currentJ = JunctionManager.Junctions.FirstOrDefault(j => j.Character.Name == Character.Name && j.Stat.Name == stat.Name);
                     
-                    <div class="junction-row d-flex justify-content-between align-items-center mb-1">
+                    <div @key="stat.Name" class="junction-row d-flex justify-content-between align-items-center mb-1">
                         <span class="small @(canJunction ? "" : "text-muted")">@stat.Name</span>
                         @if (canJunction)
                         {
-                            <select class="form-select form-select-sm w-auto" @onchange="(e) => HandleJunctionChange(stat, e)">
+                            <select class="form-select form-select-sm w-auto" data-testid="junction-select" @onchange="(e) => HandleJunctionChange(stat, e)">
                                 <option value="">None</option>
                                 @foreach (var spell in resourceManager.Inventory.GetSpells())
                                 {
-                                    <option value="@spell.Item.Name" selected="@(currentJ?.Magic.Name == spell.Item.Name)">
+                                    <option @key="spell.Item.Name" value="@spell.Item.Name" selected="@(currentJ?.Magic.Name == spell.Item.Name)">
                                         @spell.Item.Name (@spell.Quantity)
                                     </option>
                                 }

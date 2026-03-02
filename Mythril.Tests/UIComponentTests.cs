@@ -108,4 +108,21 @@ public class UIComponentTests : BunitTestBase
         var cadenceInfo = cut.Find(".cadence-info");
         Assert.IsTrue(cadenceInfo.TextContent.Contains("Cadence: None"));
     }
+
+    [TestMethod]
+    public void CadencePanel_NoCadences_RendersWarning()
+    {
+        // Arrange
+        var unlockedCadences = new List<Cadence>();
+        
+        // Act
+        var cut = RenderComponent<CadencePanel>(parameters => parameters
+            .Add(p => p.UnlockedCadences, unlockedCadences)
+            .Add(p => p.UnlockedCadenceNamesCount, 0)
+        );
+
+        // Assert
+        var alert = cut.Find(".alert-warning");
+        Assert.IsTrue(alert.TextContent.Contains("No Cadences Unlocked"));
+    }
 }

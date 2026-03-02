@@ -63,6 +63,43 @@ public class ModelTests
     }
 
     [TestMethod]
+    public void Model_Instantiation_Tests()
+    {
+        // Testing Records for coverage
+        var quest = new Quest("Q", "D");
+        Assert.AreEqual("Q", quest.Name);
+
+        var item = new Item("I", "D", ItemType.Material);
+        Assert.AreEqual(ItemType.Material, item.ItemType);
+
+        var iq = new ItemQuantity(item, 10);
+        Assert.AreEqual(10, iq.Quantity);
+
+        var ability = new CadenceAbility("A", "D");
+        var unlock = new CadenceUnlock(ability, [iq]);
+        Assert.AreEqual(ability, unlock.Ability);
+
+        var cadence = new Cadence("C", "D", [unlock]);
+        Assert.AreEqual(1, cadence.Abilities.Length);
+
+        var loc = new Location("L", [quest]);
+        Assert.AreEqual(1, loc.Quests.Count());
+
+        var character = new Character("C");
+        Assert.AreEqual("C", character.Name);
+
+        var stat = new Stat("S", "D");
+        var augment = new StatAugment(stat, 5);
+        Assert.AreEqual(5, augment.ModifierAtFull);
+
+        var detail = new QuestDetail(10, [iq], [iq], QuestType.Recurring);
+        Assert.AreEqual(QuestType.Recurring, detail.Type);
+
+        var junction = new Junction(character, stat, item);
+        Assert.AreEqual(character, junction.Character);
+    }
+
+    [TestMethod]
     public void QuestToCadenceUnlocks_Tests()
     {
         var content = new QuestToCadenceUnlocks();
@@ -94,5 +131,15 @@ public class ModelTests
         var recipe = new Recipe(1, item, 1);
         var dict = RefinementBuilder.Recipes(new KeyValuePair<Item, Recipe>(item, recipe));
         Assert.AreEqual(1, dict.Count);
+    }
+
+    [TestMethod]
+    public void Cadences_Load_Tests()
+    {
+        var content = new Cadences();
+        var c = new Cadence("C", "D", []);
+        content.Load([c]);
+        Assert.AreEqual(1, content.All.Length);
+        Assert.AreEqual("C", content.All[0].Name);
     }
 }

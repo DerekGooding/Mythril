@@ -13,7 +13,7 @@
         var ability = refinement.Key;
         var hasAbility = resourceManager.UnlockedAbilities.Contains(ability);
         
-        <div class="refinement-group @(hasAbility ? "" : "locked")">
+        <div @key="ability.Name" class="refinement-group @(hasAbility ? "" : "locked")">
             <h4>@ability.Name @(hasAbility ? "" : "(Locked)")</h4>
             
             <div class="recipe-list">
@@ -23,13 +23,14 @@
                     var recipe = recipeKvp.Value;
                     var canAfford = resourceManager.Inventory.Has(inputItem, recipe.InputQuantity);
                     
-                    <div class="recipe-card">
+                    <div @key="inputItem.Name" class="recipe-card">
                         <div class="recipe-details">
                             <span>@recipe.InputQuantity x @inputItem.Name</span>
                             <span class="arrow">→</span>
                             <span>@recipe.OutputQuantity x @recipe.OutputItem.Name</span>
                         </div>
                         <button class="btn btn-sm @(canAfford && hasAbility ? "btn-success" : "btn-secondary")" 
+                                data-testid="craft-button"
                                 disabled="@(!(canAfford && hasAbility))"
                                 @onclick="() => Craft(inputItem, recipe)">
                             Craft

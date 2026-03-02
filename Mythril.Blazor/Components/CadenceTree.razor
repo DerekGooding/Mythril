@@ -8,7 +8,7 @@
         var canAfford = resourceManager.CanAfford(abilityUnlock);
         var cardClass = isUnlocked ? "ability-card unlocked" : canAfford ? "ability-card affordable" : "ability-card locked";
 
-        <div class="@cardClass" title="@GetTooltip(abilityUnlock)">
+        <div @key="abilityUnlock" class="@cardClass" title="@GetTooltip(abilityUnlock)">
             <div class="card-header">@abilityUnlock.Ability.Name</div>
             <div class="card-body">
                 @abilityUnlock.Ability.Description

@@ -17,7 +17,7 @@
                 <ul>
                     @foreach (var requirement in Unlock.Requirements)
                     {
-                        <li>@requirement.Item.Name @requirement.Quantity</li>
+                        <li @key="requirement">@requirement.Item.Name @requirement.Quantity</li>
                     }
                 </ul>
             }

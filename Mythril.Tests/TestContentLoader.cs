@@ -78,7 +78,7 @@ public static class TestContentLoader
             var health = stats.All.First(s => s.Name == "Health");
             var potion = items.All.First(i => i.Name == "Potion");
             statAugments.Load(new Dictionary<Item, StatAugment[]> {
-                { potion, [new StatAugment(health, 10)] }
+                { potion, [new StatAugment(health, 20)] }
             });
 
             var abilityAugments = ContentHost.GetContent<AbilityAugments>();

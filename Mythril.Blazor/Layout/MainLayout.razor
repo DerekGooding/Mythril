@@ -9,7 +9,7 @@
 <main>
     <div class="top-row px-4 justify-content-between">
         <div class="d-flex align-items-center">
-            <button class="btn btn-outline-info mx-2" @onclick="ToggleFeedback">Feedback</button>
+            <button class="btn btn-outline-info mx-2" data-testid="feedback-toggle" @onclick="ToggleFeedback">Feedback</button>
         </div>
         
         <div class="version-info d-flex align-items-center">
@@ -18,7 +18,7 @@
             </span>
             @if (VersionService.IsUpdateAvailable)
             {
-                <button class="btn btn-sm btn-warning animate-pulse" @onclick="RefreshPage">
+                <button class="btn btn-sm btn-warning animate-pulse" data-testid="update-button" @onclick="RefreshPage">
                     <span class="material-icons-outlined small" style="font-size: 1rem; vertical-align: middle;">refresh</span>
                     Update Available
                 </button>
@@ -36,14 +36,14 @@
             <div class="feedback-drawer">
                 <div class="drawer-header">
                     <h5>@(AuthService.IsAuthenticated ? "Developer Console" : "Feedback")</h5>
-                    <button class="btn-close" @onclick="ToggleFeedback"></button>
+                    <button class="btn-close" data-testid="drawer-close" @onclick="ToggleFeedback"></button>
                 </div>
                 <div class="drawer-content">
                     <FeedbackPanel />
                     @if (AuthService.IsAuthenticated)
                     {
                         <hr />
-                        <button class="btn btn-sm btn-outline-danger w-100" @onclick="Logout">Disable Dev Mode</button>
+                        <button class="btn btn-sm btn-outline-danger w-100" data-testid="dev-mode-disable" @onclick="Logout">Disable Dev Mode</button>
                     }
                 </div>
             </div>
