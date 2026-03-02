@@ -13,7 +13,7 @@ This project uses agentic workflows to maintain its health and quality.
 - **Feedback Integrity**: Every cleared item in `docs/feedback/` or `docs/errors/` must have a corresponding technical resolution file in `docs/resolution/`.
 
 ## Architecture & State
-- **ResourceManager**: Core game engine managing quests, locations, and global state.
+- **ResourceManager**: Core game engine managing quests, locations, and global state. Uses thread-safe locking for active tasks.
 - **JunctionManager**: Handles character-cadence assignments and stat calculations.
 - **InventoryManager**: Manages items, spells, and capacity enforcement.
 - **Persistence**: Managed via `PersistenceService` using JSON serialization to `LocalStorage`.
@@ -24,6 +24,7 @@ This project uses agentic workflows to maintain its health and quality.
 - **Live Diagnostics**: `TestRunner.razor` provides runtime state snapshots and JS interop validation.
 
 ## Recent Improvements (March 1, 2026)
-- **Stability**: Fixed CadencePanel and TestRunner compilation issues.
-- **Interop**: Hardened theme switching with re-injection fallback logic.
-- **Layout**: Restored 2-column layout and optimized character card horizontal stat listing.
+- **UI Stability**: Migrated expanders to pure CSS transitions, eliminating flickering during rapid re-renders.
+- **Layout Integrity**: Refactored `Home.razor` with robust flexbox constraints to prevent vertical scroll area overflow.
+- **Interop**: Hardened theme switching with re-injection fallback logic and explicit `window` scoping.
+- **Quest Logic**: Fixed re-unlock loops and implemented stat-influenced durations.

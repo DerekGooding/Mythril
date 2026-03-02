@@ -34,9 +34,9 @@
     </div>
 
     <!-- Main Content Area: Two Columns -->
-    <div class="row home-columns-row flex-grow-1 min-height-0 m-0">
+    <div class="row home-columns-row flex-grow-1 min-height-0 m-0 overflow-hidden">
         <!-- Left column with tabs -->
-        <div class="col-8 d-flex flex-column h-100 p-2">
+        <div class="col-8 d-flex flex-column h-100 p-2 overflow-hidden">
             @if (resourceManager is not null)
             {
                 <ul class="nav nav-tabs flex-shrink-0" id="myTab" role="tablist">
@@ -63,7 +63,6 @@
                     <div class="tab-pane fade flex-grow-1 overflow-hidden d-flex flex-column" id="cadence" role="tabpanel">
                         <CadencePanel />
                     </div>
-
                     <div class="tab-pane fade flex-grow-1 overflow-hidden d-flex flex-column" id="workshop" role="tabpanel">
                         <Workshop />
                     </div>
@@ -76,7 +75,7 @@
         </div>
 
         <!-- Right column with PartyPanel (Vertical listing) -->
-        <div class="col-4 d-flex flex-column h-100 p-2 border-start bg-light">
+        <div class="col-4 d-flex flex-column h-100 p-2 border-start bg-light overflow-hidden">
             @if (resourceManager is not null)
             {
                 <PartyPanel Party="resourceManager.Characters"
@@ -102,6 +101,9 @@
     .tab-pane > * {
         flex-grow: 1;
         min-height: 0;
+    }
+    .home-columns-row {
+        height: 0; /* Important for flex-grow-1 inside flex-column to correctly bound children */
     }
 </style>
 

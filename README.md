@@ -18,16 +18,15 @@ From architecture and core logic to the Blazor frontend and DevOps pipelines, My
 Mythril is an RPG-inspired web application built with **.NET 10** and **Blazor WebAssembly**. It serves as a sandbox for exploring agentic development patterns and modern C# architectures.
 
 ### Key Systems
-- **Character Core**: Modular system where characters share baseline stats, differentiated by assigned Cadences and junctioned magic. Character cards feature a strictly horizontal stat layout for optimal vertical space.
+- **Character Core**: Modular system where characters share baseline stats, differentiated by assigned Cadences and junctioned magic. Character cards feature horizontal stat layout and vertical party stacking.
 - **Junctioning**: Assign magic items to character stats to gain powerful bonuses, inspired by classic RPG mechanics.
 - **Cadence System**: Progression mechanic where `Cadences` provide `CadenceAbilities`. Unlocking is performed by assigning characters to specific ability nodes.
 - **Quest & Progression**: Real-time asynchronous tick system managing quests, durations, and rewards, with offline progress continuity.
-- **Diagnostics & Testing**: Includes specialized projects like `Mythril.Headless` for logic validation and `Mythril.ThemeTest` for isolated system behaviors like theme switching.
+- **UI Stability**: Advanced flexbox layouts and CSS-driven transitions ensure a responsive, flicker-free experience even during rapid state updates.
 
 ## 🛠️ Technical Stack
 - **Frontend**: Blazor WebAssembly (.NET 10)
 - **Core Logic**: C# 13 / .NET 10 Class Libraries
-- **Architecture**: Separated into core managers: `ResourceManager` (Logic), `JunctionManager` (Stats), and `InventoryManager` (Items).
 - **Data**: JSON-driven content for easy modification and agentic updates.
 - **Testing**: MSTest, Moq, and Coverlet for coverage reporting (>89%).
 - **CI/CD**: GitHub Actions for automated deployment and health monitoring.
@@ -41,7 +40,7 @@ We maintain project health through a custom automated suite (`scripts/check_heal
 
 ## 🚀 Getting Started
 1. **Build**: `dotnet build`
-2. **Publish**: `dotnet publish Mythril.Blazor/Mythril.Blazor.csproj -c Release -o output`
+2. **Test**: `dotnet test`
 3. **Health Check**: `python scripts/check_health.py`
 4. **Run**: `dotnet run --project Mythril.Blazor` (then open `https://localhost:5001`)
 

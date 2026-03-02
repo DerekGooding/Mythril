@@ -1,16 +1,15 @@
 @using Mythril.Blazor.Services
 @using Microsoft.JSInterop
 @inject DragDropService DragDropService
-@inject IJSRuntime JS
 
 <div class="expander">
     <div class="expander-header" @onclick="Toggle">
-        <div class="inventory-item" draggable="true" @ondragstart="HandleDragStart">
+        <div class="inventory-item" draggable="true" @ondragstart="HandleDragStart" @onclick:stopPropagation="true">
             <span class="item-name">@Cadence.Name</span>
         </div>
         <span class="expander-icon @(isExpanded ? "expanded" : "")">▼</span>
     </div>
-    <div @ref="contentRef" class="expander-content @(isExpanded ? "open" : "closed")">
+    <div class="expander-content @(isExpanded ? "open" : "closed")">
         @ChildContent
     </div>
 </div>
@@ -23,18 +22,9 @@
     public RenderFragment? ChildContent { get; set; }
 
     private bool isExpanded = false;
-    private ElementReference contentRef;
 
-    private async Task Toggle()
+    private void Toggle()
     {
-        if (!isExpanded)
-        {
-            await JS.InvokeVoidAsync("expander.expand", contentRef);
-        }
-        else
-        {
-            await JS.InvokeVoidAsync("expander.collapse", contentRef);
-        }
         isExpanded = !isExpanded;
     }
 

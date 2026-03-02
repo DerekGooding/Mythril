@@ -16,8 +16,9 @@
 
 ### 2. Layout & Scrolling
 - **Viewport Constraints**: Hardened `app.css` by adding `width: 100vw` and `overflow: hidden` to the `html, body, #app` chain.
-- **Horizontal Character Stacks**: Updated `PartyPanel.razor` to use `d-flex flex-row` and `flex-wrap`, and refactored `Home.razor` into a 3-row vertical layout (Header, Party, Main) to ensure character items no longer overflow the bottom of the page.
-- **Internal Scrolling**: Ensured that the `Home.razor` container and its columns use `flex-grow: 1` and `min-height: 0` to correctly delegate scrolling to the sub-panels (Hand, Party, etc.) rather than the parent window.
+- **Internal Scrolling**: Refactored `Home.razor` to use nested flexbox containers with `overflow: hidden` and `flex-grow: 1`. This correctly delegates scrolling to sub-panels (Hand, Party, etc.) and prevents scroll areas from taking up the entire vertical space or pushing elements off-screen.
+- **Expander Fix**: Replaced JS-driven expansion logic with pure CSS transitions using `max-height` and `opacity`. This eliminated the flickering bug caused by rapid timer-induced re-renders and improved UI performance. Removed obsolete `expander.js`.
+- **Character Stacks**: Enforced strictly horizontal stat listing within cards using `flex-nowrap` and `overflow-x: auto`.
 
 ### 3. Theme System Resilience & Cadence Fixes
 - **Explicit Scoping**: Updated `ThemeService.cs` to call `window.setTheme` instead of the implicit `setTheme`.
