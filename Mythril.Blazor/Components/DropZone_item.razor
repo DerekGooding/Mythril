@@ -7,8 +7,10 @@
 
 <div class="drop-zone @(isShaking ? "shake" : "")"
     @ondragover="HandleDragOver"
+    @ondragover:preventDefault="true"
     @ondrop="HandleDrop"
-    @ondragenter="HandleDragEnter">
+    @ondragenter="HandleDragEnter"
+    @ondragenter:preventDefault="true">
     <p>Drop an item here to assign it.</p>
 </div>
 
@@ -21,37 +23,36 @@
 
     private bool isShaking = false;
 
-    private async Task HandleDragEnter(DragEventArgs args)
+    private void HandleDragEnter(DragEventArgs args)
     {
-        if (DragDropService.Data is ItemQuantity task)
+        if (DragDropService.Data is ItemQuantity)
         {
             args.DataTransfer.DropEffect = "move";
-            await JS.InvokeVoidAsync("eval", "event.preventDefault()");
         }
     }
 
-    private async Task HandleDragOver(DragEventArgs args)
+    private void HandleDragOver(DragEventArgs args)
     {
-        if (DragDropService.Data is ItemQuantity task)
+        if (DragDropService.Data is ItemQuantity)
         {
             args.DataTransfer.DropEffect = "move";
-            await JS.InvokeVoidAsync("eval", "event.preventDefault()");
         }
     }
 
     private async Task HandleDrop()
     {
-        if (DragDropService.Data is not ItemQuantity quest || string.IsNullOrWhiteSpace(quest.Item.Name)) return;
-
-        if (Accepts is null || Accepts(quest))
+        if (DragDropService.Data is ItemQuantity quest && !string.IsNullOrWhiteSpace(quest.Item.Name))
         {
-            await OnItemDrop.InvokeAsync(quest);
+            if (Accepts is null || Accepts(quest))
+            {
+                await OnItemDrop.InvokeAsync(quest);
+            }
+            else
+            {
+                await Shake();
+            }
+            DragDropService.Data = null;
         }
-        else
-        {
-            await Shake();
-        }
-        DragDropService.Data = null;
     }
 
     private async Task Shake()

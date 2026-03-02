@@ -1,5 +1,5 @@
 # Environment Knowledge
-- **Last Reviewed:** March 1, 2026 (UI Simplification & Reset Logic).
+- **Last Reviewed:** March 1, 2026 (UI & Interaction Finalization).
 - **Shell:** PowerShell is used. Standard Unix utilities like `grep` and `cat` are not available. Use `grep_search` tool or PowerShell equivalents (e.g., `Select-String`, `Get-Content`).
 - **Formatting:** `cat -n` equivalent in PowerShell is `Get-Content <file> | ForEach-Object { "$($_.ReadCount) $_" }`.
 
@@ -8,7 +8,7 @@
 This document contains foundational mandates for the AI assistant (Gemini) during development.
 
 ## 1. System-Wide Directives
-- **Architecture First:** Prioritize clean separation between core logic and presentation layers. Separated into `ResourceManager`, `JunctionManager`, and `InventoryManager`.
+- **Architecture First:** Prioritize clean separation between core logic and presentation layers. Core logic is modularized into `ResourceManager`, `JunctionManager`, and `InventoryManager`.
 - **Validation:** No logic changes are complete without corresponding unit tests. For complex system interactions, utilize `Mythril.Headless` scenario-based tests.
 - **Documentation:** Keep documentation synchronized with code changes. Staleness is tracked locally by file modification times.
 - **Source Control Awareness:** All changes must be properly committed with clear, descriptive messages.
@@ -19,10 +19,10 @@ This document contains foundational mandates for the AI assistant (Gemini) durin
 
 ## 2. Technical Standards
 - **Framework/Stack:** .NET 10 (Blazor WebAssembly)
-- **C# Standards**: Use C# 13 features where applicable. Use `@key` in all list-based UI loops to preserve component state.
+- **C# Standards**: Use C# 13 features where applicable. Use `@key` in all list-based UI loops to preserve component state during rapid updates.
 - **Interop**: Use explicit `window.` scoping for JS Interop functions. Ensure robust re-injection fallback logic for critical functions.
-- **State Management**: Use `PersistenceService` for serializable state preservation in `LocalStorage`. Manual save/load UI is deprecated in favor of auto-save and a "Reset Game" option.
-- **Dependencies**: Avoid adding external packages unless essential. Verify usage before employing.
+- **Drag-and-Drop**: Implement idiomatic Blazor drag-and-drop using `@ondragover:preventDefault` and `@ondragenter:preventDefault` to enable reliable drop target behavior.
+- **State Management**: Use `PersistenceService` for serializable state preservation in `LocalStorage`.
 
 ## 3. Project Health & Quality
 - **Test Coverage**: Maintain overall coverage above **70%** (Currently maintained >89%).

@@ -7,8 +7,10 @@
 
 <div class="drop-zone @(isShaking ? "shake" : "")"
     @ondragover="HandleDragOver"
+    @ondragover:preventDefault="true"
     @ondrop="HandleDrop"
-    @ondragenter="HandleDragEnter">
+    @ondragenter="HandleDragEnter"
+    @ondragenter:preventDefault="true">
     @ChildContent
 </div>
 
@@ -24,21 +26,19 @@
 
     private bool isShaking = false;
 
-    private async Task HandleDragEnter(DragEventArgs args)
+    private void HandleDragEnter(DragEventArgs args)
     {
         if (DragDropService.Data is Character)
         {
             args.DataTransfer.DropEffect = "move";
-            await JS.InvokeVoidAsync("window.eval", "event.preventDefault()");
         }
     }
 
-    private async Task HandleDragOver(DragEventArgs args)
+    private void HandleDragOver(DragEventArgs args)
     {
         if (DragDropService.Data is Character)
         {
             args.DataTransfer.DropEffect = "move";
-            await JS.InvokeVoidAsync("window.eval", "event.preventDefault()");
         }
     }
 
