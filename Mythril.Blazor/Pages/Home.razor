@@ -35,9 +35,9 @@
     </div>
 
     <!-- Main Content Area: Two Columns -->
-    <div class="row home-columns-row flex-grow-1 min-height-0 m-0 overflow-hidden">
+    <div class="row flex-grow-1 min-height-0 m-0 overflow-hidden">
         <!-- Left column with tabs -->
-        <div class="col-8 d-flex flex-column h-100 p-2 overflow-hidden border-end">
+        <div class="col-8 d-flex flex-column p-2 overflow-hidden border-end">
             @if (resourceManager is not null)
             {
                 <ul class="nav nav-tabs flex-shrink-0" id="myTab" role="tablist">
@@ -58,13 +58,13 @@
                     </li>
                 </ul>
                 <div class="tab-content flex-grow-1 min-height-0 border border-top-0 d-flex flex-column overflow-hidden">
-                    <div class="tab-pane fade show active flex-grow-1 overflow-auto d-flex flex-column" id="hand" role="tabpanel">
+                    <div class="tab-pane fade show active flex-grow-1 min-height-0 d-flex flex-column overflow-hidden" id="hand" role="tabpanel">
                         <HandPanel Locations="resourceManager.UsableLocations" />
                     </div>
-                    <div class="tab-pane fade flex-grow-1 overflow-auto d-flex flex-column" id="cadence" role="tabpanel">
+                    <div class="tab-pane fade flex-grow-1 min-height-0 d-flex flex-column overflow-hidden" id="cadence" role="tabpanel">
                         <CadencePanel OnUnequip="UnassignCadence" />
                     </div>
-                    <div class="tab-pane fade flex-grow-1 overflow-auto d-flex flex-column" id="workshop" role="tabpanel">
+                    <div class="tab-pane fade flex-grow-1 min-height-0 d-flex flex-column overflow-hidden" id="workshop" role="tabpanel">
                         <Workshop />
                     </div>
                 </div>
@@ -76,7 +76,7 @@
         </div>
 
         <!-- Right column with PartyPanel (Vertical listing) -->
-        <div class="col-4 d-flex flex-column h-100 p-2 overflow-hidden party-column">
+        <div class="col-4 d-flex flex-column p-2 overflow-hidden party-column">
             @if (resourceManager is not null)
             {
                 <PartyPanel Party="resourceManager.Characters"
@@ -102,7 +102,9 @@
         color: var(--text-color);
     }
     .tab-pane {
-        height: 100%;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
     }
     .tab-pane > * {
         flex-grow: 1;

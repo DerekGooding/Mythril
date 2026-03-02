@@ -4,6 +4,8 @@
     padding: 1rem;
     overflow-y: auto;
     overflow-x: hidden;
+    flex-grow: 1;
+    min-height: 0;
 }
 
 .task-container {
