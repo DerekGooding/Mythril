@@ -76,7 +76,7 @@
         </div>
 
         <!-- Right column with PartyPanel (Vertical listing) -->
-        <div class="col-4 d-flex flex-column h-100 p-2 border-start bg-light overflow-hidden">
+        <div class="col-4 d-flex flex-column h-100 p-2 border-start overflow-hidden party-column">
             @if (resourceManager is not null)
             {
                 <PartyPanel Party="resourceManager.Characters"
@@ -111,6 +111,10 @@
     .party-row {
         background-color: var(--tab-inactive-bg) !important;
         border-bottom-color: var(--header-border) !important;
+    }
+    .party-column {
+        background-color: var(--tab-inactive-bg);
+        border-left-color: var(--border-color) !important;
     }
 </style>
 
