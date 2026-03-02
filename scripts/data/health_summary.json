@@ -14,7 +14,7 @@
     "failures": [
         {
             "category": "docs_stale",
-            "message": "AGENTS.md is stale (54 source changes since last update)",
+            "message": "AGENTS.md is stale (55 source changes since last update)",
             "metadata": {}
         }
     ]

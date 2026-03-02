@@ -34,7 +34,7 @@ COVERAGE_PATTERN = re.compile(config.get("COVERAGE_REPORT_PATTERN", r"coverage\.
 FAILURES = []
 
 # -----------------------
-# Utilities
+# Utilities - 
 # -----------------------
 
 def record_failure(category, message, metadata=None):
