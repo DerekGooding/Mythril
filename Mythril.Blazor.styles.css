@@ -1,12 +1,14 @@
 /* /Components/AbilityUnlockCard.razor.rz.scp.css */
 .card[b-imavmvw6g7] {
-    border: 1px solid #ccc;
+    border: 1px solid var(--card-border);
     border-radius: 8px;
     margin: 0.5rem;
     padding: 1rem;
     width: 100%;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     transition: all 0.2s ease-in-out;
+    background-color: var(--card-bg);
+    color: var(--text-color);
 }
 
 .card:hover[b-imavmvw6g7] {
@@ -17,11 +19,13 @@
 .card-header[b-imavmvw6g7] {
     font-weight: bold;
     margin-bottom: 0.5rem;
+    color: var(--text-color);
 }
 
 .card-body p[b-imavmvw6g7] {
     margin-top: 0.25rem;
     margin-bottom: 0.25rem;
+    color: var(--text-color);
 }
 
 .card-content[b-imavmvw6g7] {
@@ -38,7 +42,7 @@
 }
 /* /Components/CadenceDragExpander.razor.rz.scp.css */
 .expander[b-4838z82fju] {
-    border: 1px solid #ccc;
+    border: 1px solid var(--panel-border);
     border-radius: 4px;
     margin-bottom: 10px;
 }
@@ -49,7 +53,8 @@
     align-items: center;
     padding: 10px;
     cursor: pointer;
-    background-color: #f5f5f5;
+    background-color: var(--tab-inactive-bg);
+    color: var(--text-color);
 }
 
 .expander-icon[b-4838z82fju] {
@@ -65,6 +70,7 @@
     max-height: 0;
     opacity: 0;
     transition: max-height 0.3s ease-out, opacity 0.2s ease-out;
+    background-color: var(--panel-bg);
 }
 
 .expander-content.open[b-4838z82fju] {
@@ -74,13 +80,15 @@
 
 .inventory-item[b-4838z82fju] {
     position: relative;
-    border: 1px solid #eee;
+    border: 1px solid var(--item-border);
     border-radius: 3px;
     padding: 5px;
     text-align: center;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     transition: all 0.2s ease-in-out;
     cursor: grab;
+    background-color: var(--item-bg);
+    color: var(--text-color);
 }
 
 .inventory-item:active[b-4838z82fju] {
@@ -117,10 +125,12 @@
 }
 /* /Components/DropZone.razor.rz.scp.css */
 .drop-zone[b-51y69rrxcv] {
-    border: 2px dashed #ccc;
+    border: 2px dashed var(--drop-zone-border);
     padding: 20px;
     text-align: center;
     margin: 10px 0;
+    background-color: var(--drop-zone-bg);
+    color: var(--text-color);
 }
 
 .drop-zone.allowed[b-51y69rrxcv] {
@@ -200,7 +210,7 @@
 }
 /* /Components/Expander.razor.rz.scp.css */
 .expander[b-h1r0ru8wr5] {
-    border: 1px solid #ccc;
+    border: 1px solid var(--panel-border);
     border-radius: 4px;
     margin-bottom: 10px;
 }
@@ -211,7 +221,8 @@
     align-items: center;
     padding: 10px;
     cursor: pointer;
-    background-color: #f5f5f5;
+    background-color: var(--tab-inactive-bg);
+    color: var(--text-color);
 }
 
 .expander-icon[b-h1r0ru8wr5] {
@@ -227,6 +238,7 @@
     max-height: 0;
     opacity: 0;
     transition: max-height 0.3s ease-out, opacity 0.2s ease-out;
+    background-color: var(--panel-bg);
 }
 
 .expander-content.open[b-h1r0ru8wr5] {
@@ -309,10 +321,12 @@
 }
 /* /Components/InventoryPanel.razor.rz.scp.css */
 .inventory-panel[b-cxbqk8vivm] {
-    border: 1px solid #ccc;
+    border: 1px solid var(--panel-border);
     border-radius: 5px;
     padding: 10px;
     margin-top: 10px;
+    background-color: var(--panel-bg);
+    color: var(--text-color);
 }
 
 .inventory-grid[b-cxbqk8vivm] {
@@ -322,29 +336,33 @@
 }
 
 .inventory-item[b-cxbqk8vivm] {
-    border: 1px solid #eee;
+    border: 1px solid var(--item-border);
     border-radius: 3px;
     padding: 5px;
     text-align: center;
+    background-color: var(--item-bg);
 }
 
 .item-name[b-cxbqk8vivm] {
     font-weight: bold;
+    color: var(--text-color);
 }
 
 .item-quantity[b-cxbqk8vivm] {
-    color: #888;
+    color: var(--text-muted);
 }
 /* /Components/PartyPanel.razor.rz.scp.css */
 .party-panel[b-fgj0qpkv83] {
-    border: 1px solid #ccc;
+    border: 1px solid var(--panel-border);
     border-radius: 8px;
     padding: 1rem;
     flex-shrink: 0;
+    background-color: var(--panel-bg);
+    color: var(--text-color);
 }
 /* /Components/QuestCard.razor.rz.scp.css */
 .card[b-mekdh8e00x] {
-    border: 1px solid #ccc;
+    border: 1px solid var(--card-border);
     border-radius: 8px;
     margin: 0.5rem;
     padding: 1rem;
@@ -352,6 +370,8 @@
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     transition: all 0.2s ease-in-out;
     cursor: grab;
+    background-color: var(--card-bg);
+    color: var(--text-color);
 }
 
 .card:active[b-mekdh8e00x] {
@@ -366,11 +386,13 @@
 .card-header[b-mekdh8e00x] {
     font-weight: bold;
     margin-bottom: 0.5rem;
+    color: var(--text-color);
 }
 
 .card-body p[b-mekdh8e00x] {
     margin-top: 0.25rem;
     margin-bottom: 0.25rem;
+    color: var(--text-color);
 }
 
 .card-content[b-mekdh8e00x] {
@@ -385,16 +407,22 @@
 .card-side[b-mekdh8e00x] {
     flex: 1; /* smaller side column */
 }
+
+.card-side h6[b-mekdh8e00x] {
+    color: var(--primary-color);
+}
 /* /Components/QuestProgressCard.razor.rz.scp.css */
 .task-progress-card[b-oes0l3to11] {
     display: flex;
     flex-direction: row;
     align-items: center;
-    border: 1px solid #ccc;
+    border: 1px solid var(--card-border);
     border-radius: 8px;
     margin: 0.5rem;
     padding: 1rem;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    background-color: var(--card-bg);
+    color: var(--text-color);
 }
 
 .task-header[b-oes0l3to11] {
@@ -409,12 +437,13 @@
 .task-duration[b-oes0l3to11] {
     margin-left: 1rem;
     font-style: italic;
+    color: var(--text-muted);
 }
 
 .progress[b-oes0l3to11] {
     width: 100%;
     height: 20px;
-    background-color: #e9ecef;
+    background-color: var(--badge-bg);
     border-radius: 10px;
     overflow: hidden;
     margin: 0.5rem 0;
@@ -423,7 +452,7 @@
 
 .progress-bar[b-oes0l3to11] {
     height: 100%;
-    background-color: #007bff;
+    background-color: var(--secondary-color);
     border-radius: 10px;
     transition: width 0.3s ease;
     margin: 0; /* Ensure no margin */
@@ -439,13 +468,14 @@
 }
 
 .snackbar[b-g03wipbmr2] {
-    background: #323232;
-    color: white;
+    background: var(--input-bg);
+    color: var(--text-color);
     padding: 12px 24px;
     border-radius: 6px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.3);
     opacity: 0;
     transform: translateY(100%);
+    border: 1px solid var(--border-color);
     animation: slideUp-b-g03wipbmr2 0.3s ease-out forwards, fadeOut-b-g03wipbmr2 0.3s ease-in forwards 2.7s;
 }
 
@@ -478,14 +508,17 @@
 /* Colors by severity */
 .snackbar.info[b-g03wipbmr2] {
     background: #2196F3;
+    color: white;
 }
 
 .snackbar.error[b-g03wipbmr2] {
     background: #F44336;
+    color: white;
 }
 
 .snackbar.success[b-g03wipbmr2] {
     background: #4CAF50;
+    color: white;
 }
 /* /Layout/MainLayout.razor.rz.scp.css */
 main[b-uvgfdke93t] {
@@ -498,8 +531,8 @@ main[b-uvgfdke93t] {
     height: 3.5rem;
     display: flex;
     align-items: center;
-    background-color: #f7f7f7;
-    border-bottom: 1px solid #dee2e6;
+    background-color: var(--header-bg);
+    border-bottom: 1px solid var(--header-border);
     z-index: 1000;
 }
 
@@ -523,22 +556,23 @@ main[b-uvgfdke93t] {
     top: 0;
     bottom: 0;
     width: 400px;
-    background-color: white;
-    border-left: 1px solid #dee2e6;
+    background-color: var(--panel-bg);
+    border-left: 1px solid var(--panel-border);
     box-shadow: -5px 0 15px rgba(0,0,0,0.2);
     z-index: 2000;
     display: flex;
     flex-direction: column;
     animation: slideIn-b-uvgfdke93t 0.3s ease-out;
+    color: var(--text-color);
 }
 
 .drawer-header[b-uvgfdke93t] {
     padding: 1rem;
-    border-bottom: 1px solid #dee2e6;
+    border-bottom: 1px solid var(--border-color);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #f8f9fa;
+    background-color: var(--tab-inactive-bg);
 }
 
 .drawer-content[b-uvgfdke93t] {
@@ -560,20 +594,4 @@ main[b-uvgfdke93t] {
 @keyframes slideIn-b-uvgfdke93t {
     from { transform: translateX(100%); }
     to { transform: translateX(0); }
-}
-
-/* Dark theme support for drawer */
-:global(.dark-theme) .feedback-drawer[b-uvgfdke93t] {
-    background-color: #1e1e1e;
-    color: #e0e0e0;
-}
-
-:global(.dark-theme) .drawer-header[b-uvgfdke93t] {
-    background-color: #2c2c2c;
-    border-bottom-color: #333;
-}
-
-:global(.dark-theme) .top-row[b-uvgfdke93t] {
-    background-color: #1e1e1e;
-    border-bottom-color: #333;
 }
