@@ -76,6 +76,16 @@ public partial class ResourceManager
     {
         if (CanAfford(item))
         {
+            // Safety check for single-use tasks already in progress
+            if (item is CadenceUnlock || (item is QuestData q && (q.Type == QuestType.Single || q.Type == QuestType.Unlock)))
+            {
+                if (IsInProgress(item))
+                {
+                    Console.WriteLine($"Attempted to start single-use task '{item}' but it is already in progress.");
+                    return;
+                }
+            }
+
             PayCosts(item);
             double duration = 10; // Default
             if (item is QuestData quest)

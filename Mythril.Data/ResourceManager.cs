@@ -110,6 +110,22 @@ public partial class ResourceManager(
         }
     }
 
+    public bool IsInProgress(object item)
+    {
+        lock(_questLock)
+        {
+            if (item is QuestData quest)
+            {
+                return ActiveQuests.Any(p => p.Item is QuestData activeQuest && activeQuest.Quest.Name == quest.Quest.Name);
+            }
+            if (item is CadenceUnlock unlock)
+            {
+                return ActiveQuests.Any(p => p.Item is CadenceUnlock activeUnlock && activeUnlock.Ability.Name == unlock.Ability.Name);
+            }
+            return false;
+        }
+    }
+
     public IEnumerable<Quest> GetCompletedQuests() => _completedQuests;
     public void ClearCompletedQuests() => _completedQuests.Clear();
 }

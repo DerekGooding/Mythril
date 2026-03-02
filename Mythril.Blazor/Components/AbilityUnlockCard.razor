@@ -3,9 +3,20 @@
 @using Mythril.Blazor
 @using Mythril.Blazor.Services
 @inject DragDropService DragDropService
+@inject ResourceManager ResourceManager
 
-<div class="card" draggable="true" @ondragstart="HandleDragStart">
-    <div class="card-header">@Unlock.Ability.Name</div>
+@{
+    bool inProgress = ResourceManager.IsInProgress(Unlock);
+}
+
+<div class="card @(inProgress ? "locked" : "")" draggable="@(inProgress ? "false" : "true")" @ondragstart="HandleDragStart">
+    <div class="card-header">
+        @Unlock.Ability.Name
+        @if (inProgress)
+        {
+            <span class="ms-auto badge bg-warning text-dark small">In Progress</span>
+        }
+    </div>
     <div class="card-content">
         <div class="card-main">
             <p>@Unlock.Ability.Description</p>

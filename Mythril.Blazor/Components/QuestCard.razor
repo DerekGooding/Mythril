@@ -3,13 +3,22 @@
 @using Mythril.Blazor
 @using Mythril.Blazor.Services
 @inject DragDropService DragDropService
+@inject ResourceManager ResourceManager
 
-<div class="card" draggable="true" @ondragstart="HandleDragStart">
+@{
+    bool inProgress = (QuestData!.Type == QuestType.Single || QuestData.Type == QuestType.Unlock) && ResourceManager.IsInProgress(QuestData);
+}
+
+<div class="card @(inProgress ? "locked" : "")" draggable="@(inProgress ? "false" : "true")" @ondragstart="HandleDragStart">
     <div class="card-header">
         <span class="material-icons" style="color: green;">
             @(QuestData!.Type == QuestType.Single ? "flag" : "repeat")
         </span>
         @QuestData.Name
+        @if (inProgress)
+        {
+            <span class="ms-auto badge bg-warning text-dark small">In Progress</span>
+        }
     </div>
 
     <div class="card-content">
