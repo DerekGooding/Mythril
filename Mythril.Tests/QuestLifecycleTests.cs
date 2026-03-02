@@ -157,7 +157,7 @@ public class QuestLifecycleTests
     }
 
     [TestMethod]
-    public void ResourceManager_PayCosts_SingleQuest_LocksQuest()
+    public void ResourceManager_PayCosts_SingleQuest_DoesNotLockQuest()
     {
         var village = _resourceManager!.UsableLocations.First(l => l.Name == "Village");
         var quest = village.Quests.First(q => q.Name == "Prologue");
@@ -167,6 +167,21 @@ public class QuestLifecycleTests
         Assert.IsTrue(village.Quests.Contains(quest));
         
         _resourceManager.PayCosts(questData);
+        
+        Assert.IsTrue(village.Quests.Contains(quest));
+    }
+
+    [TestMethod]
+    public void ResourceManager_ReceiveRewards_SingleQuest_LocksQuest()
+    {
+        var village = _resourceManager!.UsableLocations.First(l => l.Name == "Village");
+        var quest = village.Quests.First(q => q.Name == "Prologue");
+        var detail = _questDetails![quest];
+        var questData = new QuestData(quest, detail);
+        
+        Assert.IsTrue(village.Quests.Contains(quest));
+        
+        _resourceManager.ReceiveRewards(questData).Wait();
         
         Assert.IsFalse(village.Quests.Contains(quest));
     }

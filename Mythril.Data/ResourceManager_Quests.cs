@@ -60,8 +60,6 @@ public partial class ResourceManager
     {
         if (item is QuestData quest)
         {
-            if (quest.Type == QuestType.Single) LockQuest(quest.Quest);
-
             foreach (var requirement in quest.Requirements)
                 Inventory.Remove(requirement.Item, requirement.Quantity);
         }
@@ -133,6 +131,10 @@ public partial class ResourceManager
         if (item is QuestData quest)
         {
             foreach (var reward in quest.Rewards) Inventory.Add(reward.Item, reward.Quantity);
+            
+            // If it's single-use, remove it now that it's DONE
+            if (quest.Type == QuestType.Single || quest.Type == QuestType.Unlock) LockQuest(quest.Quest);
+
             UnlockQuest(quest.Quest);
             foreach (var cadence in _questToCadenceUnlocks[quest.Quest]) UnlockCadence(cadence);
         }

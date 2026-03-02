@@ -112,6 +112,27 @@ public class AdditionalUIComponentTests : BunitTestBase
         var questData = new QuestData(quest, detail);
         var cut = RenderComponent<QuestCard>(parameters => parameters.Add(p => p.QuestData, questData));
         Assert.IsTrue(cut.Markup.Contains("Test Quest"));
+        Assert.IsFalse(cut.Markup.Contains("In Progress"));
+        Assert.IsFalse(cut.Markup.Contains("locked"));
+    }
+
+    [TestMethod]
+    public void QuestCard_RendersInProgressCorrectly()
+    {
+        var quest = new Quest("Test Quest", "Description");
+        var detail = new QuestDetail(10, [], [], QuestType.Single);
+        var questData = new QuestData(quest, detail);
+        var character = new Character("Hero");
+        
+        // Mocking the progress in ResourceManager
+        var resourceManager = Services.GetRequiredService<ResourceManager>();
+        resourceManager.StartQuest(questData, character);
+
+        var cut = RenderComponent<QuestCard>(parameters => parameters.Add(p => p.QuestData, questData));
+        
+        Assert.IsTrue(cut.Markup.Contains("Test Quest"));
+        Assert.IsTrue(cut.Markup.Contains("In Progress"));
+        Assert.IsTrue(cut.Markup.Contains("locked"));
     }
 
     [TestMethod]
