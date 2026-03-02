@@ -1,9 +1,9 @@
 {
     "is_healthy": false,
-    "failure_count": 1,
+    "failure_count": 2,
     "metrics": {
-        "monoliths": 0,
-        "coverage": 90.4,
+        "monoliths": 1,
+        "coverage": 90.66,
         "missing_tests": 0,
         "key_violations": 0,
         "testid_violations": 0,
@@ -13,8 +13,15 @@
     },
     "failures": [
         {
+            "category": "monolith",
+            "message": "Mythril.Data\\ResourceManager.cs exceeds 250 lines",
+            "metadata": {
+                "lines": 255
+            }
+        },
+        {
             "category": "docs_stale",
-            "message": "AGENTS.md is stale (52 source changes since last update)",
+            "message": "AGENTS.md is stale (54 source changes since last update)",
             "metadata": {}
         }
     ]

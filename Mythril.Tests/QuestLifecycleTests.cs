@@ -181,4 +181,25 @@ public class QuestLifecycleTests
         Assert.AreEqual(1.0, progress.Progress);
         Assert.IsTrue(progress.IsCompleted);
     }
+
+    [TestMethod]
+    public void ResourceManager_Initialize_ClearsState()
+    {
+        var quest = _quests!.All.First(x => x.Name == "Buy Potion");
+        var detail = _questDetails![quest];
+        var questData = new QuestData(quest, detail);
+        var character = _resourceManager!.Characters[0];
+
+        _resourceManager.Inventory.Add(_items!.All.First(x => x.Name == "Gold"), 1000);
+        _resourceManager.StartQuest(questData, character);
+        _resourceManager.ReceiveRewards(questData).Wait();
+
+        Assert.IsTrue(_resourceManager.GetCompletedQuests().Any());
+        
+        _resourceManager.Initialize();
+
+        Assert.IsFalse(_resourceManager.ActiveQuests.Any());
+        Assert.IsFalse(_resourceManager.GetCompletedQuests().Any());
+        Assert.AreEqual(100, _resourceManager.Inventory.GetQuantity(_items.All.First(x => x.Name == "Gold")));
+    }
 }

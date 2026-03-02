@@ -43,6 +43,13 @@ public class ResourceManager(
     {
         Console.WriteLine("ResourceManager initializing...");
         Inventory.Clear();
+        _completedQuests.Clear();
+        UnlockedAbilities.Clear();
+        lock(_questLock)
+        {
+            ActiveQuests.Clear();
+        }
+        
         var gold = _items.All.FirstOrDefault(x => x.Name == "Gold");
         if (gold.Name != null) Inventory.Add(gold, 100);
 
