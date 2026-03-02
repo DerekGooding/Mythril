@@ -1,8 +1,8 @@
 {
-    "is_healthy": false,
-    "failure_count": 1,
+    "is_healthy": true,
+    "failure_count": 0,
     "metrics": {
-        "monoliths": 1,
+        "monoliths": 0,
         "coverage": 90.66,
         "missing_tests": 0,
         "key_violations": 0,
@@ -11,13 +11,5 @@
         "pending_feedback": 0,
         "test_passed": true
     },
-    "failures": [
-        {
-            "category": "monolith",
-            "message": "Mythril.Data/ResourceManager.cs exceeds 250 lines",
-            "metadata": {
-                "lines": 255
-            }
-        }
-    ]
+    "failures": []
 }
