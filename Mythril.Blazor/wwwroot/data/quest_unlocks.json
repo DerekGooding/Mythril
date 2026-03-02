@@ -4,7 +4,7 @@
   { "Quest": "Buy Potion", "Requires": ["Visit Starting Town"] },
   { "Quest": "Recover the Ancient Tome", "Requires": ["Visit Starting Town"] },
   { "Quest": "Learn About Cadences", "Requires": ["Recover the Ancient Tome"] },
-  { "Quest": "Farm Goblins", "Requires": ["Learn About Cadences"] },
+  { "Quest": "Farm Goblins", "Requires": ["Visit Starting Town"] },
   { "Quest": "Farm Trents", "Requires": ["Learn About Cadences"] },
   { "Quest": "Farm Golems", "Requires": ["Learn About Cadences"] },
   { "Quest": "Learn about the Mines", "Requires": ["Learn About Cadences"] },
