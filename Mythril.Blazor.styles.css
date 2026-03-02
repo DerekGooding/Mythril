@@ -493,7 +493,9 @@
     border: 1px solid var(--panel-border);
     border-radius: 8px;
     padding: 1rem;
-    flex-shrink: 0;
+    flex-grow: 1;
+    min-height: 0;
+    overflow-y: auto;
     background-color: var(--panel-bg);
     color: var(--text-color);
 }
