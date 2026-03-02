@@ -5,6 +5,7 @@
 ![Coverage](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/DerekGooding/Mythril/main/scripts/data/shield_coverage.json)
 ![Monoliths](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/DerekGooding/Mythril/main/scripts/data/shield_monoliths.json)
 ![Docs](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/DerekGooding/Mythril/main/scripts/data/shield_docs.json)
+![Feedback](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/DerekGooding/Mythril/main/scripts/data/shield_feedback.json)
 
 [**GitHub Repository**](https://github.com/DerekGooding/Mythril) | [**Live Website**](https://DerekGooding.Github.io/Mythril)
 
@@ -28,15 +29,16 @@ Mythril is an RPG-inspired web application built with **.NET 10** and **Blazor W
 - **Frontend**: Blazor WebAssembly (.NET 10)
 - **Core Logic**: C# 13 / .NET 10 Class Libraries
 - **Architecture**: Separated into core managers: `ResourceManager` (Logic), `JunctionManager` (Stats), and `InventoryManager` (Items).
-- **Testing**: MSTest, Moq, and bUnit for component testing. Coverage is maintained at >89% for core logic.
+- **Testing**: MSTest, Moq, and bUnit for component testing. Coverage is maintained at >90% overall.
 - **CI/CD**: GitHub Actions for automated deployment and health monitoring.
 
 ## ⚖️ Quality Assurance & Health
 We maintain project health through a custom automated suite (`scripts/check_health.py`) which runs on every commit:
-- **Monolith Prevention**: Strict 250-line limit for source files.
-- **Coverage**: Mandatory 70% unit test coverage for core logic projects.
+- **Monolith Prevention**: Strict 250-line limit for source files (excluding tools).
+- **Coverage**: Mandatory 70% overall line coverage; 25% per-file minimum.
+- **Razor Integrity**: All interactive components must have bUnit tests, `@key` usage in loops, and `data-testid` anchors.
 - **Documentation Integrity**: Automated staleness tracking via local file modification times.
-- **Feedback Integrity**: Every resolved item must have a corresponding resolution file in `docs/resolution/`.
+- **Feedback Integrity**: Monitoring of pending user feedback and runtime errors in `docs/feedback/`.
 
 ## 🚀 Getting Started
 1. **Build**: `dotnet build`

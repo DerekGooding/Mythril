@@ -1,6 +1,6 @@
 {
     "schemaVersion": 1,
-    "label": "Docs",
-    "message": "Up-to-date",
-    "color": "brightgreen"
+    "label": "docs",
+    "message": "stale",
+    "color": "orange"
 }
