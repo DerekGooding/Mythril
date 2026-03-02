@@ -242,26 +242,13 @@
     flex-direction: column;
     gap: 2px;
 }
-.draggable-name[b-tzawi3ksml] {
-    cursor: grab;
-    user-select: none;
+.character-name[b-tzawi3ksml] {
     margin: 0;
     font-size: 1.1rem;
     color: var(--text-color);
 }
-.draggable-name:hover[b-tzawi3ksml] {
-    color: var(--primary-color);
-    text-decoration: underline;
-}
-.draggable-name:active[b-tzawi3ksml] {
-    cursor: grabbing;
-}
-.draggable-cadence[b-tzawi3ksml] {
-    cursor: grab;
+.cadence-name[b-tzawi3ksml] {
     display: inline-block;
-}
-.draggable-cadence:active[b-tzawi3ksml] {
-    cursor: grabbing;
 }
 .btn-xs[b-tzawi3ksml] {
     padding: 0.1rem 0.3rem;
