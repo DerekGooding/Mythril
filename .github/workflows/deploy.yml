@@ -38,19 +38,13 @@ jobs:
         run: |
           python scripts/check_health.py
 
-      - name: Commit Health Data
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add scripts/data/*.json
-          git commit -m "chore: update health metrics and shields [skip ci]" || echo "No changes to commit"
-          git push origin main
-        continue-on-error: true
-
       - name: Build Blazor App
         if: always()
         run: |
           dotnet publish Mythril.Blazor/Mythril.Blazor.csproj -c Release -o output
+          # Copy health metrics to hosted directory
+          mkdir -p output/wwwroot/health
+          cp scripts/data/*.json output/wwwroot/health/
           echo "{\"version\": \"${{ github.sha }}\", \"timestamp\": \"$(date -u +'%Y-%m-%dT%H:%M:%SZ')\"}" > output/wwwroot/version.json
 
       - name: Deploy to GitHub Pages
