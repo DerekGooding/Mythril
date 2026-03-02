@@ -5,7 +5,7 @@
 ![Coverage](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/DerekGooding/Mythril/main/scripts/data/shield_coverage.json)
 ![Monoliths](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/DerekGooding/Mythril/main/scripts/data/shield_monoliths.json)
 ![Docs](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/DerekGooding/Mythril/main/scripts/data/shield_docs.json)
-![Feedback](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/DerekGooding/Mythril/main/scripts/data/shield_feedback.json)
+![UI Integrity](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/DerekGooding/Mythril/main/scripts/data/shield_ui.json)
 
 [**GitHub Repository**](https://github.com/DerekGooding/Mythril) | [**Live Website**](https://DerekGooding.Github.io/Mythril)
 

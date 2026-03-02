@@ -308,10 +308,15 @@ def generate_shields(metrics):
     color = "brightgreen" if stale == 0 else "orange"
     write_shield("docs", "docs", "stale" if stale > 0 else "up-to-date", color)
 
-    # Feedback Shield
-    pending = metrics.get('pending_feedback', 0)
-    color = "brightgreen" if pending == 0 else "orange"
-    write_shield("feedback", "feedback", "clear" if pending == 0 else str(pending), color)
+    # UI Integrity Shield
+    missing_tests = metrics.get('missing_tests', 0)
+    key_violations = metrics.get('key_violations', 0)
+    testid_violations = metrics.get('testid_violations', 0)
+    ui_passed = missing_tests == 0 and key_violations == 0 and testid_violations == 0
+    
+    color = "brightgreen" if ui_passed else "red"
+    message = "passed" if ui_passed else "failed"
+    write_shield("ui", "UI integrity", message, color)
 
 # -----------------------
 # Export Results
