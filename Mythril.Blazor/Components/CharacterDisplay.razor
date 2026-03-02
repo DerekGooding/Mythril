@@ -6,7 +6,7 @@
 @inject JunctionManager JunctionManager
 @inject DragDropService DragDropService
 
-<div class="character-display shadow-theme @(QuestProgress is not null ? "has-active-task" : "")">
+<div class="character-display shadow-theme @(QuestProgress is not null ? "has-active-task" : "") @(QuestProgress?.IsCompleted == true ? "completed" : "")">
     <div class="character-header">
         <div class="d-flex flex-column flex-grow-1 min-width-0">
             <h4 draggable="true" @ondragstart="HandleCharacterDragStart" class="draggable-name text-truncate">@Character.Name</h4>

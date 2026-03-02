@@ -35,21 +35,23 @@ public class VersionService(HttpClient http) : IDisposable
             var info = await http.GetFromJsonAsync<VersionInfo>($"version.json?t={DateTime.UtcNow.Ticks}");
             if (info != null)
             {
+                Console.WriteLine($"Version Check: Local={CurrentVersion ?? "null"}, Remote={info.Version}");
                 if (CurrentVersion == null)
                 {
                     CurrentVersion = info.Version;
                 }
                 else if (CurrentVersion != info.Version)
                 {
+                    Console.WriteLine("New version detected! Triggering update notification.");
                     IsUpdateAvailable = true;
                     OnUpdateAvailable?.Invoke();
                     _timer.Stop(); // Only notify once
                 }
             }
         }
-        catch
+        catch (Exception ex)
         {
-            // Fail silently, likely file doesn't exist yet or network issue
+            Console.WriteLine($"Version Check Failed: {ex.Message}");
         }
     }
 
