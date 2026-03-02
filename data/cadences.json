@@ -62,7 +62,7 @@
         "Requirements": [ { "Item": "Log", "Quantity": 10 } ]
       },
       {
-        "Ability": "J-HP",
+        "Ability": "J-Speed",
         "Requirements": [ { "Item": "Potion", "Quantity": 10 } ]
       }
     ]
