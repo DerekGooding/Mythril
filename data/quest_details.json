@@ -42,6 +42,13 @@
     "Rewards": []
   },
   {
+    "Quest": "Learn about the Dark Forest",
+    "DurationSeconds": 30,
+    "Type": "Single",
+    "Requirements": [],
+    "Rewards": []
+  },
+  {
     "Quest": "Farm Goblins",
     "DurationSeconds": 60,
     "Type": "Recurring",
