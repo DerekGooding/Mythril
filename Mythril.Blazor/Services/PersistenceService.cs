@@ -163,4 +163,9 @@ public class PersistenceService(
         var json = await js.InvokeAsync<string>("localStorage.getItem", STORAGE_KEY);
         return !string.IsNullOrEmpty(json);
     }
+
+    public async Task ClearSaveAsync()
+    {
+        await js.InvokeVoidAsync("localStorage.removeItem", STORAGE_KEY);
+    }
 }

@@ -23,7 +23,7 @@
                     @onclick="ToggleTestMode">
                 Test Mode: @(resourceManager.IsTestMode ? "ON" : "OFF")
             </button>
-            <button class="btn btn-outline-success" @onclick="SaveGame">Save Game</button>
+            <button class="btn btn-outline-danger" @onclick="ResetGame">Reset Game</button>
         }
         <div class="flex-grow-1">
             @if (resourceManager is not null)
@@ -134,10 +134,18 @@
         resourceManager.IsTestMode = !resourceManager.IsTestMode;
     }
 
-    private async Task SaveGame()
+    @inject IJSRuntime JS
+
+    private async Task ResetGame()
     {
-        await persistenceService.SaveAsync();
-        SnackbarService.Show("Game Saved", "info");
+        bool confirmed = await JS.InvokeAsync<bool>("confirm", "Are you sure you want to reset all progress? This cannot be undone.");
+        if (confirmed)
+        {
+            await persistenceService.ClearSaveAsync();
+            resourceManager.Initialize();
+            SnackbarService.Show("Game Reset", "warning");
+            await InvokeAsync(StateHasChanged);
+        }
     }
 
     private async Task TaskDropped((object item, Character character) args)
