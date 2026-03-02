@@ -15,6 +15,8 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
     <PackageReference Include="Moq" Version="4.20.72" />
     <PackageReference Include="MSTest" Version="3.10.4" />
+    <PackageReference Include="bunit" Version="1.38.4" />
+    <PackageReference Include="bunit.web" Version="1.38.4" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,6 +31,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Mythril.Data\Mythril.Data.csproj" />
+    <ProjectReference Include="..\Mythril.Blazor\Mythril.Blazor.csproj" />
   </ItemGroup>
 
 </Project>

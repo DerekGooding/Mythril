@@ -7,11 +7,13 @@
 html, body, #app {
     height: 100vh;
     width: 100vw;
-    overflow: hidden; /* Prevent the whole page from scrolling */
+    overflow: hidden; /* Lock the viewport */
     margin: 0;
     padding: 0;
     background-color: var(--bg-color);
     color: var(--text-color);
+    display: flex;
+    flex-direction: column;
 }
 
 .min-height-0 {
@@ -27,45 +29,23 @@ html, body, #app {
 
 main, .content {
     height: 100%;
-}
-
-main {
     display: flex;
     flex-direction: column;
+    overflow: hidden;
 }
 
 .content {
     flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    padding: 0 !important; /* Override any other padding */
+    padding: 0 !important;
 }
 
 .home-columns-row {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap; /* Prevent columns from wrapping */
     align-items: stretch;
-    flex-grow: 1; /* Allow the row to grow and fill available space */
-}
-
-.home-columns-row > .col-6 {
-    display: flex;
-    flex-direction: column;
+    flex-grow: 1;
+    min-height: 0;
     height: 100%;
-}
-
-.home-columns-row > .col-6 > .tab-content {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    min-height: 0; /* Allow content to shrink and enable scrolling */
-}
-
-.home-columns-row > .col-6 > .tab-content > .tab-pane {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    min-height: 0; /* Allow content to shrink and enable scrolling */
 }
 
 .hand-panel,
@@ -73,7 +53,7 @@ main {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    overflow-y: auto; /* Add scroll if content overflows */
+    overflow-y: auto;
     background-color: var(--panel-bg);
     color: var(--text-color);
 }

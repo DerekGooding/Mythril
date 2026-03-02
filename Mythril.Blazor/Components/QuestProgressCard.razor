@@ -6,7 +6,7 @@
 <div class="task-progress-card @(QuestProgress?.IsCompleted == true ? "completed" : "")" @ref="cardElement">
     <div class="task-header">@QuestProgress?.Name</div>
     <div class="task-body">
-        <p>@QuestProgress?.Description</p>
+        <p class="small mb-1">@QuestProgress?.Description</p>
         <div class="progress">
             @{
                 var progressValue = QuestProgress?.Progress ?? 0.0;
@@ -22,8 +22,8 @@
             </div>
         </div>
     </div>
-    <div class="task-duration text-nowrap">
-        @QuestProgress?.SecondsElapsed.ToString("0.#") / @QuestProgress?.DurationSeconds s
+    <div class="task-duration text-nowrap ms-3">
+        @QuestProgress?.DurationSeconds s
     </div>
 </div>
 
@@ -43,7 +43,6 @@
         if (QuestProgress?.IsCompleted == true && !_hasTriggeredCompletion)
         {
             _hasTriggeredCompletion = true;
-            // The "completed" class triggers the gold flash via completion-effects.css
             await Task.Delay(1000); 
             await OnCompletionAnimationEnd.InvokeAsync();
         }

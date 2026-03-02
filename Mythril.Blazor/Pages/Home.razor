@@ -35,9 +35,9 @@
     </div>
 
     <!-- Main Content Area: Two Columns -->
-    <div class="row home-columns-row flex-grow-1 min-height-0 m-0">
+    <div class="row home-columns-row flex-grow-1 min-height-0 m-0 overflow-hidden">
         <!-- Left column with tabs -->
-        <div class="col-8 d-flex flex-column h-100 p-2 overflow-hidden">
+        <div class="col-8 d-flex flex-column h-100 p-2 overflow-hidden border-end">
             @if (resourceManager is not null)
             {
                 <ul class="nav nav-tabs flex-shrink-0" id="myTab" role="tablist">
@@ -76,7 +76,7 @@
         </div>
 
         <!-- Right column with PartyPanel (Vertical listing) -->
-        <div class="col-4 d-flex flex-column h-100 p-2 border-start overflow-hidden party-column">
+        <div class="col-4 d-flex flex-column h-100 p-2 overflow-hidden party-column">
             @if (resourceManager is not null)
             {
                 <PartyPanel Party="resourceManager.Characters"
@@ -108,17 +108,12 @@
         flex-grow: 1;
         min-height: 0;
     }
-    .home-columns-row {
-        flex: 1 1 0; /* Important for flex-grow-1 inside flex-column to correctly bound children */
-        min-height: 0;
-    }
     .party-row {
         background-color: var(--tab-inactive-bg) !important;
         border-bottom-color: var(--header-border) !important;
     }
     .party-column {
         background-color: var(--tab-inactive-bg);
-        border-left-color: var(--border-color) !important;
     }
 </style>
 
