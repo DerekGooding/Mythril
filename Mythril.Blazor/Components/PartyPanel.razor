@@ -13,7 +13,8 @@
                                     QuestProgress="QuestProgresses.FirstOrDefault(p => p.Character == character)"
                                     OnQuestDrop="(task) => OnQuestDrop.InvokeAsync((task, character))"
                                     OnCompletionAnimationEnd="(progress) => OnCompletionAnimationEnd.InvokeAsync(progress)"
-                                    Accepts="Accepts" />
+                                    Accepts="Accepts"
+                                    OnUnequip="OnUnequip" />
             }
         }
     </div>
@@ -31,6 +32,9 @@
 
     [Parameter]
     public EventCallback<QuestProgress> OnCompletionAnimationEnd { get; set; }
+
+    [Parameter]
+    public EventCallback<Cadence> OnUnequip { get; set; }
 
     [Parameter]
     public Func<object, bool>? Accepts { get; set; }

@@ -7,22 +7,22 @@
 @inject DragDropService DragDropService
 
 <div class="character-display shadow-theme @(QuestProgress is not null ? "has-active-task" : "") @(QuestProgress?.IsCompleted == true ? "completed" : "")">
+    @{
+        var assignedCadence = JunctionManager.CurrentlyAssigned(Character).FirstOrDefault();
+    }
     <div class="character-header">
         <div class="d-flex flex-column flex-grow-1 min-width-0">
             <h4 class="character-name text-truncate">@Character.Name</h4>
             <div class="cadence-info small text-muted text-truncate">
-                @{
-                    var assignedCadence = JunctionManager.CurrentlyAssigned(Character).FirstOrDefault();
-                    if (assignedCadence.Name != null)
-                    {
-                        <span class="cadence-name">
-                            Cadence: @assignedCadence.Name
-                        </span>
-                    }
-                    else
-                    {
-                        <span>Cadence: None</span>
-                    }
+                @if (assignedCadence.Name != null)
+                {
+                    <span class="cadence-name">
+                        Cadence: @assignedCadence.Name
+                    </span>
+                }
+                else
+                {
+                    <span>Cadence: None</span>
                 }
             </div>
         </div>
@@ -42,10 +42,11 @@
     </div>
 
     <div class="d-flex justify-content-between align-items-center mt-2">
-        @if (JunctionManager.CurrentlyAssigned(Character).Any())
+        @if (assignedCadence.Name != null)
         {
-            <div class="junction-controls">
+            <div class="junction-controls d-flex gap-1">
                 <button class="btn btn-xs btn-outline-primary" data-testid="junction-toggle" @onclick="ToggleJunctionMenu">Junction</button>
+                <button class="btn btn-xs btn-outline-danger" data-testid="unequip-button" @onclick="() => OnUnequip.InvokeAsync(assignedCadence)">Unequip</button>
             </div>
         }
         
@@ -124,6 +125,9 @@
 
     [Parameter]
     public EventCallback<QuestProgress> OnCompletionAnimationEnd { get; set; }
+
+    [Parameter]
+    public EventCallback<Cadence> OnUnequip { get; set; }
 
     private bool _showJunctionMenu = false;
 
