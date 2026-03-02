@@ -74,6 +74,17 @@ main {
     display: flex;
     flex-direction: column;
     overflow-y: auto; /* Add scroll if content overflows */
+    background-color: var(--panel-bg);
+    color: var(--text-color);
+}
+
+.party-row {
+    background-color: var(--tab-inactive-bg) !important;
+    border-bottom: 1px solid var(--header-border) !important;
+}
+
+.shadow-theme {
+    box-shadow: var(--shadow-sm);
 }
 
 @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }

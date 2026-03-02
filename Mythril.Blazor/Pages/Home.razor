@@ -10,6 +10,7 @@
 @inject SnackbarService SnackbarService
 @inject AuthService AuthService
 @inject PersistenceService persistenceService
+@inject IJSRuntime JS
 
 <PageTitle>Mythril</PageTitle>
 
@@ -17,13 +18,13 @@
     <!-- Header Row -->
     <div class="header-row flex-shrink-0 p-2 border-bottom d-flex align-items-center gap-2">
         <button class="btn btn-primary" @onclick="ToggleTheme">Toggle Theme</button>
+        <button class="btn btn-outline-danger" @onclick="ResetGame">Reset Game</button>
         @if (AuthService.IsAuthenticated)
         {
             <button class="btn @(resourceManager.IsTestMode ? "btn-warning" : "btn-outline-secondary")" 
                     @onclick="ToggleTestMode">
                 Test Mode: @(resourceManager.IsTestMode ? "ON" : "OFF")
             </button>
-            <button class="btn btn-outline-danger" @onclick="ResetGame">Reset Game</button>
         }
         <div class="flex-grow-1">
             @if (resourceManager is not null)

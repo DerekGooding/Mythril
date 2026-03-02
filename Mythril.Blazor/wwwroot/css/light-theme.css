@@ -35,6 +35,9 @@
     --affordable-bg: #fff3cd;
     --affordable-border: #ffc107;
     --locked-card-bg: #e9ecef;
+    --shadow-sm: 0 2px 4px rgba(0,0,0,0.1);
+    --shadow-md: 0 4px 8px rgba(0,0,0,0.1);
+    --shadow-lg: 0 8px 16px rgba(0,0,0,0.1);
 }
 
 html, body {
