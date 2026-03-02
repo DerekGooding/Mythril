@@ -87,8 +87,8 @@ public class ResourceManagerCoreTests
     public void Stats_All_ContainsAllStats()
     {
         var stats = ContentHost.GetContent<Stats>();
-        Assert.AreEqual(9, stats.All.Length);
-        Assert.IsTrue(stats.All.Any(s => s.Name == "Health"));
+        Assert.AreEqual(4, stats.All.Length);
+        Assert.IsTrue(stats.All.Any(s => s.Name == "Vitality"));
     }
 
     [TestMethod]

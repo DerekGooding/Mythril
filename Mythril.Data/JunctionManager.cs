@@ -67,7 +67,7 @@ public class JunctionManager(
             "Strength" => "J-Str",
             "Magic" => "J-Magic",
             "Vitality" => "J-Vit",
-            "Health" => "J-HP",
+            "Speed" => "J-Speed",
             _ => "J-" + statName
         };
     }
@@ -76,12 +76,12 @@ public class JunctionManager(
     {
         int baseValue = 10;
 
-        var junction = Junctions.FirstOrDefault(j => j.Character.Name == character.Name && (j.Stat.Name == statName || (statName == "Health" && j.Stat.Name == "HP")));
+        var junction = Junctions.FirstOrDefault(j => j.Character.Name == character.Name && j.Stat.Name == statName);
         if (junction != null)
         {
             int qty = _inventory.GetQuantity(junction.Magic);
             var augments = _statAugments[junction.Magic];
-            var augment = augments.FirstOrDefault(a => a.Stat.Name == statName || (statName == "Health" && a.Stat.Name == "HP"));
+            var augment = augments.FirstOrDefault(a => a.Stat.Name == statName);
             if (augment.Stat.Name != null)
             {
                 baseValue += (int)(qty * (augment.ModifierAtFull / 100.0));

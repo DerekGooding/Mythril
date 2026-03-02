@@ -75,10 +75,10 @@ public static class TestContentLoader
             ContentHost.GetContent<ItemRefinements>().Load(refinementsDict);
 
             var statAugments = ContentHost.GetContent<StatAugments>();
-            var health = stats.All.First(s => s.Name == "Health");
+            var vitality = stats.All.First(s => s.Name == "Vitality");
             var potion = items.All.First(i => i.Name == "Potion");
             statAugments.Load(new Dictionary<Item, StatAugment[]> {
-                { potion, [new StatAugment(health, 20)] }
+                { potion, [new StatAugment(vitality, 20)] }
             });
 
             var abilityAugments = ContentHost.GetContent<AbilityAugments>();

@@ -28,7 +28,7 @@
         </div>
         <div class="stats-container">
             <div class="stats-mini">
-                @foreach (var stat in statsContent.All.Take(9))
+                @foreach (var stat in statsContent.All)
                 {
                     var val = JunctionManager.GetStatValue(Character, stat.Name);
                     var junction = JunctionManager.Junctions.FirstOrDefault(j => j.Character.Name == Character.Name && j.Stat.Name == stat.Name);
@@ -79,7 +79,7 @@
         <div class="junction-menu card p-2">
             <h6>Junction Magic</h6>
             <div class="junction-grid">
-                @foreach (var stat in statsContent.All.Take(9))
+                @foreach (var stat in statsContent.All)
                 {
                     bool canJunction = CanJunction(stat);
                     var currentJ = JunctionManager.Junctions.FirstOrDefault(j => j.Character.Name == Character.Name && j.Stat.Name == stat.Name);
@@ -145,9 +145,10 @@
         if (cadence.Name == null) return false;
         
         string abilityName = "J-" + stat.Name;
-        if (stat.Name == "Health") abilityName = "J-HP";
         if (stat.Name == "Vitality") abilityName = "J-Vit";
         if (stat.Name == "Strength") abilityName = "J-Str";
+        if (stat.Name == "Speed") abilityName = "J-Speed";
+        if (stat.Name == "Magic") abilityName = "J-Magic";
 
         return cadence.Abilities.Any(a => resourceManager.UnlockedAbilities.Contains(a.Ability) && a.Ability.Name == abilityName);
     }

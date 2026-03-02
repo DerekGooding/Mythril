@@ -29,7 +29,7 @@ public class MiscDataTests
         var potion = items.All.First(i => i.Name == "Potion");
         var augs = statAugments[potion];
         Assert.AreEqual(1, augs.Length);
-        Assert.AreEqual("Health", augs[0].Stat.Name);
+        Assert.AreEqual("Vitality", augs[0].Stat.Name);
         Assert.AreEqual(20, augs[0].ModifierAtFull);
     }
 
