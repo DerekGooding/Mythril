@@ -17,15 +17,15 @@ This project uses agentic workflows to maintain its health and quality.
 - **JunctionManager**: Handles character-cadence assignments and stat calculations.
 - **InventoryManager**: Manages items, spells, and capacity enforcement.
 - **Persistence**: Managed via `PersistenceService` using JSON serialization to `LocalStorage`.
-- **Theming**: UI styles are standardized using CSS variables defined in `light-theme.css` and `dark-theme.css`. Components should always use variables (e.g., `var(--card-bg)`) instead of hardcoded colors.
+- **Theming**: UI styles are standardized using CSS variables. Components should always use variables (e.g., `var(--card-bg)`).
 
 ## Testing Infrastructure
 - **Headless Testing**: `Mythril.Headless` verifies game logic and data integrity without a UI.
 - **Theme Testing**: `Mythril.ThemeTest` isolates and validates theme switching interop.
-- **Live Diagnostics**: `TestRunner.razor` provides runtime state snapshots and JS interop validation.
+- **Live Diagnostics**: `TestRunner.razor` includes `ThemeDiagnostics.razor` for automated self-tests of JS Interop and theme state in the browser.
 
 ## Recent Improvements (March 1, 2026)
-- **UI Stability**: Migrated expanders to pure CSS transitions and implemented `@key` directives in list loops to eliminate flickering and preserve state during rapid re-renders.
-- **Layout Integrity**: Refactored `Home.razor` with robust flexbox constraints to prevent vertical scroll area overflow.
-- **Theming Overhaul**: Transitioned entire UI to CSS variables, ensuring consistent dark/light mode across all components.
-- **Quest Logic**: Fixed re-unlock loops and implemented stat-influenced durations.
+- **UI Stability**: Migrated expanders to pure CSS transitions and implemented `@key` directives in list loops to eliminate flickering.
+- **Layout Integrity**: Restored 2-column layout and optimized character card horizontal stat listing.
+- **Theming Overhaul**: Transitioned entire UI to CSS variables and implemented robust `window.setTheme` re-injection fallback logic.
+- **Diagnostics**: Added a comprehensive live self-diagnostic tool for the theme system.

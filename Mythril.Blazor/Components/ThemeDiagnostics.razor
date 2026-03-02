@@ -1,0 +1,74 @@
+@using Microsoft.JSInterop
+@inject IJSRuntime JS
+
+<div class="card mt-3">
+    <div class="card-header bg-info text-white">Theme Self-Diagnostic</div>
+    <div class="card-body">
+        <p>Status: <span class="badge @(_testPassed ? "bg-success" : "bg-warning")">@_testStatus</span></p>
+        <div class="alert alert-secondary small">
+            @foreach (var log in _logs)
+            {
+                <div>@log</div>
+            }
+        </div>
+        <button class="btn btn-sm btn-primary" @onclick="RunDiagnostic" disabled="@_isRunning">Run Full Theme Test</button>
+    </div>
+</div>
+
+@code {
+    private string _testStatus = "Ready";
+    private bool _testPassed = false;
+    private bool _isRunning = false;
+    private List<string> _logs = new();
+
+    private void Log(string msg) => _logs.Add($"[{DateTime.Now:HH:mm:ss}] {msg}");
+
+    private async Task RunDiagnostic()
+    {
+        _isRunning = true;
+        _logs.Clear();
+        _testPassed = false;
+        _testStatus = "Running...";
+        
+        try 
+        {
+            // 1. Check JS Function Existence
+            Log("Step 1: Checking window.setTheme existence...");
+            var type = await JS.InvokeAsync<string>("eval", "typeof window.setTheme");
+            Log($"  Type: {type}");
+            if (type != "function") throw new Exception("window.setTheme is NOT a function");
+
+            // 2. Test Toggle to Dark
+            Log("Step 2: Toggling to dark-theme...");
+            await JS.InvokeVoidAsync("setTheme", "dark-theme");
+            await Task.Delay(1000); // Wait for transition
+            
+            var darkHref = await JS.InvokeAsync<string>("eval", "document.getElementById('theme').getAttribute('href')");
+            Log($"  Current href: {darkHref}");
+            if (!darkHref.Contains("dark-theme.css")) throw new Exception("href failed to update to dark-theme.css");
+
+            // 3. Test Toggle to Light
+            Log("Step 3: Toggling to light-theme...");
+            await JS.InvokeVoidAsync("setTheme", "light-theme");
+            await Task.Delay(1000);
+            
+            var lightHref = await JS.InvokeAsync<string>("eval", "document.getElementById('theme').getAttribute('href')");
+            Log($"  Current href: {lightHref}");
+            if (!lightHref.Contains("light-theme.css")) throw new Exception("href failed to update to light-theme.css");
+
+            _testPassed = true;
+            _testStatus = "PASS";
+            Log("Diagnostic Complete: SUCCESS");
+        }
+        catch (Exception ex)
+        {
+            _testPassed = false;
+            _testStatus = "FAIL";
+            Log($"CRITICAL ERROR: {ex.Message}");
+        }
+        finally
+        {
+            _isRunning = false;
+        }
+    }
+}

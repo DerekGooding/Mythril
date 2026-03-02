@@ -20,8 +20,10 @@
         <div class="card-header">Theme Test</div>
         <div class="card-body">
             <p>Current Theme Link Href: <strong>@_currentThemeHref</strong></p>
-            <p>JS window.setTheme Type: <strong>@_jsSetThemeType</strong></p>
-            <button class="btn btn-warning" @onclick="RunThemeTest">Run Theme Interop Test</button>
+            <p>JS setTheme Type: <strong>@_jsSetThemeType</strong></p>
+            <button class="btn btn-warning" @onclick="RunThemeTest">Run Quick Interop Test</button>
+            
+            <ThemeDiagnostics />
         </div>
     </div>
 </div>
