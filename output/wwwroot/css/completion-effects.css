@@ -10,6 +10,6 @@
     }
 }
 
-.quest-progress-card.completed {
+.task-progress-card.completed {
     animation: gold-flash 1s ease-in-out;
 }

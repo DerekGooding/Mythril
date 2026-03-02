@@ -95,9 +95,8 @@
     display: flex;
     flex-direction: column;
     padding: 1rem;
-    overflow: scroll;
+    overflow-y: auto;
     overflow-x: hidden;
-    height: 750px;
 }
 
 .task-container[b-dn79ye7ork] {
@@ -237,9 +236,8 @@
     display: flex;
     flex-direction: column;
     padding: 1rem;
-    overflow: scroll;
+    overflow-y: auto;
     overflow-x: hidden;
-    height: 750px;
 }
 
 .task-container[b-d2vhg9sco9] {
@@ -340,6 +338,7 @@
     border: 1px solid #ccc;
     border-radius: 8px;
     padding: 1rem;
+    flex-shrink: 0;
 }
 /* /Components/QuestCard.razor.rz.scp.css */
 .card[b-1hlbzg9zqw] {
@@ -487,4 +486,92 @@
     background: #4CAF50;
 }
 /* /Layout/MainLayout.razor.rz.scp.css */
-/* Reset CSS */
+main[b-7o2wyx2auk] {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.top-row[b-7o2wyx2auk] {
+    height: 3.5rem;
+    display: flex;
+    align-items: center;
+    background-color: #f7f7f7;
+    border-bottom: 1px solid #dee2e6;
+    z-index: 1000;
+}
+
+.main-container[b-7o2wyx2auk] {
+    flex-grow: 1;
+    display: flex;
+    position: relative;
+    overflow: hidden;
+}
+
+.content[b-7o2wyx2auk] {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.feedback-drawer[b-7o2wyx2auk] {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 400px;
+    background-color: white;
+    border-left: 1px solid #dee2e6;
+    box-shadow: -5px 0 15px rgba(0,0,0,0.2);
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+    animation: slideIn-b-7o2wyx2auk 0.3s ease-out;
+}
+
+.drawer-header[b-7o2wyx2auk] {
+    padding: 1rem;
+    border-bottom: 1px solid #dee2e6;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f8f9fa;
+}
+
+.drawer-content[b-7o2wyx2auk] {
+    padding: 1rem;
+    overflow-y: auto;
+    flex-grow: 1;
+}
+
+.drawer-backdrop[b-7o2wyx2auk] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 1999;
+}
+
+@keyframes slideIn-b-7o2wyx2auk {
+    from { transform: translateX(100%); }
+    to { transform: translateX(0); }
+}
+
+/* Dark theme support for drawer */
+:global(.dark-theme) .feedback-drawer[b-7o2wyx2auk] {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+}
+
+:global(.dark-theme) .drawer-header[b-7o2wyx2auk] {
+    background-color: #2c2c2c;
+    border-bottom-color: #333;
+}
+
+:global(.dark-theme) .top-row[b-7o2wyx2auk] {
+    background-color: #1e1e1e;
+    border-bottom-color: #333;
+}

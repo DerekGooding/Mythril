@@ -8,8 +8,26 @@
         "Requirements": [ { "Item": "Gold", "Quantity": 100 } ]
       },
       {
-        "Ability": "Augment Strength",
+        "Ability": "J-Str",
         "Requirements": [ { "Item": "Iron Ore", "Quantity": 10 } ]
+      }
+    ]
+  },
+  {
+    "Name": "The Arcanist",
+    "Description": "A starter magic-focused job.",
+    "Abilities": [
+      {
+        "Ability": "Refine Ice",
+        "Requirements": [ { "Item": "Mana Leaf", "Quantity": 5 } ]
+      },
+      {
+        "Ability": "J-Magic",
+        "Requirements": [ { "Item": "Gold", "Quantity": 500 }, { "Item": "Mana Leaf", "Quantity": 10 } ]
+      },
+      {
+        "Ability": "Magic Pocket I",
+        "Requirements": [ { "Item": "Gold", "Quantity": 1000 }, { "Item": "Mana Leaf", "Quantity": 20 } ]
       }
     ]
   },
@@ -44,7 +62,7 @@
         "Requirements": [ { "Item": "Log", "Quantity": 10 } ]
       },
       {
-        "Ability": "Refine Ice",
+        "Ability": "J-HP",
         "Requirements": [ { "Item": "Potion", "Quantity": 10 } ]
       }
     ]
@@ -60,7 +78,16 @@
       {
         "Ability": "Essence Harvest",
         "Requirements": [ { "Item": "Ancient Bark", "Quantity": 20 }, { "Item": "Moonberry", "Quantity": 50 } ]
+      },
+      {
+        "Ability": "J-Vit",
+        "Requirements": [ { "Item": "Gold", "Quantity": 2000 } ]
       }
     ]
+  },
+  {
+    "Name": "Test",
+    "Description": "An example cadence for testing assignment.",
+    "Abilities": []
   }
 ]

@@ -22,25 +22,26 @@ Mythril is an RPG-inspired web application built with **.NET 10** and **Blazor W
 - **Junctioning**: Assign magic items to character stats to gain powerful bonuses, inspired by classic RPG mechanics.
 - **Cadence System**: Progression mechanic where `Cadences` provide `CadenceAbilities`. Unlocking is performed by assigning characters to specific ability nodes.
 - **Quest & Progression**: Real-time asynchronous tick system managing quests, durations, and rewards, with offline progress continuity.
-- **Diagnostics**: Includes specialized testing projects like `Mythril.ThemeTest` for validating isolated system behaviors like theme switching.
+- **Diagnostics & Testing**: Includes specialized projects like `Mythril.Headless` for logic validation and `Mythril.ThemeTest` for isolated system behaviors like theme switching.
 
 ## 🛠️ Technical Stack
 - **Frontend**: Blazor WebAssembly (.NET 10)
 - **Core Logic**: C# 13 / .NET 10 Class Libraries
+- **Architecture**: Separated into core managers: `ResourceManager` (Logic), `JunctionManager` (Stats), and `InventoryManager` (Items).
 - **Data**: JSON-driven content for easy modification and agentic updates.
-- **Testing**: MSTest, Moq, and Coverlet for coverage reporting.
-- **Automation**: Python 3.x for custom health checks and CI integration.
+- **Testing**: MSTest, Moq, and Coverlet for coverage reporting (>89%).
+- **CI/CD**: GitHub Actions for automated deployment and health monitoring.
 
 ## ⚖️ Quality Assurance & Health
 We maintain project health through a custom automated suite (`scripts/check_health.py`) which runs on every commit:
-- **Monolith Prevention**: Strict 250-line limit for source files to ensure modularity.
-- **Coverage**: Mandatory 70% unit test coverage for all core logic.
+- **Monolith Prevention**: Strict 250-line limit for source files.
+- **Coverage**: Mandatory 70% unit test coverage.
 - **Documentation Integrity**: Automated staleness tracking via local file modification times.
 - **Feedback Integrity**: Every resolved item must have a corresponding resolution file in `docs/resolution/`.
 
 ## 🚀 Getting Started
 1. **Build**: `dotnet build`
-2. **Test**: `dotnet test`
+2. **Publish**: `dotnet publish Mythril.Blazor/Mythril.Blazor.csproj -c Release -o output`
 3. **Health Check**: `python scripts/check_health.py`
 4. **Run**: `dotnet run --project Mythril.Blazor` (then open `https://localhost:5001`)
 

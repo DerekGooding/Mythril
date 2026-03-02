@@ -64,7 +64,7 @@ def get_local_changes_since_file(doc_file_path):
     doc_mtime = os.path.getmtime(doc_file_path)
     changed_count = 0
     
-    EXCLUDE_DIRS = {"obj", "bin", ".git", "lib", "node_modules", "wwwroot/lib", "TestResults", ".gemini", ".vs"}
+    EXCLUDE_DIRS = {"obj", "bin", ".git", "lib", "node_modules", "wwwroot/lib", "TestResults", ".gemini", ".vs", "output"}
     for root, dirs, files in os.walk(SOURCE_DIR):
         dirs[:] = [d for d in dirs if d not in EXCLUDE_DIRS]
         for file in files:
@@ -96,10 +96,10 @@ def check_docs_staleness():
 def check_monoliths():
     print(f"--- Checking for Monoliths (> {MAX_LINES_PER_FILE} lines) ---")
     monolith_count = 0
-    EXCLUDE_DIRS = {"obj", "bin", ".git", "lib", "node_modules", "wwwroot/lib", "TestResults"}
+    EXCLUDE_DIRS = {"obj", "bin", ".git", "lib", "node_modules", "wwwroot/lib", "TestResults", "output"}
     for root, dirs, files in os.walk(SOURCE_DIR):
         dirs[:] = [d for d in dirs if d not in EXCLUDE_DIRS]
-        if any(ex in root.replace("\\", "/") for ex in ["/obj/", "/bin/", "/.git/", "/lib/", "/node_modules/", "/wwwroot/lib/", "/TestResults/"]):
+        if any(ex in root.replace("\\", "/") for ex in ["/obj/", "/bin/", "/.git/", "/lib/", "/node_modules/", "/wwwroot/lib/", "/TestResults/", "/output/"]):
             continue
         
         for file in files:
