@@ -15,23 +15,29 @@ public class ThemeService(IJSRuntime jsRuntime, ILogger<ThemeService> logger)
     {
         try
         {
-            // Try standard invoke
-            await _jsRuntime.InvokeVoidAsync("setTheme", theme);
+            // Try standard invoke on the window-scoped function
+            await _jsRuntime.InvokeVoidAsync("window.setTheme", theme);
             OnThemeChanged?.Invoke();
         }
-
         catch (Exception ex)
         {
-            _logger.LogWarning(ex, "Standard setTheme call failed, trying eval fallback for {Theme}", theme);
+            _logger.LogWarning("setTheme interop failed, attempting re-injection. Error: {Msg}", ex.Message);
             try
             {
-                // Try eval fallback if standard invoke fails
-                await _jsRuntime.InvokeVoidAsync("eval", $"window.setTheme('{theme}')");
+                // If it's missing, re-inject the core logic directly via eval
+                await _jsRuntime.InvokeVoidAsync("eval", $@"
+                    window.setTheme = function(t) {{
+                        var link = document.getElementById('theme');
+                        if (link) link.setAttribute('href', 'css/' + t + '.css');
+                        localStorage.setItem('theme', t);
+                    }};
+                    window.setTheme('{theme}');
+                ");
                 OnThemeChanged?.Invoke();
             }
             catch (Exception fallbackEx)
             {
-                _logger.LogError(fallbackEx, "Theme switch failed completely for {Theme}", theme);
+                _logger.LogError(fallbackEx, "Critical theme failure: Re-injection failed for {Theme}", theme);
             }
         }
     }

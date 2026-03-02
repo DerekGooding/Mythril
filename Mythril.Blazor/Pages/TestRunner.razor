@@ -1,6 +1,5 @@
 @page "/test-runner"
 @using Mythril.Data
-@using Microsoft.JSInterop
 @inject ResourceManager resourceManager
 @inject IJSRuntime JS
 
@@ -21,7 +20,7 @@
         <div class="card-header">Theme Test</div>
         <div class="card-body">
             <p>Current Theme Link Href: <strong>@_currentThemeHref</strong></p>
-            <p>JS setTheme Type: <strong>@_jsSetThemeType</strong></p>
+            <p>JS window.setTheme Type: <strong>@_jsSetThemeType</strong></p>
             <button class="btn btn-warning" @onclick="RunThemeTest">Run Theme Interop Test</button>
         </div>
     </div>
@@ -52,7 +51,7 @@
         
         try {
             _currentThemeHref = await JS.InvokeAsync<string>("eval", "document.getElementById('theme') ? document.getElementById('theme').getAttribute('href') : 'null'");
-            _jsSetThemeType = await JS.InvokeAsync<string>("eval", "typeof setTheme");
+            _jsSetThemeType = await JS.InvokeAsync<string>("eval", "typeof window.setTheme");
         } catch (Exception ex) {
             _currentThemeHref = "Error: " + ex.Message;
         }
@@ -61,7 +60,7 @@
     private async Task RunThemeTest()
     {
         try {
-            await JS.InvokeVoidAsync("setTheme", "dark-theme");
+            await JS.InvokeVoidAsync("window.setTheme", "dark-theme");
             await Task.Delay(500);
             await TakeSnapshot();
         } catch (Exception ex) {
