@@ -6,7 +6,9 @@
         <span class="expander-icon @(isExpanded ? "expanded" : "")">▼</span>
     </div>
     <div class="expander-content @(isExpanded ? "open" : "closed")">
-        @ChildContent
+        <div class="expander-inner">
+            @ChildContent
+        </div>
     </div>
 </div>
 

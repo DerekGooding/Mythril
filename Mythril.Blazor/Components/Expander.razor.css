@@ -2,6 +2,8 @@
     border: 1px solid var(--panel-border);
     border-radius: 4px;
     margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
 }
 
 .expander-header {
@@ -12,6 +14,7 @@
     cursor: pointer;
     background-color: var(--tab-inactive-bg);
     color: var(--text-color);
+    flex-shrink: 0;
 }
 
 .expander-icon {
@@ -23,14 +26,19 @@
 }
 
 .expander-content {
-    overflow: hidden;
-    max-height: 0;
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.3s ease-out, opacity 0.2s ease-out;
     opacity: 0;
-    transition: max-height 0.3s ease-out, opacity 0.2s ease-out;
+    overflow: hidden;
     background-color: var(--panel-bg);
 }
 
 .expander-content.open {
-    max-height: 1000px; /* Large enough for content */
+    grid-template-rows: 1fr;
     opacity: 1;
+}
+
+.expander-inner {
+    min-height: 0;
 }

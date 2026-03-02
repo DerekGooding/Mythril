@@ -14,7 +14,7 @@
 
 <PageTitle>Mythril</PageTitle>
 
-<div class="container-fluid d-flex flex-column h-100 p-0">
+<div class="container-fluid d-flex flex-column h-100 p-0 overflow-hidden">
     <!-- Header Row -->
     <div class="header-row flex-shrink-0 p-2 border-bottom d-flex align-items-center gap-2">
         <button class="btn btn-primary" @onclick="ToggleTheme">Toggle Theme</button>
@@ -35,7 +35,7 @@
     </div>
 
     <!-- Main Content Area: Two Columns -->
-    <div class="row home-columns-row flex-grow-1 min-height-0 m-0 overflow-hidden">
+    <div class="row home-columns-row flex-grow-1 min-height-0 m-0">
         <!-- Left column with tabs -->
         <div class="col-8 d-flex flex-column h-100 p-2 overflow-hidden">
             @if (resourceManager is not null)
@@ -58,13 +58,13 @@
                     </li>
                 </ul>
                 <div class="tab-content flex-grow-1 min-height-0 border border-top-0 d-flex flex-column overflow-hidden">
-                    <div class="tab-pane fade show active flex-grow-1 overflow-hidden d-flex flex-column" id="hand" role="tabpanel">
+                    <div class="tab-pane fade show active flex-grow-1 overflow-auto d-flex flex-column" id="hand" role="tabpanel">
                         <HandPanel Locations="resourceManager.UsableLocations" />
                     </div>
-                    <div class="tab-pane fade flex-grow-1 overflow-hidden d-flex flex-column" id="cadence" role="tabpanel">
+                    <div class="tab-pane fade flex-grow-1 overflow-auto d-flex flex-column" id="cadence" role="tabpanel">
                         <CadencePanel OnUnequip="UnassignCadence" />
                     </div>
-                    <div class="tab-pane fade flex-grow-1 overflow-hidden d-flex flex-column" id="workshop" role="tabpanel">
+                    <div class="tab-pane fade flex-grow-1 overflow-auto d-flex flex-column" id="workshop" role="tabpanel">
                         <Workshop />
                     </div>
                 </div>
@@ -101,12 +101,16 @@
         background-color: var(--tab-bg);
         color: var(--text-color);
     }
+    .tab-pane {
+        height: 100%;
+    }
     .tab-pane > * {
         flex-grow: 1;
         min-height: 0;
     }
     .home-columns-row {
-        height: 0; /* Important for flex-grow-1 inside flex-column to correctly bound children */
+        flex: 1 1 0; /* Important for flex-grow-1 inside flex-column to correctly bound children */
+        min-height: 0;
     }
     .party-row {
         background-color: var(--tab-inactive-bg) !important;
@@ -144,8 +148,6 @@
     {
         resourceManager.IsTestMode = !resourceManager.IsTestMode;
     }
-
-    @inject IJSRuntime JS
 
     private async Task ResetGame()
     {

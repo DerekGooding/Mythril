@@ -2,6 +2,8 @@
     border: 1px solid var(--panel-border);
     border-radius: 4px;
     margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
 }
 
 .expander-header {
@@ -12,6 +14,7 @@
     cursor: pointer;
     background-color: var(--tab-inactive-bg);
     color: var(--text-color);
+    flex-shrink: 0;
 }
 
 .expander-icon {
@@ -23,16 +26,21 @@
 }
 
 .expander-content {
-    overflow: hidden;
-    max-height: 0;
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.3s ease-out, opacity 0.2s ease-out;
     opacity: 0;
-    transition: max-height 0.3s ease-out, opacity 0.2s ease-out;
+    overflow: hidden;
     background-color: var(--panel-bg);
 }
 
 .expander-content.open {
-    max-height: 1000px;
+    grid-template-rows: 1fr;
     opacity: 1;
+}
+
+.expander-inner {
+    min-height: 0;
 }
 
 .inventory-item {
@@ -41,18 +49,23 @@
     border-radius: 3px;
     padding: 5px;
     text-align: center;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: var(--shadow-sm);
     transition: all 0.2s ease-in-out;
-    cursor: grab;
     background-color: var(--item-bg);
     color: var(--text-color);
+    flex-grow: 1;
+    margin-right: 10px;
 }
 
-.inventory-item:active {
+.cadence-draggable {
+    cursor: grab;
+}
+
+.cadence-draggable:active {
     cursor: grabbing;
 }
 
 .inventory-item:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
 }

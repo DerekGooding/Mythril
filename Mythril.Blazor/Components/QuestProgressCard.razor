@@ -9,7 +9,9 @@
         <p>@QuestProgress?.Description</p>
         <div class="progress">
             @{
-                var progressPercent = (QuestProgress?.Progress * 100) ?? 0.0;
+                var progressValue = QuestProgress?.Progress ?? 0.0;
+                if (double.IsNaN(progressValue) || double.IsInfinity(progressValue)) progressValue = 0.0;
+                var progressPercent = Math.Clamp(progressValue * 100, 0, 100);
                 var progressStyle = $"width: {progressPercent.ToString("0.##", CultureInfo.InvariantCulture)}%";
             }
             <div class="progress-bar" 
@@ -20,8 +22,8 @@
             </div>
         </div>
     </div>
-    <div class="task-duration">
-        @QuestProgress?.DurationSeconds s
+    <div class="task-duration text-nowrap">
+        @QuestProgress?.SecondsElapsed.ToString("0.#") / @QuestProgress?.DurationSeconds s
     </div>
 </div>
 

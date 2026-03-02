@@ -18,12 +18,11 @@ From architecture and core logic to the Blazor frontend and DevOps pipelines, My
 Mythril is an RPG-inspired web application built with **.NET 10** and **Blazor WebAssembly**. It serves as a sandbox for exploring agentic development patterns and modern C# architectures.
 
 ### Key Systems
-- **Character Core**: Modular system where characters share baseline stats, differentiated by assigned Cadences and junctioned magic. Features horizontal stat layout and vertical party stacking.
+- **Character Core**: Modular system where characters share baseline stats, differentiated by assigned Cadences and junctioned magic. Character cards feature horizontal stat layout and vertical party stacking.
 - **Junctioning**: Assign magic items to character stats to gain powerful bonuses, inspired by classic RPG mechanics.
 - **Cadence System**: Progression mechanic where `Cadences` provide `CadenceAbilities`. Unlocking is performed by assigning characters to specific ability nodes.
 - **Quest & Progression**: Real-time asynchronous tick system managing quests, durations, and rewards, with offline progress continuity.
-- **Persistence**: Automated saving and loading to `LocalStorage`. Includes a "Reset Game" feature for clearing all progress.
-- **UI Stability**: Advanced flexbox layouts, CSS transitions, and `@key` state preservation ensure a responsive, flicker-free experience.
+- **UI Stability**: Advanced flexbox layouts, CSS Grid transitions, and `@key` state preservation ensure a responsive, flicker-free experience.
 
 ## 🛠️ Technical Stack
 - **Frontend**: Blazor WebAssembly (.NET 10)

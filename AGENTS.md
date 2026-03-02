@@ -17,6 +17,7 @@ This project uses agentic workflows to maintain its health and quality.
 - **JunctionManager**: Handles character-cadence assignments and stat calculations.
 - **InventoryManager**: Manages items, spells, and capacity enforcement.
 - **Persistence**: Managed via `PersistenceService` using JSON serialization to `LocalStorage`. Includes auto-save and manual "Reset Game" functionality.
+- **Theming**: UI styles are standardized using CSS variables. Components should always use variables (e.g., `var(--card-bg)`).
 
 ## Testing Infrastructure
 - **Headless Testing**: `Mythril.Headless` verifies game logic and data integrity without a UI.
@@ -24,7 +25,8 @@ This project uses agentic workflows to maintain its health and quality.
 - **Live Diagnostics**: `TestRunner.razor` provides runtime state snapshots and JS interop validation.
 
 ## Recent Improvements (March 1, 2026)
-- **UI Simplification**: Removed redundant Save/Load buttons. Implemented auto-save and a verified "Reset Game" option.
-- **UI Stability**: Migrated expanders to pure CSS transitions and implemented `@key` directives in list loops to eliminate flickering.
-- **Layout Integrity**: Refactored `Home.razor` with robust flexbox constraints to prevent vertical scroll area overflow.
+- **UI Stability**: Migrated expanders to pure CSS Grid transitions and implemented `@key` directives to eliminate flickering.
+- **Layout Integrity**: Refactored `Home.razor` with robust flexbox constraints to ensure tabs fill the vertical space.
+- **Drag-and-Drop**: Fixed Cadence equipping/unequipping logic and UI.
+- **Polish**: Removed confetti library and stabilized progress bar rendering.
 - **Theming Overhaul**: Transitioned entire UI to CSS variables and implemented robust `window.setTheme` re-injection fallback logic.

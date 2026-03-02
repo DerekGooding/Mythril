@@ -10,7 +10,7 @@
     @ondragover="HandleDragOver"
     @ondrop="HandleDrop"
     @ondragenter="HandleDragEnter">
-    <p>Drop a task here to assign it.</p>
+    <p class="m-0 small">@Message</p>
 </div>
 
 @code {
@@ -20,39 +20,54 @@
     [Parameter]
     public Func<object, bool>? Accepts { get; set; }
 
+    [Parameter]
+    public string Message { get; set; } = "Drop here to assign.";
+
     private bool isShaking = false;
 
     private async Task HandleDragEnter(DragEventArgs args)
     {
-        if (DragDropService.Data is QuestData || DragDropService.Data is CadenceUnlock)
+        if (IsValidDrop())
         {
             args.DataTransfer.DropEffect = "move";
-            await JS.InvokeVoidAsync("eval", "event.preventDefault()");
         }
     }
 
     private async Task HandleDragOver(DragEventArgs args)
     {
-        if (DragDropService.Data is QuestData || DragDropService.Data is CadenceUnlock)
+        if (IsValidDrop())
         {
             args.DataTransfer.DropEffect = "move";
-            await JS.InvokeVoidAsync("eval", "event.preventDefault()");
         }
+    }
+
+    private bool IsValidDrop()
+    {
+        var data = DragDropService.Data;
+        if (data == null) return false;
+        
+        // Check if it's one of our accepted types
+        bool isCorrectType = data is QuestData || data is CadenceUnlock || data is Cadence;
+        if (!isCorrectType) return false;
+
+        // Check if the specific component accepts this instance
+        if (Accepts != null)
+        {
+            return Accepts(data);
+        }
+
+        return true;
     }
 
     private async Task HandleDrop()
     {
-        if (DragDropService.Data is QuestData quest || DragDropService.Data is CadenceUnlock)
+        if (IsValidDrop())
         {
-
-            if (Accepts is null || Accepts(DragDropService.Data))
-            {
-                await OnQuestDrop.InvokeAsync(DragDropService.Data);
-            }
-            else
-            {
-                await Shake();
-            }
+            await OnQuestDrop.InvokeAsync(DragDropService.Data);
+        }
+        else if (DragDropService.Data != null)
+        {
+            await Shake();
         }
 
         DragDropService.Data = null;

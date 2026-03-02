@@ -2,15 +2,20 @@
 @using Microsoft.JSInterop
 @inject DragDropService DragDropService
 
-<div class="expander">
+<div class="expander shadow-theme">
     <div class="expander-header" @onclick="Toggle">
-        <div class="inventory-item" draggable="true" @ondragstart="HandleDragStart" @onclick:stopPropagation="true">
-            <span class="item-name">@Cadence.Name</span>
+        <div class="inventory-item cadence-draggable" draggable="true" @ondragstart="HandleDragStart" @onclick:stopPropagation="true">
+            <div class="d-flex flex-column text-start">
+                <span class="item-name">@Cadence.Name</span>
+                <span class="small text-muted">@Cadence.Description</span>
+            </div>
         </div>
         <span class="expander-icon @(isExpanded ? "expanded" : "")">▼</span>
     </div>
     <div class="expander-content @(isExpanded ? "open" : "closed")">
-        @ChildContent
+        <div class="expander-inner">
+            @ChildContent
+        </div>
     </div>
 </div>
 
@@ -34,6 +39,7 @@
         {
             args.DataTransfer.EffectAllowed = "move";
             DragDropService.Data = Cadence;
+            Console.WriteLine($"Dragging Cadence: {Cadence.Name}");
         }
     }
 }
