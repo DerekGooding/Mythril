@@ -88,26 +88,13 @@
     flex-direction: column;
     gap: 2px;
 }
-.draggable-name {
-    cursor: grab;
-    user-select: none;
+.character-name {
     margin: 0;
     font-size: 1.1rem;
     color: var(--text-color);
 }
-.draggable-name:hover {
-    color: var(--primary-color);
-    text-decoration: underline;
-}
-.draggable-name:active {
-    cursor: grabbing;
-}
-.draggable-cadence {
-    cursor: grab;
+.cadence-name {
     display: inline-block;
-}
-.draggable-cadence:active {
-    cursor: grabbing;
 }
 .btn-xs {
     padding: 0.1rem 0.3rem;

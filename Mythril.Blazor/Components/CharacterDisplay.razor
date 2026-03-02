@@ -9,13 +9,13 @@
 <div class="character-display shadow-theme @(QuestProgress is not null ? "has-active-task" : "") @(QuestProgress?.IsCompleted == true ? "completed" : "")">
     <div class="character-header">
         <div class="d-flex flex-column flex-grow-1 min-width-0">
-            <h4 class="draggable-name text-truncate">@Character.Name</h4>
+            <h4 class="character-name text-truncate">@Character.Name</h4>
             <div class="cadence-info small text-muted text-truncate">
                 @{
                     var assignedCadence = JunctionManager.CurrentlyAssigned(Character).FirstOrDefault();
                     if (assignedCadence.Name != null)
                     {
-                        <span class="draggable-cadence">
+                        <span class="cadence-name">
                             Cadence: @assignedCadence.Name
                         </span>
                     }
