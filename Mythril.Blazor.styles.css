@@ -179,6 +179,29 @@
     font-weight: bold;
     border: 1px solid var(--junction-badge-border);
 }
+.character-display.has-active-task[b-tzawi3ksml] {
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 8px var(--secondary-color);
+}
+
+.character-card-progress[b-tzawi3ksml] {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: rgba(0, 0, 0, 0.1);
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    overflow: hidden;
+}
+
+.character-card-progress .progress-bar[b-tzawi3ksml] {
+    height: 100%;
+    background-color: var(--secondary-color);
+    transition: width 0.1s linear;
+}
+
 .junction-menu[b-tzawi3ksml] {
     background: var(--card-bg);
     border: 1px solid var(--border-color);
@@ -527,20 +550,21 @@
 /* /Components/QuestProgressCard.razor.rz.scp.css */
 .task-progress-card[b-oes0l3to11] {
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    border: 1px solid var(--card-border);
-    border-radius: 8px;
-    margin: 0.5rem;
-    padding: 1rem;
-    box-shadow: var(--shadow-sm);
-    background-color: var(--card-bg);
+    flex-direction: column;
+    align-items: stretch;
+    border: none;
+    border-radius: 0;
+    margin: 0;
+    padding: 0;
+    box-shadow: none;
+    background-color: transparent;
     color: var(--text-color);
 }
 
 .task-header[b-oes0l3to11] {
     font-weight: bold;
-    margin-right: 1rem;
+    font-size: 0.9rem;
+    margin-bottom: 2px;
 }
 
 .task-body[b-oes0l3to11] {
@@ -548,29 +572,13 @@
 }
 
 .task-duration[b-oes0l3to11] {
-    margin-left: 1rem;
+    font-size: 0.75rem;
     font-style: italic;
     color: var(--text-muted);
 }
 
 .progress[b-oes0l3to11] {
-    width: 100%;
-    height: 12px;
-    background-color: var(--badge-bg);
-    border-radius: 6px;
-    overflow: hidden;
-    margin: 0.5rem 0;
-    padding: 0;
-    border: 1px solid var(--card-border);
-}
-
-.progress-bar[b-oes0l3to11] {
-    height: 100%;
-    background-color: var(--secondary-color);
-    border-radius: 0;
-    transition: none; /* Disable transition to prevent stuttering with high-frequency updates */
-    margin: 0;
-    padding: 0;
+    display: none; /* Hide internal progress bar as CharacterDisplay now has its own */
 }
 /* /Components/Snackbar.razor.rz.scp.css */
 .snackbar-container[b-g03wipbmr2] {
