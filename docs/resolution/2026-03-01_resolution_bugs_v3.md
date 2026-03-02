@@ -17,7 +17,7 @@
 ### 2. Layout & Scrolling
 - **Viewport Constraints**: Hardened `app.css` by adding `width: 100vw` and `overflow: hidden` to the `html, body, #app` chain.
 - **Internal Scrolling**: Refactored `Home.razor` to use nested flexbox containers with `overflow: hidden` and `flex-grow: 1`. This correctly delegates scrolling to sub-panels (Hand, Party, etc.) and prevents scroll areas from taking up the entire vertical space or pushing elements off-screen.
-- **Expander Fix**: Replaced JS-driven expansion logic with pure CSS transitions using `max-height` and `opacity`. This eliminated the flickering bug caused by rapid timer-induced re-renders and improved UI performance. Removed obsolete `expander.js`.
+- **Expander Fix**: Replaced JS-driven expansion logic with pure CSS transitions using `max-height` and `opacity`. Additionally, implemented `@key` directives in all `@foreach` loops within `HandPanel.razor` and `CadencePanel.razor`. This ensures Blazor preserves the component state (including `isExpanded`) during rapid data updates, eliminating the "expand and unexpand" flickering bug. Removed obsolete `expander.js`.
 - **Character Stacks**: Enforced strictly horizontal stat listing within cards using `flex-nowrap` and `overflow-x: auto`.
 
 ### 3. Theme System Resilience & Cadence Fixes

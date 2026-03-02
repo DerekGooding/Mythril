@@ -7,10 +7,10 @@
     {
         @foreach (var location in Locations.Where(l => l.Quests.Any()))
         {
-            <Expander Header="@location.Name">
+            <Expander Header="@location.Name" @key="@location.Name">
                 @foreach (var quest in location.Quests)
                 {
-                    <div class="task-container">
+                    <div class="task-container" @key="@quest.Name">
                         <QuestCard QuestData="@QuestToData(quest)" />
                     </div>
                 }

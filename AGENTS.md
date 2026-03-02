@@ -24,7 +24,7 @@ This project uses agentic workflows to maintain its health and quality.
 - **Live Diagnostics**: `TestRunner.razor` provides runtime state snapshots and JS interop validation.
 
 ## Recent Improvements (March 1, 2026)
-- **UI Stability**: Migrated expanders to pure CSS transitions, eliminating flickering during rapid re-renders.
+- **UI Stability**: Migrated expanders to pure CSS transitions and implemented `@key` directives in list loops to eliminate flickering and preserve state during rapid re-renders.
 - **Layout Integrity**: Refactored `Home.razor` with robust flexbox constraints to prevent vertical scroll area overflow.
 - **Interop**: Hardened theme switching with re-injection fallback logic and explicit `window` scoping.
 - **Quest Logic**: Fixed re-unlock loops and implemented stat-influenced durations.

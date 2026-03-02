@@ -1,5 +1,5 @@
 # Environment Knowledge
-- **Last Reviewed:** March 1, 2026 (Stability & Persistence Update).
+- **Last Reviewed:** March 1, 2026 (UI Stability & State Preservation).
 - **Shell:** PowerShell is used. Standard Unix utilities like `grep` and `cat` are not available. Use `grep_search` tool or PowerShell equivalents (e.g., `Select-String`, `Get-Content`).
 - **Formatting:** `cat -n` equivalent in PowerShell is `Get-Content <file> | ForEach-Object { "$($_.ReadCount) $_" }`.
 
@@ -19,13 +19,13 @@ This document contains foundational mandates for the AI assistant (Gemini) durin
 
 ## 2. Technical Standards
 - **Framework/Stack:** .NET 10 (Blazor WebAssembly)
-- **C# Standards**: Use C# 13 features where applicable. Adhere to project-specific coding conventions.
+- **C# Standards**: Use C# 13 features where applicable. Use `@key` in all list-based UI loops to preserve component state.
 - **Interop**: Use explicit `window.` scoping for JS Interop functions. Ensure robust re-injection fallback logic for critical functions.
 - **State Management**: Use `PersistenceService` for serializable state preservation in `LocalStorage`.
 - **Dependencies**: Avoid adding external packages unless essential. Verify usage before employing.
 
 ## 3. Project Health & Quality
-- **Test Coverage**: Maintain overall coverage above **70%** (Currently verified at >89%).
+- **Test Coverage**: Maintain overall coverage above **70%** (Currently maintained >89%).
 - **Monolith Prevention**: No single source file should exceed **250** lines. `output/` and build directories are excluded from this check.
 - **Documentation Staleness**: Documentation is considered "stale" if more than **8** source files have changed since its last update.
 - **Automated Checks**: Run `python scripts/check_health.py` before completing any significant feature.

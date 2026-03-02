@@ -7,7 +7,7 @@
     {
         @foreach (var cadence in resourceManager.UnlockedCadences)
         {
-            <CadenceDragExpander Cadence="cadence">
+            <CadenceDragExpander Cadence="cadence" @key="@cadence.Name">
                 <CadenceTree CadenceData="cadence" />
             </CadenceDragExpander>
         }
