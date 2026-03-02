@@ -1,5 +1,6 @@
 @using Microsoft.JSInterop
 @using Mythril.Data
+@using System.Globalization
 @inject IJSRuntime JS
 
 <div class="task-progress-card @(QuestProgress?.IsCompleted == true ? "completed" : "")" @ref="cardElement">
@@ -7,10 +8,14 @@
     <div class="task-body">
         <p>@QuestProgress?.Description</p>
         <div class="progress">
+            @{
+                var progressPercent = (QuestProgress?.Progress * 100) ?? 0.0;
+                var progressStyle = $"width: {progressPercent.ToString("0.##", CultureInfo.InvariantCulture)}%";
+            }
             <div class="progress-bar" 
                  role="progressbar" 
-                 style="width: @((QuestProgress?.Progress * 100)?.ToString() ?? "0")%;" 
-                 aria-valuenow="@((QuestProgress?.Progress * 100) ?? 0.0)" 
+                 style="@progressStyle" 
+                 aria-valuenow="@progressPercent" 
                  aria-valuemin="0" aria-valuemax="100">
             </div>
         </div>
@@ -36,14 +41,9 @@
         if (QuestProgress?.IsCompleted == true && !_hasTriggeredCompletion)
         {
             _hasTriggeredCompletion = true;
-            await TriggerConfetti();
-            await Task.Delay(1000); // Duration of the gold flash animation
+            // The "completed" class triggers the gold flash via completion-effects.css
+            await Task.Delay(1000); 
             await OnCompletionAnimationEnd.InvokeAsync();
         }
-    }
-
-    private async Task TriggerConfetti()
-    {
-        await JS.InvokeVoidAsync("triggerConfettiAt", cardElement);
     }
 }

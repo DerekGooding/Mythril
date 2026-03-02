@@ -1,17 +1,46 @@
 @using Microsoft.JSInterop
 @inject IJSRuntime JS
 
-<div class="card mt-3">
-    <div class="card-header bg-info text-white">Theme Self-Diagnostic</div>
+<div class="card mt-3 shadow-theme">
+    <div class="card-header bg-info text-white">Theme Self-Diagnostic & Visual Audit</div>
     <div class="card-body">
         <p>Status: <span class="badge @(_testPassed ? "bg-success" : "bg-warning")">@_testStatus</span></p>
-        <div class="alert alert-secondary small">
-            @foreach (var log in _logs)
-            {
-                <div>@log</div>
-            }
+        
+        <div class="row">
+            <div class="col-md-6">
+                <h6>Diagnostic Logs</h6>
+                <div class="alert alert-secondary small overflow-auto" style="max-height: 200px;">
+                    @foreach (var log in _logs)
+                    {
+                        <div>@log</div>
+                    }
+                </div>
+            </div>
+            <div class="col-md-6">
+                <h6>Visual Snapshots</h6>
+                @if (_snapshots.Any())
+                {
+                    <div class="list-group small">
+                        @foreach (var snap in _snapshots)
+                        {
+                            <div class="list-group-item">
+                                <strong>@snap.Key</strong><br />
+                                Bg: @snap.Value.BodyBg | Text: @snap.Value.BodyText<br />
+                                CardBg: @snap.Value.CardBg
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <p class="text-muted small">No snapshots yet. Run test to audit visual styles.</p>
+                }
+            </div>
         </div>
-        <button class="btn btn-sm btn-primary" @onclick="RunDiagnostic" disabled="@_isRunning">Run Full Theme Test</button>
+
+        <button class="btn btn-sm btn-primary mt-2" @onclick="RunDiagnostic" disabled="@_isRunning">
+            Run Absolute Theme Audit
+        </button>
     </div>
 </div>
 
@@ -20,6 +49,14 @@
     private bool _testPassed = false;
     private bool _isRunning = false;
     private List<string> _logs = new();
+    private Dictionary<string, VisualSnapshot> _snapshots = new();
+
+    public class VisualSnapshot {
+        public string BodyBg { get; set; } = "";
+        public string BodyText { get; set; } = "";
+        public string CardBg { get; set; } = "";
+        public string ThemeHref { get; set; } = "";
+    }
 
     private void Log(string msg) => _logs.Add($"[{DateTime.Now:HH:mm:ss}] {msg}");
 
@@ -27,44 +64,49 @@
     {
         _isRunning = true;
         _logs.Clear();
+        _snapshots.Clear();
         _testPassed = false;
-        _testStatus = "Running...";
+        _testStatus = "Running Audit...";
         
         try 
         {
-            // 1. Check JS Function Existence
-            Log("Step 1: Checking window.setTheme existence...");
-            var type = await JS.InvokeAsync<string>("eval", "typeof window.setTheme");
-            Log($"  Type: {type}");
-            if (type != "function") throw new Exception("window.setTheme is NOT a function");
+            // 1. Initial State
+            Log("Audit Step 1: Capturing baseline...");
+            _snapshots["Baseline"] = await JS.InvokeAsync<VisualSnapshot>("getVisualSnapshot");
 
             // 2. Test Toggle to Dark
-            Log("Step 2: Toggling to dark-theme...");
+            Log("Audit Step 2: Toggling to dark-theme...");
             await JS.InvokeVoidAsync("setTheme", "dark-theme");
-            await Task.Delay(1000); // Wait for transition
+            await Task.Delay(1000); 
             
-            var darkHref = await JS.InvokeAsync<string>("eval", "document.getElementById('theme').getAttribute('href')");
-            Log($"  Current href: {darkHref}");
-            if (!darkHref.Contains("dark-theme.css")) throw new Exception("href failed to update to dark-theme.css");
+            var darkSnap = await JS.InvokeAsync<VisualSnapshot>("getVisualSnapshot");
+            _snapshots["Dark Mode"] = darkSnap;
+            Log($"  Theme Href: {darkSnap.ThemeHref}");
+            
+            if (!darkSnap.ThemeHref.Contains("dark-theme.css")) throw new Exception("href failed to update to dark-theme.css");
+            if (darkSnap.BodyBg == _snapshots["Baseline"].BodyBg && _snapshots["Baseline"].ThemeHref.Contains("light")) 
+                throw new Exception("Body background did not change after switching to dark-theme");
 
             // 3. Test Toggle to Light
-            Log("Step 3: Toggling to light-theme...");
+            Log("Audit Step 3: Toggling to light-theme...");
             await JS.InvokeVoidAsync("setTheme", "light-theme");
             await Task.Delay(1000);
             
-            var lightHref = await JS.InvokeAsync<string>("eval", "document.getElementById('theme').getAttribute('href')");
-            Log($"  Current href: {lightHref}");
-            if (!lightHref.Contains("light-theme.css")) throw new Exception("href failed to update to light-theme.css");
+            var lightSnap = await JS.InvokeAsync<VisualSnapshot>("getVisualSnapshot");
+            _snapshots["Light Mode"] = lightSnap;
+            Log($"  Theme Href: {lightSnap.ThemeHref}");
+            
+            if (!lightSnap.ThemeHref.Contains("light-theme.css")) throw new Exception("href failed to update to light-theme.css");
 
             _testPassed = true;
-            _testStatus = "PASS";
-            Log("Diagnostic Complete: SUCCESS");
+            _testStatus = "PASS - Visual Consistency Verified";
+            Log("Absolute Audit Complete: SUCCESS");
         }
         catch (Exception ex)
         {
             _testPassed = false;
             _testStatus = "FAIL";
-            Log($"CRITICAL ERROR: {ex.Message}");
+            Log($"CRITICAL AUDIT ERROR: {ex.Message}");
         }
         finally
         {

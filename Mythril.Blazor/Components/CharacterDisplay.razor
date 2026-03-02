@@ -10,7 +10,19 @@
         <div class="d-flex flex-column flex-grow-1 min-width-0">
             <h4 draggable="true" @ondragstart="HandleCharacterDragStart" class="draggable-name text-truncate">@Character.Name</h4>
             <div class="cadence-info small text-muted text-truncate">
-                Cadence: @(JunctionManager.CurrentlyAssigned(Character).FirstOrDefault().Name ?? "None")
+                @{
+                    var assignedCadence = JunctionManager.CurrentlyAssigned(Character).FirstOrDefault();
+                    if (assignedCadence.Name != null)
+                    {
+                        <span draggable="true" @ondragstart="() => HandleCadenceDragStart(assignedCadence)" class="draggable-cadence">
+                            Cadence: @assignedCadence.Name
+                        </span>
+                    }
+                    else
+                    {
+                        <span>Cadence: None</span>
+                    }
+                }
             </div>
         </div>
         <div class="stats-container">
@@ -165,6 +177,13 @@
     .draggable-name:active {
         cursor: grabbing;
     }
+    .draggable-cadence {
+        cursor: grab;
+        display: inline-block;
+    }
+    .draggable-cadence:active {
+        cursor: grabbing;
+    }
     .btn-xs {
         padding: 0.1rem 0.3rem;
         font-size: 0.7rem;
@@ -197,6 +216,11 @@
     private void HandleCharacterDragStart(DragEventArgs args)
     {
         DragDropService.Data = Character;
+    }
+
+    private void HandleCadenceDragStart(Cadence cadence)
+    {
+        DragDropService.Data = cadence;
     }
 
     private bool CanJunction(Stat stat)
