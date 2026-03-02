@@ -11,9 +11,13 @@
   { "Name": "Slime", "Description": "A gelatinous creature's residue.", "ItemType": "Material" },
   { "Name": "Moonberry", "Description": "A glowing berry from the Whispering Woods.", "ItemType": "Consumable" },
   { "Name": "Ancient Bark", "Description": "Bark from the ancient trees.", "ItemType": "Material" },
+  { "Name": "Mana Leaf", "Description": "A leaf pulsing with raw mana.", "ItemType": "Material" },
+  { "Name": "Fire Shard", "Description": "A crystalline fragment of heat.", "ItemType": "Material" },
+  { "Name": "Ice Shard", "Description": "A crystalline fragment of frost.", "ItemType": "Material" },
   { "Name": "Mythril Spark", "Description": "A legendary spark of ancient power.", "ItemType": "Material" },
   { "Name": "Fire I", "Description": "A basic fire spell.", "ItemType": "Spell" },
   { "Name": "Ice I", "Description": "A basic ice spell.", "ItemType": "Spell" },
   { "Name": "Lightning I", "Description": "A basic lightning spell.", "ItemType": "Spell" },
-  { "Name": "Earth I", "Description": "A basic earth spell.", "ItemType": "Spell" }
+  { "Name": "Earth I", "Description": "A basic earth spell.", "ItemType": "Spell" },
+  { "Name": "Cure I", "Description": "A basic healing spell.", "ItemType": "Spell" }
 ]

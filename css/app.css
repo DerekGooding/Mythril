@@ -6,7 +6,21 @@
 
 html, body, #app {
     height: 100vh;
+    width: 100vw;
     overflow: hidden; /* Prevent the whole page from scrolling */
+    margin: 0;
+    padding: 0;
+}
+
+.min-height-0 {
+    min-height: 0;
+}
+
+.stats-mini {
+    display: flex;
+    flex-wrap: nowrap !important;
+    overflow-x: auto;
+    gap: 0.25rem;
 }
 
 main, .content {
@@ -59,3 +73,6 @@ main {
     flex-direction: column;
     overflow-y: auto; /* Add scroll if content overflows */
 }
+
+@keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+.animate-pulse { animation: pulse 2s infinite; }
