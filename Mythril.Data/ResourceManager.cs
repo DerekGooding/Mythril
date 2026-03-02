@@ -32,6 +32,7 @@ public class ResourceManager(
     public List<LocationData> UsableLocations = [];
 
     public List<Cadence> UnlockedCadences = [];
+    public List<string> UnlockedCadenceNames = [];
     public List<CadenceAbility> UnlockedAbilities = [];
 
     public List<QuestProgress> ActiveQuests { get; } = [];
@@ -90,7 +91,11 @@ public class ResourceManager(
     }
 
     public void UpdateAvaiableCadences()
-        => UnlockedCadences = [.. _lockedCadences.Where(x => !x.Value).Select(x => x.Key)];
+    {
+        UnlockedCadences = [.. _lockedCadences.Where(x => !x.Value).Select(x => x.Key)];
+        UnlockedCadenceNames = [.. UnlockedCadences.Select(c => c.Name)];
+        Console.WriteLine($"Unlocked Cadences Updated: {string.Join(", ", UnlockedCadenceNames)}");
+    }
 
     private void LockQuest(Quest quest)
     {

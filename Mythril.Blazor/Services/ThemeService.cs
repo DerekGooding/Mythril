@@ -15,12 +15,24 @@ public class ThemeService(IJSRuntime jsRuntime, ILogger<ThemeService> logger)
     {
         try
         {
-            await _jsRuntime.InvokeVoidAsync("window.setTheme", theme);
+            // Try standard invoke
+            await _jsRuntime.InvokeVoidAsync("setTheme", theme);
             OnThemeChanged?.Invoke();
         }
+
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to set theme: {Theme}", theme);
+            _logger.LogWarning(ex, "Standard setTheme call failed, trying eval fallback for {Theme}", theme);
+            try
+            {
+                // Try eval fallback if standard invoke fails
+                await _jsRuntime.InvokeVoidAsync("eval", $"window.setTheme('{theme}')");
+                OnThemeChanged?.Invoke();
+            }
+            catch (Exception fallbackEx)
+            {
+                _logger.LogError(fallbackEx, "Theme switch failed completely for {Theme}", theme);
+            }
         }
     }
 

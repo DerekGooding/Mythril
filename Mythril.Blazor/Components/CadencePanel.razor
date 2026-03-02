@@ -1,23 +1,28 @@
 @using Mythril.Data
+@inject ResourceManager resourceManager
 
 <div class="hand-panel">
-    @if (Cadences is not null)
+    <h3>Cadence Progression</h3>
+    @if (resourceManager.UnlockedCadences is not null && resourceManager.UnlockedCadences.Any())
     {
-        @foreach (var cadence in Cadences)
+        @foreach (var cadence in resourceManager.UnlockedCadences)
         {
             <CadenceDragExpander Cadence="cadence">
                 <CadenceTree CadenceData="cadence" />
             </CadenceDragExpander>
         }
     }
+    else
+    {
+        <div class="alert alert-warning">
+            No Cadences Unlocked. Unlocked names count: @resourceManager.UnlockedCadenceNames.Count
+        </div>
+    }
 </div>
 
 @code {
-    [Parameter]
-    public IEnumerable<Cadence>? Cadences { get; set; }
-
-    protected override void OnParametersSet()
+    protected override void OnInitialized()
     {
-        Console.WriteLine($"CadencePanel: Received {Cadences?.Count() ?? 0} cadences.");
+        Console.WriteLine("CadencePanel Initialized.");
     }
 }

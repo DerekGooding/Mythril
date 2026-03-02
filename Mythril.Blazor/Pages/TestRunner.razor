@@ -41,7 +41,7 @@
         var state = new
         {
             UnlockedCadencesCount = resourceManager.UnlockedCadences.Count,
-            UnlockedCadences = resourceManager.UnlockedCadences.Select(c => c.Name).ToList(),
+            UnlockedCadenceNames = resourceManager.UnlockedCadenceNames,
             ActiveQuestsCount = resourceManager.ActiveQuests.Count,
             InventoryCount = resourceManager.Inventory.GetItems().Count(),
             IsTestMode = resourceManager.IsTestMode
@@ -51,7 +51,7 @@
         
         try {
             _currentThemeHref = await JS.InvokeAsync<string>("eval", "document.getElementById('theme') ? document.getElementById('theme').getAttribute('href') : 'null'");
-            _jsSetThemeType = await JS.InvokeAsync<string>("eval", "typeof window.setTheme");
+            _jsSetThemeType = await JS.InvokeAsync<string>("eval", "typeof setTheme");
         } catch (Exception ex) {
             _currentThemeHref = "Error: " + ex.Message;
         }
@@ -60,13 +60,11 @@
     private async Task RunThemeTest()
     {
         try {
-            await JS.InvokeVoidAsync("window.setTheme", "dark-theme");
+            await JS.InvokeVoidAsync("setTheme", "dark-theme");
             await Task.Delay(500);
             await TakeSnapshot();
         } catch (Exception ex) {
-            _snapshotJson += "
-
-Theme Test Error: " + ex.Message;
+            _snapshotJson += "\n\nTheme Test Error: " + ex.Message;
         }
     }
 }
