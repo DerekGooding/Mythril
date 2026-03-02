@@ -12,10 +12,20 @@
     @ondrop="HandleDrop"
     @ondragenter="HandleDragEnter"
     @ondragenter:preventDefault="true">
-    <p class="m-0 small">@Message</p>
+    @if (ChildContent != null)
+    {
+        @ChildContent
+    }
+    else
+    {
+        <p class="m-0 small">@Message</p>
+    }
 </div>
 
 @code {
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
     [Parameter]
     public EventCallback<object> OnQuestDrop { get; set; }
 
