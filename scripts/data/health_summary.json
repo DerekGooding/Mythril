@@ -1,26 +1,15 @@
 {
-    "is_healthy": false,
-    "failure_count": 2,
+    "is_healthy": true,
+    "failure_count": 0,
     "metrics": {
         "monoliths": 0,
         "coverage": 90.4,
         "missing_tests": 0,
         "key_violations": 0,
         "testid_violations": 0,
-        "stale_docs": 2,
+        "stale_docs": 0,
         "pending_feedback": 0,
         "test_passed": true
     },
-    "failures": [
-        {
-            "category": "docs_stale",
-            "message": "README.md is stale (52 source changes since last update)",
-            "metadata": {}
-        },
-        {
-            "category": "docs_stale",
-            "message": "AGENTS.md is stale (52 source changes since last update)",
-            "metadata": {}
-        }
-    ]
+    "failures": []
 }
