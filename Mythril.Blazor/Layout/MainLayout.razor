@@ -9,8 +9,6 @@
 <main>
     <div class="top-row px-4 justify-content-between">
         <div class="d-flex align-items-center">
-            <button class="btn btn-outline-primary mx-2" @onclick="SaveGame">Save</button>
-            <button class="btn btn-outline-secondary mx-2" @onclick="LoadGame">Load</button>
             <button class="btn btn-outline-info mx-2" @onclick="ToggleFeedback">Feedback</button>
         </div>
         
@@ -92,23 +90,4 @@
     }
 
     private void RefreshPage() => Navigation.NavigateTo(Navigation.Uri, forceLoad: true);
-
-    private async Task SaveGame()
-    {
-        await Persistence.SaveAsync();
-        Snackbar.Show("Game Saved!", "success");
-    }
-
-    private async Task LoadGame()
-    {
-        if (await Persistence.HasSave())
-        {
-            await Persistence.LoadAsync();
-            Snackbar.Show("Game Loaded!", "success");
-        }
-        else
-        {
-            Snackbar.Show("No save found.", "warning");
-        }
-    }
 }
