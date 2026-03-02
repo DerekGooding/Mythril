@@ -388,7 +388,6 @@
     overflow-x: hidden;
     flex-grow: 1;
     min-height: 0;
-    height: 100%;
 }
 
 .task-container[b-mqjfnsj94g] {
@@ -397,6 +396,7 @@
     align-items: stretch;
     margin: 0.5rem;
     width: 100%;
+    flex-shrink: 0;
 }
 /* /Components/InventoryItem.razor.rz.scp.css */
 .inventory-item[b-n4d12cyvsf] {
