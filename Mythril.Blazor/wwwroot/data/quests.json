@@ -5,6 +5,7 @@
   { "Name": "Buy Potion", "Description": "Get a potion from the town shop." },
   { "Name": "Recover the Ancient Tome", "Description": "Find the lost book of cadences." },
   { "Name": "Learn About Cadences", "Description": "Discover the power of your inner voice." },
+  { "Name": "Learn about the Dark Forest", "Description": "Hear the rumors of the corrupted forest." },
   { "Name": "Farm Goblins", "Description": "Clear out the local goblin encampment." },
   { "Name": "Farm Trents", "Description": "Harvest wood from the corrupted forest." },
   { "Name": "Farm Golems", "Description": "Gather stone from the mountain base." },
