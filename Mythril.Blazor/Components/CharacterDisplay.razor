@@ -1,11 +1,12 @@
 @using Mythril.Data
 @using Mythril.Blazor.Services
+@using System.Globalization
 @inject Stats statsContent
 @inject ResourceManager resourceManager
 @inject JunctionManager JunctionManager
 @inject DragDropService DragDropService
 
-<div class="character-display shadow-theme">
+<div class="character-display shadow-theme @(QuestProgress is not null ? "has-active-task" : "")">
     <div class="character-header">
         <div class="d-flex flex-column flex-grow-1 min-width-0">
             <h4 draggable="true" @ondragstart="HandleCharacterDragStart" class="draggable-name text-truncate">@Character.Name</h4>
@@ -60,6 +61,19 @@
         </div>
     </div>
     
+    @if (QuestProgress is not null)
+    {
+        <div class="character-card-progress">
+            @{
+                var progressValue = QuestProgress.Progress;
+                if (double.IsNaN(progressValue) || double.IsInfinity(progressValue)) progressValue = 0.0;
+                var progressPercent = Math.Clamp(progressValue * 100, 0, 100);
+                var progressStyle = $"width: {progressPercent.ToString("0.##", CultureInfo.InvariantCulture)}%";
+            }
+            <div class="progress-bar" style="@progressStyle"></div>
+        </div>
+    }
+
     @if (_showJunctionMenu)
     {
         <div class="junction-menu card p-2">

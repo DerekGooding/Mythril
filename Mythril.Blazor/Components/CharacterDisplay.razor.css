@@ -46,6 +46,29 @@
     font-weight: bold;
     border: 1px solid var(--junction-badge-border);
 }
+.character-display.has-active-task {
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 8px var(--secondary-color);
+}
+
+.character-card-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: rgba(0, 0, 0, 0.1);
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    overflow: hidden;
+}
+
+.character-card-progress .progress-bar {
+    height: 100%;
+    background-color: var(--secondary-color);
+    transition: width 0.1s linear;
+}
+
 .junction-menu {
     background: var(--card-bg);
     border: 1px solid var(--border-color);
