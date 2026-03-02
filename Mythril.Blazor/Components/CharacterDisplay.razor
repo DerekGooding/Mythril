@@ -9,13 +9,13 @@
 <div class="character-display shadow-theme @(QuestProgress is not null ? "has-active-task" : "") @(QuestProgress?.IsCompleted == true ? "completed" : "")">
     <div class="character-header">
         <div class="d-flex flex-column flex-grow-1 min-width-0">
-            <h4 draggable="true" @ondragstart="HandleCharacterDragStart" class="draggable-name text-truncate">@Character.Name</h4>
+            <h4 class="draggable-name text-truncate">@Character.Name</h4>
             <div class="cadence-info small text-muted text-truncate">
                 @{
                     var assignedCadence = JunctionManager.CurrentlyAssigned(Character).FirstOrDefault();
                     if (assignedCadence.Name != null)
                     {
-                        <span draggable="true" @ondragstart="() => HandleCadenceDragStart(assignedCadence)" class="draggable-cadence">
+                        <span class="draggable-cadence">
                             Cadence: @assignedCadence.Name
                         </span>
                     }
@@ -128,16 +128,6 @@
     private bool _showJunctionMenu = false;
 
     private void ToggleJunctionMenu() => _showJunctionMenu = !_showJunctionMenu;
-
-    private void HandleCharacterDragStart(DragEventArgs args)
-    {
-        DragDropService.Data = Character;
-    }
-
-    private void HandleCadenceDragStart(Cadence cadence)
-    {
-        DragDropService.Data = cadence;
-    }
 
     private bool CanJunction(Stat stat)
     {

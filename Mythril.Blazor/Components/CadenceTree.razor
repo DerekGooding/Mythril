@@ -13,19 +13,7 @@
                 <AbilityUnlockCard Unlock="abilityUnlock" />
             </div>
             
-            @if (!isUnlocked)
-            {
-                <div class="unlock-action">
-                    <DropZone_cadence OnCharacterDrop="(c) => resourceManager.StartQuest(abilityUnlock, c)"
-                                       Accepts="(c) => resourceManager.CanAfford(abilityUnlock)">
-                        <div class="drop-target @(canAfford ? "active" : "")">
-                            <span class="material-icons-outlined">person_add</span>
-                            <small>Drag Hero Here</small>
-                        </div>
-                    </DropZone_cadence>
-                </div>
-            }
-            else
+            @if (isUnlocked)
             {
                 <div class="unlock-status">
                     <span class="material-icons text-success">check_circle</span>
@@ -64,7 +52,7 @@
         min-width: 0;
     }
 
-    .unlock-action, .unlock-status {
+    .unlock-status {
         width: 120px;
         display: flex;
         flex-direction: column;
@@ -80,29 +68,6 @@
 
     .ability-node.affordable {
         border-color: var(--affordable-border);
-    }
-
-    .drop-target {
-        border: 2px dashed var(--drop-zone-border);
-        padding: 0.75rem;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 0.25rem;
-        border-radius: 8px;
-        color: var(--text-muted);
-        transition: all 0.2s;
-        width: 100%;
-    }
-
-    .drop-target.active {
-        border-color: var(--primary-color);
-        color: var(--primary-color);
-        background-color: rgba(187, 134, 252, 0.1);
-    }
-
-    .drop-target:hover {
-        background-color: var(--badge-bg);
     }
 </style>
 
