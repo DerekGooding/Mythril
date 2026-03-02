@@ -388,6 +388,7 @@
     overflow-x: hidden;
     flex-grow: 1;
     min-height: 0;
+    height: 100%;
 }
 
 .task-container[b-mqjfnsj94g] {
@@ -659,6 +660,11 @@ main[b-uvgfdke93t] {
     border-bottom: 1px solid var(--header-border);
     flex-shrink: 0;
     z-index: 1000;
+}
+
+.version-text[b-uvgfdke93t] {
+    color: var(--text-color);
+    opacity: 0.6;
 }
 
 .main-container[b-uvgfdke93t] {
