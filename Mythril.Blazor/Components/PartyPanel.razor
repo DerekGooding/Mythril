@@ -13,7 +13,7 @@
                                     QuestProgress="QuestProgresses.FirstOrDefault(p => p.Character == character)"
                                     OnQuestDrop="(task) => OnQuestDrop.InvokeAsync((task, character))"
                                     OnCompletionAnimationEnd="(progress) => OnCompletionAnimationEnd.InvokeAsync(progress)"
-                                    Accepts="resourceManager.CanAfford" />
+                                    Accepts="Accepts" />
             }
         }
     </div>
@@ -21,7 +21,7 @@
 
 @code {
     [Parameter]
-    public Character[]? Party { get; set; }
+    public IEnumerable<Character> Party { get; set; } = [];
 
     [Parameter]
     public List<QuestProgress>? QuestProgresses { get; set; }
@@ -31,4 +31,7 @@
 
     [Parameter]
     public EventCallback<QuestProgress> OnCompletionAnimationEnd { get; set; }
+
+    [Parameter]
+    public Func<object, bool>? Accepts { get; set; }
 }

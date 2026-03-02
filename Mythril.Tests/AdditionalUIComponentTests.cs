@@ -99,6 +99,7 @@ public class AdditionalUIComponentTests : BunitTestBase
         var cut = RenderComponent<PartyPanel>(parameters => parameters
             .Add(p => p.Party, party)
             .Add(p => p.QuestProgresses, [])
+            .Add(p => p.Accepts, (obj) => true)
         );
         Assert.IsTrue(cut.Markup.Contains("Party"));
     }

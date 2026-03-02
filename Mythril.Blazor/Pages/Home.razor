@@ -85,7 +85,8 @@
                 <PartyPanel Party="resourceManager.Characters"
                             QuestProgresses="resourceManager.ActiveQuests"
                             OnQuestDrop="EventCallback.Factory.Create<(object, Character)>(this, TaskDropped)"
-                            OnCompletionAnimationEnd="EventCallback.Factory.Create<QuestProgress>(this, OnCompletionAnimationEnd)" />
+                            OnCompletionAnimationEnd="EventCallback.Factory.Create<QuestProgress>(this, OnCompletionAnimationEnd)"
+                            Accepts="resourceManager.CanAfford" />
             }
             else
             {

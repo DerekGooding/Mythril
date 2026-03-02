@@ -6,27 +6,31 @@
     {
         var isUnlocked = resourceManager.UnlockedAbilities.Contains(abilityUnlock.Ability);
         var canAfford = resourceManager.CanAfford(abilityUnlock);
-        var cardClass = isUnlocked ? "ability-card unlocked" : canAfford ? "ability-card affordable" : "ability-card locked";
+        var stateClass = isUnlocked ? "unlocked" : canAfford ? "affordable" : "locked";
 
-        <div @key="abilityUnlock" class="@cardClass" title="@GetTooltip(abilityUnlock)">
-            <div class="card-header">@abilityUnlock.Ability.Name</div>
-            <div class="card-body">
-                @abilityUnlock.Ability.Description
-                @if (!isUnlocked)
-                {
-                    <div class="requirements">
-                        <small>Req: @string.Join(", ", abilityUnlock.Requirements.Select(r => $"{r.Quantity} {r.Item.Name}"))</small>
-                    </div>
-                }
+        <div @key="abilityUnlock" class="ability-node @stateClass">
+            <div class="ability-card-wrapper">
+                <AbilityUnlockCard Unlock="abilityUnlock" />
             </div>
+            
             @if (!isUnlocked)
             {
-                 <DropZone_cadence OnCharacterDrop="(c) => resourceManager.StartQuest(abilityUnlock, c)"
-                                   Accepts="(c) => resourceManager.CanAfford(abilityUnlock)">
-                    <div class="drop-target @(canAfford ? "active" : "")">
-                        <span>Drag Character Here to Unlock</span>
-                    </div>
-                </DropZone_cadence>
+                <div class="unlock-action">
+                    <DropZone_cadence OnCharacterDrop="(c) => resourceManager.StartQuest(abilityUnlock, c)"
+                                       Accepts="(c) => resourceManager.CanAfford(abilityUnlock)">
+                        <div class="drop-target @(canAfford ? "active" : "")">
+                            <span class="material-icons-outlined">person_add</span>
+                            <small>Drag Hero Here</small>
+                        </div>
+                    </DropZone_cadence>
+                </div>
+            }
+            else
+            {
+                <div class="unlock-status">
+                    <span class="material-icons text-success">check_circle</span>
+                    <small>Unlocked</small>
+                </div>
             }
         </div>
     }
@@ -36,65 +40,69 @@
     .cadence-tree {
         display: flex;
         flex-direction: column;
-        gap: 1rem;
+        gap: 1.5rem;
         padding: 1rem;
-        background-color: var(--panel-bg);
     }
 
-    .ability-card {
-        border: 1px solid var(--card-border);
-        border-radius: 8px;
+    .ability-node {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
         padding: 0.5rem;
-        background-color: var(--card-bg);
-        color: var(--text-color);
-        transition: all 0.3s ease;
+        border-radius: 12px;
+        background-color: var(--tab-inactive-bg);
+        border: 1px solid var(--border-color);
+        transition: transform 0.2s;
     }
 
-    .ability-card.unlocked {
+    .ability-node:hover {
+        transform: translateX(5px);
+    }
+
+    .ability-card-wrapper {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .unlock-action, .unlock-status {
+        width: 120px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .ability-node.unlocked {
         border-color: var(--unlocked-border);
-        background-color: var(--unlocked-bg);
-        box-shadow: 0 0 10px rgba(40, 167, 69, 0.2);
+        background-color: rgba(40, 167, 69, 0.05);
     }
 
-    .ability-card.affordable {
+    .ability-node.affordable {
         border-color: var(--affordable-border);
-        background-color: var(--affordable-bg);
     }
 
-    .ability-card.locked {
-        opacity: 0.7;
-        background-color: var(--locked-card-bg);
-    }
-
-    .card-header {
-        font-weight: bold;
-        margin-bottom: 0.5rem;
-        color: inherit;
-    }
-
-    .requirements {
-        margin-top: 0.5rem;
-        color: var(--text-muted);
-    }
-    
     .drop-target {
         border: 2px dashed var(--drop-zone-border);
-        padding: 10px;
-        text-align: center;
-        margin-top: 5px;
-        border-radius: 4px;
-        cursor: pointer;
-        background-color: var(--drop-zone-bg);
-        color: var(--text-color);
-    }
-    
-    .drop-target:hover {
-        background-color: var(--badge-bg);
+        padding: 0.75rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.25rem;
+        border-radius: 8px;
+        color: var(--text-muted);
+        transition: all 0.2s;
+        width: 100%;
     }
 
     .drop-target.active {
         border-color: var(--primary-color);
-        background-color: var(--affordable-bg);
+        color: var(--primary-color);
+        background-color: rgba(187, 134, 252, 0.1);
+    }
+
+    .drop-target:hover {
+        background-color: var(--badge-bg);
     }
 </style>
 

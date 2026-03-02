@@ -1,41 +1,56 @@
 .card {
+    background-color: var(--card-bg);
     border: 1px solid var(--card-border);
     border-radius: 8px;
-    margin: 0.5rem;
-    padding: 1rem;
-    width: 100%;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    transition: all 0.2s ease-in-out;
-    background-color: var(--card-bg);
-    color: var(--text-color);
+    padding: 0.75rem;
+    cursor: grab;
+    user-select: none;
 }
 
-.card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+.card:active {
+    cursor: grabbing;
 }
 
 .card-header {
     font-weight: bold;
+    font-size: 1rem;
     margin-bottom: 0.5rem;
-    color: var(--text-color);
-}
-
-.card-body p {
-    margin-top: 0.25rem;
-    margin-bottom: 0.25rem;
-    color: var(--text-color);
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.25rem;
+    color: var(--primary-color);
 }
 
 .card-content {
     display: flex;
-    gap: 1rem; /* spacing between main info and side info */
+    flex-direction: column;
+    gap: 0.5rem;
 }
 
-.card-main {
-    flex: 2; /* takes more space */
+.card-main p {
+    margin: 0;
+    font-size: 0.85rem;
+    line-height: 1.4;
 }
 
 .card-side {
-    flex: 1; /* smaller side column */
+    font-size: 0.8rem;
+    background-color: rgba(0,0,0,0.05);
+    padding: 0.5rem;
+    border-radius: 4px;
+}
+
+.card-side h6 {
+    margin: 0 0 0.25rem 0;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+.card-side ul {
+    margin: 0;
+    padding-left: 1rem;
+}
+
+.card-side li {
+    color: var(--text-color);
 }

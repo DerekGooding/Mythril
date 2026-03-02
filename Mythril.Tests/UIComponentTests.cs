@@ -99,6 +99,7 @@ public class UIComponentTests : BunitTestBase
         // Act
         var cut = RenderComponent<CharacterDisplay>(parameters => parameters
             .Add(p => p.Character, character)
+            .Add(p => p.Accepts, (obj) => true)
         );
 
         // Assert
