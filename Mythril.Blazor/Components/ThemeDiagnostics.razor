@@ -26,7 +26,8 @@
                             <div class="list-group-item">
                                 <strong>@snap.Key</strong><br />
                                 Bg: @snap.Value.BodyBg | Text: @snap.Value.BodyText<br />
-                                CardBg: @snap.Value.CardBg
+                                CardBg: @snap.Value.CardBg | PartyBg: @snap.Value.PartyBg<br />
+                                ProgressBg: @snap.Value.ProgressBg | Width: @snap.Value.ProgressWidth
                             </div>
                         }
                     </div>
@@ -55,6 +56,9 @@
         public string BodyBg { get; set; } = "";
         public string BodyText { get; set; } = "";
         public string CardBg { get; set; } = "";
+        public string PartyBg { get; set; } = "";
+        public string ProgressBg { get; set; } = "";
+        public string ProgressWidth { get; set; } = "";
         public string ThemeHref { get; set; } = "";
     }
 

@@ -71,10 +71,16 @@
         window.getVisualSnapshot = function() {
             const body = window.getComputedStyle(document.body);
             const card = document.querySelector('.character-display') ? window.getComputedStyle(document.querySelector('.character-display')) : null;
+            const party = document.querySelector('.party-panel') ? window.getComputedStyle(document.querySelector('.party-panel')) : null;
+            const progressBar = document.querySelector('.progress-bar') ? window.getComputedStyle(document.querySelector('.progress-bar')) : null;
+            
             return {
                 bodyBg: body.backgroundColor,
                 bodyText: body.color,
                 cardBg: card ? card.backgroundColor : 'N/A',
+                partyBg: party ? party.backgroundColor : 'N/A',
+                progressBg: progressBar ? progressBar.backgroundColor : 'N/A',
+                progressWidth: progressBar ? progressBar.width : 'N/A',
                 themeHref: document.getElementById('theme').getAttribute('href')
             };
         };

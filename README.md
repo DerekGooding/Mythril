@@ -18,18 +18,18 @@ From architecture and core logic to the Blazor frontend and DevOps pipelines, My
 Mythril is an RPG-inspired web application built with **.NET 10** and **Blazor WebAssembly**. It serves as a sandbox for exploring agentic development patterns and modern C# architectures.
 
 ### Key Systems
-- **Character Core**: Modular system where characters share baseline stats, differentiated by assigned Cadences and junctioned magic. Character cards feature horizontal stat layout and vertical party stacking.
+- **Character Core**: Modular system where characters share baseline stats, differentiated by assigned Cadences and junctioned magic.
 - **Junctioning**: Assign magic items to character stats to gain powerful bonuses, inspired by classic RPG mechanics.
 - **Cadence System**: Progression mechanic where `Cadences` provide `CadenceAbilities`. Unlocking is performed by assigning characters to specific ability nodes.
 - **Quest & Progression**: Real-time asynchronous tick system managing quests, durations, and rewards, with offline progress continuity.
-- **UI Stability**: Advanced flexbox layouts, CSS Grid transitions, and `@key` state preservation ensure a responsive, flicker-free experience.
+- **Theming & UI**: Advanced flexbox layouts and CSS Grid transitions. Theming is fully standardized via CSS variables, verified by an automated visual audit tool.
 
 ## 🛠️ Technical Stack
 - **Frontend**: Blazor WebAssembly (.NET 10)
 - **Core Logic**: C# 13 / .NET 10 Class Libraries
 - **Data**: JSON-driven content for easy modification and agentic updates.
-- **Testing**: MSTest, Moq, and Coverlet for coverage reporting (>89%).
-- **CI/CD**: GitHub Actions for automated deployment and health monitoring.
+- **Testing**: MSTest, Moq, and Coverlet for coverage reporting.
+- **Automation**: Python 3.x for custom health checks and CI integration.
 
 ## ⚖️ Quality Assurance & Health
 We maintain project health through a custom automated suite (`scripts/check_health.py`) which runs on every commit:
