@@ -1,0 +1,13 @@
+.tab-content > .tab-pane {
+    display: flex !important;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.tab-pane > .hand-panel {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+}
