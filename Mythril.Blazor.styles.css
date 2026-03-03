@@ -688,7 +688,7 @@
     flex: 1 !important;
     min-height: 0 !important;
     height: 100% !important;
-    background-color: var(--bg-color);
+    background-color: var(--tab-bg);
     color: var(--text-color);
     overflow: hidden !important; /* Header stays fixed, content scrolls */
 }
