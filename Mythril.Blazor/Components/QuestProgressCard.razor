@@ -39,9 +39,16 @@
     private ElementReference cardElement;
 
     private bool _hasTriggeredCompletion = false;
+    private QuestProgress? _lastQuestProgress;
 
     protected override async Task OnParametersSetAsync()
     {
+        if (QuestProgress != _lastQuestProgress)
+        {
+            _hasTriggeredCompletion = false;
+            _lastQuestProgress = QuestProgress;
+        }
+
         if (QuestProgress?.IsCompleted == true && !_hasTriggeredCompletion)
         {
             _hasTriggeredCompletion = true;

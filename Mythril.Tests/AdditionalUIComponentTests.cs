@@ -136,6 +136,41 @@ public class AdditionalUIComponentTests : BunitTestBase
     }
 
     [TestMethod]
+    public async Task QuestProgressCard_HandlesMultipleCompletions()
+    {
+        // Arrange
+        var character = new Character("Hero");
+        var quest = new Quest("Test Quest", "Description");
+        var detail = new QuestDetail(1, [], [], QuestType.Recurring);
+        var questData = new QuestData(quest, detail);
+        var progress1 = new QuestProgress(questData, "Desc", 1, character);
+        var progress2 = new QuestProgress(questData, "Desc", 1, character);
+        
+        int completionCount = 0;
+        var cut = RenderComponent<QuestProgressCard>(parameters => parameters
+            .Add(p => p.QuestProgress, progress1)
+            .Add(p => p.OnCompletionAnimationEnd, () => completionCount++)
+        );
+
+        // Act - First completion
+        progress1.SecondsElapsed = 1;
+        cut.SetParametersAndRender(parameters => parameters.Add(p => p.QuestProgress, progress1));
+        await Task.Delay(1100); // Wait for the 1s delay in component
+        
+        // Assert
+        Assert.AreEqual(1, completionCount);
+
+        // Act - Second completion (simulating auto-quest restart)
+        cut.SetParametersAndRender(parameters => parameters.Add(p => p.QuestProgress, progress2));
+        progress2.SecondsElapsed = 1;
+        cut.SetParametersAndRender(parameters => parameters.Add(p => p.QuestProgress, progress2));
+        await Task.Delay(1100);
+
+        // Assert
+        Assert.AreEqual(2, completionCount);
+    }
+
+    [TestMethod]
     public void Snackbar_RendersCorrectly()
     {
         var cut = RenderComponent<Snackbar>();
