@@ -4,96 +4,57 @@ This document provides explicit implementation details for each active goal in t
 
 ---
 
-## 1. Comprehensive Persistence (Active Quests)
-- **Objective**: Fully restore the game state, including mid-progress tasks.
+## 1. Auto-Quest Visualizer (Prep Time)
+- **Objective**: Improve the "aliveness" of the auto-quest loop without changing balance.
 - **Key Deliverables**:
-    - [ ] Create `QuestProgressDTO` model to handle serialization of active tasks.
-    - [ ] Update `SaveData` to include a list of `QuestProgressDTO`.
-    - [ ] Modify `PersistenceService` to map DTOs back to `QuestProgress` objects using `Items`, `Quests`, and `Character` lookups.
-    - [ ] Ensure `StartTime` and `SecondsElapsed` are preserved to maintain progress continuity.
+    - [ ] Update `QuestProgressCard.razor` to handle a "Preparing" state.
+    - [ ] When a recurring quest finishes and auto-quest is ON, trigger a 1.5s visual delay before starting the next loop.
+    - [ ] Display a "Preparing next cycle..." label or animation during this delay.
 
-## 2. Item Refinement Workshop UI
-- **Objective**: Expose the `ItemRefinements` logic to the player.
+## 2. Junction Prediction UI
+- **Objective**: Provide clear feedback on the power of magic items before they are junctioned.
 - **Key Deliverables**:
-    - [ ] Create `Workshop.razor` component and add it as a new tab in `Home.razor`.
-    - [ ] Inject `ItemRefinements` and display available recipes based on the character's unlocked abilities.
-    - [ ] Implement a "Craft" interaction that validates requirements and triggers refinement rewards.
-    - [ ] Add visual feedback for successful refinements and missing materials.
+    - [ ] Update `DragDropService` to support a "Hovered Target" or similar state.
+    - [ ] Modify `CharacterDisplay.razor` to detect when a Magic item is being dragged over a stat.
+    - [ ] Calculate the delta between the currently junctioned spell and the dragged spell.
+    - [ ] Display the delta (e.g. "+5" in green or "-2" in red) next to the stat value during the drag operation.
 
-## 3. Data-Driven Content Migration
-- **Objective**: Decouple game content from the compiled binary for easier balancing.
+## 3. Universal Stat Multipliers
+- **Objective**: Ensure character progression through Junctioning is mechanically relevant for every task.
 - **Key Deliverables**:
-    - [ ] Create a JSON schema for `Items`, `Quests`, and `Cadences`.
-    - [ ] Export current static data to `wwwroot/data/*.json`.
-    - [ ] Refactor content classes (e.g., `Items.cs`) to load data from `HttpClient` instead of hardcoded arrays.
-    - [ ] Update `ContentHost` to manage the asynchronous loading of JSON content at startup.
+    - [ ] Update `ResourceManager_Quests.cs` to apply multiplicative stat scaling to all task types.
+    - [ ] Formula: `EffectiveDuration = BaseDuration / (1.0 + (RelevantStat / 100.0))`.
+    - [ ] Enforce a `Math.Max(0.5, ...)` floor for all task durations.
+    - [ ] Define stat mappings for all existing quests (e.g. Speed for gathering, Strength for combat).
 
-## 4. Agentic "Status Report" Utility
-- **Objective**: Improve project visibility and onboarding for AI agents.
+## 4. Progression Stat Gates
+- **Objective**: Create content "walls" that require the player to engage with Junctioning.
 - **Key Deliverables**:
-    - [x] Create `scripts/generate_report.py`.
-    - [x] Script should:
-        - [x] Run `python scripts/check_health.py`.
-        - [x] Run `.\run_ai_test.ps1`.
-        - [x] Aggregate coverage, monolith counts, and headless test results.
-    - [x] Output a consolidated `STATUS.md` in the project root.
-    - [x] Update mandates to require running this script before ending a session.
+    - [ ] Update `QuestData` and JSON schema to include an optional `RequiredStats` dictionary.
+    - [ ] Modify `ResourceManager.CanAfford` or a new `CanAttempt` method to check character stats against requirements.
+    - [ ] Update UI to display required stats on Quest Cards (e.g. "Requires 15 Strength").
+    - [ ] Implementation: Apply these gates to mid-tier quests in Iron Mines and Dark Forest.
 
-## 5. Character Stats & Junctioning UI
-- **Objective**: Implement the core FF8-inspired stat-boosting mechanic.
+## 5. Content: The Sentinel Cadence
+- **Objective**: Add a defensive job focused on survival and resource management.
 - **Key Deliverables**:
-    - [ ] Update `CharacterDisplay.razor` to show a breakdown of the character's current stats and active junctions.
-    - [ ] Create a "Junctioning" sub-menu:
-        - [ ] List available Stats (Strength, Magic, Vitality, etc.).
-        - [ ] Check if the current Cadence has the matching "J-Stat" ability (e.g., "J-Str").
-        - [ ] Allow assigning a Magic item (e.g., "Fire I") to an enabled Stat slot.
-    - [ ] Implement the "Junction" data model to track these character-specific mappings.
+    - [ ] Define `The Sentinel` in `cadences.json`.
+    - [ ] Abilities: `J-Vit` (Junction Vitality), `Magic Pocket II` (Expand capacity to 100).
+    - [ ] Requirements: `Iron Ore x50`, `Ancient Bark x20`, `Gold x2000`.
 
-## 6. Linear Stat Augment Calculator
-- **Objective**: Calculate dynamic stat bonuses based on magic quantities.
+## 6. Content: Sun-Drenched Desert Biome
+- **Objective**: Expand the map with a mid-game desert environment.
 - **Key Deliverables**:
-    - [ ] Implement a `StatCalculator` that aggregates base stats + junction bonuses.
-    - [ ] Formula: `TotalStat = BaseStat + (MagicQuantity * StatMultiplierPerUnit)`.
-    - [ ] Ensure `ResourceManager` recalculates effective durations immediately when magic quantities change.
+    - [ ] Add `Sun-Drenched Desert` to `locations.json`.
+    - [ ] Add new items: `Sun-baked Scale`, `Solar Essence`.
+    - [ ] Define quests: `Scavenge Scrap` (Recurring), `Hunt Sand-Sharks` (Combat), `Locate the Hidden Oasis` (Unlock).
 
-## 7. Global Magic Capacity Enforcement
-- **Objective**: Enforce the strategic resource limitation of 30 per spell.
+## 7. Content: Magic Expenditure Quests
+- **Objective**: Deepen the link between refinement and questing.
 - **Key Deliverables**:
-    - [ ] Update `InventoryManager.Add` to cap Magic items at the current `GlobalLimit` (default 30).
-    - [ ] Add "Capacity Expansion" abilities to the Cadence tree (e.g., "Magic Pocket I").
-    - [ ] Implement logic to update the `GlobalLimit` when these abilities are unlocked.
-
-## 8. Cadence Assignment UI: Exclusivity Logic
-- **Objective**: Enforce the rule that each Cadence is a unique entity.
-- **Key Deliverables**:
-    - [ ] Create a dedicated "Party Management" UI.
-    - [ ] Implement "Equip" logic:
-        - [ ] Check if the Cadence is already equipped by another character.
-        - [ ] If yes, prompt to "Swap" or deny.
-    - [ ] Implement "Unequip" logic:
-        - [ ] **Crucial**: Automatically clear all Junctions for the character when their Cadence is removed.
-
-## 9. Tutorial Questline: "The First Refinement"
-- **Objective**: A scripted sequence to onboard players to the core loop.
-- **Key Deliverables**:
-    - [ ] Phase 1: Quest "Tutorial Section" rewards "Basic Gem".
-    - [ ] Phase 2: Instruction to unlock "Refine Fire" in the Cadence tree.
-    - [ ] Phase 3: Instruction to use the Workshop to refine "Basic Gem" into "Fire I".
-    - [ ] Phase 4: Instruction to Junction "Fire I" to "Strength" (requires "J-Str" on starter cadence).
-
-## 10. Content: The Whispering Woods Biome
-- **Objective**: Expand the map with early-game nature materials.
-- **Key Deliverables**:
-    - [ ] Add `Whispering Woods` to the `Locations` data.
-    - [ ] Add new items: `Mana Leaf` (Material), `Fire Shard` (Material).
-    - [ ] Define "Gathering" quests with related rewards.
-
-## 11. Content: New Cadence "The Arcanist"
-- **Objective**: Introduce the first magic-specialized job.
-- **Key Deliverables**:
-    - [ ] Define `The Arcanist` Cadence.
-    - [ ] Abilities: `Refine Ice`, `J-Magic`, `Magic Pocket I`.
-    - [ ] Requirements: `Gold x500`, `Mana Leaf x10`.
+    - [ ] Add quests to existing locations that require expending specific spells.
+    - [ ] Example: "Purify the Grove" requires `Cure I x20` and `Gold x500`.
+    - [ ] Ensure `ResourceManager.PayCosts` correctly removes magic items from inventory.
 
 ---
 
@@ -101,17 +62,13 @@ This document provides explicit implementation details for each active goal in t
 - [ ] **Legendary Questline "The First Spark"**: Multi-stage ruins questline.
 - [ ] **Master Cadence "Mythril Weaver"**: Endgame progression path.
 - [ ] **Refinement Mastery**: Efficiency bonuses for repeated crafting.
-- [ ] **Infinite Scaling & Prestige**: Concepts for extreme long-term play.
 
 ---
 
-## Completed Goals
-- [x] **AI Mandates & Health Check System**: Established foundation for code quality.
-- [x] **Headless AI Testing Framework**: Created `Mythril.Headless` for scenario testing.
-- [x] **Core Logic Consolidation**: Merged logic into `Mythril.Data`.
-- [x] **Headless Testing Assertion Engine**: Automated state verification.
-- [x] **Blazor State Persistence**: Implemented `LocalStorage` save/load.
-- [x] **Continuous Health Monitoring (CI/CD)**: Integrated health checks into GitHub Actions.
-- [x] **Asynchronous Quest Tick System**: Refactored to real-time timer system.
-- [x] **Cadence Visualizer Component**: Built interactive progression tree.
-- [x] **Agentic "Status Report" Utility**: Implemented automated aggregation.
+## Completed Foundational Goals
+- [x] **Comprehensive Persistence**: State restoration works across sessions.
+- [x] **Item Refinement Workshop**: Time-based refinement tasks are functional.
+- [x] **Data-Driven Content Migration**: Content loaded from JSON.
+- [x] **Linear Stat Augment Calculator**: Junction bonuses are correctly applied.
+- [x] **Tutorial Questline**: "The First Refinement" sequence.
+- [x] **Cadence Visualizer & Assignment UI**: Drag-and-drop job management.
