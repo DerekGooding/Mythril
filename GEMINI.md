@@ -1,5 +1,6 @@
 # Environment Knowledge
-- **Last Reviewed:** March 3, 2026 (Rolling back to stable UI state).
+- **Last Reviewed:** March 3, 2026 (UI scrolling & layout finalized).
+- **Stable Fallback:** `v1.0-stable` (Tag) is the verified stable build for UI layout and core systems.
 - **Shell:** PowerShell is used. Standard Unix utilities like `grep` and `cat` are not available. Use `grep_search` tool or PowerShell equivalents (e.g., `Select-String`, `Get-Content`).
 - **Syntax:** Use `;` for command chaining instead of `&&` (which is not supported in the current PowerShell environment).
 - **Formatting:** `cat -n` equivalent in PowerShell is `Get-Content <file> | ForEach-Object { "$($_.ReadCount) $_" }`.
