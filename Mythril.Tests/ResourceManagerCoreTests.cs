@@ -36,8 +36,7 @@ public class ResourceManagerCoreTests
     public void ResourceManager_StoresAndRetrievesData_Correctly()
     {
         // Assert
-        Assert.IsNotNull(_resourceManager!.UsableLocations);
-        Assert.AreEqual(7, _resourceManager.UsableLocations.Count);  
+        Assert.AreEqual(7, _resourceManager!.UsableLocations.Count);  
         Assert.AreEqual(3, _resourceManager.Characters.Length);      
     }
     [TestMethod]
