@@ -230,12 +230,12 @@
     max-height: 250px;
     overflow-y: auto;
     position: absolute;
-    bottom: 100%;
+    top: 100%;
     left: 0;
     z-index: 1000;
     width: 280px;
-    box-shadow: 0 -4px 12px rgba(0,0,0,0.15);
-    margin-bottom: 5px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    margin-top: 5px;
 }
 .junction-grid[b-tzawi3ksml] {
     display: flex;
