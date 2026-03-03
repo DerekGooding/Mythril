@@ -84,6 +84,7 @@ class Program
 
         var cadDTOs = JsonConvert.DeserializeObject<List<CadenceDTO>>(File.ReadAllText(Path.Combine(dataDir, "cadences.json"))) ?? [];
         cadences.Load(cadDTOs.Select(d => new Cadence(d.Name, d.Description, d.Abilities.Select(a => new CadenceUnlock(
+            d.Name,
             abilities.All.First(ab => ab.Name == a.Ability),
             a.Requirements.Select(r => new ItemQuantity(items.All.First(i => i.Name == r.Item), r.Quantity)).ToArray()
         )).ToArray())).ToList());
