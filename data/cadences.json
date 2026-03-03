@@ -40,6 +40,10 @@
         "Requirements": [ { "Item": "Gold", "Quantity": 100 } ]
       },
       {
+        "Ability": "Refine Wood",
+        "Requirements": [ { "Item": "Log", "Quantity": 10 } ]
+      },
+      {
         "Ability": "Refine Scrap",
         "Requirements": [ { "Item": "Gold", "Quantity": 1000 } ]
       },
