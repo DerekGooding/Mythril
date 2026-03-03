@@ -2,11 +2,10 @@
     display: flex !important;
     flex-direction: column !important;
     padding: 1rem;
-    overflow-y: auto !important; /* Root element scrolls content */
-    overflow-x: hidden !important;
     flex: 1 !important;
     min-height: 0 !important;
     height: 100% !important;
+    overflow: hidden !important; /* Contain the scrollable div */
 }
 
 .no-cadences {

@@ -4,7 +4,15 @@
     flex: 1 !important;
     min-height: 0 !important;
     height: 100% !important;
-    overflow-y: auto !important; /* Root element scrolls content */
+    overflow: hidden !important; /* Contain the scrollable content */
+}
+
+.hand-content {
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 !important;
+    min-height: 0 !important;
+    overflow-y: auto !important; /* Scroll here */
     overflow-x: hidden !important;
     padding: 0.5rem;
 }

@@ -3,20 +3,22 @@
 @inject ResourceManager ResourceManager
 
 <div class="hand-panel">
-    @if (Locations is not null)
-    {
-        @foreach (var location in Locations.Where(l => l.Quests.Any()))
+    <div class="hand-content">
+        @if (Locations is not null)
         {
-            <Expander Header="@location.Name" @key="@location.Name">
-                @foreach (var quest in location.Quests)
-                {
-                    <div class="task-container" @key="@quest.Name">
-                        <QuestCard QuestData="@QuestToData(quest)" />
-                    </div>
-                }
-            </Expander>
+            @foreach (var location in Locations.Where(l => l.Quests.Any()))
+            {
+                <Expander Header="@location.Name" @key="@location.Name">
+                    @foreach (var quest in location.Quests)
+                    {
+                        <div class="task-container" @key="@quest.Name">
+                            <QuestCard QuestData="@QuestToData(quest)" />
+                        </div>
+                    }
+                </Expander>
+            }
         }
-    }
+    </div>
 </div>
 
 @code {
