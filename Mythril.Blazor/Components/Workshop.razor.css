@@ -1,0 +1,61 @@
+.workshop-panel {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    height: 100%;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+.workshop-header {
+    padding: 1rem;
+    flex-shrink: 0;
+}
+
+.workshop-content {
+    padding: 1rem;
+    overflow-y: auto;
+    flex-grow: 1;
+    min-height: 0;
+}
+
+.refinement-group {
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 1rem;
+}
+
+.refinement-group.locked {
+    opacity: 0.5;
+    filter: grayscale(1);
+}
+
+.recipe-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+.recipe-card {
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    padding: 0.75rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--card-bg);
+    color: var(--text-color);
+}
+
+.recipe-details {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.arrow {
+    font-weight: bold;
+    color: var(--text-muted);
+}
