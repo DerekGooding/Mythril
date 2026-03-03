@@ -15,5 +15,6 @@
   { "Name": "J-Magic", "Description": "Allows junctioning magic to the Magic stat" },
   { "Name": "J-Vit", "Description": "Allows junctioning magic to the Vitality stat" },
   { "Name": "J-Speed", "Description": "Allows junctioning magic to the Speed stat" },
-  { "Name": "Magic Pocket I", "Description": "Increases global magic capacity to 60" }
+  { "Name": "Magic Pocket I", "Description": "Increases global magic capacity to 60" },
+  { "Name": "Magic Pocket II", "Description": "Advanced space-folding techniques further expand magic storage to 100." }
 ]

@@ -204,6 +204,24 @@
     transition: all 0.2s;
     white-space: nowrap;
     flex-shrink: 0;
+    position: relative;
+}
+.stat-badge.hovered[b-tzawi3ksml] {
+    transform: scale(1.1);
+    box-shadow: 0 0 5px var(--accent-color);
+    z-index: 10;
+}
+.stat-badge.can-junction[b-tzawi3ksml] {
+    cursor: copy;
+}
+.stat-badge.locked[b-tzawi3ksml] {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+.stat-delta[b-tzawi3ksml] {
+    font-weight: bold;
+    margin-left: 2px;
+    text-shadow: 0 0 2px rgba(0,0,0,0.5);
 }
 .stat-badge.junctioned[b-tzawi3ksml] {
     background: var(--junction-badge-bg);
@@ -589,6 +607,17 @@
 
 .card-side h6[b-mekdh8e00x] {
     color: var(--primary-color);
+}
+
+.stat-requirement[b-mekdh8e00x] {
+    font-size: 0.85rem;
+    list-style: none;
+    margin-left: -1rem;
+}
+
+.stat-requirement[b-mekdh8e00x]::before {
+    content: "🛡️";
+    margin-right: 4px;
 }
 /* /Components/QuestProgressCard.razor.rz.scp.css */
 .task-progress-card[b-oes0l3to11] {

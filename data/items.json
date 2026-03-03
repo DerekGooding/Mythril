@@ -15,6 +15,8 @@
   { "Name": "Fire Shard", "Description": "A crystalline fragment of heat.", "ItemType": "Material" },
   { "Name": "Ice Shard", "Description": "A crystalline fragment of frost.", "ItemType": "Material" },
   { "Name": "Mythril Spark", "Description": "A legendary spark of ancient power.", "ItemType": "Material" },
+  { "Name": "Sun-baked Scale", "Description": "A tough, heat-resistant scale from a desert predator.", "ItemType": "Material" },
+  { "Name": "Solar Essence", "Description": "Condensed sunlight that pulses with warmth.", "ItemType": "Material" },
   { "Name": "Fire I", "Description": "A basic fire spell.", "ItemType": "Spell" },
   { "Name": "Ice I", "Description": "A basic ice spell.", "ItemType": "Spell" },
   { "Name": "Lightning I", "Description": "A basic lightning spell.", "ItemType": "Spell" },
