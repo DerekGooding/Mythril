@@ -1,36 +1,23 @@
 # AI Suggestions
 
-**Last Generation:** March 3, 2026. Focused on deepening the FF8/FFT inspired systems and world expansion.
+**Last Generation:** March 3, 2026. 
 
 ## Instructions
 New AI-generated suggestions for the project should be placed in this file if it is currently empty or has been fully processed. 
 
-A user will periodically review these suggestions and greenlight specific goals by moving them to the Roadmap or issuing new directives.
+---
 
-**Mandate:** At least 30% of suggestions must focus on **Additional Content** (e.g., new locations, items, quests, or cadences) to ensure the game world continues to grow alongside technical features.
+### Greenlit (Implementing Next)
 
-**Tip:** When adding suggestions, ensure they are actionable, scoped, and aligned with the current architectural phase.
+1.  **Auto-Quest Delay Visualizer**: When Auto-Quest is active, add a small "Cooldown" or "Preparation" animation between the end of one quest and the start of the next to make the loop feel more alive.
+2.  **Junction Comparison Tooltips**: When selecting magic to junction, show a preview of how the target stat will change (e.g., "Strength: 10 -> 15 (+5)") before the user confirms.
 
 ---
 
-### New Suggestions
-
-#### 🏹 Additional Content (Expansion)
-1.  **New Cadence: The Sentinel**: A defensive-focused job.
-    *   **Abilities**: "J-Vit" (High efficiency), "Fortify" (Decreases single-use quest duration based on Vitality), and "Magic Pocket II".
-    *   **Requirements**: Heavy materials (Iron Ore, Ancient Bark) and Gold.
-2.  **New Location: Sun-Drenched Desert**: Mid-game area unlocked after completing "Ancient Ruins".
-    *   **Quests**: "Scavenge Scrap", "Hunt Sand-Sharks", "Locate the Hidden Oasis".
-    *   **Rewards**: Sun-baked scales, Solar Essence (for new spells).
-3.  **Spell Tier Upgrade: Tier II Magic**: Introduction of "Fire II", "Ice II", etc.
-    *   **Workshop**: Create recipes requiring 100x Tier I magic + a rare material (e.g., Mythril Spark) to produce Tier II.
-    *   **Junction**: Tier II spells provide significantly higher stat multipliers.
-
-#### ⚙️ Technical & UX Enhancements
-4.  **Auto-Quest Delay Visualizer**: When Auto-Quest is active, add a small "Cooldown" or "Preparation" animation between the end of one quest and the start of the next to make the loop feel more alive.
-5.  **Junction Comparison Tooltips**: When selecting magic to junction, show a preview of how the target stat will change (e.g., "Strength: 10 -> 15 (+5)") before the user confirms.
-6.  **Batch Refinement**: Allow users to specify a multiplier (x5, x10, xMax) when dragging a refinement task, consuming more resources and taking longer but producing more items in one cycle.
-
-#### ⚖️ System Depth
-7.  **Inherent Proficiencies**: Assign a unique passive trait to each starting character that provides a task-specific multiplier (e.g., Himbo is 10% faster at physical tasks) without altering base stats, maintaining the equipment-only stat model.
-8.  **Location Completion Rewards**: Reward players for completing every unique quest in a location with a "Discovery Cache" containing rare refinement materials or a unique one-time Cadence unlock.
+### Rejected (Do Not Implement)
+- New Cadences (The Sentinel)
+- New Locations (Sun-Drenched Desert)
+- Spell Tier Upgrades (Tier II)
+- Batch Refinement
+- Inherent Proficiencies
+- Location Completion Rewards
