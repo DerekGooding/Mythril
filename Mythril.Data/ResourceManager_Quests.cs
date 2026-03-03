@@ -175,7 +175,8 @@ public partial class ResourceManager
             
             // Only set unseen if this ability actually unlocks something in the workshop
             // AND it wasn't already discovered via another cadence
-            if (!alreadyDiscovered && _refinements.ByKey.ContainsKey(unlock.Ability))
+            // AND the user isn't already looking at the workshop
+            if (!alreadyDiscovered && _refinements.ByKey.ContainsKey(unlock.Ability) && ActiveTab != "workshop")
             {
                 HasUnseenWorkshop = true;
             }

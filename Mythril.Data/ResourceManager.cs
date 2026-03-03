@@ -46,6 +46,7 @@ public partial class ResourceManager(
 
     public bool HasUnseenCadence { get; set; } = false;
     public bool HasUnseenWorkshop { get; set; } = false;
+    public string ActiveTab { get; set; } = "hand";
 
     public void Initialize()
     {
@@ -116,7 +117,10 @@ public partial class ResourceManager(
     public void UnlockCadence(Cadence cadence)
     {
         _lockedCadences[cadence] = false;
-        HasUnseenCadence = true;
+        if (ActiveTab != "cadence")
+        {
+            HasUnseenCadence = true;
+        }
         UpdateAvaiableCadences();
     }
 
