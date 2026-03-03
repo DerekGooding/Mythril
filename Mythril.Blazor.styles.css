@@ -25,6 +25,25 @@
     border-bottom: 1px solid var(--border-color);
     padding-bottom: 0.25rem;
     color: var(--primary-color);
+    display: flex;
+    align-items: center;
+}
+
+.ability-name[b-imavmvw6g7] {
+    flex-grow: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.duration-badge[b-imavmvw6g7] {
+    font-size: 0.75rem;
+    background-color: var(--secondary-color);
+    color: white;
+    padding: 1px 6px;
+    border-radius: 10px;
+    font-weight: normal;
+    flex-shrink: 0;
 }
 
 .card-content[b-imavmvw6g7] {
