@@ -44,7 +44,8 @@ public abstract class BunitTestBase : TestContextWrapper
             cadences,
             ContentHost.GetContent<Locations>(),
             JunctionManager,
-            InventoryManager
+            InventoryManager,
+            ContentHost.GetContent<ItemRefinements>()
         );
         ResourceManager.Initialize();
         

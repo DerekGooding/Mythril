@@ -8,7 +8,8 @@ public partial class ResourceManager(
     Cadences cadences,
     Locations locations,
     JunctionManager junctionManager,
-    InventoryManager inventory)
+    InventoryManager inventory,
+    ItemRefinements refinements)
 {
     private readonly Items _items = items;
     private readonly QuestUnlocks _questUnlocks = questUnlocks;
@@ -16,6 +17,7 @@ public partial class ResourceManager(
     private readonly QuestDetails _questDetails = questDetails;
     private readonly Cadences _cadences = cadences;
     private readonly Locations _locations = locations;
+    private readonly ItemRefinements _refinements = refinements;
     public JunctionManager JunctionManager { get; } = junctionManager;
     public InventoryManager Inventory { get; } = inventory;
 

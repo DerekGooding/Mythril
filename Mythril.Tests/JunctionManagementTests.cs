@@ -27,7 +27,8 @@ public class JunctionManagementTests
             _cadences, 
             ContentHost.GetContent<Locations>(),
             _junctionManager,
-            inventory);
+            inventory,
+            ContentHost.GetContent<ItemRefinements>());
         _resourceManager.Initialize();
     }
 

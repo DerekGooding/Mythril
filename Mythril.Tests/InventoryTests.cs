@@ -22,11 +22,12 @@ public class InventoryTests
             _items, 
             ContentHost.GetContent<QuestUnlocks>(), 
             ContentHost.GetContent<QuestToCadenceUnlocks>(), 
-            _questDetails, 
+            ContentHost.GetContent<QuestDetails>(), 
             ContentHost.GetContent<Cadences>(), 
             ContentHost.GetContent<Locations>(),
             junctionManager,
-            inventory);
+            inventory,
+            ContentHost.GetContent<ItemRefinements>());
 
         _resourceManager.Initialize();
         

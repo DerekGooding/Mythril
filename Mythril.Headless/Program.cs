@@ -117,10 +117,20 @@ class Program
             d => d.Augments.Select(a => new StatAugment(stats.All.First(s => s.Name == a.Stat), a.ModifierAtFull)).ToArray()
         ));
 
+        var refinements = ContentHost.GetContent<ItemRefinements>();
+        var refinementDTOs = JsonConvert.DeserializeObject<List<RefinementDTO>>(File.ReadAllText(Path.Combine(dataDir, "refinements.json"))) ?? [];
+        refinements.Load(refinementDTOs.ToDictionary(
+            d => abilities.All.First(a => a.Name == d.Ability),
+            d => d.Recipes.ToDictionary(
+                r => items.All.First(i => i.Name == r.InputItem),
+                r => new Recipe(r.InputQuantity, items.All.First(i => i.Name == r.OutputItem), r.OutputQuantity)
+            )
+        ));
+
         // 2. Initialize Engine
         var inventory = new InventoryManager();
         var junctionManager = new JunctionManager(inventory, statAugments, cadences);
-        var resourceManager = new ResourceManager(items, questUnlocks, questToCadenceUnlocks, questDetails, cadences, locations, junctionManager, inventory);
+        var resourceManager = new ResourceManager(items, questUnlocks, questToCadenceUnlocks, questDetails, cadences, locations, junctionManager, inventory, refinements);
         
         resourceManager.Initialize();
 

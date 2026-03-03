@@ -141,7 +141,11 @@ public partial class ResourceManager
         if(item is CadenceUnlock unlock)
         {
             UnlockedAbilities.Add($"{unlock.CadenceName}:{unlock.Ability.Name}");
-            HasUnseenWorkshop = true;
+            // Only set unseen if this ability actually unlocks something in the workshop
+            if (_refinements.ByKey.ContainsKey(unlock.Ability))
+            {
+                HasUnseenWorkshop = true;
+            }
             UpdateMagicCapacity();
         }
         await Task.CompletedTask;

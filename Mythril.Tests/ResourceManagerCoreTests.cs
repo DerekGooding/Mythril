@@ -28,7 +28,8 @@ public class ResourceManagerCoreTests
             ContentHost.GetContent<Cadences>(), 
             ContentHost.GetContent<Locations>(),
             junctionManager,
-            inventory);
+            inventory,
+            ContentHost.GetContent<ItemRefinements>());
         _resourceManager.Initialize();
     }
 
