@@ -90,7 +90,6 @@ public abstract class BunitTestBase : TestContextWrapper
             JunctionManager,
             ContentHost.GetContent<Items>(),
             cadences,
-            ContentHost.GetContent<CadenceAbilities>(),
             ContentHost.GetContent<Quests>(),
             Stats
         ).Object);

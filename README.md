@@ -32,6 +32,11 @@ Mythril is an RPG-inspired web application built with **.NET 10** and **Blazor W
 - **Testing**: MSTest, Moq, and bUnit for component testing. Coverage is maintained at >90% overall.
 - **CI/CD**: GitHub Actions for automated deployment and health monitoring.
 
+## 🚀 Recent Updates (March 2026)
+- **UI Architecture**: Refactored the main layout and tab system to ensure perfect flexbox containment and vertical scrolling across all panels (Locations, Cadence, Workshop).
+- **Test Suite Refactoring**: Split large test monoliths (`JunctionTests`, `QuestLifecycleTests`) into specialized, focused test classes to maintain a clean, maintainable test suite.
+- **Empty State UX**: Simplified the "No Cadences" state with a cleaner, italicized message, removing outdated Bootstrap alert backgrounds.
+
 ## ⚖️ Quality Assurance & Health
 We maintain project health through a custom automated suite (`scripts/check_health.py`) which runs on every commit:
 - **Monolith Prevention**: Strict 250-line limit for source files (excluding tools).

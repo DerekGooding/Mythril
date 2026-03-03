@@ -10,7 +10,6 @@ public class PersistenceService(
     JunctionManager junctionManager,
     Items items, 
     Cadences cadences, 
-    CadenceAbilities abilities,
     Quests quests,
     Stats stats)
 {

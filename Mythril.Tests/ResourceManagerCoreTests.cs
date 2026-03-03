@@ -38,15 +38,13 @@ public class ResourceManagerCoreTests
         // Assert
         Assert.IsNotNull(_resourceManager!.UsableLocations);
         Assert.AreEqual(7, _resourceManager.UsableLocations.Count);  
-        Assert.IsNotNull(_resourceManager.Characters);
         Assert.AreEqual(3, _resourceManager.Characters.Length);      
     }
     [TestMethod]
     public void ResourceManager_RetrievesQuestData_Correctly()
     {
         // Assert
-        var village = _resourceManager!.UsableLocations.FirstOrDefault(l => l.Name == "Village");
-        Assert.IsNotNull(village);
+        var village = _resourceManager!.UsableLocations.First(l => l.Name == "Village");
         var quest = village.Quests.FirstOrDefault(c => c.Name == "Prologue");
         Assert.IsNotNull(quest);
         Assert.AreEqual("Prologue", quest.Name);

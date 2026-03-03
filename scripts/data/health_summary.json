@@ -1,34 +1,25 @@
 {
     "is_healthy": false,
-    "failure_count": 3,
+    "failure_count": 2,
     "metrics": {
-        "monoliths": 2,
-        "coverage": 91.7,
+        "monoliths": 0,
+        "coverage": 90.22,
         "missing_tests": 0,
         "key_violations": 0,
         "testid_violations": 0,
         "stale_docs": 1,
         "pending_feedback": 0,
-        "test_passed": true
+        "test_passed": false
     },
     "failures": [
         {
-            "category": "monolith",
-            "message": "Mythril.Tests\\JunctionTests.cs exceeds 250 lines",
-            "metadata": {
-                "lines": 302
-            }
-        },
-        {
-            "category": "monolith",
-            "message": "Mythril.Tests\\QuestLifecycleTests.cs exceeds 250 lines",
-            "metadata": {
-                "lines": 260
-            }
+            "category": "tests",
+            "message": "dotnet test failed",
+            "metadata": {}
         },
         {
             "category": "docs_stale",
-            "message": "README.md is stale (20 source changes since last update)",
+            "message": "README.md is stale (21 source changes since last update)",
             "metadata": {}
         }
     ]

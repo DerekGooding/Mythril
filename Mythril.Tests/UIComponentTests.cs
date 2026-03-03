@@ -123,7 +123,7 @@ public class UIComponentTests : BunitTestBase
         );
 
         // Assert
-        var alert = cut.Find(".alert-warning");
-        Assert.IsTrue(alert.TextContent.Contains("No Cadences Unlocked"));
+        var noCadences = cut.Find(".no-cadences");
+        Assert.IsTrue(noCadences.TextContent.Contains("No Cadences discovered"));
     }
 }
