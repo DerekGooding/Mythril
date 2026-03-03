@@ -497,14 +497,9 @@
 }
 /* /Components/PartyPanel.razor.rz.scp.css */
 .party-panel[b-fgj0qpkv83] {
-    border: 1px solid var(--panel-border);
-    border-radius: 8px;
-    padding: 1rem;
     flex-grow: 1;
     min-height: 0;
-    overflow-y: auto;
-    background-color: var(--panel-bg);
-    color: var(--text-color);
+    /* Removed padding and border to allow parent's scroll-area to handle it cleanly */
 }
 /* /Components/QuestCard.razor.rz.scp.css */
 .card[b-mekdh8e00x] {
@@ -661,88 +656,37 @@
     color: white;
 }
 /* /Layout/MainLayout.razor.rz.scp.css */
-main[b-uvgfdke93t] {
-    display: flex;
-    flex-direction: column;
+.viewport-wrapper[b-uvgfdke93t] {
     height: 100vh;
     width: 100vw;
-    overflow: hidden;
-}
-
-.top-row[b-uvgfdke93t] {
-    height: 3.5rem;
-    display: flex;
-    align-items: center;
-    background-color: var(--header-bg);
-    border-bottom: 1px solid var(--header-border);
-    flex-shrink: 0;
-    z-index: 1000;
-}
-
-.version-text[b-uvgfdke93t] {
-    color: var(--text-color);
-    opacity: 0.6;
-}
-
-.main-container[b-uvgfdke93t] {
-    flex-grow: 1;
-    display: flex;
-    position: relative;
-    overflow: hidden;
-    min-height: 0; 
-}
-
-.content[b-uvgfdke93t] {
-    flex-grow: 1;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
-    min-height: 0;
-    padding: 0 !important;
-}
-
-.feedback-drawer[b-uvgfdke93t] {
-    position: absolute;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    width: 400px;
-    background-color: var(--panel-bg);
-    border-left: 1px solid var(--panel-border);
-    box-shadow: -5px 0 15px rgba(0,0,0,0.2);
-    z-index: 2000;
-    display: flex;
-    flex-direction: column;
-    animation: slideIn-b-uvgfdke93t 0.3s ease-out;
+    overflow: hidden; /* Lock the browser scroll */
+    background-color: var(--bg-color);
     color: var(--text-color);
 }
 
-.drawer-header[b-uvgfdke93t] {
-    padding: 1rem;
-    border-bottom: 1px solid var(--border-color);
+main[b-uvgfdke93t] {
+    flex: 1;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: var(--tab-inactive-bg);
+    flex-direction: column;
+    min-height: 0; /* Important for flex child scrolling */
 }
 
-.drawer-content[b-uvgfdke93t] {
-    padding: 1rem;
-    overflow-y: auto;
-    flex-grow: 1;
+/* Ensure global scrollbars are styled consistent with the theme if needed */
+[b-uvgfdke93t]::-webkit-scrollbar {
+    width: 8px;
 }
 
-.drawer-backdrop[b-uvgfdke93t] {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0,0,0,0.5);
-    z-index: 1999;
+[b-uvgfdke93t]::-webkit-scrollbar-track {
+    background: var(--bg-color);
 }
 
-@keyframes slideIn-b-uvgfdke93t {
-    from { transform: translateX(100%); }
-    to { transform: translateX(0); }
+[b-uvgfdke93t]::-webkit-scrollbar-thumb {
+    background: var(--card-border);
+    border-radius: 4px;
+}
+
+[b-uvgfdke93t]::-webkit-scrollbar-thumb:hover {
+    background: var(--secondary-color);
 }
