@@ -1,6 +1,6 @@
 {
     "is_healthy": false,
-    "failure_count": 2,
+    "failure_count": 3,
     "metrics": {
         "monoliths": 2,
         "coverage": 91.7,
@@ -9,9 +9,14 @@
         "testid_violations": 0,
         "stale_docs": 0,
         "pending_feedback": 0,
-        "test_passed": true
+        "test_passed": false
     },
     "failures": [
+        {
+            "category": "tests",
+            "message": "dotnet test failed",
+            "metadata": {}
+        },
         {
             "category": "monolith",
             "message": "Mythril.Tests/JunctionTests.cs exceeds 250 lines",
