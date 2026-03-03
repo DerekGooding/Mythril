@@ -77,7 +77,7 @@ public class ResourceManagerCoreTests
         Assert.AreEqual(1, assigned.Count);
         Assert.AreEqual(cadence.Name, assigned[0].Name);
 
-        _resourceManager.JunctionManager.Unassign(cadence);
+        _resourceManager.JunctionManager.Unassign(cadence, _resourceManager.UnlockedAbilities);
         assigned = _resourceManager.JunctionManager.CurrentlyAssigned(character).ToList();
         Assert.AreEqual(0, assigned.Count);
     }
@@ -137,7 +137,7 @@ public class ResourceManagerCoreTests
 
         _resourceManager!.ReceiveRewards(unlock).Wait();
         
-        Assert.IsTrue(_resourceManager.UnlockedAbilities.Contains(unlock.Ability));
+        Assert.IsTrue(_resourceManager.UnlockedAbilities.Contains($"{unlock.CadenceName}:{unlock.Ability.Name}"));
     }
 
     [TestMethod]

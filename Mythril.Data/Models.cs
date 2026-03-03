@@ -30,7 +30,7 @@ public readonly record struct ItemQuantity(Item Item, int Quantity = 1);
 // Cadence types
 public partial record struct CadenceAbility(string Name, string Description) : INamed;
 
-public readonly record struct CadenceUnlock(CadenceAbility Ability, ItemQuantity[] Requirements);
+public readonly record struct CadenceUnlock(string CadenceName, CadenceAbility Ability, ItemQuantity[] Requirements);
 
 public partial record struct Cadence(string Name, string Description, CadenceUnlock[] Abilities) : INamed;
 

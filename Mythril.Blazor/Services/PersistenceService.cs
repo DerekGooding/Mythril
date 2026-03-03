@@ -26,7 +26,7 @@ public class PersistenceService(
                 .Select(x => new KeyValuePair<string, int>(x.Item.Name, x.Quantity))
                 .ToList(),
             UnlockedCadences = resourceManager.UnlockedCadences.Select(c => c.Name).ToList(),
-            UnlockedAbilities = resourceManager.UnlockedAbilities.Select(a => a.Name).ToList(),
+            UnlockedAbilities = resourceManager.UnlockedAbilities.ToList(),
             CompletedQuests = resourceManager.GetCompletedQuests().Select(q => q.Name).ToList(),
             Junctions = junctionManager.Junctions.Select(j => new JunctionDTO
             {
@@ -82,10 +82,9 @@ public class PersistenceService(
 
         // Restore Abilities
         resourceManager.UnlockedAbilities.Clear();
-        foreach (var name in saveData.UnlockedAbilities)
+        foreach (var abilityId in saveData.UnlockedAbilities)
         {
-            var ability = abilities.All.FirstOrDefault(x => x.Name == name);
-            if (ability.Name != null) resourceManager.UnlockedAbilities.Add(ability);
+            resourceManager.UnlockedAbilities.Add(abilityId);
         }
         resourceManager.UpdateMagicCapacity();
 

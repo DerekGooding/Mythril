@@ -19,7 +19,7 @@ public class AdditionalUIComponentTests : BunitTestBase
     public void AbilityUnlockCard_RendersCorrectly()
     {
         var ability = new CadenceAbility("Test Ability", "Description");
-        var unlock = new CadenceUnlock(ability, []);
+        var unlock = new CadenceUnlock("Test Cadence", ability, []);
         var cut = RenderComponent<AbilityUnlockCard>(parameters => parameters.Add(p => p.Unlock, unlock));
         Assert.IsTrue(cut.Markup.Contains("Test Ability"));
     }
@@ -183,9 +183,9 @@ public class AdditionalUIComponentTests : BunitTestBase
         // Arrange
         var character = new Character("Hero");
         var autoQuestAbility = new CadenceAbility("AutoQuest I", "Description");
-        var cadence = new Cadence("Test", "Desc", [new CadenceUnlock(autoQuestAbility, [])]);
+        var cadence = new Cadence("Test", "Desc", [new CadenceUnlock("Test", autoQuestAbility, [])]);
         
-        ResourceManager.UnlockedAbilities.Add(autoQuestAbility);
+        ResourceManager.UnlockedAbilities.Add("Test:AutoQuest I");
         JunctionManager.AssignCadence(cadence, character, ResourceManager.UnlockedAbilities);
 
         // Act

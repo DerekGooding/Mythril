@@ -76,8 +76,9 @@ public class ModelTests
         Assert.AreEqual(10, iq.Quantity);
 
         var ability = new CadenceAbility("A", "D");
-        var unlock = new CadenceUnlock(ability, [iq]);
+        var unlock = new CadenceUnlock("C", ability, [iq]);
         Assert.AreEqual(ability, unlock.Ability);
+        Assert.AreEqual("C", unlock.CadenceName);
 
         var cadence = new Cadence("C", "D", [unlock]);
         Assert.AreEqual(1, cadence.Abilities.Length);

@@ -11,7 +11,12 @@
     @foreach (var refinement in refinements.ByKey)
     {
         var ability = refinement.Key;
-        var hasAbility = resourceManager.UnlockedAbilities.Contains(ability);
+        // Check if ANY character has a cadence assigned that has this ability UNLOCKED
+        var hasAbility = resourceManager.Characters.Any(c => 
+            resourceManager.JunctionManager.CurrentlyAssigned(c).Any(cad => 
+                cad.Abilities.Any(a => a.Ability.Name == ability.Name && resourceManager.UnlockedAbilities.Contains($"{cad.Name}:{a.Ability.Name}"))
+            )
+        );
         
         <div @key="ability.Name" class="refinement-group @(hasAbility ? "" : "locked")">
             <h4>@ability.Name @(hasAbility ? "" : "(Locked)")</h4>

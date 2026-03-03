@@ -33,7 +33,7 @@ public partial class ResourceManager(
 
     public List<Cadence> UnlockedCadences = [];
     public List<string> UnlockedCadenceNames = [];
-    public List<CadenceAbility> UnlockedAbilities = [];
+    public HashSet<string> UnlockedAbilities = [];
 
     public List<QuestProgress> ActiveQuests { get; } = [];
 
@@ -70,9 +70,8 @@ public partial class ResourceManager(
 
     public bool CanAutoQuest(Character character)
     {
-        if (!UnlockedAbilities.Any(a => a.Name == "AutoQuest I")) return false;
         var assigned = JunctionManager.CurrentlyAssigned(character);
-        return assigned.Any(c => c.Abilities.Any(a => UnlockedAbilities.Contains(a.Ability) && a.Ability.Name == "AutoQuest I"));
+        return assigned.Any(c => c.Abilities.Any(a => UnlockedAbilities.Contains($"{c.Name}:{a.Ability.Name}") && a.Ability.Name == "AutoQuest I"));
     }
 
     public bool IsAutoQuestEnabled(Character character) => _autoQuestEnabled.TryGetValue(character.Name, out var enabled) && enabled;
@@ -103,7 +102,7 @@ public partial class ResourceManager(
     public void UpdateMagicCapacity()
     {
         int capacity = 30;
-        if (UnlockedAbilities.Any(a => a.Name == "Magic Pocket I")) capacity = 60;
+        if (UnlockedAbilities.Any(a => a.EndsWith(":Magic Pocket I"))) capacity = 60;
         Inventory.MagicCapacity = capacity;
     }
 

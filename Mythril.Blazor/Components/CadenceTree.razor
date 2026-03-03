@@ -4,7 +4,7 @@
 <div class="cadence-tree">
     @foreach (var abilityUnlock in CadenceData.Abilities)
     {
-        var isUnlocked = resourceManager.UnlockedAbilities.Contains(abilityUnlock.Ability);
+        var isUnlocked = resourceManager.UnlockedAbilities.Contains($"{CadenceData.Name}:{abilityUnlock.Ability.Name}");
         var canAfford = resourceManager.CanAfford(abilityUnlock);
         var stateClass = isUnlocked ? "unlocked" : canAfford ? "affordable" : "locked";
 

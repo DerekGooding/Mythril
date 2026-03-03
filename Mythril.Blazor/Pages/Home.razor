@@ -200,7 +200,7 @@
 
     private async Task UnassignCadence(Cadence cadence)
     {
-        JunctionManager.Unassign(cadence);
+        JunctionManager.Unassign(cadence, resourceManager.UnlockedAbilities);
         SnackbarService.Show($"Unequipped {cadence.Name}", "info");
         await InvokeAsync(StateHasChanged);
     }

@@ -166,7 +166,7 @@
         if (stat.Name == "Speed") abilityName = "J-Speed";
         if (stat.Name == "Magic") abilityName = "J-Magic";
 
-        return assigned.Any(c => c.Abilities.Any(a => resourceManager.UnlockedAbilities.Contains(a.Ability) && a.Ability.Name == abilityName));
+        return assigned.Any(c => c.Abilities.Any(a => a.Ability.Name == abilityName && resourceManager.UnlockedAbilities.Contains($"{c.Name}:{a.Ability.Name}")));
     }
 
     private void HandleJunctionChange(Stat stat, ChangeEventArgs e)

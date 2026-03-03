@@ -140,7 +140,7 @@ public partial class ResourceManager
         }
         if(item is CadenceUnlock unlock)
         {
-            UnlockedAbilities.Add(unlock.Ability);
+            UnlockedAbilities.Add($"{unlock.CadenceName}:{unlock.Ability.Name}");
             UpdateMagicCapacity();
         }
         await Task.CompletedTask;

@@ -17,29 +17,30 @@ public class JunctionManager(
         _assignedCadences = _cadences.All.ToNamedDictionary(_ => (Character?)null);
     }
 
-    public void AssignCadence(Cadence cadence, Character character, List<CadenceAbility> unlockedAbilities)
+    public void AssignCadence(Cadence cadence, Character character, HashSet<string> unlockedAbilities)
     {
         var existingOwner = _assignedCadences.GetValueOrDefault(cadence);
         if (existingOwner != null)
         {
             if (existingOwner.Value.Name == character.Name) return; // Already assigned to this character
-            Unassign(cadence);
+            Unassign(cadence, unlockedAbilities);
         }
 
         _assignedCadences[cadence] = character;
     }
 
-    public void Unassign(Cadence cadence)
+    public void Unassign(Cadence cadence, HashSet<string> unlockedAbilities)
     {
         if (_assignedCadences.TryGetValue(cadence, out var owner) && owner != null)
         {
             _assignedCadences[cadence] = null;
             
-            // Check if any junctions are now invalid because the ability is gone
+            // Check if any junctions are now invalid because the ability is gone OR locked for remaining cadences
             foreach (var junction in Junctions.Where(j => j.Character.Name == owner.Value.Name).ToList())
             {
                 string abilityName = GetJunctionAbilityName(junction.Stat.Name);
-                if (!CurrentlyAssigned(owner.Value).Any(c => c.Abilities.Any(a => a.Ability.Name == abilityName)))
+                bool hasAbility = CurrentlyAssigned(owner.Value).Any(c => c.Abilities.Any(a => a.Ability.Name == abilityName && unlockedAbilities.Contains($"{c.Name}:{a.Ability.Name}")));
+                if (!hasAbility)
                 {
                     Junctions.Remove(junction);
                 }
@@ -50,11 +51,11 @@ public class JunctionManager(
     public IEnumerable<Cadence> CurrentlyAssigned(Character character)
         => _assignedCadences.Where(x => x.Value?.Name == character.Name).Select(x => x.Key);
 
-    public void JunctionMagic(Character character, Stat stat, Item magic, List<CadenceAbility> unlockedAbilities)
+    public void JunctionMagic(Character character, Stat stat, Item magic, HashSet<string> unlockedAbilities)
     {
         string abilityName = GetJunctionAbilityName(stat.Name);
         var cadencesWithAbility = CurrentlyAssigned(character)
-            .Where(c => c.Abilities.Any(a => unlockedAbilities.Contains(a.Ability) && a.Ability.Name == abilityName));
+            .Where(c => c.Abilities.Any(a => a.Ability.Name == abilityName && unlockedAbilities.Contains($"{c.Name}:{a.Ability.Name}")));
 
         if (!cadencesWithAbility.Any()) return;
 

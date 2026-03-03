@@ -69,6 +69,7 @@ public class ContentLoader(
                 var ab = abilities.All.FirstOrDefault(x => x.Name == a.Ability);
                 if (ab.Name == null) Console.WriteLine($"WARNING: Ability '{a.Ability}' not found for cadence '{d.Name}'");
                 return new CadenceUnlock(
+                    d.Name,
                     ab,
                     a.Requirements.Select(r => {
                         var i = items.All.FirstOrDefault(x => x.Name == r.Item);
