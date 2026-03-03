@@ -32,5 +32,5 @@ A user will periodically review these suggestions and greenlight specific goals 
 6.  **Batch Refinement**: Allow users to specify a multiplier (x5, x10, xMax) when dragging a refinement task, consuming more resources and taking longer but producing more items in one cycle.
 
 #### ⚖️ System Depth
-7.  **Character Traits**: Assign a unique passive trait to each starting character (Protagonist, Wifu, Himbo) that gives them a slight 5-10% proficiency bonus in one of the core stats (e.g., Himbo gets a bonus to Strength-based tasks).
-8.  **Cadence Mastery**: Mastered Cadences (all abilities unlocked) could provide a permanent, small stat boost to the character even when unequipped, encouraging players to master every job.
+7.  **Inherent Proficiencies**: Assign a unique passive trait to each starting character that provides a task-specific multiplier (e.g., Himbo is 10% faster at physical tasks) without altering base stats, maintaining the equipment-only stat model.
+8.  **Location Completion Rewards**: Reward players for completing every unique quest in a location with a "Discovery Cache" containing rare refinement materials or a unique one-time Cadence unlock.

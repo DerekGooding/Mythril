@@ -3,6 +3,22 @@
 This file contains distilled architectural and project guidance provided by human developers. All agents must consult this base to ensure alignment with long-term project goals.
 
 ---
+## [2026-03-03] Character Growth, Inventory Scaling & Longevity
+
+### **Stat Progression**
+- **Permanent Upgrades:** There are no permanent stat upgrades or "Character Levels". Stats are strictly derived from assigned Cadences and Junctioned magic.
+- **Character Impact:** Tasks are natively affected by character stats (e.g., higher Strength speeds up Strength-dependent tasks).
+- **Future Potential:** One-time permanent buffs from specific late-game quests may be considered eventually, but are not part of the current architecture.
+
+### **Inventory Management**
+- **Capacity Limits:** Non-magic items (Materials, Gold) have no capacity limit.
+- **UI Scaling:** Large inventories should be managed via minimal UI solutions: filtering and horizontal scrolling.
+
+### **Longevity & Prestige**
+- **Prestige Mechanics:** There are no prestige or "hard reset" mechanics.
+- **Expansion Model:** The game advances strictly through horizontal and vertical content expansion: new Cadences, new resources, and new magic.
+
+---
 ## [2026-03-01] Junctioning Specifics & Cadence Sharing Rules
 
 ### **Resource Limits**
@@ -32,4 +48,3 @@ The game is inspired by the **FF8 Junction System** and the **FF Tactics Job Sys
 - Do not focus on endgame yet.
 - **Goal:** Implement a solid **20-30 minute onboarding experience** that teaches these mechanics (Equipping, Refining, Junctioning).
 - Ensure the core mechanics (Items -> Magic -> Stats -> Efficiency) are fully functional and intuitive before scaling content.
-
