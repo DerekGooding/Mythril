@@ -187,6 +187,46 @@ public class QuestLifecycleTests
     }
 
     [TestMethod]
+    public void ResourceManager_CancelQuest_RefundsCosts()
+    {
+        var quest = _quests!.All.First(x => x.Name == "Buy Potion");
+        var detail = _questDetails![quest];
+        var questData = new QuestData(quest, detail);
+        var character = _resourceManager!.Characters[0];
+        var gold = _items!.All.First(x => x.Name == "Gold");
+
+        _resourceManager.Inventory.Clear();
+        _resourceManager.Inventory.Add(gold, 1000);
+        
+        _resourceManager.StartQuest(questData, character);
+        Assert.AreEqual(750, _resourceManager.Inventory.GetQuantity(gold));
+
+        var progress = _resourceManager.ActiveQuests[0];
+        _resourceManager.CancelQuest(progress);
+
+        Assert.AreEqual(1000, _resourceManager.Inventory.GetQuantity(gold));
+    }
+
+    [TestMethod]
+    public void ResourceManager_CancelQuest_RemovesFromActive()
+    {
+        var quest = _quests!.All.First(x => x.Name == "Buy Potion");
+        var detail = _questDetails![quest];
+        var questData = new QuestData(quest, detail);
+        var character = _resourceManager!.Characters[0];
+
+        _resourceManager.Inventory.Add(_items!.All.First(x => x.Name == "Gold"), 1000);
+        _resourceManager.StartQuest(questData, character);
+        
+        Assert.AreEqual(1, _resourceManager.ActiveQuests.Count);
+
+        var progress = _resourceManager.ActiveQuests[0];
+        _resourceManager.CancelQuest(progress);
+
+        Assert.AreEqual(0, _resourceManager.ActiveQuests.Count);
+    }
+
+    [TestMethod]
     public void QuestProgress_ZeroDuration_ReturnsFullProgress()
     {
         var character = new Character("Hero");

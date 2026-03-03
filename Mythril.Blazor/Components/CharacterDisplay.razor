@@ -25,6 +25,15 @@
                     Auto: @(isAuto ? "ON" : "OFF")
                 </button>
             }
+
+            @if (QuestProgress is not null && !QuestProgress.IsCompleted)
+            {
+                <button class="btn btn-xs btn-outline-warning mt-1" 
+                        data-testid="cancel-quest"
+                        @onclick="CancelQuest">
+                    Cancel
+                </button>
+            }
         </div>
     }
 
@@ -154,6 +163,14 @@
     private void ToggleAutoQuest()
     {
         resourceManager.SetAutoQuestEnabled(Character, !resourceManager.IsAutoQuestEnabled(Character));
+    }
+
+    private void CancelQuest()
+    {
+        if (QuestProgress != null)
+        {
+            resourceManager.CancelQuest(QuestProgress);
+        }
     }
 
     private bool CanJunction(Stat stat)

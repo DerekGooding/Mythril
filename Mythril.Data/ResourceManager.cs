@@ -120,6 +120,32 @@ public partial class ResourceManager(
         }
     }
 
+    public void CancelQuest(QuestProgress progress)
+    {
+        lock(_questLock)
+        {
+            if (ActiveQuests.Contains(progress))
+            {
+                RefundCosts(progress.Item);
+                ActiveQuests.Remove(progress);
+            }
+        }
+    }
+
+    private void RefundCosts(object item)
+    {
+        if (item is QuestData quest)
+        {
+            foreach (var requirement in quest.Requirements)
+                Inventory.Add(requirement.Item, requirement.Quantity);
+        }
+        if (item is CadenceUnlock unlock)
+        {
+            foreach (var requirement in unlock.Requirements)
+                Inventory.Add(requirement.Item, requirement.Quantity);
+        }
+    }
+
     public bool IsInProgress(object item)
     {
         lock(_questLock)
