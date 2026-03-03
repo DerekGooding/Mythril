@@ -8,6 +8,13 @@
     min-height: 0;
 }
 
+.no-cadences {
+    padding: 1rem;
+    color: var(--text-muted);
+    font-style: italic;
+    opacity: 0.7;
+}
+
 .task-container {
     display: flex;
     flex-direction: row;

@@ -1,9 +1,9 @@
 {
     "is_healthy": false,
-    "failure_count": 1,
+    "failure_count": 3,
     "metrics": {
-        "monoliths": 0,
-        "coverage": 90.66,
+        "monoliths": 2,
+        "coverage": 91.7,
         "missing_tests": 0,
         "key_violations": 0,
         "testid_violations": 0,
@@ -13,8 +13,22 @@
     },
     "failures": [
         {
+            "category": "monolith",
+            "message": "Mythril.Tests\\JunctionTests.cs exceeds 250 lines",
+            "metadata": {
+                "lines": 302
+            }
+        },
+        {
+            "category": "monolith",
+            "message": "Mythril.Tests\\QuestLifecycleTests.cs exceeds 250 lines",
+            "metadata": {
+                "lines": 260
+            }
+        },
+        {
             "category": "docs_stale",
-            "message": "README.md is stale (9 source changes since last update)",
+            "message": "README.md is stale (20 source changes since last update)",
             "metadata": {}
         }
     ]
