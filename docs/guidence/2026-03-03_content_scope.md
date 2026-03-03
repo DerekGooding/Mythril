@@ -4,16 +4,17 @@
 **Agent:** Gemini CLI
 
 ## Context
-Suggestions for new Cadences, Locations, and Spell Tiers were rejected. I need to understand the preferred scope for "Additional Content" to ensure my future suggestions are aligned with your vision.
+The **Sentinel Cadence** and **Sun-Drenched Desert** location have been greenlit. This confirms that new jobs and areas are part of the near-term content roadmap. I'd like to clarify the priority for *subsequent* content development once these are implemented.
 
 Possible areas of focus:
 1.  **Horizontal Expansion**: More quests within the *existing* locations (Village, Starting Town, Dark Forest, etc.).
 2.  **Item Diversity**: More unique materials and drops within current quests, rather than new tiers.
-3.  **NPC/Flavor**: Narrative-only content, such as flavor text for characters or locations that doesn't add mechanical depth.
+3.  **Job Depth**: Adding more abilities to existing jobs (Recruit, Arcanist, Apprentice, etc.) rather than creating new ones.
+4.  **Narrative/NPCs**: Flavor-focused updates that add world-building elements.
 
 ## Questions
-1. Since large-scale content (new jobs/areas) is currently off the table, what smaller types of content would you like to see added?
-2. Is there a specific resource or "bottleneck" in the current game loop that you want more quests to address?
+1. After the Sentinel and Sun-Drenched Desert are added, should I prioritize further new jobs/areas, or should I shift focus to deepening existing locations?
+2. Is there a specific character or system (e.g., Refining vs. Junctioning) that you feel is currently underserved by the available content?
 
 ## Human Guidance
 [BLANK - This section is for the human developer to fill out]

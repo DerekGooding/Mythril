@@ -15,4 +15,4 @@ Options:
 2. If mechanical, should this duration be fixed or affected by character stats (like Speed)?
 
 ## Human Guidance
-[BLANK - This section is for the human developer to fill out]
+There is no mechanical cost to using auto-quest. The visuals can make it look like there is a prep time but no additional time is added to the task. Task time is only affected by character stats. And each task's stat affects are unique to each task. 
