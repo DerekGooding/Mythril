@@ -610,7 +610,17 @@
 }
 
 .progress[b-oes0l3to11] {
-    display: none; /* Hide internal progress bar as CharacterDisplay now has its own */
+    display: flex;
+    height: 10px;
+    background-color: var(--badge-bg);
+    border-radius: 5px;
+    margin: 8px 0;
+    overflow: hidden;
+}
+
+.progress-bar[b-oes0l3to11] {
+    background-color: var(--secondary-color);
+    transition: width 0.1s linear;
 }
 /* /Components/Snackbar.razor.rz.scp.css */
 .snackbar-container[b-g03wipbmr2] {
