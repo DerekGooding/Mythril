@@ -2,6 +2,7 @@
   { "Name": "AutoQuest I", "Description": "Allows a Quest to be looped indefinitely" },
   { "Name": "Refine Fire", "Description": "Refine items into fire magic" },
   { "Name": "Refine Ice", "Description": "Refine items into ice magic" },
+  { "Name": "Refine Wood", "Description": "Refine logs into herbs" },
   { "Name": "Refine Mixology", "Description": "Refine herbs into potions" },
   { "Name": "Refine Scrap", "Description": "Refine basic items into gold" },
   { "Name": "Augment Strength", "Description": "Directly increase physical power" },

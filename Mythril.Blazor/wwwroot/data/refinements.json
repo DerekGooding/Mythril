@@ -7,6 +7,13 @@
     ]
   },
   {
+    "Ability": "Refine Ice",
+    "Recipes": [
+      { "InputItem": "Mana Leaf", "InputQuantity": 1, "OutputItem": "Ice I", "OutputQuantity": 5 },
+      { "InputItem": "Moonberry", "InputQuantity": 1, "OutputItem": "Ice I", "OutputQuantity": 5 }
+    ]
+  },
+  {
     "Ability": "Refine Wood",
     "Recipes": [
       { "InputItem": "Log", "InputQuantity": 1, "OutputItem": "Herb", "OutputQuantity": 2 }
@@ -16,6 +23,13 @@
     "Ability": "Refine Mixology",
     "Recipes": [
       { "InputItem": "Herb", "InputQuantity": 10, "OutputItem": "Potion", "OutputQuantity": 1 }
+    ]
+  },
+  {
+    "Ability": "Refine Scrap",
+    "Recipes": [
+      { "InputItem": "Web", "InputQuantity": 1, "OutputItem": "Gold", "OutputQuantity": 100 },
+      { "InputItem": "Slime", "InputQuantity": 1, "OutputItem": "Gold", "OutputQuantity": 150 }
     ]
   }
 ]
