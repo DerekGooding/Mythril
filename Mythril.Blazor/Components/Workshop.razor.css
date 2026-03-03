@@ -1,25 +1,25 @@
 .workshop-panel {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    min-height: 0;
-    height: 100%;
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 !important;
+    min-height: 0 !important;
+    height: 100% !important;
     background-color: var(--bg-color);
     color: var(--text-color);
-    overflow: hidden; /* Header stays fixed, content scrolls */
+    overflow: hidden !important; /* Header stays fixed, content scrolls */
 }
 
 .workshop-header {
     padding: 1rem;
-    flex-shrink: 0;
+    flex-shrink: 0 !important;
 }
 
 .workshop-content {
     padding: 1rem;
-    overflow-y: auto; /* Content area scrolls */
-    overflow-x: hidden;
-    flex: 1;
-    min-height: 0;
+    overflow-y: auto !important; /* Content area scrolls */
+    overflow-x: hidden !important;
+    flex: 1 !important;
+    min-height: 0 !important;
 }
 
 .refinement-group {

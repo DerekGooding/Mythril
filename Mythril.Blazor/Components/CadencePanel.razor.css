@@ -1,12 +1,12 @@
 .cadence-panel {
-    display: flex;
-    flex-direction: column;
+    display: flex !important;
+    flex-direction: column !important;
     padding: 1rem;
-    overflow-y: auto; /* Root element scrolls content */
-    overflow-x: hidden;
-    flex: 1;
-    min-height: 0;
-    height: 100%;
+    overflow-y: auto !important; /* Root element scrolls content */
+    overflow-x: hidden !important;
+    flex: 1 !important;
+    min-height: 0 !important;
+    height: 100% !important;
 }
 
 .no-cadences {
@@ -17,9 +17,9 @@
 }
 
 .task-container {
-    display: flex;
-    flex-direction: row;
-    align-items: stretch;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: stretch !important;
     margin: 0.5rem;
     width: 100%;
 }
