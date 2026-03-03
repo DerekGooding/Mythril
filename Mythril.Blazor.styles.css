@@ -25,25 +25,6 @@
     border-bottom: 1px solid var(--border-color);
     padding-bottom: 0.25rem;
     color: var(--primary-color);
-    display: flex;
-    align-items: center;
-}
-
-.ability-name[b-imavmvw6g7] {
-    flex-grow: 1;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.duration-badge[b-imavmvw6g7] {
-    font-size: 0.75rem;
-    background-color: var(--secondary-color);
-    color: white;
-    padding: 1px 6px;
-    border-radius: 10px;
-    font-weight: normal;
-    flex-shrink: 0;
 }
 
 .card-content[b-imavmvw6g7] {
@@ -427,19 +408,13 @@
 /* /Components/InventoryItem.razor.rz.scp.css */
 .inventory-item[b-n4d12cyvsf] {
     position: relative;
-    border: 1px solid var(--item-border, #444);
-    border-radius: 4px;
-    padding: 4px 8px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    background-color: var(--item-bg, #2a2a2a);
-    color: var(--text-color, #e0e0e0);
+    border: 1px solid #eee;
+    border-radius: 3px;
+    padding: 5px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     transition: all 0.2s ease-in-out;
     cursor: grab;
-    white-space: nowrap;
-    height: 32px;
-    font-size: 0.85rem;
 }
 
 .inventory-item:active[b-n4d12cyvsf] {
@@ -447,37 +422,35 @@
 }
 
 .inventory-item:hover[b-n4d12cyvsf] {
-    border-color: var(--secondary-color, #3498db);
-    background-color: var(--badge-bg);
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
 .item-name[b-n4d12cyvsf] {
-    font-weight: 600;
+    font-weight: bold;
+    display: block;
 }
 
 .item-quantity[b-n4d12cyvsf] {
-    color: var(--secondary-color);
-    font-weight: 700;
+    color: #888;
+    display: block;
 }
 
 .floating-text[b-n4d12cyvsf] {
     position: absolute;
-    top: -15px;
+    top: -20px;
     left: 50%;
     transform: translateX(-50%);
     animation: float-up-b-n4d12cyvsf 1s ease-out forwards;
     font-weight: bold;
-    font-size: 0.75rem;
-    pointer-events: none;
-    z-index: 100;
 }
 
 .floating-text.positive[b-n4d12cyvsf] {
-    color: #4caf50;
+    color: green;
 }
 
 .floating-text.negative[b-n4d12cyvsf] {
-    color: #f44336;
+    color: red;
 }
 
 @keyframes float-up-b-n4d12cyvsf {
@@ -487,20 +460,51 @@
     }
     to {
         opacity: 0;
-        transform: translate(-50%, -20px);
+        transform: translate(-50%, -30px);
     }
 }
 /* /Components/InventoryPanel.razor.rz.scp.css */
-.inventory-bar[b-cxbqk8vivm] {
-    gap: 8px;
-    padding: 0 4px;
-    width: 100%;
+.inventory-panel[b-cxbqk8vivm] {
+    border: 1px solid var(--panel-border);
+    border-radius: 5px;
+    padding: 10px;
+    margin-top: 10px;
+    background-color: var(--panel-bg);
+    color: var(--text-color);
+}
+
+.inventory-grid[b-cxbqk8vivm] {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 10px;
+}
+
+.inventory-item[b-cxbqk8vivm] {
+    border: 1px solid var(--item-border);
+    border-radius: 3px;
+    padding: 5px;
+    text-align: center;
+    background-color: var(--item-bg);
+}
+
+.item-name[b-cxbqk8vivm] {
+    font-weight: bold;
+    color: var(--text-color);
+}
+
+.item-quantity[b-cxbqk8vivm] {
+    color: var(--text-muted);
 }
 /* /Components/PartyPanel.razor.rz.scp.css */
 .party-panel[b-fgj0qpkv83] {
+    border: 1px solid var(--panel-border);
+    border-radius: 8px;
+    padding: 1rem;
     flex-grow: 1;
     min-height: 0;
-    /* Removed padding and border to allow parent's scroll-area to handle it cleanly */
+    overflow-y: auto;
+    background-color: var(--panel-bg);
+    color: var(--text-color);
 }
 /* /Components/QuestCard.razor.rz.scp.css */
 .card[b-mekdh8e00x] {
@@ -592,17 +596,7 @@
 }
 
 .progress[b-oes0l3to11] {
-    display: flex;
-    height: 10px;
-    background-color: var(--badge-bg);
-    border-radius: 5px;
-    margin: 8px 0;
-    overflow: hidden;
-}
-
-.progress-bar[b-oes0l3to11] {
-    background-color: var(--secondary-color);
-    transition: width 0.1s linear;
+    display: none; /* Hide internal progress bar as CharacterDisplay now has its own */
 }
 /* /Components/Snackbar.razor.rz.scp.css */
 .snackbar-container[b-g03wipbmr2] {
@@ -667,37 +661,88 @@
     color: white;
 }
 /* /Layout/MainLayout.razor.rz.scp.css */
-.viewport-wrapper[b-uvgfdke93t] {
-    height: 100vh;
-    width: 100vw;
+main[b-uvgfdke93t] {
     display: flex;
     flex-direction: column;
-    overflow: hidden; /* Lock the browser scroll */
-    background-color: var(--bg-color);
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+}
+
+.top-row[b-uvgfdke93t] {
+    height: 3.5rem;
+    display: flex;
+    align-items: center;
+    background-color: var(--header-bg);
+    border-bottom: 1px solid var(--header-border);
+    flex-shrink: 0;
+    z-index: 1000;
+}
+
+.version-text[b-uvgfdke93t] {
+    color: var(--text-color);
+    opacity: 0.6;
+}
+
+.main-container[b-uvgfdke93t] {
+    flex-grow: 1;
+    display: flex;
+    position: relative;
+    overflow: hidden;
+    min-height: 0; 
+}
+
+.content[b-uvgfdke93t] {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-height: 0;
+    padding: 0 !important;
+}
+
+.feedback-drawer[b-uvgfdke93t] {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 400px;
+    background-color: var(--panel-bg);
+    border-left: 1px solid var(--panel-border);
+    box-shadow: -5px 0 15px rgba(0,0,0,0.2);
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+    animation: slideIn-b-uvgfdke93t 0.3s ease-out;
     color: var(--text-color);
 }
 
-main[b-uvgfdke93t] {
-    flex: 1;
+.drawer-header[b-uvgfdke93t] {
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
     display: flex;
-    flex-direction: column;
-    min-height: 0; /* Important for flex child scrolling */
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--tab-inactive-bg);
 }
 
-/* Ensure global scrollbars are styled consistent with the theme if needed */
-[b-uvgfdke93t]::-webkit-scrollbar {
-    width: 8px;
+.drawer-content[b-uvgfdke93t] {
+    padding: 1rem;
+    overflow-y: auto;
+    flex-grow: 1;
 }
 
-[b-uvgfdke93t]::-webkit-scrollbar-track {
-    background: var(--bg-color);
+.drawer-backdrop[b-uvgfdke93t] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 1999;
 }
 
-[b-uvgfdke93t]::-webkit-scrollbar-thumb {
-    background: var(--card-border);
-    border-radius: 4px;
-}
-
-[b-uvgfdke93t]::-webkit-scrollbar-thumb:hover {
-    background: var(--secondary-color);
+@keyframes slideIn-b-uvgfdke93t {
+    from { transform: translateX(100%); }
+    to { transform: translateX(0); }
 }
