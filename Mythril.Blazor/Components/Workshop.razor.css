@@ -6,6 +6,7 @@
     height: 100%;
     background-color: var(--bg-color);
     color: var(--text-color);
+    overflow: hidden; /* Header stays fixed, content scrolls */
 }
 
 .workshop-header {
@@ -15,8 +16,9 @@
 
 .workshop-content {
     padding: 1rem;
-    overflow-y: auto;
-    flex-grow: 1;
+    overflow-y: auto; /* Content area scrolls */
+    overflow-x: hidden;
+    flex: 1;
     min-height: 0;
 }
 

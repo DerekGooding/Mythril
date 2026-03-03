@@ -1,35 +1,60 @@
 .container-fluid {
-    height: 100vh;
+    height: 100%; /* Fill the parent (.content) which is already constrained by MainLayout */
+    display: flex;
+    flex-direction: column;
 }
 
 .header-row {
     background-color: var(--header-bg);
     border-bottom: 1px solid var(--header-border);
+    flex-shrink: 0;
 }
 
-/* Make all tab panes flex containers so children can fill height */
+/* Main row containing the two columns */
+.row.flex-grow-1 {
+    flex: 1;
+    min-height: 0;
+    margin: 0;
+    overflow: hidden;
+    display: flex;
+}
+
+/* Left column with tabs */
+.col-8 {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+    padding: 0.5rem;
+    overflow: hidden; /* Prevent this column from scrolling, let children do it */
+}
+
+/* Tab content area */
 .tab-content {
     background-color: var(--tab-bg);
     color: var(--text-color);
-    flex-grow: 1;
+    flex: 1;
     min-height: 0;
     display: flex;
     flex-direction: column;
+    overflow: hidden; /* Crucial: contain the panes */
 }
 
+/* Using ::deep to reach inside Bootstrap's tab structure if needed */
 .tab-content ::deep .tab-pane {
     display: none;
     flex-direction: column;
     flex: 1;
     min-height: 0;
-    overflow: hidden;
+    overflow: hidden; /* Panes contain the scrolling component */
 }
 
 .tab-content ::deep .tab-pane.active {
     display: flex !important;
+    height: 100%;
 }
 
-/* Ensure components fill the tab-pane */
+/* Ensure components fill the tab-pane and handle their own scrolling */
 .tab-pane ::deep .hand-panel,
 .tab-pane ::deep .cadence-panel,
 .tab-pane ::deep .workshop-panel {
@@ -37,6 +62,8 @@
     min-height: 0;
     display: flex;
     flex-direction: column;
+    height: 100%;
+    overflow: hidden; /* Children of these will handle actual overflow-y: auto */
 }
 
 /* Party column scroll */
@@ -47,13 +74,8 @@
     border-left: 1px solid var(--header-border);
     flex: 1;
     min-height: 0;
-    overflow-y: auto;
-}
-
-.col-8, .col-4 {
-    min-height: 0;
-    display: flex;
-    flex-direction: column;
+    height: 100%;
+    overflow-y: auto; /* Party panel scrolls itself */
 }
 
 .party-row {
