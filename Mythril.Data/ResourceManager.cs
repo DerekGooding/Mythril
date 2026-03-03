@@ -43,6 +43,7 @@ public partial class ResourceManager(
     public bool IsTestMode { get; set; } = false;
 
     public bool HasUnseenCadence { get; set; } = false;
+    public bool HasUnseenWorkshop { get; set; } = false;
 
     public void Initialize()
     {
@@ -52,6 +53,7 @@ public partial class ResourceManager(
         UnlockedAbilities.Clear();
         _autoQuestEnabled.Clear();
         HasUnseenCadence = false;
+        HasUnseenWorkshop = false;
         lock(_questLock)
         {
             ActiveQuests.Clear();

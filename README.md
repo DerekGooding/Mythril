@@ -36,6 +36,8 @@ Mythril is an RPG-inspired web application built with **.NET 10** and **Blazor W
 - **UI Architecture**: Refactored the main layout and tab system to ensure perfect flexbox containment and vertical scrolling across all panels (Locations, Cadence, Workshop).
 - **Test Suite Refactoring**: Split large test monoliths (`JunctionTests`, `QuestLifecycleTests`) into specialized, focused test classes to maintain a clean, maintainable test suite.
 - **Empty State UX**: Simplified the "No Cadences" state with a cleaner, italicized message, removing outdated Bootstrap alert backgrounds.
+- **Workshop Discovery System**: Implemented a discovery-based Workshop UI that hides refinements until their corresponding Cadence abilities are unlocked.
+- **Discovery Notifications**: Added pulsing red notification dots to both Cadence and Workshop tabs to alert players of new unlocks and discoveries.
 
 ## ⚖️ Quality Assurance & Health
 We maintain project health through a custom automated suite (`scripts/check_health.py`) which runs on every commit:

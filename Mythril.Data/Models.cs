@@ -63,6 +63,7 @@ public class SaveData
     public List<AssignedCadenceDTO> AssignedCadences { get; set; } = [];
     public Dictionary<string, bool> AutoQuestEnabled { get; set; } = [];
     public bool HasUnseenCadence { get; set; }
+    public bool HasUnseenWorkshop { get; set; }
     public DateTime LastSaveTime { get; set; }
 }
 

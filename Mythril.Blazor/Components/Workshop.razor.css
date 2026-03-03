@@ -22,6 +22,13 @@
     min-height: 0 !important;
 }
 
+.no-refinements {
+    padding: 1rem;
+    color: var(--text-muted);
+    font-style: italic;
+    opacity: 0.7;
+}
+
 .refinement-group {
     margin-bottom: 2rem;
     border-bottom: 1px solid var(--border-color);

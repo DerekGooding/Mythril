@@ -11,41 +11,56 @@
     </div>
 
     <div class="workshop-content">
-        @foreach (var refinement in refinements.ByKey)
+        @{
+            var discoveredRefinements = refinements.ByKey
+                .Where(r => resourceManager.UnlockedAbilities.Any(ua => ua.EndsWith($":{r.Key.Name}")))
+                .ToList();
+        }
+
+        @if (discoveredRefinements.Any())
         {
-            var ability = refinement.Key;
-            // Check if ANY character has a cadence assigned that has this ability UNLOCKED
-            var hasAbility = resourceManager.Characters.Any(c => 
-                resourceManager.JunctionManager.CurrentlyAssigned(c).Any(cad => 
-                    cad.Abilities.Any(a => a.Ability.Name == ability.Name && resourceManager.UnlockedAbilities.Contains($"{cad.Name}:{a.Ability.Name}"))
-                )
-            );
-            
-            <div @key="ability.Name" class="refinement-group @(hasAbility ? "" : "locked")">
-                <h4>@ability.Name @(hasAbility ? "" : "(Locked)")</h4>
+            @foreach (var refinement in discoveredRefinements)
+            {
+                var ability = refinement.Key;
+                // Check if ANY character has a cadence assigned that has this ability UNLOCKED
+                var hasAbility = resourceManager.Characters.Any(c => 
+                    resourceManager.JunctionManager.CurrentlyAssigned(c).Any(cad => 
+                        cad.Abilities.Any(a => a.Ability.Name == ability.Name && resourceManager.UnlockedAbilities.Contains($"{cad.Name}:{a.Ability.Name}"))
+                    )
+                );
                 
-                <div class="recipe-list">
-                    @foreach (var recipeKvp in refinement.Value)
-                    {
-                        var inputItem = recipeKvp.Key;
-                        var recipe = recipeKvp.Value;
-                        var canAfford = resourceManager.Inventory.Has(inputItem, recipe.InputQuantity);
-                        
-                        <div @key="inputItem.Name" class="recipe-card">
-                            <div class="recipe-details">
-                                <span>@recipe.InputQuantity x @inputItem.Name</span>
-                                <span class="arrow">→</span>
-                                <span>@recipe.OutputQuantity x @recipe.OutputItem.Name</span>
+                <div @key="ability.Name" class="refinement-group @(hasAbility ? "" : "locked")">
+                    <h4>@ability.Name @(hasAbility ? "" : "(Required Cadence Not Equipped)")</h4>
+                    
+                    <div class="recipe-list">
+                        @foreach (var recipeKvp in refinement.Value)
+                        {
+                            var inputItem = recipeKvp.Key;
+                            var recipe = recipeKvp.Value;
+                            var canAfford = resourceManager.Inventory.Has(inputItem, recipe.InputQuantity);
+                            
+                            <div @key="inputItem.Name" class="recipe-card">
+                                <div class="recipe-details">
+                                    <span>@recipe.InputQuantity x @inputItem.Name</span>
+                                    <span class="arrow">→</span>
+                                    <span>@recipe.OutputQuantity x @recipe.OutputItem.Name</span>
+                                </div>
+                                <button class="btn btn-sm @(canAfford && hasAbility ? "btn-success" : "btn-secondary")" 
+                                        data-testid="craft-button"
+                                        disabled="@(!(canAfford && hasAbility))"
+                                        @onclick="() => Craft(inputItem, recipe)">
+                                    Craft
+                                </button>
                             </div>
-                            <button class="btn btn-sm @(canAfford && hasAbility ? "btn-success" : "btn-secondary")" 
-                                    data-testid="craft-button"
-                                    disabled="@(!(canAfford && hasAbility))"
-                                    @onclick="() => Craft(inputItem, recipe)">
-                                Craft
-                            </button>
-                        </div>
-                    }
+                        }
+                    </div>
                 </div>
+            }
+        }
+        else
+        {
+            <div class="no-refinements">
+                No refinements discovered
             </div>
         }
     </div>

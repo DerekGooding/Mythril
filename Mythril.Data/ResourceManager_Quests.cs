@@ -141,6 +141,7 @@ public partial class ResourceManager
         if(item is CadenceUnlock unlock)
         {
             UnlockedAbilities.Add($"{unlock.CadenceName}:{unlock.Ability.Name}");
+            HasUnseenWorkshop = true;
             UpdateMagicCapacity();
         }
         await Task.CompletedTask;

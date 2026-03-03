@@ -57,8 +57,12 @@
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="workshop-tab" data-testid="workshop-tab" data-bs-toggle="tab" data-bs-target="#workshop" type="button" role="tab">
+                        <button class="nav-link" id="workshop-tab" data-testid="workshop-tab" data-bs-toggle="tab" data-bs-target="#workshop" type="button" role="tab" @onclick="MarkWorkshopAsSeen">
                             Workshop
+                            @if (resourceManager.HasUnseenWorkshop)
+                            {
+                                <span class="notification-dot"></span>
+                            }
                         </button>
                     </li>
                 </ul>
@@ -123,6 +127,15 @@
         if (resourceManager.HasUnseenCadence)
         {
             resourceManager.HasUnseenCadence = false;
+            _ = persistenceService.SaveAsync();
+        }
+    }
+
+    private void MarkWorkshopAsSeen()
+    {
+        if (resourceManager.HasUnseenWorkshop)
+        {
+            resourceManager.HasUnseenWorkshop = false;
             _ = persistenceService.SaveAsync();
         }
     }
