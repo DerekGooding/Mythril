@@ -152,5 +152,12 @@
     "Type": "Single",
     "Requirements": [],
     "Rewards": [ { "Item": "Log", "Quantity": 10 } ]
+  },
+  {
+    "Quest": "Sell Gem",
+    "DurationSeconds": 5,
+    "Type": "Recurring",
+    "Requirements": [ { "Item": "Basic Gem", "Quantity": 1 } ],
+    "Rewards": [ { "Item": "Gold", "Quantity": 25 } ]
   }
 ]
