@@ -41,6 +41,7 @@ public class PersistenceService(
                 }))
                 .ToList(),
             AutoQuestEnabled = resourceManager.AutoQuestEnabled.ToDictionary(x => x.Key, x => x.Value),
+            HasUnseenCadence = resourceManager.HasUnseenCadence,
             ActiveQuests = resourceManager.ActiveQuests.Select(q => new QuestProgressDTO
             {
                 ItemName = q.Item is QuestData qd ? qd.Name : (q.Item is CadenceUnlock cu ? cu.Ability.Name : ""),
@@ -81,6 +82,7 @@ public class PersistenceService(
 
         // Restore Abilities
         resourceManager.UnlockedAbilities.Clear();
+        resourceManager.HasUnseenCadence = saveData.HasUnseenCadence;
         foreach (var abilityId in saveData.UnlockedAbilities)
         {
             resourceManager.UnlockedAbilities.Add(abilityId);

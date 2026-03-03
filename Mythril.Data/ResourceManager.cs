@@ -42,6 +42,8 @@ public partial class ResourceManager(
 
     public bool IsTestMode { get; set; } = false;
 
+    public bool HasUnseenCadence { get; set; } = false;
+
     public void Initialize()
     {
         Console.WriteLine("ResourceManager initializing...");
@@ -49,6 +51,7 @@ public partial class ResourceManager(
         _completedQuests.Clear();
         UnlockedAbilities.Clear();
         _autoQuestEnabled.Clear();
+        HasUnseenCadence = false;
         lock(_questLock)
         {
             ActiveQuests.Clear();
@@ -109,6 +112,7 @@ public partial class ResourceManager(
     public void UnlockCadence(Cadence cadence)
     {
         _lockedCadences[cadence] = false;
+        HasUnseenCadence = true;
         UpdateAvaiableCadences();
     }
 

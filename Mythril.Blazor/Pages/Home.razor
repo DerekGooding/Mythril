@@ -48,8 +48,12 @@
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="cadence-tab" data-testid="cadence-tab" data-bs-toggle="tab" data-bs-target="#cadence" type="button" role="tab">
+                        <button class="nav-link" id="cadence-tab" data-testid="cadence-tab" data-bs-toggle="tab" data-bs-target="#cadence" type="button" role="tab" @onclick="MarkCadencesAsSeen">
                             Cadence
+                            @if (resourceManager.HasUnseenCadence)
+                            {
+                                <span class="notification-dot"></span>
+                            }
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
@@ -112,6 +116,15 @@
         timer.Enabled = true;
 
         themeService.OnThemeChanged += StateHasChanged;
+    }
+
+    private void MarkCadencesAsSeen()
+    {
+        if (resourceManager.HasUnseenCadence)
+        {
+            resourceManager.HasUnseenCadence = false;
+            _ = persistenceService.SaveAsync();
+        }
     }
 
     private async Task ToggleTheme()
