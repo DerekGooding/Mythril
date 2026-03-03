@@ -14,8 +14,5 @@
   { "Name": "J-Magic", "Description": "Allows junctioning magic to the Magic stat" },
   { "Name": "J-Vit", "Description": "Allows junctioning magic to the Vitality stat" },
   { "Name": "J-Speed", "Description": "Allows junctioning magic to the Speed stat" },
-  { "Name": "Magic Pocket I", "Description": "Increases global magic capacity to 60" },
-  { "Name": "Test Gold", "Description": "A test ability costing gold." },
-  { "Name": "Test Gem", "Description": "A test ability requiring a basic gem." },
-  { "Name": "Test Free", "Description": "A test ability with no requirements." }
+  { "Name": "Magic Pocket I", "Description": "Increases global magic capacity to 60" }
 ]

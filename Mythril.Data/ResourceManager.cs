@@ -56,10 +56,6 @@ public partial class ResourceManager(
         Console.WriteLine("Initializing Cadences...");
         _lockedCadences = _cadences.All.ToNamedDictionary(_ => true);
 
-        // Pre-unlock "Test" cadence
-        var testCadence = _cadences.All.FirstOrDefault(c => c.Name == "Test");
-        if (testCadence.Name != null) _lockedCadences[testCadence] = false;
-
         Console.WriteLine("Initializing Locations...");
         UsableLocations = [.. _locations.All.Select(x => new LocationData(x, x.Quests.Where(IsNeverLocked)))];
         
