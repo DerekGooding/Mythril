@@ -21,5 +21,10 @@
   { "Name": "Finding the Hearth", "Description": "Locate the central power source of the ruins." },
   { "Name": "Rekindling the Spark", "Description": "Ignite the ancient Mythril Forge." },
   { "Name": "Help the lumberjack", "Description": "Gather fallen wood for the local lumberjack." },
-  { "Name": "Sell Gem", "Description": "Trade a basic gem for gold at the town market." }
+  { "Name": "Sell Gem", "Description": "Trade a basic gem for gold at the town market." },
+  { "Name": "Scavenge Scrap", "Description": "Search the desert sands for abandoned materials." },
+  { "Name": "Hunt Sand-Sharks", "Description": "Take down the predators of the dunes." },
+  { "Name": "Locate the Hidden Oasis", "Description": "Find the legendary sanctuary in the waste." },
+  { "Name": "Purify the Grove", "Description": "Use healing magic to cleanse the corruption from the sacred grove." },
+  { "Name": "Power the Forge", "Description": "Channel intense fire magic to reignite the ancient Mythril Forge." }
 ]

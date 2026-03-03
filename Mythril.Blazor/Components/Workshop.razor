@@ -29,11 +29,11 @@
                     <h4>@ability.Name @(anyoneHasAbility ? "" : "(Assign a character with this ability to unlock)")</h4>
                     
                     <div class="recipe-list">
-                        @foreach (var recipeKvp in refinementGroup.Value)
+                        @foreach (var recipeKvp in refinementGroup.Value.Recipes)
                         {
                             var inputItem = recipeKvp.Key;
                             var recipe = recipeKvp.Value;
-                            var refinementData = new RefinementData(ability, inputItem, recipe);
+                            var refinementData = new RefinementData(ability, inputItem, recipe, refinementGroup.Value.PrimaryStat);
                             
                             <RefinementCard Refinement="@refinementData" @key="@(ability.Name + inputItem.Name)" />
                         }

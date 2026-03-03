@@ -56,3 +56,14 @@
 .card-side h6 {
     color: var(--primary-color);
 }
+
+.stat-requirement {
+    font-size: 0.85rem;
+    list-style: none;
+    margin-left: -1rem;
+}
+
+.stat-requirement::before {
+    content: "🛡️";
+    margin-right: 4px;
+}

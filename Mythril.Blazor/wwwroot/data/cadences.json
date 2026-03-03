@@ -5,11 +5,13 @@
     "Abilities": [
       {
         "Ability": "AutoQuest I",
-        "Requirements": [ { "Item": "Gold", "Quantity": 100 } ]
+        "Requirements": [ { "Item": "Gold", "Quantity": 100 } ],
+        "PrimaryStat": "Vitality"
       },
       {
         "Ability": "J-Str",
-        "Requirements": [ { "Item": "Iron Ore", "Quantity": 10 } ]
+        "Requirements": [ { "Item": "Iron Ore", "Quantity": 10 } ],
+        "PrimaryStat": "Strength"
       }
     ]
   },
@@ -19,15 +21,18 @@
     "Abilities": [
       {
         "Ability": "Refine Ice",
-        "Requirements": [ { "Item": "Mana Leaf", "Quantity": 5 } ]
+        "Requirements": [ { "Item": "Mana Leaf", "Quantity": 5 } ],
+        "PrimaryStat": "Magic"
       },
       {
         "Ability": "J-Magic",
-        "Requirements": [ { "Item": "Gold", "Quantity": 500 }, { "Item": "Mana Leaf", "Quantity": 10 } ]
+        "Requirements": [ { "Item": "Gold", "Quantity": 500 }, { "Item": "Mana Leaf", "Quantity": 10 } ],
+        "PrimaryStat": "Magic"
       },
       {
         "Ability": "Magic Pocket I",
-        "Requirements": [ { "Item": "Gold", "Quantity": 1000 }, { "Item": "Mana Leaf", "Quantity": 20 } ]
+        "Requirements": [ { "Item": "Gold", "Quantity": 1000 }, { "Item": "Mana Leaf", "Quantity": 20 } ],
+        "PrimaryStat": "Magic"
       }
     ]
   },
@@ -37,19 +42,23 @@
     "Abilities": [
       {
         "Ability": "AutoQuest I",
-        "Requirements": [ { "Item": "Gold", "Quantity": 100 } ]
+        "Requirements": [ { "Item": "Gold", "Quantity": 100 } ],
+        "PrimaryStat": "Vitality"
       },
       {
         "Ability": "Refine Wood",
-        "Requirements": [ { "Item": "Log", "Quantity": 10 } ]
+        "Requirements": [ { "Item": "Log", "Quantity": 10 } ],
+        "PrimaryStat": "Strength"
       },
       {
         "Ability": "Refine Scrap",
-        "Requirements": [ { "Item": "Gold", "Quantity": 1000 } ]
+        "Requirements": [ { "Item": "Gold", "Quantity": 1000 } ],
+        "PrimaryStat": "Speed"
       },
       {
         "Ability": "Refine Mixology",
-        "Requirements": [ { "Item": "Herb", "Quantity": 30 }, { "Item": "Iron Ore", "Quantity": 10 } ]
+        "Requirements": [ { "Item": "Herb", "Quantity": 30 }, { "Item": "Iron Ore", "Quantity": 10 } ],
+        "PrimaryStat": "Magic"
       }
     ]
   },
@@ -59,34 +68,56 @@
     "Abilities": [
       {
         "Ability": "AutoQuest I",
-        "Requirements": [ { "Item": "Gold", "Quantity": 100 } ]
+        "Requirements": [ { "Item": "Gold", "Quantity": 100 } ],
+        "PrimaryStat": "Vitality"
       },
       {
         "Ability": "Refine Fire",
-        "Requirements": [ { "Item": "Log", "Quantity": 10 } ]
+        "Requirements": [ { "Item": "Log", "Quantity": 10 } ],
+        "PrimaryStat": "Magic"
       },
       {
         "Ability": "J-Speed",
-        "Requirements": [ { "Item": "Potion", "Quantity": 10 } ]
+        "Requirements": [ { "Item": "Potion", "Quantity": 10 } ],
+        "PrimaryStat": "Speed"
       }
     ]
   },
   {
-    "Name": "Mythril Weaver",
-    "Description": "A master of the arcane and material arts.",
-    "Abilities": [
-      {
-        "Ability": "Mass Refine",
-        "Requirements": [ { "Item": "Gold", "Quantity": 5000 }, { "Item": "Mythril Spark", "Quantity": 1 } ]
-      },
-      {
-        "Ability": "Essence Harvest",
-        "Requirements": [ { "Item": "Ancient Bark", "Quantity": 20 }, { "Item": "Moonberry", "Quantity": 50 } ]
-      },
-      {
-        "Ability": "J-Vit",
-        "Requirements": [ { "Item": "Gold", "Quantity": 2000 } ]
-      }
-    ]
+  "Name": "Mythril Weaver",
+  "Description": "A master of the arcane and material arts.",
+  "Abilities": [
+    {
+      "Ability": "Mass Refine",
+      "Requirements": [ { "Item": "Gold", "Quantity": 5000 }, { "Item": "Mythril Spark", "Quantity": 1 } ],
+      "PrimaryStat": "Magic"
+    },
+    {
+      "Ability": "Essence Harvest",
+      "Requirements": [ { "Item": "Ancient Bark", "Quantity": 20 }, { "Item": "Moonberry", "Quantity": 50 } ],
+      "PrimaryStat": "Vitality"
+    },
+    {
+      "Ability": "J-Vit",
+      "Requirements": [ { "Item": "Gold", "Quantity": 2000 } ],
+      "PrimaryStat": "Vitality"
+    }
+  ]
+  },
+  {
+  "Name": "The Sentinel",
+  "Description": "A defensive job focused on survival and resource management.",
+  "Abilities": [
+    {
+      "Ability": "J-Vit",
+      "Requirements": [ { "Item": "Iron Ore", "Quantity": 50 }, { "Item": "Ancient Bark", "Quantity": 20 }, { "Item": "Gold", "Quantity": 2000 } ],
+      "PrimaryStat": "Vitality"
+    },
+    {
+      "Ability": "Magic Pocket II",
+      "Requirements": [ { "Item": "Gold", "Quantity": 2000 } ],
+      "PrimaryStat": "Magic"
+    }
+  ]
   }
-]
+  ]

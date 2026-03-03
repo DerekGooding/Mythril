@@ -32,15 +32,14 @@ Mythril is an RPG-inspired web application built with **.NET 10** and **Blazor W
 - **Testing**: MSTest, Moq, and bUnit for component testing. Coverage is maintained at >90% overall.
 - **CI/CD**: GitHub Actions for automated deployment and health monitoring.
 
-## 🚀 Recent Updates (March 2026)
-- **UI Architecture**: Refactored the main layout and tab system to ensure perfect flexbox containment and vertical scrolling across all panels (Locations, Cadence, Workshop).
-- **Test Suite Refactoring**: Split large test monoliths (`JunctionTests`, `QuestLifecycleTests`) into specialized, focused test classes to maintain a clean, maintainable test suite.
-- **Empty State UX**: Simplified the "No Cadences" state with a cleaner, italicized message, removing outdated Bootstrap alert backgrounds.
-- **Workshop Discovery System**: Implemented a discovery-based Workshop UI that hides refinements until their corresponding Cadence abilities are unlocked.
-- **Discovery Notifications**: Added pulsing red notification dots to both Cadence and Workshop tabs to alert players of new unlocks and discoveries.
-- **Intelligent Workshop Alerts**: Refined Workshop notifications to only trigger when an unlocked ability actually provides new recipes, reducing UI noise.
-- **Time-Based Refinement**: Refactored the Workshop from instant crafting to a time-based task system. Players now drag refinement recipes onto characters, transforming refinements into tactical, recurring assignments.
-- **Assignment Validation**: Implemented strict character-specific requirements for the Workshop. Refinement tasks can now only be assigned to characters with the relevant Cadence equipped, accompanied by clear UI feedback for invalid assignments.
+## 🚀 Recent Updates (March 3, 2026)
+- **Junction Prediction UI**: Implemented real-time previews of stat changes during magic drag-and-drop operations, providing immediate feedback on equipment power.
+- **Universal Stat Multipliers**: Refactored the task system to apply multiplicative stat scaling to all task durations (Quests, Cadence Unlocks, Refinements), ensuring character progression is mechanically relevant for every action.
+- **Stat-Gated Quests**: Added "Progression Stat Gates" to mid-game content, requiring players to reach specific junctioned stat thresholds to attempt advanced tasks.
+- **Auto-Quest Visualizer**: Improved the "aliveness" of the auto-restart loop with a 1.5s visual "Preparing next cycle..." state.
+- **Sun-Drenched Desert Biome**: Expanded the world with a new mid-game desert environment featuring scavenger quests and hunting challenges.
+- **Magic Expenditure Quests**: Deepened the link between refinement and questing by implementing tasks that require consuming magic items as costs.
+- **UI Architecture**: Refactored the main layout and tab system to ensure perfect flexbox containment and vertical scrolling.
 
 ## ⚖️ Quality Assurance & Health
 We maintain project health through a custom automated suite (`scripts/check_health.py`) which runs on every commit:

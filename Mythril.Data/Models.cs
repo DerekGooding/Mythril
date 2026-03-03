@@ -30,7 +30,7 @@ public readonly record struct ItemQuantity(Item Item, int Quantity = 1);
 // Cadence types
 public partial record struct CadenceAbility(string Name, string Description) : INamed;
 
-public readonly record struct CadenceUnlock(string CadenceName, CadenceAbility Ability, ItemQuantity[] Requirements);
+public readonly record struct CadenceUnlock(string CadenceName, CadenceAbility Ability, ItemQuantity[] Requirements, string PrimaryStat = "Magic");
 
 public partial record struct Cadence(string Name, string Description, CadenceUnlock[] Abilities) : INamed;
 
@@ -46,12 +46,12 @@ public partial record struct Stat(string Name, string Description) : INamed;
 public readonly record struct StatAugment(Stat Stat, int ModifierAtFull);
 
 // Details
-public readonly record struct QuestDetail(int DurationSeconds, ItemQuantity[] Requirements, ItemQuantity[] Rewards, QuestType Type);
+public readonly record struct QuestDetail(int DurationSeconds, ItemQuantity[] Requirements, ItemQuantity[] Rewards, QuestType Type, string PrimaryStat = "Vitality", Dictionary<string, int>? RequiredStats = null);
 
 // Refinements
 public readonly record struct Recipe(int InputQuantity, Item OutputItem, int OutputQuantity);
 
-public readonly record struct RefinementData(CadenceAbility Ability, Item InputItem, Recipe Recipe)
+public readonly record struct RefinementData(CadenceAbility Ability, Item InputItem, Recipe Recipe, string PrimaryStat = "Strength")
 {
     public string Name => $"{Ability.Name}: {Recipe.OutputItem.Name}";
     public string Description => $"Refine {Recipe.InputQuantity}x {InputItem.Name} into {Recipe.OutputQuantity}x {Recipe.OutputItem.Name}";
@@ -102,12 +102,12 @@ public class QuestProgressDTO
 // Data Transfer Objects for JSON Loading
 public class ItemQuantityDTO { public string Item { get; set; } = ""; public int Quantity { get; set; } = 1; }
 public class LocationDTO { public string Name { get; set; } = ""; public List<string> Quests { get; set; } = []; }
-public class CadenceAbilityUnlockDTO { public string Ability { get; set; } = ""; public List<ItemQuantityDTO> Requirements { get; set; } = []; }
+public class CadenceAbilityUnlockDTO { public string Ability { get; set; } = ""; public List<ItemQuantityDTO> Requirements { get; set; } = []; public string PrimaryStat { get; set; } = "Magic"; }
 public class CadenceDTO { public string Name { get; set; } = ""; public string Description { get; set; } = ""; public List<CadenceAbilityUnlockDTO> Abilities { get; set; } = []; }
-public class QuestDetailDTO { public string Quest { get; set; } = ""; public int DurationSeconds { get; set; } = 3; public string Type { get; set; } = "Single"; public List<ItemQuantityDTO> Requirements { get; set; } = []; public List<ItemQuantityDTO> Rewards { get; set; } = []; }
+public class QuestDetailDTO { public string Quest { get; set; } = ""; public int DurationSeconds { get; set; } = 3; public string Type { get; set; } = "Single"; public List<ItemQuantityDTO> Requirements { get; set; } = []; public List<ItemQuantityDTO> Rewards { get; set; } = []; public string PrimaryStat { get; set; } = "Vitality"; public Dictionary<string, int>? RequiredStats { get; set; } }
 public class QuestUnlockDTO { public string Quest { get; set; } = ""; public List<string> Requires { get; set; } = []; }
 public class QuestCadenceUnlockDTO { public string Quest { get; set; } = ""; public List<string> Cadences { get; set; } = []; }
 public class RecipeDTO { public string InputItem { get; set; } = ""; public int InputQuantity { get; set; } = 1; public string OutputItem { get; set; } = ""; public int OutputQuantity { get; set; } = 1; }
-public class RefinementDTO { public string Ability { get; set; } = ""; public List<RecipeDTO> Recipes { get; set; } = []; }
+public class RefinementDTO { public string Ability { get; set; } = ""; public List<RecipeDTO> Recipes { get; set; } = []; public string PrimaryStat { get; set; } = "Strength"; }
 public class StatAugmentEntryDTO { public string Stat { get; set; } = ""; public int ModifierAtFull { get; set; } = 0; }
 public class StatAugmentItemDTO { public string Item { get; set; } = ""; public List<StatAugmentEntryDTO> Augments { get; set; } = []; }

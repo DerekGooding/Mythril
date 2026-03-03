@@ -36,6 +36,27 @@ public partial class ResourceManager
         return true;
     }
 
+    public bool CanAfford(object item, Character character)
+    {
+        if (!CanAfford(item)) return false;
+
+        if (item is QuestData quest)
+        {
+            if (quest.RequiredStats != null)
+            {
+                foreach (var req in quest.RequiredStats)
+                {
+                    if (JunctionManager.GetStatValue(character, req.Key) < req.Value)
+                    {
+                        return false;
+                    }
+                }
+            }
+        }
+
+        return true;
+    }
+
     public bool HasAbility(Character character, CadenceAbility ability)
     {
         return JunctionManager.CurrentlyAssigned(character).Any(cad => 
@@ -86,9 +107,9 @@ public partial class ResourceManager
         }
     }
 
-    public void StartQuest(object item, Character character)
+    public void StartQuest(object item, Character character, double initialSecondsElapsed = 0)
     {
-        if (CanAfford(item))
+        if (CanAfford(item, character))
         {
             // Safety check for single-use tasks already in progress
             if (item is CadenceUnlock || (item is QuestData q && (q.Type == QuestType.Single || q.Type == QuestType.Unlock)))
@@ -102,55 +123,66 @@ public partial class ResourceManager
 
             PayCosts(item);
             double duration = 10; // Default
+            string primaryStat = "Vitality";
+
             if (item is QuestData quest)
             {
                 duration = IsTestMode ? 3 : quest.DurationSeconds;
+                primaryStat = quest.PrimaryStat;
+                
                 if (!IsTestMode)
                 {
-                    // Strength reduces recurring quest duration
-                    if (quest.Type == QuestType.Recurring)
-                    {
-                        int strength = JunctionManager.GetStatValue(character, "Strength");
-                        duration /= (1.0 + (strength / 100.0));
-                    }
-                    // Vitality reduces single quest duration
-                    else if (quest.Type == QuestType.Single)
-                    {
-                        int vitality = JunctionManager.GetStatValue(character, "Vitality");
-                        duration /= (1.0 + (vitality / 100.0));
-                    }
+                    int statValue = JunctionManager.GetStatValue(character, primaryStat);
+                    duration /= (1.0 + (statValue / 100.0));
                 }
+
+                duration = Math.Max(0.5, duration);
+
                 lock(_questLock)
                 {
-                    ActiveQuests.Add(new QuestProgress(quest, quest.Description, (int)Math.Max(1, duration), character));
+                    var qp = new QuestProgress(quest, quest.Description, (int)Math.Max(1, duration), character);
+                    qp.SecondsElapsed = initialSecondsElapsed;
+                    ActiveQuests.Add(qp);
                 }
             }
             if(item is CadenceUnlock unlock)
             {
                 duration = IsTestMode ? 3 : 30; // Increased base duration for Cadence unlocks
+                primaryStat = unlock.PrimaryStat;
+
                 if (!IsTestMode)
                 {
-                    // Magic reduces cadence unlock duration
-                    int magic = JunctionManager.GetStatValue(character, "Magic");
-                    duration /= (1.0 + (magic / 100.0));
+                    int statValue = JunctionManager.GetStatValue(character, primaryStat);
+                    duration /= (1.0 + (statValue / 100.0));
                 }
+
+                duration = Math.Max(0.5, duration);
+
                 lock(_questLock)
                 {
-                    ActiveQuests.Add(new QuestProgress(unlock, unlock.Ability.Description, (int)Math.Max(1, duration), character));
+                    var qp = new QuestProgress(unlock, unlock.Ability.Description, (int)Math.Max(1, duration), character);
+                    qp.SecondsElapsed = initialSecondsElapsed;
+                    ActiveQuests.Add(qp);
                 }
             }
             if(item is RefinementData refinement)
             {
                 duration = IsTestMode ? 2 : 15; // Base duration for refinements
+                primaryStat = refinement.PrimaryStat;
+
                 if (!IsTestMode)
                 {
-                    // Strength reduces refinement duration (it's physical work)
-                    int strength = JunctionManager.GetStatValue(character, "Strength");
-                    duration /= (1.0 + (strength / 100.0));
+                    int statValue = JunctionManager.GetStatValue(character, primaryStat);
+                    duration /= (1.0 + (statValue / 100.0));
                 }
+
+                duration = Math.Max(0.5, duration);
+
                 lock(_questLock)
                 {
-                    ActiveQuests.Add(new QuestProgress(refinement, refinement.Description, (int)Math.Max(1, duration), character));
+                    var qp = new QuestProgress(refinement, refinement.Description, (int)Math.Max(1, duration), character);
+                    qp.SecondsElapsed = initialSecondsElapsed;
+                    ActiveQuests.Add(qp);
                 }
             }
         }

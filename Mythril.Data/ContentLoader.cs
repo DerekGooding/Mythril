@@ -75,7 +75,8 @@ public class ContentLoader(
                         var i = items.All.FirstOrDefault(x => x.Name == r.Item);
                         if (i.Name == null) Console.WriteLine($"WARNING: Item '{r.Item}' not found for ability '{a.Ability}' in cadence '{d.Name}'");
                         return new ItemQuantity(i, r.Quantity);
-                    }).Where(x => x.Item.Name != null).ToArray()
+                    }).Where(x => x.Item.Name != null).ToArray(),
+                    a.PrimaryStat ?? "Magic"
                 );
             }).Where(x => x.Ability.Name != null).ToArray())).ToList();
             cadences.Load(cadencesList);
@@ -100,7 +101,9 @@ public class ContentLoader(
                         if (i.Name == null) Console.WriteLine($"WARNING: Item '{r.Item}' not found for quest rewards '{d.Quest}'");
                         return new ItemQuantity(i, r.Quantity);
                     }).Where(x => x.Item.Name != null).ToArray(),
-                    Enum.Parse<QuestType>(d.Type)
+                    Enum.Parse<QuestType>(d.Type),
+                    d.PrimaryStat ?? "Vitality",
+                    d.RequiredStats
                 );
             }
             questDetails.Load(detailsDict);
@@ -126,12 +129,13 @@ public class ContentLoader(
         try {
             var refinementDTOs = await http.GetFromJsonAsync<List<RefinementDTO>>("data/refinements.json", _options) ?? [];
             Console.WriteLine($"Loaded {refinementDTOs.Count} refinements.");
-            var refinementsDict = new Dictionary<CadenceAbility, Dictionary<Item, Recipe>>();
+            var refinementsDict = new Dictionary<CadenceAbility, (string PrimaryStat, Dictionary<Item, Recipe> Recipes)>();
             foreach (var d in refinementDTOs)
             {
                 var ab = abilities.All.FirstOrDefault(x => x.Name == d.Ability);
                 if (ab.Name == null) { Console.WriteLine($"WARNING: Ability '{d.Ability}' not found for refinements"); continue; }
-                refinementsDict[ab] = d.Recipes.Select(r => {
+                
+                var recipes = d.Recipes.Select(r => {
                     var ii = items.All.FirstOrDefault(x => x.Name == r.InputItem);
                     var oi = items.All.FirstOrDefault(x => x.Name == r.OutputItem);
                     if (ii.Name == null) Console.WriteLine($"WARNING: Input item '{r.InputItem}' not found for refinement '{d.Ability}'");
@@ -139,6 +143,8 @@ public class ContentLoader(
                     return new { Input = ii, Output = oi, r.InputQuantity, r.OutputQuantity };
                 }).Where(x => x.Input.Name != null && x.Output.Name != null)
                 .ToDictionary(x => x.Input, x => new Recipe(x.InputQuantity, x.Output, x.OutputQuantity));
+
+                refinementsDict[ab] = (d.PrimaryStat ?? "Strength", recipes);
             }
             refinements.Load(refinementsDict);
         } catch (Exception ex) { Console.WriteLine($"Error loading refinements: {ex.Message}"); throw; }

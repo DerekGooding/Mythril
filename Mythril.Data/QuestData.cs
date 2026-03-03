@@ -15,4 +15,8 @@ public class QuestData(Quest quest, QuestDetail detail)
 
     public QuestType Type { get; init; } = detail.Type;
 
+    public string PrimaryStat { get; init; } = detail.PrimaryStat;
+
+    public Dictionary<string, int>? RequiredStats { get; init; } = detail.RequiredStats;
+
 }

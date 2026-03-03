@@ -27,13 +27,22 @@
             <p>@QuestData.DurationSeconds seconds</p>
         </div>
         <div class="card-side">
-            @if (QuestData.Requirements.Length > 0)
+            @if (QuestData.Requirements.Length > 0 || (QuestData.RequiredStats != null && QuestData.RequiredStats.Count > 0))
             {
                 <h6>Requirements:</h6>
                 <ul>
                     @foreach (var requirement in QuestData.Requirements)
                     {
                         <li @key="requirement">@requirement.Item.Name @requirement.Quantity</li>
+                    }
+                    @if (QuestData.RequiredStats != null)
+                    {
+                        @foreach (var statReq in QuestData.RequiredStats)
+                        {
+                            <li @key="statReq.Key" class="stat-requirement text-info">
+                                <strong>@statReq.Key: @statReq.Value</strong>
+                            </li>
+                        }
                     }
                 </ul>
             }

@@ -50,7 +50,8 @@ public static class TestContentLoader
             cadences.Load(cadDTOs.Select(d => new Cadence(d.Name, d.Description, d.Abilities.Select(a => new CadenceUnlock(
                 d.Name,
                 abilities.All.First(ab => ab.Name == a.Ability),
-                a.Requirements.Select(r => new ItemQuantity(items.All.First(i => i.Name == r.Item), r.Quantity)).ToArray()
+                a.Requirements.Select(r => new ItemQuantity(items.All.First(i => i.Name == r.Item), r.Quantity)).ToArray(),
+                a.PrimaryStat ?? "Magic"
             )).ToArray())).ToList());
 
             var detailDTOs = JsonConvert.DeserializeObject<List<QuestDetailDTO>>(File.ReadAllText(Path.Combine(dataDir, "quest_details.json"))) ?? [];
@@ -59,7 +60,9 @@ public static class TestContentLoader
                 d => new QuestDetail(d.DurationSeconds, 
                     d.Requirements.Select(r => new ItemQuantity(items.All.First(i => i.Name == r.Item), r.Quantity)).ToArray(),
                     d.Rewards.Select(r => new ItemQuantity(items.All.First(i => i.Name == r.Item), r.Quantity)).ToArray(),
-                    Enum.Parse<QuestType>(d.Type)
+                    Enum.Parse<QuestType>(d.Type),
+                    d.PrimaryStat ?? "Vitality",
+                    d.RequiredStats
                 )
             );
             questDetails.Load(detailsDict);
@@ -71,15 +74,16 @@ public static class TestContentLoader
             );
             questUnlocks.Load(unlocksDict);
 
-            var refinementsDict = new Dictionary<CadenceAbility, Dictionary<Item, Recipe>>();
+            var refinementsDict = new Dictionary<CadenceAbility, (string PrimaryStat, Dictionary<Item, Recipe> Recipes)>();
             var refinementDTOs = JsonConvert.DeserializeObject<List<RefinementDTO>>(File.ReadAllText(Path.Combine(dataDir, "refinements.json"))) ?? [];
             foreach (var d in refinementDTOs)
             {
                 var ab = abilities.All.First(x => x.Name == d.Ability);
-                refinementsDict[ab] = d.Recipes.ToDictionary(
+                var recipes = d.Recipes.ToDictionary(
                     r => items.All.First(i => i.Name == r.InputItem),
                     r => new Recipe(r.InputQuantity, items.All.First(i => i.Name == r.OutputItem), r.OutputQuantity)
                 );
+                refinementsDict[ab] = (d.PrimaryStat ?? "Strength", recipes);
             }
             ContentHost.GetContent<ItemRefinements>().Load(refinementsDict);
 

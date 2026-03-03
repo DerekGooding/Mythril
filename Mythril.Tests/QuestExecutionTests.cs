@@ -70,6 +70,33 @@ public class QuestExecutionTests
     }
 
     [TestMethod]
+    public void ResourceManager_StartQuest_WithNegativeDelay_TicksToZero()
+    {
+        var quest = _quests!.All.First(x => x.Name == "Buy Potion");
+        var detail = _questDetails![quest];
+        var questData = new QuestData(quest, detail);
+        var character = _resourceManager!.Characters[0];
+
+        _resourceManager.Inventory.Clear();
+        _resourceManager.Inventory.Add(_items!.All.First(x => x.Name == "Gold"), 1000);
+        
+        // Start with -1.5s delay
+        _resourceManager.StartQuest(questData, character, -1.5);
+        
+        var progress = _resourceManager.ActiveQuests[0];
+        Assert.AreEqual(-1.5, progress.SecondsElapsed);
+        Assert.AreEqual(0, progress.Progress, "Progress should be 0 during delay.");
+
+        _resourceManager.Tick(1.0); 
+        Assert.AreEqual(-0.5, progress.SecondsElapsed);
+        Assert.AreEqual(0, progress.Progress, "Progress should still be 0 during delay.");
+
+        _resourceManager.Tick(1.0); 
+        Assert.AreEqual(0.5, progress.SecondsElapsed);
+        Assert.IsTrue(progress.Progress > 0, "Progress should be positive after delay.");
+    }
+
+    [TestMethod]
     public void ResourceManager_StartQuest_Recurring_StrengthReducesDuration()
     {
         var quest = _quests!.All.First(x => x.Name == "Farm Goblins");

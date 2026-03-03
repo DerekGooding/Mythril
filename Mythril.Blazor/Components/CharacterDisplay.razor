@@ -1,10 +1,8 @@
 @using Mythril.Data
 @using Mythril.Blazor.Services
 @using System.Globalization
-@inject Stats statsContent
-@inject ResourceManager resourceManager
-@inject JunctionManager JunctionManager
-@inject DragDropService DragDropService
+
+@implements IDisposable
 
 <div class="character-display shadow-theme @(QuestProgress is not null ? "has-active-task" : "") @(QuestProgress?.IsCompleted == true ? "completed" : "") d-flex align-items-center gap-2">
     @{
@@ -69,9 +67,24 @@
                     {
                         var val = JunctionManager.GetStatValue(Character, stat.Name);
                         var junction = JunctionManager.Junctions.FirstOrDefault(j => j.Character.Name == Character.Name && j.Stat.Name == stat.Name);
+                        var delta = GetPredictionDelta(stat);
+                        var isHovered = DragDropService.HoveredTarget?.character.Name == Character.Name && DragDropService.HoveredTarget?.stat.Name == stat.Name;
+                        bool canJunction = CanJunction(stat);
                         
-                        <span @key="stat.Name" class="stat-badge @(junction != null ? "junctioned" : "")" title="@stat.Description @(junction != null ? $"(J: {junction.Magic.Name})" : "")">
+                        <span @key="stat.Name" 
+                              class="stat-badge @(junction != null ? "junctioned" : "") @(isHovered ? "hovered" : "") @(canJunction ? "can-junction" : "locked")" 
+                              title="@stat.Description @(junction != null ? $"(J: {junction.Magic.Name})" : "")"
+                              @ondragenter="() => HandleStatDragEnter(stat)"
+                              @ondragleave="HandleStatDragLeave"
+                              @ondragover:preventDefault
+                              @ondrop="() => HandleStatDrop(stat)">
                             @stat.Name[0]: @val
+                            @if (delta != 0)
+                            {
+                                <span class="stat-delta @(delta > 0 ? "text-success" : "text-danger")">
+                                    @(delta > 0 ? "+" : "")@delta
+                                </span>
+                            }
                         </span>
                     }
                 </div>
@@ -86,7 +99,7 @@
                 }
                 else
                 {
-                    <DropZone OnQuestDrop="HandleTaskDrop" Accepts="Accepts" />
+                    <DropZone OnQuestDrop="HandleTaskDrop" Accepts="(item) => resourceManager.CanAfford(item, Character)" />
                 }
             </div>
         </div>
@@ -139,66 +152,3 @@
         </div>
     }
 </div>
-
-@code {
-    [Parameter]
-    public Character Character { get; set; }
-
-    [Parameter]
-    public QuestProgress? QuestProgress { get; set; }
-
-    [Parameter]
-    public EventCallback<object> OnQuestDrop { get; set; }
-
-    [Parameter]
-    public Func<object, bool>? Accepts { get; set; }
-
-    [Parameter]
-    public EventCallback<QuestProgress> OnCompletionAnimationEnd { get; set; }
-
-    [Parameter]
-    public EventCallback<Cadence> OnUnequip { get; set; }
-
-    private bool _showJunctionMenu = false;
-
-    private void ToggleJunctionMenu() => _showJunctionMenu = !_showJunctionMenu;
-
-    private void ToggleAutoQuest()
-    {
-        resourceManager.SetAutoQuestEnabled(Character, !resourceManager.IsAutoQuestEnabled(Character));
-    }
-
-    private void CancelQuest()
-    {
-        if (QuestProgress != null)
-        {
-            resourceManager.CancelQuest(QuestProgress);
-        }
-    }
-
-    private bool CanJunction(Stat stat)
-    {
-        var assigned = JunctionManager.CurrentlyAssigned(Character);
-        
-        string abilityName = "J-" + stat.Name;
-        if (stat.Name == "Vitality") abilityName = "J-Vit";
-        if (stat.Name == "Strength") abilityName = "J-Str";
-        if (stat.Name == "Speed") abilityName = "J-Speed";
-        if (stat.Name == "Magic") abilityName = "J-Magic";
-
-        return assigned.Any(c => c.Abilities.Any(a => a.Ability.Name == abilityName && resourceManager.UnlockedAbilities.Contains($"{c.Name}:{a.Ability.Name}")));
-    }
-
-    private void HandleJunctionChange(Stat stat, ChangeEventArgs e)
-    {
-        string magicName = e.Value?.ToString() ?? "";
-        var magic = resourceManager.Inventory.GetSpells().FirstOrDefault(s => s.Item.Name == magicName).Item;
-        JunctionManager.JunctionMagic(Character, stat, magic, resourceManager.UnlockedAbilities);
-        StateHasChanged();
-    }
-
-    private void HandleTaskDrop(object task)
-    {
-        OnQuestDrop.InvokeAsync(task);
-    }
-}

@@ -7,7 +7,14 @@
     <div class="d-flex justify-content-between align-items-center">
         <div class="task-header text-truncate">@QuestProgress?.Name</div>
         <div class="task-duration text-nowrap small text-muted">
-            @QuestProgress?.DurationSeconds s
+            @if (QuestProgress?.SecondsElapsed < 0)
+            {
+                <span class="fst-italic text-info">Preparing next cycle...</span>
+            }
+            else
+            {
+                <span>@QuestProgress?.DurationSeconds s</span>
+            }
         </div>
     </div>
     <div class="task-body">
@@ -18,13 +25,25 @@
                 if (double.IsNaN(progressValue) || double.IsInfinity(progressValue)) progressValue = 0.0;
                 var progressPercent = Math.Clamp(progressValue * 100, 0, 100);
                 var progressStyle = $"width: {progressPercent.ToString("0.##", CultureInfo.InvariantCulture)}%";
+                var isPreparing = QuestProgress?.SecondsElapsed < 0;
             }
-            <div class="progress-bar" 
-                 role="progressbar" 
-                 style="@progressStyle" 
-                 aria-valuenow="@progressPercent" 
-                 aria-valuemin="0" aria-valuemax="100">
-            </div>
+            
+            @if (isPreparing)
+            {
+                <div class="progress-bar progress-bar-striped progress-bar-animated bg-secondary" 
+                     role="progressbar" 
+                     style="width: 100%">
+                </div>
+            }
+            else
+            {
+                <div class="progress-bar" 
+                     role="progressbar" 
+                     style="@progressStyle" 
+                     aria-valuenow="@progressPercent" 
+                     aria-valuemin="0" aria-valuemax="100">
+                </div>
+            }
         </div>
     </div>
 </div>

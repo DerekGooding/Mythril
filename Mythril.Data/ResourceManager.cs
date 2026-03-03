@@ -111,6 +111,7 @@ public partial class ResourceManager(
     {
         int capacity = 30;
         if (UnlockedAbilities.Any(a => a.EndsWith(":Magic Pocket I"))) capacity = 60;
+        if (UnlockedAbilities.Any(a => a.EndsWith(":Magic Pocket II"))) capacity = 100;
         Inventory.MagicCapacity = capacity;
     }
 

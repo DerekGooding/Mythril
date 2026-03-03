@@ -31,23 +31,27 @@ Mythril uses an intuitive "Drag-to-Character" interaction model for most assignm
 ## ⚔️ Key Systems
 
 ### Character Stats
-Characters have four primary stats that determine their effectiveness:
-- **Strength (STR)**: Reduces the duration of **Recurring** quests.
-- **Vitality (VIT)**: Reduces the duration of **Single-use** quests.
-- **Magic (MAG)**: Reduces the duration of **Cadence Research** tasks.
-- **Speed (SPD)**: Affects global interaction efficiency.
+Characters have four primary stats that determine their effectiveness. Every task has a **Primary Stat** that reduces its duration according to the formula: `EffectiveDuration = BaseDuration / (1.0 + (Stat / 100.0))`.
+- **Strength (STR)**: Often reduces duration for physical farming and manual labor.
+- **Vitality (VIT)**: Often reduces duration for exploration and survival tasks.
+- **Magic (MAG)**: Often reduces duration for arcane research and magical purification.
+- **Speed (SPD)**: Often reduces duration for fast-paced gathering and commerce.
 
 ### Junctioning
 Inspired by classic RPGs, Junctioning allows you to "equip" magic to your stats:
 1.  Equip a Cadence that has a **Junction Ability** unlocked (e.g., "J-Str", "J-Magic").
-2.  Click the **Junction** button on the character card.
-3.  Select a spell from your inventory to assign to that stat.
+2.  **Drag and Drop Preview**: Drag a magic item from your inventory over a character's stat badge to see a real-time preview of the stat change (e.g. +5 or -2). Drop it to junction!
+3.  **Manual Selection**: Alternatively, click the **Junction** button on the character card to select a spell.
 4.  The stat bonus scales with the **Quantity** of the spell you have in your inventory.
 
 ### The Workshop
 The Workshop is where you refine raw materials into advanced items:
 - New recipes are discovered as you unlock corresponding abilities across your Cadences.
-- Refinement happens instantly but requires the base materials and the correct Cadence to be equipped by at least one party member.
+- **Time-Based Refinement**: Drag a refinement task onto a character to begin the process. Efficiency is determined by the character's stats.
+- **Assignment**: Refinement tasks can only be assigned to characters with the relevant Cadence equipped.
+
+### Progression Gates
+Advanced quests in regions like the **Iron Mines** or **Sun-Drenched Desert** require minimum junctioned stat values. If a character doesn't meet the requirement, the card will shake and return to your hand. Check the quest card for the 🛡️ icon!
 
 ## 💡 Tips for Success
 - **Specialization**: Differentiate your characters! Give one high Magic for fast research and another high Strength for resource farming.

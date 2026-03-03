@@ -43,6 +43,24 @@
     transition: all 0.2s;
     white-space: nowrap;
     flex-shrink: 0;
+    position: relative;
+}
+.stat-badge.hovered {
+    transform: scale(1.1);
+    box-shadow: 0 0 5px var(--accent-color);
+    z-index: 10;
+}
+.stat-badge.can-junction {
+    cursor: copy;
+}
+.stat-badge.locked {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+.stat-delta {
+    font-weight: bold;
+    margin-left: 2px;
+    text-shadow: 0 0 2px rgba(0,0,0,0.5);
 }
 .stat-badge.junctioned {
     background: var(--junction-badge-bg);

@@ -17,17 +17,19 @@ public class ModelTests
         Assert.AreEqual("Loc", loc.Name);
         Assert.AreEqual(1, loc.Quests.Count);
 
-        var ability = new CadenceAbilityUnlockDTO { Ability = "Ab", Requirements = [itemQty] };
+        var ability = new CadenceAbilityUnlockDTO { Ability = "Ab", Requirements = [itemQty], PrimaryStat = "Magic" };
         Assert.AreEqual("Ab", ability.Ability);
         Assert.AreEqual(1, ability.Requirements.Count);
+        Assert.AreEqual("Magic", ability.PrimaryStat);
 
         var cadence = new CadenceDTO { Name = "Cad", Description = "Desc", Abilities = [ability] };
         Assert.AreEqual("Cad", cadence.Name);
         Assert.AreEqual(1, cadence.Abilities.Count);
 
-        var detail = new QuestDetailDTO { Quest = "Q", DurationSeconds = 10, Type = "Single", Requirements = [], Rewards = [] };
+        var detail = new QuestDetailDTO { Quest = "Q", DurationSeconds = 10, Type = "Single", Requirements = [], Rewards = [], PrimaryStat = "Vitality", RequiredStats = new Dictionary<string, int> { { "Strength", 10 } } };
         Assert.AreEqual("Q", detail.Quest);
         Assert.AreEqual(10, detail.DurationSeconds);
+        Assert.AreEqual(1, detail.RequiredStats.Count);
 
         var unlock = new QuestUnlockDTO { Quest = "Q2", Requires = ["Q1"] };
         Assert.AreEqual("Q2", unlock.Quest);
@@ -40,8 +42,9 @@ public class ModelTests
         var recipe = new RecipeDTO { InputItem = "I", InputQuantity = 1, OutputItem = "O", OutputQuantity = 2 };
         Assert.AreEqual("I", recipe.InputItem);
 
-        var refinement = new RefinementDTO { Ability = "A", Recipes = [recipe] };
+        var refinement = new RefinementDTO { Ability = "A", Recipes = [recipe], PrimaryStat = "Strength" };
         Assert.AreEqual("A", refinement.Ability);
+        Assert.AreEqual("Strength", refinement.PrimaryStat);
 
         var statEntry = new StatAugmentEntryDTO { Stat = "S", ModifierAtFull = 10 };
         Assert.AreEqual("S", statEntry.Stat);
@@ -76,9 +79,10 @@ public class ModelTests
         Assert.AreEqual(10, iq.Quantity);
 
         var ability = new CadenceAbility("A", "D");
-        var unlock = new CadenceUnlock("C", ability, [iq]);
+        var unlock = new CadenceUnlock("C", ability, [iq], "Magic");
         Assert.AreEqual(ability, unlock.Ability);
         Assert.AreEqual("C", unlock.CadenceName);
+        Assert.AreEqual("Magic", unlock.PrimaryStat);
 
         var cadence = new Cadence("C", "D", [unlock]);
         Assert.AreEqual(1, cadence.Abilities.Length);
@@ -93,8 +97,9 @@ public class ModelTests
         var augment = new StatAugment(stat, 5);
         Assert.AreEqual(5, augment.ModifierAtFull);
 
-        var detail = new QuestDetail(10, [iq], [iq], QuestType.Recurring);
+        var detail = new QuestDetail(10, [iq], [iq], QuestType.Recurring, "Strength", new Dictionary<string, int> { { "Vitality", 5 } });
         Assert.AreEqual(QuestType.Recurring, detail.Type);
+        Assert.AreEqual(1, detail.RequiredStats!.Count);
 
         var junction = new Junction(character, stat, item);
         Assert.AreEqual(character, junction.Character);
@@ -120,18 +125,9 @@ public class ModelTests
         var item = new Item("I", "D", ItemType.Material);
         var recipe = new Recipe(1, item, 1);
         
-        content.Load(new Dictionary<CadenceAbility, Dictionary<Item, Recipe>> { { a, new Dictionary<Item, Recipe> { { item, recipe } } } });
-        Assert.AreEqual(1, content[a].Count);
-        Assert.AreEqual(0, content[new CadenceAbility("X", "X")].Count);
-    }
-
-    [TestMethod]
-    public void RefinementBuilder_Tests()
-    {
-        var item = new Item("I", "D", ItemType.Material);
-        var recipe = new Recipe(1, item, 1);
-        var dict = RefinementBuilder.Recipes(new KeyValuePair<Item, Recipe>(item, recipe));
-        Assert.AreEqual(1, dict.Count);
+        content.Load(new Dictionary<CadenceAbility, (string PrimaryStat, Dictionary<Item, Recipe> Recipes)> { { a, ("Strength", new Dictionary<Item, Recipe> { { item, recipe } }) } });
+        Assert.AreEqual(1, content[a].Recipes.Count);
+        Assert.AreEqual(0, content[new CadenceAbility("X", "X")].Recipes.Count);
     }
 
     [TestMethod]
