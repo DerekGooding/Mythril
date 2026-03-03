@@ -7,9 +7,13 @@
     overflow: hidden !important; /* Contain the scrollable content */
 }
 
+.hand-header {
+    padding: 1rem;
+    flex-shrink: 0 !important;
+}
+
 .hand-content {
-    display: flex !important;
-    flex-direction: column !important;
+    display: block !important; /* Block layout is more reliable for scrolling than flex in this nested context */
     flex: 1 !important;
     min-height: 0 !important;
     overflow-y: auto !important; /* Scroll here */
@@ -22,6 +26,6 @@
     flex-direction: row !important;
     align-items: stretch !important;
     margin: 0.5rem;
-    width: 100%;
+    width: calc(100% - 1rem); /* Account for margins */
     flex-shrink: 0 !important;
 }
