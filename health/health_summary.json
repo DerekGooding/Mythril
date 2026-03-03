@@ -1,9 +1,9 @@
 {
     "is_healthy": false,
-    "failure_count": 1,
+    "failure_count": 2,
     "metrics": {
-        "monoliths": 1,
-        "coverage": 92.03,
+        "monoliths": 2,
+        "coverage": 91.7,
         "missing_tests": 0,
         "key_violations": 0,
         "testid_violations": 0,
@@ -17,6 +17,13 @@
             "message": "Mythril.Tests/JunctionTests.cs exceeds 250 lines",
             "metadata": {
                 "lines": 302
+            }
+        },
+        {
+            "category": "monolith",
+            "message": "Mythril.Tests/QuestLifecycleTests.cs exceeds 250 lines",
+            "metadata": {
+                "lines": 260
             }
         }
     ]
