@@ -623,6 +623,48 @@
 .progress[b-oes0l3to11] {
     display: none; /* Hide internal progress bar as CharacterDisplay now has its own */
 }
+/* /Components/RefinementCard.razor.rz.scp.css */
+.refinement-card[b-hibfqwjfn2] {
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    padding: 0.75rem;
+    margin-bottom: 0.5rem;
+    background: var(--card-bg);
+    color: var(--text-color);
+    cursor: grab;
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.refinement-card:active[b-hibfqwjfn2] {
+    cursor: grabbing;
+}
+
+.refinement-card:hover[b-hibfqwjfn2] {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.refinement-card.insufficient[b-hibfqwjfn2] {
+    opacity: 0.6;
+    border-style: dashed;
+}
+
+.io-row[b-hibfqwjfn2] {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.arrow[b-hibfqwjfn2] {
+    color: var(--text-muted);
+}
+
+.duration[b-hibfqwjfn2] {
+    margin-top: 0.25rem;
+    color: var(--text-muted);
+}
 /* /Components/Snackbar.razor.rz.scp.css */
 .snackbar-container[b-g03wipbmr2] {
     position: fixed;
