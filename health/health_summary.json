@@ -3,7 +3,7 @@
     "failure_count": 0,
     "metrics": {
         "monoliths": 0,
-        "coverage": 91.05,
+        "coverage": 91.06,
         "missing_tests": 0,
         "key_violations": 0,
         "testid_violations": 0,
