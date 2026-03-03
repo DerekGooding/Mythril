@@ -34,9 +34,12 @@ public class PersistenceService(
                 StatName = j.Stat.Name,
                 MagicName = j.Magic.Name
             }).ToList(),
-            AssignedCadences = resourceManager.Characters.Select(c => new { Char = c, Cad = junctionManager.CurrentlyAssigned(c).FirstOrDefault() })
-                .Where(x => x.Cad.Name != null)
-                .Select(x => new AssignedCadenceDTO { CharacterName = x.Char.Name, CadenceName = x.Cad.Name })
+            AssignedCadences = resourceManager.Characters
+                .SelectMany(c => junctionManager.CurrentlyAssigned(c).Select(cad => new AssignedCadenceDTO 
+                { 
+                    CharacterName = c.Name, 
+                    CadenceName = cad.Name 
+                }))
                 .ToList(),
             AutoQuestEnabled = resourceManager.AutoQuestEnabled.ToDictionary(x => x.Key, x => x.Value),
             ActiveQuests = resourceManager.ActiveQuests.Select(q => new QuestProgressDTO

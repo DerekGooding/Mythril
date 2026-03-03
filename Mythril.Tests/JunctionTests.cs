@@ -36,6 +36,104 @@ public class JunctionTests
     }
 
     [TestMethod]
+    public void JunctionManager_AssignCadence_SupportsMultipleCadences()
+    {
+        var character = _resourceManager!.Characters[0];
+        var cadence1 = _cadences!.All[0];
+        var cadence2 = _cadences!.All[1];
+        
+        _junctionManager!.AssignCadence(cadence1, character, _resourceManager.UnlockedAbilities);
+        _junctionManager!.AssignCadence(cadence2, character, _resourceManager.UnlockedAbilities);
+        
+        var assigned = _junctionManager.CurrentlyAssigned(character).ToList();
+        Assert.AreEqual(2, assigned.Count);
+        Assert.IsTrue(assigned.Contains(cadence1));
+        Assert.IsTrue(assigned.Contains(cadence2));
+    }
+
+    [TestMethod]
+    public void JunctionManager_AssignCadence_MaintainsExclusivity()
+    {
+        var character1 = _resourceManager!.Characters[0];
+        var character2 = _resourceManager!.Characters[1];
+        var cadence = _cadences!.All[0];
+        
+        _junctionManager!.AssignCadence(cadence, character1, _resourceManager.UnlockedAbilities);
+        _junctionManager!.AssignCadence(cadence, character2, _resourceManager.UnlockedAbilities);
+        
+        Assert.IsFalse(_junctionManager.CurrentlyAssigned(character1).Contains(cadence));
+        Assert.IsTrue(_junctionManager.CurrentlyAssigned(character2).Contains(cadence));
+    }
+
+    [TestMethod]
+    public void JunctionManager_Unassign_OnlyClearsInvalidJunctions()
+    {
+        var character = _resourceManager!.Characters[0];
+        var abilityJStr = _abilities!.All.First(a => a.Name == "J-Str");
+        var cadence1 = _cadences!.All.First(c => c.Abilities.Any(a => a.Ability.Name == "J-Str"));
+        var cadence2 = new Cadence("Extra Cadence", "Desc", [new CadenceUnlock(abilityJStr, [])]);
+        var strengthStat = _stats!.All.First(s => s.Name == "Strength");
+        var fireMagic = _items!.All.First(i => i.Name == "Fire I");
+
+        _resourceManager.UnlockedAbilities.Add(abilityJStr);
+        _junctionManager!.AssignCadence(cadence1, character, _resourceManager.UnlockedAbilities);
+        _junctionManager!.AssignCadence(cadence2, character, _resourceManager.UnlockedAbilities);
+        
+        _junctionManager.JunctionMagic(character, strengthStat, fireMagic, _resourceManager.UnlockedAbilities);
+        Assert.AreEqual(1, _junctionManager.Junctions.Count);
+
+        // Unassign one cadence with the ability, but the other still has it
+        _junctionManager.Unassign(cadence1);
+        Assert.AreEqual(1, _junctionManager.Junctions.Count);
+
+        // Unassign the last cadence with the ability, junction should be gone
+        _junctionManager.Unassign(cadence2);
+        Assert.AreEqual(0, _junctionManager.Junctions.Count);
+    }
+
+    [TestMethod]
+    public void JunctionManager_JunctionMagic_ChecksAllAssignedCadences()
+    {
+        var character = _resourceManager!.Characters[0];
+        var abilityJStr = _abilities!.All.First(a => a.Name == "J-Str");
+        // Arcanist has Refine Ice, J-Magic, Magic Pocket I. No J-Str.
+        var cadenceWithoutJStr = _cadences!.All.First(c => c.Name == "The Arcanist");
+        var cadenceWithJStr = _cadences!.All.First(c => c.Abilities.Any(a => a.Ability.Name == "J-Str"));
+        var strengthStat = _stats!.All.First(s => s.Name == "Strength");
+        var fireMagic = _items!.All.First(i => i.Name == "Fire I");
+
+        _resourceManager.UnlockedAbilities.Add(abilityJStr);
+        _junctionManager!.AssignCadence(cadenceWithoutJStr, character, _resourceManager.UnlockedAbilities);
+        _junctionManager!.AssignCadence(cadenceWithJStr, character, _resourceManager.UnlockedAbilities);
+
+        _junctionManager.JunctionMagic(character, strengthStat, fireMagic, _resourceManager.UnlockedAbilities);
+        Assert.AreEqual(1, _junctionManager.Junctions.Count);
+    }
+
+    [TestMethod]
+    public void ResourceManager_CanAutoQuest_ChecksAllAssignedCadences()
+    {
+        var character = _resourceManager!.Characters[0];
+        var autoQuestAbility = _abilities!.All.First(a => a.Name == "AutoQuest I");
+        // Arcanist does NOT have AutoQuest I
+        var cadenceWithoutAuto = _cadences!.All.First(c => c.Name == "The Arcanist");
+        var cadenceWithAuto = _cadences!.All.First(c => c.Abilities.Any(a => a.Ability.Name == "AutoQuest I"));
+
+        _resourceManager.UnlockedAbilities.Add(autoQuestAbility);
+        
+        // No cadence
+        Assert.IsFalse(_resourceManager.CanAutoQuest(character));
+
+        // Cadence without auto-quest
+        _junctionManager!.AssignCadence(cadenceWithoutAuto, character, _resourceManager.UnlockedAbilities);
+        Assert.IsFalse(_resourceManager.CanAutoQuest(character));
+
+        // Add cadence with auto-quest
+        _junctionManager!.AssignCadence(cadenceWithAuto, character, _resourceManager.UnlockedAbilities);
+        Assert.IsTrue(_resourceManager.CanAutoQuest(character));
+    }
+
+    [TestMethod]
     public void JunctionManager_GetStatValue_BaseValues()
     {
         var protagonist = _resourceManager!.Characters.First(c => c.Name == "Protagonist");

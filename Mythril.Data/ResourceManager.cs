@@ -71,9 +71,8 @@ public partial class ResourceManager(
     public bool CanAutoQuest(Character character)
     {
         if (!UnlockedAbilities.Any(a => a.Name == "AutoQuest I")) return false;
-        var cadence = JunctionManager.CurrentlyAssigned(character).FirstOrDefault();
-        if (cadence.Name == null) return false;
-        return cadence.Abilities.Any(a => UnlockedAbilities.Contains(a.Ability) && a.Ability.Name == "AutoQuest I");
+        var assigned = JunctionManager.CurrentlyAssigned(character);
+        return assigned.Any(c => c.Abilities.Any(a => UnlockedAbilities.Contains(a.Ability) && a.Ability.Name == "AutoQuest I"));
     }
 
     public bool IsAutoQuestEnabled(Character character) => _autoQuestEnabled.TryGetValue(character.Name, out var enabled) && enabled;

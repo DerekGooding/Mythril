@@ -8,19 +8,18 @@
 
 <div class="character-display shadow-theme @(QuestProgress is not null ? "has-active-task" : "") @(QuestProgress?.IsCompleted == true ? "completed" : "") d-flex align-items-center gap-2">
     @{
-        var assignedCadence = JunctionManager.CurrentlyAssigned(Character).FirstOrDefault();
+        var assignedCadences = JunctionManager.CurrentlyAssigned(Character).ToList();
     }
     
-    @if (assignedCadence.Name != null)
+    @if (assignedCadences.Any())
     {
         <div class="junction-controls d-flex flex-column gap-1">
             <button class="btn btn-xs btn-outline-primary" data-testid="junction-toggle" @onclick="ToggleJunctionMenu">Junction</button>
-            <button class="btn btn-xs btn-outline-danger" data-testid="unequip-button" @onclick="() => OnUnequip.InvokeAsync(assignedCadence)">Unequip</button>
             
             @if (resourceManager.CanAutoQuest(Character))
             {
                 var isAuto = resourceManager.IsAutoQuestEnabled(Character);
-                <button class="btn btn-xs @(isAuto ? "btn-success" : "btn-outline-secondary") mt-1" 
+                <button class="btn btn-xs @(isAuto ? "btn-success" : "btn-outline-secondary")" 
                         data-testid="autoquest-toggle"
                         @onclick="ToggleAutoQuest">
                     Auto: @(isAuto ? "ON" : "OFF")
@@ -33,12 +32,18 @@
         <div class="character-header">
             <div class="d-flex flex-column flex-grow-1 min-width-0">
                 <h4 class="character-name text-truncate">@Character.Name</h4>
-                <div class="cadence-info small text-muted text-truncate">
-                    @if (assignedCadence.Name != null)
+                <div class="cadence-info small text-muted">
+                    @if (assignedCadences.Any())
                     {
-                        <span class="cadence-name">
-                            Cadence: @assignedCadence.Name
-                        </span>
+                        <div class="d-flex flex-wrap gap-1 mt-1">
+                            @foreach (var cadence in assignedCadences)
+                            {
+                                <div class="badge bg-secondary d-flex align-items-center gap-1">
+                                    <span class="text-truncate" style="max-width: 80px;">@cadence.Name</span>
+                                    <button class="btn btn-xs p-0 text-white" @onclick="() => OnUnequip.InvokeAsync(cadence)" title="Unequip">&times;</button>
+                                </div>
+                            }
+                        </div>
                     }
                     else
                     {
@@ -153,8 +158,7 @@
 
     private bool CanJunction(Stat stat)
     {
-        var cadence = JunctionManager.CurrentlyAssigned(Character).FirstOrDefault();
-        if (cadence.Name == null) return false;
+        var assigned = JunctionManager.CurrentlyAssigned(Character);
         
         string abilityName = "J-" + stat.Name;
         if (stat.Name == "Vitality") abilityName = "J-Vit";
@@ -162,7 +166,7 @@
         if (stat.Name == "Speed") abilityName = "J-Speed";
         if (stat.Name == "Magic") abilityName = "J-Magic";
 
-        return cadence.Abilities.Any(a => resourceManager.UnlockedAbilities.Contains(a.Ability) && a.Ability.Name == abilityName);
+        return assigned.Any(c => c.Abilities.Any(a => resourceManager.UnlockedAbilities.Contains(a.Ability) && a.Ability.Name == abilityName));
     }
 
     private void HandleJunctionChange(Stat stat, ChangeEventArgs e)

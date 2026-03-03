@@ -20,14 +20,10 @@ public class JunctionManager(
     public void AssignCadence(Cadence cadence, Character character, List<CadenceAbility> unlockedAbilities)
     {
         var existingOwner = _assignedCadences.GetValueOrDefault(cadence);
-        if (existingOwner != null && existingOwner.Value.Name != character.Name)
+        if (existingOwner != null)
         {
+            if (existingOwner.Value.Name == character.Name) return; // Already assigned to this character
             Unassign(cadence);
-        }
-        
-        foreach (var c in _assignedCadences.Where(x => x.Value?.Name == character.Name).ToList())
-        {
-            Unassign(c.Key);
         }
 
         _assignedCadences[cadence] = character;
@@ -37,9 +33,18 @@ public class JunctionManager(
     {
         if (_assignedCadences.TryGetValue(cadence, out var owner) && owner != null)
         {
-            Junctions.RemoveAll(j => j.Character.Name == owner.Value.Name);
+            _assignedCadences[cadence] = null;
+            
+            // Check if any junctions are now invalid because the ability is gone
+            foreach (var junction in Junctions.Where(j => j.Character.Name == owner.Value.Name).ToList())
+            {
+                string abilityName = GetJunctionAbilityName(junction.Stat.Name);
+                if (!CurrentlyAssigned(owner.Value).Any(c => c.Abilities.Any(a => a.Ability.Name == abilityName)))
+                {
+                    Junctions.Remove(junction);
+                }
+            }
         }
-        _assignedCadences[cadence] = null;
     }
 
     public IEnumerable<Cadence> CurrentlyAssigned(Character character)
@@ -47,11 +52,11 @@ public class JunctionManager(
 
     public void JunctionMagic(Character character, Stat stat, Item magic, List<CadenceAbility> unlockedAbilities)
     {
-        var cadence = CurrentlyAssigned(character).FirstOrDefault();
-        if (cadence.Name == null) return;
-
         string abilityName = GetJunctionAbilityName(stat.Name);
-        if (!cadence.Abilities.Any(a => unlockedAbilities.Contains(a.Ability) && a.Ability.Name == abilityName)) return;
+        var cadencesWithAbility = CurrentlyAssigned(character)
+            .Where(c => c.Abilities.Any(a => unlockedAbilities.Contains(a.Ability) && a.Ability.Name == abilityName));
+
+        if (!cadencesWithAbility.Any()) return;
 
         Junctions.RemoveAll(j => j.Character.Name == character.Name && j.Stat.Name == stat.Name);
         if (magic.Name != null)
