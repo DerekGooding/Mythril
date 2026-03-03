@@ -11,24 +11,27 @@
         var assignedCadences = JunctionManager.CurrentlyAssigned(Character).ToList();
     }
     
-    @if (assignedCadences.Any())
+    @if (assignedCadences.Any() || (QuestProgress is not null && !QuestProgress.IsCompleted))
     {
-        <div class="junction-controls d-flex flex-column gap-1">
-            <button class="btn btn-xs btn-outline-primary" data-testid="junction-toggle" @onclick="ToggleJunctionMenu">Junction</button>
-            
-            @if (resourceManager.CanAutoQuest(Character))
+        <div class="character-controls d-flex flex-column gap-1">
+            @if (assignedCadences.Any())
             {
-                var isAuto = resourceManager.IsAutoQuestEnabled(Character);
-                <button class="btn btn-xs @(isAuto ? "btn-success" : "btn-outline-secondary")" 
-                        data-testid="autoquest-toggle"
-                        @onclick="ToggleAutoQuest">
-                    Auto: @(isAuto ? "ON" : "OFF")
-                </button>
+                <button class="btn btn-xs btn-outline-primary" data-testid="junction-toggle" @onclick="ToggleJunctionMenu">Junction</button>
+                
+                @if (resourceManager.CanAutoQuest(Character))
+                {
+                    var isAuto = resourceManager.IsAutoQuestEnabled(Character);
+                    <button class="btn btn-xs @(isAuto ? "btn-success" : "btn-outline-secondary")" 
+                            data-testid="autoquest-toggle"
+                            @onclick="ToggleAutoQuest">
+                        Auto: @(isAuto ? "ON" : "OFF")
+                    </button>
+                }
             }
 
             @if (QuestProgress is not null && !QuestProgress.IsCompleted)
             {
-                <button class="btn btn-xs btn-outline-warning mt-1" 
+                <button class="btn btn-xs btn-outline-warning" 
                         data-testid="cancel-quest"
                         @onclick="CancelQuest">
                     Cancel
