@@ -391,11 +391,10 @@
 .hand-panel[b-mqjfnsj94g] {
     display: flex;
     flex-direction: column;
-    padding: 1rem;
+    flex: 1;
+    min-height: 0;
     overflow-y: auto;
     overflow-x: hidden;
-    flex-grow: 1;
-    min-height: 0;
 }
 
 .task-container[b-mqjfnsj94g] {
