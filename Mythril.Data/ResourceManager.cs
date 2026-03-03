@@ -160,7 +160,7 @@ public partial class ResourceManager(
             }
             if (item is CadenceUnlock unlock)
             {
-                return ActiveQuests.Any(p => p.Item is CadenceUnlock activeUnlock && activeUnlock.Ability.Name == unlock.Ability.Name);
+                return ActiveQuests.Any(p => p.Item is CadenceUnlock activeUnlock && activeUnlock.CadenceName == unlock.CadenceName && activeUnlock.Ability.Name == unlock.Ability.Name);
             }
             return false;
         }

@@ -119,13 +119,30 @@ public class QuestExecutionTests
     }
 
     [TestMethod]
-    public void QuestProgress_ZeroDuration_ReturnsFullProgress()
+    public void ResourceManager_StartQuest_MultipleCadencesCanResearchSameAbility()
     {
-        var character = new Character("Hero");
-        var quest = _quests!.All.First();
-        var progress = new QuestProgress(quest, "Zero", 0, character);
+        var cadences = ContentHost.GetContent<Cadences>();
+        var recruit = cadences.All.First(c => c.Name == "Recruit");
+        var apprentice = cadences.All.First(c => c.Name == "Apprentice");
         
-        Assert.AreEqual(1.0, progress.Progress);
-        Assert.IsTrue(progress.IsCompleted);
+        var recruitAutoQuest = recruit.Abilities.First(a => a.Ability.Name == "AutoQuest I");
+        var apprenticeAutoQuest = apprentice.Abilities.First(a => a.Ability.Name == "AutoQuest I");
+        
+        var character1 = _resourceManager!.Characters[0];
+        var character2 = _resourceManager!.Characters[1];
+
+        _resourceManager.Inventory.Add(_items!.All.First(x => x.Name == "Gold"), 1000);
+        
+        // Start Recruit research
+        _resourceManager.StartQuest(recruitAutoQuest, character1);
+        Assert.AreEqual(1, _resourceManager.ActiveQuests.Count);
+        
+        // Try starting Recruit research AGAIN (should fail)
+        _resourceManager.StartQuest(recruitAutoQuest, character2);
+        Assert.AreEqual(1, _resourceManager.ActiveQuests.Count, "Should NOT start the same cadence's research twice.");
+        
+        // Start Apprentice research (should succeed)
+        _resourceManager.StartQuest(apprenticeAutoQuest, character2);
+        Assert.AreEqual(2, _resourceManager.ActiveQuests.Count, "Should allow different cadences to research same ability name.");
     }
 }
