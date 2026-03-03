@@ -3,7 +3,7 @@
     "failure_count": 1,
     "metrics": {
         "monoliths": 1,
-        "coverage": 92.02,
+        "coverage": 92.03,
         "missing_tests": 0,
         "key_violations": 0,
         "testid_violations": 0,
@@ -16,7 +16,7 @@
             "category": "monolith",
             "message": "Mythril.Tests/JunctionTests.cs exceeds 250 lines",
             "metadata": {
-                "lines": 278
+                "lines": 302
             }
         }
     ]
