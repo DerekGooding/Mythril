@@ -1,70 +1,15 @@
 {
-    "is_healthy": false,
-    "failure_count": 10,
+    "is_healthy": true,
+    "failure_count": 0,
     "metrics": {
-        "monoliths": 2,
-        "coverage": 91.61,
-        "missing_tests": 4,
-        "key_violations": 1,
-        "testid_violations": 3,
+        "monoliths": 0,
+        "coverage": 88.02,
+        "missing_tests": 0,
+        "key_violations": 0,
+        "testid_violations": 0,
         "stale_docs": 0,
         "pending_feedback": 0,
         "test_passed": true
     },
-    "failures": [
-        {
-            "category": "monolith",
-            "message": "Mythril.Tests/JunctionTests.cs exceeds 250 lines",
-            "metadata": {
-                "lines": 302
-            }
-        },
-        {
-            "category": "monolith",
-            "message": "Mythril.Tests/QuestLifecycleTests.cs exceeds 250 lines",
-            "metadata": {
-                "lines": 260
-            }
-        },
-        {
-            "category": "razor_test",
-            "message": "No bUnit test found for NavMenu",
-            "metadata": {}
-        },
-        {
-            "category": "razor_test",
-            "message": "No bUnit test found for Counter",
-            "metadata": {}
-        },
-        {
-            "category": "razor_test",
-            "message": "No bUnit test found for Weather",
-            "metadata": {}
-        },
-        {
-            "category": "razor_test",
-            "message": "No bUnit test found for NotFound",
-            "metadata": {}
-        },
-        {
-            "category": "razor_key",
-            "message": "@foreach without @key in UIPrototype/Pages/Weather.razor",
-            "metadata": {}
-        },
-        {
-            "category": "razor_testid",
-            "message": "Interactive elements missing data-testid in UIPrototype/Layout/NavMenu.razor",
-            "metadata": {}
-        },
-        {
-            "category": "razor_testid",
-            "message": "Interactive elements missing data-testid in UIPrototype/Pages/Counter.razor",
-            "metadata": {}
-        },
-        {
-            "category": "razor_testid",
-            "message": "Interactive elements missing data-testid in UIPrototype/Pages/Home.razor",
-            "metadata": {}
-        }
-    ]
+    "failures": []
 }
