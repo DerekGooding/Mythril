@@ -178,6 +178,33 @@ public class AdditionalUIComponentTests : BunitTestBase
     }
 
     [TestMethod]
+    public void CharacterDisplay_AutoQuestToggle_RendersWhenUnlocked()
+    {
+        // Arrange
+        var character = new Character("Hero");
+        var autoQuestAbility = new CadenceAbility("AutoQuest I", "Description");
+        var cadence = new Cadence("Test", "Desc", [new CadenceUnlock(autoQuestAbility, [])]);
+        
+        ResourceManager.UnlockedAbilities.Add(autoQuestAbility);
+        JunctionManager.AssignCadence(cadence, character, ResourceManager.UnlockedAbilities);
+
+        // Act
+        var cut = RenderComponent<CharacterDisplay>(parameters => parameters
+            .Add(p => p.Character, character)
+        );
+
+        // Assert
+        var toggle = cut.Find("[data-testid='autoquest-toggle']");
+        Assert.IsNotNull(toggle);
+        Assert.IsTrue(toggle.TextContent.Contains("Auto: OFF"));
+
+        // Toggle
+        toggle.Click();
+        Assert.IsTrue(toggle.TextContent.Contains("Auto: ON"));
+        Assert.IsTrue(ResourceManager.IsAutoQuestEnabled(character));
+    }
+
+    [TestMethod]
     public void App_RendersCorrectly()
     {
         var cut = RenderComponent<App>();

@@ -16,6 +16,16 @@
         <div class="junction-controls d-flex flex-column gap-1">
             <button class="btn btn-xs btn-outline-primary" data-testid="junction-toggle" @onclick="ToggleJunctionMenu">Junction</button>
             <button class="btn btn-xs btn-outline-danger" data-testid="unequip-button" @onclick="() => OnUnequip.InvokeAsync(assignedCadence)">Unequip</button>
+            
+            @if (resourceManager.CanAutoQuest(Character))
+            {
+                var isAuto = resourceManager.IsAutoQuestEnabled(Character);
+                <button class="btn btn-xs @(isAuto ? "btn-success" : "btn-outline-secondary") mt-1" 
+                        data-testid="autoquest-toggle"
+                        @onclick="ToggleAutoQuest">
+                    Auto: @(isAuto ? "ON" : "OFF")
+                </button>
+            }
         </div>
     }
 
@@ -135,6 +145,11 @@
     private bool _showJunctionMenu = false;
 
     private void ToggleJunctionMenu() => _showJunctionMenu = !_showJunctionMenu;
+
+    private void ToggleAutoQuest()
+    {
+        resourceManager.SetAutoQuestEnabled(Character, !resourceManager.IsAutoQuestEnabled(Character));
+    }
 
     private bool CanJunction(Stat stat)
     {

@@ -37,6 +37,9 @@ public partial class ResourceManager(
 
     public List<QuestProgress> ActiveQuests { get; } = [];
 
+    private readonly Dictionary<string, bool> _autoQuestEnabled = [];
+    public IReadOnlyDictionary<string, bool> AutoQuestEnabled => _autoQuestEnabled;
+
     public bool IsTestMode { get; set; } = false;
 
     public void Initialize()
@@ -45,6 +48,7 @@ public partial class ResourceManager(
         Inventory.Clear();
         _completedQuests.Clear();
         UnlockedAbilities.Clear();
+        _autoQuestEnabled.Clear();
         lock(_questLock)
         {
             ActiveQuests.Clear();
@@ -63,6 +67,18 @@ public partial class ResourceManager(
         JunctionManager.Initialize();
         Console.WriteLine("ResourceManager initialized.");
     }
+
+    public bool CanAutoQuest(Character character)
+    {
+        if (!UnlockedAbilities.Any(a => a.Name == "AutoQuest I")) return false;
+        var cadence = JunctionManager.CurrentlyAssigned(character).FirstOrDefault();
+        if (cadence.Name == null) return false;
+        return cadence.Abilities.Any(a => UnlockedAbilities.Contains(a.Ability) && a.Ability.Name == "AutoQuest I");
+    }
+
+    public bool IsAutoQuestEnabled(Character character) => _autoQuestEnabled.TryGetValue(character.Name, out var enabled) && enabled;
+
+    public void SetAutoQuestEnabled(Character character, bool enabled) => _autoQuestEnabled[character.Name] = enabled;
 
     public void UpdateAvaiableCadences()
     {

@@ -61,6 +61,7 @@ public class SaveData
     public List<QuestProgressDTO> ActiveQuests { get; set; } = [];
     public List<JunctionDTO> Junctions { get; set; } = [];
     public List<AssignedCadenceDTO> AssignedCadences { get; set; } = [];
+    public Dictionary<string, bool> AutoQuestEnabled { get; set; } = [];
     public DateTime LastSaveTime { get; set; }
 }
 

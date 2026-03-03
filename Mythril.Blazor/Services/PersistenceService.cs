@@ -38,6 +38,7 @@ public class PersistenceService(
                 .Where(x => x.Cad.Name != null)
                 .Select(x => new AssignedCadenceDTO { CharacterName = x.Char.Name, CadenceName = x.Cad.Name })
                 .ToList(),
+            AutoQuestEnabled = resourceManager.AutoQuestEnabled.ToDictionary(x => x.Key, x => x.Value),
             ActiveQuests = resourceManager.ActiveQuests.Select(q => new QuestProgressDTO
             {
                 ItemName = q.Item is QuestData qd ? qd.Name : (q.Item is CadenceUnlock cu ? cu.Ability.Name : ""),
@@ -102,6 +103,16 @@ public class PersistenceService(
             if (character.Name != null && cadence.Name != null)
             {
                 junctionManager.RestoreAssignment(cadence, character);
+            }
+        }
+
+        // Restore AutoQuest
+        foreach (var kvp in saveData.AutoQuestEnabled)
+        {
+            var character = resourceManager.Characters.FirstOrDefault(c => c.Name == kvp.Key);
+            if (character.Name != null)
+            {
+                resourceManager.SetAutoQuestEnabled(character, kvp.Value);
             }
         }
 
