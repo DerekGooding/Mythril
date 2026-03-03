@@ -18,5 +18,7 @@
   { "Quest": "Defeat Treant Guardian", "Requires": ["Gather Moonberries"] },
   { "Quest": "Ancient Inscriptions", "Requires": ["Learn About Cadences"] },
   { "Quest": "Finding the Hearth", "Requires": ["Ancient Inscriptions"] },
-  { "Quest": "Rekindling the Spark", "Requires": ["Finding the Hearth"] }
+  { "Quest": "Rekindling the Spark", "Requires": ["Finding the Hearth"] },
+  { "Quest": "Help the lumberjack", "Requires": ["Learn about the Dark Forest"] },
+  { "Quest": "Sell Gem", "Requires": ["Visit Starting Town"] }
 ]
