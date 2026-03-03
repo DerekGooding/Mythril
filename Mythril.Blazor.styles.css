@@ -169,6 +169,10 @@
     position: relative;
     margin-bottom: 0.5rem;
 }
+.character-controls[b-tzawi3ksml] {
+    flex-shrink: 0;
+    min-width: 65px;
+}
 .character-header[b-tzawi3ksml] {
     display: flex;
     justify-content: space-between;
