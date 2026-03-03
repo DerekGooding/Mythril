@@ -46,16 +46,6 @@ main, .content {
     min-height: 0;
 }
 
-.hand-panel,
-.party-panel {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto;
-    background-color: var(--panel-bg);
-    color: var(--text-color);
-}
-
 .party-row {
     background-color: var(--tab-inactive-bg) !important;
     border-bottom: 1px solid var(--header-border) !important;
