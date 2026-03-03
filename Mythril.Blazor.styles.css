@@ -134,7 +134,7 @@
     box-shadow: var(--shadow-md);
 }
 /* /Components/CadencePanel.razor.rz.scp.css */
-.hand-panel[b-eix7gxvxzt] {
+.cadence-panel[b-eix7gxvxzt] {
     display: flex;
     flex-direction: column;
     padding: 1rem;
@@ -660,6 +660,68 @@
     background: #4CAF50;
     color: white;
 }
+/* /Components/Workshop.razor.rz.scp.css */
+.workshop-panel[b-klxtuswmfi] {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    height: 100%;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+.workshop-header[b-klxtuswmfi] {
+    padding: 1rem;
+    flex-shrink: 0;
+}
+
+.workshop-content[b-klxtuswmfi] {
+    padding: 1rem;
+    overflow-y: auto;
+    flex-grow: 1;
+    min-height: 0;
+}
+
+.refinement-group[b-klxtuswmfi] {
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 1rem;
+}
+
+.refinement-group.locked[b-klxtuswmfi] {
+    opacity: 0.5;
+    filter: grayscale(1);
+}
+
+.recipe-list[b-klxtuswmfi] {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+.recipe-card[b-klxtuswmfi] {
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    padding: 0.75rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--card-bg);
+    color: var(--text-color);
+}
+
+.recipe-details[b-klxtuswmfi] {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.arrow[b-klxtuswmfi] {
+    font-weight: bold;
+    color: var(--text-muted);
+}
 /* /Layout/MainLayout.razor.rz.scp.css */
 main[b-uvgfdke93t] {
     display: flex;
@@ -745,4 +807,67 @@ main[b-uvgfdke93t] {
 @keyframes slideIn-b-uvgfdke93t {
     from { transform: translateX(100%); }
     to { transform: translateX(0); }
+}
+/* /Pages/Home.razor.rz.scp.css */
+.container-fluid[b-c5facr9adv] {
+    height: 100vh;
+}
+
+.header-row[b-c5facr9adv] {
+    background-color: var(--header-bg);
+    border-bottom: 1px solid var(--header-border);
+}
+
+/* Make all tab panes flex containers so children can fill height */
+.tab-content[b-c5facr9adv] {
+    background-color: var(--tab-bg);
+    color: var(--text-color);
+    flex-grow: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.tab-content[b-c5facr9adv]  .tab-pane {
+    display: none;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.tab-content[b-c5facr9adv]  .tab-pane.active {
+    display: flex !important;
+}
+
+/* Ensure components fill the tab-pane */
+.tab-pane[b-c5facr9adv]  .hand-panel,
+.tab-pane[b-c5facr9adv]  .cadence-panel,
+.tab-pane[b-c5facr9adv]  .workshop-panel {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Party column scroll */
+.party-column[b-c5facr9adv] {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--tab-inactive-bg);
+    border-left: 1px solid var(--header-border);
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+}
+
+.col-8[b-c5facr9adv], .col-4[b-c5facr9adv] {
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.party-row[b-c5facr9adv] {
+    background-color: var(--tab-inactive-bg) !important;
+    border-bottom: 1px solid var(--header-border) !important;
 }
