@@ -138,10 +138,11 @@
     display: flex;
     flex-direction: column;
     padding: 1rem;
-    overflow-y: auto;
+    overflow-y: auto; /* Root element scrolls content */
     overflow-x: hidden;
-    flex-grow: 1;
+    flex: 1;
     min-height: 0;
+    height: 100%;
 }
 
 .no-cadences[b-eix7gxvxzt] {
@@ -400,8 +401,10 @@
     flex-direction: column;
     flex: 1;
     min-height: 0;
-    overflow-y: auto;
+    height: 100%;
+    overflow-y: auto; /* Root element scrolls content */
     overflow-x: hidden;
+    padding: 0.5rem;
 }
 
 .task-container[b-mqjfnsj94g] {
@@ -676,6 +679,7 @@
     height: 100%;
     background-color: var(--bg-color);
     color: var(--text-color);
+    overflow: hidden; /* Header stays fixed, content scrolls */
 }
 
 .workshop-header[b-klxtuswmfi] {
@@ -685,8 +689,9 @@
 
 .workshop-content[b-klxtuswmfi] {
     padding: 1rem;
-    overflow-y: auto;
-    flex-grow: 1;
+    overflow-y: auto; /* Content area scrolls */
+    overflow-x: hidden;
+    flex: 1;
     min-height: 0;
 }
 
@@ -817,37 +822,62 @@ main[b-uvgfdke93t] {
 }
 /* /Pages/Home.razor.rz.scp.css */
 .container-fluid[b-c5facr9adv] {
-    height: 100vh;
+    height: 100%; /* Fill the parent (.content) which is already constrained by MainLayout */
+    display: flex;
+    flex-direction: column;
 }
 
 .header-row[b-c5facr9adv] {
     background-color: var(--header-bg);
     border-bottom: 1px solid var(--header-border);
+    flex-shrink: 0;
 }
 
-/* Make all tab panes flex containers so children can fill height */
+/* Main row containing the two columns */
+.row.flex-grow-1[b-c5facr9adv] {
+    flex: 1;
+    min-height: 0;
+    margin: 0;
+    overflow: hidden;
+    display: flex;
+}
+
+/* Left column with tabs */
+.col-8[b-c5facr9adv] {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+    padding: 0.5rem;
+    overflow: hidden; /* Prevent this column from scrolling, let children do it */
+}
+
+/* Tab content area */
 .tab-content[b-c5facr9adv] {
     background-color: var(--tab-bg);
     color: var(--text-color);
-    flex-grow: 1;
+    flex: 1;
     min-height: 0;
     display: flex;
     flex-direction: column;
+    overflow: hidden; /* Crucial: contain the panes */
 }
 
+/* Using ::deep to reach inside Bootstrap's tab structure if needed */
 .tab-content[b-c5facr9adv]  .tab-pane {
     display: none;
     flex-direction: column;
     flex: 1;
     min-height: 0;
-    overflow: hidden;
+    overflow: hidden; /* Panes contain the scrolling component */
 }
 
 .tab-content[b-c5facr9adv]  .tab-pane.active {
     display: flex !important;
+    height: 100%;
 }
 
-/* Ensure components fill the tab-pane */
+/* Ensure components fill the tab-pane and handle their own scrolling */
 .tab-pane[b-c5facr9adv]  .hand-panel,
 .tab-pane[b-c5facr9adv]  .cadence-panel,
 .tab-pane[b-c5facr9adv]  .workshop-panel {
@@ -855,6 +885,8 @@ main[b-uvgfdke93t] {
     min-height: 0;
     display: flex;
     flex-direction: column;
+    height: 100%;
+    overflow: hidden; /* Children of these will handle actual overflow-y: auto */
 }
 
 /* Party column scroll */
@@ -865,13 +897,8 @@ main[b-uvgfdke93t] {
     border-left: 1px solid var(--header-border);
     flex: 1;
     min-height: 0;
-    overflow-y: auto;
-}
-
-.col-8[b-c5facr9adv], .col-4[b-c5facr9adv] {
-    min-height: 0;
-    display: flex;
-    flex-direction: column;
+    height: 100%;
+    overflow-y: auto; /* Party panel scrolls itself */
 }
 
 .party-row[b-c5facr9adv] {
