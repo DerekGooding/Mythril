@@ -19,5 +19,6 @@
   { "Name": "Defeat Treant Guardian", "Description": "Face the protector of the forest." },
   { "Name": "Ancient Inscriptions", "Description": "Decipher the ruins' entrance." },
   { "Name": "Finding the Hearth", "Description": "Locate the central power source of the ruins." },
-  { "Name": "Rekindling the Spark", "Description": "Ignite the ancient Mythril Forge." }
+  { "Name": "Rekindling the Spark", "Description": "Ignite the ancient Mythril Forge." },
+  { "Name": "Help the lumberjack", "Description": "Gather fallen wood for the local lumberjack." }
 ]

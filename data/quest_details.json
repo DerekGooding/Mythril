@@ -145,5 +145,12 @@
     "Type": "Single",
     "Requirements": [ { "Item": "Ancient Bark", "Quantity": 10 }, { "Item": "Iron Ore", "Quantity": 20 } ],
     "Rewards": [ { "Item": "Mythril Spark", "Quantity": 1 } ]
+  },
+  {
+    "Quest": "Help the lumberjack",
+    "DurationSeconds": 30,
+    "Type": "Single",
+    "Requirements": [],
+    "Rewards": [ { "Item": "Log", "Quantity": 10 } ]
   }
 ]
