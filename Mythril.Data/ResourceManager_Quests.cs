@@ -140,9 +140,12 @@ public partial class ResourceManager
         }
         if(item is CadenceUnlock unlock)
         {
+            var alreadyDiscovered = UnlockedAbilities.Any(ua => ua.EndsWith($":{unlock.Ability.Name}"));
             UnlockedAbilities.Add($"{unlock.CadenceName}:{unlock.Ability.Name}");
+            
             // Only set unseen if this ability actually unlocks something in the workshop
-            if (_refinements.ByKey.ContainsKey(unlock.Ability))
+            // AND it wasn't already discovered via another cadence
+            if (!alreadyDiscovered && _refinements.ByKey.ContainsKey(unlock.Ability))
             {
                 HasUnseenWorkshop = true;
             }
