@@ -92,7 +92,8 @@ public abstract class BunitTestBase : TestContextWrapper
             ContentHost.GetContent<Items>(),
             cadences,
             ContentHost.GetContent<Quests>(),
-            Stats
+            Stats,
+            ContentHost.GetContent<ItemRefinements>()
         ).Object);
 
         TestContext.Services.AddSingleton(new Mock<FeedbackService>(JSRuntimeMock.Object, AuthService, httpClient).Object);

@@ -39,6 +39,8 @@ Mythril is an RPG-inspired web application built with **.NET 10** and **Blazor W
 - **Workshop Discovery System**: Implemented a discovery-based Workshop UI that hides refinements until their corresponding Cadence abilities are unlocked.
 - **Discovery Notifications**: Added pulsing red notification dots to both Cadence and Workshop tabs to alert players of new unlocks and discoveries.
 - **Intelligent Workshop Alerts**: Refined Workshop notifications to only trigger when an unlocked ability actually provides new recipes, reducing UI noise.
+- **Time-Based Refinement**: Refactored the Workshop from instant crafting to a time-based task system. Players now drag refinement recipes onto characters, transforming refinements into tactical, recurring assignments.
+- **Assignment Validation**: Implemented strict character-specific requirements for the Workshop. Refinement tasks can now only be assigned to characters with the relevant Cadence equipped, accompanied by clear UI feedback for invalid assignments.
 
 ## ⚖️ Quality Assurance & Health
 We maintain project health through a custom automated suite (`scripts/check_health.py`) which runs on every commit:

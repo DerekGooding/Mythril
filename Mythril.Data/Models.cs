@@ -51,6 +51,12 @@ public readonly record struct QuestDetail(int DurationSeconds, ItemQuantity[] Re
 // Refinements
 public readonly record struct Recipe(int InputQuantity, Item OutputItem, int OutputQuantity);
 
+public readonly record struct RefinementData(CadenceAbility Ability, Item InputItem, Recipe Recipe)
+{
+    public string Name => $"{Ability.Name}: {Recipe.OutputItem.Name}";
+    public string Description => $"Refine {Recipe.InputQuantity}x {InputItem.Name} into {Recipe.OutputQuantity}x {Recipe.OutputItem.Name}";
+}
+
 // Persistence
 public class SaveData
 {
@@ -85,7 +91,9 @@ public class JunctionDTO
 public class QuestProgressDTO
 {
     public string ItemName { get; set; } = string.Empty;
-    public string ItemType { get; set; } = string.Empty; // "Quest" or "CadenceUnlock"
+    public string AbilityName { get; set; } = string.Empty;
+    public string InputItemName { get; set; } = string.Empty;
+    public string ItemType { get; set; } = string.Empty; // "Quest", "CadenceUnlock", "Refinement"
     public string CharacterName { get; set; } = string.Empty;
     public double SecondsElapsed { get; set; }
     public DateTime StartTime { get; set; }

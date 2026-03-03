@@ -7,7 +7,7 @@
 <div class="workshop-panel">
     <div class="workshop-header">
         <h3>Item Refinement Workshop</h3>
-        <p>Utilize your unlocked Cadence abilities to refine materials.</p>
+        <p>Drag refinement tasks onto characters with the required abilities.</p>
     </div>
 
     <div class="workshop-content">
@@ -19,39 +19,23 @@
 
         @if (discoveredRefinements.Any())
         {
-            @foreach (var refinement in discoveredRefinements)
+            @foreach (var refinementGroup in discoveredRefinements)
             {
-                var ability = refinement.Key;
+                var ability = refinementGroup.Key;
                 // Check if ANY character has a cadence assigned that has this ability UNLOCKED
-                var hasAbility = resourceManager.Characters.Any(c => 
-                    resourceManager.JunctionManager.CurrentlyAssigned(c).Any(cad => 
-                        cad.Abilities.Any(a => a.Ability.Name == ability.Name && resourceManager.UnlockedAbilities.Contains($"{cad.Name}:{a.Ability.Name}"))
-                    )
-                );
+                var anyoneHasAbility = resourceManager.Characters.Any(c => resourceManager.HasAbility(c, ability));
                 
-                <div @key="ability.Name" class="refinement-group @(hasAbility ? "" : "locked")">
-                    <h4>@ability.Name @(hasAbility ? "" : "(Required Cadence Not Equipped)")</h4>
+                <div @key="ability.Name" class="refinement-group @(anyoneHasAbility ? "" : "locked")">
+                    <h4>@ability.Name @(anyoneHasAbility ? "" : "(Assign a character with this ability to unlock)")</h4>
                     
                     <div class="recipe-list">
-                        @foreach (var recipeKvp in refinement.Value)
+                        @foreach (var recipeKvp in refinementGroup.Value)
                         {
                             var inputItem = recipeKvp.Key;
                             var recipe = recipeKvp.Value;
-                            var canAfford = resourceManager.Inventory.Has(inputItem, recipe.InputQuantity);
+                            var refinementData = new RefinementData(ability, inputItem, recipe);
                             
-                            <div @key="inputItem.Name" class="recipe-card">
-                                <div class="recipe-details">
-                                    <span>@recipe.InputQuantity x @inputItem.Name</span>
-                                    <span class="arrow">→</span>
-                                    <span>@recipe.OutputQuantity x @recipe.OutputItem.Name</span>
-                                </div>
-                                <button class="btn btn-sm @(canAfford && hasAbility ? "btn-success" : "btn-secondary")" 
-                                        data-testid="craft-button"
-                                        disabled="@(!(canAfford && hasAbility))"
-                                        @onclick="() => Craft(inputItem, recipe)">
-                                    Craft
-                                </button>
-                            </div>
+                            <RefinementCard Refinement="@refinementData" @key="@(ability.Name + inputItem.Name)" />
                         }
                     </div>
                 </div>
@@ -67,13 +51,5 @@
 </div>
 
 @code {
-    private void Craft(Item inputItem, Recipe recipe)
-    {
-        if (resourceManager.Inventory.Remove(inputItem, recipe.InputQuantity))
-        {
-            resourceManager.Inventory.Add(recipe.OutputItem, recipe.OutputQuantity);
-            SnackbarService.Show($"Crafted {recipe.OutputQuantity}x {recipe.OutputItem.Name}", "success");
-            StateHasChanged();
-        }
-    }
+    // Methods removed as refinements are now handled via StartQuest in Home.razor
 }

@@ -28,7 +28,19 @@ public partial class ResourceManager
             }
         }
 
+        if(item is RefinementData refinement)
+        {
+            return Inventory.Has(refinement.InputItem, refinement.Recipe.InputQuantity);
+        }
+
         return true;
+    }
+
+    public bool HasAbility(Character character, CadenceAbility ability)
+    {
+        return JunctionManager.CurrentlyAssigned(character).Any(cad => 
+            cad.Abilities.Any(a => a.Ability.Name == ability.Name && UnlockedAbilities.Contains($"{cad.Name}:{a.Ability.Name}"))
+        );
     }
 
     private void LockQuest(Quest quest)
@@ -67,6 +79,10 @@ public partial class ResourceManager
         {
             foreach (var requirement in unlock.Requirements)
                 Inventory.Remove(requirement.Item, requirement.Quantity);
+        }
+        if(item is RefinementData refinement)
+        {
+            Inventory.Remove(refinement.InputItem, refinement.Recipe.InputQuantity);
         }
     }
 
@@ -123,6 +139,20 @@ public partial class ResourceManager
                     ActiveQuests.Add(new QuestProgress(unlock, unlock.Ability.Description, (int)Math.Max(1, duration), character));
                 }
             }
+            if(item is RefinementData refinement)
+            {
+                duration = IsTestMode ? 2 : 15; // Base duration for refinements
+                if (!IsTestMode)
+                {
+                    // Strength reduces refinement duration (it's physical work)
+                    int strength = JunctionManager.GetStatValue(character, "Strength");
+                    duration /= (1.0 + (strength / 100.0));
+                }
+                lock(_questLock)
+                {
+                    ActiveQuests.Add(new QuestProgress(refinement, refinement.Description, (int)Math.Max(1, duration), character));
+                }
+            }
         }
     }
 
@@ -150,6 +180,10 @@ public partial class ResourceManager
                 HasUnseenWorkshop = true;
             }
             UpdateMagicCapacity();
+        }
+        if(item is RefinementData refinement)
+        {
+            Inventory.Add(refinement.Recipe.OutputItem, refinement.Recipe.OutputQuantity);
         }
         await Task.CompletedTask;
     }

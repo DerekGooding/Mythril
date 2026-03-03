@@ -11,7 +11,8 @@ public class PersistenceService(
     Items items, 
     Cadences cadences, 
     Quests quests,
-    Stats stats)
+    Stats stats,
+    ItemRefinements refinements)
 {
     private const string STORAGE_KEY = "mythril_save_v1";
 
@@ -46,7 +47,9 @@ public class PersistenceService(
             ActiveQuests = resourceManager.ActiveQuests.Select(q => new QuestProgressDTO
             {
                 ItemName = q.Item is QuestData qd ? qd.Name : (q.Item is CadenceUnlock cu ? cu.Ability.Name : ""),
-                ItemType = q.Item is QuestData ? "Quest" : "CadenceUnlock",
+                AbilityName = q.Item is RefinementData rd ? rd.Ability.Name : "",
+                InputItemName = q.Item is RefinementData rd2 ? rd2.InputItem.Name : "",
+                ItemType = q.Item is QuestData ? "Quest" : (q.Item is CadenceUnlock ? "CadenceUnlock" : "Refinement"),
                 CharacterName = q.Character.Name,
                 SecondsElapsed = q.SecondsElapsed,
                 StartTime = q.StartTime
@@ -159,6 +162,14 @@ public class PersistenceService(
                 if (unlock.Ability.Name != null)
                 {
                     qp = new QuestProgress(unlock, unlock.Ability.Description, 10, character);
+                }
+            }
+            else if (dto.ItemType == "Refinement")
+            {
+                var refinement = refinements.GetRefinement(dto.AbilityName, dto.InputItemName);
+                if (refinement is not null)
+                {
+                    qp = new QuestProgress(refinement.Value, refinement.Value.Description, 15, character);
                 }
             }
 

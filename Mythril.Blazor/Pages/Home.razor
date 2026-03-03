@@ -169,6 +169,17 @@
             JunctionManager.AssignCadence(cadence, args.character, resourceManager.UnlockedAbilities);
             SnackbarService.Show($"{args.character.Name} equipped {cadence.Name}", "info");
         }
+        else if (args.item is RefinementData refinement)
+        {
+            if (resourceManager.HasAbility(args.character, refinement.Ability))
+            {
+                resourceManager.StartQuest(refinement, args.character);
+            }
+            else
+            {
+                SnackbarService.Show($"This character does not have a cadence with the {refinement.Ability.Name} ability.", "warning");
+            }
+        }
         else
         {
             resourceManager.StartQuest(args.item, args.character);

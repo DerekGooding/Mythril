@@ -152,6 +152,10 @@ public partial class ResourceManager(
             foreach (var requirement in unlock.Requirements)
                 Inventory.Add(requirement.Item, requirement.Quantity);
         }
+        if (item is RefinementData refinement)
+        {
+            Inventory.Add(refinement.InputItem, refinement.Recipe.InputQuantity);
+        }
     }
 
     public bool IsInProgress(object item)
@@ -165,6 +169,12 @@ public partial class ResourceManager(
             if (item is CadenceUnlock unlock)
             {
                 return ActiveQuests.Any(p => p.Item is CadenceUnlock activeUnlock && activeUnlock.CadenceName == unlock.CadenceName && activeUnlock.Ability.Name == unlock.Ability.Name);
+            }
+            if (item is RefinementData refinement)
+            {
+                return ActiveQuests.Any(p => p.Item is RefinementData activeRefinement && 
+                    activeRefinement.Ability.Name == refinement.Ability.Name && 
+                    activeRefinement.InputItem.Name == refinement.InputItem.Name);
             }
             return false;
         }

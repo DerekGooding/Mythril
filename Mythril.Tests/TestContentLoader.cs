@@ -72,8 +72,23 @@ public static class TestContentLoader
             questUnlocks.Load(unlocksDict);
 
             var refinementsDict = new Dictionary<CadenceAbility, Dictionary<Item, Recipe>>();
-            // Add some dummy refinements if needed, but for coverage let's just Load an empty one or a small one
+            var refinementDTOs = JsonConvert.DeserializeObject<List<RefinementDTO>>(File.ReadAllText(Path.Combine(dataDir, "refinements.json"))) ?? [];
+            foreach (var d in refinementDTOs)
+            {
+                var ab = abilities.All.First(x => x.Name == d.Ability);
+                refinementsDict[ab] = d.Recipes.ToDictionary(
+                    r => items.All.First(i => i.Name == r.InputItem),
+                    r => new Recipe(r.InputQuantity, items.All.First(i => i.Name == r.OutputItem), r.OutputQuantity)
+                );
+            }
             ContentHost.GetContent<ItemRefinements>().Load(refinementsDict);
+
+            var q2cDTOs = JsonConvert.DeserializeObject<List<QuestCadenceUnlockDTO>>(File.ReadAllText(Path.Combine(dataDir, "quest_cadence_unlocks.json"))) ?? [];
+            var q2cDict = q2cDTOs.ToDictionary(
+                d => quests.All.First(q => q.Name == d.Quest),
+                d => d.Cadences.Select(cn => cadences.All.First(c => c.Name == cn)).ToArray()
+            );
+            ContentHost.GetContent<QuestToCadenceUnlocks>().Load(q2cDict);
 
             var statAugments = ContentHost.GetContent<StatAugments>();
             var vitality = stats.All.First(s => s.Name == "Vitality");

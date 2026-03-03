@@ -12,6 +12,17 @@ public class ItemRefinements : ISubContent<CadenceAbility, Dictionary<Item, Reci
         ByKey.Clear();
         foreach (var kvp in data) ByKey[kvp.Key] = kvp.Value;
     }
+
+    public RefinementData? GetRefinement(string abilityName, string inputItemName)
+    {
+        var kvp = ByKey.FirstOrDefault(x => x.Key.Name == abilityName);
+        if (kvp.Key.Name == null) return null;
+
+        var recipeKvp = kvp.Value.FirstOrDefault(x => x.Key.Name == inputItemName);
+        if (recipeKvp.Key.Name == null) return null;
+
+        return new RefinementData(kvp.Key, recipeKvp.Key, recipeKvp.Value);
+    }
 }
 
 public static class RefinementBuilder

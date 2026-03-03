@@ -1,0 +1,34 @@
+@using Mythril.Data
+@using Mythril.Blazor.Services
+@inject DragDropService DragDropService
+@inject ResourceManager ResourceManager
+
+<div class="refinement-card @(canAfford ? "" : "insufficient")" 
+     draggable="true" 
+     @ondragstart="HandleDragStart">
+    <div class="card-content">
+        <div class="refinement-info">
+            <div class="io-row">
+                <span class="input">@Refinement.Recipe.InputQuantity x @Refinement.InputItem.Name</span>
+                <span class="arrow">→</span>
+                <span class="output">@Refinement.Recipe.OutputQuantity x @Refinement.Recipe.OutputItem.Name</span>
+            </div>
+            <div class="duration">
+                <small>Duration: @(ResourceManager.IsTestMode ? "2s" : "15s") (Base)</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public RefinementData Refinement { get; set; }
+
+    private bool canAfford => ResourceManager.Inventory.Has(Refinement.InputItem, Refinement.Recipe.InputQuantity);
+
+    private void HandleDragStart(DragEventArgs args)
+    {
+        args.DataTransfer.EffectAllowed = "move";
+        DragDropService.Data = Refinement;
+    }
+}

@@ -126,4 +126,25 @@ public class UIComponentTests : BunitTestBase
         var noCadences = cut.Find(".no-cadences");
         Assert.IsTrue(noCadences.TextContent.Contains("No Cadences discovered"));
     }
+
+    [TestMethod]
+    public void RefinementCard_RendersCorrectly()
+    {
+        // Arrange
+        var ability = new CadenceAbility("Refine Fire", "Desc");
+        var input = new Item("Basic Gem", "Desc", ItemType.Material);
+        var output = new Item("Fire I", "Desc", ItemType.Spell);
+        var recipe = new Recipe(1, output, 5);
+        var refinement = new RefinementData(ability, input, recipe);
+
+        // Act
+        var cut = RenderComponent<RefinementCard>(parameters => parameters
+            .Add(p => p.Refinement, refinement)
+        );
+
+        // Assert
+        var text = cut.Find(".refinement-info").TextContent;
+        Assert.IsTrue(text.Contains("1 x Basic Gem"));
+        Assert.IsTrue(text.Contains("5 x Fire I"));
+    }
 }
