@@ -99,7 +99,7 @@ public class QuestExecutionTests
     [TestMethod]
     public void ResourceManager_StartQuest_Recurring_StrengthReducesDuration()
     {
-        var quest = _quests!.All.First(x => x.Name == "Farm Goblins");
+        var quest = _quests!.All.First(x => x.Name == "Hunt Goblins");
         var detail = _questDetails![quest];
         var questData = new QuestData(quest, detail);
         

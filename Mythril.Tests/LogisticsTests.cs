@@ -159,8 +159,8 @@ public class LogisticsTests
         _resourceManager.JunctionManager.AssignCadence(recruit, character, _resourceManager.UnlockedAbilities);
         _resourceManager.SetAutoQuestEnabled(character, true);
 
-        var questGoblins = new QuestData(_quests!.All.First(q => q.Name == "Farm Goblins"), _questDetails![_quests.All.First(q => q.Name == "Farm Goblins")]);
-        var questBats = new QuestData(_quests.All.First(q => q.Name == "Farm Bats"), _questDetails[_quests.All.First(q => q.Name == "Farm Bats")]);
+        var questGoblins = new QuestData(_quests!.All.First(q => q.Name == "Hunt Goblins"), _questDetails![_quests.All.First(q => q.Name == "Hunt Goblins")]);
+        var questBats = new QuestData(_quests.All.First(q => q.Name == "Hunt Bats"), _questDetails[_quests.All.First(q => q.Name == "Hunt Bats")]);
 
         // Start both
         _resourceManager.StartQuest(questGoblins, character); // Slot 0

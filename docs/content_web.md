@@ -24,9 +24,8 @@ Unlocks after *Visit Starting Town*.
 
 ### **III. Dark Forest (Combat & Harvesting)**
 Unlocks after *Learn about the Dark Forest*.
-*   **Farm Goblins**: (Reward: 100 Gold, 1 Fire Shard)
-*   **Farm Trents**: (Reward: 1 Log)
-*   **Farm Golems**: (Reward: 1 Iron Ore)
+*   **Hunt Goblins**: (Reward: 100 Gold, 1 Fire Shard)
+*   **Chop Wood**: (Reward: 2 Log)
 
 ### **IV. Whispering Woods (Mid-Game)**
 Unlocks after *Learn about the Dark Forest*.
@@ -35,7 +34,7 @@ Unlocks after *Learn about the Dark Forest*.
 
 ### **V. Iron Mines (Resource Gathering)**
 Unlocks after *Learn about the Mines*.
-*   **Farm Bats**: (Reward: 150 Gold)
+*   **Hunt Bats**: (Reward: 150 Gold)
 *   **Farm Spiders**: (Reward: 1 Web)
 *   **Farm Slimes**: (Reward: 1 Slime)
 *   **Unlock Mining**: Permission to mine. (Req: 1000 Gold)
