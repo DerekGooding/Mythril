@@ -76,7 +76,7 @@ public partial record struct Stat(string Name, string Description) : INamed;
 public readonly record struct StatAugment(Stat Stat, int ModifierAtFull);
 
 // Details
-public readonly record struct QuestDetail(int DurationSeconds, ItemQuantity[] Requirements, ItemQuantity[] Rewards, QuestType Type, string PrimaryStat = "Vitality", Dictionary<string, int>? RequiredStats = null);
+public readonly record struct QuestDetail(int DurationSeconds, ItemQuantity[] Requirements, ItemQuantity[] Rewards, QuestType Type, string PrimaryStat = "Vitality", Dictionary<string, int>? RequiredStats = null, Dictionary<string, int>? StatRewards = null);
 
 // Refinements
 public readonly record struct Recipe(int InputQuantity, Item OutputItem, int OutputQuantity);
@@ -103,6 +103,7 @@ public class SaveData
     public bool HasUnseenCadence { get; set; }
     public bool HasUnseenWorkshop { get; set; }
     public DateTime LastSaveTime { get; set; }
+    public Dictionary<string, Dictionary<string, int>> CharacterStatBoosts { get; set; } = [];
 }
 
 public class AssignedCadenceDTO
@@ -151,7 +152,7 @@ public class CadenceAbilityUnlockDTO
     public Dictionary<string, string> Metadata { get; set; } = [];
 }
 public class CadenceDTO { public string Name { get; set; } = ""; public string Description { get; set; } = ""; public List<CadenceAbilityUnlockDTO> Abilities { get; set; } = []; }
-public class QuestDetailDTO { public string Quest { get; set; } = ""; public int DurationSeconds { get; set; } = 3; public string Type { get; set; } = "Single"; public List<ItemQuantityDTO> Requirements { get; set; } = []; public List<ItemQuantityDTO> Rewards { get; set; } = []; public string PrimaryStat { get; set; } = "Vitality"; public Dictionary<string, int>? RequiredStats { get; set; } }
+public class QuestDetailDTO { public string Quest { get; set; } = ""; public int DurationSeconds { get; set; } = 3; public string Type { get; set; } = "Single"; public List<ItemQuantityDTO> Requirements { get; set; } = []; public List<ItemQuantityDTO> Rewards { get; set; } = []; public string PrimaryStat { get; set; } = "Vitality"; public Dictionary<string, int>? RequiredStats { get; set; } public Dictionary<string, int>? StatRewards { get; set; } }
 public class QuestUnlockDTO { public string Quest { get; set; } = ""; public List<string> Requires { get; set; } = []; }
 public class QuestCadenceUnlockDTO { public string Quest { get; set; } = ""; public List<string> Cadences { get; set; } = []; }
 public class RecipeDTO { public string InputItem { get; set; } = ""; public int InputQuantity { get; set; } = 1; public string OutputItem { get; set; } = ""; public int OutputQuantity { get; set; } = 1; }

@@ -19,9 +19,10 @@ public class RewardTests : BunitTestBase
 
         // Start it so it's in ActiveQuests (needed for character name in journal)
         ResourceManager.StartQuest(questData, character);
+        var progress = ResourceManager.ActiveQuests.First();
 
         // Act
-        await ResourceManager.ReceiveRewards(questData);
+        await ResourceManager.ReceiveRewards(progress);
 
         // Assert
         Assert.AreEqual(5, InventoryManager.GetQuantity(item));
@@ -39,9 +40,10 @@ public class RewardTests : BunitTestBase
         var character = new Character("Hero");
 
         ResourceManager.StartQuest(unlock, character);
+        var progress = ResourceManager.ActiveQuests.First();
 
         // Act
-        await ResourceManager.ReceiveRewards(unlock);
+        await ResourceManager.ReceiveRewards(progress);
 
         // Assert
         Assert.IsTrue(ResourceManager.UnlockedAbilities.Contains("Mage:Fire Ball"));
@@ -58,12 +60,19 @@ public class RewardTests : BunitTestBase
         var output = new Item("Steel", "Desc", ItemType.Material);
         var recipe = new Recipe(1, output, 2);
         var refinement = new RefinementData(ability, input, recipe);
-        var character = new Character("Hero");
+        var character = ResourceManager.Characters[0];
+
+        // Give ability to character
+        var student = ContentHost.GetContent<Cadences>().All.First(c => c.Name == "Student");
+        ResourceManager.UnlockCadence(student);
+        ResourceManager.UnlockedAbilities.Add("Student:Refine"); // Mocking ability name match
+        JunctionManager.AssignCadence(student, character, ResourceManager.UnlockedAbilities);
 
         ResourceManager.StartQuest(refinement, character);
+        var progress = ResourceManager.ActiveQuests.First();
 
         // Act
-        await ResourceManager.ReceiveRewards(refinement);
+        await ResourceManager.ReceiveRewards(progress);
 
         // Assert
         Assert.AreEqual(2, InventoryManager.GetQuantity(output));

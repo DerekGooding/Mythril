@@ -45,6 +45,7 @@ public class PersistenceService(
             UnlockedLocations = resourceManager.UnlockedLocationNames.ToList(),
             HasUnseenCadence = resourceManager.HasUnseenCadence,
             HasUnseenWorkshop = resourceManager.HasUnseenWorkshop,
+            CharacterStatBoosts = junctionManager.CharacterStatBoosts.ToDictionary(x => x.Key, x => x.Value.ToDictionary(y => y.Key, y => y.Value)),
             Journal = resourceManager.Journal.Select(j => new JournalEntryDTO
             {
                 TaskName = j.TaskName,
@@ -141,8 +142,23 @@ public class PersistenceService(
         }
         resourceManager.UpdateUsableLocations();
 
-        // Restore Junctions
-        junctionManager.Junctions.Clear();
+        // Restore Junctions and Boosts
+        junctionManager.Initialize(); // Clears junctions and boosts
+        if (saveData.CharacterStatBoosts != null)
+        {
+            foreach (var charKvp in saveData.CharacterStatBoosts)
+            {
+                foreach (var statKvp in charKvp.Value)
+                {
+                    var character = resourceManager.Characters.FirstOrDefault(c => c.Name == charKvp.Key);
+                    if (character.Name != null)
+                    {
+                        junctionManager.AddStatBoost(character, statKvp.Key, statKvp.Value);
+                    }
+                }
+            }
+        }
+
         foreach(var dto in saveData.Junctions)
         {
             var character = resourceManager.Characters.FirstOrDefault(c => c.Name == dto.CharacterName);

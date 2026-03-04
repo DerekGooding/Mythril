@@ -25,9 +25,9 @@ public partial class LatticeSimulator
 
     private GameState ApplyQuestTransfers(GameState state, Dictionary<string, Quest> questMap)
     {
-        var questTimes = ImmutableDictionary.CreateBuilder<string, double>();
-        var resourceTimes = ImmutableDictionary.CreateBuilder<string, double>();
-        var cadenceUnlocks = ImmutableHashSet.CreateBuilder<string>();
+        var questTimes = state.QuestTime.ToBuilder();
+        var resourceTimes = state.ResourceTime.ToBuilder();
+        var cadenceUnlocks = state.UnlockedCadences.ToBuilder();
 
         foreach (var loc in locations.All)
         {
@@ -72,11 +72,17 @@ public partial class LatticeSimulator
                 double duration = detail.DurationSeconds / (1.0 + (state.StatMax.GetValueOrDefault(detail.PrimaryStat, 10) / 100.0));
                 double completionTime = startTime + duration;
 
-                questTimes[quest.Name] = completionTime;
+                if (completionTime < questTimes.GetValueOrDefault(quest.Name, double.PositiveInfinity))
+                {
+                    questTimes[quest.Name] = completionTime;
+                }
 
                 foreach (var reward in detail.Rewards)
                 {
-                    resourceTimes[reward.Item.Name] = completionTime;
+                    if (completionTime < resourceTimes.GetValueOrDefault(reward.Item.Name, double.PositiveInfinity))
+                    {
+                        resourceTimes[reward.Item.Name] = completionTime;
+                    }
                 }
 
                 foreach (var cad in questToCadenceUnlocks[quest])
@@ -95,7 +101,7 @@ public partial class LatticeSimulator
 
     private GameState ApplyRefinementTransfers(GameState state)
     {
-        var resourceTimes = ImmutableDictionary.CreateBuilder<string, double>();
+        var resourceTimes = state.ResourceTime.ToBuilder();
 
         foreach (var refinementKvp in refinements.ByKey)
         {
@@ -113,7 +119,10 @@ public partial class LatticeSimulator
                 double duration = 15.0 / (1.0 + (state.StatMax.GetValueOrDefault(refinementKvp.Value.PrimaryStat, 10) / 100.0));
                 double outputTime = inputTime + duration;
 
-                resourceTimes[recipe.OutputItem.Name] = outputTime;
+                if (outputTime < resourceTimes.GetValueOrDefault(recipe.OutputItem.Name, double.PositiveInfinity))
+                {
+                    resourceTimes[recipe.OutputItem.Name] = outputTime;
+                }
             }
         }
 
@@ -122,7 +131,7 @@ public partial class LatticeSimulator
 
     private GameState ApplyAbilityUnlockTransfers(GameState state, Dictionary<string, Cadence> cadenceMap)
     {
-        var abilities = ImmutableHashSet.CreateBuilder<string>();
+        var abilities = state.UnlockedAbilities.ToBuilder();
         int newCapacity = state.MagicCapacity;
 
         foreach (var cadenceName in state.UnlockedCadences)
@@ -131,7 +140,16 @@ public partial class LatticeSimulator
             foreach (var unlock in cadence.Abilities)
             {
                 string key = $"{cadence.Name}:{unlock.Ability.Name}";
-                if (state.UnlockedAbilities.Contains(key)) continue;
+                
+                // Always check metadata for capacity, even if already unlocked
+                if (state.UnlockedAbilities.Contains(key))
+                {
+                    if (unlock.Ability.Metadata != null && unlock.Ability.Metadata.TryGetValue("MagicCapacity", out var capStr) && int.TryParse(capStr, out var capVal))
+                    {
+                        newCapacity = Math.Max(newCapacity, capVal);
+                    }
+                    continue;
+                }
 
                 double costTime = 0;
                 bool canAfford = true;
@@ -147,7 +165,11 @@ public partial class LatticeSimulator
                     abilities.Add(key);
                     if (unlock.Ability.Metadata != null && unlock.Ability.Metadata.TryGetValue("MagicCapacity", out var capStr) && int.TryParse(capStr, out var capVal))
                     {
-                        newCapacity = Math.Max(newCapacity, capVal);
+                        if (capVal > newCapacity)
+                        {
+                            Console.WriteLine($"DEBUG: Capacity increasing {newCapacity} -> {capVal} via {key}");
+                            newCapacity = capVal;
+                        }
                     }
                 }
             }
@@ -162,7 +184,7 @@ public partial class LatticeSimulator
 
         foreach (var stat in stats.All)
         {
-            int bestVal = 10;
+            int bestVal = state.StatMax.GetValueOrDefault(stat.Name, 10);
             foreach (var itemKvp in state.ResourceTime)
             {
                 if (itemKvp.Value == double.PositiveInfinity) continue;
@@ -188,7 +210,7 @@ public partial class LatticeSimulator
 
     private GameState ApplyHiddenCadenceTransfers(GameState state)
     {
-        var cadenceUnlocks = ImmutableHashSet.CreateBuilder<string>();
+        var cadenceUnlocks = state.UnlockedCadences.ToBuilder();
 
         if (state.StatMax.GetValueOrDefault("Strength", 0) >= 100) cadenceUnlocks.Add("Geologist");
         if (state.StatMax.GetValueOrDefault("Speed", 0) >= 100) cadenceUnlocks.Add("Tide-Caller");

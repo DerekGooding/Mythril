@@ -6,5 +6,9 @@
   { "Name": "Whispering Woods", "Quests": ["Gather Moonberries", "Defeat Treant Guardian", "Purify the Grove"], "RequiredQuest": "Learn about the Dark Forest" },
   { "Name": "Ancient Ruins", "Quests": ["Ancient Inscriptions", "Finding the Hearth", "Rekindling the Spark", "Power the Forge"], "RequiredQuest": "Learn About Cadences" },
   { "Name": "Sun-Drenched Desert", "Quests": ["Scavenge Scrap", "Hunt Sand-Sharks", "Locate the Hidden Oasis"], "RequiredQuest": "Recover the Ancient Tome" },
+  { "Name": "Crystal Peaks", "Quests": ["Shatter the Crystals", "High Altitude Survey"], "RequiredQuest": "Finding the Hearth" },
+  { "Name": "Tidal Caverns", "Quests": ["Harvest Sea-Life", "Deep Sea Scavenge"], "RequiredQuest": "Locate the Hidden Oasis" },
+  { "Name": "Ancient Library", "Quests": ["Archive Sifting", "Study Ancient Texts"], "RequiredQuest": "Ancient Inscriptions" },
+  { "Name": "Mythril Heart", "Quests": ["Defeat the Mythril Construct", "Ascetic Meditation", "Heavy Training"], "RequiredQuest": "Power the Forge" },
   { "Name": "Dragon's Lair", "Quests": [] }
 ]

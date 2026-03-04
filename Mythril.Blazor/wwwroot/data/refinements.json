@@ -43,5 +43,34 @@
     "Recipes": [
       { "InputItem": "Ancient Bark", "InputQuantity": 1, "OutputItem": "Cure I", "OutputQuantity": 5 }
     ]
+  },
+  {
+    "Ability": "Refine Lightning",
+    "PrimaryStat": "Magic",
+    "Recipes": [
+      { "InputItem": "Fire Shard", "InputQuantity": 1, "OutputItem": "Lightning I", "OutputQuantity": 5 },
+      { "InputItem": "Ice Shard", "InputQuantity": 1, "OutputItem": "Lightning I", "OutputQuantity": 5 }
+    ]
+  },
+  {
+    "Ability": "Refine Earth",
+    "PrimaryStat": "Strength",
+    "Recipes": [
+      { "InputItem": "Crystal Shards", "InputQuantity": 1, "OutputItem": "Earth I", "OutputQuantity": 5 }
+    ]
+  },
+  {
+    "Ability": "Refine Water",
+    "PrimaryStat": "Speed",
+    "Recipes": [
+      { "InputItem": "Blue Coral", "InputQuantity": 1, "OutputItem": "Water I", "OutputQuantity": 5 }
+    ]
+  },
+  {
+    "Ability": "Refine Haste",
+    "PrimaryStat": "Magic",
+    "Recipes": [
+      { "InputItem": "Lost Parchment", "InputQuantity": 1, "OutputItem": "Haste I", "OutputQuantity": 5 }
+    ]
   }
 ]

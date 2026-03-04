@@ -11,6 +11,7 @@ public class JunctionManager(
 
     private Dictionary<Cadence, Character?> _assignedCadences = [];
     public List<Junction> Junctions { get; } = [];
+    public Dictionary<string, Dictionary<string, int>> CharacterStatBoosts { get; } = [];
 
     public event Action<Character>? OnCadenceUnassigned;
 
@@ -18,6 +19,7 @@ public class JunctionManager(
     {
         _assignedCadences = _cadences.All.ToNamedDictionary(_ => (Character?)null);
         Junctions.Clear();
+        CharacterStatBoosts.Clear();
     }
 
     public void AssignCadence(Cadence cadence, Character character, HashSet<string> unlockedAbilities)
@@ -83,9 +85,24 @@ public class JunctionManager(
         };
     }
 
+    public void AddStatBoost(Character character, string statName, int amount)
+    {
+        if (!CharacterStatBoosts.ContainsKey(character.Name))
+            CharacterStatBoosts[character.Name] = [];
+        
+        var boosts = CharacterStatBoosts[character.Name];
+        boosts[statName] = boosts.GetValueOrDefault(statName, 0) + amount;
+    }
+
     public int GetStatValue(Character character, string statName)
     {
         int baseValue = 10;
+
+        // Apply permanent boosts
+        if (CharacterStatBoosts.TryGetValue(character.Name, out var boosts))
+        {
+            baseValue += boosts.GetValueOrDefault(statName, 0);
+        }
 
         var junction = Junctions.FirstOrDefault(j => j.Character.Name == character.Name && j.Stat.Name == statName);
         if (junction != null)

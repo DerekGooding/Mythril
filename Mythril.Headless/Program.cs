@@ -174,7 +174,8 @@ class Program
                     {
                         var detail = questDetails[quest];
                         var questData = new QuestData(quest, detail);
-                        resourceManager.ReceiveRewards(questData).Wait();
+                        var progress = new QuestProgress(questData, questData.Description, questData.DurationSeconds, resourceManager.Characters[0], 0);
+                        resourceManager.ReceiveRewards(progress).Wait();
                     }
                     break;
                 

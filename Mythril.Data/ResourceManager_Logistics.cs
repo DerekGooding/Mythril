@@ -30,7 +30,7 @@ public partial class ResourceManager
 
     public async Task CompleteTaskAsync(QuestProgress completedProgress)
     {
-        await ReceiveRewards(completedProgress.Item);
+        await ReceiveRewards(completedProgress);
         RemoveActiveQuest(completedProgress);
 
         // Auto-restart logic

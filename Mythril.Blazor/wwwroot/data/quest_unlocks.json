@@ -21,5 +21,14 @@
   { "Quest": "Finding the Hearth", "Requires": ["Ancient Inscriptions"] },
   { "Quest": "Rekindling the Spark", "Requires": ["Finding the Hearth"] },
   { "Quest": "Help the lumberjack", "Requires": ["Learn about the Dark Forest"] },
-  { "Quest": "Sell Gem", "Requires": ["Visit Starting Town"] }
+  { "Quest": "Sell Gem", "Requires": ["Visit Starting Town"] },
+  { "Quest": "Shatter the Crystals", "Requires": ["Finding the Hearth"] },
+  { "Quest": "High Altitude Survey", "Requires": ["Shatter the Crystals"] },
+  { "Quest": "Harvest Sea-Life", "Requires": ["Locate the Hidden Oasis"] },
+  { "Quest": "Deep Sea Scavenge", "Requires": ["Harvest Sea-Life"] },
+  { "Quest": "Archive Sifting", "Requires": ["Ancient Inscriptions"] },
+  { "Quest": "Study Ancient Texts", "Requires": ["Archive Sifting"] },
+  { "Quest": "Defeat the Mythril Construct", "Requires": ["Power the Forge"] },
+  { "Quest": "Ascetic Meditation", "Requires": ["Defeat the Mythril Construct"] },
+  { "Quest": "Heavy Training", "Requires": ["Defeat the Mythril Construct"] }
 ]

@@ -107,7 +107,8 @@ public class ContentLoader(
                     }).Where(x => x.Item.Name != null).ToArray(),
                     Enum.Parse<QuestType>(d.Type),
                     d.PrimaryStat ?? "Vitality",
-                    d.RequiredStats
+                    d.RequiredStats,
+                    d.StatRewards
                 );
             }
             questDetails.Load(detailsDict);

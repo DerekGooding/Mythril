@@ -2,10 +2,11 @@ namespace Mythril.Data;
 
 public partial class ResourceManager
 {
-    public async Task ReceiveRewards(object item)
+    public async Task ReceiveRewards(QuestProgress progress)
     {
+        object item = progress.Item;
         string taskName = "Unknown";
-        string characterName = "Unknown";
+        string characterName = progress.Character.Name;
         string details = "";
 
         if (item is QuestData quest)
@@ -16,6 +17,17 @@ public partial class ResourceManager
             {
                 int overflow = Inventory.Add(reward.Item, reward.Quantity);
                 if (overflow > 0) OnItemOverflow?.Invoke(reward.Item.Name, overflow);
+            }
+
+            // Apply permanent stat rewards if any
+            var questDetail = _questDetails[quest.Quest];
+            if (questDetail.StatRewards != null)
+            {
+                foreach (var statBoost in questDetail.StatRewards)
+                {
+                    JunctionManager.AddStatBoost(progress.Character, statBoost.Key, statBoost.Value);
+                    details += $" | +{statBoost.Value} {statBoost.Key}";
+                }
             }
             
             // If it's single-use, remove it now that it's DONE
@@ -48,16 +60,15 @@ public partial class ResourceManager
             if (overflow > 0) OnItemOverflow?.Invoke(refinement.Recipe.OutputItem.Name, overflow);
         }
 
-        // Add to journal
-        lock(_questLock)
-        {
-            // Find character who was doing this
-            var progress = ActiveQuests.FirstOrDefault(p => p.Item == item);
-            if (progress != null) characterName = progress.Character.Name;
-        }
         AddToJournal(taskName, characterName, details);
 
         await Task.CompletedTask;
+    }
+
+    public async Task ReceiveRewards(object item, Character? character = null)
+    {
+        var dummyProgress = new QuestProgress(item, "Manual Completion", 0, character ?? Characters[0], 0);
+        await ReceiveRewards(dummyProgress);
     }
 
     public void RestoreCompletedQuest(Quest quest)

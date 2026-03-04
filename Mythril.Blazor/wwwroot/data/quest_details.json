@@ -229,5 +229,86 @@
     "Rewards": [ { "Item": "Mythril Spark", "Quantity": 1 } ],
     "PrimaryStat": "Magic",
     "RequiredStats": { "Magic": 30 }
+  },
+  {
+    "Quest": "Shatter the Crystals",
+    "DurationSeconds": 120,
+    "Type": "Recurring",
+    "Requirements": [],
+    "Rewards": [ { "Item": "Crystal Shards", "Quantity": 2 } ],
+    "PrimaryStat": "Strength",
+    "RequiredStats": { "Strength": 30 }
+  },
+  {
+    "Quest": "High Altitude Survey",
+    "DurationSeconds": 90,
+    "Type": "Recurring",
+    "Requirements": [],
+    "Rewards": [ { "Item": "Ice Shard", "Quantity": 1 } ],
+    "PrimaryStat": "Speed",
+    "RequiredStats": { "Speed": 30 }
+  },
+  {
+    "Quest": "Harvest Sea-Life",
+    "DurationSeconds": 60,
+    "Type": "Recurring",
+    "Requirements": [],
+    "Rewards": [ { "Item": "Water", "Quantity": 2 }, { "Item": "Leather", "Quantity": 1 } ],
+    "PrimaryStat": "Vitality"
+  },
+  {
+    "Quest": "Deep Sea Scavenge",
+    "DurationSeconds": 150,
+    "Type": "Recurring",
+    "Requirements": [],
+    "Rewards": [ { "Item": "Blue Coral", "Quantity": 1 } ],
+    "PrimaryStat": "Vitality",
+    "RequiredStats": { "Vitality": 30 }
+  },
+  {
+    "Quest": "Archive Sifting",
+    "DurationSeconds": 180,
+    "Type": "Recurring",
+    "Requirements": [],
+    "Rewards": [ { "Item": "Lost Parchment", "Quantity": 1 } ],
+    "PrimaryStat": "Magic",
+    "RequiredStats": { "Magic": 30 }
+  },
+  {
+    "Quest": "Study Ancient Texts",
+    "DurationSeconds": 120,
+    "Type": "Recurring",
+    "Requirements": [],
+    "Rewards": [ { "Item": "Gold", "Quantity": 100 } ],
+    "PrimaryStat": "Magic"
+  },
+  {
+    "Quest": "Defeat the Mythril Construct",
+    "DurationSeconds": 1800,
+    "Type": "Single",
+    "Requirements": [ { "Item": "Fire I", "Quantity": 100 }, { "Item": "Ice I", "Quantity": 100 }, { "Item": "Earth I", "Quantity": 100 }, { "Item": "Water I", "Quantity": 100 } ],
+    "Rewards": [ { "Item": "Mythril Spark", "Quantity": 10 } ],
+    "PrimaryStat": "Vitality",
+    "RequiredStats": { "Strength": 100, "Vitality": 100, "Magic": 100, "Speed": 100 }
+  },
+  {
+    "Quest": "Ascetic Meditation",
+    "DurationSeconds": 600,
+    "Type": "Single",
+    "Requirements": [ { "Item": "Potion", "Quantity": 20 } ],
+    "Rewards": [],
+    "PrimaryStat": "Magic",
+    "RequiredStats": { "Magic": 50 },
+    "StatRewards": { "Magic": 5 }
+  },
+  {
+    "Quest": "Heavy Training",
+    "DurationSeconds": 600,
+    "Type": "Single",
+    "Requirements": [ { "Item": "Potion", "Quantity": 20 } ],
+    "Rewards": [],
+    "PrimaryStat": "Strength",
+    "RequiredStats": { "Strength": 50 },
+    "StatRewards": { "Strength": 5 }
   }
 ]

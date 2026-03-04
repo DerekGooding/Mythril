@@ -26,5 +26,32 @@
     "Augments": [
       { "Stat": "Vitality", "ModifierAtFull": 20 }
     ]
+  },
+  {
+    "Item": "Earth I",
+    "Augments": [
+      { "Stat": "Strength", "ModifierAtFull": 150 },
+      { "Stat": "Vitality", "ModifierAtFull": 100 }
+    ]
+  },
+  {
+    "Item": "Water I",
+    "Augments": [
+      { "Stat": "Vitality", "ModifierAtFull": 150 },
+      { "Stat": "Speed", "ModifierAtFull": 100 }
+    ]
+  },
+  {
+    "Item": "Haste I",
+    "Augments": [
+      { "Stat": "Speed", "ModifierAtFull": 200 }
+    ]
+  },
+  {
+    "Item": "Lightning I",
+    "Augments": [
+      { "Stat": "Magic", "ModifierAtFull": 150 },
+      { "Stat": "Speed", "ModifierAtFull": 100 }
+    ]
   }
 ]
