@@ -8,7 +8,7 @@
   { "Name": "Learn about the Dark Forest", "Description": "Hear the rumors of the corrupted forest." },
   { "Name": "Farm Goblins", "Description": "Clear out the local goblin encampment." },
   { "Name": "Farm Trents", "Description": "Harvest wood from the corrupted forest." },
-  { "Name": "Farm Golems", "Description": "Gather stone from the mountain base." },
+  { "Name": "Mine Ore", "Description": "Extract raw ore from the mine walls." },
   { "Name": "Learn about the Mines", "Description": "Find out where the miners went." },
   { "Name": "Farm Bats", "Description": "Clear the mine entrance of bats." },
   { "Name": "Farm Spiders", "Description": "Venture deeper into the webs." },

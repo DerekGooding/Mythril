@@ -1,8 +1,8 @@
 [
   { "Name": "Village", "Quests": ["Prologue", "Tutorial Section", "Visit Starting Town"] },
   { "Name": "Starting Town", "Quests": ["Buy Potion", "Learn About Cadences", "Learn about the Mines", "Learn about the Dark Forest", "Recover the Ancient Tome", "Help the lumberjack", "Sell Gem"] },
-  { "Name": "Dark Forest", "Quests": ["Farm Goblins", "Farm Trents", "Farm Golems"], "RequiredQuest": "Learn about the Dark Forest" },
-  { "Name": "Iron Mines", "Quests": ["Farm Bats", "Farm Spiders", "Farm Slimes", "Unlock Mining", "Mine Iron Ore"], "RequiredQuest": "Learn about the Mines" },
+  { "Name": "Dark Forest", "Quests": ["Farm Goblins", "Farm Trents"], "RequiredQuest": "Learn about the Dark Forest" },
+  { "Name": "Iron Mines", "Quests": ["Farm Bats", "Farm Spiders", "Farm Slimes", "Unlock Mining", "Mine Ore", "Mine Iron Ore"], "RequiredQuest": "Learn about the Mines" },
   { "Name": "Whispering Woods", "Quests": ["Gather Moonberries", "Defeat Treant Guardian", "Purify the Grove"], "RequiredQuest": "Learn about the Dark Forest" },
   { "Name": "Ancient Ruins", "Quests": ["Ancient Inscriptions", "Finding the Hearth", "Rekindling the Spark", "Power the Forge"], "RequiredQuest": "Learn About Cadences" },
   { "Name": "Sun-Drenched Desert", "Quests": ["Scavenge Scrap", "Hunt Sand-Sharks", "Locate the Hidden Oasis"], "RequiredQuest": "Recover the Ancient Tome" },

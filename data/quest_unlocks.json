@@ -8,7 +8,7 @@
   { "Quest": "Learn about the Dark Forest", "Requires": ["Visit Starting Town"] },
   { "Quest": "Farm Goblins", "Requires": ["Learn about the Dark Forest"] },     
   { "Quest": "Farm Trents", "Requires": ["Learn about the Dark Forest"] },     
-  { "Quest": "Farm Golems", "Requires": ["Learn about the Dark Forest"] },     
+  { "Quest": "Mine Ore", "Requires": ["Learn about the Mines"] },     
   { "Quest": "Farm Bats", "Requires": ["Learn about the Mines"] },      
   { "Quest": "Farm Spiders", "Requires": ["Farm Bats"] },
   { "Quest": "Farm Slimes", "Requires": ["Farm Spiders"] },

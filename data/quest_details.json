@@ -72,11 +72,11 @@
     "PrimaryStat": "Strength"
   },
   {
-    "Quest": "Farm Golems",
-    "DurationSeconds": 90,
+    "Quest": "Mine Ore",
+    "DurationSeconds": 60,
     "Type": "Recurring",
     "Requirements": [],
-    "Rewards": [ { "Item": "Iron Ore", "Quantity": 1 } ],
+    "Rewards": [ { "Item": "Iron Ore", "Quantity": 2 } ],
     "PrimaryStat": "Strength"
   },
   {
