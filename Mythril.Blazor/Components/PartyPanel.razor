@@ -10,7 +10,7 @@
             {
                 <CharacterDisplay @key="character.Name"
                                     Character="character"
-                                    QuestProgress="QuestProgresses.FirstOrDefault(p => p.Character == character)"
+                                    QuestProgresses="QuestProgresses.Where(p => p.Character.Name == character.Name)"
                                     OnQuestDrop="(task) => OnQuestDrop.InvokeAsync((task, character))"
                                     OnCompletionAnimationEnd="(progress) => OnCompletionAnimationEnd.InvokeAsync(progress)"
                                     Accepts="Accepts"

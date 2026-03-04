@@ -12,6 +12,8 @@ public class JunctionManager(
     private Dictionary<Cadence, Character?> _assignedCadences = [];
     public List<Junction> Junctions { get; } = [];
 
+    public event Action<Character>? OnCadenceUnassigned;
+
     public void Initialize()
     {
         _assignedCadences = _cadences.All.ToNamedDictionary(_ => (Character?)null);
@@ -45,6 +47,8 @@ public class JunctionManager(
                     Junctions.Remove(junction);
                 }
             }
+
+            OnCadenceUnassigned?.Invoke(owner.Value);
         }
     }
 

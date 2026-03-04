@@ -4,39 +4,28 @@
 
 @implements IDisposable
 
-<div class="character-display shadow-theme @(QuestProgress is not null ? "has-active-task" : "") @(QuestProgress?.IsCompleted == true ? "completed" : "") d-flex align-items-center gap-2">
+<div class="character-display shadow-theme @(QuestProgresses.Any() ? "has-active-task" : "") @(QuestProgresses.Any(p => p.IsCompleted) ? "completed" : "") d-flex align-items-center gap-2">
     @{
         var assignedCadences = JunctionManager.CurrentlyAssigned(Character).ToList();
+        var taskLimit = resourceManager.GetTaskLimit(Character);
     }
     
-    @if (assignedCadences.Any() || (QuestProgress is not null && !QuestProgress.IsCompleted))
-    {
-        <div class="character-controls d-flex flex-column gap-1">
-            @if (assignedCadences.Any())
+    <div class="character-controls d-flex flex-column gap-1">
+        @if (assignedCadences.Any())
+        {
+            <button class="btn btn-xs btn-outline-primary" data-testid="junction-toggle" @onclick="ToggleJunctionMenu">Junction</button>
+            
+            @if (resourceManager.CanAutoQuest(Character))
             {
-                <button class="btn btn-xs btn-outline-primary" data-testid="junction-toggle" @onclick="ToggleJunctionMenu">Junction</button>
-                
-                @if (resourceManager.CanAutoQuest(Character))
-                {
-                    var isAuto = resourceManager.IsAutoQuestEnabled(Character);
-                    <button class="btn btn-xs @(isAuto ? "btn-success" : "btn-outline-secondary")" 
-                            data-testid="autoquest-toggle"
-                            @onclick="ToggleAutoQuest">
-                        Auto: @(isAuto ? "ON" : "OFF")
-                    </button>
-                }
-            }
-
-            @if (QuestProgress is not null && !QuestProgress.IsCompleted)
-            {
-                <button class="btn btn-xs btn-outline-warning" 
-                        data-testid="cancel-quest"
-                        @onclick="CancelQuest">
-                    Cancel
+                var isAuto = resourceManager.IsAutoQuestEnabled(Character);
+                <button class="btn btn-xs @(isAuto ? "btn-success" : "btn-outline-secondary")" 
+                        data-testid="autoquest-toggle"
+                        @onclick="ToggleAutoQuest">
+                    Auto: @(isAuto ? "ON" : "OFF")
                 </button>
             }
-        </div>
-    }
+        }
+    </div>
 
     <div class="flex-grow-1 min-width-0">
         <div class="character-header">
@@ -91,30 +80,50 @@
             </div>
         </div>
 
-        <div class="d-flex justify-content-between align-items-center mt-2">
-            <div class="flex-grow-1">
-                @if (QuestProgress is not null)
-                {
-                    <QuestProgressCard QuestProgress="QuestProgress" OnCompletionAnimationEnd="() => OnCompletionAnimationEnd.InvokeAsync(QuestProgress)" />
-                }
-                else
-                {
-                    <DropZone OnQuestDrop="HandleTaskDrop" Accepts="(item) => resourceManager.CanAfford(item, Character)" />
-                }
-            </div>
+        <div class="task-slots-container mt-2 d-flex flex-column gap-2">
+            @for (int i = 0; i < taskLimit; i++)
+            {
+                var index = i;
+                var progress = QuestProgresses.ElementAtOrDefault(index);
+                <div class="task-slot d-flex align-items-center gap-2">
+                    @if (progress != null)
+                    {
+                        <div class="flex-grow-1">
+                            <QuestProgressCard QuestProgress="progress" OnCompletionAnimationEnd="() => OnCompletionAnimationEnd.InvokeAsync(progress)" />
+                        </div>
+                        @if (!progress.IsCompleted)
+                        {
+                            <button class="btn btn-xs btn-outline-warning h-100" 
+                                    data-testid="cancel-quest"
+                                    @onclick="() => CancelQuest(progress)">
+                                Cancel
+                            </button>
+                        }
+                    }
+                    else
+                    {
+                        <DropZone OnQuestDrop="HandleTaskDrop" Accepts="(item) => resourceManager.CanAfford(item, Character)" />
+                    }
+                </div>
+            }
         </div>
     </div>
     
-    @if (QuestProgress is not null)
+    @if (QuestProgresses.Any())
     {
-        <div class="character-card-progress">
-            @{
-                var progressValue = QuestProgress.Progress;
-                if (double.IsNaN(progressValue) || double.IsInfinity(progressValue)) progressValue = 0.0;
-                var progressPercent = Math.Clamp(progressValue * 100, 0, 100);
-                var progressStyle = $"width: {progressPercent.ToString("0.##", CultureInfo.InvariantCulture)}%";
+        <div class="character-card-progress-container">
+            @foreach (var progress in QuestProgresses)
+            {
+                <div class="character-card-progress mb-1">
+                    @{
+                        var progressValue = progress.Progress;
+                        if (double.IsNaN(progressValue) || double.IsInfinity(progressValue)) progressValue = 0.0;
+                        var progressPercent = Math.Clamp(progressValue * 100, 0, 100);
+                        var progressStyle = $"width: {progressPercent.ToString("0.##", CultureInfo.InvariantCulture)}%";
+                    }
+                    <div class="progress-bar" style="@progressStyle"></div>
+                </div>
             }
-            <div class="progress-bar" style="@progressStyle"></div>
         </div>
     }
 

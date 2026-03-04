@@ -100,13 +100,24 @@ public partial class ResourceManager
     {
         if (CanAfford(item, character))
         {
-            // Safety check for single-use tasks already in progress
-            if (item is CadenceUnlock || (item is QuestData q && (q.Type == QuestType.Single || q.Type == QuestType.Unlock)))
+            lock (_questLock)
             {
-                if (IsInProgress(item))
+                // Task limit check
+                var charQuests = ActiveQuests.Where(q => q.Character.Name == character.Name).ToList();
+                if (charQuests.Count >= GetTaskLimit(character))
                 {
-                    Console.WriteLine($"Attempted to start single-use task '{item}' but it is already in progress.");
+                    Console.WriteLine($"Character {character.Name} is already at task limit.");
                     return;
+                }
+
+                // Safety check for single-use tasks already in progress
+                if (item is CadenceUnlock || (item is QuestData q && (q.Type == QuestType.Single || q.Type == QuestType.Unlock)))
+                {
+                    if (IsInProgress(item))
+                    {
+                        Console.WriteLine($"Attempted to start single-use task '{item}' but it is already in progress.");
+                        return;
+                    }
                 }
             }
 

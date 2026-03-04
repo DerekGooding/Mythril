@@ -1,25 +1,40 @@
 namespace Mythril.Data;
 
-public partial class ResourceManager(
-    Items items, 
-    QuestUnlocks questUnlocks, 
-    QuestToCadenceUnlocks questToCadenceUnlocks, 
-    QuestDetails questDetails,
-    Cadences cadences,
-    Locations locations,
-    JunctionManager junctionManager,
-    InventoryManager inventory,
-    ItemRefinements refinements)
+public partial class ResourceManager
 {
-    private readonly Items _items = items;
-    private readonly QuestUnlocks _questUnlocks = questUnlocks;
-    private readonly QuestToCadenceUnlocks _questToCadenceUnlocks = questToCadenceUnlocks;
-    private readonly QuestDetails _questDetails = questDetails;
-    private readonly Cadences _cadences = cadences;
-    private readonly Locations _locations = locations;
-    private readonly ItemRefinements _refinements = refinements;
-    public JunctionManager JunctionManager { get; } = junctionManager;
-    public InventoryManager Inventory { get; } = inventory;
+    private readonly Items _items;
+    private readonly QuestUnlocks _questUnlocks;
+    private readonly QuestToCadenceUnlocks _questToCadenceUnlocks;
+    private readonly QuestDetails _questDetails;
+    private readonly Cadences _cadences;
+    private readonly Locations _locations;
+    private readonly ItemRefinements _refinements;
+    public JunctionManager JunctionManager { get; }
+    public InventoryManager Inventory { get; }
+
+    public ResourceManager(
+        Items items, 
+        QuestUnlocks questUnlocks, 
+        QuestToCadenceUnlocks questToCadenceUnlocks, 
+        QuestDetails questDetails,
+        Cadences cadences,
+        Locations locations,
+        JunctionManager junctionManager,
+        InventoryManager inventory,
+        ItemRefinements refinements)
+    {
+        _items = items;
+        _questUnlocks = questUnlocks;
+        _questToCadenceUnlocks = questToCadenceUnlocks;
+        _questDetails = questDetails;
+        _cadences = cadences;
+        _locations = locations;
+        _refinements = refinements;
+        JunctionManager = junctionManager;
+        Inventory = inventory;
+
+        JunctionManager.OnCadenceUnassigned += CancelExcessQuests;
+    }
 
     private readonly object _questLock = new();
 
@@ -77,6 +92,8 @@ public partial class ResourceManager(
         JunctionManager.Initialize();
         Console.WriteLine("ResourceManager initialized.");
     }
+
+    public ItemRefinements Refinements => _refinements;
 
     public void UpdateUsableLocations()
     {
@@ -136,6 +153,29 @@ public partial class ResourceManager(
         if (UnlockedAbilities.Any(a => a.EndsWith(":Magic Pocket I"))) capacity = 60;
         if (UnlockedAbilities.Any(a => a.EndsWith(":Magic Pocket II"))) capacity = 100;
         Inventory.MagicCapacity = capacity;
+    }
+
+    public int GetTaskLimit(Character character)
+    {
+        var assigned = JunctionManager.CurrentlyAssigned(character);
+        if (assigned.Any(c => c.Abilities.Any(a => UnlockedAbilities.Contains($"{c.Name}:{a.Ability.Name}") && a.Ability.Name == "Logistics I")))
+            return 2;
+        return 1;
+    }
+
+    public void CancelExcessQuests(Character character)
+    {
+        int limit = GetTaskLimit(character);
+        lock (_questLock)
+        {
+            var charQuests = ActiveQuests.Where(q => q.Character.Name == character.Name).ToList();
+            while (charQuests.Count > limit)
+            {
+                var toCancel = charQuests.Last();
+                charQuests.Remove(toCancel);
+                CancelQuest(toCancel);
+            }
+        }
     }
 
     public void UnlockCadence(Cadence cadence)

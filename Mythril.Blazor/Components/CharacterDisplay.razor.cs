@@ -22,7 +22,7 @@ public partial class CharacterDisplay : IDisposable
     public Character Character { get; set; }
 
     [Parameter]
-    public QuestProgress? QuestProgress { get; set; }
+    public IEnumerable<QuestProgress> QuestProgresses { get; set; } = [];
 
     [Parameter]
     public EventCallback<object> OnQuestDrop { get; set; }
@@ -113,12 +113,9 @@ public partial class CharacterDisplay : IDisposable
         resourceManager.SetAutoQuestEnabled(Character, !resourceManager.IsAutoQuestEnabled(Character));
     }
 
-    private void CancelQuest()
+    private void CancelQuest(QuestProgress progress)
     {
-        if (QuestProgress != null)
-        {
-            resourceManager.CancelQuest(QuestProgress);
-        }
+        resourceManager.CancelQuest(progress);
     }
 
     private bool CanJunction(Stat stat)
