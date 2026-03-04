@@ -59,7 +59,7 @@
         if (data == null) return false;
         
         // Check if it's one of our accepted types
-        bool isCorrectType = data is QuestData || data is CadenceUnlock || data is Cadence;
+        bool isCorrectType = data is QuestData || data is CadenceUnlock || data is Cadence || data is RefinementData;
         if (!isCorrectType) return false;
 
         // Check if the specific component accepts this instance

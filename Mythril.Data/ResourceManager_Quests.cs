@@ -52,6 +52,11 @@ public partial class ResourceManager
             }
         }
 
+        if (item is RefinementData refinement)
+        {
+            return HasAbility(character, refinement.Ability);
+        }
+
         return true;
     }
 
