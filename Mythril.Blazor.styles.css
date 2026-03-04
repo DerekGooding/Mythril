@@ -436,11 +436,6 @@
     overflow: hidden !important; /* Contain the scrollable content */
 }
 
-.hand-header[b-mqjfnsj94g] {
-    padding: 1rem;
-    flex-shrink: 0 !important;
-}
-
 .hand-content[b-mqjfnsj94g] {
     display: block !important; /* Block layout is more reliable for scrolling than flex in this nested context */
     flex: 1 !important;
@@ -521,7 +516,6 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 1rem;
     padding: 5px 10px;
     border: 1px solid var(--panel-border);
     border-radius: 4px;
@@ -530,15 +524,6 @@
     flex-grow: 1;
     min-width: 0;
     overflow: hidden;
-}
-
-.inventory-header h5[b-cxbqk8vivm] {
-    margin: 0;
-    font-size: 0.9rem;
-    font-weight: bold;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
 }
 
 .inventory-content[b-cxbqk8vivm] {
@@ -783,11 +768,6 @@
     background-color: var(--tab-bg);
     color: var(--text-color);
     overflow: hidden !important; /* Header stays fixed, content scrolls */
-}
-
-.workshop-header[b-klxtuswmfi] {
-    padding: 1rem;
-    flex-shrink: 0 !important;
 }
 
 .workshop-content[b-klxtuswmfi] {
