@@ -188,7 +188,7 @@ public class AdditionalUIComponentTests : BunitTestBase
     public void Workshop_RendersCorrectly()
     {
         var cut = RenderComponent<Workshop>();
-        Assert.IsTrue(cut.Markup.Contains("Item Refinement Workshop"));
+        Assert.IsTrue(cut.Markup.Contains("workshop-panel"));
     }
 
     [TestMethod]

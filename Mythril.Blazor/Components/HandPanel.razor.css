@@ -7,11 +7,6 @@
     overflow: hidden !important; /* Contain the scrollable content */
 }
 
-.hand-header {
-    padding: 1rem;
-    flex-shrink: 0 !important;
-}
-
 .hand-content {
     display: block !important; /* Block layout is more reliable for scrolling than flex in this nested context */
     flex: 1 !important;

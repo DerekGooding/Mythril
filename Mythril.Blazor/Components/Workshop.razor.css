@@ -9,11 +9,6 @@
     overflow: hidden !important; /* Header stays fixed, content scrolls */
 }
 
-.workshop-header {
-    padding: 1rem;
-    flex-shrink: 0 !important;
-}
-
 .workshop-content {
     padding: 1rem;
     overflow-y: auto !important; /* Content area scrolls */

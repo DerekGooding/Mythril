@@ -14,7 +14,7 @@
     "failures": [
         {
             "category": "docs_stale",
-            "message": "docs/instructions.md is stale (10 source changes since last update)",
+            "message": "docs/instructions.md is stale (13 source changes since last update)",
             "metadata": {}
         }
     ]
