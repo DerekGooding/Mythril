@@ -1,9 +1,11 @@
 @using Mythril.Blazor.Services
+@using Mythril.Data
 @inject DragDropService DragDropService
 @inject InventoryService InventoryService
+@inject InventoryManager InventoryManager
 @implements IDisposable
 
-<div class="inventory-item @(showOverflowGlow ? "overflowing" : "")" draggable="true" @ondragstart="HandleDragStart">
+<div class="inventory-item @(showOverflowGlow ? "overflowing" : "") @(isAtMaxCapacity ? "at-capacity" : "")" draggable="true" @ondragstart="HandleDragStart">
     <span class="item-name">@Item.Item.Name</span>
     <span class="item-quantity">@Item.Quantity</span>
     @if (showAnimation)
@@ -29,6 +31,8 @@
     private int quantityChange;
     private bool showAnimation;
     private bool showOverflowGlow;
+
+    private bool isAtMaxCapacity => Item.Item.ItemType == ItemType.Spell && Item.Quantity >= InventoryManager.MagicCapacity;
 
     protected override void OnInitialized()
     {

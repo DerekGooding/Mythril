@@ -56,6 +56,11 @@
     }
 }
 
+.inventory-item.at-capacity {
+    border-color: #ffd700;
+    box-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+}
+
 .inventory-item.overflowing {
     animation: red-glow 1s ease-in-out infinite alternate;
     border-color: #ff4444;
