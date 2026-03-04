@@ -4,9 +4,10 @@
   { "Quest": "Buy Potion", "Requires": ["Visit Starting Town"] },       
   { "Quest": "Recover the Ancient Tome", "Requires": ["Visit Starting Town"] },
   { "Quest": "Learn About Cadences", "Requires": ["Visit Starting Town"] },
-  { "Quest": "Learn about the Mines", "Requires": ["Visit Starting Town"] },
-  { "Quest": "Learn about the Dark Forest", "Requires": ["Visit Starting Town"] },
-  { "Quest": "Farm Goblins", "Requires": ["Learn about the Dark Forest"] },     
+  { "Quest": "Learn about the Mines", "Requires": ["Learn About Cadences"] },
+  { "Quest": "Learn about the Dark Forest", "Requires": ["Learn about the Mines"] },
+  { "Quest": "Farm Goblins", "Requires": ["Learn about the Dark Forest"] },
+     
   { "Quest": "Farm Trents", "Requires": ["Learn about the Dark Forest"] },     
   { "Quest": "Mine Ore", "Requires": ["Learn about the Mines"] },     
   { "Quest": "Farm Bats", "Requires": ["Learn about the Mines"] },      
