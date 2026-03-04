@@ -7,6 +7,7 @@ public class LocationData(Location location, IEnumerable<Quest> startingUnlocked
 
     public List<Quest> Quests { get; set; } = [..startingUnlockedQuests];
 
+    public IEnumerable<Quest> AllQuests => _location.Quests;
 
     public IEnumerable<Quest> LockedQuests => _location.Quests.Where(q => !Quests.Contains(q));
 }

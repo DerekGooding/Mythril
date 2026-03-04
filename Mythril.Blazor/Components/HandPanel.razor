@@ -12,7 +12,11 @@
         {
             @foreach (var location in Locations.Where(l => l.Quests.Any()))
             {
-                <Expander Header="@location.Name" @key="@location.Name">
+                var stats = GetCompletionStats(location);
+                <Expander Header="@location.Name" 
+                          @key="@location.Name"
+                          CompletedCount="@stats.Completed"
+                          TotalCount="@stats.Total">
                     @foreach (var quest in location.Quests)
                     {
                         <div class="task-container" @key="@quest.Name">
@@ -30,4 +34,18 @@
     public List<LocationData>? Locations { get; set; }
 
     public QuestData QuestToData(Quest quest) => new QuestData(quest, ResourceManager.GetQuestDetails(quest));
+
+    private (int Completed, int Total) GetCompletionStats(LocationData location)
+    {
+        var oneTimeQuests = location.AllQuests.Where(q => 
+        {
+            var detail = ResourceManager.GetQuestDetails(q);
+            return detail.Type == QuestType.Single || detail.Type == QuestType.Unlock;
+        }).ToList();
+
+        if (!oneTimeQuests.Any()) return (0, 0);
+
+        var completed = oneTimeQuests.Count(q => ResourceManager.GetCompletedQuests().Contains(q));
+        return (completed, oneTimeQuests.Count);
+    }
 }

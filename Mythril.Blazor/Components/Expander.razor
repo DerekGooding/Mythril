@@ -2,7 +2,17 @@
 
 <div class="expander">
     <div class="expander-header" @onclick="Toggle">
-        <span>@Header</span>
+        <div class="d-flex align-items-center gap-2 flex-grow-1">
+            <span>@Header</span>
+            @if (TotalCount > 0)
+            {
+                <span class="completion-counter small text-muted">(@CompletedCount/@TotalCount)</span>
+                @if (CompletedCount >= TotalCount)
+                {
+                    <span class="text-success small">✔</span>
+                }
+            }
+        </div>
         <span class="expander-icon @(isExpanded ? "expanded" : "")">▼</span>
     </div>
     <div class="expander-content @(isExpanded ? "open" : "closed")">
@@ -15,6 +25,12 @@
 @code {
     [Parameter]
     public string? Header { get; set; }
+
+    [Parameter]
+    public int CompletedCount { get; set; }
+
+    [Parameter]
+    public int TotalCount { get; set; }
 
     [Parameter]
     public RenderFragment? ChildContent { get; set; }

@@ -33,12 +33,14 @@ Mythril is an RPG-inspired web application built with **.NET 10** and **Blazor W
 - **CI/CD**: GitHub Actions for automated deployment and health monitoring.
 
 ## 🚀 Recent Updates (March 4, 2026)
+- **Location Completion Tracking**: Added a quest counter to location expanders, showing progress on one-time quests. A green checkmark now appears when all unique tasks in a region are finished.
 - **Logistics I Ability**: Implemented a new progression tier allowing characters to perform two tasks simultaneously. Features automated task cancellation and cost refunding when the ability is lost.
 - **Location Gating System**: Refactored the world map to gate major biomes (Whispering Woods, Ancient Ruins, etc.) behind prerequisite story quests, improving early-game focus and sense of discovery.
 - **Refined Workshop Reactivity**: Optimized the refinement UI to ensure immediate visual updates when new abilities are learned, powered by reactive parameter binding.
 - **Auto-Quest Slot Restriction**: Balanced the Auto-Quest I ability to specifically target only the primary task slot, adding strategic depth to multi-tasking.
 - **Monolith Prevention Refactor**: Decomposed the `ResourceManager` into specialized partial classes (`State`, `Discovery`, `Inventory`, `Quests`) to maintain a lean, maintainable architecture below the 250-line file limit.
 - **Persistence Layer Upgrade**: Enhanced the save system to preserve task slot assignments and discovered location names across sessions.
+- **UI Streamlining**: Restacked header controls vertically and cleaned up instructional text across all main panels for a more focused gameplay experience.
 
 ## ⚖️ Quality Assurance & Health
 We maintain project health through a custom automated suite (`scripts/check_health.py`) which runs on every commit:

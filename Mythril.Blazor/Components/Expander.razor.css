@@ -17,6 +17,16 @@
     flex-shrink: 0;
 }
 
+.completion-counter {
+    font-variant-numeric: tabular-nums;
+    font-weight: normal;
+}
+
+.text-success {
+    color: #28a745;
+    font-weight: bold;
+}
+
 .expander-icon {
     transition: transform 0.2s;
 }
