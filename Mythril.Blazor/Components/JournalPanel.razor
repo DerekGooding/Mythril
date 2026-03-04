@@ -1,0 +1,30 @@
+@using Mythril.Data
+@inject ResourceManager ResourceManager
+
+<div class="journal-panel" data-testid="journal-panel">
+    @if (ResourceManager.Journal.Any())
+    {
+        <div class="journal-entries">
+            @foreach (var entry in ResourceManager.Journal)
+            {
+                <div @key="entry" class="journal-entry mb-2 p-2 border rounded shadow-sm">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <h6 class="mb-1">@entry.TaskName</h6>
+                        <span class="small text-muted">@entry.CompletedAt.ToString("HH:mm:ss")</span>
+                    </div>
+                    <div class="entry-details small">
+                        <span class="badge bg-info text-dark me-1">@entry.CharacterName</span>
+                        <span>@entry.Details</span>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="no-entries text-center p-4 text-muted">
+            <span class="material-icons mb-2 d-block">history</span>
+            No tasks completed yet.
+        </div>
+    }
+</div>

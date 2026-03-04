@@ -45,6 +45,13 @@ public class PersistenceService(
             UnlockedLocations = resourceManager.UnlockedLocationNames.ToList(),
             HasUnseenCadence = resourceManager.HasUnseenCadence,
             HasUnseenWorkshop = resourceManager.HasUnseenWorkshop,
+            Journal = resourceManager.Journal.Select(j => new JournalEntryDTO
+            {
+                TaskName = j.TaskName,
+                CharacterName = j.CharacterName,
+                Details = j.Details,
+                CompletedAt = j.CompletedAt
+            }).ToList(),
             ActiveQuests = resourceManager.ActiveQuests.Select(q => new QuestProgressDTO
             {
                 ItemName = q.Item is QuestData qd ? qd.Name : (q.Item is CadenceUnlock cu ? cu.Ability.Name : ""),
@@ -144,6 +151,16 @@ public class PersistenceService(
             if (character.Name != null && stat.Name != null && magic.Name != null)
             {
                 junctionManager.Junctions.Add(new Junction(character, stat, magic));
+            }
+        }
+
+        // Restore Journal
+        resourceManager.Journal.Clear();
+        if (saveData.Journal != null)
+        {
+            foreach (var dto in saveData.Journal)
+            {
+                resourceManager.Journal.Add(new ResourceManager.JournalEntry(dto.TaskName, dto.CharacterName, dto.Details, dto.CompletedAt));
             }
         }
 

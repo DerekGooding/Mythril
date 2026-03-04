@@ -1,5 +1,6 @@
 namespace Mythril.Data;
 
+[Singleton]
 public partial class ResourceManager
 {
     private readonly Items _items;
@@ -70,6 +71,7 @@ public partial class ResourceManager
     {
         Console.WriteLine("ResourceManager initializing...");
         Inventory.Clear();
+        Journal.Clear();
         _completedQuests.Clear();
         UnlockedAbilities.Clear();
         _autoQuestEnabled.Clear();

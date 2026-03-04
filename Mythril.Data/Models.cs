@@ -65,6 +65,7 @@ public class SaveData
     public List<string> UnlockedAbilities { get; set; } = [];
     public List<string> CompletedQuests { get; set; } = [];
     public List<QuestProgressDTO> ActiveQuests { get; set; } = [];
+    public List<JournalEntryDTO> Journal { get; set; } = [];
     public List<JunctionDTO> Junctions { get; set; } = [];
     public List<AssignedCadenceDTO> AssignedCadences { get; set; } = [];
     public Dictionary<string, bool> AutoQuestEnabled { get; set; } = [];
@@ -99,6 +100,14 @@ public class QuestProgressDTO
     public double SecondsElapsed { get; set; }
     public DateTime StartTime { get; set; }
     public int SlotIndex { get; set; }
+}
+
+public class JournalEntryDTO
+{
+    public string TaskName { get; set; } = "";
+    public string CharacterName { get; set; } = "";
+    public string Details { get; set; } = "";
+    public DateTime CompletedAt { get; set; }
 }
 
 // Data Transfer Objects for JSON Loading

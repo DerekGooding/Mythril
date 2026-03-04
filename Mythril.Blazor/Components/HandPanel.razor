@@ -3,6 +3,12 @@
 @inject ResourceManager ResourceManager
 
 <div class="hand-panel">
+    <div class="hand-controls p-2 d-flex justify-content-end">
+        <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" id="sortDuration" data-testid="sort-duration-switch" @bind="_sortByDuration" />
+            <label class="form-check-label small ms-1" for="sortDuration">Sort by Duration</label>
+        </div>
+    </div>
     <div class="hand-content">
         @if (Locations is not null)
         {
@@ -14,9 +20,10 @@
                           CompletedCount="@stats.Completed"
                           TotalCount="@stats.Total">
                     @{
-                        var sortedQuests = location.Quests
-                            .OrderBy(q => ResourceManager.GetQuestDetails(q).Type == QuestType.Recurring)
-                            .ToList();
+                        var quests = location.Quests.ToList();
+                        var sortedQuests = _sortByDuration 
+                            ? quests.OrderBy(q => ResourceManager.GetQuestDetails(q).DurationSeconds).ToList()
+                            : quests.OrderBy(q => ResourceManager.GetQuestDetails(q).Type == QuestType.Recurring).ToList();
                     }
                     @foreach (var quest in sortedQuests)
                     {
@@ -33,6 +40,8 @@
 @code {
     [Parameter]
     public List<LocationData>? Locations { get; set; }
+
+    private bool _sortByDuration;
 
     public QuestData QuestToData(Quest quest) => new QuestData(quest, ResourceManager.GetQuestDetails(quest));
 

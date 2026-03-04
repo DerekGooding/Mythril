@@ -59,8 +59,15 @@ You can track your progress in each region by checking the counter on the locati
 ### Cadence Completion
 Similarly, you can track your research progress for each job in the **Cadence** tab. The counter shows how many abilities you have unlocked out of the total available for that Cadence. A green checkmark indicates you have mastered that job!
 
+### The Journal
+The **Journal** tab provides a historical log of your party's recent activities.
+- **Task Tracking**: It records the last 50 completed quests, refinements, and cadence unlocks.
+- **Details**: Each entry shows which character completed the task, what was achieved (e.g., rewards gained), and the exact time of completion.
+- **Persistence**: Your journal history is saved automatically and persists across sessions.
+
 ## 💡 Tips for Success
 - **Specialization**: Differentiate your characters! Give one high Magic for fast research and another high Strength for resource farming.
+- **Task Sorting**: In the **Locations** tab, use the "Sort by Duration" toggle to quickly find short-burst tasks for active play or long-duration quests for idling.
 
 ### Logistics and Multi-Tasking
 As you progress, you may unlock the **Logistics I** ability on certain advanced Cadences.

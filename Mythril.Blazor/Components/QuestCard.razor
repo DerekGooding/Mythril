@@ -4,9 +4,11 @@
 @using Mythril.Blazor.Services
 @inject DragDropService DragDropService
 @inject ResourceManager ResourceManager
+@inject QuestUnlocks QuestUnlocks
 
 @{
     bool inProgress = (QuestData!.Type == QuestType.Single || QuestData.Type == QuestType.Unlock) && ResourceManager.IsInProgress(QuestData);
+    var prerequisites = QuestUnlocks[QuestData.Quest];
 }
 
 <div class="card @(inProgress ? "locked" : "")" draggable="@(inProgress ? "false" : "true")" @ondragstart="HandleDragStart">
@@ -27,20 +29,28 @@
             <p>@QuestData.DurationSeconds seconds</p>
         </div>
         <div class="card-side">
-            @if (QuestData.Requirements.Length > 0 || (QuestData.RequiredStats != null && QuestData.RequiredStats.Count > 0))
+            @if (QuestData.Requirements.Length > 0 || (QuestData.RequiredStats != null && QuestData.RequiredStats.Count > 0) || prerequisites.Length > 0)
             {
                 <h6>Requirements:</h6>
                 <ul>
+                    @foreach (var prereq in prerequisites)
+                    {
+                        <li @key="prereq.Name" class="text-warning">
+                            <span title="Prerequisite">🔑</span> @prereq.Name
+                        </li>
+                    }
                     @foreach (var requirement in QuestData.Requirements)
                     {
-                        <li @key="requirement">@requirement.Item.Name @requirement.Quantity</li>
+                        <li @key="requirement">
+                            <span title="Item Requirement">📦</span> @requirement.Item.Name @requirement.Quantity
+                        </li>
                     }
                     @if (QuestData.RequiredStats != null)
                     {
                         @foreach (var statReq in QuestData.RequiredStats)
                         {
                             <li @key="statReq.Key" class="stat-requirement text-info">
-                                <strong>@statReq.Key: @statReq.Value</strong>
+                                <span title="Stat Requirement">🛡️</span> <strong>@statReq.Key: @statReq.Value</strong>
                             </li>
                         }
                     }

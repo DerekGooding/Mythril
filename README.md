@@ -24,6 +24,7 @@ Mythril is an RPG-inspired web application built with **.NET 10** and **Blazor W
 - **Character Core**: Modular system where characters share baseline stats (**Strength, Vitality, Magic, Speed**), differentiated by assigned Cadences and junctioned magic. Features immersive visual feedback for task completion and per-character equipment management.
 - **Junctioning**: Assign magic items to character stats to gain powerful bonuses, inspired by classic RPG mechanics.
 - **Cadence System**: Progression mechanic where `Cadences` provide `CadenceAbilities`. Unlocking is performed by dragging ability nodes directly onto characters.
+- **Journal System**: Persistent historical log tracking the last 50 completed tasks, providing transparency into character activities and resource gains.
 - **Quest & Progression**: Real-time asynchronous tick system managing quests, durations, and rewards, with offline progress continuity and interconnected world unlocks.
 - **UI Stability**: Advanced flexbox layouts and pure CSS Grid transitions ensure a responsive, flicker-free experience that fills the browser viewport, featuring an intuitive "Drag-to-Character" interaction model.
 
@@ -35,13 +36,16 @@ Mythril is an RPG-inspired web application built with **.NET 10** and **Blazor W
 - **CI/CD**: GitHub Actions for automated deployment and health monitoring.
 
 ## 🚀 Recent Updates (March 4, 2026)
+- **Historical Journal**: Integrated a new Journal tab that tracks task completion history across sessions, including character names and specific rewards.
+- **Task Sorting**: Added a duration-based sorting toggle to the Locations panel, allowing players to easily prioritize tasks based on their playstyle.
+- **Requirement Iconography**: Implemented standardized icons (🛡️ for stats, 📦 for items, 🔑 for prerequisites) across all quest and ability cards for improved readability.
 - **Cadence Completion Tracking**: Implemented a progress counter and checkmark system for Cadences, similar to Location tracking. Users can now see how many abilities have been unlocked for each job at a glance.
 - **Location Completion Tracking**: Added a quest counter to location expanders, showing progress on one-time quests. A green checkmark now appears when all unique tasks in a region are finished.
 - **Logistics I Ability**: Implemented a new progression tier allowing characters to perform two tasks simultaneously. Features automated task cancellation and cost refunding when the ability is lost.
 - **Location Gating System**: Refactored the world map to gate major biomes (Whispering Woods, Ancient Ruins, etc.) behind prerequisite story quests, improving early-game focus and sense of discovery.
 - **Refined Workshop Reactivity**: Optimized the refinement UI to ensure immediate visual updates when new abilities are learned, powered by reactive parameter binding.
 - **Auto-Quest Slot Restriction**: Balanced the Auto-Quest I ability to specifically target only the primary task slot, adding strategic depth to multi-tasking.
-- **Monolith Prevention Refactor**: Decomposed the `ResourceManager` into specialized partial classes (`State`, `Discovery`, `Inventory`, `Quests`) to maintain a lean, maintainable architecture below the 250-line file limit.
+- **Monolith Prevention Refactor**: Decomposed the `ResourceManager` into specialized partial classes (`State`, `Discovery`, `Inventory`, `Quests`, `Journal`, `Rewards`) to maintain a lean, maintainable architecture below the 250-line file limit.
 - **Persistence Layer Upgrade**: Enhanced the save system to preserve task slot assignments and discovered location names across sessions.
 - **UI Streamlining**: Restacked header controls vertically and cleaned up instructional text across all main panels for a more focused gameplay experience.
 
