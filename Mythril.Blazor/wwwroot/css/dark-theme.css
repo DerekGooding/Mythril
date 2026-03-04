@@ -166,3 +166,7 @@ a, .btn-link {
 .drop-target:hover {
     background-color: var(--badge-bg);
 }
+
+.text-muted {
+    color: var(--text-muted) !important;
+}

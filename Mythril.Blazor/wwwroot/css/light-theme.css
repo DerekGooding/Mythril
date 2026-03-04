@@ -83,3 +83,7 @@ a, .btn-link {
 code {
     color: #c02d76;
 }
+
+.text-muted {
+    color: var(--text-muted) !important;
+}
