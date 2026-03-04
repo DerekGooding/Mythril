@@ -1,31 +1,38 @@
 .inventory-panel {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+    padding: 5px 10px;
     border: 1px solid var(--panel-border);
-    border-radius: 5px;
-    padding: 10px;
-    margin-top: 10px;
+    border-radius: 4px;
     background-color: var(--panel-bg);
     color: var(--text-color);
+    flex-grow: 1;
+    min-width: 0;
+    overflow: hidden;
 }
 
-.inventory-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-    gap: 10px;
-}
-
-.inventory-item {
-    border: 1px solid var(--item-border);
-    border-radius: 3px;
-    padding: 5px;
-    text-align: center;
-    background-color: var(--item-bg);
-}
-
-.item-name {
+.inventory-header h5 {
+    margin: 0;
+    font-size: 0.9rem;
     font-weight: bold;
-    color: var(--text-color);
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
-.item-quantity {
-    color: var(--text-muted);
+.inventory-content {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    overflow-x: auto;
+    flex-grow: 1;
+    padding-bottom: 2px; /* Space for scrollbar if it appears */
+}
+
+/* Ensure items don't shrink */
+.inventory-content ::deep .inventory-item {
+    flex: 0 0 auto;
+    min-width: 80px;
 }

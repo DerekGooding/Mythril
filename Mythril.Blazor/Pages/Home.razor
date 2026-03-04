@@ -24,7 +24,8 @@
         <div class="flex-grow-1 d-flex align-items-center gap-2">
             @if (resourceManager is not null)
             {
-                <InventoryPanel Items="resourceManager.Inventory?.GetItems().ToList()" />
+                <InventoryPanel Items="resourceManager.Inventory?.GetItems().ToList()" 
+                                Spells="resourceManager.Inventory?.GetSpells().ToList()" />
             }
             
             <div class="version-stack d-flex flex-column align-items-end ms-auto text-nowrap">

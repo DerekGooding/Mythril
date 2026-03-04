@@ -1,6 +1,8 @@
 <div class="inventory-panel">
-    <h5>Inventory</h5>
-    <div class="inventory-grid">
+    <div class="inventory-header">
+        <h5>Inventory</h5>
+    </div>
+    <div class="inventory-content">
         @if (Items is not null)
         {
             @foreach (var item in Items)
@@ -8,8 +10,6 @@
                 <InventoryItem @key="item.Item.Name" Item="item" />
             }
         }
-    </div>
-    <div class="inventory-grid">
         @if (Spells is not null)
         {
             @foreach (var item in Spells)
