@@ -33,3 +33,6 @@ Implement the third tier of multi-tasking and the second tier of automation, alo
 - [ ] **Quest Lines**: 6 new recurring quest chains for advanced materials (Crystal Shards, Blue Coral, Lost Parchment).
 - [ ] **Refinement Tier II**: Earth, Water, and Haste magic; Geode/Seed processing.
 
+- [ ] Return the optimal completion time metric to the simulation report.
+- [ ] If a refinement hits the maximum magic value and triggers a warning snackbar message, and the task is set to auto replace, can it from auto replaying.
+- [ ] Review Journal UI and confirm it updates the UI when it's underlying list is updated and every time a task is completed for the first time, make sure the journal shows it. 
