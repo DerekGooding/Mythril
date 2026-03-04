@@ -27,5 +27,14 @@
   { "Name": "Hunt Sand-Sharks", "Description": "Take down the predators of the dunes." },
   { "Name": "Locate the Hidden Oasis", "Description": "Find the legendary sanctuary in the waste." },
   { "Name": "Purify the Grove", "Description": "Use healing magic to cleanse the corruption from the sacred grove." },
-  { "Name": "Power the Forge", "Description": "Channel intense fire magic to reignite the ancient Mythril Forge." }
+  { "Name": "Power the Forge", "Description": "Channel intense fire magic to reignite the ancient Mythril Forge." },
+  { "Name": "Shatter the Crystals", "Description": "Harvest prismatic fragments from the peak's formations." },
+  { "Name": "High Altitude Survey", "Description": "Map the dangerous heights of the Crystal Peaks." },
+  { "Name": "Harvest Sea-Life", "Description": "Gather biological components from the Tidal Caverns." },
+  { "Name": "Deep Sea Scavenge", "Description": "Search the lightless depths for rare coral." },
+  { "Name": "Archive Sifting", "Description": "Search through stacks of ancient writings." },
+  { "Name": "Study Ancient Texts", "Description": "Learn from the preserved knowledge of the library." },
+  { "Name": "Defeat the Mythril Construct", "Description": "Face the ultimate defender of the Mythril Heart." },
+  { "Name": "Ascetic Meditation", "Description": "Focus your mind to achieve permanent magical growth." },
+  { "Name": "Heavy Training", "Description": "Push your body to achieve permanent physical growth." }
 ]

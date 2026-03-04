@@ -34,6 +34,11 @@
         "Requirements": [ { "Item": "Gold", "Quantity": 1000 }, { "Item": "Mana Leaf", "Quantity": 20 } ],
         "PrimaryStat": "Magic",
         "Metadata": { "MagicCapacity": "60" }
+      },
+      {
+        "Ability": "Refine Lightning",
+        "Requirements": [ { "Item": "Fire Shard", "Quantity": 5 }, { "Item": "Ice Shard", "Quantity": 5 } ],
+        "PrimaryStat": "Magic"
       }
     ]
   },
@@ -145,6 +150,11 @@
       "Ability": "AutoQuest II",
       "Requirements": [ { "Item": "Gold", "Quantity": 7500 } ],
       "PrimaryStat": "Magic"
+    },
+    {
+      "Ability": "Refine Haste",
+      "Requirements": [ { "Item": "Lost Parchment", "Quantity": 5 } ],
+      "PrimaryStat": "Magic"
     }
   ]
   },
@@ -156,6 +166,11 @@
       "Ability": "Mountain Crush",
       "Requirements": [ { "Item": "Gold", "Quantity": 5000 } ],
       "PrimaryStat": "Strength"
+    },
+    {
+      "Ability": "Refine Earth",
+      "Requirements": [ { "Item": "Crystal Shards", "Quantity": 10 } ],
+      "PrimaryStat": "Strength"
     }
   ]
   },
@@ -166,6 +181,11 @@
     {
       "Ability": "Deep Dive",
       "Requirements": [ { "Item": "Gold", "Quantity": 5000 } ],
+      "PrimaryStat": "Speed"
+    },
+    {
+      "Ability": "Refine Water",
+      "Requirements": [ { "Item": "Blue Coral", "Quantity": 10 } ],
       "PrimaryStat": "Speed"
     }
   ]
@@ -181,4 +201,4 @@
     }
   ]
   }
-  ]
+]

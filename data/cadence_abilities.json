@@ -23,5 +23,9 @@
   { "Name": "Mountain Crush", "Description": "Gather rare minerals with high strength" },
   { "Name": "Deep Dive", "Description": "Explore the depths with high speed" },
   { "Name": "Master Slayer", "Description": "Defeat high-tier threats" },
-  { "Name": "Refine Life", "Description": "Refine ancient components into life magic" }
+  { "Name": "Refine Life", "Description": "Refine ancient components into life magic" },
+  { "Name": "Refine Earth", "Description": "Refine minerals into earth magic" },
+  { "Name": "Refine Water", "Description": "Refine coral into water magic" },
+  { "Name": "Refine Haste", "Description": "Refine ancient parchment into haste magic" },
+  { "Name": "Refine Lightning", "Description": "Refine shards into lightning magic" }
 ]

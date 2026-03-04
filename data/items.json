@@ -17,9 +17,14 @@
   { "Name": "Mythril Spark", "Description": "A legendary spark of ancient power.", "ItemType": "Material" },
   { "Name": "Sun-baked Scale", "Description": "A tough, heat-resistant scale from a desert predator.", "ItemType": "Material" },
   { "Name": "Solar Essence", "Description": "Condensed sunlight that pulses with warmth.", "ItemType": "Material" },
+  { "Name": "Crystal Shards", "Description": "Prismatic fragments found at high altitudes.", "ItemType": "Material" },
+  { "Name": "Blue Coral", "Description": "Rare coral harvested from underwater caves.", "ItemType": "Material" },
+  { "Name": "Lost Parchment", "Description": "Ancient writings preserved in the library.", "ItemType": "Material" },
   { "Name": "Fire I", "Description": "A basic fire spell.", "ItemType": "Spell" },
   { "Name": "Ice I", "Description": "A basic ice spell.", "ItemType": "Spell" },
   { "Name": "Lightning I", "Description": "A basic lightning spell.", "ItemType": "Spell" },
   { "Name": "Earth I", "Description": "A basic earth spell.", "ItemType": "Spell" },
+  { "Name": "Water I", "Description": "A basic water spell.", "ItemType": "Spell" },
+  { "Name": "Haste I", "Description": "A basic speed-enhancing spell.", "ItemType": "Spell" },
   { "Name": "Cure I", "Description": "A basic healing spell.", "ItemType": "Spell" }
 ]
