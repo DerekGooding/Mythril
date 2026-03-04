@@ -4,7 +4,7 @@
     "DurationSeconds": 5,
     "Type": "Single",
     "Requirements": [],
-    "Rewards": [ { "Item": "Gold", "Quantity": 10 } ],
+    "Rewards": [ { "Item": "Gold", "Quantity": 100 } ],
     "PrimaryStat": "Vitality"
   },
   {
