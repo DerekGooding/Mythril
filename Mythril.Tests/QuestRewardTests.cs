@@ -155,6 +155,6 @@ public class QuestRewardTests
 
         Assert.IsFalse(_resourceManager.ActiveQuests.Any());
         Assert.IsFalse(_resourceManager.GetCompletedQuests().Any());
-        Assert.AreEqual(100, _resourceManager.Inventory.GetQuantity(_items.All.First(x => x.Name == "Gold")));
+        Assert.AreEqual(0, _resourceManager.Inventory.GetQuantity(_items.All.First(x => x.Name == "Gold")));
     }
 }

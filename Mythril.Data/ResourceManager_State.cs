@@ -79,9 +79,6 @@ public partial class ResourceManager
             ActiveQuests.Clear();
         }
         
-        var gold = _items.All.FirstOrDefault(x => x.Name == "Gold");
-        if (gold.Name != null) Inventory.Add(gold, 100);
-
         Console.WriteLine("Initializing Cadences...");
         _lockedCadences = _cadences.All.ToNamedDictionary(_ => true);
 
