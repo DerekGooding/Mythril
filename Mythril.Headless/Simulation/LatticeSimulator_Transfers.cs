@@ -10,16 +10,20 @@ public partial class LatticeSimulator
 {
     private GameState ApplyTransfers(GameState state)
     {
+        var itemMap = items.All.ToDictionary(i => i.Name);
+        var questMap = quests.All.ToDictionary(q => q.Name);
+        var cadenceMap = cadences.All.ToDictionary(c => c.Name);
+
         var next = state;
-        next = Join(next, ApplyQuestTransfers(state));
+        next = Join(next, ApplyQuestTransfers(state, questMap));
         next = Join(next, ApplyRefinementTransfers(state));
-        next = Join(next, ApplyAbilityUnlockTransfers(state));
-        next = Join(next, ApplyStatTransfers(state));
+        next = Join(next, ApplyAbilityUnlockTransfers(state, cadenceMap));
+        next = Join(next, ApplyStatTransfers(state, itemMap));
         next = Join(next, ApplyHiddenCadenceTransfers(state));
         return next;
     }
 
-    private GameState ApplyQuestTransfers(GameState state)
+    private GameState ApplyQuestTransfers(GameState state, Dictionary<string, Quest> questMap)
     {
         var questTimes = ImmutableDictionary.CreateBuilder<string, double>();
         var resourceTimes = ImmutableDictionary.CreateBuilder<string, double>();
@@ -34,7 +38,6 @@ public partial class LatticeSimulator
             {
                 var detail = questDetails[quest];
                 
-                // Check quest prereqs
                 double prereqTime = 0;
                 bool prereqsMet = true;
                 foreach (var reqQ in questUnlocks[quest])
@@ -45,7 +48,6 @@ public partial class LatticeSimulator
                 }
                 if (!prereqsMet) continue;
 
-                // Check item requirements
                 double itemTime = 0;
                 bool itemsMet = true;
                 foreach (var reqI in detail.Requirements)
@@ -56,7 +58,6 @@ public partial class LatticeSimulator
                 }
                 if (!itemsMet) continue;
 
-                // Check stat requirements
                 bool statsMet = true;
                 if (detail.RequiredStats != null)
                 {
@@ -73,13 +74,11 @@ public partial class LatticeSimulator
 
                 questTimes[quest.Name] = completionTime;
 
-                // Rewards
                 foreach (var reward in detail.Rewards)
                 {
                     resourceTimes[reward.Item.Name] = completionTime;
                 }
 
-                // Cadence Unlocks
                 foreach (var cad in questToCadenceUnlocks[quest])
                 {
                     cadenceUnlocks.Add(cad.Name);
@@ -111,7 +110,6 @@ public partial class LatticeSimulator
                 double inputTime = state.ResourceTime.GetValueOrDefault(inputItem.Name, double.PositiveInfinity);
                 if (inputTime == double.PositiveInfinity) continue;
 
-                // Refinement takes time but we assume parallel/efficient for simulation
                 double duration = 15.0 / (1.0 + (state.StatMax.GetValueOrDefault(refinementKvp.Value.PrimaryStat, 10) / 100.0));
                 double outputTime = inputTime + duration;
 
@@ -122,14 +120,14 @@ public partial class LatticeSimulator
         return state with { ResourceTime = resourceTimes.ToImmutable() };
     }
 
-    private GameState ApplyAbilityUnlockTransfers(GameState state)
+    private GameState ApplyAbilityUnlockTransfers(GameState state, Dictionary<string, Cadence> cadenceMap)
     {
         var abilities = ImmutableHashSet.CreateBuilder<string>();
         int newCapacity = state.MagicCapacity;
 
         foreach (var cadenceName in state.UnlockedCadences)
         {
-            var cadence = cadences.All.First(c => c.Name == cadenceName);
+            if (!cadenceMap.TryGetValue(cadenceName, out var cadence)) continue;
             foreach (var unlock in cadence.Abilities)
             {
                 string key = $"{cadence.Name}:{unlock.Ability.Name}";
@@ -147,7 +145,6 @@ public partial class LatticeSimulator
                 if (canAfford)
                 {
                     abilities.Add(key);
-                    // Data-driven scaling
                     if (unlock.Ability.Metadata != null && unlock.Ability.Metadata.TryGetValue("MagicCapacity", out var capStr) && int.TryParse(capStr, out var capVal))
                     {
                         newCapacity = Math.Max(newCapacity, capVal);
@@ -159,27 +156,28 @@ public partial class LatticeSimulator
         return state with { UnlockedAbilities = abilities.ToImmutable(), MagicCapacity = newCapacity };
     }
 
-    private GameState ApplyStatTransfers(GameState state)
+    private GameState ApplyStatTransfers(GameState state, Dictionary<string, Item> itemMap)
     {
         var statsMax = state.StatMax.ToBuilder();
 
         foreach (var stat in stats.All)
         {
             int bestVal = 10;
-            // Iterate over all items that are Spells and reached
             foreach (var itemKvp in state.ResourceTime)
             {
                 if (itemKvp.Value == double.PositiveInfinity) continue;
                 
-                var item = items.All.FirstOrDefault(i => i.Name == itemKvp.Key);
-                if (item.ItemType != ItemType.Spell) continue;
-
-                string abilityName = stat.Name switch { "Strength" => "J-Str", "Magic" => "J-Magic", "Vitality" => "J-Vit", "Speed" => "J-Speed", _ => "J-" + stat.Name };
-                if (state.UnlockedAbilities.Any(ua => ua.EndsWith($":{abilityName}")))
+                if (itemMap.TryGetValue(itemKvp.Key, out var item))
                 {
-                    var augment = statAugments[item].FirstOrDefault(a => a.Stat.Name == stat.Name);
-                    int val = 10 + (int)(state.MagicCapacity * (augment.Stat.Name != null ? augment.ModifierAtFull / 100.0 : 0.1));
-                    bestVal = Math.Max(bestVal, Math.Min(255, val));
+                    if (item.ItemType != ItemType.Spell) continue;
+
+                    string abilityName = stat.Name switch { "Strength" => "J-Str", "Magic" => "J-Magic", "Vitality" => "J-Vit", "Speed" => "J-Speed", _ => "J-" + stat.Name };
+                    if (state.UnlockedAbilities.Any(ua => ua.EndsWith($":{abilityName}")))
+                    {
+                        var augment = statAugments[item].FirstOrDefault(a => a.Stat.Name == stat.Name);
+                        int val = 10 + (int)(state.MagicCapacity * (augment.Stat.Name != null ? augment.ModifierAtFull / 100.0 : 0.1));
+                        bestVal = Math.Max(bestVal, Math.Min(255, val));
+                    }
                 }
             }
             statsMax[stat.Name] = bestVal;
@@ -192,16 +190,9 @@ public partial class LatticeSimulator
     {
         var cadenceUnlocks = ImmutableHashSet.CreateBuilder<string>();
 
-        // Geologist: 100 STR
         if (state.StatMax.GetValueOrDefault("Strength", 0) >= 100) cadenceUnlocks.Add("Geologist");
-        
-        // Tide-Caller: 100 SPD
         if (state.StatMax.GetValueOrDefault("Speed", 0) >= 100) cadenceUnlocks.Add("Tide-Caller");
-
-        // Scholar: 100 MAG
         if (state.StatMax.GetValueOrDefault("Magic", 0) >= 100) cadenceUnlocks.Add("Scholar");
-        
-        // Slayer: 100 STR AND 100 SPD
         if (state.StatMax.GetValueOrDefault("Strength", 0) >= 100 && state.StatMax.GetValueOrDefault("Speed", 0) >= 100) cadenceUnlocks.Add("Slayer");
 
         return state with { UnlockedCadences = cadenceUnlocks.ToImmutable() };
