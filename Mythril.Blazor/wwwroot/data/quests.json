@@ -13,7 +13,7 @@
   { "Name": "Hunt Bats", "Description": "Clear the mine entrance of bats." },
   { "Name": "Hunt Spiders", "Description": "Venture deeper into the webs." },
 
-  { "Name": "Farm Slimes", "Description": "Clear the lower levels of sticky residue." },
+  { "Name": "Hunt Slimes", "Description": "Clear the lower levels of sticky residue." },
   { "Name": "Unlock Mining", "Description": "Obtain permission to mine Iron Ore." },
   { "Name": "Mine Iron Ore", "Description": "Extract precious metals from the earth." },
   { "Name": "Gather Moonberries", "Description": "Pick glowing fruit from the woods." },

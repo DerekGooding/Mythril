@@ -36,7 +36,7 @@ Unlocks after *Learn about the Dark Forest*.
 Unlocks after *Learn about the Mines*.
 *   **Hunt Bats**: (Reward: 150 Gold)
 *   **Hunt Spiders**: (Reward: 1 Web)
-*   **Farm Slimes**: (Reward: 1 Slime)
+*   **Hunt Slimes**: (Reward: 1 Slime)
 *   **Unlock Mining**: Permission to mine. (Req: 1000 Gold)
 *   **Mine Iron Ore**: (Reward: 5 Iron Ore)
 

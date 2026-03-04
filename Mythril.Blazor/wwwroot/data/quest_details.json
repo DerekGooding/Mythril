@@ -105,7 +105,7 @@
     "PrimaryStat": "Vitality"
   },
   {
-    "Quest": "Farm Slimes",
+    "Quest": "Hunt Slimes",
     "DurationSeconds": 90,
     "Type": "Recurring",
     "Requirements": [],
