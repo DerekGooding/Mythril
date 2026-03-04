@@ -526,6 +526,21 @@
         transform: translate(-50%, -30px);
     }
 }
+
+.inventory-item.overflowing[b-n4d12cyvsf] {
+    animation: red-glow-b-n4d12cyvsf 1s ease-in-out infinite alternate;
+    border-color: #ff4444;
+    z-index: 10;
+}
+
+@keyframes red-glow-b-n4d12cyvsf {
+    from {
+        box-shadow: 0 0 5px #ff4444, inset 0 0 5px #ff4444;
+    }
+    to {
+        box-shadow: 0 0 20px #ff4444, inset 0 0 10px #ff4444;
+    }
+}
 /* /Components/InventoryPanel.razor.rz.scp.css */
 .inventory-panel[b-cxbqk8vivm] {
     display: flex;
