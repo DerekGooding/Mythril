@@ -146,13 +146,16 @@ public partial class Home : IDisposable
         SnackbarService.Show($"Completed: {completedProgress.Name}", "success");
 
         // Auto-restart logic (Only for Slot 0)
-        if (completedProgress.SlotIndex == 0 && completedProgress.Item is QuestData quest && quest.Type == QuestType.Recurring)
+        bool isRecurring = (completedProgress.Item is QuestData q && q.Type == QuestType.Recurring) || 
+                          (completedProgress.Item is RefinementData);
+
+        if (completedProgress.SlotIndex == 0 && isRecurring)
         {
             if (resourceManager.IsAutoQuestEnabled(completedProgress.Character) && resourceManager.CanAutoQuest(completedProgress.Character))
             {
-                if (resourceManager.CanAfford(quest))
+                if (resourceManager.CanAfford(completedProgress.Item, completedProgress.Character))
                 {
-                    resourceManager.StartQuest(quest, completedProgress.Character, -1.5);
+                    resourceManager.StartQuest(completedProgress.Item, completedProgress.Character, -1.5);
                 }
             }
         }
