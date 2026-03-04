@@ -18,5 +18,7 @@
   { "Name": "Magic Pocket I", "Description": "Increases global magic capacity to 60" },
   { "Name": "Magic Pocket II", "Description": "Advanced space-folding techniques further expand magic storage to 100." },
   { "Name": "Logistics I", "Description": "Allows a character to perform two tasks at once" },
+  { "Name": "Logistics II", "Description": "Allows a character to perform three tasks at once" },
+  { "Name": "AutoQuest II", "Description": "Enables auto-restart for the second task slot" },
   { "Name": "Refine Life", "Description": "Refine ancient components into life magic" }
 ]

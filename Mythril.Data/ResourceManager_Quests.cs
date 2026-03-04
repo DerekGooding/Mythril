@@ -108,12 +108,24 @@ public partial class ResourceManager
                     return;
                 }
 
-                // Safety check for single-use tasks already in progress
+                // Safety check for single-use tasks already in progress or completed
                 if (item is CadenceUnlock || (item is QuestData q && (q.Type == QuestType.Single || q.Type == QuestType.Unlock)))
                 {
                     if (IsInProgress(item))
                     {
                         Console.WriteLine($"Attempted to start single-use task '{item}' but it is already in progress.");
+                        return;
+                    }
+
+                    if (item is QuestData q2 && _completedQuests.Contains(q2.Quest))
+                    {
+                        Console.WriteLine($"Attempted to start completed single-use quest '{q2.Name}'.");
+                        return;
+                    }
+                    
+                    if (item is CadenceUnlock cu && UnlockedAbilities.Contains($"{cu.CadenceName}:{cu.Ability.Name}"))
+                    {
+                        Console.WriteLine($"Attempted to start already unlocked ability '{cu.Ability.Name}'.");
                         return;
                     }
                 }

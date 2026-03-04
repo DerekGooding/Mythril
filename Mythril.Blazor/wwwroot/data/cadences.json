@@ -129,5 +129,21 @@
       "PrimaryStat": "Magic"
     }
   ]
+  },
+  {
+  "Name": "Scholar",
+  "Description": "A highly advanced job specializing in optimization and multi-tasking.",
+  "Abilities": [
+    {
+      "Ability": "Logistics II",
+      "Requirements": [ { "Item": "Gold", "Quantity": 10000 } ],
+      "PrimaryStat": "Magic"
+    },
+    {
+      "Ability": "AutoQuest II",
+      "Requirements": [ { "Item": "Gold", "Quantity": 7500 } ],
+      "PrimaryStat": "Magic"
+    }
+  ]
   }
   ]

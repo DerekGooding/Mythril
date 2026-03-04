@@ -12,10 +12,10 @@ Implement the third tier of multi-tasking and the second tier of automation, alo
 - [x] **Inventory UI Scaling**: Horizontal scrolling implemented for large inventories. (Category filtering moved to UX polish phase).
 
 ### Phase 2: Logistics & Automation (Tier II)
-- [ ] **Logistics II**: Expand character capacity to a **3rd task slot**.
-- [ ] **AutoQuest II**: Enable automation for the **2nd task slot** (Logistics I slot).
-- [ ] **Logic Enforcement**: Ensure Slot 2 (Logistics II) remains manual and single-use quests never loop.
-- [ ] **Auto-Quest Visuals**: Implement a non-mechanical visual delay for auto-restarting tasks to improve game "feel."
+- [x] **Logistics II**: Expand character capacity to a **3rd task slot**.
+- [x] **AutoQuest II**: Enable automation for the **2nd task slot** (Logistics I slot).
+- [x] **Logic Enforcement**: Ensure Slot 2 (Logistics II) remains manual and single-use quests never loop.
+- [x] **Auto-Quest Visuals**: Implement a non-mechanical visual delay for auto-restarting tasks to improve game "feel."
 
 ### Phase 3: Junction System Overhaul (Tactile Interaction)
 - [ ] **Drag-and-Drop Enhancement**: Finalize the transition to a pure drag-from-inventory model.
