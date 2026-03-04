@@ -55,3 +55,18 @@
         transform: translate(-50%, -30px);
     }
 }
+
+.inventory-item.overflowing {
+    animation: red-glow 1s ease-in-out infinite alternate;
+    border-color: #ff4444;
+    z-index: 10;
+}
+
+@keyframes red-glow {
+    from {
+        box-shadow: 0 0 5px #ff4444, inset 0 0 5px #ff4444;
+    }
+    to {
+        box-shadow: 0 0 20px #ff4444, inset 0 0 10px #ff4444;
+    }
+}

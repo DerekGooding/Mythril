@@ -5,19 +5,22 @@ public class InventoryManager
     private readonly Dictionary<Item, int> _inventory = [];
     public int MagicCapacity { get; set; } = 30;
 
-    public void Add(Item item, int quantity = 1)
+    public int Add(Item item, int quantity = 1)
     {
-        if (quantity <= 0) return;
+        if (quantity <= 0) return 0;
         
         int current = _inventory.GetValueOrDefault(item);
         int next = current + quantity;
+        int overflow = 0;
 
         if (item.ItemType == ItemType.Spell && next > MagicCapacity)
         {
+            overflow = next - MagicCapacity;
             next = MagicCapacity;
         }
 
         _inventory[item] = next;
+        return overflow;
     }
 
     public bool Remove(Item item, int quantity = 1)

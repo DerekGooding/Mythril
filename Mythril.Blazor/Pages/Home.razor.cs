@@ -17,6 +17,7 @@ public partial class Home : IDisposable
     [Inject] public PersistenceService persistenceService { get; set; } = null!;
     [Inject] public IJSRuntime JS { get; set; } = null!;
     [Inject] public VersionService VersionService { get; set; } = null!;
+    [Inject] public InventoryService inventoryService { get; set; } = null!;
 
     private System.Timers.Timer? timer;
     private int saveCounter = 0;
@@ -33,6 +34,13 @@ public partial class Home : IDisposable
 
         themeService.OnThemeChanged += StateHasChanged;
         VersionService.OnUpdateAvailable += HandleUpdateAvailable;
+        resourceManager.OnItemOverflow += HandleItemOverflow;
+    }
+
+    private void HandleItemOverflow(string itemName, int overflowAmount)
+    {
+        SnackbarService.Show($"Magic Capacity reached! Lost {overflowAmount}x {itemName}.", "warning");
+        inventoryService.NotifyOverflow(itemName);
     }
 
     private async void HandleUpdateAvailable()

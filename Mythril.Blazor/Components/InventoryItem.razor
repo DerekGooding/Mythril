@@ -1,7 +1,9 @@
 @using Mythril.Blazor.Services
 @inject DragDropService DragDropService
+@inject InventoryService InventoryService
+@implements IDisposable
 
-<div class="inventory-item" draggable="true" @ondragstart="HandleDragStart">
+<div class="inventory-item @(showOverflowGlow ? "overflowing" : "")" draggable="true" @ondragstart="HandleDragStart">
     <span class="item-name">@Item.Item.Name</span>
     <span class="item-quantity">@Item.Quantity</span>
     @if (showAnimation)
@@ -26,6 +28,31 @@
     private int previousQuantity;
     private int quantityChange;
     private bool showAnimation;
+    private bool showOverflowGlow;
+
+    protected override void OnInitialized()
+    {
+        InventoryService.OnItemOverflow += HandleOverflow;
+    }
+
+    private void HandleOverflow(string itemName)
+    {
+        if (Item.Item.Name == itemName)
+        {
+            showOverflowGlow = true;
+            StateHasChanged();
+            _ = Task.Delay(2000).ContinueWith(_ => 
+            {
+                showOverflowGlow = false;
+                InvokeAsync(StateHasChanged);
+            });
+        }
+    }
+
+    public void Dispose()
+    {
+        InventoryService.OnItemOverflow -= HandleOverflow;
+    }
 
     protected override void OnParametersSet()
     {

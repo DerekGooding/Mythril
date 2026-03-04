@@ -64,6 +64,8 @@ public partial class ResourceManager
     public bool HasUnseenWorkshop { get; set; } = false;
     public string ActiveTab { get; set; } = "hand";
 
+    public event Action<string, int>? OnItemOverflow;
+
     public void Initialize()
     {
         Console.WriteLine("ResourceManager initializing...");

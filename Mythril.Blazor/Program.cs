@@ -16,6 +16,7 @@ builder.Services.AddScoped<VersionService>();
 builder.Services.AddSingleton<AuthService>();
 builder.Services.AddSingleton<FeedbackService>();
 builder.Services.AddSingleton<SnackbarService>();
+builder.Services.AddSingleton<InventoryService>();
 
 // Register the logger provider correctly within the service collection
 builder.Logging.Services.AddSingleton<ILoggerProvider, FeedbackLoggerProvider>();

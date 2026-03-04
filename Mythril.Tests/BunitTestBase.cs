@@ -83,6 +83,7 @@ public abstract class BunitTestBase : TestContextWrapper
         TestContext.Services.AddSingleton(SnackbarService);
         TestContext.Services.AddSingleton(AuthService);
         TestContext.Services.AddSingleton(ContentLoaderMock.Object);
+        TestContext.Services.AddSingleton(new InventoryService());
         TestContext.Services.AddSingleton(new ThemeService(JSRuntimeMock.Object, new Mock<ILogger<ThemeService>>().Object));
         
         TestContext.Services.AddSingleton(new Mock<PersistenceService>(

@@ -205,7 +205,11 @@ public partial class ResourceManager
     {
         if (item is QuestData quest)
         {
-            foreach (var reward in quest.Rewards) Inventory.Add(reward.Item, reward.Quantity);
+            foreach (var reward in quest.Rewards)
+            {
+                int overflow = Inventory.Add(reward.Item, reward.Quantity);
+                if (overflow > 0) OnItemOverflow?.Invoke(reward.Item.Name, overflow);
+            }
             
             // If it's single-use, remove it now that it's DONE
             if (quest.Type == QuestType.Single || quest.Type == QuestType.Unlock) LockQuest(quest.Quest);
@@ -229,7 +233,8 @@ public partial class ResourceManager
         }
         if(item is RefinementData refinement)
         {
-            Inventory.Add(refinement.Recipe.OutputItem, refinement.Recipe.OutputQuantity);
+            int overflow = Inventory.Add(refinement.Recipe.OutputItem, refinement.Recipe.OutputQuantity);
+            if (overflow > 0) OnItemOverflow?.Invoke(refinement.Recipe.OutputItem.Name, overflow);
         }
         await Task.CompletedTask;
     }
