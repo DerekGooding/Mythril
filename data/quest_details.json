@@ -60,7 +60,7 @@
     "DurationSeconds": 60,
     "Type": "Recurring",
     "Requirements": [],
-    "Rewards": [ { "Item": "Gold", "Quantity": 100 }, { "Item": "Fire Shard", "Quantity": 1 } ],
+    "Rewards": [ { "Item": "Gold", "Quantity": 100 }, { "Item": "Fire Shard", "Quantity": 1 }, { "Item": "Mana Leaf", "Quantity": 1 } ],
     "PrimaryStat": "Strength"
   },
   {
@@ -68,7 +68,7 @@
     "DurationSeconds": 75,
     "Type": "Recurring",
     "Requirements": [],
-    "Rewards": [ { "Item": "Log", "Quantity": 2 } ],
+    "Rewards": [ { "Item": "Log", "Quantity": 2 }, { "Item": "Ancient Bark", "Quantity": 1 } ],
     "PrimaryStat": "Strength"
   },
   {

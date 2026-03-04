@@ -2,22 +2,23 @@
   {
     "Item": "Fire I",
     "Augments": [
-      { "Stat": "Strength", "ModifierAtFull": 10 },
-      { "Stat": "Magic", "ModifierAtFull": 5 }
+      { "Stat": "Strength", "ModifierAtFull": 50 },
+      { "Stat": "Magic", "ModifierAtFull": 20 }
     ]
   },
   {
     "Item": "Ice I",
     "Augments": [
-      { "Stat": "Magic", "ModifierAtFull": 10 },
+      { "Stat": "Magic", "ModifierAtFull": 100 },
+      { "Stat": "Speed", "ModifierAtFull": 100 },
       { "Stat": "Vitality", "ModifierAtFull": 50 }
     ]
   },
   {
     "Item": "Cure I",
     "Augments": [
-      { "Stat": "Magic", "ModifierAtFull": 15 },
-      { "Stat": "Vitality", "ModifierAtFull": 100 }
+      { "Stat": "Magic", "ModifierAtFull": 150 },
+      { "Stat": "Vitality", "ModifierAtFull": 200 }
     ]
   },
   {

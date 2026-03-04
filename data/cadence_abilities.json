@@ -17,5 +17,6 @@
   { "Name": "J-Speed", "Description": "Allows junctioning magic to the Speed stat" },
   { "Name": "Magic Pocket I", "Description": "Increases global magic capacity to 60" },
   { "Name": "Magic Pocket II", "Description": "Advanced space-folding techniques further expand magic storage to 100." },
-  { "Name": "Logistics I", "Description": "Allows a character to perform two tasks at once" }
+  { "Name": "Logistics I", "Description": "Allows a character to perform two tasks at once" },
+  { "Name": "Refine Life", "Description": "Refine ancient components into life magic" }
 ]
