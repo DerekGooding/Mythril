@@ -17,7 +17,12 @@
                           @key="@location.Name"
                           CompletedCount="@stats.Completed"
                           TotalCount="@stats.Total">
-                    @foreach (var quest in location.Quests)
+                    @{
+                        var sortedQuests = location.Quests
+                            .OrderBy(q => ResourceManager.GetQuestDetails(q).Type == QuestType.Recurring)
+                            .ToList();
+                    }
+                    @foreach (var quest in sortedQuests)
                     {
                         <div class="task-container" @key="@quest.Name">
                             <QuestCard QuestData="@QuestToData(quest)" />
