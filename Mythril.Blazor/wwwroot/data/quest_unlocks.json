@@ -10,9 +10,9 @@
   { "Quest": "Chop Wood", "Requires": ["Learn about the Dark Forest"] },     
   { "Quest": "Mine Ore", "Requires": ["Learn about the Mines"] },     
   { "Quest": "Hunt Bats", "Requires": ["Learn about the Mines"] },      
-  { "Quest": "Farm Spiders", "Requires": ["Hunt Bats"] },      
+  { "Quest": "Hunt Spiders", "Requires": ["Hunt Bats"] },      
+  { "Quest": "Farm Slimes", "Requires": ["Hunt Spiders"] },
 
-  { "Quest": "Farm Slimes", "Requires": ["Farm Spiders"] },
   { "Quest": "Unlock Mining", "Requires": ["Farm Slimes"] },
   { "Quest": "Mine Iron Ore", "Requires": ["Unlock Mining"] },
   { "Quest": "Gather Moonberries", "Requires": ["Learn about the Dark Forest"] },
