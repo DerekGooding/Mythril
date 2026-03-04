@@ -8,6 +8,7 @@ public class QuestProgress(object item, string description, int durationSeconds,
     public string Name { get; set; } =
         item is QuestData quest ? quest.Name :
         item is CadenceUnlock unlock ? unlock.Ability.Name :
+        item is RefinementData refinement ? refinement.Name :
         string.Empty;
 
     public string Description { get; set; } = description;

@@ -77,4 +77,40 @@ public class RefinementLogicTests
         anyoneHasAbility = _resourceManager.Characters.Any(c => _resourceManager.HasAbility(c, ability));
         Assert.IsTrue(anyoneHasAbility, "Should be true because Student is assigned and ability is unlocked.");
     }
+
+    [TestMethod]
+    public async Task RefinementExecution_AddsItemsToInventory()
+    {
+        var student = ContentHost.GetContent<Cadences>().All.First(c => c.Name == "Student");
+        var ability = student.Abilities.First(a => a.Ability.Name == "Refine Fire").Ability;
+        var basicGem = ContentHost.GetContent<Items>().All.First(i => i.Name == "Basic Gem");
+        var fireI = ContentHost.GetContent<Items>().All.First(i => i.Name == "Fire I");
+        var recipe = _refinements!.ByKey[ability].Recipes[basicGem];
+        
+        var refinementData = new RefinementData(ability, basicGem, recipe, "Magic");
+        var character = _resourceManager!.Characters[0];
+
+        // Unlock and Assign cadence so character has ability
+        _resourceManager.UnlockedAbilities.Add("Student:Refine Fire");
+        _resourceManager.JunctionManager.AssignCadence(student, character, _resourceManager.UnlockedAbilities);
+
+        // Ensure inventory is empty
+        _resourceManager.Inventory.Clear();
+        Assert.AreEqual(0, _resourceManager.Inventory.GetQuantity(fireI));
+
+        // Start quest (Pay costs)
+        _resourceManager.Inventory.Add(basicGem, 1);
+        _resourceManager.StartQuest(refinementData, character);
+        Assert.AreEqual(0, _resourceManager.Inventory.GetQuantity(basicGem), "Basic Gem should have been consumed.");
+
+        // Get progress and verify name
+        var progress = _resourceManager.ActiveQuests[0];
+        Assert.AreEqual(refinementData.Name, progress.Name);
+        Assert.IsFalse(string.IsNullOrEmpty(progress.Name), "Progress name should not be empty for refinements.");
+
+        // Finish quest (Receive rewards)
+        await _resourceManager.ReceiveRewards(progress.Item);
+        
+        Assert.AreEqual(recipe.OutputQuantity, _resourceManager.Inventory.GetQuantity(fireI), "Should have received fire magic from refinement.");
+    }
 }
