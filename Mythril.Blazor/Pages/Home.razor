@@ -124,6 +124,7 @@
 
     private void MarkCadencesAsSeen()
     {
+        resourceManager.ActiveTab = "cadence";
         if (resourceManager.HasUnseenCadence)
         {
             resourceManager.HasUnseenCadence = false;
@@ -133,6 +134,7 @@
 
     private void MarkWorkshopAsSeen()
     {
+        resourceManager.ActiveTab = "workshop";
         if (resourceManager.HasUnseenWorkshop)
         {
             resourceManager.HasUnseenWorkshop = false;
