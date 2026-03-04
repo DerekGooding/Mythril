@@ -518,35 +518,42 @@
 }
 /* /Components/InventoryPanel.razor.rz.scp.css */
 .inventory-panel[b-cxbqk8vivm] {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+    padding: 5px 10px;
     border: 1px solid var(--panel-border);
-    border-radius: 5px;
-    padding: 10px;
-    margin-top: 10px;
+    border-radius: 4px;
     background-color: var(--panel-bg);
     color: var(--text-color);
+    flex-grow: 1;
+    min-width: 0;
+    overflow: hidden;
 }
 
-.inventory-grid[b-cxbqk8vivm] {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-    gap: 10px;
-}
-
-.inventory-item[b-cxbqk8vivm] {
-    border: 1px solid var(--item-border);
-    border-radius: 3px;
-    padding: 5px;
-    text-align: center;
-    background-color: var(--item-bg);
-}
-
-.item-name[b-cxbqk8vivm] {
+.inventory-header h5[b-cxbqk8vivm] {
+    margin: 0;
+    font-size: 0.9rem;
     font-weight: bold;
-    color: var(--text-color);
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
-.item-quantity[b-cxbqk8vivm] {
-    color: var(--text-muted);
+.inventory-content[b-cxbqk8vivm] {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    overflow-x: auto;
+    flex-grow: 1;
+    padding-bottom: 2px; /* Space for scrollbar if it appears */
+}
+
+/* Ensure items don't shrink */
+.inventory-content[b-cxbqk8vivm]  .inventory-item {
+    flex: 0 0 auto;
+    min-width: 80px;
 }
 /* /Components/PartyPanel.razor.rz.scp.css */
 .party-panel[b-fgj0qpkv83] {
