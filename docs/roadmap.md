@@ -18,14 +18,14 @@ Implement the third tier of multi-tasking and the second tier of automation, alo
 - [x] **Auto-Quest Visuals**: Implement a non-mechanical visual delay for auto-restarting tasks to improve game "feel."
 
 ### Phase 3: Junction System Overhaul (Tactile Interaction)
-- [ ] **Drag-and-Drop Enhancement**: Finalize the transition to a pure drag-from-inventory model.
-- [ ] **Predicted Effect Preview**: Implement color-coded stat changes (Green/Red) during drag operations.
-- [ ] **Junction Removal**: Repurpose the "Junction" button on the character display as a dedicated removal tool.
-- [ ] **Stat Ceiling**: Enforce the **255** maximum stat value across all systems.
+- [x] **Drag-and-Drop Enhancement**: Finalize the transition to a pure drag-from-inventory model.
+- [x] **Predicted Effect Preview**: Implement color-coded stat changes (Green/Red) during drag operations.
+- [x] **Junction Removal**: Repurpose the "Junction" button on the character display as a dedicated removal tool.
+- [x] **Stat Ceiling**: Enforce the **255** maximum stat value across all systems.
 
 ### Phase 4: Advanced Progression & Gates
-- [ ] **Hidden Cadences**: Implement stat-threshold detection for auto-unlocking Cadences (e.g., Geologist at 100 STR, Tide-Caller at 100 SPD).
-- [ ] **Stat Scaling Polish**: Audit the multiplicative duration formula to ensure it aligns with the "not linear" mandate.
+- [x] **Hidden Cadences**: Implement stat-threshold detection for auto-unlocking Cadences (e.g., Geologist at 100 STR, Tide-Caller at 100 SPD).
+- [x] **Stat Scaling Polish**: Audit the multiplicative duration formula to ensure it aligns with the "not linear" mandate.
 
 ### Phase 5: World Content Expansion (Tier II)
 - [ ] **New Regions**: Crystal Peaks, Tidal Caverns, Ancient Library.

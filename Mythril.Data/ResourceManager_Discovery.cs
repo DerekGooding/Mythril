@@ -48,6 +48,38 @@ public partial class ResourceManager
         UpdateAvaiableCadences();
     }
 
+    public void CheckHiddenCadences()
+    {
+        foreach (var character in Characters)
+        {
+            // Geologist: 100 STR
+            if (JunctionManager.GetStatValue(character, "Strength") >= 100)
+                UnlockByName("Geologist");
+            
+            // Tide-Caller: 100 SPD
+            if (JunctionManager.GetStatValue(character, "Speed") >= 100)
+                UnlockByName("Tide-Caller");
+
+            // Scholar: 100 MAG
+            if (JunctionManager.GetStatValue(character, "Magic") >= 100)
+                UnlockByName("Scholar");
+            
+            // Slayer: 100 STR AND 100 SPD
+            if (JunctionManager.GetStatValue(character, "Strength") >= 100 && JunctionManager.GetStatValue(character, "Speed") >= 100)
+                UnlockByName("Slayer");
+        }
+    }
+
+    private void UnlockByName(string name)
+    {
+        var cadence = _cadences.All.FirstOrDefault(c => c.Name == name);
+        if (cadence.Name != null && _lockedCadences.TryGetValue(cadence, out var isLocked) && isLocked)
+        {
+            UnlockCadence(cadence);
+            Console.WriteLine($"Stat-based unlock: {name}");
+        }
+    }
+
     public bool HasAbility(Character character, CadenceAbility ability)
     {
         return JunctionManager.CurrentlyAssigned(character).Any(cad => 

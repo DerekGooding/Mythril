@@ -145,5 +145,38 @@
       "PrimaryStat": "Magic"
     }
   ]
+  },
+  {
+  "Name": "Geologist",
+  "Description": "A strength-based specialist focused on harvesting rare earth materials.",
+  "Abilities": [
+    {
+      "Ability": "Mountain Crush",
+      "Requirements": [ { "Item": "Gold", "Quantity": 5000 } ],
+      "PrimaryStat": "Strength"
+    }
+  ]
+  },
+  {
+  "Name": "Tide-Caller",
+  "Description": "A speed-based specialist focused on exploring deep waters.",
+  "Abilities": [
+    {
+      "Ability": "Deep Dive",
+      "Requirements": [ { "Item": "Gold", "Quantity": 5000 } ],
+      "PrimaryStat": "Speed"
+    }
+  ]
+  },
+  {
+  "Name": "Slayer",
+  "Description": "An elite combatant unlocked through mastery of both strength and speed.",
+  "Abilities": [
+    {
+      "Ability": "Master Slayer",
+      "Requirements": [ { "Item": "Gold", "Quantity": 15000 } ],
+      "PrimaryStat": "Strength"
+    }
+  ]
   }
   ]

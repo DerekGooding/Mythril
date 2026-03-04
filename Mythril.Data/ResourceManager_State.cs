@@ -107,6 +107,7 @@ public partial class ResourceManager
                 }
             }
         }
+        CheckHiddenCadences();
     }
 
     public IEnumerable<Quest> GetCompletedQuests() => _completedQuests;
