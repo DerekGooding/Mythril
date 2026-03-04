@@ -1,6 +1,5 @@
 namespace Mythril.Data;
 
-[Singleton]
 public partial class ResourceManager
 {
     private readonly Items _items;

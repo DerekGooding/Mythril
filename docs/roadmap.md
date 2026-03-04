@@ -6,10 +6,10 @@ Implement the third tier of multi-tasking and the second tier of automation, alo
 ## 🛤️ Active Tasks
 
 ### Phase 1: UI & Visual Foundation
-- [ ] **Requirement Iconography**: Implement 🛡️ (Stats), 📦 (Items), and 🔑 (Prerequisites) on all Quest and Ability cards.
-- [ ] **Task Sorting**: Add a toggle in the Locations tab to sort quests by base duration.
-- [ ] **Historical Logs**: Create a "Journal" tab to track the last 50 completed tasks.
-- [ ] **Inventory UI Scaling**: Implement horizontal scrolling and category filtering for large inventories.
+- [x] **Requirement Iconography**: Implement 🛡️ (Stats), 📦 (Items), and 🔑 (Prerequisites) on all Quest and Ability cards.
+- [x] **Task Sorting**: Add a toggle in the Locations tab to sort quests by base duration.
+- [x] **Historical Logs**: Create a "Journal" tab to track the last 50 completed tasks.
+- [x] **Inventory UI Scaling**: Horizontal scrolling implemented for large inventories. (Category filtering moved to UX polish phase).
 
 ### Phase 2: Logistics & Automation (Tier II)
 - [ ] **Logistics II**: Expand character capacity to a **3rd task slot**.

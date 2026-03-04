@@ -1,4 +1,6 @@
 using Mythril.Data;
+using Microsoft.Extensions.DependencyInjection;
+using System.Linq;
 
 namespace Mythril.Tests;
 
@@ -66,5 +68,25 @@ public class RewardTests : BunitTestBase
         // Assert
         Assert.AreEqual(2, InventoryManager.GetQuantity(output));
         Assert.AreEqual(1, ResourceManager.Journal.Count);
+    }
+
+    [TestMethod]
+    public void RestoreCompletedQuest_UnlocksQuestAndCadences()
+    {
+        // Arrange
+        var quest = new Quest("Unlock Quest", "Desc");
+        var cadence = new Cadence("Secret Cadence", "Desc", []);
+        
+        // This is a bit internal, but we need to set up the mapping
+        // In a real scenario, this is loaded from JSON
+        var questToCadence = TestContext.Services.GetRequiredService<QuestToCadenceUnlocks>();
+        questToCadence.Load(new Dictionary<Quest, Cadence[]> { { quest, [cadence] } });
+
+        // Act
+        ResourceManager.RestoreCompletedQuest(quest);
+
+        // Assert
+        Assert.IsTrue(ResourceManager.GetCompletedQuests().Contains(quest));
+        Assert.IsTrue(ResourceManager.UnlockedCadences.Any(c => c.Name == "Secret Cadence"));
     }
 }
