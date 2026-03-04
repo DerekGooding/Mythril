@@ -13,7 +13,7 @@
     <div class="workshop-content">
         @{
             var discoveredRefinements = refinements.ByKey
-                .Where(r => resourceManager.UnlockedAbilities.Any(ua => ua.EndsWith($":{r.Key.Name}")))
+                .Where(r => UnlockedAbilities?.Any(ua => ua.EndsWith($":{r.Key.Name}")) == true)
                 .ToList();
         }
 
@@ -51,5 +51,6 @@
 </div>
 
 @code {
-    // Methods removed as refinements are now handled via StartQuest in Home.razor
+    [Parameter]
+    public HashSet<string>? UnlockedAbilities { get; set; }
 }

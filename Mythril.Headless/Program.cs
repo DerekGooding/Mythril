@@ -80,13 +80,14 @@ class Program
         abilities.Load(JsonConvert.DeserializeObject<List<CadenceAbility>>(File.ReadAllText(Path.Combine(dataDir, "cadence_abilities.json"))) ?? []);
 
         var locDTOs = JsonConvert.DeserializeObject<List<LocationDTO>>(File.ReadAllText(Path.Combine(dataDir, "locations.json"))) ?? [];
-        locations.Load(locDTOs.Select(d => new Location(d.Name, d.Quests.Select(qn => quests.All.First(q => q.Name == qn)))).ToList());
+        locations.Load(locDTOs.Select(d => new Location(d.Name, d.Quests.Select(qn => quests.All.First(q => q.Name == qn)), d.RequiredQuest)).ToList());
 
         var cadDTOs = JsonConvert.DeserializeObject<List<CadenceDTO>>(File.ReadAllText(Path.Combine(dataDir, "cadences.json"))) ?? [];
         cadences.Load(cadDTOs.Select(d => new Cadence(d.Name, d.Description, d.Abilities.Select(a => new CadenceUnlock(
             d.Name,
             abilities.All.First(ab => ab.Name == a.Ability),
-            a.Requirements.Select(r => new ItemQuantity(items.All.First(i => i.Name == r.Item), r.Quantity)).ToArray()
+            a.Requirements.Select(r => new ItemQuantity(items.All.First(i => i.Name == r.Item), r.Quantity)).ToArray(),
+            a.PrimaryStat ?? "Magic"
         )).ToArray())).ToList());
 
         var detailDTOs = JsonConvert.DeserializeObject<List<QuestDetailDTO>>(File.ReadAllText(Path.Combine(dataDir, "quest_details.json"))) ?? [];
@@ -95,7 +96,9 @@ class Program
             d => new QuestDetail(d.DurationSeconds, 
                 d.Requirements.Select(r => new ItemQuantity(items.All.First(i => i.Name == r.Item), r.Quantity)).ToArray(),
                 d.Rewards.Select(r => new ItemQuantity(items.All.First(i => i.Name == r.Item), r.Quantity)).ToArray(),
-                Enum.Parse<QuestType>(d.Type)
+                Enum.Parse<QuestType>(d.Type),
+                d.PrimaryStat ?? "Vitality",
+                d.RequiredStats
             )
         ));
 
@@ -121,10 +124,10 @@ class Program
         var refinementDTOs = JsonConvert.DeserializeObject<List<RefinementDTO>>(File.ReadAllText(Path.Combine(dataDir, "refinements.json"))) ?? [];
         refinements.Load(refinementDTOs.ToDictionary(
             d => abilities.All.First(a => a.Name == d.Ability),
-            d => d.Recipes.ToDictionary(
+            d => (d.PrimaryStat ?? "Strength", d.Recipes.ToDictionary(
                 r => items.All.First(i => i.Name == r.InputItem),
                 r => new Recipe(r.InputQuantity, items.All.First(i => i.Name == r.OutputItem), r.OutputQuantity)
-            )
+            ))
         ));
 
         // 2. Initialize Engine

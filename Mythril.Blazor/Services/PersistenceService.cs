@@ -42,6 +42,7 @@ public class PersistenceService(
                 }))
                 .ToList(),
             AutoQuestEnabled = resourceManager.AutoQuestEnabled.ToDictionary(x => x.Key, x => x.Value),
+            UnlockedLocations = resourceManager.UnlockedLocationNames.ToList(),
             HasUnseenCadence = resourceManager.HasUnseenCadence,
             HasUnseenWorkshop = resourceManager.HasUnseenWorkshop,
             ActiveQuests = resourceManager.ActiveQuests.Select(q => new QuestProgressDTO
@@ -123,6 +124,14 @@ public class PersistenceService(
                 resourceManager.SetAutoQuestEnabled(character, kvp.Value);
             }
         }
+
+        // Restore Unlocked Locations
+        resourceManager.UnlockedLocationNames.Clear();
+        foreach (var name in saveData.UnlockedLocations)
+        {
+            resourceManager.UnlockedLocationNames.Add(name);
+        }
+        resourceManager.UpdateUsableLocations();
 
         // Restore Junctions
         junctionManager.Junctions.Clear();

@@ -58,7 +58,7 @@ public class ContentLoader(
                 var q = quests.All.FirstOrDefault(x => x.Name == qn);
                 if (q.Name == null) Console.WriteLine($"WARNING: Quest '{qn}' not found for location '{d.Name}'");
                 return q;
-            }).Where(x => x.Name != null))).ToList();
+            }).Where(x => x.Name != null), d.RequiredQuest)).ToList();
             locations.Load(locationsList);
         } catch (Exception ex) { Console.WriteLine($"Error loading locations: {ex.Message}"); throw; }
 

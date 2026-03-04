@@ -32,6 +32,7 @@ public partial class ResourceManager(
     private readonly HashSet<Quest> _completedQuests = [];
 
     public List<LocationData> UsableLocations = [];
+    public readonly HashSet<string> UnlockedLocationNames = [];
 
     public List<Cadence> UnlockedCadences = [];
     public List<string> UnlockedCadenceNames = [];
@@ -55,6 +56,7 @@ public partial class ResourceManager(
         _completedQuests.Clear();
         UnlockedAbilities.Clear();
         _autoQuestEnabled.Clear();
+        UnlockedLocationNames.Clear();
         HasUnseenCadence = false;
         HasUnseenWorkshop = false;
         lock(_questLock)
@@ -69,11 +71,24 @@ public partial class ResourceManager(
         _lockedCadences = _cadences.All.ToNamedDictionary(_ => true);
 
         Console.WriteLine("Initializing Locations...");
-        UsableLocations = [.. _locations.All.Select(x => new LocationData(x, x.Quests.Where(IsNeverLocked)))];
+        UpdateUsableLocations();
         
         UpdateAvaiableCadences();
         JunctionManager.Initialize();
         Console.WriteLine("ResourceManager initialized.");
+    }
+
+    public void UpdateUsableLocations()
+    {
+        UsableLocations = [.. _locations.All
+            .Where(l => string.IsNullOrEmpty(l.RequiredQuest) || UnlockedLocationNames.Contains(l.Name) || _completedQuests.Any(q => q.Name == l.RequiredQuest))
+            .Select(x => new LocationData(x, x.Quests.Where(IsNeverLocked)))];
+        
+        foreach(var location in UsableLocations)
+        {
+            if (!string.IsNullOrEmpty(location.Name))
+                UnlockedLocationNames.Add(location.Name);
+        }
     }
 
     public bool CanAutoQuest(Character character)

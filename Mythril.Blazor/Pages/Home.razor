@@ -76,7 +76,7 @@
                                       OnUnequip="UnassignCadence" />
                     </div>
                     <div class="tab-pane" id="workshop" role="tabpanel">
-                        <Workshop />
+                        <Workshop UnlockedAbilities="resourceManager.UnlockedAbilities" @key="@resourceManager.UnlockedAbilities.Count" />
                     </div>
                 </div>
             }

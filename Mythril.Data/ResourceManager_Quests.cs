@@ -75,6 +75,7 @@ public partial class ResourceManager
     private void UnlockQuest(Quest quest)
     {
         _completedQuests.Add(quest);
+        UpdateUsableLocations();
         foreach(var location in UsableLocations)
         {
             foreach(var data in location.LockedQuests)
