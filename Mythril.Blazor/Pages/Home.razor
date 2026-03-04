@@ -3,35 +3,41 @@
 @using Mythril.Data
 @using System.Threading.Tasks
 
-@inject ResourceManager resourceManager
-@inject JunctionManager JunctionManager
-@inject ThemeService themeService
-@inject NavigationManager navigationManager
-@inject SnackbarService SnackbarService
-@inject AuthService AuthService
-@inject PersistenceService persistenceService
-@inject IJSRuntime JS
-
 <PageTitle>Mythril</PageTitle>
 
 <div class="container-fluid d-flex flex-column p-0 overflow-hidden">
     <!-- Header Row -->
-    <div class="header-row flex-shrink-0 p-2 d-flex align-items-center gap-2">
-        <button class="btn btn-primary" data-testid="theme-toggle" @onclick="ToggleTheme">Toggle Theme</button>
-        <button class="btn btn-outline-danger" data-testid="reset-game" @onclick="ResetGame">Reset Game</button>
-        @if (AuthService.IsAuthenticated)
-        {
-            <button class="btn @(resourceManager.IsTestMode ? "btn-warning" : "btn-outline-secondary")" 
-                    data-testid="test-mode-toggle"
-                    @onclick="ToggleTestMode">
-                Test Mode: @(resourceManager.IsTestMode ? "ON" : "OFF")
-            </button>
-        }
-        <div class="flex-grow-1">
+    <div class="header-row flex-shrink-0 p-2 d-flex align-items-center gap-3">
+        <div class="d-flex flex-column gap-1">
+            <button class="btn btn-sm btn-primary" data-testid="theme-toggle" @onclick="ToggleTheme">Toggle Theme</button>
+            <button class="btn btn-sm btn-outline-danger" data-testid="reset-game" @onclick="ResetGame">Reset Game</button>
+            @if (AuthService.IsAuthenticated)
+            {
+                <button class="btn btn-sm @(resourceManager.IsTestMode ? "btn-warning" : "btn-outline-secondary")" 
+                        data-testid="test-mode-toggle"
+                        @onclick="ToggleTestMode">
+                    Test Mode: @(resourceManager.IsTestMode ? "ON" : "OFF")
+                </button>
+            }
+        </div>
+        
+        <div class="flex-grow-1 d-flex align-items-center gap-2">
             @if (resourceManager is not null)
             {
                 <InventoryPanel Items="resourceManager.Inventory?.GetItems().ToList()" />
             }
+            
+            <div class="version-stack d-flex flex-column align-items-end ms-auto text-nowrap">
+                <span class="version-text small text-muted" style="cursor: pointer; user-select: none;" @onclick="OnVersionClick">
+                    v: @(VersionService.CurrentVersion?.Substring(0, 7) ?? "local")
+                </span>
+                @if (VersionService.IsUpdateAvailable)
+                {
+                    <button class="btn btn-xs btn-warning animate-pulse mt-1" data-testid="update-button" @onclick="RefreshPage">
+                        Update Available
+                    </button>
+                }
+            </div>
         </div>
     </div>
 
@@ -104,136 +110,3 @@
         </div>
     </div>
 </div>
-
-@using System.Timers
-@code {
-    private Timer? timer;
-    private int saveCounter = 0;
-
-    protected override async Task OnInitializedAsync()
-    {
-        await persistenceService.LoadAsync();
-        
-        timer = new Timer(100);
-        timer.Elapsed += (sender, args) => { _ = Task.Run(OnTimerElapsed); };
-        timer.AutoReset = true;
-        timer.Enabled = true;
-
-        themeService.OnThemeChanged += StateHasChanged;
-    }
-
-    private void MarkCadencesAsSeen()
-    {
-        resourceManager.ActiveTab = "cadence";
-        if (resourceManager.HasUnseenCadence)
-        {
-            resourceManager.HasUnseenCadence = false;
-            _ = persistenceService.SaveAsync();
-        }
-    }
-
-    private void MarkWorkshopAsSeen()
-    {
-        resourceManager.ActiveTab = "workshop";
-        if (resourceManager.HasUnseenWorkshop)
-        {
-            resourceManager.HasUnseenWorkshop = false;
-            _ = persistenceService.SaveAsync();
-        }
-    }
-
-    private async Task ToggleTheme()
-    {
-        await themeService.ToggleTheme();
-    }
-
-    private void ToggleTestMode()
-    {
-        resourceManager.IsTestMode = !resourceManager.IsTestMode;
-    }
-
-    private async Task ResetGame()
-    {
-        bool confirmed = await JS.InvokeAsync<bool>("confirm", "Are you sure you want to reset all progress? This cannot be undone.");
-        if (confirmed)
-        {
-            await persistenceService.ClearSaveAsync();
-            resourceManager.Initialize();
-            SnackbarService.Show("Game Reset", "warning");
-            await InvokeAsync(StateHasChanged);
-        }
-    }
-
-    private async Task TaskDropped((object item, Character character) args)
-    {
-        if (args.item is Cadence cadence)
-        {
-            JunctionManager.AssignCadence(cadence, args.character, resourceManager.UnlockedAbilities);
-            SnackbarService.Show($"{args.character.Name} equipped {cadence.Name}", "info");
-        }
-        else if (args.item is RefinementData refinement)
-        {
-            if (resourceManager.HasAbility(args.character, refinement.Ability))
-            {
-                resourceManager.StartQuest(refinement, args.character);
-            }
-            else
-            {
-                SnackbarService.Show($"This character does not have a cadence with the {refinement.Ability.Name} ability.", "warning");
-            }
-        }
-        else
-        {
-            resourceManager.StartQuest(args.item, args.character);
-        }
-        await InvokeAsync(StateHasChanged);
-    }
-
-    private async Task UnassignCadence(Cadence cadence)
-    {
-        JunctionManager.Unassign(cadence, resourceManager.UnlockedAbilities);
-        SnackbarService.Show($"Unequipped {cadence.Name}", "info");
-        await InvokeAsync(StateHasChanged);
-    }
-
-    private async Task OnTimerElapsed()
-    {
-        resourceManager.Tick(0.1); 
-        
-        saveCounter++;
-        if (saveCounter >= 300) // Save every 30 seconds
-        {
-            saveCounter = 0;
-            await persistenceService.SaveAsync();
-        }
-
-        await InvokeAsync(StateHasChanged);
-    }
-
-    public void Dispose()
-    {
-        timer?.Dispose();
-        themeService.OnThemeChanged -= StateHasChanged;
-    }
-
-    protected async Task OnCompletionAnimationEnd(QuestProgress completedProgress)
-    {
-        await resourceManager.ReceiveRewards(completedProgress.Item);
-        resourceManager.RemoveActiveQuest(completedProgress);
-        SnackbarService.Show($"Completed: {completedProgress.Name}", "success");
-
-        // Auto-restart logic (Only for Slot 0)
-        if (completedProgress.SlotIndex == 0 && completedProgress.Item is QuestData quest && quest.Type == QuestType.Recurring)
-        {
-            if (resourceManager.IsAutoQuestEnabled(completedProgress.Character) && resourceManager.CanAutoQuest(completedProgress.Character))
-            {
-                if (resourceManager.CanAfford(quest))
-                {
-                    resourceManager.StartQuest(quest, completedProgress.Character, -1.5);
-                }
-            }
-        }
-        
-        await InvokeAsync(StateHasChanged);
-    }
-}

@@ -7,25 +7,6 @@
 @inject AuthService AuthService
 
 <main>
-    <div class="top-row px-4 justify-content-between">
-        <div class="d-flex align-items-center">
-            <button class="btn btn-outline-info mx-2" data-testid="feedback-toggle" @onclick="ToggleFeedback">Feedback</button>
-        </div>
-        
-        <div class="version-info d-flex align-items-center">
-            <span class="version-text small mx-2" style="cursor: pointer; user-select: none;" @onclick="OnVersionClick">
-                v: @(VersionService.CurrentVersion?.Substring(0, 7) ?? "local")
-            </span>
-            @if (VersionService.IsUpdateAvailable)
-            {
-                <button class="btn btn-sm btn-warning animate-pulse" data-testid="update-button" @onclick="RefreshPage">
-                    <span class="material-icons-outlined small" style="font-size: 1rem; vertical-align: middle;">refresh</span>
-                    Update Available
-                </button>
-            }
-        </div>
-    </div>
-
     <div class="main-container">
         <article class="content">
             @Body
