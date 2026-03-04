@@ -88,6 +88,11 @@
   "Description": "A master of the arcane and material arts.",
   "Abilities": [
     {
+      "Ability": "Logistics I",
+      "Requirements": [ { "Item": "Gold", "Quantity": 2500 } ],
+      "PrimaryStat": "Magic"
+    },
+    {
       "Ability": "Mass Refine",
       "Requirements": [ { "Item": "Gold", "Quantity": 5000 }, { "Item": "Mythril Spark", "Quantity": 1 } ],
       "PrimaryStat": "Magic"
