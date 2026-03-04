@@ -253,6 +253,23 @@ def check_docs_staleness():
     return stale_count
 
 # -----------------------
+# Reachability Simulation
+# -----------------------
+
+def check_reachability():
+    print("--- Running Reachability Simulation ---")
+    try:
+        # Run the headless simulation
+        # Use shell=True for windows/powershell compatibility if needed, 
+        # but direct list is safer for argument passing.
+        cmd = ["dotnet", "run", "--project", "Mythril.Headless", "--", "--run-sim"]
+        subprocess.check_call(cmd)
+        return True
+    except subprocess.CalledProcessError:
+        record_failure("reachability", "Simulation failed: One or more quests are mathematically unreachable.")
+        return False
+
+# -----------------------
 # Feedback Check
 # -----------------------
 
@@ -351,6 +368,7 @@ if __name__ == "__main__":
     key_violations = check_key_usage()
     testid_violations = check_data_testid()
     stale_docs = check_docs_staleness()
+    reachability_passed = check_reachability()
     pending_feedback = check_feedback()
 
     metrics = {
@@ -360,6 +378,7 @@ if __name__ == "__main__":
         "key_violations": key_violations,
         "testid_violations": testid_violations,
         "stale_docs": stale_docs,
+        "reachability_passed": reachability_passed,
         "pending_feedback": pending_feedback,
         "test_passed": test_passed
     }

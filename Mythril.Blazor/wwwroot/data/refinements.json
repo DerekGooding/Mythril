@@ -36,5 +36,12 @@
       { "InputItem": "Web", "InputQuantity": 1, "OutputItem": "Gold", "OutputQuantity": 100 },
       { "InputItem": "Slime", "InputQuantity": 1, "OutputItem": "Gold", "OutputQuantity": 150 }
     ]
+  },
+  {
+    "Ability": "Refine Life",
+    "PrimaryStat": "Magic",
+    "Recipes": [
+      { "InputItem": "Ancient Bark", "InputQuantity": 1, "OutputItem": "Cure I", "OutputQuantity": 5 }
+    ]
   }
 ]

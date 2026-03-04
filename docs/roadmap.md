@@ -1,27 +1,16 @@
-# Project Roadmap
+# Mythril Project Roadmap
 
-**Status:** Updated March 3, 2026. Transitioning to Depth & Balancing.
+## ✅ Completed Milestones (March 4, 2026)
+- **Game Graph Simulation**: Implemented a mathematical reachability engine in `Mythril.Headless` to verify that all quests and resources are attainable within the game's logic.
+- **Automated Balancing**: Integrated simulation into the project health check to prevent "logic orphans" or impossible content chains during development.
+- **Progress Tracking**: Added completion counters and visual mastery indicators (checkmarks) to both Locations and Cadences.
+- **Logistics & Multi-Tasking**: Added the "Logistics I" ability, allowing characters to perform two tasks at once with automated cancellation/refund logic.
+- **Refinement Automation**: Enabled "AutoQuest I" to correctly loop refinement tasks in the primary task slot.
+- **Dynamic Economy Gating**: Implemented location discovery based on story quest completion and balanced magic capacity/stat scaling.
+- **UI Streamlining**: Refactored the header and panel layouts for better information density and theme responsiveness.
 
-## Current Phase: Expansion & Depth
-- [x] AI Mandates & Health Check System
-- [x] Headless AI Testing Framework
-- [x] Core Logic Consolidation
-- [x] State Persistence & Mid-Progress Restore
-- [x] Asynchronous Quest Tick System
-- [x] Cadence Visualizer & Assignment UI
-- [x] Item Refinement Workshop (Time-Based)
-- [x] Intelligent Discovery Notifications
-- [x] Auto-Quest Visualizer (Prep Time)
-- [x] Junction Prediction UI
-- [x] Universal Stat Multipliers
-- [x] Progression Stat Gates
-- [x] Content: The Sentinel Cadence
-- [x] Content: Sun-Drenched Desert Biome
-- [x] Content: Magic Expenditure Quests
-
-## Completed Phase 1: Foundation
-- [x] Data-Driven Content Migration (JSON)
-- [x] Agentic "Status Report" Utility
-- [x] Linear Stat Augment Calculator
-- [x] Global Magic Capacity Enforcement
-- [x] Tutorial Questline: "The First Refinement"
+## 🔜 Future Vision
+- [ ] Tier II and III Cadence abilities.
+- [ ] Advanced "Logistics" tiers for 3+ task slots.
+- [ ] Equipment and crafting system beyond raw magic junctioning.
+- [ ] Narrative events and branching quest choices.

@@ -41,10 +41,12 @@ class Program
         if (args.Length < 1)
         {
             Console.WriteLine("Usage: Mythril.Headless <command_file.json> [output_state.json]");
+            Console.WriteLine("       Mythril.Headless --run-sim");
             Environment.Exit(1);
         }
 
-        string commandFilePath = args[0];
+        bool isSimMode = args[0].Equals("--run-sim", StringComparison.OrdinalIgnoreCase);
+        string commandFilePath = isSimMode ? "" : args[0];
         string outputFilePath = args.Length > 1 ? args[1] : "state.json";
 
         // 1. Initialize Content (Manual load for Headless)
@@ -136,6 +138,15 @@ class Program
         var resourceManager = new ResourceManager(items, questUnlocks, questToCadenceUnlocks, questDetails, cadences, locations, junctionManager, inventory, refinements);
         
         resourceManager.Initialize();
+
+        if (isSimMode)
+        {
+            var simulator = new Simulation.ReachabilitySimulator(
+                items, quests, questDetails, questUnlocks, questToCadenceUnlocks,
+                cadences, locations, refinements, statAugments, stats);
+            simulator.Run();
+            return;
+        }
 
         var json = File.ReadAllText(commandFilePath);
         var commandFile = JsonConvert.DeserializeObject<CommandFile>(json);

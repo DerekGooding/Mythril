@@ -145,7 +145,7 @@ public class JunctionStatTests
         _junctionManager.JunctionMagic(character, strengthStat, fireMagic, _resourceManager.UnlockedAbilities);
 
         var val = _junctionManager.GetStatValue(character, "Strength");
-        Assert.AreEqual(13, val);
+        Assert.AreEqual(25, val); // Base 10 + (30 items * (50/100)) = 10 + 15 = 25
     }
 
     [TestMethod]
@@ -203,7 +203,10 @@ public class JunctionStatTests
         
         _resourceManager.UnlockedAbilities.Add("AnyCadence:Magic Pocket I");
         _resourceManager.UpdateMagicCapacity();
-        
         Assert.AreEqual(60, _resourceManager.Inventory.MagicCapacity);
+
+        _resourceManager.UnlockedAbilities.Add("AnyCadence:Magic Pocket II");
+        _resourceManager.UpdateMagicCapacity();
+        Assert.AreEqual(100, _resourceManager.Inventory.MagicCapacity);
     }
 }
