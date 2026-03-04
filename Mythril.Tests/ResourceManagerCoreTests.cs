@@ -169,6 +169,29 @@ public class ResourceManagerCoreTests
     }
 
     [TestMethod]
+    public void ResourceManager_Initialize_ClearsJunctions()
+    {
+        // Setup a junction
+        var character = _resourceManager!.Characters[0];
+        var stat = ContentHost.GetContent<Stats>().All.First();
+        var magic = _items!.All.First(i => i.Name == "Fire I");
+        
+        // Mock ability unlock
+        _resourceManager.UnlockedAbilities.Add("Recruit:J-Str");
+        var recruit = ContentHost.GetContent<Cadences>().All.First(c => c.Name == "Recruit");
+        _resourceManager.JunctionManager.AssignCadence(recruit, character, _resourceManager.UnlockedAbilities);
+        
+        _resourceManager.JunctionManager.JunctionMagic(character, stat, magic, _resourceManager.UnlockedAbilities);
+        Assert.AreEqual(1, _resourceManager.JunctionManager.Junctions.Count);
+
+        // Initialize
+        _resourceManager.Initialize();
+
+        // Assert
+        Assert.AreEqual(0, _resourceManager.JunctionManager.Junctions.Count, "Junctions should be cleared on initialization.");
+    }
+
+    [TestMethod]
     public void Character_Name_ReturnsCorrectValue()
     {
         var character = new Character("Test");

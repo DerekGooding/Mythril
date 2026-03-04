@@ -17,6 +17,7 @@ public class JunctionManager(
     public void Initialize()
     {
         _assignedCadences = _cadences.All.ToNamedDictionary(_ => (Character?)null);
+        Junctions.Clear();
     }
 
     public void AssignCadence(Cadence cadence, Character character, HashSet<string> unlockedAbilities)

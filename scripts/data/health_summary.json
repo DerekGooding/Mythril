@@ -3,7 +3,7 @@
     "failure_count": 1,
     "metrics": {
         "monoliths": 0,
-        "coverage": 91.27,
+        "coverage": 91.28,
         "missing_tests": 0,
         "key_violations": 0,
         "testid_violations": 0,
@@ -14,7 +14,7 @@
     "failures": [
         {
             "category": "docs_stale",
-            "message": "docs/instructions.md is stale (11 source changes since last update)",
+            "message": "docs/instructions.md is stale (13 source changes since last update)",
             "metadata": {}
         }
     ]
