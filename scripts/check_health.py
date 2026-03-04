@@ -260,14 +260,22 @@ def check_reachability():
     print("--- Running Reachability Simulation ---")
     try:
         # Run the headless simulation
-        # Use shell=True for windows/powershell compatibility if needed, 
-        # but direct list is safer for argument passing.
         cmd = ["dotnet", "run", "--project", "Mythril.Headless", "--", "--run-sim"]
         subprocess.check_call(cmd)
-        return True
+        
+        # Parse the report for time estimate
+        report_path = Path("simulation_report.md")
+        game_time = "Unknown"
+        if report_path.exists():
+            content = report_path.read_text(encoding="utf-8")
+            match = re.search(r"- \*\*Rekindling the Spark\*\*: ([\d:]+)", content)
+            if match:
+                game_time = match.group(1)
+        
+        return {"passed": True, "time": game_time}
     except subprocess.CalledProcessError:
         record_failure("reachability", "Simulation failed: One or more quests are mathematically unreachable.")
-        return False
+        return {"passed": False, "time": "N/A"}
 
 # -----------------------
 # Feedback Check
@@ -334,6 +342,17 @@ def generate_shields(metrics):
     color = "brightgreen" if ui_passed else "red"
     message = "passed" if ui_passed else "failed"
     write_shield("ui", "UI integrity", message, color)
+
+    # Simulation Shield
+    sim = metrics.get('reachability_passed', {})
+    sim_passed = sim.get('passed', False)
+    color = "brightgreen" if sim_passed else "red"
+    message = "passed" if sim_passed else "failed"
+    write_shield("simulation", "reachability", message, color)
+
+    # Game Time Shield
+    game_time = sim.get('time', "N/A")
+    write_shield("game_time", "optimal completion", game_time, "blue")
 
 # -----------------------
 # Export Results

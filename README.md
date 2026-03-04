@@ -6,6 +6,8 @@
 ![Monoliths](https://img.shields.io/endpoint?url=https://DerekGooding.github.io/Mythril/health/shield_monoliths.json)
 ![Docs](https://img.shields.io/endpoint?url=https://DerekGooding.github.io/Mythril/health/shield_docs.json)
 ![UI Integrity](https://img.shields.io/endpoint?url=https://DerekGooding.github.io/Mythril/health/shield_ui.json)
+![Reachability](https://img.shields.io/endpoint?url=https://DerekGooding.github.io/Mythril/health/shield_simulation.json)
+![Optimal Completion](https://img.shields.io/endpoint?url=https://DerekGooding.github.io/Mythril/health/shield_game_time.json)
 
 [**Live Website**](https://DerekGooding.Github.io/Mythril) | [**How to Play**](docs/instructions.md)
 
@@ -46,6 +48,8 @@ Mythril is an RPG-inspired web application built with **.NET 10** and **Blazor W
 ## ⚖️ Quality Assurance & Health
 We maintain project health through a custom automated suite (`scripts/check_health.py`) which runs on every commit:
 - **Monolith Prevention**: Strict 250-line limit for source files (excluding tools).
+- **Game Graph Simulation**: Integrated Fixed-Point Iteration engine that mathematically verifies every quest and resource is attainable from a fresh start. Prevents "logic orphans" and provides estimated optimal completion times for the endgame.
+- **Automated Balancing**: The reachability simulation is part of the health suite. If a content change makes a quest mathematically impossible (e.g. required stat cannot be reached), the build fails.
 - **Coverage**: Mandatory 70% overall line coverage; 25% per-file minimum.
 - **Razor Integrity**: All interactive components must have bUnit tests, `@key` usage in loops, and `data-testid` anchors.
 - **Documentation Integrity**: Automated staleness tracking via local file modification times.
