@@ -133,6 +133,21 @@
     transform: translateY(-2px);
     box-shadow: var(--shadow-md);
 }
+
+.item-name[b-4838z82fju] {
+    font-weight: bold;
+    color: var(--text-color);
+}
+
+.completion-counter[b-4838z82fju] {
+    font-variant-numeric: tabular-nums;
+    font-weight: normal;
+}
+
+.text-success[b-4838z82fju] {
+    color: #28a745;
+    font-weight: bold;
+}
 /* /Components/CadencePanel.razor.rz.scp.css */
 .cadence-panel[b-eix7gxvxzt] {
     display: flex !important;
