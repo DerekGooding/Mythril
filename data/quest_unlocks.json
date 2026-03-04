@@ -11,9 +11,9 @@
   { "Quest": "Mine Ore", "Requires": ["Learn about the Mines"] },     
   { "Quest": "Hunt Bats", "Requires": ["Learn about the Mines"] },      
   { "Quest": "Hunt Spiders", "Requires": ["Hunt Bats"] },      
-  { "Quest": "Farm Slimes", "Requires": ["Hunt Spiders"] },
+  { "Quest": "Hunt Slimes", "Requires": ["Hunt Spiders"] },
+  { "Quest": "Unlock Mining", "Requires": ["Hunt Slimes"] },
 
-  { "Quest": "Unlock Mining", "Requires": ["Farm Slimes"] },
   { "Quest": "Mine Iron Ore", "Requires": ["Unlock Mining"] },
   { "Quest": "Gather Moonberries", "Requires": ["Learn about the Dark Forest"] },
   { "Quest": "Defeat Treant Guardian", "Requires": ["Gather Moonberries"] },
