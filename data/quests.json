@@ -11,7 +11,8 @@
   { "Name": "Mine Ore", "Description": "Extract raw ore from the mine walls." },
   { "Name": "Learn about the Mines", "Description": "Find out where the miners went." },
   { "Name": "Hunt Bats", "Description": "Clear the mine entrance of bats." },
-  { "Name": "Farm Spiders", "Description": "Venture deeper into the webs." },
+  { "Name": "Hunt Spiders", "Description": "Venture deeper into the webs." },
+
   { "Name": "Farm Slimes", "Description": "Clear the lower levels of sticky residue." },
   { "Name": "Unlock Mining", "Description": "Obtain permission to mine Iron Ore." },
   { "Name": "Mine Iron Ore", "Description": "Extract precious metals from the earth." },

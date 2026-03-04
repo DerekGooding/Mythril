@@ -97,7 +97,7 @@
   },
 
   {
-    "Quest": "Farm Spiders",
+    "Quest": "Hunt Spiders",
     "DurationSeconds": 75,
     "Type": "Recurring",
     "Requirements": [],
