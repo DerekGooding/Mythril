@@ -75,7 +75,22 @@ The game is inspired by the **FF8 Junction System** and the **FF Tactics Job Sys
 4. **Junctioning**: Combine Magic with Cadence **Junction Abilities** to increase character stats.
 5. **Scaling**: Higher stats allow characters to perform related quests faster or unlock higher-tier item quests.
 
-### **Short-Term Priority**
-- Do not focus on endgame yet.
-- **Goal**: Implement a solid **20-30 minute onboarding experience** that teaches these mechanics (Equipping, Refining, Junctioning).
-- Ensure the core mechanics (Items -> Magic -> Stats -> Efficiency) are fully functional and intuitive before scaling content.
+---
+## [2026-03-04] Automation, Balancing, and Aesthetics
+
+### **Automation & Pacing**
+- **Gameplay Ratio**: Aim for an optimal gameplay ratio of **2/3 idle** (automated recurring tasks) and **1/3 active** (one-time objectives and long-running quests).
+- **Multi-Tasking**: As players unlock more task slots, they should be encouraged to keep a balance between automated resource generation and manual progression.
+- **The "Wall"**: The first significant "grind" where junction optimization becomes necessary should occur around **10 minutes** into a fresh game.
+
+### **Character & Stat Limits**
+- **Character Identity**: Characters remain **Blank Slates**. No unique starting passives or narrative roles that influence builds.
+- **Stat Ceiling**: Maximum stat values are capped at **255** (Final Fantasy standard).
+
+### **Equipment & Economy**
+- **No Equipment**: There will be no dedicated equipment slots (Weapons/Armor). **Junctioning remains the primary and only system** for stat modification.
+- **Resource Scarcity**: Rare progression-gating resources (e.g., Mythril Spark) should initially be one-time rewards. They may become recurring sources much later in the progression tree.
+
+### **Visual Aesthetic**
+- **Minimalism**: Maintain the clean, minimalist dashboard look.
+- **Visual Cues**: Expand the use of icons for quest requirements. In addition to the "shield" for stats, introduce a "bullet point" or similar icon for item requirements.
