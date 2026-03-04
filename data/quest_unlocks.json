@@ -6,12 +6,12 @@
   { "Quest": "Learn About Cadences", "Requires": ["Visit Starting Town"] },
   { "Quest": "Learn about the Mines", "Requires": ["Learn About Cadences"] },
   { "Quest": "Learn about the Dark Forest", "Requires": ["Learn about the Mines"] },
-  { "Quest": "Farm Goblins", "Requires": ["Learn about the Dark Forest"] },
-     
-  { "Quest": "Farm Trents", "Requires": ["Learn about the Dark Forest"] },     
+  { "Quest": "Hunt Goblins", "Requires": ["Learn about the Dark Forest"] },     
+  { "Quest": "Chop Wood", "Requires": ["Learn about the Dark Forest"] },     
   { "Quest": "Mine Ore", "Requires": ["Learn about the Mines"] },     
-  { "Quest": "Farm Bats", "Requires": ["Learn about the Mines"] },      
-  { "Quest": "Farm Spiders", "Requires": ["Farm Bats"] },
+  { "Quest": "Hunt Bats", "Requires": ["Learn about the Mines"] },      
+  { "Quest": "Farm Spiders", "Requires": ["Hunt Bats"] },      
+
   { "Quest": "Farm Slimes", "Requires": ["Farm Spiders"] },
   { "Quest": "Unlock Mining", "Requires": ["Farm Slimes"] },
   { "Quest": "Mine Iron Ore", "Requires": ["Unlock Mining"] },
