@@ -1,6 +1,6 @@
 [
   { "Quest": "Learn About Cadences", "Cadences": ["Recruit"] },
-  { "Quest": "Recover the Ancient Tome", "Cadences": ["The Arcanist"] },
+  { "Quest": "Recover the Ancient Tome", "Cadences": ["Arcanist"] },
   { "Quest": "Learn about the Mines", "Cadences": ["Apprentice"] },
   { "Quest": "Learn about the Dark Forest", "Cadences": ["Student"] },
   { "Quest": "Rekindling the Spark", "Cadences": ["Mythril Weaver"] }

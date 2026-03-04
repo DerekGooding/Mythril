@@ -20,7 +20,7 @@ Unlocks after *Visit Starting Town*.
 *   **Learn About Cadences**: Discover the power of your inner voice. (**Unlocks: Recruit Cadence**)
 *   **Learn about the Mines**: Find out where the miners went. (**Unlocks: Apprentice Cadence**)
 *   **Learn about the Dark Forest**: Hear rumors of corruption. (**Unlocks: Student Cadence**)
-*   **Recover the Ancient Tome**: Find the lost book. (Req: 500 Gold | **Unlocks: The Arcanist Cadence**)
+*   **Recover the Ancient Tome**: Find the lost book. (Req: 500 Gold | **Unlocks: Arcanist Cadence**)
 
 ### **III. Dark Forest (Combat & Harvesting)**
 Unlocks after *Learn about the Dark Forest*.
@@ -58,7 +58,7 @@ Cadences are specialized "jobs" that provide unique abilities.
 | **Recruit** | Learn About Cadences | Combat/Basics | **J-Str** (Req: 10 Iron Ore) |
 | **Apprentice** | Learn about the Mines | Item Refinement | **Refine Wood** (Req: 10 Log), **Refine Scrap** (Req: 1000 Gold), **Refine Mixology** (Req: 30 Herb, 10 Iron Ore) |
 | **Student** | Learn about the Dark Forest | Magic Refinement | **Refine Fire** (Req: 10 Log), **J-Speed** (Req: 10 Potion) |
-| **The Arcanist** | Recover the Ancient Tome | Magic Offense | **Refine Ice** (Req: 5 Mana Leaf), **J-Magic** (Req: 500 Gold, 10 Mana Leaf) |
+| **Arcanist** | Recover the Ancient Tome | Magic Offense | **Refine Ice** (Req: 5 Mana Leaf), **J-Magic** (Req: 500 Gold, 10 Mana Leaf) |
 | **Mythril Weaver** | Rekindling the Spark | Master Crafting | **J-Vit** (Req: 2000 Gold), **Mass Refine**, **Essence Harvest** |
 
 ---

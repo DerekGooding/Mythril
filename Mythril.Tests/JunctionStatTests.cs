@@ -68,7 +68,7 @@ public class JunctionStatTests
     {
         var character = _resourceManager!.Characters[0];
         var abilityJStr = _abilities!.All.First(a => a.Name == "J-Str");
-        var cadenceWithoutJStr = _cadences!.All.First(c => c.Name == "The Arcanist");
+        var cadenceWithoutJStr = _cadences!.All.First(c => c.Name == "Arcanist");
         var cadenceWithJStr = _cadences!.All.First(c => c.Abilities.Any(a => a.Ability.Name == "J-Str"));
         var strengthStat = _stats!.All.First(s => s.Name == "Strength");
         var fireMagic = _items!.All.First(i => i.Name == "Fire I");
@@ -86,7 +86,7 @@ public class JunctionStatTests
     {
         var character = _resourceManager!.Characters[0];
         var autoQuestAbility = _abilities!.All.First(a => a.Name == "AutoQuest I");
-        var cadenceWithoutAuto = _cadences!.All.First(c => c.Name == "The Arcanist");
+        var cadenceWithoutAuto = _cadences!.All.First(c => c.Name == "Arcanist");
         var cadenceWithAuto = _cadences!.All.First(c => c.Abilities.Any(a => a.Ability.Name == "AutoQuest I"));
 
         _resourceManager.UnlockedAbilities.Add($"{cadenceWithAuto.Name}:AutoQuest I");
