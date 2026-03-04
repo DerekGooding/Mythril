@@ -1,18 +1,18 @@
 # Mythril: Feature & Content Suggestions
 
 ## ⚔️ Character & Party Mechanics
-1.  **Character Roles (Sub-Classes)**: Allow characters to specialize in a role (e.g., Tank, DPS, Support) based on their junctioned magic, providing unique passive bonuses.
-2.  **Affinity Levels**: Implement a relationship system between characters where completing tasks together increases affinity, unlocking "Co-op Tasks."
+1.  **Character Roles (Sub-Classes)**: Allow characters to specialize in a role (e.g., Tank, DPS, Support) based on their **currently equipped** Cadence and Junctions, providing unique passive bonuses while assigned.
+2.  **Affinity Levels**: Implement a relationship system between characters where completing tasks together increases affinity, unlocking special "Combo Tasks" when those specific characters are assigned together.
 3.  **Character Fatigue**: Introduce a stamina system where characters' efficiency drops over time, requiring "Rest" tasks or Potion consumption to recover.
-4.  **Unique Passives**: Give each of the three starting characters a unique starting passive (e.g., Protagonist gets +5% XP, Himbo gets +10% Strength scaling).
+4.  **Unique Starting Traits**: Give each of the three starting characters a small unique starting trait (e.g., Protagonist gets +5% task efficiency, Himbo gets +10% Strength scaling from junctions).
 5.  **Equipment Slots**: Add dedicated slots for Weapons and Armor that provide flat stat boosts, separate from the percentage-based Junctioning system.
 
 ## 🌀 Cadence & Ability System
 6.  **Logistics II & III**: Higher tiers allowing 3 and 4 simultaneous tasks per character.
 7.  **Ability Branching**: Make some Cadence trees mutually exclusive (e.g., choose between "Fire Specialist" or "Ice Specialist").
-8.  **Passive Mastery**: Unlocking all abilities in a Cadence grants a powerful "Mastery Passive" that stays active even if the Cadence is unequipped.
+8.  **Passive Mastery**: Unlocking all abilities in a Cadence grants a powerful "Mastery Passive" that stays active **only while that Cadence is equipped**.
 9.  **Hidden Cadences**: Cadences that only unlock by reaching specific stat thresholds (e.g., "Sage" requires 150 Magic).
-10. **Ability Augmentation**: Allow users to "overclock" an unlocked ability using high-tier magic to increase its effect.
+10. **Ability Augmentation**: Allow users to "overclock" an unlocked ability using high-tier magic to temporarily increase its effect.
 
 ## 🗺️ World & Progression
 11. **Dungeon Crawling**: A special type of location where characters move through "Rooms" (sequential mini-tasks) to reach a Boss Reward.
@@ -25,7 +25,7 @@
 16. **Bulk Refinement**: An ability to refine 10x or 100x items at once for a time discount.
 17. **Resource Conversion**: A "Black Market" cadence that allows converting lower-tier magic into higher-tier magic directly.
 18. **Automation Tiers**: "AutoQuest II" which allows looping single-use quests (if they have a cost) or specific refinement chains.
-19. **Magic Degradation**: High-tier magic slowly loses quantity if not stored in a "Stasis Box" (new item type).
+19. **Magic Storage**: New "Stasis Box" item types that allow carrying specific magic beyond the standard capacity limits.
 20. **Trading Post**: An offline system where resources can be "shipped" away for a few hours to return with rare exotic items.
 
 ## 🖥️ UI & Quality of Life

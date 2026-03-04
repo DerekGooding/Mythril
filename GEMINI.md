@@ -15,11 +15,10 @@ This document contains foundational mandates for the AI assistant (Gemini) durin
 - **Documentation:** Keep documentation synchronized with code changes. Staleness is tracked locally by file modification times.
 - **Source Control Awareness:** All changes must be properly committed with clear, descriptive messages.
 - **Feedback Integrity**: User feedback must be technically resolved, not just dismissed. Every cleared item in `docs/feedback/` or `docs/errors/` must have a corresponding technical resolution file in `docs/resolution/`.
-- **AI Guidance System**: When facing architectural or strategic ambiguity, agents must:
-    1. Consult `docs/guidence_knowledge_base.md` for existing decisions.
-    2. If no guidance exists, create a new request in `docs/guidence/` using the template in `docs/guidence.md`.
-    3. **Granularity**: Each high-level question or distinct topic must be its own file to facilitate focused discussion and tracking. Group questions into a single file only if they are tightly coupled.
-    4. Naming convention: `YYYY-MM-DD_topic.md`.
+- **AI Guidance System**: When facing architectural or strategic ambiguity, agents **MUST** consult `docs/guidence_knowledge_base.md` first to check for existing decisions and project philosophy. Alignment with this base is mandatory.
+    1. If no guidance exists, create a new request in `docs/guidence/` using the template in `docs/guidence.md`.
+    2. **Granularity**: Each high-level question or distinct topic must be its own file to facilitate focused discussion and tracking. Group questions into a single file only if they are tightly coupled.
+    3. Naming convention: `YYYY-MM-DD_topic.md`.
     4. Wait for human developer response before implementing high-level structural changes.
 - **Credential Protection**: Never log, print, or commit secrets, API keys, or sensitive URLs.
 
