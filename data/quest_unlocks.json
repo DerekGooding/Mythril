@@ -1,0 +1,25 @@
+[
+  { "Quest": "Tutorial Section", "Requires": ["Prologue"] },
+  { "Quest": "Visit Starting Town", "Requires": ["Tutorial Section"] }, 
+  { "Quest": "Buy Potion", "Requires": ["Visit Starting Town"] },       
+  { "Quest": "Recover the Ancient Tome", "Requires": ["Visit Starting Town"] },
+  { "Quest": "Learn About Cadences", "Requires": ["Visit Starting Town"] },
+  { "Quest": "Learn about the Mines", "Requires": ["Learn About Cadences"] },
+  { "Quest": "Learn about the Dark Forest", "Requires": ["Learn about the Mines"] },
+  { "Quest": "Hunt Goblins", "Requires": ["Learn about the Dark Forest"] },     
+  { "Quest": "Chop Wood", "Requires": ["Learn about the Dark Forest"] },     
+  { "Quest": "Mine Ore", "Requires": ["Learn about the Mines"] },     
+  { "Quest": "Hunt Bats", "Requires": ["Learn about the Mines"] },      
+  { "Quest": "Hunt Spiders", "Requires": ["Hunt Bats"] },      
+  { "Quest": "Farm Slimes", "Requires": ["Hunt Spiders"] },
+
+  { "Quest": "Unlock Mining", "Requires": ["Farm Slimes"] },
+  { "Quest": "Mine Iron Ore", "Requires": ["Unlock Mining"] },
+  { "Quest": "Gather Moonberries", "Requires": ["Learn about the Dark Forest"] },
+  { "Quest": "Defeat Treant Guardian", "Requires": ["Gather Moonberries"] },
+  { "Quest": "Ancient Inscriptions", "Requires": ["Learn About Cadences"] },
+  { "Quest": "Finding the Hearth", "Requires": ["Ancient Inscriptions"] },
+  { "Quest": "Rekindling the Spark", "Requires": ["Finding the Hearth"] },
+  { "Quest": "Help the lumberjack", "Requires": ["Learn about the Dark Forest"] },
+  { "Quest": "Sell Gem", "Requires": ["Visit Starting Town"] }
+]

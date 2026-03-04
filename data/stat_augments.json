@@ -1,0 +1,30 @@
+[
+  {
+    "Item": "Fire I",
+    "Augments": [
+      { "Stat": "Strength", "ModifierAtFull": 50 },
+      { "Stat": "Magic", "ModifierAtFull": 20 }
+    ]
+  },
+  {
+    "Item": "Ice I",
+    "Augments": [
+      { "Stat": "Magic", "ModifierAtFull": 100 },
+      { "Stat": "Speed", "ModifierAtFull": 100 },
+      { "Stat": "Vitality", "ModifierAtFull": 50 }
+    ]
+  },
+  {
+    "Item": "Cure I",
+    "Augments": [
+      { "Stat": "Magic", "ModifierAtFull": 150 },
+      { "Stat": "Vitality", "ModifierAtFull": 200 }
+    ]
+  },
+  {
+    "Item": "Potion",
+    "Augments": [
+      { "Stat": "Vitality", "ModifierAtFull": 20 }
+    ]
+  }
+]
