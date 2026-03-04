@@ -20,5 +20,8 @@
   { "Name": "Logistics I", "Description": "Allows a character to perform two tasks at once" },
   { "Name": "Logistics II", "Description": "Allows a character to perform three tasks at once" },
   { "Name": "AutoQuest II", "Description": "Enables auto-restart for the second task slot" },
+  { "Name": "Mountain Crush", "Description": "Gather rare minerals with high strength" },
+  { "Name": "Deep Dive", "Description": "Explore the depths with high speed" },
+  { "Name": "Master Slayer", "Description": "Defeat high-tier threats" },
   { "Name": "Refine Life", "Description": "Refine ancient components into life magic" }
 ]
