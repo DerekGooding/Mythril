@@ -1,6 +1,0 @@
-[
-  { "Name": "Strength", "Description": "Determines the physical power of a character." },
-  { "Name": "Vitality", "Description": "Affects the speed and evasion of a character." },
-  { "Name": "Magic", "Description": "Influences the effectiveness of magical abilities." },
-  { "Name": "Speed", "Description": "Determines the frequency of character actions." }
-]
