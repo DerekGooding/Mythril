@@ -527,6 +527,11 @@
     }
 }
 
+.inventory-item.at-capacity[b-n4d12cyvsf] {
+    border-color: #ffd700;
+    box-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+}
+
 .inventory-item.overflowing[b-n4d12cyvsf] {
     animation: red-glow-b-n4d12cyvsf 1s ease-in-out infinite alternate;
     border-color: #ff4444;
