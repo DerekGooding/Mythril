@@ -1,4 +1,4 @@
-# How to Play Mythril
+# How to Play Mythril 
 
 Mythril is a job-based incremental RPG where you manage a party of characters, unlock powerful abilities (Cadences), and tactically manage stats through Junctioning.
 

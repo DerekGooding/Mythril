@@ -55,6 +55,16 @@ We maintain project health through a custom automated suite (`scripts/check_heal
 - **Documentation Integrity**: Automated staleness tracking via local file modification times.
 - **Feedback Integrity**: Monitoring of pending user feedback and runtime errors in `docs/feedback/`.
 
+### 🛡️ Health Shield Guide
+All badges are automatically updated by `scripts/check_health.py` on every commit:
+- **Tests**: Status of the entire MSTest suite. Fails if any unit test is broken.
+- **Coverage**: Total line coverage percentage. Must remain above 70% overall.
+- **Monoliths**: A count of source files exceeding 250 lines. Aiming for 0 for maximum maintainability.
+- **Docs**: Staleness indicator. Flags documentation if more than 10 source changes occur without a doc update.
+- **UI Integrity**: Validates bUnit test presence, `@key` usage in loops, and stable `data-testid` anchors.
+- **Reachability**: Result of the Game Graph Simulation. Verifies all content is mathematically attainable.
+- **Optimal Completion**: The minimum real-world time required to finish the current endgame content.
+
 ## 🚀 Getting Started
 1. **Build**: `dotnet build`
 2. **Test**: `dotnet test`

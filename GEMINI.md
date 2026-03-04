@@ -14,8 +14,15 @@ This document contains foundational mandates for the AI assistant (Gemini) durin
 - **Validation:** No logic changes are complete without corresponding unit tests. For complex system interactions, utilize `Mythril.Headless` scenario-based tests. For UI components, use `bUnit` tests.
 - **Documentation:** Keep documentation synchronized with code changes. Staleness is tracked locally by file modification times.
 - **Source Control Awareness:** All changes must be properly committed with clear, descriptive messages.
-- **Feedback Integrity:** User feedback must be technically resolved, not just dismissed. Every cleared item in `docs/feedback/` or `docs/errors/` must have a corresponding technical resolution file in `docs/resolution/`.
-- **Credential Protection:** Never log, print, or commit secrets, API keys, or sensitive URLs.
+- **Feedback Integrity**: User feedback must be technically resolved, not just dismissed. Every cleared item in `docs/feedback/` or `docs/errors/` must have a corresponding technical resolution file in `docs/resolution/`.
+- **AI Guidance System**: When facing architectural or strategic ambiguity, agents must:
+    1. Consult `docs/guidence_knowledge_base.md` for existing decisions.
+    2. If no guidance exists, create a new request in `docs/guidence/` using the template in `docs/guidence.md`.
+    3. **Granularity**: Each high-level question or distinct topic must be its own file to facilitate focused discussion and tracking. Group questions into a single file only if they are tightly coupled.
+    4. Naming convention: `YYYY-MM-DD_topic.md`.
+    4. Wait for human developer response before implementing high-level structural changes.
+- **Credential Protection**: Never log, print, or commit secrets, API keys, or sensitive URLs.
+
 - **Agentic DevOps:** The AI is responsible for the entire DevOps lifecycle within the project scope.
 - **Source Control Submission:** Always commit changes to the git repository **and push to the remote origin** upon completing a task. Push directly to the `main` branch.
 
