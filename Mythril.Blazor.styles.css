@@ -391,6 +391,16 @@
     flex-shrink: 0;
 }
 
+.completion-counter[b-h1r0ru8wr5] {
+    font-variant-numeric: tabular-nums;
+    font-weight: normal;
+}
+
+.text-success[b-h1r0ru8wr5] {
+    color: #28a745;
+    font-weight: bold;
+}
+
 .expander-icon[b-h1r0ru8wr5] {
     transition: transform 0.2s;
 }
