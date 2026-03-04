@@ -89,6 +89,8 @@ public class InventoryOverflowTests
         var basicGem = _items!.All.First(i => i.Name == "Basic Gem");
         var fireI = _items.All.First(i => i.Name == "Fire I");
         var student = ContentHost.GetContent<Cadences>().All.First(c => c.Name == "Student");
+        
+        // Find the specific ability object from the cadence content
         var ability = student.Abilities.First(a => a.Ability.Name == "Refine Fire").Ability;
         var recipe = ContentHost.GetContent<ItemRefinements>().ByKey[ability].Recipes[basicGem];
         // Recipe produces 5x Fire I

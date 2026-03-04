@@ -32,7 +32,8 @@
       {
         "Ability": "Magic Pocket I",
         "Requirements": [ { "Item": "Gold", "Quantity": 1000 }, { "Item": "Mana Leaf", "Quantity": 20 } ],
-        "PrimaryStat": "Magic"
+        "PrimaryStat": "Magic",
+        "Metadata": { "MagicCapacity": "60" }
       }
     ]
   },
@@ -126,7 +127,8 @@
     {
       "Ability": "Magic Pocket II",
       "Requirements": [ { "Item": "Gold", "Quantity": 2000 } ],
-      "PrimaryStat": "Magic"
+      "PrimaryStat": "Magic",
+      "Metadata": { "MagicCapacity": "100" }
     }
   ]
   },

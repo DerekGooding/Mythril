@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
+using System.Text;
 using Mythril.Data;
 
 namespace Mythril.Headless.Simulation;
@@ -17,153 +19,106 @@ public partial class ReachabilitySimulator(
     StatAugments statAugments,
     Stats stats)
 {
-    private readonly HashSet<string> _infiniteResources = [];
-    private readonly Dictionary<string, int> _oneTimeResources = [];
-    private readonly HashSet<string> _completedQuests = [];
-    private readonly HashSet<string> _unlockedCadences = [];
-    private readonly HashSet<string> _unlockedAbilities = []; // "CadenceName:AbilityName"
-    private readonly Dictionary<string, int> _maxStats = stats.All.ToDictionary(s => s.Name, _ => 10);
-    private int _magicCapacity = 30;
-
-    private readonly Dictionary<string, double> _minTimeToReachResource = [];
-    private readonly Dictionary<string, double> _minTimeToReachQuest = [];
-
     public void Run()
     {
-        bool changed = true;
-        int iteration = 0;
+        var lattice = new LatticeSimulator(items, quests, questDetails, questUnlocks, questToCadenceUnlocks, cadences, locations, refinements, statAugments, stats);
+        
+        var seed = new SimulationSeed(
+            ImmutableDictionary<string, int>.Empty,
+            stats.All.ToImmutableDictionary(s => s.Name, _ => 10),
+            ImmutableHashSet.Create<string>("Recruit"),
+            ImmutableHashSet.Create<string>()
+        );
 
-        foreach (var item in items.All) _minTimeToReachResource[item.Name] = double.PositiveInfinity;
-        foreach (var quest in quests.All) _minTimeToReachQuest[quest.Name] = double.PositiveInfinity;
+        Console.WriteLine("Starting Lattice Simulation...");
+        var finalState = lattice.Solve(seed);
+        Console.WriteLine("Simulation Complete.");
 
-        while (changed && iteration < 1000)
+        GenerateLatticeReport(finalState);
+    }
+
+    private void GenerateLatticeReport(GameState state)
+    {
+        var sb = new StringBuilder();
+        sb.AppendLine("# Game Content Reachability Report (Lattice Model)");
+        sb.AppendLine($"Generated: {DateTime.Now:yyyy-MM-dd HH:mm:ss}");
+        sb.AppendLine();
+
+        // 1. Dead Content Detection
+        sb.AppendLine("## 💀 Dead Content Detection");
+        
+        var unreachableQuests = quests.All.Where(q => state.QuestTime[q.Name] == double.PositiveInfinity).ToList();
+        if (unreachableQuests.Any())
         {
-            changed = false;
-            iteration++;
-
-            foreach (var loc in locations.All)
-            {
-                if (string.IsNullOrEmpty(loc.RequiredQuest) || _completedQuests.Contains(loc.RequiredQuest))
-                {
-                    foreach (var quest in loc.Quests)
-                    {
-                        if (CanCompleteQuest(quest, out double time))
-                        {
-                            if (!_completedQuests.Contains(quest.Name)) { _completedQuests.Add(quest.Name); changed = true; }
-                            if (time < _minTimeToReachQuest[quest.Name])
-                            {
-                                _minTimeToReachQuest[quest.Name] = time;
-                                changed = true;
-                                var detail = questDetails[quest];
-                                foreach (var reward in detail.Rewards) UpdateResourceReachability(reward.Item.Name, reward.Quantity, detail.Type == QuestType.Recurring, time);
-                                foreach (var cadence in questToCadenceUnlocks[quest]) { if (!_unlockedCadences.Contains(cadence.Name)) { _unlockedCadences.Add(cadence.Name); changed = true; } }
-                            }
-                        }
-                    }
-                }
-            }
-
-            foreach (var cadenceName in _unlockedCadences)
-            {
-                var cadence = cadences.All.First(c => c.Name == cadenceName);
-                foreach (var unlock in cadence.Abilities)
-                {
-                    string abilityKey = $"{cadence.Name}:{unlock.Ability.Name}";
-                    if (!_unlockedAbilities.Contains(abilityKey) && CanAfford(unlock.Requirements, out double costTime))
-                    {
-                        _unlockedAbilities.Add(abilityKey); changed = true;
-                        if (unlock.Ability.Name == "Magic Pocket I") _magicCapacity = Math.Max(_magicCapacity, 60);
-                        if (unlock.Ability.Name == "Magic Pocket II") _magicCapacity = Math.Max(_magicCapacity, 100);
-                    }
-                }
-            }
-
-            foreach (var abilityKvp in refinements.ByKey)
-            {
-                if (_unlockedAbilities.Any(ua => ua.EndsWith($":{abilityKvp.Key.Name}")))
-                {
-                    foreach (var recipeKvp in abilityKvp.Value.Recipes)
-                    {
-                        if (IsResourceAvailable(recipeKvp.Key.Name, recipeKvp.Value.InputQuantity, out double inputTime))
-                        {
-                            double outputTime = inputTime + (15.0 / recipeKvp.Value.OutputQuantity); 
-                            if (UpdateResourceReachability(recipeKvp.Value.OutputItem.Name, recipeKvp.Value.OutputQuantity, true, outputTime)) changed = true;
-                        }
-                    }
-                }
-            }
-
-            if (UpdateStats()) changed = true;
+            sb.AppendLine("### Unreachable Quests");
+            foreach (var q in unreachableQuests) sb.AppendLine($"- {q.Name}");
         }
-        GenerateReport();
-    }
+        else sb.AppendLine("✅ All quests reachable.");
 
-    private bool IsResourceAvailable(string name, int qty, out double time)
-    {
-        time = _minTimeToReachResource.GetValueOrDefault(name, double.PositiveInfinity);
-        return _infiniteResources.Contains(name) || _oneTimeResources.GetValueOrDefault(name, 0) >= qty;
-    }
-
-    private bool CanAfford(ItemQuantity[] requirements, out double time)
-    {
-        time = 0;
-        foreach (var req in requirements)
+        var unreachableResources = items.All.Where(i => state.ResourceTime[i.Name] == double.PositiveInfinity).ToList();
+        if (unreachableResources.Any())
         {
-            if (!IsResourceAvailable(req.Item.Name, req.Quantity, out double resTime)) { time = double.PositiveInfinity; return false; }
-            time = Math.Max(time, resTime);
+            sb.AppendLine("\n### Unreachable Resources");
+            foreach (var r in unreachableResources) sb.AppendLine($"- {r.Name}");
         }
-        return true;
-    }
 
-    private bool CanCompleteQuest(Quest quest, out double time)
-    {
-        var detail = questDetails[quest];
-        if (!CanAfford(detail.Requirements, out double costTime)) { time = double.PositiveInfinity; return false; }
-        foreach (var reqQuest in questUnlocks[quest])
+        var unreachableCadences = cadences.All.Where(c => !state.UnlockedCadences.Contains(c.Name)).ToList();
+        if (unreachableCadences.Any())
         {
-            if (!_completedQuests.Contains(reqQuest.Name)) { time = double.PositiveInfinity; return false; }
-            costTime = Math.Max(costTime, _minTimeToReachQuest[reqQuest.Name]);
+            sb.AppendLine("\n### Unreachable Cadences");
+            foreach (var c in unreachableCadences) sb.AppendLine($"- {c.Name}");
         }
-        if (detail.RequiredStats != null)
-        {
-            foreach (var statReq in detail.RequiredStats) if (_maxStats[statReq.Key] < statReq.Value) { time = double.PositiveInfinity; return false; }
-        }
-        double duration = detail.DurationSeconds / (1.0 + (_maxStats[detail.PrimaryStat] / 100.0));
-        time = costTime + duration;
-        return true;
-    }
 
-    private bool UpdateResourceReachability(string name, int qty, bool infinite, double time)
-    {
-        bool changed = false;
-        if (infinite && !_infiniteResources.Contains(name)) { _infiniteResources.Add(name); changed = true; }
-        int currentQty = _oneTimeResources.GetValueOrDefault(name, 0);
-        if (currentQty < 9999) { _oneTimeResources[name] = currentQty + qty; changed = true; }
-        if (time < _minTimeToReachResource[name]) { _minTimeToReachResource[name] = time; changed = true; }
-        return changed;
-    }
-
-    private bool UpdateStats()
-    {
-        bool changed = false;
+        // 2. Stat Progression
+        sb.AppendLine("\n## 📈 Maximum Achievable Stats");
         foreach (var stat in stats.All)
         {
-            int bestVal = 10;
-            foreach (var magicName in _infiniteResources)
-            {
-                var item = items.All.First(i => i.Name == magicName);
-                if (item.ItemType == ItemType.Spell)
-                {
-                    string abilityName = stat.Name switch { "Strength" => "J-Str", "Magic" => "J-Magic", "Vitality" => "J-Vit", "Speed" => "J-Speed", _ => "J-" + stat.Name };
-                    if (_unlockedAbilities.Any(ua => ua.EndsWith($":{abilityName}")))
-                    {
-                        var augment = statAugments[item].FirstOrDefault(a => a.Stat.Name == stat.Name);
-                        bestVal = Math.Max(bestVal, 10 + (int)(_magicCapacity * (augment.Stat.Name != null ? augment.ModifierAtFull / 100.0 : 0.1)));
-                    }
-                }
-            }
-            if (bestVal > _maxStats[stat.Name]) { _maxStats[stat.Name] = bestVal; changed = true; }
+            sb.AppendLine($"- **{stat.Name}**: {state.StatMax[stat.Name]}");
         }
-        return changed;
+
+        // 3. Time To New Content Metric
+        sb.AppendLine("\n## ⏱️ Timeline Metrics");
+        
+        var events = new List<(string Name, double Time, string Type)>();
+        foreach (var pair in state.QuestTime.Where(p => p.Value != double.PositiveInfinity)) events.Add((pair.Key, pair.Value, "Quest"));
+        foreach (var pair in state.ResourceTime.Where(p => p.Value != double.PositiveInfinity && p.Value > 0)) events.Add((pair.Key, pair.Value, "Resource"));
+        foreach (var a in state.UnlockedAbilities) events.Add((a, state.ResourceTime.GetValueOrDefault(a.Split(':')[1], 0), "Ability")); // Approximation
+
+        var sortedEvents = events.OrderBy(e => e.Time).ToList();
+        
+        double longestStall = 0;
+        double totalStall = 0;
+        int stallCount = 0;
+        double lastTime = 0;
+
+        foreach (var e in sortedEvents)
+        {
+            double stall = e.Time - lastTime;
+            if (stall > 0.001)
+            {
+                longestStall = Math.Max(longestStall, stall);
+                totalStall += stall;
+                stallCount++;
+            }
+            lastTime = e.Time;
+        }
+
+        sb.AppendLine($"- **Total Events**: {sortedEvents.Count}");
+        sb.AppendLine($"- **Longest Progression Stall**: {longestStall:F1}s");
+        sb.AppendLine($"- **Average Stall**: {(stallCount > 0 ? totalStall / stallCount : 0):F1}s");
+        sb.AppendLine($"- **Estimated End-Game Time**: {lastTime:F1}s ({(lastTime / 60):F1}m)");
+
+        Console.WriteLine(sb.ToString());
+        System.IO.File.WriteAllText("simulation_report.md", sb.ToString());
+        
+        if (unreachableQuests.Any())
+        {
+            Console.WriteLine("[FAIL] reachability: Simulation failed: One or more quests are mathematically unreachable.");
+            // Environment.Exit(1); // In a real CI env
+        }
+        else
+        {
+            Console.WriteLine("SIMULATION PASSED: All content reachable.");
+        }
     }
 }

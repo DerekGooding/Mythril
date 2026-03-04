@@ -44,6 +44,7 @@ public class WorkshopTests
         // 2. Initially, it shouldn't be unlocked
         Assert.IsFalse(_resourceManager!.UnlockedAbilities.Contains("Apprentice:Refine Mixology"));
         Assert.IsFalse(_resourceManager.HasUnseenWorkshop);
+        _resourceManager.ActiveTab = "hand";
 
         // 3. Receive rewards (unlock it)
         _resourceManager.ReceiveRewards(refineMixology).Wait();
@@ -66,6 +67,7 @@ public class WorkshopTests
         var apprentice = _cadences!.All.First(c => c.Name == "Apprentice");
         var refineMixology = apprentice.Abilities.First(a => a.Ability.Name == "Refine Mixology");
 
+        _resourceManager!.ActiveTab = "hand";
         // First unlock
         _resourceManager!.ReceiveRewards(refineMixology).Wait();
         Assert.IsTrue(_resourceManager.HasUnseenWorkshop);

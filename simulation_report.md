@@ -1,18 +1,31 @@
-# Simulation Reachability Report
-Generated at: 2026-03-04 3:25:39 PM
+# Game Content Reachability Report (Lattice Model)
+Generated: 2026-03-04 15:45:33
 
-## ✅ All Content Reachable
-No orphaned or mathematically impossible quests detected.
+## 💀 Dead Content Detection
+✅ All quests reachable.
 
-## ⏱️ Milestone Estimates (Optimal Path)
-- **Prologue**: 00:00:02
-- **Visit Starting Town**: 00:00:21
-- **Learn About Cadences**: 00:00:36
-- **Learn about the Mines**: 00:00:58
-- **Learn about the Dark Forest**: 00:01:11
-- **Rekindling the Spark**: 00:13:47
+### Unreachable Resources
+- Leather
+- Water
+- Ice Shard
+- Lightning I
+- Earth I
 
-## 📊 Economy Summary
-**Discovered Infinite Resources**: Basic Gem, Gold, Fire Shard, Mana Leaf, Log, Ancient Bark, Web, Slime, Iron Ore, Fire I, Herb, Cure I, Potion, Sun-baked Scale, Ice I, Moonberry, Mythril Spark
-**Max Stat Potentials**: Strength: 40, Vitality: 130, Magic: 100, Speed: 70
-**Final Magic Capacity**: 60
+### Unreachable Cadences
+- The Sentinel
+- Scholar
+- Geologist
+- Tide-Caller
+- Slayer
+
+## 📈 Maximum Achievable Stats
+- **Strength**: 25
+- **Vitality**: 70
+- **Magic**: 55
+- **Speed**: 40
+
+## ⏱️ Timeline Metrics
+- **Total Events**: 63
+- **Longest Progression Stall**: 335.0s
+- **Average Stall**: 29.9s
+- **Estimated End-Game Time**: 1076.9s (17.9m)

@@ -68,9 +68,13 @@ public class ContentLoader(
             var cadencesList = cadenceDTOs.Select(d => new Cadence(d.Name, d.Description, d.Abilities.Select(a => {
                 var ab = abilities.All.FirstOrDefault(x => x.Name == a.Ability);
                 if (ab.Name == null) Console.WriteLine($"WARNING: Ability '{a.Ability}' not found for cadence '{d.Name}'");
+                
+                // Clone ability with metadata from DTO
+                var abWithMeta = ab with { Metadata = a.Metadata ?? [] };
+
                 return new CadenceUnlock(
                     d.Name,
-                    ab,
+                    abWithMeta,
                     a.Requirements.Select(r => {
                         var i = items.All.FirstOrDefault(x => x.Name == r.Item);
                         if (i.Name == null) Console.WriteLine($"WARNING: Item '{r.Item}' not found for ability '{a.Ability}' in cadence '{d.Name}'");

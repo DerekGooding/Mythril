@@ -28,7 +28,37 @@ public partial record struct Item(string Name, string Description, ItemType Item
 public readonly record struct ItemQuantity(Item Item, int Quantity = 1);
 
 // Cadence types
-public partial record struct CadenceAbility(string Name, string Description) : INamed;
+public partial record struct CadenceAbility(string Name, string Description) : INamed
+{
+    public Dictionary<string, string> Metadata { get; init; } = [];
+
+    public bool Equals(CadenceAbility other)
+    {
+        if (Name != other.Name || Description != other.Description) return false;
+        var thisMeta = Metadata ?? [];
+        var otherMeta = other.Metadata ?? [];
+        if (thisMeta.Count != otherMeta.Count) return false;
+        foreach (var kvp in thisMeta)
+        {
+            if (!otherMeta.TryGetValue(kvp.Key, out var val) || val != kvp.Value) return false;
+        }
+        return true;
+    }
+
+    public override int GetHashCode()
+    {
+        var hash = new HashCode();
+        hash.Add(Name);
+        hash.Add(Description);
+        var thisMeta = Metadata ?? [];
+        foreach (var kvp in thisMeta.OrderBy(x => x.Key))
+        {
+            hash.Add(kvp.Key);
+            hash.Add(kvp.Value);
+        }
+        return hash.ToHashCode();
+    }
+}
 
 public readonly record struct CadenceUnlock(string CadenceName, CadenceAbility Ability, ItemQuantity[] Requirements, string PrimaryStat = "Magic");
 
@@ -113,7 +143,13 @@ public class JournalEntryDTO
 // Data Transfer Objects for JSON Loading
 public class ItemQuantityDTO { public string Item { get; set; } = ""; public int Quantity { get; set; } = 1; }
 public class LocationDTO { public string Name { get; set; } = ""; public List<string> Quests { get; set; } = []; public string? RequiredQuest { get; set; } }
-public class CadenceAbilityUnlockDTO { public string Ability { get; set; } = ""; public List<ItemQuantityDTO> Requirements { get; set; } = []; public string PrimaryStat { get; set; } = "Magic"; }
+public class CadenceAbilityUnlockDTO 
+{ 
+    public string Ability { get; set; } = ""; 
+    public List<ItemQuantityDTO> Requirements { get; set; } = []; 
+    public string PrimaryStat { get; set; } = "Magic";
+    public Dictionary<string, string> Metadata { get; set; } = [];
+}
 public class CadenceDTO { public string Name { get; set; } = ""; public string Description { get; set; } = ""; public List<CadenceAbilityUnlockDTO> Abilities { get; set; } = []; }
 public class QuestDetailDTO { public string Quest { get; set; } = ""; public int DurationSeconds { get; set; } = 3; public string Type { get; set; } = "Single"; public List<ItemQuantityDTO> Requirements { get; set; } = []; public List<ItemQuantityDTO> Rewards { get; set; } = []; public string PrimaryStat { get; set; } = "Vitality"; public Dictionary<string, int>? RequiredStats { get; set; } }
 public class QuestUnlockDTO { public string Quest { get; set; } = ""; public List<string> Requires { get; set; } = []; }
