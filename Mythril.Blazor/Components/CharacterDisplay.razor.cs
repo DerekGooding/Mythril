@@ -40,6 +40,7 @@ public partial class CharacterDisplay : IDisposable
     public EventCallback<Cadence> OnUnequip { get; set; }
 
     private bool _showJunctionMenu = false;
+    private bool _isRemovalMode = false;
 
     protected override void OnInitialized()
     {
@@ -61,18 +62,20 @@ public partial class CharacterDisplay : IDisposable
         if (DragDropService.HoveredTarget?.character.Name != Character.Name || DragDropService.HoveredTarget?.stat.Name != stat.Name)
             return 0;
 
-        if (DragDropService.Data is not ItemQuantity spell || spell.Item.ItemType != ItemType.Spell)
+        Item? draggedMagic = null;
+        if (DragDropService.Data is ItemQuantity iq && iq.Item.ItemType == ItemType.Spell) draggedMagic = iq.Item;
+        if (DragDropService.Data is Item i && i.ItemType == ItemType.Spell) draggedMagic = i;
+
+        if (draggedMagic == null || !CanJunction(stat))
             return 0;
 
-        if (!CanJunction(stat))
-            return 0;
-
+        Item activeMagic = (Item)draggedMagic;
         int currentVal = JunctionManager.GetStatValue(Character, stat.Name);
         
         // Calculate what it WOULD be
         int newVal = 10;
-        int qty = resourceManager.Inventory.GetQuantity(spell.Item);
-        var augments = ContentHost.GetContent<StatAugments>()[spell.Item];
+        int qty = resourceManager.Inventory.GetQuantity(activeMagic);
+        var augments = ContentHost.GetContent<StatAugments>()[activeMagic];
         var augment = augments.FirstOrDefault(a => a.Stat.Name == stat.Name);
         if (augment.Stat.Name != null)
         {
@@ -83,12 +86,19 @@ public partial class CharacterDisplay : IDisposable
             newVal += qty / 10;
         }
 
+        newVal = Math.Min(255, newVal);
+
         return newVal - currentVal;
     }
 
+
     private void HandleStatDragEnter(Stat stat)
     {
-        if (DragDropService.Data is ItemQuantity spell && spell.Item.ItemType == ItemType.Spell && CanJunction(stat))
+        bool isSpell = false;
+        if (DragDropService.Data is ItemQuantity iq && iq.Item.ItemType == ItemType.Spell) isSpell = true;
+        if (DragDropService.Data is Item i && i.ItemType == ItemType.Spell) isSpell = true;
+
+        if (isSpell && CanJunction(stat))
         {
             DragDropService.SetHoveredTarget(Character, stat);
         }
@@ -101,15 +111,35 @@ public partial class CharacterDisplay : IDisposable
 
     private void HandleStatDrop(Stat stat)
     {
-        if (DragDropService.Data is ItemQuantity spell && spell.Item.ItemType == ItemType.Spell && CanJunction(stat))
+        Item? droppedMagic = null;
+        if (DragDropService.Data is ItemQuantity iq && iq.Item.ItemType == ItemType.Spell) droppedMagic = iq.Item;
+        if (DragDropService.Data is Item i && i.ItemType == ItemType.Spell) droppedMagic = i;
+
+        if (droppedMagic != null && CanJunction(stat))
         {
-            JunctionManager.JunctionMagic(Character, stat, spell.Item, resourceManager.UnlockedAbilities);
+            JunctionManager.JunctionMagic(Character, stat, (Item)droppedMagic, resourceManager.UnlockedAbilities);
             DragDropService.ClearHoveredTarget();
             DragDropService.Data = null;
         }
     }
 
-    private void ToggleJunctionMenu() => _showJunctionMenu = !_showJunctionMenu;
+    private void ToggleJunctionMenu() 
+    {
+        _showJunctionMenu = !_showJunctionMenu;
+        if (_showJunctionMenu) _isRemovalMode = false;
+    }
+
+    private void ToggleRemovalMode()
+    {
+        _isRemovalMode = !_isRemovalMode;
+        if (_isRemovalMode) _showJunctionMenu = false;
+    }
+
+    private void ClearJunction(Stat stat)
+    {
+        JunctionManager.JunctionMagic(Character, stat, new Item(), resourceManager.UnlockedAbilities);
+        StateHasChanged();
+    }
 
     private void ToggleAutoQuest()
     {

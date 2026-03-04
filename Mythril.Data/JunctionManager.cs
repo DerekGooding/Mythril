@@ -103,7 +103,7 @@ public class JunctionManager(
             }
         }
 
-        return baseValue;
+        return Math.Min(255, baseValue);
     }
     
     public void RestoreAssignment(Cadence cadence, Character character)

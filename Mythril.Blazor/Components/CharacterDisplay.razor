@@ -13,7 +13,18 @@
     <div class="character-controls d-flex flex-column gap-1">
         @if (assignedCadences.Any())
         {
-            <button class="btn btn-xs btn-outline-primary" data-testid="junction-toggle" @onclick="ToggleJunctionMenu">Junction</button>
+            <div class="btn-group btn-group-xs w-100">
+                <button class="btn btn-xs @(_isRemovalMode ? "btn-danger" : "btn-outline-danger")" 
+                        title="Remove Junctions" 
+                        @onclick="ToggleRemovalMode">
+                    <span class="material-icons" style="font-size: 14px;">link_off</span>
+                </button>
+                <button class="btn btn-xs @(_showJunctionMenu ? "btn-primary" : "btn-outline-primary")" 
+                        title="Junction Menu"
+                        @onclick="ToggleJunctionMenu">
+                    <span class="material-icons" style="font-size: 14px;">menu</span>
+                </button>
+            </div>
             
             @if (resourceManager.CanAutoQuest(Character))
             {
@@ -61,8 +72,9 @@
                         bool canJunction = CanJunction(stat);
                         
                         <span @key="stat.Name" 
-                              class="stat-badge @(junction != null ? "junctioned" : "") @(isHovered ? "hovered" : "") @(canJunction ? "can-junction" : "locked")" 
+                              class="stat-badge @(junction != null ? "junctioned" : "") @(isHovered ? "hovered" : "") @(canJunction ? "can-junction" : "locked") @(_isRemovalMode && junction != null ? "removal-target" : "")" 
                               title="@stat.Description @(junction != null ? $"(J: {junction.Magic.Name})" : "")"
+                              @onclick="() => { if(_isRemovalMode && junction != null) ClearJunction(stat); }"
                               @ondragenter="() => HandleStatDragEnter(stat)"
                               @ondragleave="HandleStatDragLeave"
                               @ondragover:preventDefault
@@ -71,7 +83,7 @@
                             @if (delta != 0)
                             {
                                 <span class="stat-delta @(delta > 0 ? "text-success" : "text-danger")">
-                                    @(delta > 0 ? "+" : "")@delta
+                                    @(delta > 0 ? "↑" : "↓")@Math.Abs(delta)
                                 </span>
                             }
                         </span>
