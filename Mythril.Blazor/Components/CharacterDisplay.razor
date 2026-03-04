@@ -102,7 +102,9 @@
                     }
                     else
                     {
-                        <DropZone OnQuestDrop="HandleTaskDrop" Accepts="(item) => resourceManager.CanAfford(item, Character)" />
+                        <DropZone OnQuestDrop="HandleTaskDrop" 
+                                  OnDropFailed="HandleDropFailed"
+                                  Accepts="(item) => resourceManager.CanAfford(item, Character)" />
                     }
                 </div>
             }

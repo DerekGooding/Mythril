@@ -30,6 +30,9 @@
     public EventCallback<object> OnQuestDrop { get; set; }
 
     [Parameter]
+    public EventCallback<object> OnDropFailed { get; set; }
+
+    [Parameter]
     public Func<object, bool>? Accepts { get; set; }
 
     [Parameter]
@@ -80,6 +83,10 @@
         else if (DragDropService.Data != null)
         {
             await Shake();
+            if (OnDropFailed.HasDelegate)
+            {
+                await OnDropFailed.InvokeAsync(DragDropService.Data);
+            }
         }
 
         DragDropService.Data = null;

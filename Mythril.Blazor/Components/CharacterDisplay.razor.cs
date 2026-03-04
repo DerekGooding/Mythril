@@ -18,6 +18,9 @@ public partial class CharacterDisplay : IDisposable
     [Inject]
     public DragDropService DragDropService { get; set; } = null!;
 
+    [Inject]
+    public SnackbarService SnackbarService { get; set; } = null!;
+
     [Parameter]
     public Character Character { get; set; }
 
@@ -142,5 +145,54 @@ public partial class CharacterDisplay : IDisposable
     private void HandleTaskDrop(object task)
     {
         OnQuestDrop.InvokeAsync(task);
+    }
+
+    private void HandleDropFailed(object data)
+    {
+        if (data is RefinementData refinement)
+        {
+            if (!resourceManager.HasAbility(Character, refinement.Ability))
+            {
+                SnackbarService.Show($"{Character.Name} lacks the '{refinement.Ability.Name}' ability.", "warning");
+            }
+            else if (!resourceManager.Inventory.Has(refinement.InputItem, refinement.Recipe.InputQuantity))
+            {
+                SnackbarService.Show($"Insufficient materials: {refinement.Recipe.InputQuantity}x {refinement.InputItem.Name} required.", "warning");
+            }
+        }
+        else if (data is QuestData quest)
+        {
+            foreach (var req in quest.Requirements)
+            {
+                if (!resourceManager.Inventory.Has(req.Item, req.Quantity))
+                {
+                    SnackbarService.Show($"Insufficient materials: {req.Quantity}x {req.Item.Name} required.", "warning");
+                    return;
+                }
+            }
+
+            if (quest.RequiredStats != null)
+            {
+                foreach (var req in quest.RequiredStats)
+                {
+                    if (JunctionManager.GetStatValue(Character, req.Key) < req.Value)
+                    {
+                        SnackbarService.Show($"{Character.Name} needs {req.Value} {req.Key} (Current: {JunctionManager.GetStatValue(Character, req.Key)}).", "warning");
+                        return;
+                    }
+                }
+            }
+        }
+        else if (data is CadenceUnlock unlock)
+        {
+            foreach (var req in unlock.Requirements)
+            {
+                if (!resourceManager.Inventory.Has(req.Item, req.Quantity))
+                {
+                    SnackbarService.Show($"Insufficient materials: {req.Quantity}x {req.Item.Name} required.", "warning");
+                    return;
+                }
+            }
+        }
     }
 }
