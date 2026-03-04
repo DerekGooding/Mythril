@@ -263,16 +263,35 @@ def check_reachability():
         cmd = ["dotnet", "run", "--project", "Mythril.Headless", "--", "--run-sim"]
         subprocess.check_call(cmd)
         
-        # Parse the report for time estimate
+        # Parse the report for metrics
         report_path = Path("simulation_report.md")
         game_time = "Unknown"
+        sustainable_count = 0
+        unsustainable_count = 0
+        
         if report_path.exists():
             content = report_path.read_text(encoding="utf-8")
-            match = re.search(r"- \*\*Rekindling the Spark\*\*: ([\d:]+)", content)
-            if match:
-                game_time = match.group(1)
+            
+            # 1. End Game Time
+            time_match = re.search(r"Estimated End-Game Time: ([\d.]+)s", content)
+            if time_match:
+                game_time = time_match.group(1) + "s"
+            
+            # 2. Sustainability counts
+            sust_match = re.search(r"### Sustainable Recurring Activities\n(.*?)\n\n", content, re.DOTALL)
+            if sust_match:
+                sustainable_count = len([line for line in sust_match.group(1).split("\n") if line.strip().startswith("-")])
+                
+            unsust_match = re.search(r"### ⚠️ Unsustainable Activities.*?\n(.*?)\n\n", content, re.DOTALL)
+            if unsust_match:
+                unsustainable_count = len([line for line in unsust_match.group(1).split("\n") if line.strip().startswith("-")])
         
-        return {"passed": True, "time": game_time}
+        return {
+            "passed": True, 
+            "time": game_time,
+            "sustainable": sustainable_count,
+            "unsustainable": unsustainable_count
+        }
     except subprocess.CalledProcessError:
         record_failure("reachability", "Simulation failed: One or more quests are mathematically unreachable.")
         return {"passed": False, "time": "N/A"}
@@ -353,6 +372,17 @@ def generate_shields(metrics):
     # Game Time Shield
     game_time = sim.get('time', "N/A")
     write_shield("game_time", "optimal completion", game_time, "blue")
+
+    # Sustainability Shield
+    sust = sim.get('sustainable', 0)
+    unsust = sim.get('unsustainable', 0)
+    total = sust + unsust
+    if total > 0:
+        pct = (sust / total) * 100
+        color = "brightgreen" if pct == 100 else "green" if pct >= 80 else "orange" if pct >= 50 else "red"
+        write_shield("sustainability", "economy", f"{pct:.0f}% sustainable", color)
+    else:
+        write_shield("sustainability", "economy", "N/A", "inactive")
 
 # -----------------------
 # Export Results
