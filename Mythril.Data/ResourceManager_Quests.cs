@@ -2,8 +2,6 @@ namespace Mythril.Data;
 
 public partial class ResourceManager
 {
-    public bool IsNeverLocked(Quest quest) => _questUnlocks[quest].Length == 0;
-
     public bool CanAfford(object item)
     {
         if (item is QuestData quest)
@@ -76,16 +74,6 @@ public partial class ResourceManager
     {
         _completedQuests.Add(quest);
         UpdateUsableLocations();
-        foreach(var location in UsableLocations)
-        {
-            foreach(var data in location.LockedQuests)
-            {
-                if (_questDetails[data].Type == QuestType.Single && _completedQuests.Contains(data))
-                    continue;
-                if (IsComplete(_questUnlocks[data]))
-                    location.Quests.Add(data);
-            }
-        }
     }
 
     private bool IsComplete(Quest[] quests) => quests.All(_completedQuests.Contains);

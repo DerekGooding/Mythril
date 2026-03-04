@@ -82,13 +82,21 @@ public partial class ResourceManager(
     {
         UsableLocations = [.. _locations.All
             .Where(l => string.IsNullOrEmpty(l.RequiredQuest) || UnlockedLocationNames.Contains(l.Name) || _completedQuests.Any(q => q.Name == l.RequiredQuest))
-            .Select(x => new LocationData(x, x.Quests.Where(IsNeverLocked)))];
+            .Select(x => new LocationData(x, x.Quests.Where(IsQuestUnlocked)))];
         
         foreach(var location in UsableLocations)
         {
             if (!string.IsNullOrEmpty(location.Name))
                 UnlockedLocationNames.Add(location.Name);
         }
+    }
+
+    public bool IsQuestUnlocked(Quest quest)
+    {
+        if ((_questDetails[quest].Type == QuestType.Single || _questDetails[quest].Type == QuestType.Unlock) && _completedQuests.Contains(quest))
+            return false;
+            
+        return IsComplete(_questUnlocks[quest]);
     }
 
     public bool CanAutoQuest(Character character)
