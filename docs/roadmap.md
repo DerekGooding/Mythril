@@ -33,6 +33,13 @@ Implement the third tier of multi-tasking and the second tier of automation, alo
 - [ ] **Quest Lines**: 6 new recurring quest chains for advanced materials (Crystal Shards, Blue Coral, Lost Parchment).
 - [ ] **Refinement Tier II**: Earth, Water, and Haste magic; Geode/Seed processing.
 
+### Phase 6: Endgame & Longevity
+- [ ] **Ultimate Materials**: Implement "Mythril Spark" as a rare, one-time reward for the final world boss.
+- [ ] **Permanent Buffs**: Add late-game quests that provide unique, one-time character stat increases (beyond Junctioning).
+- [ ] **Final Biome**: The "Mythril Heart" - a region where 255-stat Junctioning is required to survive.
+- [ ] **Scholar Cadence**: Unlock the final "Scholar" cadence at 100 Magic.
+- [ ] **Total Completion Simulation**: Verify the 255-stat ceiling is attainable for all stats via the Reachability Simulator.
+
 ## ✅ Completed Tasks
 
 ### Core Engine & Systems
