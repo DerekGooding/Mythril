@@ -233,6 +233,18 @@
     opacity: 0.5;
     cursor: not-allowed;
 }
+.stat-badge.removal-target[b-tzawi3ksml] {
+    border: 1px dashed #dc3545;
+    cursor: pointer;
+    animation: pulse-red-b-tzawi3ksml 2s infinite;
+}
+
+@keyframes pulse-red-b-tzawi3ksml {
+    0% { background-color: rgba(220, 53, 69, 0.1); }
+    50% { background-color: rgba(220, 53, 69, 0.3); }
+    100% { background-color: rgba(220, 53, 69, 0.1); }
+}
+
 .stat-delta[b-tzawi3ksml] {
     font-weight: bold;
     margin-left: 2px;
