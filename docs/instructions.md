@@ -56,6 +56,9 @@ Advanced quests in regions like the **Iron Mines** or **Sun-Drenched Desert** re
 ### Location Completion
 You can track your progress in each region by checking the counter on the location expanders. It shows how many **one-time quests** (Single or Unlock types) you have completed out of the total available in that area. Once you've cleared everything unique in a region, a green checkmark will appear!
 
+### Cadence Completion
+Similarly, you can track your research progress for each job in the **Cadence** tab. The counter shows how many abilities you have unlocked out of the total available for that Cadence. A green checkmark indicates you have mastered that job!
+
 ## 💡 Tips for Success
 - **Specialization**: Differentiate your characters! Give one high Magic for fast research and another high Strength for resource farming.
 

@@ -4,9 +4,19 @@
 
 <div class="expander shadow-theme">
     <div class="expander-header" @onclick="Toggle">
-        <div class="inventory-item cadence-draggable" draggable="true" @ondragstart="HandleDragStart" @onclick:stopPropagation="true">
+        <div class="inventory-item cadence-draggable flex-grow-1" draggable="true" @ondragstart="HandleDragStart" @onclick:stopPropagation="true">
             <div class="d-flex flex-column text-start">
-                <span class="item-name">@Cadence.Name</span>
+                <div class="d-flex align-items-center gap-2">
+                    <span class="item-name">@Cadence.Name</span>
+                    @if (TotalCount > 0)
+                    {
+                        <span class="completion-counter small text-muted">(@CompletedCount/@TotalCount)</span>
+                        @if (CompletedCount >= TotalCount)
+                        {
+                            <span class="text-success small">✔</span>
+                        }
+                    }
+                </div>
                 <span class="small text-muted">@Cadence.Description</span>
             </div>
         </div>
@@ -22,6 +32,12 @@
 @code {
     [Parameter]
     public Cadence Cadence { get; set; }
+
+    [Parameter]
+    public int CompletedCount { get; set; }
+
+    [Parameter]
+    public int TotalCount { get; set; }
 
     [Parameter]
     public RenderFragment? ChildContent { get; set; }

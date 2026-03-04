@@ -33,6 +33,7 @@ Mythril is an RPG-inspired web application built with **.NET 10** and **Blazor W
 - **CI/CD**: GitHub Actions for automated deployment and health monitoring.
 
 ## 🚀 Recent Updates (March 4, 2026)
+- **Cadence Completion Tracking**: Implemented a progress counter and checkmark system for Cadences, similar to Location tracking. Users can now see how many abilities have been unlocked for each job at a glance.
 - **Location Completion Tracking**: Added a quest counter to location expanders, showing progress on one-time quests. A green checkmark now appears when all unique tasks in a region are finished.
 - **Logistics I Ability**: Implemented a new progression tier allowing characters to perform two tasks simultaneously. Features automated task cancellation and cost refunding when the ability is lost.
 - **Location Gating System**: Refactored the world map to gate major biomes (Whispering Woods, Ancient Ruins, etc.) behind prerequisite story quests, improving early-game focus and sense of discovery.

@@ -69,3 +69,18 @@
     transform: translateY(-2px);
     box-shadow: var(--shadow-md);
 }
+
+.item-name {
+    font-weight: bold;
+    color: var(--text-color);
+}
+
+.completion-counter {
+    font-variant-numeric: tabular-nums;
+    font-weight: normal;
+}
+
+.text-success {
+    color: #28a745;
+    font-weight: bold;
+}

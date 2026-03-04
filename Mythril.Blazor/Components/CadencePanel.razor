@@ -1,6 +1,7 @@
 @using Mythril.Data
 @using Mythril.Blazor.Services
 @inject DragDropService DragDropService
+@inject ResourceManager resourceManager
 
 <div class="cadence-panel d-flex flex-column h-100">
     <div class="flex-grow-1 overflow-auto mt-2">
@@ -8,7 +9,11 @@
         {
             @foreach (var cadence in UnlockedCadences)
             {
-                <CadenceDragExpander Cadence="cadence" @key="@cadence.Name">
+                var stats = GetCompletionStats(cadence);
+                <CadenceDragExpander Cadence="cadence" 
+                                     @key="@cadence.Name"
+                                     CompletedCount="@stats.Completed"
+                                     TotalCount="@stats.Total">
                     <CadenceTree CadenceData="cadence" />
                 </CadenceDragExpander>
             }
@@ -38,5 +43,15 @@
         {
             await OnUnequip.InvokeAsync(cadence);
         }
+    }
+
+    private (int Completed, int Total) GetCompletionStats(Cadence cadence)
+    {
+        if (cadence.Abilities == null) return (0, 0);
+        
+        int total = cadence.Abilities.Length;
+        int completed = cadence.Abilities.Count(a => resourceManager.UnlockedAbilities.Contains($"{cadence.Name}:{a.Ability.Name}"));
+        
+        return (completed, total);
     }
 }
