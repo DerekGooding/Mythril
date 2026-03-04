@@ -55,5 +55,16 @@ Advanced quests in regions like the **Iron Mines** or **Sun-Drenched Desert** re
 
 ## 💡 Tips for Success
 - **Specialization**: Differentiate your characters! Give one high Magic for fast research and another high Strength for resource farming.
-- **Auto-Quest**: Once you unlock the "AutoQuest I" ability on a Cadence, you can toggle "Auto" on for that character to automatically restart recurring quests.
-- **Magic Capacity**: Watch your magic limits. Research "Magic Pocket" abilities to increase the amount of magic you can carry.
+
+### Logistics and Multi-Tasking
+As you progress, you may unlock the **Logistics I** ability on certain advanced Cadences.
+- **Dual Slots**: Equipping a Cadence with Logistics I gives that character a second task slot, allowing them to perform two actions at once.
+- **Management**: You can drag and drop different tasks into each slot independently.
+- **Cancellation**: If you unequip your Logistics Cadence while two tasks are active, the second task will be automatically cancelled and its costs refunded.
+
+### Auto-Quest
+Once you unlock the "AutoQuest I" ability on a Cadence, you can toggle "Auto" on for that character to automatically restart recurring quests.
+- **Slot Restriction**: Note that Auto-Quest only affects the **primary (first) task slot**. Quests in additional slots must be restarted manually.
+
+### Magic Capacity
+- **Capacity**: Watch your magic limits. Research "Magic Pocket" abilities to increase the amount of magic you can carry.

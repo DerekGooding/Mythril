@@ -53,7 +53,8 @@ public class PersistenceService(
                 ItemType = q.Item is QuestData ? "Quest" : (q.Item is CadenceUnlock ? "CadenceUnlock" : "Refinement"),
                 CharacterName = q.Character.Name,
                 SecondsElapsed = q.SecondsElapsed,
-                StartTime = q.StartTime
+                StartTime = q.StartTime,
+                SlotIndex = q.SlotIndex
             }).ToList()
         };
 
@@ -161,7 +162,7 @@ public class PersistenceService(
                 if (quest.Name != null)
                 {
                     var detail = resourceManager.GetQuestDetails(quest);
-                    qp = new QuestProgress(new QuestData(quest, detail), quest.Description, detail.DurationSeconds, character);
+                    qp = new QuestProgress(new QuestData(quest, detail), quest.Description, detail.DurationSeconds, character, dto.SlotIndex);
                 }
             }
             else if (dto.ItemType == "CadenceUnlock")
@@ -170,7 +171,7 @@ public class PersistenceService(
                 var unlock = cadence.Abilities.FirstOrDefault(a => a.Ability.Name == dto.ItemName);
                 if (unlock.Ability.Name != null)
                 {
-                    qp = new QuestProgress(unlock, unlock.Ability.Description, 10, character);
+                    qp = new QuestProgress(unlock, unlock.Ability.Description, 10, character, dto.SlotIndex);
                 }
             }
             else if (dto.ItemType == "Refinement")
@@ -178,7 +179,7 @@ public class PersistenceService(
                 var refinement = refinements.GetRefinement(dto.AbilityName, dto.InputItemName);
                 if (refinement is not null)
                 {
-                    qp = new QuestProgress(refinement.Value, refinement.Value.Description, 15, character);
+                    qp = new QuestProgress(refinement.Value, refinement.Value.Description, 15, character, dto.SlotIndex);
                 }
             }
 

@@ -55,13 +55,6 @@ public partial class ResourceManager
         return true;
     }
 
-    public bool HasAbility(Character character, CadenceAbility ability)
-    {
-        return JunctionManager.CurrentlyAssigned(character).Any(cad => 
-            cad.Abilities.Any(a => a.Ability.Name == ability.Name && UnlockedAbilities.Contains($"{cad.Name}:{a.Ability.Name}"))
-        );
-    }
-
     private void LockQuest(Quest quest)
     {
         foreach(var location in UsableLocations)
@@ -125,6 +118,21 @@ public partial class ResourceManager
             double duration = 10; // Default
             string primaryStat = "Vitality";
 
+            // Find first available slot
+            int slotIndex = 0;
+            lock(_questLock)
+            {
+                var charQuests = ActiveQuests.Where(q => q.Character.Name == character.Name).ToList();
+                for (int i = 0; i < GetTaskLimit(character); i++)
+                {
+                    if (!charQuests.Any(q => q.SlotIndex == i))
+                    {
+                        slotIndex = i;
+                        break;
+                    }
+                }
+            }
+
             if (item is QuestData quest)
             {
                 duration = IsTestMode ? 3 : quest.DurationSeconds;
@@ -140,7 +148,7 @@ public partial class ResourceManager
 
                 lock(_questLock)
                 {
-                    var qp = new QuestProgress(quest, quest.Description, (int)Math.Max(1, duration), character);
+                    var qp = new QuestProgress(quest, quest.Description, (int)Math.Max(1, duration), character, slotIndex);
                     qp.SecondsElapsed = initialSecondsElapsed;
                     ActiveQuests.Add(qp);
                 }
@@ -160,7 +168,7 @@ public partial class ResourceManager
 
                 lock(_questLock)
                 {
-                    var qp = new QuestProgress(unlock, unlock.Ability.Description, (int)Math.Max(1, duration), character);
+                    var qp = new QuestProgress(unlock, unlock.Ability.Description, (int)Math.Max(1, duration), character, slotIndex);
                     qp.SecondsElapsed = initialSecondsElapsed;
                     ActiveQuests.Add(qp);
                 }
@@ -180,7 +188,7 @@ public partial class ResourceManager
 
                 lock(_questLock)
                 {
-                    var qp = new QuestProgress(refinement, refinement.Description, (int)Math.Max(1, duration), character);
+                    var qp = new QuestProgress(refinement, refinement.Description, (int)Math.Max(1, duration), character, slotIndex);
                     qp.SecondsElapsed = initialSecondsElapsed;
                     ActiveQuests.Add(qp);
                 }

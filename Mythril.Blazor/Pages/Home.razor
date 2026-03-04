@@ -222,8 +222,8 @@
         resourceManager.RemoveActiveQuest(completedProgress);
         SnackbarService.Show($"Completed: {completedProgress.Name}", "success");
 
-        // Auto-restart logic
-        if (completedProgress.Item is QuestData quest && quest.Type == QuestType.Recurring)
+        // Auto-restart logic (Only for Slot 0)
+        if (completedProgress.SlotIndex == 0 && completedProgress.Item is QuestData quest && quest.Type == QuestType.Recurring)
         {
             if (resourceManager.IsAutoQuestEnabled(completedProgress.Character) && resourceManager.CanAutoQuest(completedProgress.Character))
             {

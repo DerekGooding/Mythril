@@ -98,6 +98,7 @@ public class QuestProgressDTO
     public string CharacterName { get; set; } = string.Empty;
     public double SecondsElapsed { get; set; }
     public DateTime StartTime { get; set; }
+    public int SlotIndex { get; set; }
 }
 
 // Data Transfer Objects for JSON Loading

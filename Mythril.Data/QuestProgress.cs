@@ -1,8 +1,9 @@
 namespace Mythril.Data;
 
-public class QuestProgress(object item, string description, int durationSeconds, Character character)
+public class QuestProgress(object item, string description, int durationSeconds, Character character, int slotIndex = 0)
 {
     public object Item { get; set; } = item;
+    public int SlotIndex { get; set; } = slotIndex;
 
     public string Name { get; set; } =
         item is QuestData quest ? quest.Name :

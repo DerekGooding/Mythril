@@ -142,4 +142,56 @@ public class LogisticsTests
         Assert.AreEqual(ironAfterStart + 20, _resourceManager.Inventory.GetQuantity(iron), "Second quest SHOULD be refunded.");
         Assert.AreEqual(10, _resourceManager.Inventory.GetQuantity(bark), "Ancient Bark SHOULD be refunded.");
     }
+
+    [TestMethod]
+    public void AutoQuest_OnlyRestartsSlotZero()
+    {
+        var character = _resourceManager!.Characters[0];
+        var weaver = _cadences!.All.First(c => c.Name == "Mythril Weaver");
+        var recruit = _cadences!.All.First(c => c.Name == "Recruit");
+        
+        _resourceManager.UnlockCadence(weaver);
+        _resourceManager.UnlockCadence(recruit);
+        _resourceManager.UnlockedAbilities.Add("Mythril Weaver:Logistics I");
+        _resourceManager.UnlockedAbilities.Add("Recruit:AutoQuest I");
+        
+        _resourceManager.JunctionManager.AssignCadence(weaver, character, _resourceManager.UnlockedAbilities);
+        _resourceManager.JunctionManager.AssignCadence(recruit, character, _resourceManager.UnlockedAbilities);
+        _resourceManager.SetAutoQuestEnabled(character, true);
+
+        var questGoblins = new QuestData(_quests!.All.First(q => q.Name == "Farm Goblins"), _questDetails![_quests.All.First(q => q.Name == "Farm Goblins")]);
+        var questBats = new QuestData(_quests.All.First(q => q.Name == "Farm Bats"), _questDetails[_quests.All.First(q => q.Name == "Farm Bats")]);
+
+        // Start both
+        _resourceManager.StartQuest(questGoblins, character); // Slot 0
+        _resourceManager.StartQuest(questBats, character);    // Slot 1
+
+        var progress0 = _resourceManager.ActiveQuests.First(p => p.SlotIndex == 0);
+        var progress1 = _resourceManager.ActiveQuests.First(p => p.SlotIndex == 1);
+
+        // Simulate completion of slot 1
+        _resourceManager.ReceiveRewards(progress1.Item).Wait();
+        _resourceManager.RemoveActiveQuest(progress1);
+
+        // Manual check of what Home.razor does:
+        if (progress1.SlotIndex == 0 && progress1.Item is QuestData q1 && q1.Type == QuestType.Recurring)
+        {
+             _resourceManager.StartQuest(q1, character, -1.5);
+        }
+
+        Assert.AreEqual(1, _resourceManager.ActiveQuests.Count, "Slot 1 should NOT have restarted.");
+        Assert.AreEqual(0, _resourceManager.ActiveQuests.First().SlotIndex);
+
+        // Simulate completion of slot 0
+        _resourceManager.ReceiveRewards(progress0.Item).Wait();
+        _resourceManager.RemoveActiveQuest(progress0);
+
+        if (progress0.SlotIndex == 0 && progress0.Item is QuestData q0 && q0.Type == QuestType.Recurring)
+        {
+             _resourceManager.StartQuest(q0, character, -1.5);
+        }
+
+        Assert.AreEqual(1, _resourceManager.ActiveQuests.Count, "Slot 0 SHOULD have restarted.");
+        Assert.AreEqual(0, _resourceManager.ActiveQuests.First().SlotIndex);
+    }
 }

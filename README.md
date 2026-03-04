@@ -32,14 +32,13 @@ Mythril is an RPG-inspired web application built with **.NET 10** and **Blazor W
 - **Testing**: MSTest, Moq, and bUnit for component testing. Coverage is maintained at >90% overall.
 - **CI/CD**: GitHub Actions for automated deployment and health monitoring.
 
-## 🚀 Recent Updates (March 3, 2026)
-- **Junction Prediction UI**: Implemented real-time previews of stat changes during magic drag-and-drop operations, providing immediate feedback on equipment power.
-- **Universal Stat Multipliers**: Refactored the task system to apply multiplicative stat scaling to all task durations (Quests, Cadence Unlocks, Refinements), ensuring character progression is mechanically relevant for every action.
-- **Stat-Gated Quests**: Added "Progression Stat Gates" to mid-game content, requiring players to reach specific junctioned stat thresholds to attempt advanced tasks.
-- **Auto-Quest Visualizer**: Improved the "aliveness" of the auto-restart loop with a 1.5s visual "Preparing next cycle..." state.
-- **Sun-Drenched Desert Biome**: Expanded the world with a new mid-game desert environment featuring scavenger quests and hunting challenges.
-- **Magic Expenditure Quests**: Deepened the link between refinement and questing by implementing tasks that require consuming magic items as costs.
-- **UI Architecture**: Refactored the main layout and tab system to ensure perfect flexbox containment and vertical scrolling.
+## 🚀 Recent Updates (March 4, 2026)
+- **Logistics I Ability**: Implemented a new progression tier allowing characters to perform two tasks simultaneously. Features automated task cancellation and cost refunding when the ability is lost.
+- **Location Gating System**: Refactored the world map to gate major biomes (Whispering Woods, Ancient Ruins, etc.) behind prerequisite story quests, improving early-game focus and sense of discovery.
+- **Refined Workshop Reactivity**: Optimized the refinement UI to ensure immediate visual updates when new abilities are learned, powered by reactive parameter binding.
+- **Auto-Quest Slot Restriction**: Balanced the Auto-Quest I ability to specifically target only the primary task slot, adding strategic depth to multi-tasking.
+- **Monolith Prevention Refactor**: Decomposed the `ResourceManager` into specialized partial classes (`State`, `Discovery`, `Inventory`, `Quests`) to maintain a lean, maintainable architecture below the 250-line file limit.
+- **Persistence Layer Upgrade**: Enhanced the save system to preserve task slot assignments and discovered location names across sessions.
 
 ## ⚖️ Quality Assurance & Health
 We maintain project health through a custom automated suite (`scripts/check_health.py`) which runs on every commit:
