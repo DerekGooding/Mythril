@@ -14,6 +14,7 @@ public partial class ResourceManager
         {
             Journal.Clear();
             _everPerformedActivities.Clear();
+            CharacterMiniLogs.Clear();
         }
         OnJournalUpdated?.Invoke();
     }

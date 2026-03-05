@@ -172,14 +172,13 @@ public partial class Home : IDisposable
 
     private async Task OnVersionClick()
     {
-        if (AuthService.IsAuthenticated) return;
-
         _versionClicks++;
         if (_versionClicks >= 3)
         {
-            await AuthService.SetDevMode(true);
+            bool newState = !AuthService.IsAuthenticated;
+            await AuthService.SetDevMode(newState);
             _versionClicks = 0;
-            SnackbarService.Show("Developer mode unlocked!", "success");
+            SnackbarService.Show(newState ? "Developer mode unlocked!" : "Developer mode disabled.", newState ? "success" : "info");
             StateHasChanged();
         }
     }
