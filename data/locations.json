@@ -2,34 +2,47 @@
   {
     "Name": "Village",
     "Type": "Plains",
-    "Quests": [ "Prologue", "Tutorial Section", "Visit Starting Town", "Buy Potion", "Sell Gem" ]
+    "Quests": [ 
+      "Prologue", 
+      "Tutorial Section", 
+      "Visit Starting Town", 
+      "Buy Potion", 
+      "Sell Gem", 
+      "Learn About Cadences", 
+      "Learn about the Mines", 
+      "Learn about the Dark Forest",
+      "Recover the Ancient Tome"
+    ]
   },
   {
     "Name": "Greenwood Forest",
     "Type": "Forest",
+    "RequiredQuest": "Tutorial Section",
     "Quests": [ "Chop Wood", "Gather Moonberries", "Hunt Spiders", "Purify the Grove" ]
   },
   {
     "Name": "Dark Forest",
     "Type": "Forest",
     "RequiredQuest": "Learn about the Dark Forest",
-    "Quests": [ "Learn about the Dark Forest", "Defeat Treant Guardian", "Help the lumberjack" ]
+    "Quests": [ "Defeat Treant Guardian", "Help the lumberjack" ]
   },
   {
     "Name": "Sun-drenched Plains",
     "Type": "Plains",
-    "Quests": [ "Hunt Slimes", "Hunt Goblins", "Hunt Sand-Sharks" ]
+    "RequiredQuest": "Visit Starting Town",
+    "Quests": [ "Hunt Slimes", "Hunt Goblins", "Hunt Sand-Sharks", "Locate the Hidden Oasis" ]
   },
   {
     "Name": "Forgotten Mines",
     "Type": "Mine",
+    "RequiredQuest": "Learn about the Mines",
     "Quests": [ "Mine Iron Ore", "Power the Forge", "Scavenge Scrap" ]
   },
   {
     "Name": "Deep Mines",
     "Type": "Mine",
     "RequiredQuest": "Learn about the Mines",
-    "Quests": [ "Learn about the Mines", "Hunt Bats", "Unlock Mining" ]
+    "Quests": [ "Hunt Bats", "Unlock Mining" ]
   },
   {
     "Name": "Crystal Peaks",
@@ -47,19 +60,19 @@
     "Name": "Hidden Oasis",
     "Type": "Water",
     "RequiredQuest": "Locate the Hidden Oasis",
-    "Quests": [ "Locate the Hidden Oasis" ]
+    "Quests": [ ]
   },
   {
     "Name": "Ancient Library",
     "Type": "Library",
-    "RequiredQuest": "Recover the Ancient Tome",
+    "RequiredQuest": "Ancient Inscriptions",
     "Quests": [ "Archive Sifting", "Study Ancient Texts" ]
   },
   {
     "Name": "Ancient Ruins",
     "Type": "Library",
     "RequiredQuest": "Recover the Ancient Tome",
-    "Quests": [ "Recover the Ancient Tome", "Ancient Inscriptions", "Finding the Hearth", "Rekindling the Spark" ]
+    "Quests": [ "Ancient Inscriptions", "Finding the Hearth", "Rekindling the Spark" ]
   },
   {
     "Name": "Mythril Sanctum",

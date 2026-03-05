@@ -3,16 +3,16 @@
     "failure_count": 8,
     "metrics": {
         "monoliths": 0,
-        "coverage": 75.3,
+        "coverage": 75.2,
         "missing_tests": 0,
         "key_violations": 0,
         "testid_violations": 0,
         "stale_docs": 0,
         "reachability_passed": {
             "passed": true,
-            "time": "1.0m",
-            "sustainable": 3,
-            "unsustainable": 2
+            "time": "0.6m",
+            "sustainable": 21,
+            "unsustainable": 13
         },
         "pending_feedback": 0,
         "test_passed": true
