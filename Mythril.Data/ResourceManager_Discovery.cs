@@ -52,12 +52,12 @@ public partial class ResourceManager
     {
         foreach (var character in Characters)
         {
-            // Geologist: 100 STR
-            if (JunctionManager.GetStatValue(character, "Strength") >= 100)
+            // Geologist: 60 STR
+            if (JunctionManager.GetStatValue(character, "Strength") >= 60)
                 UnlockByName("Geologist");
             
-            // Tide-Caller: 100 SPD
-            if (JunctionManager.GetStatValue(character, "Speed") >= 100)
+            // Tide-Caller: 60 SPD
+            if (JunctionManager.GetStatValue(character, "Speed") >= 60)
                 UnlockByName("Tide-Caller");
 
             // Scholar: 100 MAG

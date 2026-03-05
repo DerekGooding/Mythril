@@ -61,12 +61,14 @@ public class RewardTests : BunitTestBase
         var recipe = new Recipe(1, output, 2);
         var refinement = new RefinementData(ability, input, recipe);
         var character = ResourceManager.Characters[0];
+        ResourceManager.IsTestMode = true;
 
-        // Give ability to character
-        var student = ContentHost.GetContent<Cadences>().All.First(c => c.Name == "Student");
-        ResourceManager.UnlockCadence(student);
-        ResourceManager.UnlockedAbilities.Add("Student:Refine"); // Mocking ability name match
-        JunctionManager.AssignCadence(student, character, ResourceManager.UnlockedAbilities);
+        // Ensure character HAS the ability and inventory HAS the input
+        var cadence = new Cadence("Student", "Desc", [new CadenceUnlock("Student", ability, [], "Strength")]);
+        ResourceManager.UnlockCadence(cadence);
+        ResourceManager.UnlockedAbilities.Add("Student:Refine");
+        JunctionManager.AssignCadence(cadence, character, ResourceManager.UnlockedAbilities);
+        InventoryManager.Add(input, 1);
 
         ResourceManager.StartQuest(refinement, character);
         var progress = ResourceManager.ActiveQuests.First();

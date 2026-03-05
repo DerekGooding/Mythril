@@ -152,7 +152,7 @@
     "DurationSeconds": 120,
     "Type": "Single",
     "Requirements": [],
-    "Rewards": [ { "Item": "Gold", "Quantity": 500 } ],
+    "Rewards": [ { "Item": "Gold", "Quantity": 500 }, { "Item": "Lost Parchment", "Quantity": 1 } ],
     "PrimaryStat": "Magic"
   },
   {
@@ -160,7 +160,7 @@
     "DurationSeconds": 300,
     "Type": "Single",
     "Requirements": [],
-    "Rewards": [ { "Item": "Basic Gem", "Quantity": 10 } ],
+    "Rewards": [ { "Item": "Basic Gem", "Quantity": 10 }, { "Item": "Crystal Shards", "Quantity": 1 } ],
     "PrimaryStat": "Vitality"
   },
   {
@@ -209,7 +209,7 @@
     "DurationSeconds": 300,
     "Type": "Single",
     "Requirements": [],
-    "Rewards": [ { "Item": "Solar Essence", "Quantity": 1 } ],
+    "Rewards": [ { "Item": "Solar Essence", "Quantity": 1 }, { "Item": "Blue Coral", "Quantity": 1 } ],
     "PrimaryStat": "Vitality",
     "RequiredStats": { "Speed": 25 }
   },

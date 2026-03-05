@@ -212,8 +212,8 @@ public partial class LatticeSimulator
     {
         var cadenceUnlocks = state.UnlockedCadences.ToBuilder();
 
-        if (state.StatMax.GetValueOrDefault("Strength", 0) >= 100) cadenceUnlocks.Add("Geologist");
-        if (state.StatMax.GetValueOrDefault("Speed", 0) >= 100) cadenceUnlocks.Add("Tide-Caller");
+        if (state.StatMax.GetValueOrDefault("Strength", 0) >= 60) cadenceUnlocks.Add("Geologist");
+        if (state.StatMax.GetValueOrDefault("Speed", 0) >= 60) cadenceUnlocks.Add("Tide-Caller");
         if (state.StatMax.GetValueOrDefault("Magic", 0) >= 100) cadenceUnlocks.Add("Scholar");
         if (state.StatMax.GetValueOrDefault("Strength", 0) >= 100 && state.StatMax.GetValueOrDefault("Speed", 0) >= 100) cadenceUnlocks.Add("Slayer");
 

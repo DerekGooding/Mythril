@@ -1,5 +1,6 @@
 @using Mythril.Data
 @inject ResourceManager ResourceManager
+@implements IDisposable
 
 <div class="journal-panel" data-testid="journal-panel">
     @if (ResourceManager.Journal.Any())
@@ -28,3 +29,20 @@
         </div>
     }
 </div>
+
+@code {
+    protected override void OnInitialized()
+    {
+        ResourceManager.OnJournalUpdated += HandleJournalUpdated;
+    }
+
+    private void HandleJournalUpdated()
+    {
+        InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        ResourceManager.OnJournalUpdated -= HandleJournalUpdated;
+    }
+}

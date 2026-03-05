@@ -43,6 +43,15 @@ public partial class ResourceManager
             // Slot 1 restarts only with AutoQuest II
             bool shouldRestart = completedProgress.SlotIndex == 0 || (completedProgress.SlotIndex == 1 && HasAutoQuestII(completedProgress.Character));
 
+            if (shouldRestart && completedProgress.Item is RefinementData refinement)
+            {
+                if (refinement.Recipe.OutputItem.ItemType == ItemType.Spell && 
+                    Inventory.GetQuantity(refinement.Recipe.OutputItem) >= Inventory.MagicCapacity)
+                {
+                    shouldRestart = false;
+                }
+            }
+
             if (shouldRestart)
             {
                 if (CanAfford(completedProgress.Item, completedProgress.Character))

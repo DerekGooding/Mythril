@@ -1,16 +1,16 @@
 {
     "is_healthy": false,
-    "failure_count": 10,
+    "failure_count": 9,
     "metrics": {
         "monoliths": 0,
-        "coverage": 75.37,
+        "coverage": 75.0,
         "missing_tests": 0,
         "key_violations": 0,
         "testid_violations": 0,
-        "stale_docs": 1,
+        "stale_docs": 0,
         "reachability_passed": {
             "passed": true,
-            "time": "Unknown",
+            "time": "1076.9s",
             "sustainable": 18,
             "unsustainable": 10
         },
@@ -86,11 +86,6 @@
                 "actual": 0.0,
                 "required": 25.0
             }
-        },
-        {
-            "category": "docs_stale",
-            "message": "docs/instructions.md is stale (22 source changes since last update)",
-            "metadata": {}
         }
     ]
 }

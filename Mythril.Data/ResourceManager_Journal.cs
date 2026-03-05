@@ -5,6 +5,8 @@ public partial class ResourceManager
     public record JournalEntry(string TaskName, string CharacterName, string Details, DateTime CompletedAt);
     public List<JournalEntry> Journal { get; set; } = [];
 
+    public event Action? OnJournalUpdated;
+
     private void AddToJournal(string taskName, string characterName, string details)
     {
         lock(_questLock)
@@ -15,5 +17,6 @@ public partial class ResourceManager
                 Journal.RemoveAt(Journal.Count - 1);
             }
         }
+        OnJournalUpdated?.Invoke();
     }
 }

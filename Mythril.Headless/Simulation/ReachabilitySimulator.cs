@@ -26,7 +26,7 @@ public partial class ReachabilitySimulator(
         
         var seed = new SimulationSeed(
             ImmutableDictionary<string, int>.Empty,
-            stats.All.ToImmutableDictionary(s => s.Name, _ => 10),
+            stats.All.ToImmutableDictionary(s => s.Name, _ => 25), // Starting at 25 instead of 10
             ImmutableHashSet.Create<string>("Recruit"),
             ImmutableHashSet.Create<string>()
         );
@@ -59,6 +59,9 @@ public partial class ReachabilitySimulator(
             foreach (var q in unreachableQuests) sb.AppendLine($"- {q.Name}");
         }
         else sb.AppendLine("✅ All quests reachable.");
+
+        double maxQuestTime = state.QuestTime.Values.Where(t => t < double.PositiveInfinity).DefaultIfEmpty(0).Max();
+        sb.AppendLine($"Estimated End-Game Time: {maxQuestTime:F1}s");
 
         var unreachableResources = items.All.Where(i => state.ResourceTime[i.Name] == double.PositiveInfinity).ToList();
         if (unreachableResources.Any())
