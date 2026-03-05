@@ -43,7 +43,39 @@ As the game progresses, several lists and panels will become unwieldy due to the
 - **Junction "Quick Swap":** Allow dragging a junction from one character's stat directly to another's to swap the magic and the underlying cadence assignment in one move.
 - **Mini-Log:** A tiny scrollable "Recent Results" list per character (e.g., "Hero: +5 Iron Ore", "Wifu: Refined Fire I").
 
-## 6. General UX (Aesthetics & Interaction)
-- **Keyboard Shortcuts:** `1, 2, 3` to switch between main tabs (Locations, Cadence, Workshop).
-- **Contextual Help:** A "Help" overlay (accessible via `?`) that explains the Junction formula and Auto-Quest rules.
-- **Theme Persistence:** Ensure high-contrast variants for the dark theme as some badge colors (bg-info, bg-warning) can be hard to read on very dark backgrounds.
+## 7. Asset Strategy: "The High-Quality Placeholder"
+To avoid the "developer art" look without a dedicated artist, we can use the following methods:
+- **Game-icons.net (SVG)**: A massive, free library of white-on-black SVG icons that fit the "Fantasy/Dashboard" aesthetic perfectly. They are easily stylable via CSS `filter: drop-shadow()` or `mask-image`.
+- **Generative AI (DALL-E 3 / Midjourney)**: Generate a consistent set of "UI Sprite Sheets" for materials. 
+    - *Prompt Tip*: "Pixel art icon of a [Item Name], fantasy RPG style, white background, consistent 32x32 framing."
+- **CSS-Only "Primitives"**: Use CSS `clip-path` and gradients to create items. For example, a "Fire I" spell could be a simple CSS diamond with a red/orange radial gradient and a `pulse` animation.
+
+## 8. Asset-Light Alternatives (No Art Required)
+If we choose not to add external images, we can achieve similar results using the tools already in the project:
+
+### A. Material Icon Overlays
+The project already uses Material Icons. We can combine them with CSS backgrounds to create unique "composite" icons:
+- **Materials**: Use a circle background with a specific color + a central icon.
+    - *Iron Ore*: Grey Circle + `settings` icon.
+    - *Mana Leaf*: Green Circle + `eco` icon.
+    - *Gold*: Gold Circle + `payments` icon.
+
+### B. Typography & Color Coding
+- **Inventory Groups**: Instead of icons, use consistent color borders for item types.
+    - **Spells**: Neon Blue border with a subtle "inner glow" box-shadow.
+    - **Materials**: Solid Grey/Brown borders.
+    - **Key Items**: Pulsing Gold border.
+
+### C. Unicode "Glyphs"
+Many RPG stats and types can be represented via standard Unicode characters which inherit the project's font styling:
+- **Strength**: `✦` or `⚔`
+- **Magic**: `❃` or `☄`
+- **Vitality**: `❤` or `🛡`
+- **Speed**: `⚡` or `➳`
+
+### D. CSS Grid "Shape" Recognition
+- **Location Differentiation**: Instead of region icons, use distinct **header shapes** via `border-radius`. 
+    - *Forests*: Top-left and top-right rounded.
+    - *Mines/Mountains*: No rounding (sharp edges).
+    - *Water/Caverns*: Fully pill-shaped headers.
+- **Recipe Rarity**: Use CSS `repeating-linear-gradient` as a background for "Rare" recipes to make them instantly recognizable in a long list without needing a new icon.
