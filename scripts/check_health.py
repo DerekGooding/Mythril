@@ -20,6 +20,7 @@ MAX_LINES_PER_FILE = config.get("MAX_LINES_PER_FILE", 250)
 MIN_OVERALL_COVERAGE = config.get("MIN_OVERALL_COVERAGE", 70.0)
 MIN_FILE_COVERAGE = config.get("MIN_FILE_COVERAGE", 25.0)
 MIN_BRANCH_COVERAGE = config.get("MIN_BRANCH_COVERAGE", 50.0)
+MIN_MUTATION_SCORE = config.get("MIN_MUTATION_SCORE", 60.0)
 DOCS_STALENESS_THRESHOLD = config.get("DOCS_STALENESS_THRESHOLD", 10)
 
 SOURCE_DIR = Path(config.get("SOURCE_DIR", "."))
@@ -57,6 +58,31 @@ def run_tests():
     except subprocess.CalledProcessError:
         record_failure("tests", "dotnet test failed")
         return False
+
+# -----------------------
+# Mutation Testing
+# -----------------------
+
+def check_mutation():
+    print("--- Running Mutation Testing ---")
+    try:
+        # Run custom mutation script
+        result = subprocess.run([sys.executable, "scripts/run_mutation.py"], capture_output=True, text=True)
+        output = result.stdout
+        
+        score_match = re.search(r"Mutation Score: ([\d.]+)%", output)
+        if score_match:
+            score = float(score_match.group(1))
+            print(f"Mutation Score: {score:.2f}%")
+            if score < MIN_MUTATION_SCORE:
+                record_failure("mutation", f"Mutation score below threshold: {score:.2f}% (required: {MIN_MUTATION_SCORE}%)", {"actual": score, "required": MIN_MUTATION_SCORE})
+            return score
+        else:
+            record_failure("mutation", "Could not parse mutation score from output")
+            return 0.0
+    except Exception as e:
+        record_failure("mutation", f"Error running mutation script: {e}")
+        return 0.0
 
 # -----------------------
 # Monolith Check
@@ -406,10 +432,15 @@ def export_results(metrics):
 
 if __name__ == "__main__":
     skip_tests = "--skip-tests" in sys.argv
+    run_mutation = "--mutation" in sys.argv
 
     test_passed = True
     if not skip_tests:
         test_passed = run_tests()
+
+    mutation_score = 0.0
+    if run_mutation:
+        mutation_score = check_mutation()
 
     monolith_count = check_monoliths()
     coverage_pct = parse_coverage()
@@ -423,6 +454,7 @@ if __name__ == "__main__":
     metrics = {
         "monoliths": monolith_count,
         "coverage": coverage_pct,
+        "mutation_score": mutation_score,
         "missing_tests": missing_tests,
         "key_violations": key_violations,
         "testid_violations": testid_violations,

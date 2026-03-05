@@ -197,6 +197,26 @@ public class JunctionStatTests
     }
 
     [TestMethod]
+    public void JunctionManager_JunctionMagic_StrictlyRequiresCorrectAbility()
+    {
+        var character = _resourceManager!.Characters[0];
+        // Apprentice has "AutoQuest I" but NOT "J-Str"
+        var apprentice = _cadences!.All.First(c => c.Name == "Apprentice");
+        var strengthStat = _stats!.All.First(s => s.Name == "Strength");
+        var fireMagic = _items!.All.First(i => i.Name == "Fire I");
+
+        _resourceManager.UnlockedAbilities.Add("Apprentice:AutoQuest I");
+        _junctionManager!.AssignCadence(apprentice, character, _resourceManager.UnlockedAbilities);
+
+        // Act: Try to junction Strength magic.
+        // It should FAIL because Apprentice has abilities, but not J-Str.
+        _junctionManager.JunctionMagic(character, strengthStat, fireMagic, _resourceManager.UnlockedAbilities);
+
+        // Assert
+        Assert.AreEqual(0, _junctionManager.Junctions.Count, "Should not allow junctioning with the wrong ability.");
+    }
+
+    [TestMethod]
     public void ResourceManager_UpdateMagicCapacity_Works()
     {
         Assert.AreEqual(30, _resourceManager!.Inventory.MagicCapacity);
