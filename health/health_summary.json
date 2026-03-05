@@ -1,0 +1,86 @@
+{
+    "is_healthy": false,
+    "failure_count": 8,
+    "metrics": {
+        "monoliths": 0,
+        "coverage": 75.17,
+        "missing_tests": 0,
+        "key_violations": 0,
+        "testid_violations": 0,
+        "stale_docs": 0,
+        "reachability_passed": {
+            "passed": true,
+            "time": "1076.9s",
+            "sustainable": 18,
+            "unsustainable": 9
+        },
+        "pending_feedback": 0,
+        "test_passed": true
+    },
+    "failures": [
+        {
+            "category": "file_coverage",
+            "message": "Mythril.Headless/Program.cs below minimum coverage: 0.00% (required: 25.0%)",
+            "metadata": {
+                "actual": 0.0,
+                "required": 25.0
+            }
+        },
+        {
+            "category": "file_coverage",
+            "message": "Mythril.Headless/Program.cs below minimum coverage: 0.00% (required: 25.0%)",
+            "metadata": {
+                "actual": 0.0,
+                "required": 25.0
+            }
+        },
+        {
+            "category": "file_coverage",
+            "message": "Mythril.Headless/Program.cs below minimum coverage: 0.00% (required: 25.0%)",
+            "metadata": {
+                "actual": 0.0,
+                "required": 25.0
+            }
+        },
+        {
+            "category": "file_coverage",
+            "message": "Mythril.Headless/Program.cs below minimum coverage: 0.00% (required: 25.0%)",
+            "metadata": {
+                "actual": 0.0,
+                "required": 25.0
+            }
+        },
+        {
+            "category": "file_coverage",
+            "message": "Mythril.Headless/Program.cs below minimum coverage: 0.00% (required: 25.0%)",
+            "metadata": {
+                "actual": 0.0,
+                "required": 25.0
+            }
+        },
+        {
+            "category": "file_coverage",
+            "message": "Mythril.Headless/Simulation/ReachabilitySimulator.cs below minimum coverage: 0.00% (required: 25.0%)",
+            "metadata": {
+                "actual": 0.0,
+                "required": 25.0
+            }
+        },
+        {
+            "category": "file_coverage",
+            "message": "Mythril.Data/Models.cs below minimum coverage: 0.00% (required: 25.0%)",
+            "metadata": {
+                "actual": 0.0,
+                "required": 25.0
+            }
+        },
+        {
+            "category": "file_coverage",
+            "message": "Mythril.Data/Cadences.cs below minimum coverage: 0.00% (required: 25.0%)",
+            "metadata": {
+                "actual": 0.0,
+                "required": 25.0
+            }
+        }
+    ]
+}

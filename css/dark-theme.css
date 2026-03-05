@@ -1,0 +1,172 @@
+:root {
+    --bg-color: #121212;
+    --text-color: #e0e0e0;
+    --text-muted: #b0b0b0;
+    --card-bg: #1e1e1e;
+    --card-border: #333333;
+    --header-bg: #1e1e1e;
+    --header-border: #333333;
+    --tab-bg: #1e1e1e;
+    --tab-active-bg: #1e1e1e;
+    --tab-inactive-bg: #2c2c2c;
+    --panel-bg: #1e1e1e;
+    --panel-border: #333333;
+    --item-bg: #2c2c2c;
+    --item-border: #444444;
+    --item-hover-bg: #383838;
+    --stats-bg: #2c2c2c;
+    --badge-bg: #333333;
+    --badge-text: #e0e0e0;
+    --junction-badge-bg: #1a3a5a;
+    --junction-badge-text: #bb86fc;
+    --junction-badge-border: #bb86fc;
+    --primary-color: #bb86fc;
+    --primary-hover: #9965f4;
+    --secondary-color: #00bcff;
+    --accent-color: #03dac6;
+    --border-color: #333333;
+    --drop-zone-bg: #252525;
+    --drop-zone-border: #444444;
+    --input-bg: #1e1e1e;
+    --input-text: #e0e0e0;
+    --input-border: #333333;
+    --unlocked-bg: #1b4721;
+    --unlocked-border: #28a745;
+    --affordable-bg: #4d3d00;
+    --affordable-border: #ffc107;
+    --locked-card-bg: #2c2c2c;
+    --shadow-sm: 0 2px 4px rgba(0,0,0,0.3);
+    --shadow-md: 0 4px 8px rgba(0,0,0,0.4);
+    --shadow-lg: 0 8px 16px rgba(0,0,0,0.5);
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: var(--primary-color);
+    border-color: var(--primary-hover);
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+    border-color: var(--primary-hover);
+}
+
+a, .btn-link {
+    color: var(--primary-color);
+}
+
+.form-control {
+    background-color: var(--input-bg);
+    color: var(--input-text);
+    border-color: var(--input-border);
+}
+
+.form-control:focus {
+    background-color: var(--input-bg);
+    color: var(--input-text);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.25rem rgba(187, 134, 252, 0.25);
+}
+
+.card {
+    background-color: var(--card-bg);
+    border-color: var(--card-border);
+    color: var(--text-color);
+}
+
+.nav-tabs .nav-link {
+    color: var(--text-color);
+    border-color: var(--border-color);
+}
+
+.nav-tabs .nav-link.active {
+    background-color: var(--tab-active-bg);
+    color: var(--primary-color);
+    border-color: var(--border-color) var(--border-color) var(--tab-active-bg);
+}
+
+.nav-tabs .nav-link:hover {
+    border-color: #444;
+}
+
+.tab-content {
+    background-color: var(--tab-bg);
+    border-color: var(--border-color) !important;
+}
+
+/* Expanders */
+.expander {
+    border-color: var(--border-color);
+}
+
+.expander-header {
+    background-color: var(--tab-inactive-bg);
+    color: var(--text-color);
+}
+
+.expander-header:hover {
+    background-color: var(--item-hover-bg);
+}
+
+.expander-content {
+    background-color: var(--panel-bg);
+}
+
+/* Quest Cards */
+.card-header {
+    background-color: var(--tab-inactive-bg);
+    border-bottom-color: var(--border-color);
+}
+
+.card-main p {
+    color: var(--text-muted);
+}
+
+.card-side h6 {
+    color: var(--primary-color);
+}
+
+/* Inventory */
+.inventory-panel {
+    background-color: var(--panel-bg);
+    border-color: var(--panel-border);
+}
+
+.inventory-item {
+    background-color: var(--item-bg);
+    border-color: var(--item-border);
+}
+
+/* Character Display */
+.character-card {
+    background-color: var(--card-bg);
+    border-color: var(--card-border);
+}
+
+/* Progress Bars */
+.progress {
+    background-color: var(--badge-bg);
+}
+
+.progress-bar {
+    background-color: var(--secondary-color);
+}
+
+/* Drop Zones */
+.drop-target {
+    border-color: var(--drop-zone-border);
+    background-color: var(--drop-zone-bg);
+}
+
+.drop-target:hover {
+    background-color: var(--badge-bg);
+}
+
+.text-muted {
+    color: var(--text-muted) !important;
+}

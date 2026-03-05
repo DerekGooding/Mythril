@@ -1,0 +1,204 @@
+[
+  {
+    "Name": "Recruit",
+    "Description": "Foundational adventuring cadence",
+    "Abilities": [
+      {
+        "Ability": "AutoQuest I",
+        "Requirements": [ { "Item": "Gold", "Quantity": 100 } ],
+        "PrimaryStat": "Vitality"
+      },
+      {
+        "Ability": "J-Str",
+        "Requirements": [ { "Item": "Iron Ore", "Quantity": 10 } ],
+        "PrimaryStat": "Strength"
+      }
+    ]
+  },
+  {
+    "Name": "Arcanist",
+    "Description": "A starter magic-focused job.",
+    "Abilities": [
+      {
+        "Ability": "Refine Ice",
+        "Requirements": [ { "Item": "Mana Leaf", "Quantity": 5 } ],
+        "PrimaryStat": "Magic"
+      },
+      {
+        "Ability": "J-Magic",
+        "Requirements": [ { "Item": "Gold", "Quantity": 500 }, { "Item": "Mana Leaf", "Quantity": 10 } ],
+        "PrimaryStat": "Magic"
+      },
+      {
+        "Ability": "Magic Pocket I",
+        "Requirements": [ { "Item": "Gold", "Quantity": 1000 }, { "Item": "Mana Leaf", "Quantity": 20 } ],
+        "PrimaryStat": "Magic",
+        "Metadata": { "MagicCapacity": "60" }
+      },
+      {
+        "Ability": "Refine Lightning",
+        "Requirements": [ { "Item": "Fire Shard", "Quantity": 5 }, { "Item": "Ice Shard", "Quantity": 5 } ],
+        "PrimaryStat": "Magic"
+      }
+    ]
+  },
+  {
+    "Name": "Apprentice",
+    "Description": "Has the foundational item refining abilities",
+    "Abilities": [
+      {
+        "Ability": "AutoQuest I",
+        "Requirements": [ { "Item": "Gold", "Quantity": 100 } ],
+        "PrimaryStat": "Vitality"
+      },
+      {
+        "Ability": "Refine Wood",
+        "Requirements": [ { "Item": "Log", "Quantity": 10 } ],
+        "PrimaryStat": "Strength"
+      },
+      {
+        "Ability": "Refine Scrap",
+        "Requirements": [ { "Item": "Gold", "Quantity": 1000 } ],
+        "PrimaryStat": "Speed"
+      },
+      {
+        "Ability": "Refine Mixology",
+        "Requirements": [ { "Item": "Herb", "Quantity": 30 }, { "Item": "Iron Ore", "Quantity": 10 } ],
+        "PrimaryStat": "Magic"
+      }
+    ]
+  },
+  {
+    "Name": "Student",
+    "Description": "Has the foundational magic refining abilities",
+    "Abilities": [
+      {
+        "Ability": "AutoQuest I",
+        "Requirements": [ { "Item": "Gold", "Quantity": 100 } ],
+        "PrimaryStat": "Vitality"
+      },
+      {
+        "Ability": "Refine Fire",
+        "Requirements": [ { "Item": "Log", "Quantity": 10 } ],
+        "PrimaryStat": "Magic"
+      },
+      {
+        "Ability": "J-Speed",
+        "Requirements": [ { "Item": "Potion", "Quantity": 10 } ],
+        "PrimaryStat": "Speed"
+      }
+    ]
+  },
+  {
+  "Name": "Mythril Weaver",
+  "Description": "A master of the arcane and material arts.",
+  "Abilities": [
+    {
+      "Ability": "Logistics I",
+      "Requirements": [ { "Item": "Gold", "Quantity": 2500 } ],
+      "PrimaryStat": "Magic"
+    },
+    {
+      "Ability": "Mass Refine",
+      "Requirements": [ { "Item": "Gold", "Quantity": 5000 }, { "Item": "Mythril Spark", "Quantity": 1 } ],
+      "PrimaryStat": "Magic"
+    },
+    {
+      "Ability": "Essence Harvest",
+      "Requirements": [ { "Item": "Ancient Bark", "Quantity": 20 }, { "Item": "Moonberry", "Quantity": 50 } ],
+      "PrimaryStat": "Vitality"
+    },
+    {
+      "Ability": "J-Vit",
+      "Requirements": [ { "Item": "Gold", "Quantity": 2000 } ],
+      "PrimaryStat": "Vitality"
+    },
+    {
+      "Ability": "Refine Life",
+      "Requirements": [ { "Item": "Ancient Bark", "Quantity": 5 } ],
+      "PrimaryStat": "Magic"
+    }
+  ]
+  },
+  {
+  "Name": "The Sentinel",
+  "Description": "A defensive job focused on survival and resource management.",
+  "Abilities": [
+    {
+      "Ability": "J-Vit",
+      "Requirements": [ { "Item": "Iron Ore", "Quantity": 50 }, { "Item": "Ancient Bark", "Quantity": 20 }, { "Item": "Gold", "Quantity": 2000 } ],
+      "PrimaryStat": "Vitality"
+    },
+    {
+      "Ability": "Magic Pocket II",
+      "Requirements": [ { "Item": "Gold", "Quantity": 2000 } ],
+      "PrimaryStat": "Magic",
+      "Metadata": { "MagicCapacity": "100" }
+    }
+  ]
+  },
+  {
+  "Name": "Scholar",
+  "Description": "A highly advanced job specializing in optimization and multi-tasking.",
+  "Abilities": [
+    {
+      "Ability": "Logistics II",
+      "Requirements": [ { "Item": "Gold", "Quantity": 10000 } ],
+      "PrimaryStat": "Magic"
+    },
+    {
+      "Ability": "AutoQuest II",
+      "Requirements": [ { "Item": "Gold", "Quantity": 7500 } ],
+      "PrimaryStat": "Magic"
+    },
+    {
+      "Ability": "Refine Haste",
+      "Requirements": [ { "Item": "Lost Parchment", "Quantity": 5 } ],
+      "PrimaryStat": "Magic"
+    }
+  ]
+  },
+  {
+  "Name": "Geologist",
+  "Description": "A strength-based specialist focused on harvesting rare earth materials.",
+  "Abilities": [
+    {
+      "Ability": "Mountain Crush",
+      "Requirements": [ { "Item": "Gold", "Quantity": 5000 } ],
+      "PrimaryStat": "Strength"
+    },
+    {
+      "Ability": "Refine Earth",
+      "Requirements": [ { "Item": "Crystal Shards", "Quantity": 10 } ],
+      "PrimaryStat": "Strength"
+    }
+  ]
+  },
+  {
+  "Name": "Tide-Caller",
+  "Description": "A speed-based specialist focused on exploring deep waters.",
+  "Abilities": [
+    {
+      "Ability": "Deep Dive",
+      "Requirements": [ { "Item": "Gold", "Quantity": 5000 } ],
+      "PrimaryStat": "Speed"
+    },
+    {
+      "Ability": "Refine Water",
+      "Requirements": [ { "Item": "Blue Coral", "Quantity": 10 } ],
+      "PrimaryStat": "Speed"
+    }
+  ]
+  },
+  {
+  "Name": "Slayer",
+  "Description": "An elite combatant unlocked through mastery of both strength and speed.",
+  "Abilities": [
+    {
+      "Ability": "Master Slayer",
+      "Requirements": [ { "Item": "Gold", "Quantity": 15000 } ],
+      "PrimaryStat": "Strength"
+    }
+  ]
+  }
+]
