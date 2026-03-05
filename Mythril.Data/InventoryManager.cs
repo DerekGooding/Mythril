@@ -5,6 +5,20 @@ public class InventoryManager
     private readonly Dictionary<Item, int> _inventory = [];
     public int MagicCapacity { get; set; } = 30;
 
+    private readonly HashSet<string> _pinnedItemNames = [];
+
+    public void TogglePin(string itemName)
+    {
+        if (!_pinnedItemNames.Add(itemName))
+            _pinnedItemNames.Remove(itemName);
+    }
+
+    public bool IsPinned(string itemName) => _pinnedItemNames.Contains(itemName);
+
+    public IEnumerable<ItemQuantity> GetPinnedItems()
+        => _inventory.Where(x => _pinnedItemNames.Contains(x.Key.Name))
+                     .Select(x => new ItemQuantity(x.Key, x.Value));
+
     public int Add(Item item, int quantity = 1)
     {
         if (quantity <= 0) return 0;
@@ -45,6 +59,9 @@ public class InventoryManager
     public int GetQuantity(Item item) => _inventory.GetValueOrDefault(item);
 
     public void Clear() => _inventory.Clear();
+
+    public IEnumerable<ItemQuantity> GetAll()
+        => _inventory.Select(x => new ItemQuantity(x.Key, x.Value));
 
     public IEnumerable<ItemQuantity> GetItems()
         => _inventory.Where(x => x.Key.ItemType != ItemType.Spell)

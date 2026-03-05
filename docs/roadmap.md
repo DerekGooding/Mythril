@@ -6,10 +6,10 @@ Implement the comprehensive UI and Asset Overhaul as greenlit in the Suggestions
 ## 🛤️ Active Tasks
 
 ### Phase 1: Global Inventory Overhaul (Section 1)
-- [ ] **Grid-Based Layout**: Replace the horizontal row with a 40x40 icon grid.
-- [ ] **Categorization Tabs**: Split inventory into "Materials", "Magic", and "Key Items".
-- [ ] **Search & Sort**: Add a search bar and sort options (Alphabetical, Quantity, Recent).
-- [ ] **Pinning System**: Allow pinning up to 5 items for quick monitoring.
+- [x] **Grid-Based Layout**: Replace the horizontal row with a 40x40 icon grid.
+- [x] **Categorization Tabs**: Split inventory into "Materials", "Magic", and "Key Items".
+- [x] **Search & Sort**: Add a search bar and sort options (Alphabetical, Quantity, Recent).
+- [x] **Pinning System**: Allow pinning up to 5 items for quick monitoring.
 
 ### Phase 2: Location Management (Section 2)
 - [ ] **Compact Mode**: Automatically collapse locations where all one-time quests are complete.

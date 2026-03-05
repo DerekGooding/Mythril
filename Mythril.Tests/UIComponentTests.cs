@@ -16,21 +16,22 @@ public class UIComponentTests : BunitTestBase
     public void InventoryPanel_RendersCorrectly()
     {
         // Arrange
-        var items = new List<ItemQuantity>
-        {
-            new ItemQuantity(new Item("Potion", "Heals 50 HP", ItemType.Consumable), 5),
-            new ItemQuantity(new Item("Ether", "Restores 20 MP", ItemType.Consumable), 2)
-        };
-        var spells = new List<ItemQuantity>
-        {
-            new ItemQuantity(new Item("Fire", "Fire damage", ItemType.Spell), 10)
-        };
+        var item1 = new Item("Potion", "Heals 50 HP", ItemType.Consumable);
+        var item2 = new Item("Ether", "Restores 20 MP", ItemType.Consumable);
+        var spell1 = new Item("Fire", "Fire damage", ItemType.Spell);
+        
+        var inventory = Services.GetRequiredService<InventoryManager>();
+        inventory.Clear();
+        inventory.Add(item1, 5);
+        inventory.Add(item2, 2);
+        inventory.Add(spell1, 10);
 
         // Act
-        var cut = RenderComponent<InventoryPanel>(parameters => parameters
-            .Add(p => p.Items, items)
-            .Add(p => p.Spells, spells)
-        );
+        var cut = RenderComponent<InventoryPanel>();
+        
+        // Ensure we show ALL items for the test count to match
+        var allTab = cut.Find("[data-testid='inventory-tab-all']");
+        allTab.Click();
 
         // Assert
         var itemElements = cut.FindComponents<InventoryItem>();

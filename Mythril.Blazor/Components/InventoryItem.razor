@@ -5,20 +5,28 @@
 @inject InventoryManager InventoryManager
 @implements IDisposable
 
-<div class="inventory-item @(showOverflowGlow ? "overflowing" : "") @(isAtMaxCapacity ? "at-capacity" : "")" draggable="true" @ondragstart="HandleDragStart">
-    <span class="item-name">@Item.Item.Name</span>
-    <span class="item-quantity">@Item.Quantity</span>
+<div class="inventory-item @(showOverflowGlow ? "overflowing" : "") @(isAtMaxCapacity ? "at-capacity" : "") @(InventoryManager.IsPinned(Item.Item.Name) ? "pinned" : "")" 
+     data-testid="inventory-item-@Item.Item.Name.Replace(" ", "-").ToLower()"
+     draggable="true" 
+     @ondragstart="HandleDragStart"
+     @onclick:ctrlKey="TogglePin"
+     title="@Item.Item.Name: @Item.Item.Description @(isAtMaxCapacity ? "(MAX)" : "")">
+    
+    <div class="item-icon-container">
+        <!-- Future: Sprite here -->
+        <div class="item-initial">@Item.Item.Name[0]</div>
+        @if (InventoryManager.IsPinned(Item.Item.Name))
+        {
+            <span class="pin-icon material-icons" data-testid="pin-icon">push_pin</span>
+        }
+    </div>
+
+    <span class="item-quantity">@FormatQuantity(Item.Quantity)</span>
+
     @if (showAnimation)
     {
         <div class="floating-text @(quantityChange > 0 ? "positive" : "negative")">
-            @if (quantityChange > 0)
-            {
-                <span>+@quantityChange</span>
-            }
-            else
-            {
-                <span>-@Math.Abs(quantityChange)</span>
-            }
+            @(quantityChange > 0 ? "+" : "")@quantityChange
         </div>
     }
 </div>
@@ -37,6 +45,19 @@
     protected override void OnInitialized()
     {
         InventoryService.OnItemOverflow += HandleOverflow;
+    }
+
+    private string FormatQuantity(int qty)
+    {
+        if (qty >= 1000000) return (qty / 1000000.0).ToString("0.#") + "M";
+        if (qty >= 1000) return (qty / 1000.0).ToString("0.#") + "k";
+        return qty.ToString();
+    }
+
+    private void TogglePin()
+    {
+        InventoryManager.TogglePin(Item.Item.Name);
+        StateHasChanged();
     }
 
     private void HandleOverflow(string itemName)

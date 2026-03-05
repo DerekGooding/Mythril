@@ -1,25 +1,112 @@
-<div class="inventory-panel">
-    <div class="inventory-content">
-        @if (Items is not null)
+@using Mythril.Data
+@inject InventoryManager InventoryManager
+@implements IDisposable
+
+<div class="inventory-panel shadow-theme">
+    <div class="inventory-header d-flex align-items-center gap-2 mb-2 p-1">
+        <div class="inventory-tabs d-flex gap-1">
+            @foreach (var category in _categories)
+            {
+                <button class="btn btn-xs @(_activeCategory == category ? "btn-primary" : "btn-outline-secondary")"
+                        data-testid="inventory-tab-@category.Replace(" ", "-").ToLower()"
+                        @onclick="() => _activeCategory = category">
+                    @category
+                </button>
+            }
+        </div>
+        
+        <div class="inventory-search flex-grow-1">
+            <input type="text" class="form-control form-control-xs" 
+                   data-testid="inventory-search"
+                   placeholder="Search..." @bind="_searchTerm" @bind:event="oninput" />
+        </div>
+
+        <div class="inventory-sort">
+            <button class="btn btn-xs btn-outline-secondary" 
+                    data-testid="inventory-sort-toggle"
+                    @onclick="ToggleSort">
+                <span class="material-icons" style="font-size: 14px;">@( _isSortByQuantity ? "sort" : "abc" )</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="inventory-grid-container">
+        @if (PinnedItems.Any())
         {
-            @foreach (var item in Items)
+            <div class="pinned-section d-flex flex-wrap gap-2 mb-2 pb-2 border-bottom">
+                @foreach (var item in PinnedItems)
+                {
+                    <InventoryItem @key="@("pinned-" + item.Item.Name)" Item="item" />
+                }
+            </div>
+        }
+
+        <div class="inventory-grid d-flex flex-wrap gap-2">
+            @foreach (var item in FilteredItems)
             {
                 <InventoryItem @key="item.Item.Name" Item="item" />
             }
-        }
-        @if (Spells is not null)
-        {
-            @foreach (var item in Spells)
+            
+            @if (!FilteredItems.Any() && !PinnedItems.Any())
             {
-                <InventoryItem @key="item.Item.Name" Item="item" />
+                <div class="no-items text-center w-100 p-2 text-muted small">
+                    Empty
+                </div>
             }
-        }
+        </div>
     </div>
 </div>
 
 @code {
     [Parameter]
-    public IEnumerable<ItemQuantity>? Items { get; set; }
+    public IEnumerable<ItemQuantity>? Items { get; set; } // Keep for compatibility if needed, but we use InventoryManager directly
+
     [Parameter]
     public IEnumerable<ItemQuantity>? Spells { get; set; }
+
+    private string _activeCategory = "Materials";
+    private string _searchTerm = "";
+    private bool _isSortByQuantity = true;
+    private string[] _categories = ["Materials", "Magic", "Key Items", "All"];
+
+    private IEnumerable<ItemQuantity> PinnedItems => InventoryManager.GetPinnedItems();
+
+    private IEnumerable<ItemQuantity> FilteredItems
+    {
+        get
+        {
+            var items = InventoryManager.GetAll();
+
+            // Filter by Category
+            if (_activeCategory != "All")
+            {
+                items = items.Where(i => i.Item.Category == _activeCategory);
+            }
+
+            // Filter by Search
+            if (!string.IsNullOrWhiteSpace(_searchTerm))
+            {
+                items = items.Where(i => i.Item.Name.Contains(_searchTerm, StringComparison.OrdinalIgnoreCase));
+            }
+
+            // Remove Pinned from main list to avoid duplication
+            var pinnedNames = PinnedItems.Select(p => p.Item.Name).ToHashSet();
+            items = items.Where(i => !pinnedNames.Contains(i.Item.Name));
+
+            // Sort
+            if (_isSortByQuantity)
+                return items.OrderByDescending(i => i.Quantity);
+            else
+                return items.OrderBy(i => i.Item.Name);
+        }
+    }
+
+    private void ToggleSort() => _isSortByQuantity = !_isSortByQuantity;
+
+    protected override void OnInitialized()
+    {
+        // Subscription to inventory updates if needed, currently Handled via StateHasChanged in Home.razor or parent
+    }
+
+    public void Dispose() { }
 }

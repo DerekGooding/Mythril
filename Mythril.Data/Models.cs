@@ -21,9 +21,18 @@ public enum ItemType
     Consumable,
     Material,
     Spell,
+    KeyItem,
 }
 
-public partial record struct Item(string Name, string Description, ItemType ItemType) : INamed;
+public partial record struct Item(string Name, string Description, ItemType ItemType) : INamed
+{
+    public string Category => ItemType switch
+    {
+        ItemType.Spell => "Magic",
+        ItemType.KeyItem => "Key Items",
+        _ => "Materials"
+    };
+}
 
 public readonly record struct ItemQuantity(Item Item, int Quantity = 1);
 
