@@ -111,6 +111,33 @@ public class UIComponentTests : BunitTestBase
     }
 
     [TestMethod]
+    public void CharacterDisplay_RendersMultipleProgressBars_Correctly()
+    {
+        // Arrange
+        var character = new Character("Hero");
+        var quest1 = new Quest("Quest 1", "Desc");
+        var quest2 = new Quest("Quest 2", "Desc");
+        var detail = new QuestDetail(10, [], [], QuestType.Single);
+        
+        var progress1 = new QuestProgress(new QuestData(quest1, detail), "Desc", 10, character, 0);
+        var progress2 = new QuestProgress(new QuestData(quest2, detail), "Desc", 10, character, 1);
+        
+        var progresses = new List<QuestProgress> { progress1, progress2 };
+
+        // Act
+        var cut = RenderComponent<CharacterDisplay>(parameters => parameters
+            .Add(p => p.Character, character)
+            .Add(p => p.QuestProgresses, progresses)
+        );
+
+        // Assert
+        var container = cut.Find(".character-card-progress-container");
+        var progressBars = container.QuerySelectorAll(".character-card-progress");
+        
+        Assert.AreEqual(2, progressBars.Length, "Should render two mini progress bars at the bottom.");
+    }
+
+    [TestMethod]
     public void CadencePanel_NoCadences_RendersWarning()
     {
         // Arrange

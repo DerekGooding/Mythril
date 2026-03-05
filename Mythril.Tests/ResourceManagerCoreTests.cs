@@ -192,6 +192,19 @@ public class ResourceManagerCoreTests
     }
 
     [TestMethod]
+    public void ResourceManager_Journal_TracksFirstTime()
+    {
+        // Act
+        _resourceManager!.ReceiveRewards(new QuestProgress(new QuestData(_quests!.All[0], _questDetails![_quests.All[0]]), "Test", 0, _resourceManager.Characters[0], 0)).Wait();
+        _resourceManager!.ReceiveRewards(new QuestProgress(new QuestData(_quests!.All[0], _questDetails![_quests.All[0]]), "Test", 0, _resourceManager.Characters[0], 0)).Wait();
+
+        // Assert
+        Assert.AreEqual(2, _resourceManager.Journal.Count);
+        Assert.IsTrue(_resourceManager.Journal[1].IsFirstTime, "First completion should be marked as first time.");
+        Assert.IsFalse(_resourceManager.Journal[0].IsFirstTime, "Second completion should NOT be marked as first time.");
+    }
+
+    [TestMethod]
     public void Character_Name_ReturnsCorrectValue()
     {
         var character = new Character("Test");

@@ -126,9 +126,9 @@
     @if (QuestProgresses.Any())
     {
         <div class="character-card-progress-container">
-            @foreach (var progress in QuestProgresses)
+            @foreach (var progress in QuestProgresses.OrderBy(p => p.SlotIndex))
             {
-                <div class="character-card-progress mb-1">
+                <div class="character-card-progress" @key="progress">
                     @{
                         var progressValue = progress.Progress;
                         if (double.IsNaN(progressValue) || double.IsInfinity(progressValue)) progressValue = 0.0;

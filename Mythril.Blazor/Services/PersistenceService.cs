@@ -51,7 +51,8 @@ public class PersistenceService(
                 TaskName = j.TaskName,
                 CharacterName = j.CharacterName,
                 Details = j.Details,
-                CompletedAt = j.CompletedAt
+                CompletedAt = j.CompletedAt,
+                IsFirstTime = j.IsFirstTime
             }).ToList(),
             ActiveQuests = resourceManager.ActiveQuests.Select(q => new QuestProgressDTO
             {
@@ -176,7 +177,7 @@ public class PersistenceService(
         {
             foreach (var dto in saveData.Journal)
             {
-                resourceManager.Journal.Add(new ResourceManager.JournalEntry(dto.TaskName, dto.CharacterName, dto.Details, dto.CompletedAt));
+                resourceManager.Journal.Add(new ResourceManager.JournalEntry(dto.TaskName, dto.CharacterName, dto.Details, dto.CompletedAt, dto.IsFirstTime));
             }
         }
 

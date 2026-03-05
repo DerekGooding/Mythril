@@ -85,16 +85,24 @@
     box-shadow: 0 0 8px var(--secondary-color);
 }
 
-.character-card-progress {
+.character-card-progress-container {
     position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
-    height: 4px;
+    display: flex;
+    flex-direction: column;
+}
+
+.character-card-progress {
+    height: 3px;
     background: rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.character-card-progress:last-child {
     border-bottom-left-radius: 8px;
     border-bottom-right-radius: 8px;
-    overflow: hidden;
 }
 
 .character-card-progress .progress-bar {

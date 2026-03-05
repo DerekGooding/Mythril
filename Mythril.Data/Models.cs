@@ -139,6 +139,7 @@ public class JournalEntryDTO
     public string CharacterName { get; set; } = "";
     public string Details { get; set; } = "";
     public DateTime CompletedAt { get; set; }
+    public bool IsFirstTime { get; set; }
 }
 
 // Data Transfer Objects for JSON Loading

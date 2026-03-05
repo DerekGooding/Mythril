@@ -26,7 +26,7 @@ public class JournalTests : BunitTestBase
     public void JournalPanel_RendersEntriesCorrectly()
     {
         // Arrange
-        ResourceManager.Journal.Add(new ResourceManager.JournalEntry("Test Task", "Hero", "Details here", DateTime.Now));
+        ResourceManager.Journal.Add(new ResourceManager.JournalEntry("Test Task", "Hero", "Details here", DateTime.Now, true));
 
         // Act
         var cut = RenderComponent<JournalPanel>();
@@ -36,5 +36,28 @@ public class JournalTests : BunitTestBase
         Assert.IsTrue(entry.TextContent.Contains("Test Task"));
         Assert.IsTrue(entry.TextContent.Contains("Hero"));
         Assert.IsTrue(entry.TextContent.Contains("Details here"));
+        Assert.IsTrue(entry.TextContent.Contains("First Time"));
+    }
+
+    [TestMethod]
+    public void JournalPanel_Filter_WorksCorrectly()
+    {
+        // Arrange
+        ResourceManager.Journal.Add(new ResourceManager.JournalEntry("First Task", "Hero", "First", DateTime.Now, true));
+        ResourceManager.Journal.Add(new ResourceManager.JournalEntry("Second Task", "Hero", "Second", DateTime.Now, false));
+
+        // Act
+        var cut = RenderComponent<JournalPanel>();
+        
+        // Initially should show both
+        Assert.AreEqual(2, cut.FindAll(".journal-entry").Count);
+
+        // Toggle filter
+        var checkbox = cut.Find("#firstTimeFilter");
+        checkbox.Change(true);
+
+        // Assert
+        Assert.AreEqual(1, cut.FindAll(".journal-entry").Count);
+        Assert.IsTrue(cut.Find(".journal-entry").TextContent.Contains("First Task"));
     }
 }
