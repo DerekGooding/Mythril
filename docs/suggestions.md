@@ -50,32 +50,29 @@ To avoid the "developer art" look without a dedicated artist, we can use the fol
     - *Prompt Tip*: "Pixel art icon of a [Item Name], fantasy RPG style, white background, consistent 32x32 framing."
 - **CSS-Only "Primitives"**: Use CSS `clip-path` and gradients to create items. For example, a "Fire I" spell could be a simple CSS diamond with a red/orange radial gradient and a `pulse` animation.
 
-## 8. Asset-Light Alternatives (No Art Required)
-If we choose not to add external images, we can achieve similar results using the tools already in the project:
+## 9. Zero-Cost Programmatic Sprite Generation
+Since there is no budget for AI tokens, we can use a **Python-based Procedural Sprite Generator**. This allows us to generate a consistent library of 32x32 pixel-art icons locally and for free.
 
-### A. Material Icon Overlays
-The project already uses Material Icons. We can combine them with CSS backgrounds to create unique "composite" icons:
-- **Materials**: Use a circle background with a specific color + a central icon.
-    - *Iron Ore*: Grey Circle + `settings` icon.
-    - *Mana Leaf*: Green Circle + `eco` icon.
-    - *Gold*: Gold Circle + `payments` icon.
+### A. The "Layered SVG" Approach (Highest Quality)
+We can write a Python script using the `svglib` or `Cairo` libraries to programmatically layer shapes.
+- **Base Shapes**: Define a set of "Item Bases" (Potion Bottle, Ore Chunk, Gemstone, Scroll).
+- **Dynamic Tinting**: Use Python to swap hex colors based on the item type (e.g., Red for Fire, Blue for Ice).
+- **Glow Effects**: Programmatically add SVG `<filter>` tags for magic items.
 
-### B. Typography & Color Coding
-- **Inventory Groups**: Instead of icons, use consistent color borders for item types.
-    - **Spells**: Neon Blue border with a subtle "inner glow" box-shadow.
-    - **Materials**: Solid Grey/Brown borders.
-    - **Key Items**: Pulsing Gold border.
+### B. Procedural Pixel Art Script
+We can create a `scripts/generate_sprites.py` utility that uses the **Pillow (PIL)** library:
+1. **Symmetry Generation**: Generate a 7x7 "Core" pattern and mirror it to create 16x16 or 32x32 icons (great for gems, crystals, and artifacts).
+2. **Palette Mapping**: Use a fixed 8-color fantasy palette (e.g., [DawnBringer 8](https://lospec.com/palette-list/dawnbringer-8)) to ensure all generated sprites look like they belong to the same game.
+3. **Noise & Dithering**: Programmatically add "shading" by darkening pixels furthest from a defined "light source" (top-left).
 
-### C. Unicode "Glyphs"
-Many RPG stats and types can be represented via standard Unicode characters which inherit the project's font styling:
-- **Strength**: `✦` or `⚔`
-- **Magic**: `❃` or `☄`
-- **Vitality**: `❤` or `🛡`
-- **Speed**: `⚡` or `➳`
+### C. CSS-to-Canvas Export
+An even lighter solution:
+- Create a hidden `SpriteGenerator.razor` component.
+- Use CSS to style a `<div>` into a complex shape (using multiple box-shadows for "pixels").
+- Use `html2canvas` or a native Canvas `drawImage` call to "bake" these CSS objects into PNG sprites at runtime, which are then cached in LocalStorage.
 
-### D. CSS Grid "Shape" Recognition
-- **Location Differentiation**: Instead of region icons, use distinct **header shapes** via `border-radius`. 
-    - *Forests*: Top-left and top-right rounded.
-    - *Mines/Mountains*: No rounding (sharp edges).
-    - *Water/Caverns*: Fully pill-shaped headers.
-- **Recipe Rarity**: Use CSS `repeating-linear-gradient` as a background for "Rare" recipes to make them instantly recognizable in a long list without needing a new icon.
+### D. Emoji "Baking"
+- Use standard Emojis (which are high-quality vector assets provided by the OS) as a base.
+- Render the Emoji to a 32x32 Canvas.
+- Apply a "Pixelate" filter (downscale then upscale without interpolation).
+- **Result**: High-quality, recognizable silhouettes with a consistent pixel-art aesthetic, generated 100% locally and programmatically.
