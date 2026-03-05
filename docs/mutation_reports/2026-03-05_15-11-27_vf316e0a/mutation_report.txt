@@ -1,0 +1,38 @@
+Starting Custom Mutation Testing Pipeline...
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  Mythril.Data -> C:\Users\dgooding\source\repos\Mythril\Mythril.Data\bin\Debug\net10.0\Mythril.Data.dll
+  Mythril.Headless -> C:\Users\dgooding\source\repos\Mythril\Mythril.Headless\bin\Debug\net10.0\Mythril.Headless.dll
+  Mythril.Blazor -> C:\Users\dgooding\source\repos\Mythril\Mythril.Blazor\bin\Debug\net10.0\Mythril.Blazor.dll
+  Mythril.Blazor (Blazor output) -> C:\Users\dgooding\source\repos\Mythril\Mythril.Blazor\bin\Debug\net10.0\wwwroot
+C:\Users\dgooding\source\repos\Mythril\Mythril.Tests\RequirementIconTests.cs(53,28): warning CS8602: Dereference of a possibly null reference. [C:\Users\dgooding\source\repos\Mythril\Mythril.Tests\Mythril.Tests.csproj]
+C:\Users\dgooding\source\repos\Mythril\Mythril.Tests\RewardTests.cs(93,30): warning CS8602: Dereference of a possibly null reference. [C:\Users\dgooding\source\repos\Mythril\Mythril.Tests\Mythril.Tests.csproj]
+C:\Users\dgooding\source\repos\Mythril\Mythril.Tests\ResourceManagerCoreTests.cs(49,9): warning MSTEST0032: Review or remove the assertion as its condition is known to be always true (https://learn.microsoft.com/dotnet/core/testing/mstest-analyzers/mstest0032) [C:\Users\dgooding\source\repos\Mythril\Mythril.Tests\Mythril.Tests.csproj]
+  Mythril.Tests -> C:\Users\dgooding\source\repos\Mythril\Mythril.Tests\bin\Debug\net10.0\Mythril.Tests.dll
+Test run for C:\Users\dgooding\source\repos\Mythril\Mythril.Tests\bin\Debug\net10.0\Mythril.Tests.dll (.NETCoreApp,Version=v10.0)
+VSTest version 18.0.1 (x64)
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+  Failed ResourceManager_CancelQuest_RefundsCorrectly [6 ms]
+  Error Message:
+   Assert.AreEqual failed. Expected:<0>. Actual:<100>. 'expected' expression: '0', 'actual' expression: '_resourceManager.Inventory.GetQuantity(gold)'.
+  Stack Trace:
+     at Microsoft.VisualStudio.TestTools.UnitTesting.Assert.ThrowAssertAreEqualFailed(Object expected, Object actual, String userMessage) in /_/src/TestFramework/TestFramework/Assertions/Assert.AreEqual.cs:line 665
+   at Microsoft.VisualStudio.TestTools.UnitTesting.Assert.AreEqual[T](T expected, T actual, IEqualityComparer`1 comparer, String message, String expectedExpression, String actualExpression) in /_/src/TestFramework/TestFramework/Assertions/Assert.AreEqual.cs:line 492
+   at Microsoft.VisualStudio.TestTools.UnitTesting.Assert.AreEqual[T](T expected, T actual, String message, String expectedExpression, String actualExpression) in /_/src/TestFramework/TestFramework/Assertions/Assert.AreEqual.cs:line 405
+   at Mythril.Tests.LogisticsTests.ResourceManager_CancelQuest_RefundsCorrectly() in C:\Users\dgooding\source\repos\Mythril\Mythril.Tests\LogisticsTests.cs:line 183
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Standard Output Messages:
+ ResourceManager initializing...
+ Initializing Cadences...
+ Initializing Locations...
+ Unlocked Cadences Updated: 
+ ResourceManager initialized.
+
+
+
+Failed!  - Failed:     1, Passed:   145, Skipped:     0, Total:   146, Duration: 3 s - Mythril.Tests.dll (net10.0)
+
+FAIL: Baseline tests failed. Fix project state first.

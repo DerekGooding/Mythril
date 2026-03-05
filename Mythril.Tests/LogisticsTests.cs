@@ -141,4 +141,60 @@ public class LogisticsTests
 
         Assert.AreEqual(0, _resourceManager.ActiveQuests.Count, "Should not be able to start a completed single-use quest.");
     }
+
+    [TestMethod]
+    public void Character_TaskLimit_SlotAllocation_Correctness()
+    {
+        var character = _resourceManager!.Characters[0];
+        var scholar = _cadences!.All.First(c => c.Name == "Scholar");
+        
+        _resourceManager.UnlockCadence(scholar);
+        _resourceManager.UnlockedAbilities.Add("Scholar:Logistics II");
+        _resourceManager.JunctionManager.AssignCadence(scholar, character, _resourceManager.UnlockedAbilities);
+
+        var questData = new QuestData(_quests!.All.First(q => q.Name == "Buy Potion"), _questDetails![_quests.All.First(q => q.Name == "Buy Potion")]);
+        _resourceManager.Inventory.Add(_items!.All.First(i => i.Name == "Gold"), 1000);
+        _resourceManager.JunctionManager.AddStatBoost(character, "Speed", 10); // Meet requirement
+
+        // Fill slots
+        _resourceManager.StartQuest(questData, character); // Slot 0
+        _resourceManager.StartQuest(questData, character); // Slot 1
+        _resourceManager.StartQuest(questData, character); // Slot 2
+
+        var active = _resourceManager.ActiveQuests.Where(q => q.Character.Name == character.Name).ToList();
+        Assert.AreEqual(3, active.Count);
+        Assert.IsTrue(active.Any(a => a.SlotIndex == 0));
+        Assert.IsTrue(active.Any(a => a.SlotIndex == 1));
+        Assert.IsTrue(active.Any(a => a.SlotIndex == 2));
+    }
+
+    [TestMethod]
+    public void ResourceManager_CancelQuest_RefundsCorrectly()
+    {
+        var character = _resourceManager!.Characters[0];
+        var questData = new QuestData(_quests!.All.First(q => q.Name == "Buy Potion"), _questDetails![_quests.All.First(q => q.Name == "Buy Potion")]);
+        var gold = _items!.All.First(i => i.Name == "Gold");
+        
+        _resourceManager.Inventory.Clear();
+        _resourceManager.Inventory.Add(gold, 250);
+        _resourceManager.JunctionManager.AddStatBoost(character, "Speed", 10); // Meet 15 Speed requirement
+        
+        // Unlock 'Buy Potion' by completing its prerequisites
+        var prologue = _quests.All.First(q => q.Name == "Prologue");
+        var tutorial = _quests.All.First(q => q.Name == "Tutorial Section");
+        var town = _quests.All.First(q => q.Name == "Visit Starting Town");
+        _resourceManager.ReceiveRewards(new QuestData(prologue, _questDetails[prologue])).Wait();
+        _resourceManager.ReceiveRewards(new QuestData(tutorial, _questDetails[tutorial])).Wait();
+        _resourceManager.ReceiveRewards(new QuestData(town, _questDetails[town])).Wait();
+
+        _resourceManager.StartQuest(questData, character);
+        // Quantity should be 0 here because quest costs 250 gold
+        Assert.AreEqual(0, _resourceManager.Inventory.GetQuantity(gold));
+
+        var active = _resourceManager.ActiveQuests.First();
+        _resourceManager.CancelQuest(active);
+
+        // Should be 250 now after refund
+        Assert.AreEqual(250, _resourceManager.Inventory.GetQuantity(gold), "Gold should be fully refunded on cancellation.");
+    }
 }

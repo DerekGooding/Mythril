@@ -59,6 +59,7 @@ public class QuestRewardTests
         
         _resourceManager.PayCosts(questData);
         
+        // Buy Potion costs 250
         Assert.AreEqual(750, _resourceManager.Inventory.GetQuantity(_items.All.First(x => x.Name == "Gold")));
     }
 
@@ -129,7 +130,16 @@ public class QuestRewardTests
 
         _resourceManager.Inventory.Clear();
         _resourceManager.Inventory.Add(gold, 1000);
+        _resourceManager.JunctionManager.AddStatBoost(character, "Speed", 10); // Meet requirement
         
+        // Prerequisites
+        var prologue = _quests.All.First(q => q.Name == "Prologue");
+        var tutorial = _quests.All.First(q => q.Name == "Tutorial Section");
+        var town = _quests.All.First(q => q.Name == "Visit Starting Town");
+        _resourceManager.ReceiveRewards(new QuestData(prologue, _questDetails[prologue])).Wait();
+        _resourceManager.ReceiveRewards(new QuestData(tutorial, _questDetails[tutorial])).Wait();
+        _resourceManager.ReceiveRewards(new QuestData(town, _questDetails[town])).Wait();
+
         _resourceManager.StartQuest(questData, character);
         Assert.AreEqual(750, _resourceManager.Inventory.GetQuantity(gold));
 
@@ -148,6 +158,16 @@ public class QuestRewardTests
         var character = _resourceManager!.Characters[0];
 
         _resourceManager.Inventory.Add(_items!.All.First(x => x.Name == "Gold"), 1000);
+        _resourceManager.JunctionManager.AddStatBoost(character, "Speed", 10);
+        
+        // Prerequisites
+        var prologue = _quests.All.First(q => q.Name == "Prologue");
+        var tutorial = _quests.All.First(q => q.Name == "Tutorial Section");
+        var town = _quests.All.First(q => q.Name == "Visit Starting Town");
+        _resourceManager.ReceiveRewards(new QuestData(prologue, _questDetails[prologue])).Wait();
+        _resourceManager.ReceiveRewards(new QuestData(tutorial, _questDetails[tutorial])).Wait();
+        _resourceManager.ReceiveRewards(new QuestData(town, _questDetails[town])).Wait();
+
         _resourceManager.StartQuest(questData, character);
         _resourceManager.ReceiveRewards(questData).Wait();
 

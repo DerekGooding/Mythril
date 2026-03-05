@@ -163,11 +163,35 @@ public class InventoryTests
     }
 
     [TestMethod]
-    public void InventoryManager_Remove_ReturnsFalseForMissingItem()
+    public void InventoryManager_Add_NegativeQuantity_DoesNothing()
     {
         var potion = _items!.All.First(x => x.Name == "Potion");
         var inventoryManager = _resourceManager?.Inventory;
-        var result = inventoryManager!.Remove(potion, 1);
-        Assert.IsFalse(result);
+        inventoryManager!.Add(potion, -10);
+        Assert.AreEqual(0, inventoryManager.GetQuantity(potion));
+    }
+
+    [TestMethod]
+    public void InventoryManager_Remove_NegativeQuantity_ReturnsTrueAndDoesNothing()
+    {
+        var potion = _items!.All.First(x => x.Name == "Potion");
+        var inventoryManager = _resourceManager?.Inventory;
+        inventoryManager!.Add(potion, 5);
+        var result = inventoryManager.Remove(potion, -5);
+        Assert.IsTrue(result);
+        Assert.AreEqual(5, inventoryManager.GetQuantity(potion));
+    }
+
+    [TestMethod]
+    public void InventoryManager_MagicCapacity_Enforcement()
+    {
+        var fire = _items!.All.First(x => x.Name == "Fire I");
+        var inventoryManager = _resourceManager?.Inventory;
+        inventoryManager!.MagicCapacity = 30;
+
+        // Try adding 100
+        inventoryManager.Add(fire, 100);
+
+        Assert.AreEqual(30, inventoryManager.GetQuantity(fire), "Should be capped at capacity.");
     }
 }

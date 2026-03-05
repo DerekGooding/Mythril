@@ -62,7 +62,8 @@ public static class TestContentLoader
                     d.Rewards.Select(r => new ItemQuantity(items.All.First(i => i.Name == r.Item), r.Quantity)).ToArray(),
                     Enum.Parse<QuestType>(d.Type),
                     d.PrimaryStat ?? "Vitality",
-                    d.RequiredStats
+                    d.RequiredStats,
+                    d.StatRewards
                 )
             );
             questDetails.Load(detailsDict);

@@ -8,9 +8,9 @@ import sys
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 
 TARGET_FILES = [
-    os.path.join(ROOT_DIR, "Mythril.Data/JunctionManager.cs"),
-    os.path.join(ROOT_DIR, "Mythril.Data/ResourceManager_Quests.cs"),
-    os.path.join(ROOT_DIR, "Mythril.Data/InventoryManager.cs")
+    os.path.join(ROOT_DIR, "Mythril.Data", "JunctionManager.cs"),
+    os.path.join(ROOT_DIR, "Mythril.Data", "ResourceManager_Quests.cs"),
+    os.path.join(ROOT_DIR, "Mythril.Data", "InventoryManager.cs")
 ]
 
 TEST_PROJECT = os.path.join(ROOT_DIR, "Mythril.Tests/Mythril.Tests.csproj")
