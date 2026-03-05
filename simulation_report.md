@@ -1,5 +1,5 @@
 # Game Content Health Report
-Generated: 2026-03-05 00:29:55
+Generated: 2026-03-05 02:19:31
 
 ## 💀 Reachability Analysis
 ### Unreachable Quests
@@ -19,55 +19,55 @@ Estimated End-Game Time: 1076.9s
 
 ## ⚖️ Economic Sustainability
 ### Sustainable Recurring Activities
-- Mine Iron Ore
-- Harvest Sea-Life
 - Power the Forge
-- Hunt Slimes
-- Refine Scrap:Web->Gold
+- Harvest Sea-Life
 - Study Ancient Texts
-- Hunt Bats
-- Scavenge Scrap
-- Deep Sea Scavenge
+- Mine Iron Ore
 - Hunt Sand-Sharks
-- Hunt Goblins
-- Refine Fire:Iron Ore->Fire I
+- Refine Scrap:Web->Gold
+- Gather Moonberries
+- Hunt Bats
+- Chop Wood
 - Archive Sifting
 - Buy Potion
+- Deep Sea Scavenge
 - Hunt Spiders
-- Chop Wood
-- Gather Moonberries
+- Scavenge Scrap
+- Refine Fire:Iron Ore->Fire I
 - Tutorial Section
+- Hunt Goblins
+- Hunt Slimes
 
 ### ⚠️ Unsustainable Activities (Reachable but starving)
-- Refine Ice:Mana Leaf->Ice I
-- Refine Wood:Log->Herb
-- Sell Gem
-- Refine Mixology:Herb->Potion
-- Refine Life:Ancient Bark->Cure I
 - Refine Scrap:Slime->Gold
 - Refine Fire:Basic Gem->Fire I
+- Sell Gem
 - Purify the Grove
+- Refine Ice:Mana Leaf->Ice I
 - Refine Ice:Moonberry->Ice I
+- Refine Wood:Log->Herb
+- Refine Life:Ancient Bark->Cure I
+- Refine Mixology:Herb->Potion
 
 ### Net Resource Rates (per second)
-- **Water**: 0.0567/s
-- **Log**: 0.0333/s
 - **Iron Ore**: 0.0069/s
 - **Moonberry**: 0.0117/s
-- **Blue Coral**: 0.0113/s
-- **Potion**: 0.0311/s
-- **Mythril Spark**: 0.0086/s
-- **Fire I**: 0.0861/s
-- **Ancient Bark**: 0.0167/s
 - **Leather**: 0.0283/s
-- **Mana Leaf**: 0.0267/s
-- **Fire Shard**: 0.0208/s
-- **Lost Parchment**: 0.0086/s
-- **Web**: 0.0200/s
-- **Sun-baked Scale**: 0.0139/s
-- **Gold**: 11.4861/s
+- **Water**: 0.0567/s
 - **Basic Gem**: 0.0567/s
+- **Sun-baked Scale**: 0.0139/s
+- **Mythril Spark**: 0.0086/s
+- **Potion**: 0.0311/s
 - **Slime**: 0.0694/s
+- **Fire Shard**: 0.0208/s
+- **Log**: 0.0333/s
+- **Gold**: 11.4861/s
+- **Blue Coral**: 0.0113/s
+- **Ancient Bark**: 0.0167/s
+- **Lost Parchment**: 0.0086/s
+- **Fire I**: 0.0861/s
+- **Mana Leaf**: 0.0267/s
+- **Web**: 0.0200/s
 
 ## 🔄 Feedback Loops
 ✅ No unbounded growth loops detected (approximation).

@@ -64,9 +64,9 @@ public class RewardTests : BunitTestBase
         ResourceManager.IsTestMode = true;
 
         // Ensure character HAS the ability and inventory HAS the input
-        var cadence = new Cadence("Student", "Desc", [new CadenceUnlock("Student", ability, [], "Strength")]);
+        var cadence = new Cadence("Refiner", "Desc", [new CadenceUnlock("Refiner", ability, [], "Strength")]);
         ResourceManager.UnlockCadence(cadence);
-        ResourceManager.UnlockedAbilities.Add("Student:Refine");
+        ResourceManager.UnlockedAbilities.Add("Refiner:Refine");
         JunctionManager.AssignCadence(cadence, character, ResourceManager.UnlockedAbilities);
         InventoryManager.Add(input, 1);
 

@@ -11,6 +11,12 @@ public class QuestProgress(object item, string description, int durationSeconds,
         item is RefinementData refinement ? refinement.Name :
         string.Empty;
 
+    public string PrimaryStat { get; set; } =
+        item is QuestData q ? q.PrimaryStat :
+        item is CadenceUnlock u ? u.PrimaryStat :
+        item is RefinementData r ? r.PrimaryStat :
+        "Vitality"; // Default
+
     public string Description { get; set; } = description;
     public int DurationSeconds { get; set; } = durationSeconds;
     public Character Character { get; set; } = character;

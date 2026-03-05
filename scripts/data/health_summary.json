@@ -3,11 +3,11 @@
     "failure_count": 9,
     "metrics": {
         "monoliths": 0,
-        "coverage": 75.0,
+        "coverage": 75.17,
         "missing_tests": 0,
         "key_violations": 0,
         "testid_violations": 0,
-        "stale_docs": 0,
+        "stale_docs": 1,
         "reachability_passed": {
             "passed": true,
             "time": "1076.9s",
@@ -15,14 +15,9 @@
             "unsustainable": 9
         },
         "pending_feedback": 0,
-        "test_passed": false
+        "test_passed": true
     },
     "failures": [
-        {
-            "category": "tests",
-            "message": "dotnet test failed",
-            "metadata": {}
-        },
         {
             "category": "file_coverage",
             "message": "Mythril.Data\\Models.cs below minimum coverage: 0.00% (required: 25.0%)",
@@ -86,6 +81,11 @@
                 "actual": 0.0,
                 "required": 25.0
             }
+        },
+        {
+            "category": "docs_stale",
+            "message": "docs/instructions.md is stale (13 source changes since last update)",
+            "metadata": {}
         }
     ]
 }
