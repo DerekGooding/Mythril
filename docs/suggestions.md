@@ -43,36 +43,33 @@ As the game progresses, several lists and panels will become unwieldy due to the
 - **Junction "Quick Swap":** Allow dragging a junction from one character's stat directly to another's to swap the magic and the underlying cadence assignment in one move.
 - **Mini-Log:** A tiny scrollable "Recent Results" list per character (e.g., "Hero: +5 Iron Ore", "Wifu: Refined Fire I").
 
-## 7. Asset Strategy: "The High-Quality Placeholder"
-To avoid the "developer art" look without a dedicated artist, we can use the following methods:
-- **Game-icons.net (SVG)**: A massive, free library of white-on-black SVG icons that fit the "Fantasy/Dashboard" aesthetic perfectly. They are easily stylable via CSS `filter: drop-shadow()` or `mask-image`.
-- **Generative AI (DALL-E 3 / Midjourney)**: Generate a consistent set of "UI Sprite Sheets" for materials. 
-    - *Prompt Tip*: "Pixel art icon of a [Item Name], fantasy RPG style, white background, consistent 32x32 framing."
-- **CSS-Only "Primitives"**: Use CSS `clip-path` and gradients to create items. For example, a "Fire I" spell could be a simple CSS diamond with a red/orange radial gradient and a `pulse` animation.
+---
 
-## 9. Zero-Cost Programmatic Sprite Generation
-Since there is no budget for AI tokens, we can use a **Python-based Procedural Sprite Generator**. This allows us to generate a consistent library of 32x32 pixel-art icons locally and for free.
+# Visual Asset Strategy (Selected Approach)
 
-### A. The "Layered SVG" Approach (Highest Quality)
-We can write a Python script using the `svglib` or `Cairo` libraries to programmatically layer shapes.
-- **Base Shapes**: Define a set of "Item Bases" (Potion Bottle, Ore Chunk, Gemstone, Scroll).
-- **Dynamic Tinting**: Use Python to swap hex colors based on the item type (e.g., Red for Fire, Blue for Ice).
-- **Glow Effects**: Programmatically add SVG `<filter>` tags for magic items.
+To ensure high-quality visual richness without a budget for artists or AI tokens, we will adopt a **Zero-Cost Programmatic Sprite Generation** strategy. All assets will be generated locally and for free using procedural logic.
 
-### B. Procedural Pixel Art Script
-We can create a `scripts/generate_sprites.py` utility that uses the **Pillow (PIL)** library:
-1. **Symmetry Generation**: Generate a 7x7 "Core" pattern and mirror it to create 16x16 or 32x32 icons (great for gems, crystals, and artifacts).
-2. **Palette Mapping**: Use a fixed 8-color fantasy palette (e.g., [DawnBringer 8](https://lospec.com/palette-list/dawnbringer-8)) to ensure all generated sprites look like they belong to the same game.
+## 6. Primary Decision: Procedural Pixel Art
+We will create a `scripts/generate_sprites.py` utility that uses the **Pillow (PIL)** library to generate a consistent library of 32x32 pixel-art icons.
+
+### A. Procedural Pixel Art Script
+1. **Symmetry Generation**: Generate a 7x7 "Core" pattern and mirror it to create 16x16 or 32x32 icons (ideal for gems, crystals, and artifacts).
+2. **Palette Mapping**: Use a fixed 8-color fantasy palette (e.g., [DawnBringer 8](https://lospec.com/palette-list/dawnbringer-8)) to ensure all generated sprites look cohesive.
 3. **Noise & Dithering**: Programmatically add "shading" by darkening pixels furthest from a defined "light source" (top-left).
 
-### C. CSS-to-Canvas Export
-An even lighter solution:
-- Create a hidden `SpriteGenerator.razor` component.
-- Use CSS to style a `<div>` into a complex shape (using multiple box-shadows for "pixels").
-- Use `html2canvas` or a native Canvas `drawImage` call to "bake" these CSS objects into PNG sprites at runtime, which are then cached in LocalStorage.
-
-### D. Emoji "Baking"
-- Use standard Emojis (which are high-quality vector assets provided by the OS) as a base.
+### B. Emoji "Baking"
+- Use standard Emojis (vector assets provided by the OS) as a base.
 - Render the Emoji to a 32x32 Canvas.
 - Apply a "Pixelate" filter (downscale then upscale without interpolation).
-- **Result**: High-quality, recognizable silhouettes with a consistent pixel-art aesthetic, generated 100% locally and programmatically.
+- **Result**: High-quality, recognizable silhouettes with a consistent pixel-art aesthetic.
+
+### C. The "Layered SVG" Approach
+We can write a script using `svglib` or `Cairo` to programmatically layer shapes.
+- **Base Shapes**: Define "Item Bases" (Potion Bottle, Ore Chunk, Gemstone, Scroll).
+- **Dynamic Tinting**: Swap hex colors based on the item type (e.g., Red for Fire, Blue for Ice).
+- **Glow Effects**: Programmatically add SVG `<filter>` tags for magic items.
+
+## 7. Secondary Techniques (CSS-Only)
+- **CSS-Only "Primitives"**: Use CSS `clip-path` and gradients to create items. A "Fire I" spell could be a CSS diamond with a red/orange radial gradient and a `pulse` animation.
+- **Game-icons.net (SVG)**: Utilize the free library of white-on-black SVG icons, styled via CSS `filter: drop-shadow()` or `mask-image`.
+- **CSS-to-Canvas Export**: Use a hidden `SpriteGenerator.razor` component to style a `<div>` with multiple box-shadows and then "bake" it into a PNG sprite at runtime.
