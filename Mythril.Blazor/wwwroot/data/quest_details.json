@@ -72,14 +72,6 @@
     "PrimaryStat": "Strength"
   },
   {
-    "Quest": "Mine Ore",
-    "DurationSeconds": 60,
-    "Type": "Recurring",
-    "Requirements": [],
-    "Rewards": [ { "Item": "Iron Ore", "Quantity": 2 } ],
-    "PrimaryStat": "Strength"
-  },
-  {
     "Quest": "Learn about the Mines",
     "DurationSeconds": 30,
     "Type": "Single",
@@ -101,7 +93,7 @@
     "DurationSeconds": 75,
     "Type": "Recurring",
     "Requirements": [],
-    "Rewards": [ { "Item": "Web", "Quantity": 1 } ],
+    "Rewards": [ { "Item": "Web", "Quantity": 5 } ],
     "PrimaryStat": "Vitality"
   },
   {
@@ -109,7 +101,7 @@
     "DurationSeconds": 90,
     "Type": "Recurring",
     "Requirements": [],
-    "Rewards": [ { "Item": "Slime", "Quantity": 1 } ],
+    "Rewards": [ { "Item": "Slime", "Quantity": 5 } ],
     "PrimaryStat": "Strength"
   },
   {

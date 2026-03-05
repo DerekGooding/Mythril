@@ -1,5 +1,5 @@
 # Game Content Health Report
-Generated: 2026-03-04 23:56:43
+Generated: 2026-03-05 00:29:55
 
 ## 💀 Reachability Analysis
 ### Unreachable Quests
@@ -19,56 +19,55 @@ Estimated End-Game Time: 1076.9s
 
 ## ⚖️ Economic Sustainability
 ### Sustainable Recurring Activities
-- Refine Fire:Iron Ore->Fire I
-- Hunt Bats
-- Hunt Spiders
-- Power the Forge
-- Chop Wood
-- Archive Sifting
-- Hunt Sand-Sharks
 - Mine Iron Ore
-- Hunt Slimes
-- Study Ancient Texts
-- Mine Ore
-- Gather Moonberries
 - Harvest Sea-Life
-- Deep Sea Scavenge
-- Tutorial Section
-- Buy Potion
-- Hunt Goblins
+- Power the Forge
+- Hunt Slimes
+- Refine Scrap:Web->Gold
+- Study Ancient Texts
+- Hunt Bats
 - Scavenge Scrap
+- Deep Sea Scavenge
+- Hunt Sand-Sharks
+- Hunt Goblins
+- Refine Fire:Iron Ore->Fire I
+- Archive Sifting
+- Buy Potion
+- Hunt Spiders
+- Chop Wood
+- Gather Moonberries
+- Tutorial Section
 
 ### ⚠️ Unsustainable Activities (Reachable but starving)
-- Refine Fire:Basic Gem->Fire I
-- Refine Ice:Moonberry->Ice I
-- Sell Gem
-- Refine Life:Ancient Bark->Cure I
 - Refine Ice:Mana Leaf->Ice I
 - Refine Wood:Log->Herb
+- Sell Gem
 - Refine Mixology:Herb->Potion
-- Purify the Grove
-- Refine Scrap:Web->Gold
+- Refine Life:Ancient Bark->Cure I
 - Refine Scrap:Slime->Gold
+- Refine Fire:Basic Gem->Fire I
+- Purify the Grove
+- Refine Ice:Moonberry->Ice I
 
 ### Net Resource Rates (per second)
+- **Water**: 0.0567/s
+- **Log**: 0.0333/s
+- **Iron Ore**: 0.0069/s
 - **Moonberry**: 0.0117/s
+- **Blue Coral**: 0.0113/s
+- **Potion**: 0.0311/s
+- **Mythril Spark**: 0.0086/s
+- **Fire I**: 0.0861/s
 - **Ancient Bark**: 0.0167/s
 - **Leather**: 0.0283/s
-- **Potion**: 0.0311/s
-- **Iron Ore**: 0.0486/s
-- **Fire I**: 0.0861/s
-- **Log**: 0.0333/s
-- **Fire Shard**: 0.0208/s
-- **Web**: 0.0227/s
-- **Mythril Spark**: 0.0086/s
-- **Blue Coral**: 0.0113/s
-- **Gold**: 2.1528/s
-- **Water**: 0.0567/s
 - **Mana Leaf**: 0.0267/s
-- **Slime**: 0.0139/s
-- **Basic Gem**: 0.0567/s
+- **Fire Shard**: 0.0208/s
 - **Lost Parchment**: 0.0086/s
+- **Web**: 0.0200/s
 - **Sun-baked Scale**: 0.0139/s
+- **Gold**: 11.4861/s
+- **Basic Gem**: 0.0567/s
+- **Slime**: 0.0694/s
 
 ## 🔄 Feedback Loops
 ✅ No unbounded growth loops detected (approximation).

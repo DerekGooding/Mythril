@@ -35,8 +35,8 @@ Unlocks after *Learn about the Dark Forest*.
 ### **V. Iron Mines (Resource Gathering)**
 Unlocks after *Learn about the Mines*.
 *   **Hunt Bats**: (Reward: 150 Gold)
-*   **Hunt Spiders**: (Reward: 1 Web)
-*   **Hunt Slimes**: (Reward: 1 Slime)
+*   **Hunt Spiders**: (Reward: 5 Web)
+*   **Hunt Slimes**: (Reward: 5 Slime)
 *   **Unlock Mining**: Permission to mine. (Req: 1000 Gold)
 *   **Mine Iron Ore**: (Reward: 5 Iron Ore)
 
