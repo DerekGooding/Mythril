@@ -12,7 +12,7 @@
             "passed": true,
             "time": "1076.9s",
             "sustainable": 18,
-            "unsustainable": 10
+            "unsustainable": 9
         },
         "pending_feedback": 0,
         "test_passed": false

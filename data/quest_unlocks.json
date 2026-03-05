@@ -8,9 +8,7 @@
   { "Quest": "Learn about the Dark Forest", "Requires": ["Learn about the Mines"] },
   { "Quest": "Hunt Goblins", "Requires": ["Learn about the Dark Forest"] },     
   { "Quest": "Chop Wood", "Requires": ["Learn about the Dark Forest"] },     
-  { "Quest": "Mine Ore", "Requires": ["Learn about the Mines"] },     
-  { "Quest": "Hunt Bats", "Requires": ["Learn about the Mines"] },      
-  { "Quest": "Hunt Spiders", "Requires": ["Hunt Bats"] },      
+  { "Quest": "Hunt Bats", "Requires": ["Learn about the Mines"] },  { "Quest": "Hunt Spiders", "Requires": ["Hunt Bats"] },      
   { "Quest": "Hunt Slimes", "Requires": ["Hunt Spiders"] },
   { "Quest": "Unlock Mining", "Requires": ["Hunt Slimes"] },
 
