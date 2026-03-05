@@ -96,6 +96,23 @@ public readonly record struct RefinementData(CadenceAbility Ability, Item InputI
     public string Description => $"Refine {Recipe.InputQuantity}x {InputItem.Name} into {Recipe.OutputQuantity}x {Recipe.OutputItem.Name}";
 }
 
+// Unified Content Graph
+public class ContentNode
+{
+    public string Id { get; set; } = "";
+    public string Type { get; set; } = ""; // Quest, Location, Cadence, Item, Refinement
+    public string Name { get; set; } = "";
+    public Dictionary<string, object> Data { get; set; } = [];
+    public Dictionary<string, List<string>> InEdges { get; set; } = []; // RelationType -> [NodeIds]
+    public Dictionary<string, List<ContentEdge>> OutEdges { get; set; } = []; // RelationType -> [Edges]
+}
+
+public class ContentEdge
+{
+    public string TargetId { get; set; } = "";
+    public int Quantity { get; set; } = 1;
+}
+
 // Persistence
 public class SaveData
 {

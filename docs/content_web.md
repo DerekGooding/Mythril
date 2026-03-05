@@ -1,101 +1,118 @@
 # Mythril: Content & Unlock Web
-**Last Updated:** March 2, 2026
+**Last Updated:** March 5, 2026
 
-This document provides a comprehensive overview of all content in Mythril, including quest lines, cadence progression, junctioning mechanics, and refinement recipes.
+This document provides a comprehensive overview of all content in Mythril, including quest lines, cadence progression, and location unlocking.
 
----
+## 🗺️ Progression Map
 
-## 1. World & Quest Progression
-
-The game is structured into major regions, each unlocked by completing key story quests.
-
-### **I. Village (Starting Area)**
-*   **Prologue**: Watch the intro cinematic. (Reward: 10 Gold)
-*   **Tutorial Section**: Complete initial training. (Reward: 1 Basic Gem)
-*   **Visit Starting Town**: Explore the local village. (Reward: 100 Gold)
-
-### **II. Starting Town (Hub)**
-Unlocks after *Visit Starting Town*.
-*   **Buy Potion**: Purchase medicinal supplies. (Req: 250 Gold | Reward: 1 Potion)
-*   **Learn About Cadences**: Discover the power of your inner voice. (**Unlocks: Recruit Cadence**)
-*   **Learn about the Mines**: Find out where the miners went. (**Unlocks: Apprentice Cadence**)
-*   **Learn about the Dark Forest**: Hear rumors of corruption. (**Unlocks: Student Cadence**)
-*   **Recover the Ancient Tome**: Find the lost book. (Req: 500 Gold | **Unlocks: Arcanist Cadence**)
-
-### **III. Dark Forest (Combat & Harvesting)**
-Unlocks after *Learn about the Dark Forest*.
-*   **Hunt Goblins**: (Reward: 100 Gold, 1 Fire Shard)
-*   **Chop Wood**: (Reward: 2 Log)
-
-### **IV. Whispering Woods (Mid-Game)**
-Unlocks after *Learn about the Dark Forest*.
-*   **Gather Moonberries**: (Reward: 2 Moonberry, 1 Mana Leaf)
-*   **Defeat Treant Guardian**: Boss fight. (Req: 5 Potion | Reward: 5 Ancient Bark)
-
-### **V. Iron Mines (Resource Gathering)**
-Unlocks after *Learn about the Mines*.
-*   **Hunt Bats**: (Reward: 150 Gold)
-*   **Hunt Spiders**: (Reward: 5 Web)
-*   **Hunt Slimes**: (Reward: 5 Slime)
-*   **Unlock Mining**: Permission to mine. (Req: 1000 Gold)
-*   **Mine Iron Ore**: (Reward: 5 Iron Ore)
-
-### **VI. Ancient Ruins (End-Game)**
-Unlocks after *Learn About Cadences*.
-*   **Ancient Inscriptions**: Decipher ruins entrance. (Reward: 500 Gold)
-*   **Finding the Hearth**: Locate power source. (Reward: 10 Basic Gem)
-*   **Rekindling the Spark**: Ignite the forge. (Req: 10 Ancient Bark, 20 Iron Ore | **Unlocks: Mythril Weaver Cadence**)
-
----
-
-## 2. Cadence Progression
-
-Cadences are specialized "jobs" that provide unique abilities.
-
-| Cadence | Unlock Quest | Focus | Key Abilities |
-| :--- | :--- | :--- | :--- |
-| **Recruit** | Learn About Cadences | Combat/Basics | **J-Str** (Req: 10 Iron Ore) |
-| **Apprentice** | Learn about the Mines | Item Refinement | **Refine Wood** (Req: 10 Log), **Refine Scrap** (Req: 1000 Gold), **Refine Mixology** (Req: 30 Herb, 10 Iron Ore) |
-| **Student** | Learn about the Dark Forest | Magic Refinement | **Refine Fire** (Req: 10 Log), **J-Speed** (Req: 10 Potion) |
-| **Arcanist** | Recover the Ancient Tome | Magic Offense | **Refine Ice** (Req: 5 Mana Leaf), **J-Magic** (Req: 500 Gold, 10 Mana Leaf) |
-| **Mythril Weaver** | Rekindling the Spark | Master Crafting | **J-Vit** (Req: 2000 Gold), **Mass Refine**, **Essence Harvest** |
-
----
-
-## 3. Junctioning (Stat Augments)
-
-Assign Magic items to stats to gain bonuses.
-
-| Magic Item | Type | Primary Stat | Secondary Stat |
-| :--- | :--- | :--- | :--- |
-| **Fire I** | Spell | **Strength (+10)** | Magic (+5) |
-| **Ice I** | Spell | **Magic (+10)** | Vitality (+50) |
-| **Cure I** | Spell | **Vitality (+100)** | Magic (+15) |
-| **Potion** | Consumable | **Vitality (+20)** | N/A |
-
-*Note: Ability names like `J-Str` are required to enable junctioning to that specific stat.*
-
----
-
-## 4. Refinement Recipes
-
-Refining converts raw materials into useful items/magic.
-
-| Ability Required | Input | Output |
-| :--- | :--- | :--- |
-| **Refine Fire** | 1x Basic Gem / Iron Ore | 5x Fire I |
-| **Refine Ice** | 1x Mana Leaf / Moonberry | 5x Ice I |
-| **Refine Wood** | 1x Log | 2x Herb |
-| **Refine Mixology** | 10x Herb | 1x Potion |
-| **Refine Scrap** | 1x Web / 1x Slime | 100-150 Gold |
-
----
-
-## 5. Optimal Completion Route
-
-1.  **Early Game**: Complete *Prologue* and *Tutorial*. Save Gold to buy *Visit Starting Town*.
-2.  **Unlocks**: Rush *Learn About Cadences* (Recruit) and *Learn about the Mines* (Apprentice).
-3.  **Refining**: Use Apprentice to refine *Logs* into *Herbs* (Refine Wood) and *Herbs* into *Potions* (Refine Mixology).
-4.  **Mid-Game**: Clear *Learn about the Dark Forest* to unlock *Gather Moonberries*.
-5.  **Junctioning**: Unlock `J-Str` on Recruit. Farm *Golems* for *Iron Ore*, refine into *Fire I*, and junction to **Strength** to speed up combat.
-6.  **Late Game**: Defeat *Treant Guardian* for *Ancient Bark*. Use it to complete *Rekindling the Spark* and unlock the **Mythril Weaver**.
+```mermaid
+graph TD
+classDef quest fill:#f9f,stroke:#333,stroke-width:2px;
+classDef location fill:#ccf,stroke:#333,stroke-width:2px;
+classDef cadence fill:#cfc,stroke:#333,stroke-width:2px;
+classDef root fill:#ff9,stroke:#333,stroke-width:4px;
+quest_prologue["Prologue"]:::root
+quest_tutorial_section["Tutorial Section"]:::quest
+quest_prologue -->|Requires| quest_tutorial_section
+quest_visit_starting_town["Visit Starting Town"]:::quest
+quest_tutorial_section -->|Requires| quest_visit_starting_town
+quest_buy_potion["Buy Potion"]:::quest
+quest_visit_starting_town -->|Requires| quest_buy_potion
+quest_recover_the_ancient_tome["Recover the Ancient Tome"]:::quest
+quest_visit_starting_town -->|Requires| quest_recover_the_ancient_tome
+quest_recover_the_ancient_tome ==>|Unlocks| cadence_arcanist
+quest_learn_about_cadences["Learn About Cadences"]:::quest
+quest_visit_starting_town -->|Requires| quest_learn_about_cadences
+quest_learn_about_cadences ==>|Unlocks| cadence_recruit
+quest_learn_about_the_dark_forest["Learn about the Dark Forest"]:::quest
+quest_learn_about_the_mines -->|Requires| quest_learn_about_the_dark_forest
+quest_learn_about_the_dark_forest ==>|Unlocks| cadence_student
+quest_hunt_goblins["Hunt Goblins"]:::quest
+quest_learn_about_the_dark_forest -->|Requires| quest_hunt_goblins
+quest_chop_wood["Chop Wood"]:::quest
+quest_learn_about_the_dark_forest -->|Requires| quest_chop_wood
+quest_learn_about_the_mines["Learn about the Mines"]:::quest
+quest_learn_about_cadences -->|Requires| quest_learn_about_the_mines
+quest_learn_about_the_mines ==>|Unlocks| cadence_apprentice
+quest_hunt_bats["Hunt Bats"]:::quest
+quest_learn_about_the_mines -->|Requires| quest_hunt_bats
+quest_hunt_spiders["Hunt Spiders"]:::quest
+quest_hunt_bats -->|Requires| quest_hunt_spiders
+quest_hunt_slimes["Hunt Slimes"]:::quest
+quest_hunt_spiders -->|Requires| quest_hunt_slimes
+quest_unlock_mining["Unlock Mining"]:::quest
+quest_hunt_slimes -->|Requires| quest_unlock_mining
+quest_mine_iron_ore["Mine Iron Ore"]:::quest
+quest_unlock_mining -->|Requires| quest_mine_iron_ore
+quest_gather_moonberries["Gather Moonberries"]:::quest
+quest_learn_about_the_dark_forest -->|Requires| quest_gather_moonberries
+quest_defeat_treant_guardian["Defeat Treant Guardian"]:::quest
+quest_gather_moonberries -->|Requires| quest_defeat_treant_guardian
+quest_ancient_inscriptions["Ancient Inscriptions"]:::quest
+quest_learn_about_cadences -->|Requires| quest_ancient_inscriptions
+quest_finding_the_hearth["Finding the Hearth"]:::quest
+quest_ancient_inscriptions -->|Requires| quest_finding_the_hearth
+quest_rekindling_the_spark["Rekindling the Spark"]:::quest
+quest_finding_the_hearth -->|Requires| quest_rekindling_the_spark
+quest_rekindling_the_spark ==>|Unlocks| cadence_mythril_weaver
+quest_help_the_lumberjack["Help the lumberjack"]:::quest
+quest_learn_about_the_dark_forest -->|Requires| quest_help_the_lumberjack
+quest_sell_gem["Sell Gem"]:::quest
+quest_visit_starting_town -->|Requires| quest_sell_gem
+quest_scavenge_scrap["Scavenge Scrap"]:::quest
+quest_hunt_sand_sharks["Hunt Sand-Sharks"]:::quest
+quest_locate_the_hidden_oasis["Locate the Hidden Oasis"]:::quest
+quest_purify_the_grove["Purify the Grove"]:::quest
+quest_power_the_forge["Power the Forge"]:::quest
+quest_shatter_the_crystals["Shatter the Crystals"]:::quest
+quest_finding_the_hearth -->|Requires| quest_shatter_the_crystals
+quest_high_altitude_survey["High Altitude Survey"]:::quest
+quest_shatter_the_crystals -->|Requires| quest_high_altitude_survey
+quest_harvest_sea_life["Harvest Sea-Life"]:::quest
+quest_locate_the_hidden_oasis -->|Requires| quest_harvest_sea_life
+quest_deep_sea_scavenge["Deep Sea Scavenge"]:::quest
+quest_harvest_sea_life -->|Requires| quest_deep_sea_scavenge
+quest_archive_sifting["Archive Sifting"]:::quest
+quest_ancient_inscriptions -->|Requires| quest_archive_sifting
+quest_study_ancient_texts["Study Ancient Texts"]:::quest
+quest_archive_sifting -->|Requires| quest_study_ancient_texts
+quest_defeat_the_mythril_construct["Defeat the Mythril Construct"]:::quest
+quest_power_the_forge -->|Requires| quest_defeat_the_mythril_construct
+quest_ascetic_meditation["Ascetic Meditation"]:::quest
+quest_defeat_the_mythril_construct -->|Requires| quest_ascetic_meditation
+quest_heavy_training["Heavy Training"]:::quest
+quest_defeat_the_mythril_construct -->|Requires| quest_heavy_training
+location_village["Village"]:::location
+location_greenwood_forest["Greenwood Forest"]:::location
+quest_tutorial_section -->|Requires| location_greenwood_forest
+location_dark_forest["Dark Forest"]:::location
+quest_learn_about_the_dark_forest -->|Requires| location_dark_forest
+location_sun_drenched_plains["Sun-drenched Plains"]:::location
+quest_visit_starting_town -->|Requires| location_sun_drenched_plains
+location_forgotten_mines["Forgotten Mines"]:::location
+quest_learn_about_the_mines -->|Requires| location_forgotten_mines
+location_deep_mines["Deep Mines"]:::location
+quest_learn_about_the_mines -->|Requires| location_deep_mines
+location_crystal_peaks["Crystal Peaks"]:::location
+quest_power_the_forge -->|Requires| location_crystal_peaks
+location_tidal_caverns["Tidal Caverns"]:::location
+quest_hunt_sand_sharks -->|Requires| location_tidal_caverns
+location_hidden_oasis["Hidden Oasis"]:::location
+quest_locate_the_hidden_oasis -->|Requires| location_hidden_oasis
+location_ancient_library["Ancient Library"]:::location
+quest_ancient_inscriptions -->|Requires| location_ancient_library
+location_ancient_ruins["Ancient Ruins"]:::location
+quest_recover_the_ancient_tome -->|Requires| location_ancient_ruins
+location_mythril_sanctum["Mythril Sanctum"]:::location
+quest_rekindling_the_spark -->|Requires| location_mythril_sanctum
+cadence_recruit["Recruit"]:::cadence
+cadence_arcanist["Arcanist"]:::cadence
+cadence_apprentice["Apprentice"]:::cadence
+cadence_student["Student"]:::cadence
+cadence_mythril_weaver["Mythril Weaver"]:::cadence
+cadence_the_sentinel["The Sentinel"]:::cadence
+cadence_scholar["Scholar"]:::cadence
+cadence_geologist["Geologist"]:::cadence
+cadence_tide_caller["Tide-Caller"]:::cadence
+cadence_slayer["Slayer"]:::cadence
+```

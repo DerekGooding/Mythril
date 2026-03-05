@@ -1,9 +1,9 @@
 {
     "is_healthy": false,
-    "failure_count": 11,
+    "failure_count": 61,
     "metrics": {
-        "monoliths": 0,
-        "coverage": 74.69,
+        "monoliths": 2,
+        "coverage": 7.44,
         "mutation_score": 0.0,
         "missing_tests": 0,
         "key_violations": 0,
@@ -30,6 +30,76 @@
             "metadata": {}
         },
         {
+            "category": "monolith",
+            "message": "Mythril.Data\\ContentLoader.cs exceeds 250 lines",
+            "metadata": {
+                "lines": 311
+            }
+        },
+        {
+            "category": "monolith",
+            "message": "Mythril.Tests\\TestContentLoader.cs exceeds 250 lines",
+            "metadata": {
+                "lines": 287
+            }
+        },
+        {
+            "category": "coverage",
+            "message": "Overall line coverage below threshold",
+            "metadata": {
+                "actual": 7.44,
+                "required": 70.0
+            }
+        },
+        {
+            "category": "file_coverage",
+            "message": "Mythril.Data\\AbilityAugments.cs below minimum coverage: 0.00% (required: 25.0%)",
+            "metadata": {
+                "actual": 0.0,
+                "required": 25.0
+            }
+        },
+        {
+            "category": "file_coverage",
+            "message": "Mythril.Data\\Models.cs below minimum coverage: 14.28% (required: 25.0%)",
+            "metadata": {
+                "actual": 14.279999999999998,
+                "required": 25.0
+            }
+        },
+        {
+            "category": "file_coverage",
+            "message": "Mythril.Data\\Models.cs below minimum coverage: 0.00% (required: 25.0%)",
+            "metadata": {
+                "actual": 0.0,
+                "required": 25.0
+            }
+        },
+        {
+            "category": "file_coverage",
+            "message": "Mythril.Data\\Models.cs below minimum coverage: 0.00% (required: 25.0%)",
+            "metadata": {
+                "actual": 0.0,
+                "required": 25.0
+            }
+        },
+        {
+            "category": "file_coverage",
+            "message": "Mythril.Data\\Models.cs below minimum coverage: 0.00% (required: 25.0%)",
+            "metadata": {
+                "actual": 0.0,
+                "required": 25.0
+            }
+        },
+        {
+            "category": "file_coverage",
+            "message": "Mythril.Data\\Models.cs below minimum coverage: 0.00% (required: 25.0%)",
+            "metadata": {
+                "actual": 0.0,
+                "required": 25.0
+            }
+        },
+        {
             "category": "file_coverage",
             "message": "Mythril.Data\\Models.cs below minimum coverage: 0.00% (required: 25.0%)",
             "metadata": {
@@ -47,9 +117,273 @@
         },
         {
             "category": "file_coverage",
-            "message": "Mythril.Headless\\Program.cs below minimum coverage: 0.00% (required: 25.0%)",
+            "message": "Mythril.Data\\ContentLoader.cs below minimum coverage: 0.00% (required: 25.0%)",
             "metadata": {
                 "actual": 0.0,
+                "required": 25.0
+            }
+        },
+        {
+            "category": "file_coverage",
+            "message": "Mythril.Data\\ContentLoader.cs below minimum coverage: 0.00% (required: 25.0%)",
+            "metadata": {
+                "actual": 0.0,
+                "required": 25.0
+            }
+        },
+        {
+            "category": "file_coverage",
+            "message": "Mythril.Data\\ContentLoader.cs below minimum coverage: 0.00% (required: 25.0%)",
+            "metadata": {
+                "actual": 0.0,
+                "required": 25.0
+            }
+        },
+        {
+            "category": "file_coverage",
+            "message": "Mythril.Data\\ContentLoader.cs below minimum coverage: 0.00% (required: 25.0%)",
+            "metadata": {
+                "actual": 0.0,
+                "required": 25.0
+            }
+        },
+        {
+            "category": "file_coverage",
+            "message": "Mythril.Data\\ContentLoader.cs below minimum coverage: 0.00% (required: 25.0%)",
+            "metadata": {
+                "actual": 0.0,
+                "required": 25.0
+            }
+        },
+        {
+            "category": "file_coverage",
+            "message": "Mythril.Data\\ContentLoader.cs below minimum coverage: 0.00% (required: 25.0%)",
+            "metadata": {
+                "actual": 0.0,
+                "required": 25.0
+            }
+        },
+        {
+            "category": "file_coverage",
+            "message": "Mythril.Data\\ContentLoader.cs below minimum coverage: 0.00% (required: 25.0%)",
+            "metadata": {
+                "actual": 0.0,
+                "required": 25.0
+            }
+        },
+        {
+            "category": "file_coverage",
+            "message": "Mythril.Data\\ContentLoader.cs below minimum coverage: 0.00% (required: 25.0%)",
+            "metadata": {
+                "actual": 0.0,
+                "required": 25.0
+            }
+        },
+        {
+            "category": "file_coverage",
+            "message": "Mythril.Data\\ContentLoader.cs below minimum coverage: 0.00% (required: 25.0%)",
+            "metadata": {
+                "actual": 0.0,
+                "required": 25.0
+            }
+        },
+        {
+            "category": "file_coverage",
+            "message": "Mythril.Data\\ContentLoader.cs below minimum coverage: 0.00% (required: 25.0%)",
+            "metadata": {
+                "actual": 0.0,
+                "required": 25.0
+            }
+        },
+        {
+            "category": "file_coverage",
+            "message": "Mythril.Data\\ContentLoader.cs below minimum coverage: 0.00% (required: 25.0%)",
+            "metadata": {
+                "actual": 0.0,
+                "required": 25.0
+            }
+        },
+        {
+            "category": "file_coverage",
+            "message": "Mythril.Data\\ContentLoader.cs below minimum coverage: 0.00% (required: 25.0%)",
+            "metadata": {
+                "actual": 0.0,
+                "required": 25.0
+            }
+        },
+        {
+            "category": "file_coverage",
+            "message": "Mythril.Data\\ContentLoader.cs below minimum coverage: 0.00% (required: 25.0%)",
+            "metadata": {
+                "actual": 0.0,
+                "required": 25.0
+            }
+        },
+        {
+            "category": "file_coverage",
+            "message": "Mythril.Data\\ContentLoader.cs below minimum coverage: 2.57% (required: 25.0%)",
+            "metadata": {
+                "actual": 2.57,
+                "required": 25.0
+            }
+        },
+        {
+            "category": "file_coverage",
+            "message": "Mythril.Data\\InventoryManager.cs below minimum coverage: 0.00% (required: 25.0%)",
+            "metadata": {
+                "actual": 0.0,
+                "required": 25.0
+            }
+        },
+        {
+            "category": "file_coverage",
+            "message": "Mythril.Data\\JunctionManager.cs below minimum coverage: 0.00% (required: 25.0%)",
+            "metadata": {
+                "actual": 0.0,
+                "required": 25.0
+            }
+        },
+        {
+            "category": "file_coverage",
+            "message": "Mythril.Data\\LocationData.cs below minimum coverage: 0.00% (required: 25.0%)",
+            "metadata": {
+                "actual": 0.0,
+                "required": 25.0
+            }
+        },
+        {
+            "category": "file_coverage",
+            "message": "Mythril.Data\\QuestData.cs below minimum coverage: 0.00% (required: 25.0%)",
+            "metadata": {
+                "actual": 0.0,
+                "required": 25.0
+            }
+        },
+        {
+            "category": "file_coverage",
+            "message": "Mythril.Data\\QuestDetails.cs below minimum coverage: 16.66% (required: 25.0%)",
+            "metadata": {
+                "actual": 16.66,
+                "required": 25.0
+            }
+        },
+        {
+            "category": "file_coverage",
+            "message": "Mythril.Data\\QuestProgress.cs below minimum coverage: 0.00% (required: 25.0%)",
+            "metadata": {
+                "actual": 0.0,
+                "required": 25.0
+            }
+        },
+        {
+            "category": "file_coverage",
+            "message": "Mythril.Data\\QuestUnlocks.cs below minimum coverage: 16.66% (required: 25.0%)",
+            "metadata": {
+                "actual": 16.66,
+                "required": 25.0
+            }
+        },
+        {
+            "category": "file_coverage",
+            "message": "Mythril.Data\\ResourceManager_Discovery.cs below minimum coverage: 0.00% (required: 25.0%)",
+            "metadata": {
+                "actual": 0.0,
+                "required": 25.0
+            }
+        },
+        {
+            "category": "file_coverage",
+            "message": "Mythril.Data\\ResourceManager_Inventory.cs below minimum coverage: 0.00% (required: 25.0%)",
+            "metadata": {
+                "actual": 0.0,
+                "required": 25.0
+            }
+        },
+        {
+            "category": "file_coverage",
+            "message": "Mythril.Data\\ResourceManager_Journal.cs below minimum coverage: 0.00% (required: 25.0%)",
+            "metadata": {
+                "actual": 0.0,
+                "required": 25.0
+            }
+        },
+        {
+            "category": "file_coverage",
+            "message": "Mythril.Data\\ResourceManager_Journal.cs below minimum coverage: 0.00% (required: 25.0%)",
+            "metadata": {
+                "actual": 0.0,
+                "required": 25.0
+            }
+        },
+        {
+            "category": "file_coverage",
+            "message": "Mythril.Data\\ResourceManager_Logistics.cs below minimum coverage: 0.00% (required: 25.0%)",
+            "metadata": {
+                "actual": 0.0,
+                "required": 25.0
+            }
+        },
+        {
+            "category": "file_coverage",
+            "message": "Mythril.Data\\ResourceManager_Logistics.cs below minimum coverage: 0.00% (required: 25.0%)",
+            "metadata": {
+                "actual": 0.0,
+                "required": 25.0
+            }
+        },
+        {
+            "category": "file_coverage",
+            "message": "Mythril.Data\\ResourceManager_Quests.cs below minimum coverage: 0.00% (required: 25.0%)",
+            "metadata": {
+                "actual": 0.0,
+                "required": 25.0
+            }
+        },
+        {
+            "category": "file_coverage",
+            "message": "Mythril.Data\\ResourceManager_Rewards.cs below minimum coverage: 0.00% (required: 25.0%)",
+            "metadata": {
+                "actual": 0.0,
+                "required": 25.0
+            }
+        },
+        {
+            "category": "file_coverage",
+            "message": "Mythril.Data\\ResourceManager_Rewards.cs below minimum coverage: 0.00% (required: 25.0%)",
+            "metadata": {
+                "actual": 0.0,
+                "required": 25.0
+            }
+        },
+        {
+            "category": "file_coverage",
+            "message": "Mythril.Data\\ResourceManager_Rewards.cs below minimum coverage: 0.00% (required: 25.0%)",
+            "metadata": {
+                "actual": 0.0,
+                "required": 25.0
+            }
+        },
+        {
+            "category": "file_coverage",
+            "message": "Mythril.Data\\ResourceManager_Rewards.cs below minimum coverage: 0.00% (required: 25.0%)",
+            "metadata": {
+                "actual": 0.0,
+                "required": 25.0
+            }
+        },
+        {
+            "category": "file_coverage",
+            "message": "Mythril.Data\\ResourceManager_State.cs below minimum coverage: 0.00% (required: 25.0%)",
+            "metadata": {
+                "actual": 0.0,
+                "required": 25.0
+            }
+        },
+        {
+            "category": "file_coverage",
+            "message": "Mythril.Data\\StatAugments.cs below minimum coverage: 16.66% (required: 25.0%)",
+            "metadata": {
+                "actual": 16.66,
                 "required": 25.0
             }
         },
@@ -80,6 +414,70 @@
         {
             "category": "file_coverage",
             "message": "Mythril.Headless\\Program.cs below minimum coverage: 0.00% (required: 25.0%)",
+            "metadata": {
+                "actual": 0.0,
+                "required": 25.0
+            }
+        },
+        {
+            "category": "file_coverage",
+            "message": "Mythril.Headless\\Program.cs below minimum coverage: 0.00% (required: 25.0%)",
+            "metadata": {
+                "actual": 0.0,
+                "required": 25.0
+            }
+        },
+        {
+            "category": "file_coverage",
+            "message": "Mythril.Headless\\Simulation\\FlowSimulator.cs below minimum coverage: 0.00% (required: 25.0%)",
+            "metadata": {
+                "actual": 0.0,
+                "required": 25.0
+            }
+        },
+        {
+            "category": "file_coverage",
+            "message": "Mythril.Headless\\Simulation\\FlowSimulator.cs below minimum coverage: 0.00% (required: 25.0%)",
+            "metadata": {
+                "actual": 0.0,
+                "required": 25.0
+            }
+        },
+        {
+            "category": "file_coverage",
+            "message": "Mythril.Headless\\Simulation\\FlowSimulator.cs below minimum coverage: 0.00% (required: 25.0%)",
+            "metadata": {
+                "actual": 0.0,
+                "required": 25.0
+            }
+        },
+        {
+            "category": "file_coverage",
+            "message": "Mythril.Headless\\Simulation\\LatticeSimulator.cs below minimum coverage: 0.00% (required: 25.0%)",
+            "metadata": {
+                "actual": 0.0,
+                "required": 25.0
+            }
+        },
+        {
+            "category": "file_coverage",
+            "message": "Mythril.Headless\\Simulation\\LatticeSimulator.cs below minimum coverage: 0.00% (required: 25.0%)",
+            "metadata": {
+                "actual": 0.0,
+                "required": 25.0
+            }
+        },
+        {
+            "category": "file_coverage",
+            "message": "Mythril.Headless\\Simulation\\LatticeSimulator.cs below minimum coverage: 0.00% (required: 25.0%)",
+            "metadata": {
+                "actual": 0.0,
+                "required": 25.0
+            }
+        },
+        {
+            "category": "file_coverage",
+            "message": "Mythril.Headless\\Simulation\\LatticeSimulator_Transfers.cs below minimum coverage: 0.00% (required: 25.0%)",
             "metadata": {
                 "actual": 0.0,
                 "required": 25.0
@@ -95,7 +493,7 @@
         },
         {
             "category": "docs_stale",
-            "message": "docs/instructions.md is stale (56 source changes since last update)",
+            "message": "docs/instructions.md is stale (57 source changes since last update)",
             "metadata": {}
         }
     ]

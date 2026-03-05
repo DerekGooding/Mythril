@@ -322,6 +322,21 @@ def check_reachability():
         record_failure("reachability", "Simulation failed: One or more quests are mathematically unreachable.")
         return {"passed": False, "time": "N/A"}
 
+def check_content_graph():
+    print("--- Verifying Content Graph Integrity ---")
+    try:
+        result = subprocess.run([sys.executable, "scripts/verify_graph.py"], capture_output=True, text=True)
+        if result.returncode == 0:
+            print(result.stdout.strip())
+            return True
+        else:
+            record_failure("content_graph", "Content contract violations found", {"output": result.stdout.strip()})
+            print(result.stdout)
+            return False
+    except Exception as e:
+        record_failure("content_graph", f"Error running verification script: {e}")
+        return False
+
 # -----------------------
 # Feedback Check
 # -----------------------
@@ -441,6 +456,8 @@ if __name__ == "__main__":
     mutation_score = 0.0
     if run_mutation:
         mutation_score = check_mutation()
+
+    content_graph_passed = check_content_graph()
 
     monolith_count = check_monoliths()
     coverage_pct = parse_coverage()
