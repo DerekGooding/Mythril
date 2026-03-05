@@ -1,39 +1,48 @@
 # Mythril Project Roadmap
 
 ## 🎯 Current Goal
-Implement the third tier of multi-tasking and the second tier of automation, alongside a massive content expansion across new locations and specialized cadences, while overhauling the Junction UX for a more tactile experience.
+Implement the comprehensive UI and Asset Overhaul as greenlit in the Suggestions document, transitioning the project from a text-heavy prototype to a high-density, visually rich, and tactile management dashboard.
 
 ## 🛤️ Active Tasks
 
-### Phase 1: UI & Visual Foundation
-- [x] **Requirement Iconography**: Implement 🛡️ (Stats), 📦 (Items), and 🔑 (Prerequisites) on all Quest and Ability cards.
-- [x] **Task Sorting**: Add a toggle in the Locations tab to sort quests by base duration.
-- [x] **Historical Logs**: Create a "Journal" tab to track the last 50 completed tasks.
-- [x] **Inventory UI Scaling**: Horizontal scrolling implemented for large inventories. (Category filtering moved to UX polish phase).
+### Phase 1: Global Inventory Overhaul (Section 1)
+- [ ] **Grid-Based Layout**: Replace the horizontal row with a 40x40 icon grid.
+- [ ] **Categorization Tabs**: Split inventory into "Materials", "Magic", and "Key Items".
+- [ ] **Search & Sort**: Add a search bar and sort options (Alphabetical, Quantity, Recent).
+- [ ] **Pinning System**: Allow pinning up to 5 items for quick monitoring.
 
-### Phase 2: Logistics & Automation (Tier II)
-- [x] **Logistics II**: Expand character capacity to a **3rd task slot**.
-- [x] **AutoQuest II**: Enable automation for the **2nd task slot** (Logistics I slot).
-- [x] **Logic Enforcement**: Ensure Slot 2 (Logistics II) remains manual and single-use quests never loop.
-- [x] **Auto-Quest Visuals**: Implement a non-mechanical visual delay for auto-restarting tasks to improve game "feel."
+### Phase 2: Location Management (Section 2)
+- [ ] **Compact Mode**: Automatically collapse locations where all one-time quests are complete.
+- [ ] **Visual Distinction**: Apply environment-specific CSS shapes/colors to location headers.
+- [ ] **Active Task Indicator**: Show a pulsing dot on location headers for active character tasks.
 
-### Phase 3: Junction System Overhaul (Tactile Interaction)
-- [x] **Drag-and-Drop Enhancement**: Finalize the transition to a pure drag-from-inventory model.
-- [x] **Predicted Effect Preview**: Implement color-coded stat changes (Green/Red) during drag operations.
-- [x] **Junction Removal**: Repurpose the "Junction" button on the character display as a dedicated removal tool.
-- [x] **Stat Ceiling**: Enforce the **255** maximum stat value across all systems.
+### Phase 3: Cadence Intelligence (Section 3)
+- [ ] **Equipped Status**: Render character portraits on Cadence expanders when assigned.
+- [ ] **Ability Search**: Highlight Cadences containing specific searched abilities (e.g., "J-Str").
+- [ ] **Tree Progress**: Display a percentage bar for ability unlock completion on headers.
 
-### Phase 4: Advanced Progression & Gates
-- [x] **Hidden Cadences**: Implement stat-threshold detection for auto-unlocking Cadences (e.g., Geologist at 100 STR, Tide-Caller at 100 SPD).
-- [x] **Stat Scaling Polish**: Audit the multiplicative duration formula to ensure it aligns with the "not linear" mandate.
+### Phase 4: Workshop Optimization (Section 4)
+- [ ] **Affordability Toggle**: Option to hide recipes with missing requirements.
+- [ ] **Output Filtering**: Buttons to filter by Spells, Materials, or Consumables.
+- [ ] **Favorites (Starring)**: Implement a "Star" system to pin frequent recipes.
+- [ ] **Consolidated Groups**: Use sub-expanders for abilities with numerous recipes.
 
-### Phase 5: World Content Expansion (Tier II)
-- [x] **New Regions**: Crystal Peaks, Tidal Caverns, Ancient Library.
-- [x] **New Cadences**: Slayer, Geologist, Tide-Caller.
-- [x] **Quest Lines**: 6 new recurring quest chains for advanced materials (Crystal Shards, Blue Coral, Lost Parchment).
-- [x] **Refinement Tier II**: Earth, Water, and Haste magic; Geode/Seed processing.
+### Phase 5: Party & Tactile Interaction (Section 5)
+- [ ] **Junction "Quick Swap"**: Enable dragging junctioned stats between character cards.
+- [ ] **Character Mini-Log**: Add a small activity history (last 3 items) per character card.
 
-- [x] Return the optimal completion time metric to the simulation report.
-- [x] If a refinement hits the maximum magic value and triggers a warning snackbar message, and the task is set to auto replace, can it from auto replaying.
-- [x] Review Journal UI and confirm it updates the UI when it's underlying list is updated and every time a task is completed for the first time, make sure the journal shows it. 
- 
+### Phase 6: Primary Asset Generation (Section 6)
+- [ ] **Procedural Sprite Generator**: Python script (Pillow) for symmetrical 32x32 pixel-art icons.
+- [ ] **Emoji "Baking"**: Utility to process OS emojis into pixel-art sprites.
+- [ ] **Layered SVG Tinting**: System for color-swapping base SVG shapes (potions, scrolls).
+
+### Phase 7: Secondary Asset Techniques (Section 7)
+- [ ] **CSS Primitives**: Implement clip-path and gradient-based magic items (e.g., fire diamonds).
+- [ ] **SVG Sourcing**: Integrate Game-icons.net SVG library.
+- [ ] **CSS-to-Canvas Baking**: Runtime utility to convert complex CSS objects into PNG sprites.
+
+### Phase 8: General UX & Accessibility
+- [ ] **Keyboard Shortcuts**: Map numeric keys `1-4` to main navigation tabs.
+- [ ] **Contextual Help Overlay**: Implement a global `?` help system for mechanics.
+- [ ] **Theme Persistence**: Polish high-contrast variants for all new UI components.
+- [ ] **Standardized Tooltips**: Implement advanced descriptions across all grid systems.

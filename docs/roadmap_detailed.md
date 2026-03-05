@@ -1,38 +1,48 @@
-# Resolved Implementation Details: Phase 2 Content & Systems
+# Detailed Technical Roadmap: Programmatic Assets & UI Overhaul
 
-## ⚙️ Mechanical Specifications
+## ⚙️ Mechanical Specifications (Section-by-Section Mapping)
 
-### 1. Tiered Multi-Tasking
-- **Logistics II**: A high-tier ability. When active on a character, the `CharacterDisplay` UI will render 3 task slots.
-- **AutoQuest II**: Extends the auto-restart logic.
-    - If a character has AutoQuest II, recurring tasks in **Slot 0 AND Slot 1** will restart.
-    - Slot 2 remains manual-only.
+### Phase 1: Global Inventory Grid (Section 1)
+- **Structure**: 40x40px icon grid with tooltips.
+- **Categorization**: Multi-tab interface (Materials, Magic, Key Items).
+- **UX Features**: 
+    - Real-time search by name.
+    - Multi-select for mass refinement (future-proofing).
+    - Top-bar pinning for 5 tracked resources.
 
-### 2. Requirement Iconography
-- **Icons**:
-    - `StatRequirement`: 🛡️
-    - `ItemRequirement`: 📦
-    - `Prerequisite`: 🔑
-- **Implementation**: Cards will display these icons inline with text. Tooltips will explain the requirement on hover.
+### Phase 2: Location Environment Logic (Section 2)
+- **Visual Mapping**: 
+    - Forests: Rounded corners (`border-radius: 12px 12px 0 0`).
+    - Mines/Mountains: Sharp edges (`border-radius: 0`).
+    - Water/Caverns: Pill-shaped (`border-radius: 20px`).
+- **Compact Logic**: If `location.AllQuests.All(q => q.IsComplete)` then `Expander.IsDefaultCollapsed = true`.
+- **Status Indicators**: Pulse animation on Location headers if `location.Quests.Any(q => q.IsActive)`.
 
-### 3. Hidden Cadences (Stat Gates)
-- `ResourceManager` will check `MaxStats` during each `Tick`.
-- **Geologist**: Unlocks when any character reaches **100 Strength**.
-- **Tide-Caller**: Unlocks when any character reaches **100 Speed**.
-- **Scholar**: (Reserved for future) Unlocks at **100 Magic**.
+### Phase 3: Cadence Management UI (Section 3)
+- **Assignments**: Character avatar icons displayed on the Cadence Expander if assigned.
+- **Search**: "Find Ability" input that highlights Cadence cards.
+- **Progress**: `(UnlockedAbilities / TotalAbilities) * 100` progress bar on headers.
 
-### 4. Content Mapping
-- **Crystal Peaks**:
-    - Quests: *Shatter the Crystals* (Rewards: Crystal Shards).
-    - Refinement: *Refine Earth* (Shards -> Earth I).
-- **Tidal Caverns**:
-    - Quests: *Deep Sea Scavenge* (Rewards: Blue Coral).
-    - Refinement: *Refine Water* (Coral -> Water I).
-- **Ancient Library**:
-    - Quests: *Archive Sifting* (Rewards: Lost Parchment).
-    - Refinement: *Refine Parchment* (Parchment -> Haste I).
+### Phase 4: Workshop Management (Section 4)
+- **Filtering**: Hide recipes where requirements are not met.
+- **Favorites**: `IsStarred` Boolean on recipe data to pin to the top of the group.
+- **Consolidation**: Group multiple recipes from one ability into sub-menus or scrollable grids.
 
-## 🧪 Simulation Constraints
-- The **Reachability Simulator** must be updated to include these new nodes.
-- Total Stat Ceiling: **255**.
-- "No combining" rule: All refinement recipes must follow the `1 Input -> 1 Output` pattern.
+### Phase 5: Party Interaction (Section 5)
+- **Junction Quick Swap**: Inter-card drag event between stat badges.
+- **Character Mini-History**: Last 3 activities (e.g., "Mined Ore", "Unlocked Logistics") rendered in small text on character cards.
+
+### Phase 6: Asset Generator Script (Section 6)
+- **Core Script**: `scripts/generate_sprites.py` (Pillow).
+- **Procedural Pixel Art**: 7x7 core patterns mirrored to 32x32 using fixed **DB8 palette**.
+- **Emoji Baking**: Downscale (No-interpolation) processing of OS emojis into PNGs.
+- **Layered SVG Logic**: Programmatic tinting of SVG base files (Potions, Crystals, Scrolls).
+
+### Phase 7: Secondary Visual Asset Techniques (Section 7)
+- **Game-icons.net**: Integration of standardized SVGs via `mask-image` for high-quality silhouettes.
+- **CSS-to-Canvas**: Hidden utility to "bake" complex CSS objects into LocalStorage cached images.
+
+### Phase 8: General UX & Polishing
+- **Shortcuts**: `numeric 1-4` for navigation tabs.
+- **Help System**: `?` hotkey triggers a detailed mechanic overlay.
+- **Accessibility**: Theme-consistent glows for magic items and high-density grid layouts.
