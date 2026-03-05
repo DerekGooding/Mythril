@@ -1,48 +1,71 @@
-# Detailed Technical Roadmap: Programmatic Assets & UI Overhaul
+# Detailed Technical Roadmap: Mutation Testing Implementation
 
-## ⚙️ Mechanical Specifications (Section-by-Section Mapping)
+Mutation testing ensures that tests are actually checking logic, not just passing over lines of code. By introducing small bugs (mutants) into the source, we verify that the test suite is sensitive enough to fail.
 
-### Phase 1: Global Inventory Grid (Section 1)
-- **Structure**: 40x40px icon grid with tooltips.
-- **Categorization**: Multi-tab interface (Materials, Magic, Key Items).
-- **UX Features**: 
-    - Real-time search by name.
-    - Multi-select for mass refinement (future-proofing).
-    - Top-bar pinning for 5 tracked resources.
+## ⚙️ Mechanical Specifications
 
-### Phase 2: Location Environment Logic (Section 2)
-- **Visual Mapping**: 
-    - Forests: Rounded corners (`border-radius: 12px 12px 0 0`).
-    - Mines/Mountains: Sharp edges (`border-radius: 0`).
-    - Water/Caverns: Pill-shaped (`border-radius: 20px`).
-- **Compact Logic**: If `location.AllQuests.All(q => q.IsComplete)` then `Expander.IsDefaultCollapsed = true`.
-- **Status Indicators**: Pulse animation on Location headers if `location.Quests.Any(q => q.IsActive)`.
+### 1. Tooling: Stryker.NET
+- **Choice**: [Stryker.NET](https://stryker-mutator.io/docs/stryker-net/introduction) is the industry standard for .NET mutation testing.
+- **Support**: Native support for .NET 10 and C# 13 features.
+- **Reporting**: Generates interactive HTML reports showing exactly which line mutation survived and why.
 
-### Phase 3: Cadence Management UI (Section 3)
-- **Assignments**: Character avatar icons displayed on the Cadence Expander if assigned.
-- **Search**: "Find Ability" input that highlights Cadence cards.
-- **Progress**: `(UnlockedAbilities / TotalAbilities) * 100` progress bar on headers.
+### 2. Stryker Configuration (`stryker-config.json`)
+```json
+{
+  "stryker-config": {
+    "project-info": {
+      "name": "Mythril",
+      "module": "Mythril.Data"
+    },
+    "mutate": [
+      "**/!(*DTO|*Models|*ContentHost|*Loader).cs"
+    ],
+    "test-projects": [
+      "../Mythril.Tests/Mythril.Tests.csproj"
+    ],
+    "reporters": [
+      "html",
+      "progress",
+      "cleartext"
+    ],
+    "concurrency": 4,
+    "thresholds": {
+      "high": 80,
+      "low": 60,
+      "break": 50
+    }
+  }
+}
+```
 
-### Phase 4: Workshop Management (Section 4)
-- **Filtering**: Hide recipes where requirements are not met.
-- **Favorites**: `IsStarred` Boolean on recipe data to pin to the top of the group.
-- **Consolidation**: Group multiple recipes from one ability into sub-menus or scrollable grids.
+### 3. Mutator Targeting Strategy
+- **Arithmetic Mutators**: Swapping `+` for `-` in `JunctionManager.GetStatValue`.
+- **Equality Mutators**: Swapping `==` for `!=` in `ResourceManager.CanAfford`.
+- **Logical Mutators**: Swapping `&&` for `||` in `LatticeSimulator`.
+- **Update Mutators**: Swapping `++` for `--` in `InventoryManager.Add`.
 
-### Phase 5: Party Interaction (Section 5)
-- **Junction Quick Swap**: Inter-card drag event between stat badges.
-- **Character Mini-History**: Last 3 activities (e.g., "Mined Ore", "Unlocked Logistics") rendered in small text on character cards.
+### 4. Integration with Health Checks
+Update `scripts/check_health.py` to support a `--mutation` flag:
+- **Command**: `dotnet stryker --project Mythril.Data.csproj`
+- **Validation**: Parse the `mutation-report.html` or JSON output.
+- **Failure Condition**: If `MutationScore < Threshold`, health check fails even if regular tests pass.
 
-### Phase 6: Asset Generator Script (Section 6)
-- **Core Script**: `scripts/generate_sprites.py` (Pillow).
-- **Procedural Pixel Art**: 7x7 core patterns mirrored to 32x32 using fixed **DB8 palette**.
-- **Emoji Baking**: Downscale (No-interpolation) processing of OS emojis into PNGs.
-- **Layered SVG Logic**: Programmatic tinting of SVG base files (Potions, Crystals, Scrolls).
+## 🧪 Phase-Specific Implementation Details
 
-### Phase 7: Secondary Visual Asset Techniques (Section 7)
-- **Game-icons.net**: Integration of standardized SVGs via `mask-image` for high-quality silhouettes.
-- **CSS-to-Canvas**: Hidden utility to "bake" complex CSS objects into LocalStorage cached images.
+### Phase 2: Core Logic Focus
+- **Priority**: Files like `JunctionManager.cs` and `ResourceManager_Quests.cs`.
+- **Goal**: Kill all mutants related to the Junction formula:
+  - `StatValue = 10 + (Qty * Modifier / 100)`
+  - If a mutator changes `100` to `101` and tests pass, the test is insufficient.
 
-### Phase 8: General UX & Polishing
-- **Shortcuts**: `numeric 1-4` for navigation tabs.
-- **Help System**: `?` hotkey triggers a detailed mechanic overlay.
-- **Accessibility**: Theme-consistent glows for magic items and high-density grid layouts.
+### Phase 4: UI Logic Focus
+- **bUnit Mutators**: Targeting C# logic inside `.razor` files or code-behind.
+- **Example**: If `IsActive` is mutated to `!IsActive`, the bUnit test must fail to find the `.active-dot.pulse` element.
+
+### Phase 5: Report Archiving
+- Reports will be stored in `docs/mutation_reports/YYYY-MM-DD_v[hash]/`.
+- This allows historical tracking of "Test suite hardening" over time.
+
+## 🛡️ Stability & Performance
+- **Concurrency**: Set `concurrency` to `CPU_COUNT - 1` to prevent system hang during massive mutation runs.
+- **Baseline**: Regular `dotnet test` must pass before Stryker will even begin.

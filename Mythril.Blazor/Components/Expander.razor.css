@@ -20,12 +20,14 @@
     font-weight: 500;
 }
 
-/* Environment Shapes */
-.forest .expander-header { border-radius: 12px 12px 0 0; border-left: 4px solid #28a745; }
-.mine .expander-header { border-radius: 0; border-left: 4px solid #6c757d; }
-.water .expander-header { border-radius: 20px; border-left: 4px solid #007bff; margin: 0 4px; }
-.plains .expander-header { border-radius: 4px; border-left: 4px solid #ffc107; }
-.library .expander-header { border-radius: 4px 20px 4px 20px; border-left: 4px solid #6f42c1; }
+/* Environment Shapes & Colors */
+.expander-header { border-radius: 12px 12px 0 0; }
+
+.forest .expander-header { border-left: 4px solid #28a745; }
+.mine .expander-header { border-left: 4px solid #6c757d; }
+.water .expander-header { border-left: 4px solid #007bff; }
+.plains .expander-header { border-left: 4px solid #ffc107; }
+.library .expander-header { border-left: 4px solid #6f42c1; }
 
 .header-text {
     flex-grow: 1;

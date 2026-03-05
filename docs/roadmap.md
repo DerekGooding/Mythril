@@ -1,48 +1,34 @@
-# Mythril Project Roadmap
+# Mythril Project Roadmap: Mutation Testing Overhaul
 
 ## 🎯 Current Goal
-Implement the comprehensive UI and Asset Overhaul as greenlit in the Suggestions document, transitioning the project from a text-heavy prototype to a high-density, visually rich, and tactile management dashboard.
+Implement a robust mutation testing pipeline using **Stryker.NET** to quantify test effectiveness, identify "survivors" (weak test coverage), and ensure the integrity of core RPG logic (Junctions, Resource Scaling, and Simulation).
 
 ## 🛤️ Active Tasks
 
-### Phase 1: Global Inventory Overhaul (Section 1)
-- [x] **Grid-Based Layout**: Replace the horizontal row with a 40x40 icon grid.
-- [x] **Categorization Tabs**: Split inventory into "Materials", "Magic", and "Key Items".
-- [x] **Search & Sort**: Add a search bar and sort options (Alphabetical, Quantity, Recent).
-- [x] **Pinning System**: Allow pinning up to 5 items for quick monitoring.
+### Phase 1: Environment & Tooling
+- [ ] **Stryker Installation**: Verify and document the installation of `dotnet-stryker` as a global or local tool.
+- [ ] **Baseline Configuration**: Create `stryker-config.json` in the project root with optimal defaults for .NET 10.
+- [ ] **Project Targeting**: Configure Stryker to target `Mythril.Data.csproj` using `Mythril.Tests.csproj` as the test runner.
 
-### Phase 2: Location Management (Section 2)
-- [x] **Compact Mode**: Automatically collapse locations where all one-time quests are complete.
-- [x] **Visual Distinction**: Apply environment-specific CSS shapes/colors to location headers.
-- [x] **Active Task Indicator**: Show a pulsing dot on location headers for active character tasks.
+### Phase 2: Core Logic Mutation (Mythril.Data)
+- [ ] **Exclusion Rules**: Exclude DTOs, `Models.cs` (simple records), and generated code from mutation to reduce noise.
+- [ ] **Baseline Run**: Execute an initial Stryker run on the `ResourceManager` and `JunctionManager` to establish a current Mutation Score.
+- [ ] **Survivor Analysis**: Identify critical survivors in the Junction math and Resource scaling logic.
 
-### Phase 3: Cadence Intelligence (Section 3)
-- [x] **Equipped Status**: Render character portraits on Cadence expanders when assigned.
-- [x] **Ability Search**: Highlight Cadences containing specific searched abilities (e.g., "J-Str").
-- [x] **Tree Progress**: Display a percentage bar for ability unlock completion on headers.
+### Phase 3: Test Suite Hardening
+- [ ] **Junction Logic Fixes**: Add targeted MSTests to "kill" survivors in `JunctionManager.cs`.
+- [ ] **Resource Flow Fixes**: Add edge-case tests for `InventoryManager` and `ResourceManager_Logistics`.
+- [ ] **Simulation Verification**: Ensure `ReachabilitySimulator` logic is fully protected against logic mutations.
 
-### Phase 4: Workshop Optimization (Section 4)
-- [x] **Affordability Toggle**: Option to hide recipes with missing requirements.
-- [x] **Output Filtering**: Buttons to filter by Spells, Materials, or Consumables.
-- [x] **Favorites (Starring)**: Implement a "Star" system to pin frequent recipes.
-- [x] **Consolidated Groups**: Use sub-expanders for abilities with numerous recipes.
+### Phase 4: UI & Component Mutation (Mythril.Blazor)
+- [ ] **bUnit Integration**: Configure Stryker to run against `Mythril.Blazor` using the bUnit test suite.
+- [ ] **Conditional Rendering Protection**: Mutate conditional UI logic (e.g., `IsActive` dots, `IsCompact` expanders) to ensure tests fail if visual logic breaks.
 
-### Phase 5: Party & Tactile Interaction (Section 5)
-- [x] **Junction "Quick Swap"**: Enable dragging junctioned stats between character cards.
-- [x] **Character Mini-Log**: Add a small activity history (last 3 items) per character card.
+### Phase 5: Pipeline & Health Integration
+- [ ] **Health Check Integration**: Update `scripts/check_health.py` to optionally run Stryker and check for a minimum Mutation Score threshold.
+- [ ] **Reporting Utility**: Create a script to archive Stryker HTML reports into a `docs/mutation_reports/` directory.
+- [ ] **CI/CD Configuration**: (Future) Add Stryker steps to the GitHub Actions workflow.
 
-### Phase 6: Primary Asset Generation (Section 6)
-- [x] **Procedural Sprite Generator**: Python script (Pillow) for symmetrical 32x32 pixel-art icons.
-- [x] **Emoji "Baking"**: Utility to process OS emojis into pixel-art sprites.
-- [x] **Layered SVG Tinting**: System for color-swapping base SVG shapes (potions, scrolls).
-
-### Phase 7: Secondary Asset Techniques (Section 7)
-- [x] **CSS Primitives**: Implement clip-path and gradient-based magic items (e.g., fire diamonds).
-- [x] **SVG Sourcing**: Integrate Game-icons.net SVG library (via CSS masks).
-- [x] **CSS-to-Canvas Baking**: Runtime utility to convert complex CSS objects into PNG sprites. (Replaced with unified ItemIcon component)
-
-### Phase 8: General UX & Accessibility
-- [x] **Keyboard Shortcuts**: Map numeric keys `1-4` to main navigation tabs.
-- [x] **Contextual Help Overlay**: Implement a global `?` help system for mechanics.
-- [x] **Theme Persistence**: Polish high-contrast variants for all new UI components.
-- [x] **Standardized Tooltips**: Implement advanced descriptions across all grid systems.
+### Phase 6: Enforcement
+- [ ] **Threshold Setting**: Set a project-wide mandatory Mutation Score (e.g., 60% for Core Logic).
+- [ ] **Final Validation**: Pass health checks with mutation testing enabled.
