@@ -1,65 +1,59 @@
 .workshop-panel {
-    display: flex !important;
-    flex-direction: column !important;
-    flex: 1 !important;
-    min-height: 0 !important;
-    height: 100% !important;
-    background-color: var(--tab-bg);
-    color: var(--text-color);
-    overflow: hidden !important; /* Header stays fixed, content scrolls */
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-color: var(--panel-bg);
+}
+
+.workshop-controls {
+    background-color: var(--tab-inactive-bg);
 }
 
 .workshop-content {
-    padding: 1rem;
-    overflow-y: auto !important; /* Content area scrolls */
-    overflow-x: hidden !important;
-    flex: 1 !important;
-    min-height: 0 !important;
-}
-
-.no-refinements {
-    padding: 1rem;
-    color: var(--text-muted);
-    font-style: italic;
-    opacity: 0.7;
+    scrollbar-width: thin;
 }
 
 .refinement-group {
-    margin-bottom: 2rem;
-    border-bottom: 1px solid var(--border-color);
-    padding-bottom: 1rem;
+    border: 1px solid var(--panel-border);
+    border-radius: 8px;
+    padding: 10px;
+    background-color: var(--card-bg);
 }
 
 .refinement-group.locked {
-    opacity: 0.5;
-    filter: grayscale(1);
+    opacity: 0.6;
+    filter: grayscale(0.5);
+    background-color: rgba(0, 0, 0, 0.05);
 }
 
-.recipe-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 1rem;
+.refinement-group.starred {
+    border: 1px solid rgba(255, 193, 7, 0.3);
+    background-color: rgba(255, 193, 7, 0.02);
 }
 
-.recipe-card {
-    border: 1px solid var(--card-border);
-    border-radius: 8px;
-    padding: 0.75rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: var(--card-bg);
-    color: var(--text-color);
-}
-
-.recipe-details {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.9rem;
-}
-
-.arrow {
-    font-weight: bold;
+.group-header {
+    margin-bottom: 8px;
     color: var(--text-muted);
+    font-weight: 600;
+}
+
+.recipe-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 8px;
+}
+
+.x-small {
+    font-size: 0.65rem;
+    padding: 0.2em 0.5em;
+}
+
+.btn-xs {
+    padding: 1px 6px;
+    font-size: 0.7rem;
+}
+
+.form-check-input {
+    width: 2em;
+    height: 1em;
 }

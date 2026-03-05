@@ -1,15 +1,19 @@
 @using Microsoft.JSInterop
 
-<div class="expander">
-    <div class="expander-header" @onclick="Toggle">
+<div class="expander @(IsCompact ? "compact" : "") @(Type?.ToLower())">
+    <div class="expander-header" @onclick="Toggle" data-testid="expander-header-@Header?.Replace(" ", "-").ToLower()">
         <div class="d-flex align-items-center gap-2 flex-grow-1">
-            <span>@Header</span>
+            @if (IsActive)
+            {
+                <span class="active-dot pulse" title="Active Task In Progress"></span>
+            }
+            <span class="header-text">@Header</span>
             @if (TotalCount > 0)
             {
                 <span class="completion-counter small text-muted">(@CompletedCount/@TotalCount)</span>
                 @if (CompletedCount >= TotalCount)
                 {
-                    <span class="text-success small">✔</span>
+                    <span class="text-success small material-icons" style="font-size: 14px;">check_circle</span>
                 }
             }
         </div>
@@ -23,19 +27,28 @@
 </div>
 
 @code {
-    [Parameter]
-    public string? Header { get; set; }
+    [Parameter] public string? Header { get; set; }
+    [Parameter] public int CompletedCount { get; set; }
+    [Parameter] public int TotalCount { get; set; }
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public string? Type { get; set; }
+    [Parameter] public bool IsActive { get; set; }
+    [Parameter] public bool IsDefaultCollapsed { get; set; }
 
-    [Parameter]
-    public int CompletedCount { get; set; }
+    private bool isExpanded;
+    private bool IsCompact => TotalCount > 0 && CompletedCount >= TotalCount;
 
-    [Parameter]
-    public int TotalCount { get; set; }
+    protected override void OnParametersSet()
+    {
+        // Only set initial state once or if forced by logic
+        if (!initialSet)
+        {
+            isExpanded = !IsDefaultCollapsed && !IsCompact;
+            initialSet = true;
+        }
+    }
 
-    [Parameter]
-    public RenderFragment? ChildContent { get; set; }
-
-    private bool isExpanded = false;
+    private bool initialSet = false;
 
     private void Toggle()
     {

@@ -45,6 +45,13 @@
     flex-shrink: 0;
     position: relative;
 }
+.stat-badge.junctioned {
+    background: var(--junction-badge-bg);
+    color: var(--junction-badge-text);
+    font-weight: bold;
+    border: 1px solid var(--junction-badge-border);
+    cursor: grab;
+}
 .stat-badge.hovered {
     transform: scale(1.1);
     box-shadow: 0 0 5px var(--accent-color);
@@ -63,6 +70,22 @@
     animation: pulse-red 2s infinite;
 }
 
+.mini-log {
+    font-size: 0.65rem;
+    opacity: 0.6;
+    height: 3.6em; /* roughly 3 lines */
+    overflow: hidden;
+    line-height: 1.2;
+    background: rgba(0, 0, 0, 0.05);
+    padding: 2px 6px;
+    border-radius: 4px;
+    border-left: 2px solid var(--accent-color);
+}
+
+.log-entry {
+    color: var(--text-color);
+}
+
 @keyframes pulse-red {
     0% { background-color: rgba(220, 53, 69, 0.1); }
     50% { background-color: rgba(220, 53, 69, 0.3); }
@@ -74,12 +97,7 @@
     margin-left: 2px;
     text-shadow: 0 0 2px rgba(0,0,0,0.5);
 }
-.stat-badge.junctioned {
-    background: var(--junction-badge-bg);
-    color: var(--junction-badge-text);
-    font-weight: bold;
-    border: 1px solid var(--junction-badge-border);
-}
+
 .character-display.has-active-task {
     border-color: var(--secondary-color);
     box-shadow: 0 0 8px var(--secondary-color);

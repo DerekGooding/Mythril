@@ -1,9 +1,19 @@
 @using Mythril.Blazor.Services
+@using Mythril.Data
 @using Microsoft.JSInterop
 @inject DragDropService DragDropService
+@inject ResourceManager ResourceManager
 
-<div class="expander shadow-theme">
-    <div class="expander-header" @onclick="Toggle">
+<div class="expander shadow-theme @(IsHighlighted ? "highlighted" : "") @(isEquipped ? "equipped" : "")">
+    <div class="expander-header d-flex align-items-center" @onclick="Toggle">
+        @if (assignedCharacter.HasValue)
+        {
+            <div class="equipped-portrait me-2" title="Equipped by @assignedCharacter.Value.Name">
+                <span class="material-icons" style="font-size: 20px;">account_circle</span>
+                <span class="character-initial">@assignedCharacter.Value.Name[0]</span>
+            </div>
+        }
+
         <div class="inventory-item cadence-draggable flex-grow-1" draggable="true" @ondragstart="HandleDragStart" @onclick:stopPropagation="true">
             <div class="d-flex flex-column text-start">
                 <div class="d-flex align-items-center gap-2">
@@ -13,11 +23,14 @@
                         <span class="completion-counter small text-muted">(@CompletedCount/@TotalCount)</span>
                         @if (CompletedCount >= TotalCount)
                         {
-                            <span class="text-success small">✔</span>
+                            <span class="text-success small material-icons" style="font-size: 14px;">check_circle</span>
                         }
                     }
                 </div>
-                <span class="small text-muted">@Cadence.Description</span>
+                <div class="progress cadence-progress-mini mt-1" style="height: 2px;">
+                    <div class="progress-bar bg-info" role="progressbar" style="width: @(ProgressPercent)%;"></div>
+                </div>
+                <span class="small text-muted x-small-desc">@Cadence.Description</span>
             </div>
         </div>
         <span class="expander-icon @(isExpanded ? "expanded" : "")">▼</span>
@@ -30,24 +43,18 @@
 </div>
 
 @code {
-    [Parameter]
-    public Cadence Cadence { get; set; }
-
-    [Parameter]
-    public int CompletedCount { get; set; }
-
-    [Parameter]
-    public int TotalCount { get; set; }
-
-    [Parameter]
-    public RenderFragment? ChildContent { get; set; }
+    [Parameter] public Cadence Cadence { get; set; }
+    [Parameter] public int CompletedCount { get; set; }
+    [Parameter] public int TotalCount { get; set; }
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public bool IsHighlighted { get; set; }
 
     private bool isExpanded = false;
+    private Character? assignedCharacter => ResourceManager.JunctionManager.GetAssignedCharacter(Cadence);
+    private bool isEquipped => assignedCharacter.HasValue;
+    private int ProgressPercent => TotalCount > 0 ? (CompletedCount * 100 / TotalCount) : 0;
 
-    private void Toggle()
-    {
-        isExpanded = !isExpanded;
-    }
+    private void Toggle() => isExpanded = !isExpanded;
 
     private void HandleDragStart(DragEventArgs args)
     {
@@ -55,7 +62,6 @@
         {
             args.DataTransfer.EffectAllowed = "move";
             DragDropService.Data = Cadence;
-            Console.WriteLine($"Dragging Cadence: {Cadence.Name}");
         }
     }
 }

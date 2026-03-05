@@ -1,0 +1,33 @@
+@using Mythril.Data
+
+<div class="item-icon @(Item.ItemType == ItemType.Spell ? "spell-glow" : "")" style="@GetIconStyle()">
+    @if (hasSprite)
+    {
+        <img src="assets/sprites/@(Item.Name.ToLower().Replace(" ", "_")).png" 
+             class="item-sprite" 
+             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+    }
+    
+    <div class="icon-fallback d-flex align-items-center justify-content-center" style="@(hasSprite ? "display:none;" : "")">
+        @if (Item.ItemType == ItemType.Spell)
+        {
+            <div class="spell-primitive @(Item.Name.ToLower().Split(' ')[0])"></div>
+        }
+        else
+        {
+            <span class="initial">@Item.Name[0]</span>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter] public Item Item { get; set; }
+
+    private bool hasSprite => true; // We generated most of them
+
+    private string GetIconStyle()
+    {
+        // Add dynamic color based on name hash if no sprite
+        return "";
+    }
+}

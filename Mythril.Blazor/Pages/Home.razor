@@ -5,7 +5,49 @@
 
 <PageTitle>Mythril</PageTitle>
 
-<div class="container-fluid d-flex flex-column p-0 overflow-hidden">
+<div class="container-fluid d-flex flex-column p-0 overflow-hidden" 
+     tabindex="0" 
+     @onkeydown="HandleGlobalKeyDown"
+     style="outline: none;">
+    
+    @if (_showHelp)
+    {
+        <div class="help-overlay shadow-lg" @onclick="() => _showHelp = false">
+            <div class="help-content p-4" @onclick:stopPropagation="true">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h3>Mythril Help</h3>
+                    <button class="btn-close" @onclick="() => _showHelp = false"></button>
+                </div>
+                
+                <section class="mb-4">
+                    <h5>⌨️ Keyboard Shortcuts</h5>
+                    <ul class="list-unstyled">
+                        <li><kbd>1</kbd> - Locations</li>
+                        <li><kbd>2</kbd> - Cadences</li>
+                        <li><kbd>3</kbd> - Workshop</li>
+                        <li><kbd>4</kbd> - Journal</li>
+                        <li><kbd>?</kbd> - Toggle Help</li>
+                    </ul>
+                </section>
+
+                <section class="mb-4">
+                    <h5>⛓️ Junction System</h5>
+                    <p class="small">Assign a <strong>Cadence</strong> to a character to unlock Stat Junctions. Drag <strong>Magic</strong> from your inventory onto a Stat Badge to increase that attribute.</p>
+                    <code>Stat = Base(10) + (Quantity * Modifier / 100)</code>
+                </section>
+
+                <section>
+                    <h5>🤖 Automation</h5>
+                    <p class="small">Unlock the <strong>AutoQuest</strong> ability in the Recruit cadence to allow characters to automatically repeat tasks when completed.</p>
+                </section>
+
+                <div class="mt-4 text-center">
+                    <button class="btn btn-primary" @onclick="() => _showHelp = false">Got it!</button>
+                </div>
+            </div>
+        </div>
+    }
+
     <!-- Header Row -->
     <div class="header-row flex-shrink-0 p-2 d-flex align-items-center gap-3">
         <div class="d-flex flex-column gap-1">

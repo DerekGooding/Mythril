@@ -18,6 +18,8 @@ public partial class ResourceManager
         OnJournalUpdated?.Invoke();
     }
 
+    public Dictionary<string, Queue<string>> CharacterMiniLogs = [];
+
     private void AddToJournal(string taskName, string characterName, string details)
     {
         lock(_questLock)
@@ -28,6 +30,14 @@ public partial class ResourceManager
             {
                 Journal.RemoveAt(Journal.Count - 1);
             }
+
+            // Update mini-log
+            if (!CharacterMiniLogs.ContainsKey(characterName))
+                CharacterMiniLogs[characterName] = new Queue<string>();
+            
+            var log = CharacterMiniLogs[characterName];
+            log.Enqueue(taskName);
+            if (log.Count > 3) log.Dequeue();
         }
         OnJournalUpdated?.Invoke();
     }

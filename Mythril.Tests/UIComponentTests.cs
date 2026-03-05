@@ -172,7 +172,24 @@ public class UIComponentTests : BunitTestBase
 
         // Assert
         var text = cut.Find(".refinement-info").TextContent;
-        Assert.IsTrue(text.Contains("1 x Basic Gem"));
-        Assert.IsTrue(text.Contains("5 x Fire I"));
+        Assert.IsTrue(text.Contains("1 Basic Gem"));
+        Assert.IsTrue(text.Contains("5 Fire I"));
+    }
+
+    [TestMethod]
+    public void ItemIcon_RendersCorrectly()
+    {
+        // Arrange
+        var item = new Item("Fire I", "Desc", ItemType.Spell);
+
+        // Act
+        var cut = RenderComponent<ItemIcon>(parameters => parameters.Add(p => p.Item, item));
+
+        // Assert
+        // Should have spell-glow class for spells
+        Assert.IsTrue(cut.Find(".item-icon").ClassList.Contains("spell-glow"));
+        // Should have the primitive div for spells (fallback)
+        var primitive = cut.Find(".spell-primitive");
+        Assert.IsTrue(primitive.ClassList.Contains("fire"));
     }
 }

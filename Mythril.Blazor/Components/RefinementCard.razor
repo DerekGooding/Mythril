@@ -3,28 +3,40 @@
 @inject DragDropService DragDropService
 @inject ResourceManager ResourceManager
 
-<div class="refinement-card @(canAfford ? "" : "insufficient")" 
+<div class="refinement-card shadow-sm @(canAfford ? "" : "insufficient") @(isStarred ? "starred" : "")" 
+     data-testid="refinement-card-@Refinement.Name.Replace(" ", "-").ToLower()"
      draggable="true" 
      @ondragstart="HandleDragStart">
-    <div class="card-content">
-        <div class="refinement-info">
-            <div class="io-row">
-                <span class="input">@Refinement.Recipe.InputQuantity x @Refinement.InputItem.Name</span>
-                <span class="arrow">→</span>
-                <span class="output">@Refinement.Recipe.OutputQuantity x @Refinement.Recipe.OutputItem.Name</span>
+    <div class="card-content d-flex align-items-center">
+        <button class="btn btn-link p-0 me-2 star-btn @(isStarred ? "text-warning" : "text-muted")" 
+                @onclick="ToggleStar" @onclick:stopPropagation="true">
+            <span class="material-icons" style="font-size: 18px;">@(isStarred ? "star" : "star_border")</span>
+        </button>
+
+        <div class="refinement-info flex-grow-1">
+            <div class="io-row d-flex justify-content-between align-items-center">
+                <span class="input small">@Refinement.Recipe.InputQuantity <span class="text-muted">@Refinement.InputItem.Name</span></span>
+                <span class="arrow text-muted mx-1">→</span>
+                <span class="output fw-bold small">@Refinement.Recipe.OutputQuantity @Refinement.Recipe.OutputItem.Name</span>
             </div>
-            <div class="duration">
-                <small>@(ResourceManager.IsTestMode ? "2s" : "15s") <span class="text-info" title="Stat used to improve task time">⚡ @Refinement.PrimaryStat</span></small>
+            <div class="duration x-small-text">
+                <span>@(ResourceManager.IsTestMode ? "2s" : "15s")</span>
+                <span class="text-info ms-2">⚡ @Refinement.PrimaryStat</span>
             </div>
         </div>
     </div>
 </div>
 
 @code {
-    [Parameter]
-    public RefinementData Refinement { get; set; }
+    [Parameter] public RefinementData Refinement { get; set; }
 
     private bool canAfford => ResourceManager.Inventory.Has(Refinement.InputItem, Refinement.Recipe.InputQuantity);
+    private bool isStarred => ResourceManager.StarredRecipes.Contains(Refinement.Name);
+
+    private void ToggleStar()
+    {
+        ResourceManager.ToggleRecipeStar(Refinement.Name);
+    }
 
     private void HandleDragStart(DragEventArgs args)
     {

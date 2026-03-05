@@ -15,8 +15,11 @@
             @foreach (var location in Locations.Where(l => l.Quests.Any()))
             {
                 var stats = GetCompletionStats(location);
+                bool isActive = IsLocationActive(location);
                 <Expander Header="@location.Name" 
                           @key="@location.Name"
+                          Type="@GetLocationType(location)"
+                          IsActive="@isActive"
                           CompletedCount="@stats.Completed"
                           TotalCount="@stats.Total">
                     @{
@@ -44,6 +47,19 @@
     private bool _sortByDuration;
 
     public QuestData QuestToData(Quest quest) => new QuestData(quest, ResourceManager.GetQuestDetails(quest));
+
+    private string GetLocationType(LocationData data)
+    {
+        // Find the original location record to get its Type
+        var original = ResourceManager.GetLocation(data.Name);
+        return original.Type ?? "Plains";
+    }
+
+    private bool IsLocationActive(LocationData data)
+    {
+        var activeQuestNames = ResourceManager.ActiveQuests.Select(q => q.Name).ToHashSet();
+        return data.Quests.Any(q => activeQuestNames.Contains(q.Name));
+    }
 
     private (int Completed, int Total) GetCompletionStats(LocationData location)
     {

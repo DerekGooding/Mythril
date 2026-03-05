@@ -73,6 +73,8 @@
                         
                         <span @key="stat.Name" 
                               class="stat-badge @(junction != null ? "junctioned" : "") @(isHovered ? "hovered" : "") @(canJunction ? "can-junction" : "locked") @(_isRemovalMode && junction != null ? "removal-target" : "")" 
+                              draggable="@(junction != null ? "true" : "false")"
+                              @ondragstart="() => HandleStatDragStart(stat, junction)"
                               title="@stat.Description @(junction != null ? $"(J: {junction.Magic.Name})" : "")"
                               @onclick="() => { if(_isRemovalMode && junction != null) ClearJunction(stat); }"
                               @ondragenter="() => HandleStatDragEnter(stat)"
@@ -91,6 +93,16 @@
                 </div>
             </div>
         </div>
+
+        @if (resourceManager.CharacterMiniLogs.TryGetValue(Character.Name, out var log) && log.Any())
+        {
+            <div class="mini-log mt-1">
+                @foreach (var entry in log.Reverse())
+                {
+                    <div class="log-entry text-truncate">@entry</div>
+                }
+            </div>
+        }
 
         <div class="task-slots-container mt-2 d-flex flex-column gap-2">
             @for (int i = 0; i < taskLimit; i++)

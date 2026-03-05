@@ -58,6 +58,14 @@ public partial class ResourceManager
     private readonly Dictionary<string, bool> _autoQuestEnabled = [];
     public IReadOnlyDictionary<string, bool> AutoQuestEnabled => _autoQuestEnabled;
 
+    public HashSet<string> StarredRecipes = [];
+
+    public void ToggleRecipeStar(string recipeKey)
+    {
+        if (!StarredRecipes.Add(recipeKey))
+            StarredRecipes.Remove(recipeKey);
+    }
+
     public bool IsTestMode { get; set; } = false;
 
     public bool HasUnseenCadence { get; set; } = false;

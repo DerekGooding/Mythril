@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
 using Mythril.Blazor.Services;
 using Mythril.Data;
@@ -22,6 +23,21 @@ public partial class Home : IDisposable
     private System.Timers.Timer? timer;
     private int saveCounter = 0;
     private int _versionClicks = 0;
+    private bool _showHelp = false;
+
+    private async Task HandleGlobalKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "1") await SwitchTab("hand-tab");
+        if (e.Key == "2") await SwitchTab("cadence-tab");
+        if (e.Key == "3") await SwitchTab("workshop-tab");
+        if (e.Key == "4") await SwitchTab("journal-tab");
+        if (e.Key == "?" || e.Key == "/") _showHelp = !_showHelp;
+    }
+
+    private async Task SwitchTab(string tabId)
+    {
+        await JS.InvokeVoidAsync("eval", $"document.getElementById('{tabId}').click()");
+    }
 
     protected override async Task OnInitializedAsync()
     {

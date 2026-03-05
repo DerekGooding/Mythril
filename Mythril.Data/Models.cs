@@ -74,7 +74,7 @@ public readonly record struct CadenceUnlock(string CadenceName, CadenceAbility A
 public partial record struct Cadence(string Name, string Description, CadenceUnlock[] Abilities) : INamed;
 
 // Location types
-public partial record struct Location(string Name, IEnumerable<Quest> Quests, string? RequiredQuest = null) : INamed;
+public partial record struct Location(string Name, IEnumerable<Quest> Quests, string? RequiredQuest = null, string? Type = null) : INamed;
 
 // Character
 public partial record struct Character(string Name);
@@ -108,7 +108,8 @@ public class SaveData
     public List<JunctionDTO> Junctions { get; set; } = [];
     public List<AssignedCadenceDTO> AssignedCadences { get; set; } = [];
     public Dictionary<string, bool> AutoQuestEnabled { get; set; } = [];
-    public List<string> UnlockedLocations { get; set; } = []; // Added UnlockedLocations
+    public List<string> UnlockedLocations { get; set; } = []; 
+    public List<string> StarredRecipes { get; set; } = [];
     public bool HasUnseenCadence { get; set; }
     public bool HasUnseenWorkshop { get; set; }
     public DateTime LastSaveTime { get; set; }
@@ -153,7 +154,7 @@ public class JournalEntryDTO
 
 // Data Transfer Objects for JSON Loading
 public class ItemQuantityDTO { public string Item { get; set; } = ""; public int Quantity { get; set; } = 1; }
-public class LocationDTO { public string Name { get; set; } = ""; public List<string> Quests { get; set; } = []; public string? RequiredQuest { get; set; } }
+public class LocationDTO { public string Name { get; set; } = ""; public List<string> Quests { get; set; } = []; public string? RequiredQuest { get; set; } public string? Type { get; set; } }
 public class CadenceAbilityUnlockDTO 
 { 
     public string Ability { get; set; } = ""; 

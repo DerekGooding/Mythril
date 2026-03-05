@@ -55,6 +55,8 @@ public class JunctionManager(
         }
     }
 
+    public Character? GetAssignedCharacter(Cadence cadence) => _assignedCadences.GetValueOrDefault(cadence);
+
     public IEnumerable<Cadence> CurrentlyAssigned(Character character)
         => _assignedCadences.Where(x => x.Value?.Name == character.Name).Select(x => x.Key);
 

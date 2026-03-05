@@ -1,85 +1,89 @@
 # Game Content Health Report
-Generated: 2026-03-05 09:30:17
+Generated: 2026-03-05 11:08:20
 
 ## 💀 Reachability Analysis
 ### Unreachable Quests
+- Recover the Ancient Tome
+- Learn About Cadences
+- Learn about the Dark Forest
+- Hunt Goblins
+- Chop Wood
+- Learn about the Mines
+- Hunt Bats
+- Hunt Spiders
+- Hunt Slimes
+- Unlock Mining
+- Mine Iron Ore
+- Gather Moonberries
+- Defeat Treant Guardian
+- Ancient Inscriptions
+- Finding the Hearth
+- Rekindling the Spark
+- Help the lumberjack
+- Locate the Hidden Oasis
+- Purify the Grove
+- Power the Forge
 - Shatter the Crystals
 - High Altitude Survey
+- Harvest Sea-Life
+- Deep Sea Scavenge
+- Archive Sifting
+- Study Ancient Texts
 - Defeat the Mythril Construct
 - Ascetic Meditation
 - Heavy Training
-Estimated End-Game Time: 8.9m
+Estimated End-Game Time: 1.0m
 
 ### Unreachable Resources
+- Log
+- Herb
+- Leather
+- Water
+- Web
+- Slime
+- Moonberry
+- Ancient Bark
+- Mana Leaf
+- Fire Shard
 - Ice Shard
+- Mythril Spark
+- Solar Essence
+- Crystal Shards
+- Blue Coral
+- Lost Parchment
+- Fire I
+- Ice I
 - Lightning I
 - Earth I
 - Water I
 - Haste I
+- Cure I
 
 ## ⚖️ Economic Sustainability
 ### Sustainable Recurring Activities
-- Hunt Sand-Sharks
-- Power the Forge
-- Buy Potion
-- Hunt Bats
-- Mine Iron Ore
 - Tutorial Section
-- Study Ancient Texts
-- Refine Fire:Iron Ore->Fire I
-- Chop Wood
-- Archive Sifting
-- Hunt Goblins
-- Hunt Slimes
-- Deep Sea Scavenge
-- Harvest Sea-Life
-- Hunt Spiders
-- Refine Scrap:Web->Gold
+- Hunt Sand-Sharks
 - Scavenge Scrap
-- Gather Moonberries
 
 ### ⚠️ Unsustainable Activities (Reachable but starving)
-- Purify the Grove
-- Refine Scrap:Slime->Gold
-- Refine Life:Ancient Bark->Cure I
-- Refine Ice:Mana Leaf->Ice I
-- Refine Wood:Log->Herb
-- Refine Mixology:Herb->Potion
-- Refine Fire:Basic Gem->Fire I
+- Buy Potion
 - Sell Gem
-- Refine Ice:Moonberry->Ice I
 
 ### Net Resource Rates (per second)
+- **Basic Gem**: 0.0513/s
+- **Iron Ore**: 0.0684/s
 - **Sun-baked Scale**: 0.0171/s
-- **Log**: 0.0411/s
-- **Fire I**: 0.2027/s
-- **Leather**: 0.0936/s
-- **Mythril Spark**: 0.0203/s
-- **Basic Gem**: 0.1873/s
-- **Web**: 0.2166/s
-- **Slime**: 0.0855/s
-- **Blue Coral**: 0.0375/s
-- **Mana Leaf**: 0.0355/s
-- **Lost Parchment**: 0.0203/s
-- **Ancient Bark**: 0.0205/s
-- **Moonberry**: 0.0198/s
-- **Potion**: 0.0527/s
-- **Gold**: 22.3851/s
-- **Fire Shard**: 0.0257/s
-- **Water**: 0.1873/s
-- **Iron Ore**: 0.0492/s
+- **Gold**: 1.7107/s
 
 ## 🔄 Feedback Loops
 ✅ No unbounded growth loops detected (approximation).
 
 ## ⏱️ Progression & Pacing
 ### Potential Economic Stalls
-- **Defeat the Mythril Construct**: Delayed by Fire I (8.2m)
-- **Ascetic Meditation**: Delayed by Potion (6.3m)
-- **Heavy Training**: Delayed by Potion (6.3m)
+- **Unlock Mining**: Delayed by Gold (9.7m)
 
 ## 📈 Maximum Achievable Stats
 - **Strength**: 25
-- **Vitality**: 70
-- **Magic**: 55
-- **Speed**: 40
+- **Vitality**: 25
+- **Magic**: 25
+- **Speed**: 25

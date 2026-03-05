@@ -13,8 +13,7 @@
      title="@Item.Item.Name: @Item.Item.Description @(isAtMaxCapacity ? "(MAX)" : "")">
     
     <div class="item-icon-container">
-        <!-- Future: Sprite here -->
-        <div class="item-initial">@Item.Item.Name[0]</div>
+        <ItemIcon Item="Item.Item" />
         @if (InventoryManager.IsPinned(Item.Item.Name))
         {
             <span class="pin-icon material-icons" data-testid="pin-icon">push_pin</span>

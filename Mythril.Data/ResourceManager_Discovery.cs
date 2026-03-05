@@ -15,6 +15,8 @@ public partial class ResourceManager
         }
     }
 
+    public Location GetLocation(string name) => _locations.All.FirstOrDefault(l => l.Name == name);
+
     public bool IsQuestUnlocked(Quest quest)
     {
         if ((_questDetails[quest].Type == QuestType.Single || _questDetails[quest].Type == QuestType.Unlock) && _completedQuests.Contains(quest))

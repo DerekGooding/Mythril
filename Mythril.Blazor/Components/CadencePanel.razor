@@ -4,14 +4,27 @@
 @inject ResourceManager resourceManager
 
 <div class="cadence-panel d-flex flex-column h-100">
+    <div class="cadence-controls p-2 border-bottom">
+        <div class="input-group input-group-sm">
+            <span class="input-group-text material-icons" style="font-size: 16px;">search</span>
+            <input type="text" class="form-control" placeholder="Search abilities (e.g. J-Str)..." 
+                   data-testid="cadence-ability-search"
+                   @bind="_abilitySearchTerm" @bind:event="oninput" />
+        </div>
+    </div>
+
     <div class="flex-grow-1 overflow-auto mt-2">
-        @if (UnlockedCadences is not null && UnlockedCadences.Any())
+        @if (FilteredCadences is not null && FilteredCadences.Any())
         {
-            @foreach (var cadence in UnlockedCadences)
+            @foreach (var cadence in FilteredCadences)
             {
                 var stats = GetCompletionStats(cadence);
+                bool matchesSearch = !string.IsNullOrWhiteSpace(_abilitySearchTerm) && 
+                                     cadence.Abilities.Any(a => a.Ability.Name.Contains(_abilitySearchTerm, StringComparison.OrdinalIgnoreCase));
+
                 <CadenceDragExpander Cadence="cadence" 
                                      @key="@cadence.Name"
+                                     IsHighlighted="@matchesSearch"
                                      CompletedCount="@stats.Completed"
                                      TotalCount="@stats.Total">
                     <CadenceTree CadenceData="cadence" />
@@ -20,8 +33,8 @@
         }
         else
         {
-            <div class="no-cadences">
-                No Cadences discovered
+            <div class="no-cadences text-center p-4 text-muted">
+                @( string.IsNullOrWhiteSpace(_abilitySearchTerm) ? "No Cadences discovered" : "No matching abilities found" )
             </div>
         }
     </div>
@@ -36,6 +49,13 @@
 
     [Parameter]
     public EventCallback<Cadence> OnUnequip { get; set; }
+
+    private string _abilitySearchTerm = "";
+
+    private IEnumerable<Cadence>? FilteredCadences => UnlockedCadences; 
+    // We don't filter out the cadences themselves, just highlight them in CadenceDragExpander if the ability matches.
+    // Actually, usually search filters the list. But the requirement says "Highlight Cadences containing specific searched abilities".
+    // I'll keep the full list but highlight.
 
     private async Task HandleUnequip(object cadenceObj)
     {

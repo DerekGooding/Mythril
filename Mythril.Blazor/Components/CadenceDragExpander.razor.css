@@ -4,25 +4,70 @@
     margin-bottom: 10px;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
+    transition: all 0.3s;
+}
+
+.expander.highlighted {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 10px var(--accent-color);
+    transform: scale(1.02);
+    z-index: 10;
+}
+
+.expander.equipped {
+    border-left: 4px solid var(--accent-color);
 }
 
 .expander-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px;
+    padding: 8px 12px;
     cursor: pointer;
     background-color: var(--tab-inactive-bg);
     color: var(--text-color);
     flex-shrink: 0;
 }
 
+.equipped-portrait {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent-color);
+}
+
+.character-initial {
+    position: absolute;
+    font-size: 0.6rem;
+    font-weight: bold;
+    color: var(--panel-bg);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
 .expander-icon {
     transition: transform 0.2s;
+    opacity: 0.5;
 }
 
 .expander-icon.expanded {
     transform: rotate(180deg);
+}
+
+.cadence-progress-mini {
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 1px;
+    overflow: hidden;
+}
+
+.x-small-desc {
+    font-size: 0.7rem;
+    line-height: 1;
+    margin-top: 2px;
+    opacity: 0.7;
 }
 
 .expander-content {
@@ -41,20 +86,18 @@
 
 .expander-inner {
     min-height: 0;
+    padding: 0;
 }
 
 .inventory-item {
     position: relative;
-    border: 1px solid var(--item-border);
-    border-radius: 3px;
-    padding: 5px;
-    text-align: center;
-    box-shadow: var(--shadow-sm);
+    border: none;
+    padding: 0;
+    text-align: left;
     transition: all 0.2s ease-in-out;
-    background-color: var(--item-bg);
+    background-color: transparent;
     color: var(--text-color);
     flex-grow: 1;
-    margin-right: 10px;
 }
 
 .cadence-draggable {
@@ -65,22 +108,18 @@
     cursor: grabbing;
 }
 
-.inventory-item:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
-}
-
 .item-name {
     font-weight: bold;
     color: var(--text-color);
+    font-size: 0.9rem;
 }
 
 .completion-counter {
     font-variant-numeric: tabular-nums;
     font-weight: normal;
+    font-size: 0.75rem;
 }
 
 .text-success {
     color: #28a745;
-    font-weight: bold;
 }

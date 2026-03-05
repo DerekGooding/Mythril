@@ -4,42 +4,94 @@
 @inject ItemRefinements refinements
 @inject SnackbarService SnackbarService
 
-<div class="workshop-panel">
-    <div class="workshop-content">
+<div class="workshop-panel shadow-theme" data-testid="workshop-panel">
+    <div class="workshop-controls d-flex gap-2 p-2 border-bottom align-items-center">
+        <div class="form-check form-switch me-2">
+            <input class="form-check-input" type="checkbox" id="affordToggle" data-testid="workshop-afford-toggle" @bind="_showAffordableOnly">
+            <label class="form-check-label small" for="affordToggle">Affordable Only</label>
+        </div>
+
+        <div class="workshop-tabs d-flex gap-1 flex-grow-1">
+            @foreach (var type in _outputFilters)
+            {
+                <button class="btn btn-xs @(_activeFilter == type ? "btn-primary" : "btn-outline-secondary")"
+                        data-testid="workshop-filter-@type.ToLower()"
+                        @onclick="() => _activeFilter = type">
+                    @type
+                </button>
+            }
+        </div>
+    </div>
+
+    <div class="workshop-content overflow-auto p-2" style="max-height: 600px;">
         @{
             var discoveredRefinements = refinements.ByKey
                 .Where(r => UnlockedAbilities?.Any(ua => ua.EndsWith($":{r.Key.Name}")) == true)
                 .ToList();
+
+            // Apply Filters
+            var filteredGroups = discoveredRefinements.Select(g => new {
+                Ability = g.Key,
+                Recipes = g.Value.Recipes.Select(r => new RefinementData(g.Key, r.Key, r.Value, g.Value.PrimaryStat))
+                    .Where(rd => !_showAffordableOnly || resourceManager.Inventory.Has(rd.InputItem, rd.Recipe.InputQuantity))
+                    .Where(rd => _activeFilter == "All" || (rd.Recipe.OutputItem.ItemType.ToString() + "s").Contains(_activeFilter, StringComparison.OrdinalIgnoreCase))
+                    .ToList(),
+                PrimaryStat = g.Value.PrimaryStat
+            }).Where(g => g.Recipes.Any()).ToList();
+
+            // Separate Starred
+            var allRecipes = filteredGroups.SelectMany(g => g.Recipes).ToList();
+            var starredRecipes = allRecipes.Where(r => resourceManager.StarredRecipes.Contains(r.Name)).ToList();
         }
 
-        @if (discoveredRefinements.Any())
+        @if (starredRecipes.Any())
         {
-            @foreach (var refinementGroup in discoveredRefinements)
+            <div class="refinement-group starred mb-3">
+                <h6 class="text-warning d-flex align-items-center gap-1">
+                    <span class="material-icons" style="font-size: 16px;">star</span> Favorites
+                </h6>
+                <div class="recipe-grid">
+                    @foreach (var recipe in starredRecipes)
+                    {
+                        <RefinementCard Refinement="@recipe" @key="@("star-" + recipe.Name)" />
+                    }
+                </div>
+            </div>
+        }
+
+        @if (filteredGroups.Any())
+        {
+            @foreach (var group in filteredGroups)
             {
-                var ability = refinementGroup.Key;
-                // Check if ANY character has a cadence assigned that has this ability UNLOCKED
+                var ability = group.Ability;
                 var anyoneHasAbility = resourceManager.Characters.Any(c => resourceManager.HasAbility(c, ability));
                 
-                <div @key="ability.Name" class="refinement-group @(anyoneHasAbility ? "" : "locked")">
-                    <h4>@ability.Name @(anyoneHasAbility ? "" : "(Assign a character with this ability to unlock)")</h4>
+                <div @key="ability.Name" class="refinement-group mb-3 @(anyoneHasAbility ? "" : "locked")">
+                    <h6 class="group-header d-flex justify-content-between align-items-center">
+                        <span>@ability.Name @(anyoneHasAbility ? "" : " (Assign Character)")</span>
+                        <span class="badge bg-secondary x-small">@group.Recipes.Count Recipes</span>
+                    </h6>
                     
-                    <div class="recipe-list">
-                        @foreach (var recipeKvp in refinementGroup.Value.Recipes)
+                    <div class="recipe-grid">
+                        @foreach (var recipe in group.Recipes.Where(r => !resourceManager.StarredRecipes.Contains(r.Name)))
                         {
-                            var inputItem = recipeKvp.Key;
-                            var recipe = recipeKvp.Value;
-                            var refinementData = new RefinementData(ability, inputItem, recipe, refinementGroup.Value.PrimaryStat);
-                            
-                            <RefinementCard Refinement="@refinementData" @key="@(ability.Name + inputItem.Name)" />
+                            <RefinementCard Refinement="@recipe" @key="@recipe.Name" />
                         }
                     </div>
                 </div>
             }
         }
+        else if (!discoveredRefinements.Any())
+        {
+            <div class="no-refinements text-center p-4 text-muted">
+                <span class="material-icons d-block mb-2">science</span>
+                No refinements discovered
+            </div>
+        }
         else
         {
-            <div class="no-refinements">
-                No refinements discovered
+            <div class="no-results text-center p-4 text-muted">
+                No recipes match your filters.
             </div>
         }
     </div>
@@ -48,4 +100,8 @@
 @code {
     [Parameter]
     public HashSet<string>? UnlockedAbilities { get; set; }
+
+    private bool _showAffordableOnly = false;
+    private string _activeFilter = "All";
+    private string[] _outputFilters = ["All", "Spells", "Materials"];
 }

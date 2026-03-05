@@ -1,41 +1,62 @@
 .refinement-card {
-    border: 1px solid var(--card-border);
-    border-radius: 8px;
-    padding: 0.75rem;
-    margin-bottom: 0.5rem;
-    background: var(--card-bg);
+    border: 1px solid var(--panel-border);
+    border-radius: 6px;
+    padding: 6px 10px;
+    background: var(--item-bg);
     color: var(--text-color);
     cursor: grab;
-    transition: transform 0.1s ease, box-shadow 0.1s ease;
-}
-
-.refinement-card:active {
-    cursor: grabbing;
+    transition: all 0.1s;
+    user-select: none;
 }
 
 .refinement-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    border-color: var(--accent-color);
+    background-color: var(--tab-inactive-bg);
+}
+
+.refinement-card.starred {
+    background: linear-gradient(135deg, var(--item-bg) 0%, rgba(255, 193, 7, 0.05) 100%);
+    border-color: rgba(255, 193, 7, 0.5);
 }
 
 .refinement-card.insufficient {
-    opacity: 0.6;
-    border-style: dashed;
+    opacity: 0.5;
+    border-style: dotted;
+}
+
+.star-btn {
+    text-decoration: none;
+    line-height: 1;
+    transition: transform 0.1s;
+}
+
+.star-btn:hover {
+    transform: scale(1.2);
+}
+
+.refinement-info {
+    min-width: 0;
 }
 
 .io-row {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.9rem;
-    font-weight: 500;
+    line-height: 1.2;
 }
 
-.arrow {
-    color: var(--text-muted);
+.x-small-text {
+    font-size: 0.65rem;
+    opacity: 0.6;
+    margin-top: 2px;
 }
 
-.duration {
-    margin-top: 0.25rem;
-    color: var(--text-muted);
+.input {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.output {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: right;
 }

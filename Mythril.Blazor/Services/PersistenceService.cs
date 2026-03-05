@@ -41,8 +41,9 @@ public class PersistenceService(
                     CadenceName = cad.Name 
                 }))
                 .ToList(),
-            AutoQuestEnabled = resourceManager.AutoQuestEnabled.ToDictionary(x => x.Key, x => x.Value),
+            AutoQuestEnabled = resourceManager.AutoQuestEnabled.ToDictionary(kvp => kvp.Key, kvp => kvp.Value),
             UnlockedLocations = resourceManager.UnlockedLocationNames.ToList(),
+            StarredRecipes = resourceManager.StarredRecipes.ToList(),
             HasUnseenCadence = resourceManager.HasUnseenCadence,
             HasUnseenWorkshop = resourceManager.HasUnseenWorkshop,
             CharacterStatBoosts = junctionManager.CharacterStatBoosts.ToDictionary(x => x.Key, x => x.Value.ToDictionary(y => y.Key, y => y.Value)),

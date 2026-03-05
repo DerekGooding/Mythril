@@ -1,14 +1,70 @@
 [
-  { "Name": "Village", "Quests": ["Prologue", "Tutorial Section", "Visit Starting Town"] },
-  { "Name": "Starting Town", "Quests": ["Buy Potion", "Learn About Cadences", "Learn about the Mines", "Learn about the Dark Forest", "Recover the Ancient Tome", "Help the lumberjack", "Sell Gem"] },
-  { "Name": "Dark Forest", "Quests": ["Hunt Goblins", "Chop Wood"], "RequiredQuest": "Learn about the Dark Forest" },
-  { "Name": "Iron Mines", "Quests": ["Hunt Bats", "Hunt Spiders", "Hunt Slimes", "Unlock Mining", "Mine Iron Ore"], "RequiredQuest": "Learn about the Mines" },
-  { "Name": "Whispering Woods", "Quests": ["Gather Moonberries", "Defeat Treant Guardian", "Purify the Grove"], "RequiredQuest": "Learn about the Dark Forest" },
-  { "Name": "Ancient Ruins", "Quests": ["Ancient Inscriptions", "Finding the Hearth", "Rekindling the Spark", "Power the Forge"], "RequiredQuest": "Learn About Cadences" },
-  { "Name": "Sun-Drenched Desert", "Quests": ["Scavenge Scrap", "Hunt Sand-Sharks", "Locate the Hidden Oasis"], "RequiredQuest": "Recover the Ancient Tome" },
-  { "Name": "Crystal Peaks", "Quests": ["Shatter the Crystals", "High Altitude Survey"], "RequiredQuest": "Finding the Hearth" },
-  { "Name": "Tidal Caverns", "Quests": ["Harvest Sea-Life", "Deep Sea Scavenge"], "RequiredQuest": "Locate the Hidden Oasis" },
-  { "Name": "Ancient Library", "Quests": ["Archive Sifting", "Study Ancient Texts"], "RequiredQuest": "Ancient Inscriptions" },
-  { "Name": "Mythril Heart", "Quests": ["Defeat the Mythril Construct", "Ascetic Meditation", "Heavy Training"], "RequiredQuest": "Power the Forge" },
-  { "Name": "Dragon's Lair", "Quests": [] }
+  {
+    "Name": "Village",
+    "Type": "Plains",
+    "Quests": [ "Prologue", "Tutorial Section", "Visit Starting Town", "Buy Potion", "Sell Gem" ]
+  },
+  {
+    "Name": "Greenwood Forest",
+    "Type": "Forest",
+    "Quests": [ "Chop Wood", "Gather Moonberries", "Hunt Spiders", "Purify the Grove" ]
+  },
+  {
+    "Name": "Dark Forest",
+    "Type": "Forest",
+    "RequiredQuest": "Learn about the Dark Forest",
+    "Quests": [ "Learn about the Dark Forest", "Defeat Treant Guardian", "Help the lumberjack" ]
+  },
+  {
+    "Name": "Sun-drenched Plains",
+    "Type": "Plains",
+    "Quests": [ "Hunt Slimes", "Hunt Goblins", "Hunt Sand-Sharks" ]
+  },
+  {
+    "Name": "Forgotten Mines",
+    "Type": "Mine",
+    "Quests": [ "Mine Iron Ore", "Power the Forge", "Scavenge Scrap" ]
+  },
+  {
+    "Name": "Deep Mines",
+    "Type": "Mine",
+    "RequiredQuest": "Learn about the Mines",
+    "Quests": [ "Learn about the Mines", "Hunt Bats", "Unlock Mining" ]
+  },
+  {
+    "Name": "Crystal Peaks",
+    "Type": "Mine",
+    "RequiredQuest": "Power the Forge",
+    "Quests": [ "Shatter the Crystals", "High Altitude Survey" ]
+  },
+  {
+    "Name": "Tidal Caverns",
+    "Type": "Water",
+    "RequiredQuest": "Hunt Sand-Sharks",
+    "Quests": [ "Deep Sea Scavenge", "Harvest Sea-Life" ]
+  },
+  {
+    "Name": "Hidden Oasis",
+    "Type": "Water",
+    "RequiredQuest": "Locate the Hidden Oasis",
+    "Quests": [ "Locate the Hidden Oasis" ]
+  },
+  {
+    "Name": "Ancient Library",
+    "Type": "Library",
+    "RequiredQuest": "Recover the Ancient Tome",
+    "Quests": [ "Archive Sifting", "Study Ancient Texts" ]
+  },
+  {
+    "Name": "Ancient Ruins",
+    "Type": "Library",
+    "RequiredQuest": "Recover the Ancient Tome",
+    "Quests": [ "Recover the Ancient Tome", "Ancient Inscriptions", "Finding the Hearth", "Rekindling the Spark" ]
+  },
+  {
+    "Name": "Mythril Sanctum",
+    "Type": "Library",
+    "RequiredQuest": "Rekindling the Spark",
+    "Quests": [ "Defeat the Mythril Construct", "Ascetic Meditation", "Heavy Training" ]
+  }
 ]
