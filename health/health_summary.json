@@ -4,6 +4,7 @@
     "metrics": {
         "monoliths": 0,
         "coverage": 75.21,
+        "mutation_score": 0.0,
         "missing_tests": 0,
         "key_violations": 0,
         "testid_violations": 0,
