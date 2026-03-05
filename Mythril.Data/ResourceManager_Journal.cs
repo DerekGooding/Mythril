@@ -7,6 +7,15 @@ public partial class ResourceManager
 
     public event Action? OnJournalUpdated;
 
+    public void ClearJournal()
+    {
+        lock(_questLock)
+        {
+            Journal.Clear();
+        }
+        OnJournalUpdated?.Invoke();
+    }
+
     private void AddToJournal(string taskName, string characterName, string details)
     {
         lock(_questLock)

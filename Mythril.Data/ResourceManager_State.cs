@@ -70,7 +70,7 @@ public partial class ResourceManager
     {
         Console.WriteLine("ResourceManager initializing...");
         Inventory.Clear();
-        Journal.Clear();
+        ClearJournal();
         _completedQuests.Clear();
         UnlockedAbilities.Clear();
         _autoQuestEnabled.Clear();
