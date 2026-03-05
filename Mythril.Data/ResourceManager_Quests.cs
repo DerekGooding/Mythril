@@ -155,12 +155,7 @@ public partial class ResourceManager
                 duration = IsTestMode ? 3 : quest.DurationSeconds;
                 primaryStat = quest.PrimaryStat;
                 
-                if (!IsTestMode)
-                {
-                    int statValue = JunctionManager.GetStatValue(character, primaryStat);
-                    duration /= (1.0 + (statValue / 100.0));
-                }
-
+                duration = ApplyStatModifier(duration, primaryStat, character);
                 duration = Math.Max(0.5, duration);
 
                 lock(_questLock)
@@ -175,12 +170,7 @@ public partial class ResourceManager
                 duration = IsTestMode ? 3 : 30; // Increased base duration for Cadence unlocks
                 primaryStat = unlock.PrimaryStat;
 
-                if (!IsTestMode)
-                {
-                    int statValue = JunctionManager.GetStatValue(character, primaryStat);
-                    duration /= (1.0 + (statValue / 100.0));
-                }
-
+                duration = ApplyStatModifier(duration, primaryStat, character);
                 duration = Math.Max(0.5, duration);
 
                 lock(_questLock)
@@ -195,12 +185,7 @@ public partial class ResourceManager
                 duration = IsTestMode ? 2 : 15; // Base duration for refinements
                 primaryStat = refinement.PrimaryStat;
 
-                if (!IsTestMode)
-                {
-                    int statValue = JunctionManager.GetStatValue(character, primaryStat);
-                    duration /= (1.0 + (statValue / 100.0));
-                }
-
+                duration = ApplyStatModifier(duration, primaryStat, character);
                 duration = Math.Max(0.5, duration);
 
                 lock(_questLock)
@@ -211,5 +196,20 @@ public partial class ResourceManager
                 }
             }
         }
+    }
+
+    private double ApplyStatModifier(double duration, string primaryStat, Character character)
+    {
+        if (IsTestMode) return duration;
+
+        int statValue = JunctionManager.GetStatValue(character, primaryStat);
+
+        // 10 is the baseline (0% change).
+        // Stat 20 -> 25% reduction (0.75 multiplier).
+        // Stat 30 -> ~44% reduction (0.5625 multiplier).
+        // Formula: multiplier = 0.75 ^ ((Stat - 10) / 10)
+        double multiplier = Math.Pow(0.75, (statValue - 10) / 10.0);
+
+        return duration * multiplier;
     }
 }

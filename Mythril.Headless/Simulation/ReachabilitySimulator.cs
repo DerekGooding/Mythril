@@ -61,7 +61,7 @@ public partial class ReachabilitySimulator(
         else sb.AppendLine("✅ All quests reachable.");
 
         double maxQuestTime = state.QuestTime.Values.Where(t => t < double.PositiveInfinity).DefaultIfEmpty(0).Max();
-        sb.AppendLine($"Estimated End-Game Time: {maxQuestTime:F1}s");
+        sb.AppendLine($"Estimated End-Game Time: {(maxQuestTime / 60.0):F1}m");
 
         var unreachableResources = items.All.Where(i => state.ResourceTime[i.Name] == double.PositiveInfinity).ToList();
         if (unreachableResources.Any())
@@ -123,7 +123,7 @@ public partial class ReachabilitySimulator(
                     double timeToAmount = req.Quantity / net;
                     if (timeToAmount > stallThreshold)
                     {
-                        sb.AppendLine($"- **{next.Quest.Name}**: Delayed by {req.Item.Name} ({timeToAmount:F1}s)");
+                        sb.AppendLine($"- **{next.Quest.Name}**: Delayed by {req.Item.Name} ({(timeToAmount / 60.0):F1}m)");
                         stallFound = true;
                     }
                 }

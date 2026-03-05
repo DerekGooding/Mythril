@@ -97,7 +97,7 @@ public class QuestExecutionTests
     }
 
     [TestMethod]
-    public void ResourceManager_StartQuest_Recurring_StrengthReducesDuration()
+    public void ResourceManager_StartQuest_Recurring_Stat10IsBaseline()
     {
         var quest = _quests!.All.First(x => x.Name == "Hunt Goblins");
         var detail = _questDetails![quest];
@@ -109,11 +109,48 @@ public class QuestExecutionTests
         _resourceManager.StartQuest(questData, himbo);
         
         var progress = _resourceManager.ActiveQuests[0];
-        Assert.AreEqual(54, progress.DurationSeconds);
+        // Base is 60. Stat 10 is baseline, so no reduction.
+        Assert.AreEqual(60, progress.DurationSeconds);
     }
 
     [TestMethod]
-    public void ResourceManager_StartQuest_Wifu_MagicReducesCadenceDuration()
+    public void ResourceManager_StartQuest_Recurring_Stat20ReducesDurationBy25Percent()
+    {
+        var quest = _quests!.All.First(x => x.Name == "Hunt Goblins");
+        var detail = _questDetails![quest];
+        var questData = new QuestData(quest, detail);
+        
+        var himbo = _resourceManager!.Characters.First(c => c.Name == "Himbo");
+        _resourceManager.JunctionManager.AddStatBoost(himbo, "Strength", 10); // 10 + 10 = 20
+        
+        _resourceManager.Inventory.Add(_items!.All.First(x => x.Name == "Gold"), 1000);
+        _resourceManager.StartQuest(questData, himbo);
+        
+        var progress = _resourceManager.ActiveQuests[0];
+        // 60 * 0.75 = 45
+        Assert.AreEqual(45, progress.DurationSeconds);
+    }
+
+    [TestMethod]
+    public void ResourceManager_StartQuest_Recurring_Stat30ReducesDurationByAlmost50Percent()
+    {
+        var quest = _quests!.All.First(x => x.Name == "Hunt Goblins");
+        var detail = _questDetails![quest];
+        var questData = new QuestData(quest, detail);
+        
+        var himbo = _resourceManager!.Characters.First(c => c.Name == "Himbo");
+        _resourceManager.JunctionManager.AddStatBoost(himbo, "Strength", 20); // 10 + 20 = 30
+        
+        _resourceManager.Inventory.Add(_items!.All.First(x => x.Name == "Gold"), 1000);
+        _resourceManager.StartQuest(questData, himbo);
+        
+        var progress = _resourceManager.ActiveQuests[0];
+        // 60 * 0.5625 = 33.75 -> 33
+        Assert.AreEqual(33, progress.DurationSeconds);
+    }
+
+    [TestMethod]
+    public void ResourceManager_StartQuest_Wifu_Stat10IsBaselineForCadence()
     {
         var cadence = ContentHost.GetContent<Cadences>().All.First();
         var unlock = cadence.Abilities[0];
@@ -124,7 +161,8 @@ public class QuestExecutionTests
         _resourceManager.StartQuest(unlock, wifu);
         
         var progress = _resourceManager.ActiveQuests[0];
-        Assert.AreEqual(27, progress.DurationSeconds);
+        // Base is 30. Stat 10 is baseline.
+        Assert.AreEqual(30, progress.DurationSeconds);
     }
 
     [TestMethod]

@@ -68,9 +68,10 @@ public class FlowSimulator(
                 var detail = questDetails[quest];
                 if (detail.Type != QuestType.Recurring) continue;
 
+                double statValue = reachabilityResult.StatMax.GetValueOrDefault(detail.PrimaryStat, 10);
                 flows.Add(new ActivityFlow(
                     quest.Name,
-                    detail.DurationSeconds / (1.0 + (reachabilityResult.StatMax.GetValueOrDefault(detail.PrimaryStat, 10) / 100.0)),
+                    detail.DurationSeconds * Math.Pow(0.75, (statValue - 10) / 10.0),
                     detail.Requirements.ToImmutableDictionary(r => r.Item.Name, r => r.Quantity),
                     detail.Rewards.ToImmutableDictionary(r => r.Item.Name, r => r.Quantity)
                 ));
@@ -95,9 +96,10 @@ public class FlowSimulator(
 
                 string flowName = $"{ability.Name}:{inputItem.Name}->{recipe.OutputItem.Name}";
 
+                double statValue = reachabilityResult.StatMax.GetValueOrDefault(refinementKvp.Value.PrimaryStat, 10);
                 flows.Add(new ActivityFlow(
                     flowName,
-                    15.0 / (1.0 + (reachabilityResult.StatMax.GetValueOrDefault(refinementKvp.Value.PrimaryStat, 10) / 100.0)),
+                    15.0 * Math.Pow(0.75, (statValue - 10) / 10.0),
                     new Dictionary<string, int> { { inputItem.Name, recipe.InputQuantity } }.ToImmutableDictionary(),
                     new Dictionary<string, int> { { recipe.OutputItem.Name, recipe.OutputQuantity } }.ToImmutableDictionary()
                 ));

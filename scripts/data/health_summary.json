@@ -10,7 +10,7 @@
         "stale_docs": 1,
         "reachability_passed": {
             "passed": true,
-            "time": "1076.9s",
+            "time": "8.9m",
             "sustainable": 18,
             "unsustainable": 9
         },
@@ -84,7 +84,7 @@
         },
         {
             "category": "docs_stale",
-            "message": "docs/instructions.md is stale (13 source changes since last update)",
+            "message": "docs/instructions.md is stale (17 source changes since last update)",
             "metadata": {}
         }
     ]

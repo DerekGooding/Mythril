@@ -273,9 +273,9 @@ def check_reachability():
             content = report_path.read_text(encoding="utf-8")
             
             # 1. End Game Time
-            time_match = re.search(r"Estimated End-Game Time: ([\d.]+)s", content)
-            if time_match:
-                game_time = time_match.group(1) + "s"
+            time_match = re.search(r"Estimated End-Game Time: ([\d.]+)m", content)
+            if (time_match):
+                game_time = time_match.group(1) + "m"
             
             # 2. Sustainability counts
             sust_match = re.search(r"### Sustainable Recurring Activities\n(.*?)\n\n", content, re.DOTALL)

@@ -69,7 +69,8 @@ public partial class LatticeSimulator
                 if (!statsMet) continue;
 
                 double startTime = Math.Max(locTime, Math.Max(prereqTime, itemTime));
-                double duration = detail.DurationSeconds / (1.0 + (state.StatMax.GetValueOrDefault(detail.PrimaryStat, 10) / 100.0));
+                double statValue = state.StatMax.GetValueOrDefault(detail.PrimaryStat, 10);
+                double duration = detail.DurationSeconds * Math.Pow(0.75, (statValue - 10) / 10.0);
                 double completionTime = startTime + duration;
 
                 if (completionTime < questTimes.GetValueOrDefault(quest.Name, double.PositiveInfinity))
@@ -116,7 +117,8 @@ public partial class LatticeSimulator
                 double inputTime = state.ResourceTime.GetValueOrDefault(inputItem.Name, double.PositiveInfinity);
                 if (inputTime == double.PositiveInfinity) continue;
 
-                double duration = 15.0 / (1.0 + (state.StatMax.GetValueOrDefault(refinementKvp.Value.PrimaryStat, 10) / 100.0));
+                double statValue = state.StatMax.GetValueOrDefault(refinementKvp.Value.PrimaryStat, 10);
+                double duration = 15.0 * Math.Pow(0.75, (statValue - 10) / 10.0);
                 double outputTime = inputTime + duration;
 
                 if (outputTime < resourceTimes.GetValueOrDefault(recipe.OutputItem.Name, double.PositiveInfinity))
