@@ -5,12 +5,10 @@
 
 <div class="cadence-panel d-flex flex-column h-100">
     <div class="cadence-controls p-2 border-bottom">
-        <div class="input-group input-group-sm">
-            <span class="input-group-text material-icons" style="font-size: 16px;">search</span>
-            <input type="text" class="form-control" placeholder="Search abilities (e.g. J-Str)..." 
-                   data-testid="cadence-ability-search"
-                   @bind="_abilitySearchTerm" @bind:event="oninput" />
-        </div>
+        <input type="text" class="form-control form-control-sm" 
+               placeholder="Search abilities (e.g. J-Str)..." 
+               data-testid="cadence-ability-search"
+               @bind="_abilitySearchTerm" @bind:event="oninput" />
     </div>
 
     <div class="flex-grow-1 overflow-auto mt-2">
