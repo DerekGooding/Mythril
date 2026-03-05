@@ -26,12 +26,11 @@
     <div class="card-content">
         <div class="card-main">
             <p>@QuestData.Description</p>
-            <p>@QuestData.DurationSeconds seconds <span class="text-info small ms-2" title="Stat used to improve task time">⚡ @QuestData.PrimaryStat</span></p>
+            <p>@QuestData.DurationSeconds s <span class="text-info small ms-2" title="Stat used to improve task time">⚡ @QuestData.PrimaryStat</span></p>
         </div>
         <div class="card-side">
             @if (QuestData.Requirements.Length > 0 || (QuestData.RequiredStats != null && QuestData.RequiredStats.Count > 0) || prerequisites.Length > 0)
             {
-                <h6>Requirements:</h6>
                 <ul>
                     @foreach (var prereq in prerequisites)
                     {
@@ -60,11 +59,10 @@
         <div class="card-side">
             @if (QuestData.Rewards.Length > 0)
             {
-                <h6>Rewards:</h6>
-                <ul>
+                <ul class="text-success">
                     @foreach (var reward in QuestData.Rewards)
                     {
-                        <li @key="reward">@reward.Item.Name @reward.Quantity</li>
+                        <li @key="reward"><span title="Reward">💎</span> @reward.Item.Name @reward.Quantity</li>
                     }
                 </ul>
             }
