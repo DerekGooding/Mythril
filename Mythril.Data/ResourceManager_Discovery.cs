@@ -60,6 +60,10 @@ public partial class ResourceManager
             if (JunctionManager.GetStatValue(character, "Speed") >= 60)
                 UnlockByName("Tide-Caller");
 
+            // The Sentinel: 60 VIT
+            if (JunctionManager.GetStatValue(character, "Vitality") >= 60)
+                UnlockByName("The Sentinel");
+
             // Scholar: 100 MAG
             if (JunctionManager.GetStatValue(character, "Magic") >= 100)
                 UnlockByName("Scholar");
