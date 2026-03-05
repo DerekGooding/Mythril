@@ -3,14 +3,14 @@
     "failure_count": 8,
     "metrics": {
         "monoliths": 0,
-        "coverage": 75.17,
+        "coverage": 75.68,
         "missing_tests": 0,
         "key_violations": 0,
         "testid_violations": 0,
         "stale_docs": 0,
         "reachability_passed": {
             "passed": true,
-            "time": "1076.9s",
+            "time": "8.9m",
             "sustainable": 18,
             "unsustainable": 9
         },
