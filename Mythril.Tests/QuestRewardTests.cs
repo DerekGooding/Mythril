@@ -113,6 +113,8 @@ public class QuestRewardTests
         
         _resourceManager.ReceiveRewards(questData).Wait();
         
+        // Refetch location as it is recreated on completion
+        village = _resourceManager!.UsableLocations.First(l => l.Name == "Village");
         Assert.IsFalse(village.Quests.Contains(quest));
     }
 

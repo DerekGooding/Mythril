@@ -1,89 +1,79 @@
 # Game Content Health Report
-Generated: 2026-03-05 11:08:20
+Generated: 2026-03-05 12:00:52
 
 ## 💀 Reachability Analysis
-### Unreachable Quests
-- Recover the Ancient Tome
-- Learn About Cadences
-- Learn about the Dark Forest
-- Hunt Goblins
-- Chop Wood
-- Learn about the Mines
-- Hunt Bats
-- Hunt Spiders
-- Hunt Slimes
-- Unlock Mining
-- Mine Iron Ore
-- Gather Moonberries
-- Defeat Treant Guardian
-- Ancient Inscriptions
-- Finding the Hearth
-- Rekindling the Spark
-- Help the lumberjack
-- Locate the Hidden Oasis
-- Purify the Grove
-- Power the Forge
-- Shatter the Crystals
-- High Altitude Survey
-- Harvest Sea-Life
-- Deep Sea Scavenge
-- Archive Sifting
-- Study Ancient Texts
-- Defeat the Mythril Construct
-- Ascetic Meditation
-- Heavy Training
-Estimated End-Game Time: 1.0m
-
-### Unreachable Resources
-- Log
-- Herb
-- Leather
-- Water
-- Web
-- Slime
-- Moonberry
-- Ancient Bark
-- Mana Leaf
-- Fire Shard
-- Ice Shard
-- Mythril Spark
-- Solar Essence
-- Crystal Shards
-- Blue Coral
-- Lost Parchment
-- Fire I
-- Ice I
-- Lightning I
-- Earth I
-- Water I
-- Haste I
-- Cure I
+✅ All quests reachable.
+Estimated End-Game Time: 0.6m
 
 ## ⚖️ Economic Sustainability
 ### Sustainable Recurring Activities
+- Mine Iron Ore
+- Refine Scrap:Web->Gold
+- Refine Fire:Iron Ore->Fire I
+- Chop Wood
+- Harvest Sea-Life
+- Hunt Bats
 - Tutorial Section
-- Hunt Sand-Sharks
+- Study Ancient Texts
+- Refine Fire:Basic Gem->Fire I
+- Gather Moonberries
+- Hunt Goblins
+- Shatter the Crystals
 - Scavenge Scrap
+- Hunt Spiders
+- Power the Forge
+- Deep Sea Scavenge
+- High Altitude Survey
+- Archive Sifting
+- Hunt Sand-Sharks
+- Hunt Slimes
+- Buy Potion
 
 ### ⚠️ Unsustainable Activities (Reachable but starving)
-- Buy Potion
+- Refine Lightning:Ice Shard->Lightning I
+- Refine Haste:Lost Parchment->Haste I
+- Refine Mixology:Herb->Potion
+- Refine Water:Blue Coral->Water I
+- Refine Wood:Log->Herb
+- Refine Lightning:Fire Shard->Lightning I
 - Sell Gem
+- Refine Scrap:Slime->Gold
+- Refine Ice:Moonberry->Ice I
+- Refine Ice:Mana Leaf->Ice I
+- Refine Earth:Crystal Shards->Earth I
+- Purify the Grove
+- Refine Life:Ancient Bark->Cure I
 
 ### Net Resource Rates (per second)
-- **Basic Gem**: 0.0513/s
-- **Iron Ore**: 0.0684/s
-- **Sun-baked Scale**: 0.0171/s
-- **Gold**: 1.7107/s
+- **Slime**: 4.1573/s
+- **Ancient Bark**: 0.9977/s
+- **Ice Shard**: 3.5037/s
+- **Mythril Spark**: 0.4157/s
+- **Fire I**: 29.1009/s
+- **Fire Shard**: 1.2472/s
+- **Leather**: 5.2556/s
+- **Potion**: 7.0075/s
+- **Iron Ore**: 11.1049/s
+- **Moonberry**: 2.6278/s
+- **Basic Gem**: 5.5225/s
+- **Gold**: 1938.9487/s
+- **Blue Coral**: 2.1022/s
+- **Crystal Shards**: 1.2472/s
+- **Log**: 1.9955/s
+- **Mana Leaf**: 2.5611/s
+- **Sun-baked Scale**: 0.8315/s
+- **Water**: 10.5112/s
+- **Lost Parchment**: 0.4157/s
 
 ## 🔄 Feedback Loops
 ✅ No unbounded growth loops detected (approximation).
 
 ## ⏱️ Progression & Pacing
 ### Potential Economic Stalls
-- **Unlock Mining**: Delayed by Gold (9.7m)
+✅ No major economic stalls detected for next tier.
 
 ## 📈 Maximum Achievable Stats
-- **Strength**: 25
-- **Vitality**: 25
-- **Magic**: 25
-- **Speed**: 25
+- **Strength**: 160
+- **Vitality**: 210
+- **Magic**: 160
+- **Speed**: 210

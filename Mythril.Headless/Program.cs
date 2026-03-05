@@ -28,7 +28,7 @@ public class Assertion
     public int ExpectedValue { get; set; }
 }
 
-public class GameState
+public class HeadlessGameState
 {
     public List<KeyValuePair<string, int>> Inventory { get; set; } = [];
     public List<string> UnlockedCadences { get; set; } = [];
@@ -82,15 +82,19 @@ class Program
         abilities.Load(JsonConvert.DeserializeObject<List<CadenceAbility>>(File.ReadAllText(Path.Combine(dataDir, "cadence_abilities.json"))) ?? []);
 
         var locDTOs = JsonConvert.DeserializeObject<List<LocationDTO>>(File.ReadAllText(Path.Combine(dataDir, "locations.json"))) ?? [];
-        locations.Load(locDTOs.Select(d => new Location(d.Name, d.Quests.Select(qn => quests.All.First(q => q.Name == qn)), d.RequiredQuest)).ToList());
+        locations.Load(locDTOs.Select(d => new Location(d.Name, d.Quests.Select(qn => quests.All.First(q => q.Name == qn)), d.RequiredQuest, d.Type)).ToList());
 
         var cadDTOs = JsonConvert.DeserializeObject<List<CadenceDTO>>(File.ReadAllText(Path.Combine(dataDir, "cadences.json"))) ?? [];
-        cadences.Load(cadDTOs.Select(d => new Cadence(d.Name, d.Description, d.Abilities.Select(a => new CadenceUnlock(
-            d.Name,
-            abilities.All.First(ab => ab.Name == a.Ability),
-            a.Requirements.Select(r => new ItemQuantity(items.All.First(i => i.Name == r.Item), r.Quantity)).ToArray(),
-            a.PrimaryStat ?? "Magic"
-        )).ToArray())).ToList());
+        cadences.Load(cadDTOs.Select(d => new Cadence(d.Name, d.Description, d.Abilities.Select(a => {
+            var baseAbility = abilities.All.First(ab => ab.Name == a.Ability);
+            var abilityWithMeta = baseAbility with { Metadata = a.Metadata ?? [] };
+            return new CadenceUnlock(
+                d.Name,
+                abilityWithMeta,
+                a.Requirements.Select(r => new ItemQuantity(items.All.First(i => i.Name == r.Item), r.Quantity)).ToArray(),
+                a.PrimaryStat ?? "Magic"
+            );
+        }).ToArray())).ToList());
 
         var detailDTOs = JsonConvert.DeserializeObject<List<QuestDetailDTO>>(File.ReadAllText(Path.Combine(dataDir, "quest_details.json"))) ?? [];
         questDetails.Load(detailDTOs.ToDictionary(
@@ -100,7 +104,8 @@ class Program
                 d.Rewards.Select(r => new ItemQuantity(items.All.First(i => i.Name == r.Item), r.Quantity)).ToArray(),
                 Enum.Parse<QuestType>(d.Type),
                 d.PrimaryStat ?? "Vitality",
-                d.RequiredStats
+                d.RequiredStats,
+                d.StatRewards
             )
         ));
 
@@ -186,7 +191,7 @@ class Program
             }
         }
 
-        var finalState = new GameState
+        var finalState = new HeadlessGameState
         {
             Inventory = resourceManager.Inventory.GetItems().Select(i => new KeyValuePair<string, int>(i.Item.Name, i.Quantity)).ToList(),
             UnlockedCadences = resourceManager.UnlockedCadences.Select(c => c.Name).ToList(),

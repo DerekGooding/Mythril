@@ -169,7 +169,6 @@ public partial class LatticeSimulator
                     {
                         if (capVal > newCapacity)
                         {
-                            Console.WriteLine($"DEBUG: Capacity increasing {newCapacity} -> {capVal} via {key}");
                             newCapacity = capVal;
                         }
                     }
@@ -216,6 +215,7 @@ public partial class LatticeSimulator
 
         if (state.StatMax.GetValueOrDefault("Strength", 0) >= 60) cadenceUnlocks.Add("Geologist");
         if (state.StatMax.GetValueOrDefault("Speed", 0) >= 60) cadenceUnlocks.Add("Tide-Caller");
+        if (state.StatMax.GetValueOrDefault("Vitality", 0) >= 60) cadenceUnlocks.Add("The Sentinel");
         if (state.StatMax.GetValueOrDefault("Magic", 0) >= 100) cadenceUnlocks.Add("Scholar");
         if (state.StatMax.GetValueOrDefault("Strength", 0) >= 100 && state.StatMax.GetValueOrDefault("Speed", 0) >= 100) cadenceUnlocks.Add("Slayer");
 
