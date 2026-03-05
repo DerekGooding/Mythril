@@ -26,7 +26,7 @@
     <div class="card-content">
         <div class="card-main">
             <p>@QuestData.Description</p>
-            <p>@QuestData.DurationSeconds seconds</p>
+            <p>@QuestData.DurationSeconds seconds <span class="text-info small ms-2" title="Stat used to improve task time">⚡ @QuestData.PrimaryStat</span></p>
         </div>
         <div class="card-side">
             @if (QuestData.Requirements.Length > 0 || (QuestData.RequiredStats != null && QuestData.RequiredStats.Count > 0) || prerequisites.Length > 0)

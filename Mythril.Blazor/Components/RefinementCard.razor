@@ -14,7 +14,7 @@
                 <span class="output">@Refinement.Recipe.OutputQuantity x @Refinement.Recipe.OutputItem.Name</span>
             </div>
             <div class="duration">
-                <small>Duration: @(ResourceManager.IsTestMode ? "2s" : "15s") (Base)</small>
+                <small>Duration: @(ResourceManager.IsTestMode ? "2s" : "15s") (Base) <span class="text-info" title="Stat used to improve task time">⚡ @Refinement.PrimaryStat</span></small>
             </div>
         </div>
     </div>
