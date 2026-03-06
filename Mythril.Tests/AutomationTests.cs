@@ -106,4 +106,49 @@ public class AutomationTests
 
         Assert.AreEqual(2, _resourceManager.ActiveQuests.Count, "Slot 2 should NOT have restarted.");
     }
+
+    [TestMethod]
+    public async Task AutoQuest_DoesNotRestart_SingleUseQuest()
+    {
+        var character = _resourceManager!.Characters[0];
+        _resourceManager.UnlockedAbilities.Add("Recruit:AutoQuest I");
+        _resourceManager.SetAutoQuestEnabled(character, true);
+
+        var prologue = new QuestData(_quests!.All.First(q => q.Name == "Prologue"), _questDetails![_quests.All.First(q => q.Name == "Prologue")]);
+        _resourceManager.StartQuest(prologue, character);
+
+        var progress = _resourceManager.ActiveQuests.First();
+        await _resourceManager.CompleteTaskAsync(progress);
+
+        Assert.AreEqual(0, _resourceManager.ActiveQuests.Count, "Single-use quest should NOT auto-restart.");
+    }
+
+    [TestMethod]
+    public async Task Refinement_AutoQuest_RespectsMagicCapacity()
+    {
+        var character = _resourceManager!.Characters[0];
+        var student = _cadences!.All.First(c => c.Name == "Student");
+        _resourceManager.UnlockCadence(student);
+        _resourceManager.UnlockedAbilities.Add("Student:AutoQuest I");
+        _resourceManager.UnlockedAbilities.Add("Student:Refine Fire");
+        _resourceManager.JunctionManager.AssignCadence(student, character, _resourceManager.UnlockedAbilities);
+        _resourceManager.SetAutoQuestEnabled(character, true);
+
+        // Get "Refine Fire" refinement for "Basic Gem" input
+        var refData = _resourceManager.Refinements.GetRefinement("Refine Fire", "Basic Gem");
+        Assert.IsNotNull(refData, "Refinement 'Refine Fire' for 'Basic Gem' should exist.");
+        
+        // Set capacity to 30
+        _resourceManager.Inventory.MagicCapacity = 30;
+        // Fill inventory to capacity
+        _resourceManager.Inventory.Add(refData.Value.Recipe.OutputItem, 30);
+        // Add input item
+        _resourceManager.Inventory.Add(refData.Value.InputItem, 1);
+
+        _resourceManager.StartQuest(refData.Value, character);
+        var progress = _resourceManager.ActiveQuests.First();
+        await _resourceManager.CompleteTaskAsync(progress);
+
+        Assert.AreEqual(0, _resourceManager.ActiveQuests.Count, "Refinement producing Magic should NOT restart when capacity reached.");
+    }
 }

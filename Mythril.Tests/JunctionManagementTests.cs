@@ -104,4 +104,33 @@ public class JunctionManagementTests
         // Should not throw
         _junctionManager!.Unassign(cadence, _resourceManager!.UnlockedAbilities);
     }
+
+    [TestMethod]
+    public void JunctionManager_Unassign_InvalidatesJunctions()
+    {
+        var character = _resourceManager!.Characters[0];
+        var recruit = _cadences!.All.First(c => c.Name == "Recruit");
+        var strStat = ContentHost.GetContent<Stats>().All.First(s => s.Name == "Strength");
+        var fire = ContentHost.GetContent<Items>().All.First(i => i.Name == "Fire I");
+
+        _resourceManager.UnlockedAbilities.Add("Recruit:J-Str");
+        _junctionManager!.AssignCadence(recruit, character, _resourceManager.UnlockedAbilities);
+        
+        _junctionManager.JunctionMagic(character, strStat, fire, _resourceManager.UnlockedAbilities);
+        Assert.AreEqual(1, _junctionManager.Junctions.Count);
+
+        _junctionManager.Unassign(recruit, _resourceManager.UnlockedAbilities);
+        Assert.AreEqual(0, _junctionManager.Junctions.Count, "Junction should be removed when ability is lost.");
+    }
+
+    [TestMethod]
+    public void JunctionManager_JunctionMagic_DoesNothingWithoutAbility()
+    {
+        var character = _resourceManager!.Characters[0];
+        var strStat = ContentHost.GetContent<Stats>().All.First(s => s.Name == "Strength");
+        var fire = ContentHost.GetContent<Items>().All.First(i => i.Name == "Fire I");
+
+        _junctionManager!.JunctionMagic(character, strStat, fire, _resourceManager!.UnlockedAbilities);
+        Assert.AreEqual(0, _junctionManager.Junctions.Count);
+    }
 }

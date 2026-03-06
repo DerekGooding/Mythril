@@ -67,4 +67,97 @@ public class ProgressionTests : BunitTestBase
         // Assert
         Assert.IsTrue(ResourceManager.UnlockedCadenceNames.Contains("Slayer"), "Slayer should be unlocked at 100 STR AND 100 SPD");
     }
+
+    [TestMethod]
+    public void TideCaller_UnlocksAtSpeedThreshold()
+    {
+        var character = ResourceManager.Characters[0];
+        var spdStat = Stats.All.First(s => s.Name == "Speed");
+        var spdMagic = new Item("Spd Magic", "Desc", ItemType.Spell);
+        
+        var student = ContentHost.GetContent<Cadences>().All.First(c => c.Name == "Student");
+        ResourceManager.UnlockCadence(student);
+        ResourceManager.UnlockedAbilities.Add("Student:J-Speed");
+        JunctionManager.AssignCadence(student, character, ResourceManager.UnlockedAbilities);
+
+        InventoryManager.MagicCapacity = 1000;
+        InventoryManager.Add(spdMagic, 500); // 10 (base) + 500/10 = 60
+        JunctionManager.JunctionMagic(character, spdStat, spdMagic, ResourceManager.UnlockedAbilities);
+
+        ResourceManager.Tick(1.0);
+        Assert.IsTrue(ResourceManager.UnlockedCadenceNames.Contains("Tide-Caller"));
+    }
+
+    [TestMethod]
+    public void Sentinel_UnlocksAtVitalityThreshold()
+    {
+        var character = ResourceManager.Characters[0];
+        var vitStat = Stats.All.First(s => s.Name == "Vitality");
+        var vitMagic = new Item("Vit Magic", "Desc", ItemType.Spell);
+        
+        var weaver = ContentHost.GetContent<Cadences>().All.First(c => c.Name == "Mythril Weaver");
+        ResourceManager.UnlockCadence(weaver);
+        ResourceManager.UnlockedAbilities.Add("Mythril Weaver:J-Vit");
+        JunctionManager.AssignCadence(weaver, character, ResourceManager.UnlockedAbilities);
+
+        InventoryManager.MagicCapacity = 1000;
+        InventoryManager.Add(vitMagic, 500); // 60 VIT
+        JunctionManager.JunctionMagic(character, vitStat, vitMagic, ResourceManager.UnlockedAbilities);
+
+        ResourceManager.Tick(1.0);
+        Assert.IsTrue(ResourceManager.UnlockedCadenceNames.Contains("The Sentinel"));
+    }
+
+    [TestMethod]
+    public void Scholar_UnlocksAtMagicThreshold()
+    {
+        var character = ResourceManager.Characters[0];
+        var magStat = Stats.All.First(s => s.Name == "Magic");
+        var magMagic = new Item("Mag Magic", "Desc", ItemType.Spell);
+        
+        var arcanist = ContentHost.GetContent<Cadences>().All.First(c => c.Name == "Arcanist");
+        ResourceManager.UnlockCadence(arcanist);
+        ResourceManager.UnlockedAbilities.Add("Arcanist:J-Magic");
+        JunctionManager.AssignCadence(arcanist, character, ResourceManager.UnlockedAbilities);
+
+        InventoryManager.MagicCapacity = 1000;
+        InventoryManager.Add(magMagic, 900); // 100 MAG
+        JunctionManager.JunctionMagic(character, magStat, magMagic, ResourceManager.UnlockedAbilities);
+
+        ResourceManager.Tick(1.0);
+        Assert.IsTrue(ResourceManager.UnlockedCadenceNames.Contains("Scholar"));
+    }
+
+    [TestMethod]
+    public void MagicPocket_IncreasesCapacity()
+    {
+        Assert.AreEqual(30, InventoryManager.MagicCapacity);
+
+        ResourceManager.UnlockedAbilities.Add("Arcanist:Magic Pocket I");
+        ResourceManager.UpdateMagicCapacity();
+        Assert.AreEqual(60, InventoryManager.MagicCapacity);
+
+        ResourceManager.UnlockedAbilities.Add("The Sentinel:Magic Pocket II");
+        ResourceManager.UpdateMagicCapacity();
+        Assert.AreEqual(100, InventoryManager.MagicCapacity);
+    }
+
+    [TestMethod]
+    public void LocationDiscovery_Works()
+    {
+        var town = ContentHost.GetContent<Locations>().All.First(l => l.Name == "Village");
+        
+        // Initially unlocked because it has no required quest
+        Assert.IsTrue(ResourceManager.UnlockedLocationNames.Contains("Village"));
+        
+        var whisperingWoods = ContentHost.GetContent<Locations>().All.First(l => l.Name == "Dark Forest");
+        Assert.IsFalse(ResourceManager.UnlockedLocationNames.Contains("Dark Forest"));
+        
+        // Complete the required quest "Learn about the Dark Forest"
+        var quest = ContentHost.GetContent<Quests>().All.First(q => q.Name == "Learn about the Dark Forest");
+        ResourceManager.ReceiveRewards(new QuestData(quest, ContentHost.GetContent<QuestDetails>()[quest])).Wait();
+        
+        ResourceManager.UpdateUsableLocations();
+        Assert.IsTrue(ResourceManager.UnlockedLocationNames.Contains("Dark Forest"));
+    }
 }

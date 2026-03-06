@@ -194,4 +194,40 @@ public class InventoryTests
 
         Assert.AreEqual(30, inventoryManager.GetQuantity(fire), "Should be capped at capacity.");
     }
+
+    [TestMethod]
+    public void InventoryManager_Pinning_Works()
+    {
+        var potion = _items!.All.First(x => x.Name == "Potion");
+        var inventoryManager = _resourceManager?.Inventory;
+        
+        Assert.IsFalse(inventoryManager!.IsPinned("Potion"));
+        
+        inventoryManager.TogglePin("Potion");
+        Assert.IsTrue(inventoryManager.IsPinned("Potion"));
+        
+        inventoryManager.Add(potion, 5);
+        var pinned = inventoryManager.GetPinnedItems().ToList();
+        Assert.AreEqual(1, pinned.Count);
+        Assert.AreEqual("Potion", pinned[0].Item.Name);
+        Assert.AreEqual(5, pinned[0].Quantity);
+        
+        inventoryManager.TogglePin("Potion");
+        Assert.IsFalse(inventoryManager.IsPinned("Potion"));
+        Assert.AreEqual(0, inventoryManager.GetPinnedItems().Count());
+    }
+
+    [TestMethod]
+    public void InventoryManager_Clear_Works()
+    {
+        var potion = _items!.All.First(x => x.Name == "Potion");
+        var inventoryManager = _resourceManager?.Inventory;
+        
+        inventoryManager!.Add(potion, 5);
+        Assert.AreEqual(5, inventoryManager.GetQuantity(potion));
+        
+        inventoryManager.Clear();
+        Assert.AreEqual(0, inventoryManager.GetQuantity(potion));
+        Assert.AreEqual(0, inventoryManager.GetAll().Count());
+    }
 }

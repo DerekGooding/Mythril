@@ -182,4 +182,52 @@ public class QuestRewardTests
         Assert.IsFalse(_resourceManager.GetCompletedQuests().Any());
         Assert.AreEqual(0, _resourceManager.Inventory.GetQuantity(_items.All.First(x => x.Name == "Gold")));
     }
+
+    [TestMethod]
+    public async Task ReceiveRewards_CadenceUnlock_Works()
+    {
+        var arcanist = ContentHost.GetContent<Cadences>().All.First(c => c.Name == "Arcanist");
+        var ability = arcanist.Abilities.First(a => a.Ability.Name == "Refine Ice").Ability;
+        var unlock = new CadenceUnlock("Arcanist", ability, [], "Magic");
+
+        Assert.IsFalse(_resourceManager!.UnlockedAbilities.Contains("Arcanist:Refine Ice"));
+        
+        await _resourceManager.ReceiveRewards(unlock);
+        
+        Assert.IsTrue(_resourceManager.UnlockedAbilities.Contains("Arcanist:Refine Ice"));
+        Assert.IsTrue(_resourceManager.HasUnseenWorkshop);
+    }
+
+    [TestMethod]
+    public async Task ReceiveRewards_RefinementData_Works()
+    {
+        var refData = _resourceManager!.Refinements.GetRefinement("Refine Fire", "Basic Gem");
+        _resourceManager.Inventory.Clear();
+        
+        await _resourceManager.ReceiveRewards(refData!.Value);
+        
+        Assert.AreEqual(5, _resourceManager.Inventory.GetQuantity(_items!.All.First(x => x.Name == "Fire I")));
+    }
+
+    [TestMethod]
+    public async Task ReceiveRewards_RefinementData_TriggersOverflow()
+    {
+        var refData = _resourceManager!.Refinements.GetRefinement("Refine Fire", "Basic Gem");
+        _resourceManager.Inventory.Clear();
+        _resourceManager.Inventory.MagicCapacity = 10;
+        _resourceManager.Inventory.Add(_items!.All.First(x => x.Name == "Fire I"), 8);
+        
+        string overflowItem = "";
+        int overflowQty = 0;
+        _resourceManager.OnItemOverflow += (name, qty) => {
+            overflowItem = name;
+            overflowQty = qty;
+        };
+        
+        await _resourceManager.ReceiveRewards(refData!.Value);
+        
+        Assert.AreEqual(10, _resourceManager.Inventory.GetQuantity(_items.All.First(x => x.Name == "Fire I")));
+        Assert.AreEqual("Fire I", overflowItem);
+        Assert.AreEqual(3, overflowQty); // 8 + 5 = 13. 13 - 10 = 3.
+    }
 }
