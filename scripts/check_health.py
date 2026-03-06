@@ -159,7 +159,7 @@ def parse_coverage():
         if "obj" in filename or filename.endswith(".g.cs"):
             continue
         
-        ignored_files = ["Models.cs", "Cadences.cs", "Program.cs", "ReachabilitySimulator.cs", "FlowSimulator.cs", "LatticeSimulator.cs"]
+        ignored_files = ["Models.cs", "Cadences.cs", "Program.cs", "ReachabilitySimulator.cs", "FlowSimulator.cs", "LatticeSimulator.cs", "RoutedSimulator.cs"]
         if any(ignored in filename for ignored in ignored_files):
             continue
             

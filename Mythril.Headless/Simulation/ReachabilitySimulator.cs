@@ -39,6 +39,9 @@ public partial class ReachabilitySimulator(
         var flowState = flowSim.Solve(finalState, seed);
         Console.WriteLine("Flow Analysis Complete.");
 
+        var routed = new RoutedSimulator(items, quests, questDetails, questUnlocks, questToCadenceUnlocks, cadences, locations, refinements, statAugments, stats);
+        routed.Run();
+
         GenerateIntegratedReport(finalState, flowState, flowSim);
     }
 
