@@ -1,22 +1,50 @@
 {
-    "is_healthy": true,
-    "failure_count": 0,
+    "is_healthy": false,
+    "failure_count": 4,
     "metrics": {
         "monoliths": 0,
-        "coverage": 74.34,
+        "coverage": 67.36,
         "mutation_score": 0.0,
         "missing_tests": 0,
         "key_violations": 0,
         "testid_violations": 0,
         "stale_docs": 0,
         "reachability_passed": {
-            "passed": true,
-            "time": "0.6m",
-            "sustainable": 21,
-            "unsustainable": 13
+            "passed": false,
+            "time": "N/A"
         },
         "pending_feedback": 0,
         "test_passed": true
     },
-    "failures": []
+    "failures": [
+        {
+            "category": "coverage",
+            "message": "Overall line coverage below threshold",
+            "metadata": {
+                "actual": 67.36,
+                "required": 70.0
+            }
+        },
+        {
+            "category": "file_coverage",
+            "message": "Mythril.Headless/Simulation/SimulationState.cs below minimum coverage: 0.00% (required: 25.0%)",
+            "metadata": {
+                "actual": 0.0,
+                "required": 25.0
+            }
+        },
+        {
+            "category": "file_coverage",
+            "message": "Mythril.Headless/Simulation/SimulationState.cs below minimum coverage: 0.00% (required: 25.0%)",
+            "metadata": {
+                "actual": 0.0,
+                "required": 25.0
+            }
+        },
+        {
+            "category": "reachability",
+            "message": "Simulation failed: One or more quests are mathematically unreachable.",
+            "metadata": {}
+        }
+    ]
 }
