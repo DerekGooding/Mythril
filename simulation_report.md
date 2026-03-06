@@ -1,5 +1,5 @@
 # Game Content Health Report
-Generated: 2026-03-06 15:30:07
+Generated: 2026-03-06 15:37:20
 
 ## 💀 Reachability Analysis
 ✅ All quests reachable.
@@ -8,63 +8,63 @@ Routed Completion Time: 343.9m
 
 ## ⚖️ Economic Sustainability
 ### Sustainable Recurring Activities
-- Power the Forge
-- Refine Fire:Iron Ore->Fire I
-- Chop Wood
-- Buy Potion
-- Refine Fire:Basic Gem->Fire I
-- Hunt Sand-Sharks
-- Archive Sifting
-- Mine Iron Ore
-- High Altitude Survey
-- Refine Scrap:Web->Gold
-- Study Ancient Texts
-- Gather Moonberries
-- Hunt Bats
-- Harvest Sea-Life
 - Shatter the Crystals
-- Hunt Spiders
-- Scavenge Scrap
+- Harvest Sea-Life
+- Study Ancient Texts
 - Tutorial Section
-- Hunt Goblins
+- Buy Potion
+- Archive Sifting
+- Refine Scrap:Web->Gold
+- High Altitude Survey
+- Refine Fire:Iron Ore->Fire I
+- Hunt Bats
 - Deep Sea Scavenge
+- Power the Forge
+- Chop Wood
+- Hunt Goblins
+- Hunt Sand-Sharks
+- Scavenge Scrap
+- Gather Moonberries
+- Hunt Spiders
+- Refine Fire:Basic Gem->Fire I
+- Mine Iron Ore
 - Hunt Slimes
 
 ### ⚠️ Unsustainable Activities (Reachable but starving)
-- Refine Haste:Lost Parchment->Haste I
-- Refine Ice:Mana Leaf->Ice I
-- Refine Mixology:Herb->Potion
-- Refine Ice:Moonberry->Ice I
-- Sell Gem
-- Refine Water:Blue Coral->Water I
-- Refine Earth:Crystal Shards->Earth I
-- Refine Wood:Log->Herb
-- Refine Scrap:Slime->Gold
-- Refine Lightning:Ice Shard->Lightning I
-- Purify the Grove
 - Refine Lightning:Fire Shard->Lightning I
+- Refine Wood:Log->Herb
+- Refine Lightning:Ice Shard->Lightning I
 - Refine Life:Ancient Bark->Cure I
+- Refine Water:Blue Coral->Water I
+- Refine Haste:Lost Parchment->Haste I
+- Sell Gem
+- Refine Earth:Crystal Shards->Earth I
+- Refine Mixology:Herb->Potion
+- Refine Scrap:Slime->Gold
+- Refine Ice:Mana Leaf->Ice I
+- Refine Ice:Moonberry->Ice I
+- Purify the Grove
 
 ### Net Resource Rates (per second)
-- **Iron Ore**: 11.1049/s
-- **Sun-baked Scale**: 0.8315/s
-- **Mana Leaf**: 2.5611/s
+- **Crystal Shards**: 1.2472/s
+- **Blue Coral**: 2.1022/s
 - **Lost Parchment**: 0.4157/s
 - **Slime**: 4.1573/s
 - **Log**: 1.9955/s
-- **Leather**: 5.2556/s
-- **Basic Gem**: 5.5225/s
-- **Ice Shard**: 3.5037/s
 - **Fire I**: 29.1009/s
-- **Moonberry**: 2.6278/s
-- **Ancient Bark**: 0.9977/s
-- **Mythril Spark**: 0.4157/s
-- **Potion**: 7.0075/s
-- **Fire Shard**: 1.2472/s
-- **Blue Coral**: 2.1022/s
-- **Crystal Shards**: 1.2472/s
-- **Water**: 10.5112/s
 - **Gold**: 1938.9487/s
+- **Ancient Bark**: 0.9977/s
+- **Basic Gem**: 5.5225/s
+- **Fire Shard**: 1.2472/s
+- **Potion**: 7.0075/s
+- **Water**: 10.5112/s
+- **Mana Leaf**: 2.5611/s
+- **Sun-baked Scale**: 0.8315/s
+- **Leather**: 5.2556/s
+- **Mythril Spark**: 0.4157/s
+- **Moonberry**: 2.6278/s
+- **Iron Ore**: 11.1049/s
+- **Ice Shard**: 3.5037/s
 
 ## 🔄 Feedback Loops
 ✅ No unbounded growth loops detected (approximation).

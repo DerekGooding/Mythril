@@ -283,6 +283,22 @@ def check_docs_staleness():
 # Reachability Simulation
 # -----------------------
 
+def format_game_time(minutes_str):
+    try:
+        minutes = float(minutes_str.replace('m', ''))
+        total_seconds = minutes * 60
+        
+        if minutes >= 50 * 60: # Over 50 hours
+            return f"{minutes / (60 * 24):.1f}d"
+        elif minutes >= 120:   # Over 120 minutes
+            return f"{minutes / 60:.1f}h"
+        elif total_seconds >= 300: # Over 300 seconds
+            return f"{minutes:.1f}m"
+        else:
+            return f"{total_seconds:.0f}s"
+    except:
+        return minutes_str
+
 def check_reachability():
     print("--- Running Reachability Simulation ---")
     try:
@@ -303,10 +319,13 @@ def check_reachability():
             routed_match = re.search(r"Routed Completion Time: ([\d.]+)m", content)
             lattice_match = re.search(r"Estimated End-Game Time: ([\d.]+)m", content)
             
+            raw_time = "0"
             if routed_match:
-                game_time = routed_match.group(1) + "m"
+                raw_time = routed_match.group(1)
             elif lattice_match:
-                game_time = lattice_match.group(1) + "m"
+                raw_time = lattice_match.group(1)
+            
+            game_time = format_game_time(raw_time)
             
             # 2. Sustainability counts
             sust_match = re.search(r"### Sustainable Recurring Activities\n(.*?)\n\n", content, re.DOTALL)
