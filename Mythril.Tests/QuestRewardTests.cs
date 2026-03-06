@@ -140,6 +140,9 @@ public class QuestRewardTests
         _resourceManager.ReceiveRewards(new QuestData(tutorial, _questDetails[tutorial])).Wait();
         _resourceManager.ReceiveRewards(new QuestData(town, _questDetails[town])).Wait();
 
+        _resourceManager.Inventory.Clear();
+        _resourceManager.Inventory.Add(gold, 1000);
+
         _resourceManager.StartQuest(questData, character);
         Assert.AreEqual(750, _resourceManager.Inventory.GetQuantity(gold));
 

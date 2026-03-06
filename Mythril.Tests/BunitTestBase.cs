@@ -67,6 +67,7 @@ public abstract class BunitTestBase : TestContextWrapper
             ContentHost.GetContent<QuestUnlocks>(),
             ContentHost.GetContent<ItemRefinements>(),
             statAugments,
+            ContentHost.GetContent<AbilityAugments>(),
             ContentHost.GetContent<QuestToCadenceUnlocks>()
         );
 

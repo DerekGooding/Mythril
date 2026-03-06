@@ -187,6 +187,9 @@ public class LogisticsTests
         _resourceManager.ReceiveRewards(new QuestData(tutorial, _questDetails[tutorial])).Wait();
         _resourceManager.ReceiveRewards(new QuestData(town, _questDetails[town])).Wait();
 
+        _resourceManager.Inventory.Clear();
+        _resourceManager.Inventory.Add(gold, 250);
+
         _resourceManager.StartQuest(questData, character);
         // Quantity should be 0 here because quest costs 250 gold
         Assert.AreEqual(0, _resourceManager.Inventory.GetQuantity(gold));

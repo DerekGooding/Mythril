@@ -99,17 +99,31 @@ public readonly record struct RefinementData(CadenceAbility Ability, Item InputI
 // Unified Content Graph
 public class ContentNode
 {
+    [JsonPropertyName("id")]
     public string Id { get; set; } = "";
+    
+    [JsonPropertyName("type")]
     public string Type { get; set; } = ""; // Quest, Location, Cadence, Item, Refinement
+    
+    [JsonPropertyName("name")]
     public string Name { get; set; } = "";
+    
+    [JsonPropertyName("data")]
     public Dictionary<string, object> Data { get; set; } = [];
+    
+    [JsonPropertyName("in_edges")]
     public Dictionary<string, List<string>> InEdges { get; set; } = []; // RelationType -> [NodeIds]
+    
+    [JsonPropertyName("out_edges")]
     public Dictionary<string, List<ContentEdge>> OutEdges { get; set; } = []; // RelationType -> [Edges]
 }
 
 public class ContentEdge
 {
+    [JsonPropertyName("targetId")]
     public string TargetId { get; set; } = "";
+    
+    [JsonPropertyName("quantity")]
     public int Quantity { get; set; } = 1;
 }
 

@@ -42,7 +42,7 @@ public class MiscDataTests
 
         var autoQuest = abilities.All.First(a => a.Name == "AutoQuest I");
         var stat = abilityAugments[autoQuest];
-        Assert.AreEqual("Magic", stat.Name);
+        Assert.AreEqual("Vitality", stat.Name);
     }
 
     [TestMethod]

@@ -20,7 +20,10 @@ public class ContentLoaderTests
         // Helper to setup mock response for a file
         void SetupMock(string url, string fileName)
         {
-            var content = File.ReadAllText(Path.Combine(dataDir, fileName));
+            var path = Path.Combine(dataDir, fileName);
+            if (!File.Exists(path)) throw new FileNotFoundException($"Test file not found: {path}");
+
+            var content = File.ReadAllText(path);
             handlerMock
                .Protected()
                .Setup<Task<HttpResponseMessage>>(
@@ -35,19 +38,12 @@ public class ContentLoaderTests
                });
         }
 
-        SetupMock("data/items.json", "items.json");
-        SetupMock("data/stats.json", "stats.json");
-        SetupMock("data/cadence_abilities.json", "cadence_abilities.json");
-        SetupMock("data/quests.json", "quests.json");
-        SetupMock("data/locations.json", "locations.json");
-        SetupMock("data/cadences.json", "cadences.json");
-        SetupMock("data/quest_details.json", "quest_details.json");
-        SetupMock("data/quest_unlocks.json", "quest_unlocks.json");
-        SetupMock("data/refinements.json", "refinements.json");
-        SetupMock("data/quest_cadence_unlocks.json", "quest_cadence_unlocks.json");
+        // Only these two files are loaded by the new ContentLoader
+        SetupMock("data/content_graph.json", "content_graph.json");
         SetupMock("data/stat_augments.json", "stat_augments.json");
 
         var httpClient = new HttpClient(handlerMock.Object) { BaseAddress = new Uri("http://test.com/") };
+
 
         // 2. Instantiate ContentLoader
         var loader = new ContentLoader(
@@ -62,6 +58,7 @@ public class ContentLoaderTests
             ContentHost.GetContent<QuestUnlocks>(),
             ContentHost.GetContent<ItemRefinements>(),
             ContentHost.GetContent<StatAugments>(),
+            ContentHost.GetContent<AbilityAugments>(),
             ContentHost.GetContent<QuestToCadenceUnlocks>()
         );
 
