@@ -1,6 +1,6 @@
 {
     "schemaVersion": 1,
     "label": "reachability",
-    "message": "failed",
-    "color": "red"
+    "message": "passed",
+    "color": "brightgreen"
 }
