@@ -299,10 +299,14 @@ def check_reachability():
         if report_path.exists():
             content = report_path.read_text(encoding="utf-8")
             
-            # 1. End Game Time
-            time_match = re.search(r"Estimated End-Game Time: ([\d.]+)m", content)
-            if (time_match):
-                game_time = time_match.group(1) + "m"
+            # 1. End Game Time (Prefer Routed over Lattice)
+            routed_match = re.search(r"Routed Completion Time: ([\d.]+)m", content)
+            lattice_match = re.search(r"Estimated End-Game Time: ([\d.]+)m", content)
+            
+            if routed_match:
+                game_time = routed_match.group(1) + "m"
+            elif lattice_match:
+                game_time = lattice_match.group(1) + "m"
             
             # 2. Sustainability counts
             sust_match = re.search(r"### Sustainable Recurring Activities\n(.*?)\n\n", content, re.DOTALL)

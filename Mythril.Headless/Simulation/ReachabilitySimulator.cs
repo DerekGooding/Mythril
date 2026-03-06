@@ -40,12 +40,12 @@ public partial class ReachabilitySimulator(
         Console.WriteLine("Flow Analysis Complete.");
 
         var routed = new RoutedSimulator(items, quests, questDetails, questUnlocks, questToCadenceUnlocks, cadences, locations, refinements, statAugments, stats);
-        routed.Run();
+        routed.Run(seed);
 
-        GenerateIntegratedReport(finalState, flowState, flowSim);
+        GenerateIntegratedReport(finalState, flowState, flowSim, routed);
     }
 
-    private void GenerateIntegratedReport(GameState state, QuantitativeFlowState flow, FlowSimulator flowSim)
+    private void GenerateIntegratedReport(GameState state, QuantitativeFlowState flow, FlowSimulator flowSim, RoutedSimulator routed)
     {
         var sb = new StringBuilder();
         sb.AppendLine("# Game Content Health Report");
@@ -65,6 +65,8 @@ public partial class ReachabilitySimulator(
 
         double maxQuestTime = state.QuestTime.Values.Where(t => t < double.PositiveInfinity).DefaultIfEmpty(0).Max();
         sb.AppendLine($"Estimated End-Game Time: {(maxQuestTime / 60.0):F1}m");
+        sb.AppendLine($"Routed Completion Time: {(routed.LastRunTime / 60.0):F1}m");
+        if (!routed.EndGameReached) sb.AppendLine("⚠️ WARNING: Path-routed simulation failed to reach End Game.");
 
         var unreachableResources = items.All.Where(i => state.ResourceTime[i.Name] == double.PositiveInfinity).ToList();
         if (unreachableResources.Any())

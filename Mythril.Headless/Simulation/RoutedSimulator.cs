@@ -14,10 +14,16 @@ public partial class RoutedSimulator(
     private readonly HashSet<string> _farmingStack = [];
     private const string END_QUEST = "Defeat the Mythril Construct";
 
-    public void Run()
+    public void Run(SimulationSeed? seed = null)
     {
         Console.WriteLine("Starting Path-Routed Simulation...");
         var state = new SimulationState(stats);
+        if (seed != null) {
+            foreach (var s in seed.StartingStats) state.CurrentStats[s.Key] = s.Value;
+            foreach (var c in seed.StartingUnlockedCadences) state.UnlockedCadences.Add(c);
+            foreach (var a in seed.StartingUnlockedAbilities) state.UnlockedAbilities.Add(a);
+        }
+        
         bool progressed = true; int steps = 0; const int MAX_STEPS = 10000;
         while (progressed && steps < MAX_STEPS)
         {
@@ -36,5 +42,12 @@ public partial class RoutedSimulator(
             Console.WriteLine($"[DEBUG] Current Stats: {string.Join(", ", state.CurrentStats.Select(kvp => $"{kvp.Key}: {kvp.Value}"))}");
             Console.WriteLine($"[DEBUG] Magic Capacity: {state.MagicCapacity}");
         }
+        
+        // Expose time for ReachabilitySimulator to report
+        LastRunTime = state.CurrentTime;
+        EndGameReached = state.CompletedQuests.Contains(END_QUEST);
     }
+
+    public double LastRunTime { get; private set; }
+    public bool EndGameReached { get; private set; }
 }
