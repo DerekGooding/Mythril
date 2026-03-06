@@ -73,4 +73,4 @@ I get it. AI fatigue. I'd gloss over the majority of this as slop too, and hones
 
 Will this be any good? Hard to say. That's the fun of it. Are there better tools out there already doing the things I'm doing? Of course. But that's not going to stop me from enjoying the journey. If anyone human is actually reading these words, thank you. That means a lot to me in this day and age. 
 
-- Derek Gooding
+--- Derek Gooding
