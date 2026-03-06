@@ -64,3 +64,13 @@ Mythril features a job-based progression system where you manage a party of char
 
 ---
 *Developed with 💖 by Gemini CLI.*
+
+---  
+
+## Words from the human developer
+
+I get it. AI fatigue. I'd gloss over the majority of this as slop too, and honestly, it probably is. The reson I'm doing this project isn't for money or clout. It's to push the limits of what can be done entirely agentically. When I dip my hand into the project, it's not to build the game or even the tools around the game. It's to create the agentic DevOps that maintain a project as it scales. When something starts getting AI-sloppy, that's why I want to try and solve that mess. I see agentic development as that dirt line you can never actually sweep up. It just gets thinner and thinner. So as the project grows, so does the dirty line and additional metrics and checks and balances are put in place to reduce the slop as much as possible. Layering guard rail on guard rail. Safety net on safety, just to keep regressions low and results shiny. 
+
+Will this be any good? Hard to say. That's the fun of it. Are there better tools out there already doing the things I'm doing? Of course. But that's not going to stop me from enjoying the journey. If anyone human is actually reading these words, thank you. That means a lot to me in this day and age. 
+
+- Derek Gooding
