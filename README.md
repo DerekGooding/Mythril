@@ -12,61 +12,49 @@
 
 [**Live Website**](https://DerekGooding.Github.io/Mythril) | [**How to Play**](docs/instructions.md)
 
-A .NET 10 Blazor-based incremental RPG with a focus on job-based progression (Cadences) and tactical stat management (Junctioning).
+Mythril is a .NET 10 Blazor-based incremental RPG designed as a **sandbox for Agentic Software Engineering**. 
 
-## Project Structure
-**This project is heavily and primarily developed by AI agents.**
-From architecture and core logic to the Blazor frontend and DevOps pipelines, Mythril is a testament to agentic software engineering. All changes, including this documentation, are managed and validated by agents to ensure technical integrity and adherence to the project's [AI Mandates](GEMINI.md).
+## 🤖 Developed by Agents
+**This project is primarily built, managed, and maintained by AI agents.**
+From architectural design and core logic implementation to the Blazor frontend and custom DevOps pipelines, Mythril demonstrates the capabilities of agent-driven development. 
 
-## ⚔️ Project Overview
-Mythril is an RPG-inspired web application built with **.NET 10** and **Blazor WebAssembly**. It serves as a sandbox for exploring agentic development patterns and modern C# architectures.
+### Agentic Principles
+- **Mandate-Driven**: All development adheres to the foundational rules in [GEMINI.md](GEMINI.md).
+- **Self-Validating**: Agents are responsible for the entire lifecycle: implementation, test generation, and health validation.
+- **Architectural Integrity**: Heavy use of modular partial classes and specialized managers to prevent code rot and monoliths.
+- **Agentic DevOps**: A custom health suite (`scripts/check_health.py`) enforces strict technical standards on every commit.
 
-### Key Systems
-- **Character Core**: Modular system where characters share baseline stats (**Strength, Vitality, Magic, Speed**), differentiated by assigned Cadences and junctioned magic. Features immersive visual feedback for task completion and per-character equipment management.
-- **Junctioning**: Assign magic items to character stats to gain powerful bonuses. Features a tactile drag-and-drop system from the inventory directly onto character stats, complete with predictive effect previews and a specialized removal tool.
-- **Cadence System**: Progression mechanic where `Cadences` provide `CadenceAbilities`. Unlocking is performed by dragging ability nodes directly onto characters.
-- **Journal System**: Persistent historical log tracking the last 50 completed tasks, providing transparency into character activities and resource gains.
-- **Quest & Progression**: Real-time asynchronous tick system managing quests, durations, and rewards, with offline progress continuity and interconnected world unlocks.
-- **UI Stability**: Advanced flexbox layouts and pure CSS Grid transitions ensure a responsive, flicker-free experience that fills the browser viewport, featuring an intuitive "Drag-to-Character" interaction model.
+## 🛠️ Technical Stack & Architecture
+- **Frontend**: Blazor WebAssembly (.NET 10) utilizing advanced Flexbox/Grid layouts for full-viewport stability.
+- **Core Logic**: C# 13 / .NET 10 Libraries with a clean separation of concerns:
+    - `ResourceManager`: The orchestrator of game state and asynchronous progression.
+    - `JunctionManager`: Handles the complex stat-calculation logic and magic assignments.
+    - `InventoryManager`: Manages resource collection, pinning, and capacity limits.
+- **State Management**: Serialized state preservation via `PersistenceService` in `LocalStorage`.
+- **Testing**: Comprehensive suite using MSTest, Moq, and bUnit. Line coverage is maintained at **>75%**.
 
-## 🛠️ Technical Stack
-- **Frontend**: Blazor WebAssembly (.NET 10)
-- **Core Logic**: C# 13 / .NET 10 Class Libraries
-- **Architecture**: Separated into core managers: `ResourceManager` (Logic), `JunctionManager` (Stats), and `InventoryManager` (Items).
-- **Testing**: MSTest, Moq, and bUnit for component testing. Coverage is maintained at >90% overall.
-- **CI/CD**: GitHub Actions for automated deployment and health monitoring.
+## ⚖️ Quality Assurance & Automated Balancing
+To ensure the game remains both technically sound and balanced, we use a custom headless simulation suite:
+- **Lattice Reachability Analysis**: A monotonic fixpoint solver that mathematically verifies every quest, cadence, and resource is attainable from a fresh start.
+- **Path-Routed Simulation**: A character-aware simulator that models optimal gameplay paths to calculate realistic "real-world" completion times.
+- **Quantitative Flow Analysis**: Models the steady-state economy to identify "starving" activities and prevent infinite resource feedback loops.
+- **Monolith Prevention**: Automated enforcement of a 250-line limit for all source files.
 
-## 🚀 Recent Updates (March 4, 2026)
-- **Tactile Junction Overhaul**: Transitioned to a pure drag-from-inventory model for Junctioning. Added color-coded stat delta previews (↑/↓) and a dedicated "Link Off" removal tool.
-- **Stat Ceiling Enforcement**: Implemented a global **255** maximum cap for all character stats to ensure long-term game balance.
-- **Tier II Multi-Tasking & Automation**: Expanded character capacity to a 3rd task slot via **Logistics II** and enabled automation for the 2nd slot with **AutoQuest II** (Scholar cadence).
-- **Historical Journal**: Integrated a new Journal tab that tracks task completion history across sessions, including character names and specific rewards.
-- **Task Sorting**: Added a duration-based sorting toggle to the Locations panel, allowing players to easily prioritize tasks based on their playstyle.
-- **Requirement Iconography**: Implemented standardized icons (🛡️ for stats, 📦 for items, 🔑 for prerequisites) across all quest and ability cards for improved readability.
-- **Monolith Prevention Refactor**: Decomposed the `ResourceManager` into specialized partial classes (`State`, `Discovery`, `Inventory`, `Quests`, `Journal`, `Rewards`, `Logistics`) to maintain a lean, maintainable architecture.
+## ⚔️ Game Overview (Brief)
+Mythril features a job-based progression system where you manage a party of characters.
+- **Cadences**: Specialized jobs that grant unique abilities through research.
+- **Junctioning**: A tactile drag-and-drop system to assign refined magic to character stats for massive bonuses.
+- **World Progression**: Asynchronous quests that unlock new locations, refined through a workshop system.
+- **Journaling**: A persistent historical log of all character activities and achievements.
 
-## ⚖️ Quality Assurance & Health
-We maintain project health through a custom automated suite (`scripts/check_health.py`) which runs on every commit:
-- **Monolith Prevention**: Strict 250-line limit for source files (excluding tools).
-- **Game Graph Simulation**: 
-    - **Lattice Reachability**: Mathematically verifies every quest, cadence, and resource is attainable from a fresh start using a monotonic fixpoint solver.
-    - **Quantitative Flow Analysis**: Models the steady-state economy. It identifies "starving" activities where consumption exceeds production and detects infinite feedback loops.
-- **Automated Balancing**: The simulation suite ensures no content change makes a quest mathematically impossible or economically unsustainable.
-- **Coverage**: Mandatory 70% overall line coverage; 25% per-file minimum.
-- **Razor Integrity**: All interactive components must have bUnit tests, `@key` usage in loops, and `data-testid` anchors.
-- **Documentation Integrity**: Automated staleness tracking via local file modification times.
+*For detailed gameplay mechanics, see the [How to Play](docs/instructions.md) guide.*
 
-### 🛡️ Health Shield Guide
-All badges are automatically updated by `scripts/check_health.py` on every commit:
-- **Tests**: Status of the entire MSTest suite. Fails if any unit test is broken.
-- **Coverage**: Total line coverage percentage. Must remain above 70% overall.
-- **Monoliths**: A count of source files exceeding 250 lines. Aiming for 0 for maximum maintainability.
-- **Docs**: Staleness indicator. Flags documentation if more than 10 source changes occur without a doc update.
-- **UI Integrity**: Validates bUnit test presence, `@key` usage in loops, and stable `data-testid` anchors.
-- **Reachability**: Result of the Lattice Simulation. Verifies all content is mathematically attainable.
-- **Economic Stability**: Percentage of recurring activities that are sustainable under current production rates.
-- **Optimal Completion**: The minimum real-world time required to finish the current endgame content.
-
+## 🚀 Recent Updates (March 6, 2026)
+- **Optimal Path Optimization**: Enhanced the Path-Routed Simulator to prioritize critical progression quests, bringing the simulated end-game time to a realistic **~5.7h**.
+- **Coverage Expansion**: Increased project line coverage to **77.6%** by adding exhaustive tests for simulation logic and resource management.
+- **Intelligent Shield Reporting**: Implemented adaptive time formatting for completion badges (Days/Hours/Minutes).
+- **Refinement Automation**: Fixed edge cases in AutoQuest logic to ensure magic capacity limits are strictly respected during automated loops.
+- **Architectural Decoupling**: Refactored complex simulation logic into partial classes to maintain strict monolith prevention compliance.
 
 ## 🚀 Getting Started
 1. **Build**: `dotnet build`
