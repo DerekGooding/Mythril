@@ -230,4 +230,19 @@ public class InventoryTests
         Assert.AreEqual(0, inventoryManager.GetQuantity(potion));
         Assert.AreEqual(0, inventoryManager.GetAll().Count());
     }
+
+    [TestMethod]
+    public void InventoryManager_Subtract_Works()
+    {
+        var potion = _items!.All.First(x => x.Name == "Potion");
+        var inventoryManager = _resourceManager?.Inventory;
+        
+        inventoryManager!.Add(potion, 10);
+        inventoryManager.Remove(potion, 4);
+        Assert.AreEqual(6, inventoryManager.GetQuantity(potion));
+        
+        var result = inventoryManager.Remove(potion, 10); // Should return false
+        Assert.IsFalse(result);
+        Assert.AreEqual(6, inventoryManager.GetQuantity(potion));
+    }
 }

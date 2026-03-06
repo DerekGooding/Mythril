@@ -145,19 +145,54 @@ public class ProgressionTests : BunitTestBase
     [TestMethod]
     public void LocationDiscovery_Works()
     {
-        var town = ContentHost.GetContent<Locations>().All.First(l => l.Name == "Village");
-        
-        // Initially unlocked because it has no required quest
-        Assert.IsTrue(ResourceManager.UnlockedLocationNames.Contains("Village"));
-        
-        var whisperingWoods = ContentHost.GetContent<Locations>().All.First(l => l.Name == "Dark Forest");
-        Assert.IsFalse(ResourceManager.UnlockedLocationNames.Contains("Dark Forest"));
-        
-        // Complete the required quest "Learn about the Dark Forest"
-        var quest = ContentHost.GetContent<Quests>().All.First(q => q.Name == "Learn about the Dark Forest");
-        ResourceManager.ReceiveRewards(new QuestData(quest, ContentHost.GetContent<QuestDetails>()[quest])).Wait();
-        
         ResourceManager.UpdateUsableLocations();
-        Assert.IsTrue(ResourceManager.UnlockedLocationNames.Contains("Dark Forest"));
+        var forest = ContentHost.GetContent<Locations>().All.First(l => l.Name == "Greenwood Forest");
+        var reqQuestName = forest.RequiredQuest;
+        Assert.IsNotNull(reqQuestName);
+
+        Assert.IsFalse(ResourceManager.UnlockedLocationNames.Contains("Greenwood Forest"));
+
+        // Complete the required quest
+        var quest = ContentHost.GetContent<Quests>().All.First(q => q.Name == reqQuestName);
+        ResourceManager.ReceiveRewards(new QuestData(quest, ContentHost.GetContent<QuestDetails>()[quest])).Wait();
+
+        ResourceManager.UpdateUsableLocations();
+        Assert.IsTrue(ResourceManager.UnlockedLocationNames.Contains("Greenwood Forest"));
     }
-}
+
+    [TestMethod]
+    public void CheckHiddenCadences_TriggersUnlock()
+    {
+        var character = ResourceManager.Characters[0];
+        var magStat = Stats.All.First(s => s.Name == "Magic");
+        var magMagic = new Item("Mag Magic", "Desc", ItemType.Spell);
+
+        var arcanist = ContentHost.GetContent<Cadences>().All.First(c => c.Name == "Arcanist");
+        ResourceManager.UnlockCadence(arcanist);
+        ResourceManager.UnlockedAbilities.Add("Arcanist:J-Magic");
+        JunctionManager.AssignCadence(arcanist, character, ResourceManager.UnlockedAbilities);
+
+        InventoryManager.MagicCapacity = 1000;
+        InventoryManager.Add(magMagic, 900);
+        JunctionManager.JunctionMagic(character, magStat, magMagic, ResourceManager.UnlockedAbilities);
+
+        // Act
+        ResourceManager.CheckHiddenCadences();
+
+        // Assert
+        Assert.IsTrue(ResourceManager.UnlockedCadenceNames.Contains("Scholar"));
+    }
+
+    [TestMethod]
+    public void IsInProgress_QuestData_Works()
+    {
+        var character = ResourceManager.Characters[0];
+        var quest = ContentHost.GetContent<Quests>().All.First();
+        var data = new QuestData(quest, ContentHost.GetContent<QuestDetails>()[quest]);
+
+        Assert.IsFalse(ResourceManager.IsInProgress(data));
+
+        ResourceManager.StartQuest(data, character);
+        Assert.IsTrue(ResourceManager.IsInProgress(data));
+    }
+    }
