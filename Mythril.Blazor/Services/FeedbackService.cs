@@ -44,6 +44,9 @@ public class FeedbackService(IJSRuntime js, AuthService auth, HttpClient http)
 
     private async Task SyncToDevBridge(FeedbackEntry entry)
     {
+#if !DEBUG
+        return;
+#endif
         try
         {
             Console.WriteLine($"[FeedbackService] Syncing {entry.Type} to bridge...");

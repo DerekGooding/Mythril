@@ -196,13 +196,13 @@ def migrate():
         
         for recipe in ref["Recipes"]:
             r_name = f"{ref['Ability']}: {recipe['OutputItem']}"
-            r_id = generate_id("recipe", r_name)
-            
+            # Unique ID including input item to avoid collisions for multiple recipes for same ability/output
+            r_id = generate_id("recipe", f"{ref['Ability']}_{recipe['InputItem']}_{recipe['OutputItem']}")
+
             node = {
                 "id": r_id,
                 "type": "Refinement",
-                "name": r_name,
-                "data": { "primary_stat": ref.get("PrimaryStat", "Strength") },
+                "name": r_name,                "data": { "primary_stat": ref.get("PrimaryStat", "Strength") },
                 "in_edges": {
                     "requires_ability": [ab_id]
                 },
