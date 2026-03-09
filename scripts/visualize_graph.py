@@ -40,6 +40,9 @@ def generate_html(mermaid_code):
             .quest-box {{ background-color: #4b0082; border: 1px solid #f9f; }}
             .location-box {{ background-color: #00008b; border: 1px solid #ccf; }}
             .cadence-box {{ background-color: #006400; border: 1px solid #cfc; }}
+            .item-box {{ background-color: #444; border: 1px solid #fff; }}
+            .stat-box {{ background-color: #8b4513; border: 1px solid #ff8c00; }}
+            .ability-box {{ background-color: #2f4f4f; border: 1px solid #00ced1; }}
             
             #graph-container {{
                 width: 100%;
@@ -64,6 +67,9 @@ def generate_html(mermaid_code):
                 <div class="legend-item"><div class="legend-box quest-box"></div> Quest</div>
                 <div class="legend-item"><div class="legend-box location-box"></div> Location</div>
                 <div class="legend-item"><div class="legend-box cadence-box"></div> Cadence</div>
+                <div class="legend-item"><div class="legend-box item-box"></div> Item</div>
+                <div class="legend-item"><div class="legend-box stat-box"></div> Stat</div>
+                <div class="legend-item"><div class="legend-box ability-box"></div> Ability</div>
             </div>
         </div>
         <div id="graph-container">
