@@ -957,7 +957,11 @@
       "quest_type": "Recurring",
       "primary_stat": "Vitality"
     },
-    "in_edges": {},
+    "in_edges": {
+      "requires_quest": [
+        "quest_learn_about_the_mines"
+      ]
+    },
     "out_edges": {
       "rewards": [
         {
@@ -981,7 +985,11 @@
       "quest_type": "Recurring",
       "primary_stat": "Strength"
     },
-    "in_edges": {},
+    "in_edges": {
+      "requires_quest": [
+        "quest_hunt_slimes"
+      ]
+    },
     "out_edges": {
       "rewards": [
         {
@@ -1001,7 +1009,11 @@
       "quest_type": "Single",
       "primary_stat": "Vitality"
     },
-    "in_edges": {},
+    "in_edges": {
+      "requires_quest": [
+        "quest_hunt_sand_sharks"
+      ]
+    },
     "out_edges": {
       "rewards": [
         {
@@ -1055,7 +1067,11 @@
       "quest_type": "Recurring",
       "primary_stat": "Magic"
     },
-    "in_edges": {},
+    "in_edges": {
+      "requires_quest": [
+        "quest_rekindling_the_spark"
+      ]
+    },
     "out_edges": {
       "consumes": [
         {
