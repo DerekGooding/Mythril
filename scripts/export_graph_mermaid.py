@@ -54,6 +54,10 @@ def generate_mermaid():
         ntype = node["type"]
         name = node["name"]
         
+        # IGNORE GOLD
+        if nid == "item_gold":
+            continue
+            
         style = ntype.lower()
         if nid == "quest_prologue": style = "root"
         
@@ -68,10 +72,6 @@ def generate_mermaid():
             cad = cadence_map[nid]
             if cad not in by_cadence: by_cadence[cad] = []
             by_cadence[cad].append(node_def)
-        elif ntype == "Location":
-            # Locations themselves stay global or we could group them by region?
-            # Let's keep them global to connect subgraphs
-            globals.append(node_def)
         else:
             globals.append(node_def)
 
@@ -101,13 +101,21 @@ def generate_mermaid():
         for reward_type in ["rewards", "produces", "rewards_item"]:
             if reward_type in out_edges:
                 for edge in out_edges[reward_type]:
+                    target_id = edge["targetId"]
+                    # IGNORE GOLD EDGES
+                    if target_id == "item_gold": continue
+                    
                     qty = edge.get("quantity", 1)
-                    edge_lines.append(f"{nid} --o|Gives {qty}| {edge['targetId']}")
+                    edge_lines.append(f"{nid} --o|Gives {qty}| {target_id}")
 
         if "consumes" in out_edges:
             for edge in out_edges["consumes"]:
+                target_id = edge["targetId"]
+                # IGNORE GOLD EDGES
+                if target_id == "item_gold": continue
+                
                 qty = edge.get("quantity", 1)
-                edge_lines.append(f"{edge['targetId']} --x|Consumes {qty}| {nid}")
+                edge_lines.append(f"{target_id} --x|Consumes {qty}| {nid}")
 
     # Build final output
     for node_def in globals:
