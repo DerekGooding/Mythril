@@ -45,20 +45,21 @@ def generate_html(mermaid_code):
             .ability-box {{ background-color: #2f4f4f; border: 1px solid #00ced1; }}
             
             #graph-container {{
-                width: 100%;
+                width: 100vw;
+                height: calc(100vh - 60px);
                 overflow: auto;
                 padding: 40px;
                 box-sizing: border-box;
+                background-color: #0d1117;
             }}
             
             .mermaid {{
-                background: #0d1117;
-                display: block;
-                margin: 0 auto;
+                margin: 0;
+                display: inline-block;
             }}
         </style>
     </head>
-    <body>
+    <body style="overflow: hidden;">
         <div class="header">
             <div>
                 <h2 style="margin:0; font-size: 1.2em;">Mythril Content Graph</h2>
