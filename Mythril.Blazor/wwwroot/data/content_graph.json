@@ -788,6 +788,12 @@
           "targetId": "item_ancient_bark",
           "quantity": 5
         }
+      ],
+      "unlocks_location": [
+        {
+          "targetId": "location_sacred_grove",
+          "quantity": 1
+        }
       ]
     }
   },
@@ -1019,7 +1025,11 @@
       "quest_type": "Recurring",
       "primary_stat": "Magic"
     },
-    "in_edges": {},
+    "in_edges": {
+      "requires_quest": [
+        "quest_defeat_treant_guardian"
+      ]
+    },
     "out_edges": {
       "consumes": [
         {
@@ -1362,24 +1372,19 @@
     },
     "out_edges": {
       "contains": [
-        {
-          "targetId": "quest_chop_wood",
-          "quantity": 1
-        },
-        {
-          "targetId": "quest_gather_moonberries",
-          "quantity": 1
-        },
-        {
-          "targetId": "quest_hunt_spiders",
-          "quantity": 1
-        },
-        {
-          "targetId": "quest_purify_the_grove",
-          "quantity": 1
-        }
-      ]
-    }
+      {
+        "targetId": "quest_chop_wood",
+        "quantity": 1
+      },
+      {
+        "targetId": "quest_gather_moonberries",
+        "quantity": 1
+      },
+      {
+        "targetId": "quest_hunt_spiders",
+        "quantity": 1
+      }
+      ]    }
   },
   {
     "id": "location_dark_forest",
@@ -1401,6 +1406,27 @@
         },
         {
           "targetId": "quest_help_the_lumberjack",
+          "quantity": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "location_sacred_grove",
+    "type": "Location",
+    "name": "Sacred Grove",
+    "data": {
+      "region_type": "Forest"
+    },
+    "in_edges": {
+      "requires_quest": [
+        "quest_defeat_treant_guardian"
+      ]
+    },
+    "out_edges": {
+      "contains": [
+        {
+          "targetId": "quest_purify_the_grove",
           "quantity": 1
         }
       ]

@@ -18,7 +18,13 @@
     "Name": "Greenwood Forest",
     "Type": "Forest",
     "RequiredQuest": "Tutorial Section",
-    "Quests": [ "Chop Wood", "Gather Moonberries", "Hunt Spiders", "Purify the Grove" ]
+    "Quests": [ "Chop Wood", "Gather Moonberries", "Hunt Spiders" ]
+  },
+  {
+    "Name": "Sacred Grove",
+    "Type": "Forest",
+    "RequiredQuest": "Defeat Treant Guardian",
+    "Quests": [ "Purify the Grove" ]
   },
   {
     "Name": "Dark Forest",

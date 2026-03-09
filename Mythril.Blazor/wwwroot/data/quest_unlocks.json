@@ -15,6 +15,7 @@
   { "Quest": "Mine Iron Ore", "Requires": ["Unlock Mining"] },
   { "Quest": "Gather Moonberries", "Requires": ["Learn about the Dark Forest"] },
   { "Quest": "Defeat Treant Guardian", "Requires": ["Gather Moonberries"] },
+  { "Quest": "Purify the Grove", "Requires": ["Defeat Treant Guardian"] },
   { "Quest": "Ancient Inscriptions", "Requires": ["Learn About Cadences"] },
   { "Quest": "Finding the Hearth", "Requires": ["Ancient Inscriptions"] },
   { "Quest": "Rekindling the Spark", "Requires": ["Finding the Hearth"] },
