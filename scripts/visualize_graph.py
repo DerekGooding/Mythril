@@ -1,6 +1,5 @@
 import os
 import webbrowser
-import tempfile
 from export_graph_mermaid import generate_mermaid
 
 def generate_html(mermaid_code):
@@ -24,11 +23,30 @@ def generate_html(mermaid_code):
                 padding: 10px 20px;
                 border-bottom: 1px solid #30363d;
                 display: flex;
-                justify-content: space-between;
-                align-items: center;
+                flex-direction: column;
                 position: sticky;
                 top: 0;
                 z-index: 100;
+            }}
+            .header-top {{
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 10px;
+            }}
+            .controls {{
+                display: flex;
+                gap: 20px;
+                background: #21262d;
+                padding: 8px 15px;
+                border-radius: 6px;
+                font-size: 0.9em;
+            }}
+            .control-item {{
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                cursor: pointer;
             }}
             .legend {{
                 display: flex;
@@ -46,7 +64,7 @@ def generate_html(mermaid_code):
             
             #graph-container {{
                 width: 100vw;
-                height: calc(100vh - 60px);
+                height: calc(100vh - 100px);
                 overflow: auto;
                 padding: 40px;
                 box-sizing: border-box;
@@ -57,20 +75,41 @@ def generate_html(mermaid_code):
                 margin: 0;
                 display: inline-block;
             }}
+
+            /* Toggling Logic */
+            body.hide-items .item, body.hide-items [class*="Gives"], body.hide-items [class*="Consumes"] {{ display: none !important; }}
+            body.hide-stats .stat, body.hide-stats [class*="Req"] {{ display: none !important; }}
+            body.hide-abilities .ability, body.hide-abilities .cadence, body.hide-abilities [class*="Allows"] {{ display: none !important; }}
+            
+            /* Mermaid Specific SVG targeting */
+            body.hide-items g.node.item, body.hide-items g.edgePath path[stroke*="o"], body.hide-items g.edgePath path[stroke*="x"] {{ opacity: 0; pointer-events: none; }}
+            /* Standard CSS display:none doesn't work well on SVG elements inside Mermaid sometimes, so we use opacity/pointer-events */
         </style>
     </head>
-    <body style="overflow: hidden;">
+    <body>
         <div class="header">
-            <div>
-                <h2 style="margin:0; font-size: 1.2em;">Mythril Content Graph</h2>
+            <div class="header-top">
+                <h2 style="margin:0; font-size: 1.2em;">Mythril Content Graph (Clustered)</h2>
+                <div class="legend">
+                    <div class="legend-item"><div class="legend-box quest-box"></div> Quest</div>
+                    <div class="legend-item"><div class="legend-box location-box"></div> Location</div>
+                    <div class="legend-item"><div class="legend-box cadence-box"></div> Cadence</div>
+                    <div class="legend-item"><div class="legend-box item-box"></div> Item</div>
+                    <div class="legend-item"><div class="legend-box stat-box"></div> Stat</div>
+                    <div class="legend-item"><div class="legend-box ability-box"></div> Ability</div>
+                </div>
             </div>
-            <div class="legend">
-                <div class="legend-item"><div class="legend-box quest-box"></div> Quest</div>
-                <div class="legend-item"><div class="legend-box location-box"></div> Location</div>
-                <div class="legend-item"><div class="legend-box cadence-box"></div> Cadence</div>
-                <div class="legend-item"><div class="legend-box item-box"></div> Item</div>
-                <div class="legend-item"><div class="legend-box stat-box"></div> Stat</div>
-                <div class="legend-item"><div class="legend-box ability-box"></div> Ability</div>
+            <div class="controls">
+                <strong>Visibility Toggles:</strong>
+                <label class="control-item">
+                    <input type="checkbox" checked onchange="toggleCategory('hide-items', this.checked)"> Items & Economy
+                </label>
+                <label class="control-item">
+                    <input type="checkbox" checked onchange="toggleCategory('hide-stats', this.checked)"> Stat Requirements
+                </label>
+                <label class="control-item">
+                    <input type="checkbox" checked onchange="toggleCategory('hide-abilities', this.checked)"> Cadences & Abilities
+                </label>
             </div>
         </div>
         <div id="graph-container">
@@ -90,6 +129,14 @@ def generate_html(mermaid_code):
                     padding: 50
                 }}
             }});
+
+            function toggleCategory(className, isVisible) {{
+                if (isVisible) {{
+                    document.body.classList.remove(className);
+                }} else {{
+                    document.body.classList.add(className);
+                }}
+            }}
         </script>
     </body>
     </html>
@@ -97,12 +144,11 @@ def generate_html(mermaid_code):
     return html_template
 
 def main():
-    print("Generating Mermaid graph content...")
+    print("Generating Clustered Mermaid graph...")
     try:
         mermaid_code = generate_mermaid()
         html = generate_html(mermaid_code)
         
-        # Ensure output directory exists
         output_dir = "output"
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
@@ -113,8 +159,6 @@ def main():
             
         abs_path = os.path.abspath(file_path)
         print(f"Graph generated: {abs_path}")
-        
-        # Open in browser
         print("Opening browser...")
         webbrowser.open(f"file://{abs_path}")
         
