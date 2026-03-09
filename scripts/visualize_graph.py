@@ -1,5 +1,10 @@
 import os
 import webbrowser
+import http.server
+import socketserver
+import threading
+import time
+import sys
 from export_graph_mermaid import generate_mermaid
 
 def generate_html(mermaid_code):
@@ -83,13 +88,12 @@ def generate_html(mermaid_code):
             
             /* Mermaid Specific SVG targeting */
             body.hide-items g.node.item, body.hide-items g.edgePath path[stroke*="o"], body.hide-items g.edgePath path[stroke*="x"] {{ opacity: 0; pointer-events: none; }}
-            /* Standard CSS display:none doesn't work well on SVG elements inside Mermaid sometimes, so we use opacity/pointer-events */
         </style>
     </head>
     <body>
         <div class="header">
             <div class="header-top">
-                <h2 style="margin:0; font-size: 1.2em;">Mythril Content Graph (Clustered)</h2>
+                <h2 style="margin:0; font-size: 1.2em;">Mythril Content Graph</h2>
                 <div class="legend">
                     <div class="legend-item"><div class="legend-box quest-box"></div> Quest</div>
                     <div class="legend-item"><div class="legend-box location-box"></div> Location</div>
@@ -143,6 +147,18 @@ def generate_html(mermaid_code):
     """
     return html_template
 
+def start_server(port):
+    """Starts a simple HTTP server in the current directory."""
+    handler = http.server.SimpleHTTPRequestHandler
+    # Suppress server logs to keep terminal clean
+    handler.log_message = lambda *args: None
+    try:
+        with socketserver.TCPServer(("", port), handler) as httpd:
+            print(f"Server started at http://localhost:{port}")
+            httpd.serve_forever()
+    except Exception as e:
+        print(f"Server error: {e}")
+
 def main():
     print("Generating Clustered Mermaid graph...")
     try:
@@ -159,9 +175,30 @@ def main():
             
         abs_path = os.path.abspath(file_path)
         print(f"Graph generated: {abs_path}")
-        print("Opening browser...")
-        webbrowser.open(f"file://{abs_path}")
         
+        # Start server in a background thread
+        port = 8000
+        # Change dir to output so we serve the file directly
+        os.chdir(output_dir)
+        
+        server_thread = threading.Thread(target=start_server, args=(port,), daemon=True)
+        server_thread.start()
+        
+        # Small delay to ensure server is up
+        time.sleep(1)
+        
+        url = f"http://localhost:{port}/graph_visualizer.html"
+        print(f"Opening {url}...")
+        webbrowser.open(url)
+        
+        print("\nVisualizer is running. Press Ctrl+C to stop the server.")
+        try:
+            while True:
+                time.sleep(1)
+        except KeyboardInterrupt:
+            print("\nStopping server...")
+            sys.exit(0)
+            
     except Exception as e:
         print(f"Error: {e}")
 
