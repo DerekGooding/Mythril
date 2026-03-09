@@ -92,7 +92,7 @@ public readonly record struct Recipe(int InputQuantity, Item OutputItem, int Out
 
 public readonly record struct RefinementData(CadenceAbility Ability, Item InputItem, Recipe Recipe, string PrimaryStat = "Strength")
 {
-    public string Name => $"{Ability.Name}: {Recipe.OutputItem.Name}";
+    public string Name => $"{Ability.Name} ({InputItem.Name}): {Recipe.OutputItem.Name}";
     public string Description => $"Refine {Recipe.InputQuantity}x {InputItem.Name} into {Recipe.OutputQuantity}x {Recipe.OutputItem.Name}";
 }
 

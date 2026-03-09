@@ -76,7 +76,7 @@ public class MiscDataTests
     public void Locations_All_ContainsCorrectLocations()
     {
         var locations = ContentHost.GetContent<Locations>();
-        Assert.AreEqual(12, locations.All.Length);
+        Assert.AreEqual(13, locations.All.Length);
         Assert.IsTrue(locations.All.Any(l => l.Name == "Village"));  
     }
     [TestMethod]
