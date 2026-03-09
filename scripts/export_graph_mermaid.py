@@ -13,10 +13,10 @@ def generate_mermaid():
     lines = ["graph TD"]
     
     # Define styles
-    lines.append("classDef quest fill:#f9f,stroke:#333,stroke-width:2px;")
-    lines.append("classDef location fill:#ccf,stroke:#333,stroke-width:2px;")
-    lines.append("classDef cadence fill:#cfc,stroke:#333,stroke-width:2px;")
-    lines.append("classDef root fill:#ff9,stroke:#333,stroke-width:4px;")
+    lines.append("classDef quest fill:#4b0082,stroke:#f9f,stroke-width:2px,color:#fff;")
+    lines.append("classDef location fill:#00008b,stroke:#ccf,stroke-width:2px,color:#fff;")
+    lines.append("classDef cadence fill:#006400,stroke:#cfc,stroke-width:2px,color:#fff;")
+    lines.append("classDef root fill:#8b8b00,stroke:#ff9,stroke-width:4px,color:#fff;")
 
     # Filter for significant nodes to avoid clutter
     # Focus on Quests, Locations, Cadences

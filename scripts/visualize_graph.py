@@ -18,7 +18,6 @@ def generate_html(mermaid_code):
                 color: #c9d1d9; 
                 margin: 0; 
                 padding: 0;
-                overflow: hidden;
             }}
             .header {{
                 background-color: #161b22;
@@ -27,6 +26,9 @@ def generate_html(mermaid_code):
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
+                position: sticky;
+                top: 0;
+                z-index: 100;
             }}
             .legend {{
                 display: flex;
@@ -35,22 +37,21 @@ def generate_html(mermaid_code):
             }}
             .legend-item {{ display: flex; align-items: center; gap: 5px; }}
             .legend-box {{ width: 12px; height: 12px; border-radius: 2px; }}
-            .quest-box {{ background-color: #f9f; border: 1px solid #333; }}
-            .location-box {{ background-color: #ccf; border: 1px solid #333; }}
-            .cadence-box {{ background-color: #cfc; border: 1px solid #333; }}
+            .quest-box {{ background-color: #4b0082; border: 1px solid #f9f; }}
+            .location-box {{ background-color: #00008b; border: 1px solid #ccf; }}
+            .cadence-box {{ background-color: #006400; border: 1px solid #cfc; }}
             
             #graph-container {{
-                width: 100vw;
-                height: calc(100vh - 60px);
+                width: 100%;
                 overflow: auto;
-                padding: 20px;
+                padding: 40px;
                 box-sizing: border-box;
-                display: flex;
-                justify-content: center;
             }}
             
             .mermaid {{
                 background: #0d1117;
+                display: block;
+                margin: 0 auto;
             }}
         </style>
     </head>
@@ -66,9 +67,9 @@ def generate_html(mermaid_code):
             </div>
         </div>
         <div id="graph-container">
-            <pre class="mermaid">
+            <div class="mermaid">
 {mermaid_code}
-            </pre>
+            </div>
         </div>
         <script>
             mermaid.initialize({{ 
@@ -78,7 +79,8 @@ def generate_html(mermaid_code):
                 flowchart: {{
                     useMaxWidth: false,
                     htmlLabels: true,
-                    curve: 'basis'
+                    curve: 'basis',
+                    padding: 50
                 }}
             }});
         </script>
