@@ -39,27 +39,22 @@ def generate_mermaid():
 
         lines.append(f'{nid}["{name}"]{style}')
 
-        # Edges
-        # 1. Requirements (Quest -> Quest)
+        # 2. Location Unlocks (Quest -> Location)
+        if "unlocks_location" in node["out_edges"]:
+            for edge in node["out_edges"]["unlocks_location"]:
+                target_id = edge["targetId"]
+                if target_id in sig_nodes:
+                    lines.append(f"{nid} ==>|Unlocks| {target_id}")
+
+        # 3. Requirements (Location -> Quest)
         if "requires_quest" in node["in_edges"]:
             for req_id in node["in_edges"]["requires_quest"]:
                 if req_id in sig_nodes:
-                    lines.append(f"{req_id} -->|Requires| {nid}")
-
-        # 2. Location Unlocks (Quest -> Location) - Actually Location requires Quest in gating
-        # In our graph, Location has in_edge requires_quest. 
-        # Mermaid: Quest --> Location
-        # Wait, Location -> Quest means Location requires Quest to enter. 
-        # So Quest -> Location flow is correct for progression.
-        
-        # 3. Quest containment (Location -> Quest)
-        # Location contains Quest
-        if "contains" in node["out_edges"]:
-            for edge in node["out_edges"]["contains"]:
-                target_id = edge["targetId"]
-                if target_id in sig_nodes:
-                    # lines.append(f"{nid} -.->|Contains| {target_id}") # Optional: Can be noisy
-                    pass
+                    # Avoid duplicate edges with 'requires_quest' which is also on Quest nodes.
+                    if node["type"] == "Location":
+                        lines.append(f"{req_id} -->|Enables| {nid}")
+                    elif node["type"] == "Quest":
+                        lines.append(f"{req_id} -->|Requires| {nid}")
 
         # 4. Cadence Unlocks (Quest -> Cadence)
         if "unlocks_cadence" in node["out_edges"]:
@@ -69,7 +64,7 @@ def generate_mermaid():
                     lines.append(f"{nid} ==>|Unlocks| {target_id}")
 
     # Output
-    print("\n".join(lines))
+    return "\n".join(lines)
 
 if __name__ == "__main__":
-    generate_mermaid()
+    print(generate_mermaid())
