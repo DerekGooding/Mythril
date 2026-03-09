@@ -177,7 +177,7 @@ public class UIComponentTests : BunitTestBase
     }
 
     [TestMethod]
-    public void ItemIcon_RendersCorrectly()
+    public void ItemIcon_RendersSpellWithFallback()
     {
         // Arrange
         var item = new Item("Fire I", "Desc", ItemType.Spell);
@@ -187,9 +187,40 @@ public class UIComponentTests : BunitTestBase
 
         // Assert
         // Should have spell-glow class for spells
-        Assert.IsTrue(cut.Find(".item-icon").ClassList.Contains("spell-glow"));
-        // Should have the primitive div for spells (fallback)
+        var container = cut.Find("[data-testid='item-icon-fire-i']");
+        Assert.IsTrue(container.ClassList.Contains("spell-glow"));
+        
+        // Initially shows sprite
+        Assert.IsTrue(cut.FindAll(".item-sprite").Count > 0);
+
+        // Simulate error
+        var img = cut.Find(".item-sprite");
+        img.TriggerEvent("onerror", EventArgs.Empty);
+
+        // Should now show fallback
         var primitive = cut.Find(".spell-primitive");
         Assert.IsTrue(primitive.ClassList.Contains("fire"));
+    }
+
+    [TestMethod]
+    public void ItemIcon_RendersMaterialWithFallback()
+    {
+        // Arrange
+        var item = new Item("Iron Ore", "Desc", ItemType.Material);
+
+        // Act
+        var cut = RenderComponent<ItemIcon>(parameters => parameters.Add(p => p.Item, item));
+
+        // Assert
+        var container = cut.Find("[data-testid='item-icon-iron-ore']");
+        Assert.IsFalse(container.ClassList.Contains("spell-glow"));
+
+        // Simulate error
+        var img = cut.Find(".item-sprite");
+        img.TriggerEvent("onerror", EventArgs.Empty);
+
+        // Should show initial
+        var initial = cut.Find(".initial");
+        Assert.AreEqual("I", initial.TextContent);
     }
 }

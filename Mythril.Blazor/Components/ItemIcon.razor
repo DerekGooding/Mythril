@@ -1,33 +1,55 @@
 @using Mythril.Data
 
-<div class="item-icon @(Item.ItemType == ItemType.Spell ? "spell-glow" : "")" style="@GetIconStyle()">
-    @if (hasSprite)
+<div class="item-icon @(Item.ItemType == ItemType.Spell ? "spell-glow" : "")" style="@GetIconStyle()" data-testid="item-icon-@Item.Name.ToLower().Replace(" ", "-")">
+    @if (showSprite)
     {
         <img src="assets/sprites/@(Item.Name.ToLower().Replace(" ", "_")).png" 
              class="item-sprite" 
-             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+             @onerror="OnSpriteError" />
     }
     
-    <div class="icon-fallback d-flex align-items-center justify-content-center" style="@(hasSprite ? "display:none;" : "")">
-        @if (Item.ItemType == ItemType.Spell)
-        {
-            <div class="spell-primitive @(Item.Name.ToLower().Split(' ')[0])"></div>
-        }
-        else
-        {
-            <span class="initial">@Item.Name[0]</span>
-        }
-    </div>
+    @if (!showSprite)
+    {
+        <div class="icon-fallback d-flex align-items-center justify-content-center">
+            @if (Item.ItemType == ItemType.Spell)
+            {
+                <div class="spell-primitive @(Item.Name.ToLower().Split(' ')[0])"></div>
+            }
+            else
+            {
+                <span class="initial">@Item.Name[0]</span>
+            }
+        </div>
+    }
 </div>
 
 @code {
-    [Parameter] public Item Item { get; set; }
+    [Parameter] public Item Item { get; set; } = new Item("", "", ItemType.Material);
 
-    private bool hasSprite => true; // We generated most of them
+    private bool showSprite = true;
+
+    private void OnSpriteError()
+    {
+        showSprite = false;
+    }
 
     private string GetIconStyle()
     {
-        // Add dynamic color based on name hash if no sprite
+        if (Item.ItemType == ItemType.Spell)
+        {
+            var firstWord = Item.Name.ToLower().Split(' ')[0];
+            return firstWord switch
+            {
+                "fire" => "color: #ff4444;",
+                "ice" => "color: #44ccff;",
+                "lightning" => "color: #ffff44;",
+                "earth" => "color: #886644;",
+                "water" => "color: #4444ff;",
+                "haste" => "color: #44ff44;",
+                "cure" => "color: #ff44aa;",
+                _ => ""
+            };
+        }
         return "";
     }
 }
