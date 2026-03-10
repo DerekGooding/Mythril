@@ -51,9 +51,12 @@ def generate_mermaid():
     edge_lines = []
     
     for node in nodes:
-        nid = node["id"]
+        nid = node["id"].strip()
         ntype = node["type"]
-        name = node["name"]
+        # Rigorous cleaning
+        raw_name = node["name"].replace('"', "'").replace(":", "-")
+        name = "".join(c for c in raw_name if c.isprintable() or c == " ")
+        name = " ".join(name.split()).strip()
         
         # IGNORE GOLD
         if nid == "item_gold":
@@ -62,15 +65,19 @@ def generate_mermaid():
         style = ntype.lower()
         if nid == "quest_prologue": style = "root"
         
-        node_def = f'{nid}["{name.replace('"', "'")}"]:::{style}'
+        node_def = f'{nid}["{name}"]:::{style}'
         
         # Assign to group
         if ntype == "Quest" and nid in location_map:
-            loc = location_map[nid]
+            raw_loc = location_map[nid].replace(":", "-")
+            loc = "".join(c for c in raw_loc if c.isprintable() or c == " ")
+            loc = " ".join(loc.split()).strip()
             if loc not in by_location: by_location[loc] = []
             by_location[loc].append(node_def)
         elif ntype == "Ability" and nid in cadence_map:
-            cad = cadence_map[nid]
+            raw_cad = cadence_map[nid].replace(":", "-")
+            cad = "".join(c for c in raw_cad if c.isprintable() or c == " ")
+            cad = " ".join(cad.split()).strip()
             if cad not in by_cadence: by_cadence[cad] = []
             by_cadence[cad].append(node_def)
         else:
@@ -123,12 +130,12 @@ def generate_mermaid():
         lines.append(node_def)
         
     for loc, nodes_in_loc in by_location.items():
-        lines.append(f'subgraph "Location: {loc}"')
+        lines.append(f'subgraph "Location - {loc}"')
         lines.extend(nodes_in_loc)
         lines.append("end")
         
     for cad, nodes_in_cad in by_cadence.items():
-        lines.append(f'subgraph "Cadence: {cad}"')
+        lines.append(f'subgraph "Cadence - {cad}"')
         lines.extend(nodes_in_cad)
         lines.append("end")
         
@@ -137,4 +144,9 @@ def generate_mermaid():
     return "\n".join(lines)
 
 if __name__ == "__main__":
-    print(generate_mermaid())
+    mermaid = generate_mermaid()
+    if len(sys.argv) > 1:
+        with open(sys.argv[1], 'w', encoding='utf-8') as f:
+            f.write(mermaid)
+    else:
+        print(mermaid)

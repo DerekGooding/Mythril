@@ -195,7 +195,7 @@ def migrate():
         # Let's create Recipe Nodes linked to the Ability.
         
         for recipe in ref["Recipes"]:
-            r_name = f"{ref['Ability']}: {recipe['OutputItem']}"
+            r_name = f"{ref['Ability']} - {recipe['OutputItem']}"
             # Unique ID including input item to avoid collisions for multiple recipes for same ability/output
             r_id = generate_id("recipe", f"{ref['Ability']}_{recipe['InputItem']}_{recipe['OutputItem']}")
 

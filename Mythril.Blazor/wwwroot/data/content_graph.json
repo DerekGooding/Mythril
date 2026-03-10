@@ -2400,7 +2400,7 @@
   {
     "id": "recipe_refine_fire_basic_gem_fire_i",
     "type": "Refinement",
-    "name": "Refine Fire: Fire I",
+    "name": "Refine Fire - Fire I",
     "data": {
       "primary_stat": "Magic"
     },
@@ -2427,7 +2427,7 @@
   {
     "id": "recipe_refine_fire_iron_ore_fire_i",
     "type": "Refinement",
-    "name": "Refine Fire: Fire I",
+    "name": "Refine Fire - Fire I",
     "data": {
       "primary_stat": "Magic"
     },
@@ -2454,7 +2454,7 @@
   {
     "id": "recipe_refine_ice_mana_leaf_ice_i",
     "type": "Refinement",
-    "name": "Refine Ice: Ice I",
+    "name": "Refine Ice - Ice I",
     "data": {
       "primary_stat": "Magic"
     },
@@ -2481,7 +2481,7 @@
   {
     "id": "recipe_refine_ice_moonberry_ice_i",
     "type": "Refinement",
-    "name": "Refine Ice: Ice I",
+    "name": "Refine Ice - Ice I",
     "data": {
       "primary_stat": "Magic"
     },
@@ -2508,7 +2508,7 @@
   {
     "id": "recipe_refine_wood_log_herb",
     "type": "Refinement",
-    "name": "Refine Wood: Herb",
+    "name": "Refine Wood - Herb",
     "data": {
       "primary_stat": "Strength"
     },
@@ -2535,7 +2535,7 @@
   {
     "id": "recipe_refine_mixology_herb_potion",
     "type": "Refinement",
-    "name": "Refine Mixology: Potion",
+    "name": "Refine Mixology - Potion",
     "data": {
       "primary_stat": "Strength"
     },
@@ -2562,7 +2562,7 @@
   {
     "id": "recipe_refine_scrap_web_gold",
     "type": "Refinement",
-    "name": "Refine Scrap: Gold",
+    "name": "Refine Scrap - Gold",
     "data": {
       "primary_stat": "Speed"
     },
@@ -2589,7 +2589,7 @@
   {
     "id": "recipe_refine_scrap_slime_gold",
     "type": "Refinement",
-    "name": "Refine Scrap: Gold",
+    "name": "Refine Scrap - Gold",
     "data": {
       "primary_stat": "Speed"
     },
@@ -2616,7 +2616,7 @@
   {
     "id": "recipe_refine_life_ancient_bark_cure_i",
     "type": "Refinement",
-    "name": "Refine Life: Cure I",
+    "name": "Refine Life - Cure I",
     "data": {
       "primary_stat": "Magic"
     },
@@ -2643,7 +2643,7 @@
   {
     "id": "recipe_refine_lightning_fire_shard_lightning_i",
     "type": "Refinement",
-    "name": "Refine Lightning: Lightning I",
+    "name": "Refine Lightning - Lightning I",
     "data": {
       "primary_stat": "Magic"
     },
@@ -2670,7 +2670,7 @@
   {
     "id": "recipe_refine_lightning_ice_shard_lightning_i",
     "type": "Refinement",
-    "name": "Refine Lightning: Lightning I",
+    "name": "Refine Lightning - Lightning I",
     "data": {
       "primary_stat": "Magic"
     },
@@ -2697,7 +2697,7 @@
   {
     "id": "recipe_refine_earth_crystal_shards_earth_i",
     "type": "Refinement",
-    "name": "Refine Earth: Earth I",
+    "name": "Refine Earth - Earth I",
     "data": {
       "primary_stat": "Strength"
     },
@@ -2724,7 +2724,7 @@
   {
     "id": "recipe_refine_water_blue_coral_water_i",
     "type": "Refinement",
-    "name": "Refine Water: Water I",
+    "name": "Refine Water - Water I",
     "data": {
       "primary_stat": "Speed"
     },
@@ -2751,7 +2751,7 @@
   {
     "id": "recipe_refine_haste_lost_parchment_haste_i",
     "type": "Refinement",
-    "name": "Refine Haste: Haste I",
+    "name": "Refine Haste - Haste I",
     "data": {
       "primary_stat": "Magic"
     },
