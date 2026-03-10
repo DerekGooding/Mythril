@@ -66,6 +66,7 @@ def generate_html(mermaid_code):
             .item-box {{ background-color: #444; border: 1px solid #fff; }}
             .stat-box {{ background-color: #8b4513; border: 1px solid #ff8c00; }}
             .ability-box {{ background-color: #2f4f4f; border: 1px solid #00ced1; }}
+            .refinement-box {{ background-color: #ff4500; border: 1px solid #fff; }}
             
             #graph-container {{
                 width: 100vw;
@@ -84,7 +85,7 @@ def generate_html(mermaid_code):
             /* Toggling Logic */
             body.hide-items .item, body.hide-items [class*="Gives"], body.hide-items [class*="Consumes"] {{ display: none !important; }}
             body.hide-stats .stat, body.hide-stats [class*="Req"] {{ display: none !important; }}
-            body.hide-abilities .ability, body.hide-abilities .cadence, body.hide-abilities [class*="Allows"] {{ display: none !important; }}
+            body.hide-abilities .ability, body.hide-abilities .cadence, body.hide-abilities [class*="Allows"], body.hide-abilities .refinement {{ display: none !important; }}
             
             /* Mermaid Specific SVG targeting */
             body.hide-items g.node.item, body.hide-items g.edgePath path[stroke*="o"], body.hide-items g.edgePath path[stroke*="x"] {{ opacity: 0; pointer-events: none; }}
@@ -101,6 +102,7 @@ def generate_html(mermaid_code):
                     <div class="legend-item"><div class="legend-box item-box"></div> Item</div>
                     <div class="legend-item"><div class="legend-box stat-box"></div> Stat</div>
                     <div class="legend-item"><div class="legend-box ability-box"></div> Ability</div>
+                    <div class="legend-item"><div class="legend-box refinement-box"></div> Refinement</div>
                 </div>
             </div>
             <div class="controls">

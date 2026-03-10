@@ -45,6 +45,7 @@ def generate_mermaid():
     lines.append("classDef item fill:#444,stroke:#fff,stroke-width:1px,color:#fff;")
     lines.append("classDef stat fill:#8b4513,stroke:#ff8c00,stroke-width:1px,color:#fff;")
     lines.append("classDef ability fill:#2f4f4f,stroke:#00ced1,stroke-width:1px,color:#fff;")
+    lines.append("classDef refinement fill:#ff4500,stroke:#fff,stroke-width:1px,color:#fff;")
     lines.append("classDef root fill:#8b8b00,stroke:#ff9,stroke-width:4px,color:#fff;")
 
     edge_lines = []

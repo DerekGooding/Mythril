@@ -788,12 +788,6 @@
           "targetId": "item_ancient_bark",
           "quantity": 5
         }
-      ],
-      "unlocks_location": [
-        {
-          "targetId": "location_sacred_grove",
-          "quantity": 1
-        }
       ]
     }
   },
@@ -1388,40 +1382,16 @@
     },
     "out_edges": {
       "contains": [
-      {
-        "targetId": "quest_chop_wood",
-        "quantity": 1
-      },
-      {
-        "targetId": "quest_gather_moonberries",
-        "quantity": 1
-      },
-      {
-        "targetId": "quest_hunt_spiders",
-        "quantity": 1
-      }
-      ]    }
-  },
-  {
-    "id": "location_dark_forest",
-    "type": "Location",
-    "name": "Dark Forest",
-    "data": {
-      "region_type": "Forest"
-    },
-    "in_edges": {
-      "requires_quest": [
-        "quest_learn_about_the_dark_forest"
-      ]
-    },
-    "out_edges": {
-      "contains": [
         {
-          "targetId": "quest_defeat_treant_guardian",
+          "targetId": "quest_chop_wood",
           "quantity": 1
         },
         {
-          "targetId": "quest_help_the_lumberjack",
+          "targetId": "quest_gather_moonberries",
+          "quantity": 1
+        },
+        {
+          "targetId": "quest_hunt_spiders",
           "quantity": 1
         }
       ]
@@ -1443,6 +1413,31 @@
       "contains": [
         {
           "targetId": "quest_purify_the_grove",
+          "quantity": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "location_dark_forest",
+    "type": "Location",
+    "name": "Dark Forest",
+    "data": {
+      "region_type": "Forest"
+    },
+    "in_edges": {
+      "requires_quest": [
+        "quest_learn_about_the_dark_forest"
+      ]
+    },
+    "out_edges": {
+      "contains": [
+        {
+          "targetId": "quest_defeat_treant_guardian",
+          "quantity": 1
+        },
+        {
+          "targetId": "quest_help_the_lumberjack",
           "quantity": 1
         }
       ]
