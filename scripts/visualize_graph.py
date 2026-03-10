@@ -14,7 +14,7 @@ def generate_html(mermaid_code):
     <head>
         <meta charset="UTF-8">
         <title>Mythril Content Graph Visualizer</title>
-        <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@9.4.0/dist/mermaid.min.js"></script>
         <style>
             body {{ 
                 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
@@ -124,17 +124,25 @@ def generate_html(mermaid_code):
             </div>
         </div>
         <script>
-            mermaid.initialize({{ 
-                startOnLoad: true,
-                theme: 'dark',
-                securityLevel: 'loose',
-                flowchart: {{
-                    useMaxWidth: false,
-                    htmlLabels: true,
-                    curve: 'basis',
-                    padding: 50
-                }}
-            }});
+            try {{
+                mermaid.initialize({{ 
+                    startOnLoad: true,
+                    theme: 'dark',
+                    securityLevel: 'loose',
+                    flowchart: {{
+                        useMaxWidth: false,
+                        htmlLabels: false,
+                        curve: 'linear',
+                        padding: 50
+                    }}
+                }});
+
+                mermaid.parseError = function(err, hash) {{
+                    console.error('Mermaid Parse Error:', err);
+                }};
+            }} catch (e) {{
+                console.error('Mermaid Initialization Error:', e);
+            }}
 
             function toggleCategory(className, isVisible) {{
                 if (isVisible) {{
