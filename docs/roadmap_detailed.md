@@ -1,47 +1,53 @@
-# Detailed Technical Roadmap: Content Graph Transition
+# Detailed Technical Roadmap: Simulation & Architecture Maturity
 
-## ⚙️ Mechanical Specifications
+Detailed breakdown of current roadmap initiatives.
 
-### 1. Unified Schema (The Content Node)
-Every piece of game data (Quest, Location, Cadence, Item, Refinement) will be represented as a `ContentNode`.
+## 1. Economic Equilibrium Refinement
+Achieving 100% sustainability for all reachable recurring content.
 
-**Node Fields:**
-🛡️ `id`: Unique string (e.g., `q_prologue`, `loc_village`, `i_gold`).
-🛡️ `type`: String enum (`Quest`, `Location`, `Cadence`, `Item`, `Refinement`, `Stat`).
-🛡️ `name`: Display name.
-🛡️ `data`: Dynamic dictionary for type-specific properties (duration, repeatability, etc).
-🛡️ `in_edges`: Requirements (other node IDs).
-🛡️ `out_edges`: Unlocks and Rewards (other node IDs with quantities).
+- [ ] **Data Audit**: Identify all "Unsustainable Activities" using `FlowSimulator` report.
+- [ ] **Logistics/Resource Injection**: Update `content_graph.json` to ensure bottleneck resources like `Log`, `Mana Leaf`, and `Ancient Bark` have sustainable production loops.
+- [ ] **Cost-Benefit Balance**: Adjust refinement costs and rewards for late-game content to prevent resource depletion.
+- [ ] **Verification**: Run `check_health.py` and confirm `shield_sustainability` reaches 100%.
 
-### 2. Migration Logic (`scripts/migrate_to_graph.py`)
-- **Input**: The 11 JSON files in `wwwroot/data/`.
-- **Mapping**:
-    - `quests.json` + `quest_details.json` + `quest_unlocks.json` → `Quest` nodes.
-    - `locations.json` → `Location` nodes + `Quest` containment edges.
-    - `refinements.json` → `Refinement` nodes + `Item` input/output edges.
-- **Output**: A single `content_graph.json` array.
+## 2. Dependency-Tracked Fixpoint Solver
+Optimizing `LatticeSimulator` performance for large-scale content expansion.
 
-### 3. Semantic Linter Rules (`scripts/verify_graph.py`)
-This script will implement graph traversal algorithms to enforce the following:
+- [ ] **Worklist Architecture**: Implement a queue-based `Solve()` loop in `LatticeSimulator.cs`.
+- [ ] **Dependency Graph Build**: Create an internal map of `Node -> [DependentNodes]` during initialization.
+- [ ] **Delta Propagation**: Only add nodes to the worklist when their inputs (in-edges) change state.
+- [ ] **Validation**: Ensure results are bit-for-bit identical to the exhaustive solver.
 
-🛡️ **Connectivity**:
-- **Root Validation**: Only one node of type `Quest` has zero incoming edges of type `requires_quest`.
-- **Reachability**: All nodes must have a valid path from the Root node.
-- **Cycle Detection**: Ensure no cycles exist in the `Quest` or `Location` unlock chains.
+## 3. Simulation-Driven Regression Assertions
+Automated pacing and balance checks for CI.
 
-🛡️ **Semantic Contracts**:
-- **Initial Capital**: The Root node must reward `item_gold` >= 100.
-- **Location Lockdown**: Every Location node (except Village) must have an incoming edge from a Quest node.
-- **Useless Content**: Every node of type `Quest` (with `Type: Single` or `Unlock`) must either unlock a new node or be a requirement for another node.
-- **Capacity Check**: Refinement requirements must be holdable within the `MagicCapacity` available at the time the refinement becomes reachable.
+- [ ] **Baseline Establishment**: Record current `Routed Completion Time` as the performance baseline.
+- [ ] **Pacing Logic**: Add logic to `check_health.py` to compare current sim results with baseline.
+- [ ] **Regression Thresholds**: Define acceptable variance (e.g., <15% increase without new content).
+- [ ] **CI Integration**: Fail the health check if pacing regressions are detected.
 
-### 4. Visualization (`Mermaid`)
-- Export logic will translate the JSON graph into Mermaid's `graph TD` syntax.
-- **Nodes**: Styled by type (e.g., Quests as rectangles, Locations as rounded rectangles).
-- **Edges**: Labeled by relationship (e.g., `requires`, `unlocks`, `rewards`).
+## 4. UI: Predictive Dependency Overlay
+Graph-based navigation assistance for the player.
 
-## 🧪 Implementation Guidelines
-- **Zero Data Loss**: The migration script must include a checksum or item count verification to ensure every existing quest and item is preserved.
-- **Backwards Compatibility**: During refactoring, the `ContentLoader` will temporarily support both formats to allow incremental migration.
-- **Performance**: Use a standard Graph library (like `networkx` in Python) for verification to ensure rapid health checks.
-- **Graph Invariants**: The graph is a Directed Acyclic Graph (DAG) regarding unlocks, but can be cyclic regarding resource flows (which is handled by the Flow Simulator).
+- [ ] **Pathfinding Logic**: Implement BFS/DFS on the client-side content graph to find the shortest path to a locked node.
+- [ ] **UI State Integration**: Update `CadenceTree` and `QuestPanel` to accept a `HighightedNodes` parameter.
+- [ ] **Hover Interactions**: Implement hover-triggers that activate the pathfinding and highlight prerequisite nodes.
+
+## 5. Eliminate "Magic String" Metadata
+Type-safe ability and quest effects.
+
+- [ ] **Schema Definition**: Create a JSON schema/C# record for `EffectDefinition` (e.g., `StatBoost`, `MagicCapacity`, `AutoQuest`).
+- [ ] **Content Migration**: Update all `Ability` and `Quest` nodes in `content_graph.json` to use the new `effects` field.
+- [ ] **Loader Refactor**: Update `ContentLoader.cs` to deserialize the typed effects.
+- [ ] **Code Cleanup**: Remove `Metadata` dictionary lookups and replace with typed property checks.
+
+## 6. Unified Deterministic State Store
+Full parity between simulation and Blazor runtime.
+
+- [ ] **State Record**: Create a single `GameStoreState` immutable record.
+- [ ] **Actions & Reducers**: Define formal `Actions` (e.g., `CompleteQuest`, `SpendResource`) and a pure `Reducer` function.
+- [ ] **Manager Refactor**: Convert `ResourceManager`, `JunctionManager`, and `InventoryManager` to be view-only subscribers to the `GameStateStore`.
+- [ ] **Snapshot Support**: Implement a one-click snapshot/restore feature for testing and save-games.
+
+---
+*Last Updated: 2026-04-06*
