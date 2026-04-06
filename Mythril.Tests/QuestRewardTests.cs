@@ -59,8 +59,8 @@ public class QuestRewardTests
         
         _resourceManager.PayCosts(questData);
         
-        // Buy Potion costs 250
-        Assert.AreEqual(750, _resourceManager.Inventory.GetQuantity(_items.All.First(x => x.Name == "Gold")));
+        // Buy Potion costs 100
+        Assert.AreEqual(900, _resourceManager.Inventory.GetQuantity(_items.All.First(x => x.Name == "Gold")));
     }
 
     [TestMethod]
@@ -74,7 +74,7 @@ public class QuestRewardTests
         
         _resourceManager.ReceiveRewards(questData).Wait();
         
-        Assert.AreEqual(1, _resourceManager.Inventory.GetQuantity(_items!.All.First(x => x.Name == "Potion")));
+        Assert.AreEqual(5, _resourceManager.Inventory.GetQuantity(_items!.All.First(x => x.Name == "Potion")));
     }
 
     [TestMethod]
@@ -144,7 +144,7 @@ public class QuestRewardTests
         _resourceManager.Inventory.Add(gold, 1000);
 
         _resourceManager.StartQuest(questData, character);
-        Assert.AreEqual(750, _resourceManager.Inventory.GetQuantity(gold));
+        Assert.AreEqual(900, _resourceManager.Inventory.GetQuantity(gold));
 
         var progress = _resourceManager.ActiveQuests[0];
         _resourceManager.CancelQuest(progress);

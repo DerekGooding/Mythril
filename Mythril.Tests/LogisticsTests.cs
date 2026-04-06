@@ -188,16 +188,16 @@ public class LogisticsTests
         _resourceManager.ReceiveRewards(new QuestData(town, _questDetails[town])).Wait();
 
         _resourceManager.Inventory.Clear();
-        _resourceManager.Inventory.Add(gold, 250);
+        _resourceManager.Inventory.Add(gold, 150);
 
         _resourceManager.StartQuest(questData, character);
-        // Quantity should be 0 here because quest costs 250 gold
-        Assert.AreEqual(0, _resourceManager.Inventory.GetQuantity(gold));
+        // Quantity should be 50 here because quest costs 100 gold
+        Assert.AreEqual(50, _resourceManager.Inventory.GetQuantity(gold));
 
         var active = _resourceManager.ActiveQuests.First();
         _resourceManager.CancelQuest(active);
 
-        // Should be 250 now after refund
-        Assert.AreEqual(250, _resourceManager.Inventory.GetQuantity(gold), "Gold should be fully refunded on cancellation.");
+        // Should be 150 now after refund
+        Assert.AreEqual(150, _resourceManager.Inventory.GetQuantity(gold), "Gold should be fully refunded on cancellation.");
     }
 }

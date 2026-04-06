@@ -73,7 +73,9 @@ def migrate():
                 "description": quest["Description"],
                 "duration": detail.get("DurationSeconds", 10),
                 "quest_type": detail.get("Type", "Single"),
-                "primary_stat": detail.get("PrimaryStat", "Vitality")
+                "primary_stat": detail.get("PrimaryStat", "Vitality"),
+                "required_stats": detail.get("RequiredStats"),
+                "stat_rewards": detail.get("StatRewards")
             },
             "in_edges": {},
             "out_edges": {}

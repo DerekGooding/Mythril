@@ -8,217 +8,261 @@ namespace Mythril.Headless.Simulation;
 
 public partial class LatticeSimulator
 {
-    private GameState ApplyTransfers(GameState state)
+    private (bool, GameState) UpdateQuest(string name, GameState state)
     {
-        var itemMap = items.All.ToDictionary(i => i.Name);
-        var questMap = quests.All.ToDictionary(q => q.Name);
-        var cadenceMap = cadences.All.ToDictionary(c => c.Name);
-
-        var next = state;
-        next = Join(next, ApplyQuestTransfers(state, questMap));
-        next = Join(next, ApplyRefinementTransfers(state));
-        next = Join(next, ApplyAbilityUnlockTransfers(state, cadenceMap));
-        next = Join(next, ApplyStatTransfers(state, itemMap));
-        next = Join(next, ApplyHiddenCadenceTransfers(state));
-        return next;
-    }
-
-    private GameState ApplyQuestTransfers(GameState state, Dictionary<string, Quest> questMap)
-    {
-        var questTimes = state.QuestTime.ToBuilder();
-        var resourceTimes = state.ResourceTime.ToBuilder();
-        var cadenceUnlocks = state.UnlockedCadences.ToBuilder();
-
-        foreach (var loc in locations.All)
+        var quest = quests.All.First(q => q.Name == name);
+        var detail = questDetails[quest];
+        
+        // 1. Location requirement
+        double locTime = 0;
+        var loc = locations.All.FirstOrDefault(l => l.Quests.Contains(quest));
+        if (!string.IsNullOrEmpty(loc.Name) && !string.IsNullOrEmpty(loc.RequiredQuest))
         {
-            double locTime = string.IsNullOrEmpty(loc.RequiredQuest) ? 0 : state.QuestTime.GetValueOrDefault(loc.RequiredQuest, double.PositiveInfinity);
-            if (locTime == double.PositiveInfinity) continue;
+            locTime = state.QuestTime.GetValueOrDefault(loc.RequiredQuest, double.PositiveInfinity);
+        }
+        if (locTime == double.PositiveInfinity) return (false, state);
 
-            foreach (var quest in loc.Quests)
+        // 2. Prerequisites
+        double prereqTime = 0;
+        foreach (var reqQ in questUnlocks[quest])
+        {
+            double t = state.QuestTime.GetValueOrDefault(reqQ.Name, double.PositiveInfinity);
+            if (t == double.PositiveInfinity) return (false, state);
+            prereqTime = Math.Max(prereqTime, t);
+        }
+
+        // 3. Item requirements
+        double itemTime = 0;
+        foreach (var reqI in detail.Requirements)
+        {
+            double t = state.ResourceTime.GetValueOrDefault(reqI.Item.Name, double.PositiveInfinity);
+            if (t == double.PositiveInfinity) return (false, state);
+            itemTime = Math.Max(itemTime, t);
+        }
+
+        // 4. Stat requirements
+        if (detail.RequiredStats != null)
+        {
+            foreach (var reqS in detail.RequiredStats)
             {
-                var detail = questDetails[quest];
-                
-                double prereqTime = 0;
-                bool prereqsMet = true;
-                foreach (var reqQ in questUnlocks[quest])
-                {
-                    double t = state.QuestTime.GetValueOrDefault(reqQ.Name, double.PositiveInfinity);
-                    if (t == double.PositiveInfinity) { prereqsMet = false; break; }
-                    prereqTime = Math.Max(prereqTime, t);
-                }
-                if (!prereqsMet) continue;
-
-                double itemTime = 0;
-                bool itemsMet = true;
-                foreach (var reqI in detail.Requirements)
-                {
-                    double t = state.ResourceTime.GetValueOrDefault(reqI.Item.Name, double.PositiveInfinity);
-                    if (t == double.PositiveInfinity) { itemsMet = false; break; }
-                    itemTime = Math.Max(itemTime, t);
-                }
-                if (!itemsMet) continue;
-
-                bool statsMet = true;
-                if (detail.RequiredStats != null)
-                {
-                    foreach (var reqS in detail.RequiredStats)
-                    {
-                        if (state.StatMax.GetValueOrDefault(reqS.Key, 0) < reqS.Value) { statsMet = false; break; }
-                    }
-                }
-                if (!statsMet) continue;
-
-                double startTime = Math.Max(locTime, Math.Max(prereqTime, itemTime));
-                double statValue = state.StatMax.GetValueOrDefault(detail.PrimaryStat, 10);
-                double duration = detail.DurationSeconds * Math.Pow(0.75, (statValue - 10) / 10.0);
-                double completionTime = startTime + duration;
-
-                if (completionTime < questTimes.GetValueOrDefault(quest.Name, double.PositiveInfinity))
-                {
-                    questTimes[quest.Name] = completionTime;
-                }
-
-                foreach (var reward in detail.Rewards)
-                {
-                    if (completionTime < resourceTimes.GetValueOrDefault(reward.Item.Name, double.PositiveInfinity))
-                    {
-                        resourceTimes[reward.Item.Name] = completionTime;
-                    }
-                }
-
-                foreach (var cad in questToCadenceUnlocks[quest])
-                {
-                    cadenceUnlocks.Add(cad.Name);
-                }
+                if (state.StatMax.GetValueOrDefault(reqS.Key, 0) < reqS.Value) return (false, state);
             }
         }
 
-        return state with { 
-            QuestTime = questTimes.ToImmutable(), 
-            ResourceTime = resourceTimes.ToImmutable(),
-            UnlockedCadences = cadenceUnlocks.ToImmutable()
-        };
-    }
+        double startTime = Math.Max(locTime, Math.Max(prereqTime, itemTime));
+        double statValue = state.StatMax.GetValueOrDefault(detail.PrimaryStat, 10);
+        double duration = detail.DurationSeconds * Math.Pow(0.75, (statValue - 10) / 10.0);
+        double completionTime = startTime + duration;
 
-    private GameState ApplyRefinementTransfers(GameState state)
-    {
-        var resourceTimes = state.ResourceTime.ToBuilder();
-
-        foreach (var refinementKvp in refinements.ByKey)
+        bool changed = false;
+        var nextQuestTime = state.QuestTime;
+        if (completionTime < state.QuestTime.GetValueOrDefault(name, double.PositiveInfinity))
         {
-            var ability = refinementKvp.Key;
-            if (!state.UnlockedAbilities.Any(ua => ua.EndsWith($":{ability.Name}"))) continue;
+            nextQuestTime = state.QuestTime.SetItem(name, completionTime);
+            changed = true;
+        }
 
-            foreach (var recipeKvp in refinementKvp.Value.Recipes)
+        var nextResourceTime = state.ResourceTime;
+        foreach (var reward in detail.Rewards)
+        {
+            if (completionTime < state.ResourceTime.GetValueOrDefault(reward.Item.Name, double.PositiveInfinity))
             {
-                var inputItem = recipeKvp.Key;
-                var recipe = recipeKvp.Value;
-
-                double inputTime = state.ResourceTime.GetValueOrDefault(inputItem.Name, double.PositiveInfinity);
-                if (inputTime == double.PositiveInfinity) continue;
-
-                double statValue = state.StatMax.GetValueOrDefault(refinementKvp.Value.PrimaryStat, 10);
-                double duration = 15.0 * Math.Pow(0.75, (statValue - 10) / 10.0);
-                double outputTime = inputTime + duration;
-
-                if (outputTime < resourceTimes.GetValueOrDefault(recipe.OutputItem.Name, double.PositiveInfinity))
-                {
-                    resourceTimes[recipe.OutputItem.Name] = outputTime;
-                }
+                nextResourceTime = nextResourceTime.SetItem(reward.Item.Name, completionTime);
+                changed = true;
             }
         }
 
-        return state with { ResourceTime = resourceTimes.ToImmutable() };
-    }
-
-    private GameState ApplyAbilityUnlockTransfers(GameState state, Dictionary<string, Cadence> cadenceMap)
-    {
-        var abilities = state.UnlockedAbilities.ToBuilder();
-        int newCapacity = state.MagicCapacity;
-
-        foreach (var cadenceName in state.UnlockedCadences)
+        var nextCadences = state.UnlockedCadences;
+        foreach (var cad in questToCadenceUnlocks[quest])
         {
-            if (!cadenceMap.TryGetValue(cadenceName, out var cadence)) continue;
-            foreach (var unlock in cadence.Abilities)
+            if (!state.UnlockedCadences.Contains(cad.Name))
             {
-                string key = $"{cadence.Name}:{unlock.Ability.Name}";
-                
-                // Always check metadata for capacity, even if already unlocked
-                if (state.UnlockedAbilities.Contains(key))
-                {
-                    if (unlock.Ability.Metadata != null && unlock.Ability.Metadata.TryGetValue("MagicCapacity", out var capStr) && int.TryParse(capStr, out var capVal))
-                    {
-                        newCapacity = Math.Max(newCapacity, capVal);
-                    }
-                    continue;
-                }
-
-                double costTime = 0;
-                bool canAfford = true;
-                foreach (var req in unlock.Requirements)
-                {
-                    double t = state.ResourceTime.GetValueOrDefault(req.Item.Name, double.PositiveInfinity);
-                    if (t == double.PositiveInfinity) { canAfford = false; break; }
-                    costTime = Math.Max(costTime, t);
-                }
-
-                if (canAfford)
-                {
-                    abilities.Add(key);
-                    if (unlock.Ability.Metadata != null && unlock.Ability.Metadata.TryGetValue("MagicCapacity", out var capStr) && int.TryParse(capStr, out var capVal))
-                    {
-                        if (capVal > newCapacity)
-                        {
-                            newCapacity = capVal;
-                        }
-                    }
-                }
+                nextCadences = nextCadences.Add(cad.Name);
+                changed = true;
             }
         }
 
-        return state with { UnlockedAbilities = abilities.ToImmutable(), MagicCapacity = newCapacity };
-    }
-
-    private GameState ApplyStatTransfers(GameState state, Dictionary<string, Item> itemMap)
-    {
-        var statsMax = state.StatMax.ToBuilder();
-
-        foreach (var stat in stats.All)
+        if (changed)
         {
-            int bestVal = state.StatMax.GetValueOrDefault(stat.Name, 10);
-            foreach (var itemKvp in state.ResourceTime)
-            {
-                if (itemKvp.Value == double.PositiveInfinity) continue;
-                
-                if (itemMap.TryGetValue(itemKvp.Key, out var item))
-                {
-                    if (item.ItemType != ItemType.Spell) continue;
-
-                    string abilityName = stat.Name switch { "Strength" => "J-Str", "Magic" => "J-Magic", "Vitality" => "J-Vit", "Speed" => "J-Speed", _ => "J-" + stat.Name };
-                    if (state.UnlockedAbilities.Any(ua => ua.EndsWith($":{abilityName}")))
-                    {
-                        var augment = statAugments[item].FirstOrDefault(a => a.Stat.Name == stat.Name);
-                        int val = 10 + (int)(state.MagicCapacity * (augment.Stat.Name != null ? augment.ModifierAtFull / 100.0 : 0.1));
-                        bestVal = Math.Max(bestVal, Math.Min(255, val));
-                    }
-                }
-            }
-            statsMax[stat.Name] = bestVal;
+            return (true, state with { 
+                QuestTime = nextQuestTime, 
+                ResourceTime = nextResourceTime,
+                UnlockedCadences = nextCadences
+            });
         }
 
-        return state with { StatMax = statsMax.ToImmutable() };
+        return (false, state);
     }
 
-    private GameState ApplyHiddenCadenceTransfers(GameState state)
+    private (bool, GameState) UpdateRefinement(string name, GameState state)
     {
-        var cadenceUnlocks = state.UnlockedCadences.ToBuilder();
+        // Name format: "AbilityName:InputItemName"
+        var parts = name.Split(':');
+        var abilityName = parts[0];
+        var inputItemName = parts[1];
 
-        if (state.StatMax.GetValueOrDefault("Strength", 0) >= 60) cadenceUnlocks.Add("Geologist");
-        if (state.StatMax.GetValueOrDefault("Speed", 0) >= 60) cadenceUnlocks.Add("Tide-Caller");
-        if (state.StatMax.GetValueOrDefault("Vitality", 0) >= 60) cadenceUnlocks.Add("The Sentinel");
-        if (state.StatMax.GetValueOrDefault("Magic", 0) >= 100) cadenceUnlocks.Add("Scholar");
-        if (state.StatMax.GetValueOrDefault("Strength", 0) >= 100 && state.StatMax.GetValueOrDefault("Speed", 0) >= 100) cadenceUnlocks.Add("Slayer");
+        var ability = refinements.ByKey.Keys.First(a => a.Name == abilityName);
+        var refinementData = refinements.ByKey[ability];
+        var inputItem = items.All.First(i => i.Name == inputItemName);
+        var recipe = refinementData.Recipes[inputItem];
 
-        return state with { UnlockedCadences = cadenceUnlocks.ToImmutable() };
+        if (!state.UnlockedAbilities.Any(ua => ua.EndsWith($":{abilityName}"))) return (false, state);
+
+        double inputTime = state.ResourceTime.GetValueOrDefault(inputItemName, double.PositiveInfinity);
+        if (inputTime == double.PositiveInfinity) return (false, state);
+
+        double statValue = state.StatMax.GetValueOrDefault(refinementData.PrimaryStat, 10);
+        double duration = 15.0 * Math.Pow(0.75, (statValue - 10) / 10.0);
+        double outputTime = inputTime + duration;
+
+        if (outputTime < state.ResourceTime.GetValueOrDefault(recipe.OutputItem.Name, double.PositiveInfinity))
+        {
+            return (true, state with { 
+                ResourceTime = state.ResourceTime.SetItem(recipe.OutputItem.Name, outputTime) 
+            });
+        }
+
+        return (false, state);
+    }
+
+    private (bool, GameState) UpdateAbility(string name, GameState state)
+    {
+        bool changed = false;
+        var nextAbilities = state.UnlockedAbilities;
+        int nextCapacity = state.MagicCapacity;
+
+        foreach (var cadence in cadences.All)
+        {
+            var unlock = cadence.Abilities.FirstOrDefault(a => a.Ability.Name == name);
+            if (string.IsNullOrEmpty(unlock.Ability.Name)) continue;
+
+            string key = $"{cadence.Name}:{unlock.Ability.Name}";
+            if (!state.UnlockedCadences.Contains(cadence.Name)) continue;
+
+            // metadata capacity check
+            if (unlock.Ability.Metadata != null && unlock.Ability.Metadata.TryGetValue("MagicCapacity", out var capStr) && int.TryParse(capStr, out var capVal))
+            {
+                if (capVal > nextCapacity)
+                {
+                    nextCapacity = capVal;
+                    changed = true;
+                }
+            }
+
+            if (state.UnlockedAbilities.Contains(key)) continue;
+
+            bool canAfford = true;
+            foreach (var req in unlock.Requirements)
+            {
+                if (state.ResourceTime.GetValueOrDefault(req.Item.Name, double.PositiveInfinity) == double.PositiveInfinity)
+                {
+                    canAfford = false;
+                    break;
+                }
+            }
+
+            if (canAfford)
+            {
+                nextAbilities = nextAbilities.Add(key);
+                changed = true;
+            }
+        }
+
+        if (changed)
+        {
+            return (true, state with { UnlockedAbilities = nextAbilities, MagicCapacity = nextCapacity });
+        }
+
+        return (false, state);
+    }
+
+    private (bool, GameState) UpdateStat(string name, GameState state)
+    {
+        int bestVal = state.StatMax.GetValueOrDefault(name, 10);
+        string abilityName = name switch { "Strength" => "J-Str", "Magic" => "J-Magic", "Vitality" => "J-Vit", "Speed" => "J-Speed", _ => "J-" + name };
+        
+        bool hasAbility = state.UnlockedAbilities.Any(ua => ua.EndsWith($":{abilityName}"));
+        if (!hasAbility) return (false, state);
+
+        foreach (var itemKvp in state.ResourceTime)
+        {
+            if (itemKvp.Value == double.PositiveInfinity) continue;
+            
+            var item = items.All.First(i => i.Name == itemKvp.Key);
+            if (item.ItemType != ItemType.Spell) continue;
+
+            var augments = statAugments[item];
+            var augment = augments.FirstOrDefault(a => a.Stat.Name == name);
+            if (augment.Stat.Name != null)
+            {
+                int val = 10 + (int)(state.MagicCapacity * (augment.ModifierAtFull / 100.0));
+                bestVal = Math.Max(bestVal, Math.Min(255, val));
+            }
+        }
+
+        if (bestVal > state.StatMax.GetValueOrDefault(name, 10))
+        {
+            return (true, state with { StatMax = state.StatMax.SetItem(name, bestVal) });
+        }
+
+        return (false, state);
+    }
+
+    private (bool, GameState) UpdateCadence(string name, GameState state)
+    {
+        if (name == "HIDDEN")
+        {
+            var nextCadences = state.UnlockedCadences;
+            bool changed = false;
+
+            void Check(string cad, bool condition)
+            {
+                if (condition && !nextCadences.Contains(cad))
+                {
+                    nextCadences = nextCadences.Add(cad);
+                    changed = true;
+                }
+            }
+
+            Check("Geologist", state.StatMax.GetValueOrDefault("Strength", 0) >= 60);
+            Check("Tide-Caller", state.StatMax.GetValueOrDefault("Speed", 0) >= 60);
+            Check("The Sentinel", state.StatMax.GetValueOrDefault("Vitality", 0) >= 60);
+            Check("Scholar", state.StatMax.GetValueOrDefault("Magic", 0) >= 100);
+            Check("Slayer", state.StatMax.GetValueOrDefault("Strength", 0) >= 100 && state.StatMax.GetValueOrDefault("Speed", 0) >= 100);
+
+            if (changed) return (true, state with { UnlockedCadences = nextCadences });
+        }
+        else
+        {
+            // Quest-based cadences are handled in UpdateQuest
+        }
+
+        return (false, state);
+    }
+
+    private (bool, GameState) UpdateCapacity(GameState state)
+    {
+        int bestCap = 30;
+        foreach (var abilityKey in state.UnlockedAbilities)
+        {
+            var parts = abilityKey.Split(':');
+            var cadenceName = parts[0];
+            var abilityName = parts[1];
+            
+            var cadence = cadences.All.First(c => c.Name == cadenceName);
+            var unlock = cadence.Abilities.First(a => a.Ability.Name == abilityName);
+
+            if (unlock.Ability.Metadata != null && unlock.Ability.Metadata.TryGetValue("MagicCapacity", out var capStr) && int.TryParse(capStr, out var capVal))
+            {
+                bestCap = Math.Max(bestCap, capVal);
+            }
+        }
+
+        if (bestCap > state.MagicCapacity)
+        {
+            return (true, state with { MagicCapacity = bestCap });
+        }
+
+        return (false, state);
     }
 }

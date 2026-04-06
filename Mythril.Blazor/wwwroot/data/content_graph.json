@@ -355,7 +355,9 @@
       "description": "Watch the intro cinematic.",
       "duration": 5,
       "quest_type": "Single",
-      "primary_stat": "Vitality"
+      "primary_stat": "Vitality",
+      "required_stats": null,
+      "stat_rewards": null
     },
     "in_edges": {},
     "out_edges": {
@@ -375,7 +377,9 @@
       "description": "Complete the tutorial section of the game.",
       "duration": 30,
       "quest_type": "Recurring",
-      "primary_stat": "Vitality"
+      "primary_stat": "Vitality",
+      "required_stats": null,
+      "stat_rewards": null
     },
     "in_edges": {
       "requires_quest": [
@@ -386,7 +390,7 @@
       "rewards": [
         {
           "targetId": "item_basic_gem",
-          "quantity": 1
+          "quantity": 10
         }
       ]
     }
@@ -399,7 +403,9 @@
       "description": "Explore the local village.",
       "duration": 15,
       "quest_type": "Single",
-      "primary_stat": "Vitality"
+      "primary_stat": "Vitality",
+      "required_stats": null,
+      "stat_rewards": null
     },
     "in_edges": {
       "requires_quest": [
@@ -423,7 +429,9 @@
       "description": "Get a potion from the town shop.",
       "duration": 45,
       "quest_type": "Recurring",
-      "primary_stat": "Speed"
+      "primary_stat": "Speed",
+      "required_stats": null,
+      "stat_rewards": null
     },
     "in_edges": {
       "requires_quest": [
@@ -434,13 +442,13 @@
       "consumes": [
         {
           "targetId": "item_gold",
-          "quantity": 250
+          "quantity": 100
         }
       ],
       "rewards": [
         {
           "targetId": "item_potion",
-          "quantity": 1
+          "quantity": 5
         }
       ]
     }
@@ -453,7 +461,9 @@
       "description": "Find the lost book of cadences.",
       "duration": 60,
       "quest_type": "Single",
-      "primary_stat": "Magic"
+      "primary_stat": "Magic",
+      "required_stats": null,
+      "stat_rewards": null
     },
     "in_edges": {
       "requires_quest": [
@@ -489,7 +499,9 @@
       "description": "Discover the power of your inner voice.",
       "duration": 30,
       "quest_type": "Single",
-      "primary_stat": "Magic"
+      "primary_stat": "Magic",
+      "required_stats": null,
+      "stat_rewards": null
     },
     "in_edges": {
       "requires_quest": [
@@ -513,7 +525,9 @@
       "description": "Hear the rumors of the corrupted forest.",
       "duration": 30,
       "quest_type": "Single",
-      "primary_stat": "Vitality"
+      "primary_stat": "Vitality",
+      "required_stats": null,
+      "stat_rewards": null
     },
     "in_edges": {
       "requires_quest": [
@@ -537,7 +551,9 @@
       "description": "Clear out the local goblin encampment.",
       "duration": 60,
       "quest_type": "Recurring",
-      "primary_stat": "Strength"
+      "primary_stat": "Strength",
+      "required_stats": null,
+      "stat_rewards": null
     },
     "in_edges": {
       "requires_quest": [
@@ -556,7 +572,7 @@
         },
         {
           "targetId": "item_mana_leaf",
-          "quantity": 1
+          "quantity": 3
         }
       ]
     }
@@ -569,7 +585,9 @@
       "description": "Harvest wood from the corrupted forest.",
       "duration": 75,
       "quest_type": "Recurring",
-      "primary_stat": "Strength"
+      "primary_stat": "Strength",
+      "required_stats": null,
+      "stat_rewards": null
     },
     "in_edges": {
       "requires_quest": [
@@ -580,11 +598,11 @@
       "rewards": [
         {
           "targetId": "item_log",
-          "quantity": 2
+          "quantity": 10
         },
         {
           "targetId": "item_ancient_bark",
-          "quantity": 1
+          "quantity": 5
         }
       ]
     }
@@ -597,7 +615,9 @@
       "description": "Find out where the miners went.",
       "duration": 30,
       "quest_type": "Single",
-      "primary_stat": "Strength"
+      "primary_stat": "Strength",
+      "required_stats": null,
+      "stat_rewards": null
     },
     "in_edges": {
       "requires_quest": [
@@ -621,7 +641,9 @@
       "description": "Clear the mine entrance of bats.",
       "duration": 45,
       "quest_type": "Recurring",
-      "primary_stat": "Speed"
+      "primary_stat": "Speed",
+      "required_stats": null,
+      "stat_rewards": null
     },
     "in_edges": {
       "requires_quest": [
@@ -645,7 +667,9 @@
       "description": "Venture deeper into the webs.",
       "duration": 75,
       "quest_type": "Recurring",
-      "primary_stat": "Vitality"
+      "primary_stat": "Vitality",
+      "required_stats": null,
+      "stat_rewards": null
     },
     "in_edges": {
       "requires_quest": [
@@ -669,7 +693,9 @@
       "description": "Clear the lower levels of sticky residue.",
       "duration": 90,
       "quest_type": "Recurring",
-      "primary_stat": "Strength"
+      "primary_stat": "Strength",
+      "required_stats": null,
+      "stat_rewards": null
     },
     "in_edges": {
       "requires_quest": [
@@ -680,7 +706,7 @@
       "rewards": [
         {
           "targetId": "item_slime",
-          "quantity": 5
+          "quantity": 50
         }
       ]
     }
@@ -693,7 +719,9 @@
       "description": "Obtain permission to mine Iron Ore.",
       "duration": 120,
       "quest_type": "Single",
-      "primary_stat": "Strength"
+      "primary_stat": "Strength",
+      "required_stats": null,
+      "stat_rewards": null
     },
     "in_edges": {
       "requires_quest": [
@@ -717,7 +745,11 @@
       "description": "Extract precious metals from the earth.",
       "duration": 180,
       "quest_type": "Recurring",
-      "primary_stat": "Strength"
+      "primary_stat": "Strength",
+      "required_stats": {
+        "Strength": 15
+      },
+      "stat_rewards": null
     },
     "in_edges": {
       "requires_quest": [
@@ -741,7 +773,11 @@
       "description": "Pick glowing fruit from the woods.",
       "duration": 240,
       "quest_type": "Recurring",
-      "primary_stat": "Speed"
+      "primary_stat": "Speed",
+      "required_stats": {
+        "Speed": 15
+      },
+      "stat_rewards": null
     },
     "in_edges": {
       "requires_quest": [
@@ -752,11 +788,11 @@
       "rewards": [
         {
           "targetId": "item_moonberry",
-          "quantity": 2
+          "quantity": 20
         },
         {
           "targetId": "item_mana_leaf",
-          "quantity": 1
+          "quantity": 5
         }
       ]
     }
@@ -769,7 +805,11 @@
       "description": "Face the protector of the forest.",
       "duration": 600,
       "quest_type": "Single",
-      "primary_stat": "Strength"
+      "primary_stat": "Strength",
+      "required_stats": {
+        "Strength": 25
+      },
+      "stat_rewards": null
     },
     "in_edges": {
       "requires_quest": [
@@ -799,7 +839,9 @@
       "description": "Decipher the ruins' entrance.",
       "duration": 120,
       "quest_type": "Single",
-      "primary_stat": "Magic"
+      "primary_stat": "Magic",
+      "required_stats": null,
+      "stat_rewards": null
     },
     "in_edges": {
       "requires_quest": [
@@ -814,7 +856,7 @@
         },
         {
           "targetId": "item_lost_parchment",
-          "quantity": 1
+          "quantity": 10
         }
       ]
     }
@@ -827,7 +869,9 @@
       "description": "Locate the central power source of the ruins.",
       "duration": 300,
       "quest_type": "Single",
-      "primary_stat": "Vitality"
+      "primary_stat": "Vitality",
+      "required_stats": null,
+      "stat_rewards": null
     },
     "in_edges": {
       "requires_quest": [
@@ -842,7 +886,7 @@
         },
         {
           "targetId": "item_crystal_shards",
-          "quantity": 1
+          "quantity": 20
         }
       ]
     }
@@ -855,7 +899,9 @@
       "description": "Ignite the ancient Mythril Forge.",
       "duration": 1200,
       "quest_type": "Single",
-      "primary_stat": "Magic"
+      "primary_stat": "Magic",
+      "required_stats": null,
+      "stat_rewards": null
     },
     "in_edges": {
       "requires_quest": [
@@ -895,7 +941,9 @@
       "description": "Gather fallen wood for the local lumberjack.",
       "duration": 30,
       "quest_type": "Single",
-      "primary_stat": "Strength"
+      "primary_stat": "Strength",
+      "required_stats": null,
+      "stat_rewards": null
     },
     "in_edges": {
       "requires_quest": [
@@ -917,9 +965,11 @@
     "name": "Sell Gem",
     "data": {
       "description": "Trade a basic gem for gold at the town market.",
-      "duration": 5,
+      "duration": 20,
       "quest_type": "Recurring",
-      "primary_stat": "Speed"
+      "primary_stat": "Speed",
+      "required_stats": null,
+      "stat_rewards": null
     },
     "in_edges": {
       "requires_quest": [
@@ -936,7 +986,7 @@
       "rewards": [
         {
           "targetId": "item_gold",
-          "quantity": 25
+          "quantity": 250
         }
       ]
     }
@@ -949,7 +999,9 @@
       "description": "Search the desert sands for abandoned materials.",
       "duration": 45,
       "quest_type": "Recurring",
-      "primary_stat": "Vitality"
+      "primary_stat": "Vitality",
+      "required_stats": null,
+      "stat_rewards": null
     },
     "in_edges": {
       "requires_quest": [
@@ -977,7 +1029,11 @@
       "description": "Take down the predators of the dunes.",
       "duration": 90,
       "quest_type": "Recurring",
-      "primary_stat": "Strength"
+      "primary_stat": "Strength",
+      "required_stats": {
+        "Strength": 20
+      },
+      "stat_rewards": null
     },
     "in_edges": {
       "requires_quest": [
@@ -1001,7 +1057,11 @@
       "description": "Find the legendary sanctuary in the waste.",
       "duration": 300,
       "quest_type": "Single",
-      "primary_stat": "Vitality"
+      "primary_stat": "Vitality",
+      "required_stats": {
+        "Speed": 25
+      },
+      "stat_rewards": null
     },
     "in_edges": {
       "requires_quest": [
@@ -1016,7 +1076,7 @@
         },
         {
           "targetId": "item_blue_coral",
-          "quantity": 1
+          "quantity": 20
         }
       ]
     }
@@ -1029,7 +1089,9 @@
       "description": "Use healing magic to cleanse the corruption from the sacred grove.",
       "duration": 120,
       "quest_type": "Recurring",
-      "primary_stat": "Magic"
+      "primary_stat": "Magic",
+      "required_stats": null,
+      "stat_rewards": null
     },
     "in_edges": {
       "requires_quest": [
@@ -1059,7 +1121,11 @@
       "description": "Channel intense fire magic to reignite the ancient Mythril Forge.",
       "duration": 180,
       "quest_type": "Recurring",
-      "primary_stat": "Magic"
+      "primary_stat": "Magic",
+      "required_stats": {
+        "Magic": 30
+      },
+      "stat_rewards": null
     },
     "in_edges": {
       "requires_quest": [
@@ -1089,7 +1155,11 @@
       "description": "Harvest prismatic fragments from the peak's formations.",
       "duration": 120,
       "quest_type": "Recurring",
-      "primary_stat": "Strength"
+      "primary_stat": "Strength",
+      "required_stats": {
+        "Strength": 30
+      },
+      "stat_rewards": null
     },
     "in_edges": {
       "requires_quest": [
@@ -1100,7 +1170,7 @@
       "rewards": [
         {
           "targetId": "item_crystal_shards",
-          "quantity": 2
+          "quantity": 20
         }
       ]
     }
@@ -1113,7 +1183,11 @@
       "description": "Map the dangerous heights of the Crystal Peaks.",
       "duration": 90,
       "quest_type": "Recurring",
-      "primary_stat": "Speed"
+      "primary_stat": "Speed",
+      "required_stats": {
+        "Speed": 30
+      },
+      "stat_rewards": null
     },
     "in_edges": {
       "requires_quest": [
@@ -1124,7 +1198,11 @@
       "rewards": [
         {
           "targetId": "item_ice_shard",
-          "quantity": 1
+          "quantity": 10
+        },
+        {
+          "targetId": "item_fire_shard",
+          "quantity": 10
         }
       ]
     }
@@ -1137,7 +1215,9 @@
       "description": "Gather biological components from the Tidal Caverns.",
       "duration": 60,
       "quest_type": "Recurring",
-      "primary_stat": "Vitality"
+      "primary_stat": "Vitality",
+      "required_stats": null,
+      "stat_rewards": null
     },
     "in_edges": {
       "requires_quest": [
@@ -1148,11 +1228,11 @@
       "rewards": [
         {
           "targetId": "item_water",
-          "quantity": 2
+          "quantity": 10
         },
         {
           "targetId": "item_leather",
-          "quantity": 1
+          "quantity": 5
         }
       ]
     }
@@ -1165,7 +1245,11 @@
       "description": "Search the lightless depths for rare coral.",
       "duration": 150,
       "quest_type": "Recurring",
-      "primary_stat": "Vitality"
+      "primary_stat": "Vitality",
+      "required_stats": {
+        "Vitality": 30
+      },
+      "stat_rewards": null
     },
     "in_edges": {
       "requires_quest": [
@@ -1176,7 +1260,7 @@
       "rewards": [
         {
           "targetId": "item_blue_coral",
-          "quantity": 1
+          "quantity": 10
         }
       ]
     }
@@ -1189,7 +1273,11 @@
       "description": "Search through stacks of ancient writings.",
       "duration": 180,
       "quest_type": "Recurring",
-      "primary_stat": "Magic"
+      "primary_stat": "Magic",
+      "required_stats": {
+        "Magic": 30
+      },
+      "stat_rewards": null
     },
     "in_edges": {
       "requires_quest": [
@@ -1200,7 +1288,7 @@
       "rewards": [
         {
           "targetId": "item_lost_parchment",
-          "quantity": 1
+          "quantity": 20
         }
       ]
     }
@@ -1213,7 +1301,9 @@
       "description": "Learn from the preserved knowledge of the library.",
       "duration": 120,
       "quest_type": "Recurring",
-      "primary_stat": "Magic"
+      "primary_stat": "Magic",
+      "required_stats": null,
+      "stat_rewards": null
     },
     "in_edges": {
       "requires_quest": [
@@ -1237,7 +1327,14 @@
       "description": "Face the ultimate defender of the Mythril Heart.",
       "duration": 1800,
       "quest_type": "Single",
-      "primary_stat": "Vitality"
+      "primary_stat": "Vitality",
+      "required_stats": {
+        "Strength": 100,
+        "Vitality": 100,
+        "Magic": 100,
+        "Speed": 100
+      },
+      "stat_rewards": null
     },
     "in_edges": {
       "requires_quest": [
@@ -1279,7 +1376,13 @@
       "description": "Focus your mind to achieve permanent magical growth.",
       "duration": 600,
       "quest_type": "Single",
-      "primary_stat": "Magic"
+      "primary_stat": "Magic",
+      "required_stats": {
+        "Magic": 50
+      },
+      "stat_rewards": {
+        "Magic": 5
+      }
     },
     "in_edges": {
       "requires_quest": [
@@ -1303,7 +1406,13 @@
       "description": "Push your body to achieve permanent physical growth.",
       "duration": 600,
       "quest_type": "Single",
-      "primary_stat": "Strength"
+      "primary_stat": "Strength",
+      "required_stats": {
+        "Strength": 50
+      },
+      "stat_rewards": {
+        "Strength": 5
+      }
     },
     "in_edges": {
       "requires_quest": [
@@ -2527,7 +2636,7 @@
       "produces": [
         {
           "targetId": "item_herb",
-          "quantity": 2
+          "quantity": 6
         }
       ]
     }
@@ -2548,7 +2657,7 @@
       "consumes": [
         {
           "targetId": "item_herb",
-          "quantity": 10
+          "quantity": 2
         }
       ],
       "produces": [

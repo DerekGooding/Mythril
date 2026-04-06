@@ -1,0 +1,34 @@
+{
+  "stryker-config": {
+    "project": "Mythril.Data.csproj",
+    "test-projects": [
+      "../Mythril.Tests/Mythril.Tests.csproj"
+    ],
+    "mutate": [
+      "InventoryManager.cs",
+      "JunctionManager.cs",
+      "ResourceManager_Discovery.cs",
+      "ResourceManager_Inventory.cs",
+      "ResourceManager_Journal.cs",
+      "ResourceManager_Logistics.cs",
+      "ResourceManager_Quests.cs",
+      "ResourceManager_Rewards.cs",
+      "ResourceManager_State.cs",
+      "ContentLoader.cs",
+      "QuestProgress.cs",
+      "Refinements.cs"
+    ],
+    "thresholds": {
+      "high": 80,
+      "low": 60,
+      "break": 0
+    },
+    "reporters": [
+      "Progress",
+      "Html",
+      "ClearText"
+    ],
+    "verbosity": "info",
+    "concurrency": 4
+  }
+}
