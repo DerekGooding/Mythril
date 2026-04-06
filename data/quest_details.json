@@ -12,7 +12,7 @@
     "DurationSeconds": 30,
     "Type": "Recurring",
     "Requirements": [],
-    "Rewards": [ { "Item": "Basic Gem", "Quantity": 1 } ],
+    "Rewards": [ { "Item": "Basic Gem", "Quantity": 10 } ],
     "PrimaryStat": "Vitality"
   },
   {
@@ -27,8 +27,8 @@
     "Quest": "Buy Potion",
     "DurationSeconds": 45,
     "Type": "Recurring",
-    "Requirements": [ { "Item": "Gold", "Quantity": 250 } ],
-    "Rewards": [ { "Item": "Potion", "Quantity": 1 } ],
+    "Requirements": [ { "Item": "Gold", "Quantity": 100 } ],
+    "Rewards": [ { "Item": "Potion", "Quantity": 5 } ],
     "PrimaryStat": "Speed"
   },
   {
@@ -60,7 +60,7 @@
     "DurationSeconds": 60,
     "Type": "Recurring",
     "Requirements": [],
-    "Rewards": [ { "Item": "Gold", "Quantity": 100 }, { "Item": "Fire Shard", "Quantity": 1 }, { "Item": "Mana Leaf", "Quantity": 1 } ],
+    "Rewards": [ { "Item": "Gold", "Quantity": 100 }, { "Item": "Fire Shard", "Quantity": 1 }, { "Item": "Mana Leaf", "Quantity": 3 } ],
     "PrimaryStat": "Strength"
   },
   {
@@ -68,7 +68,7 @@
     "DurationSeconds": 75,
     "Type": "Recurring",
     "Requirements": [],
-    "Rewards": [ { "Item": "Log", "Quantity": 2 }, { "Item": "Ancient Bark", "Quantity": 1 } ],
+    "Rewards": [ { "Item": "Log", "Quantity": 10 }, { "Item": "Ancient Bark", "Quantity": 5 } ],
     "PrimaryStat": "Strength"
   },
   {
@@ -101,7 +101,7 @@
     "DurationSeconds": 90,
     "Type": "Recurring",
     "Requirements": [],
-    "Rewards": [ { "Item": "Slime", "Quantity": 5 } ],
+    "Rewards": [ { "Item": "Slime", "Quantity": 50 } ],
     "PrimaryStat": "Strength"
   },
   {
@@ -126,7 +126,7 @@
     "DurationSeconds": 240,
     "Type": "Recurring",
     "Requirements": [],
-    "Rewards": [ { "Item": "Moonberry", "Quantity": 2 }, { "Item": "Mana Leaf", "Quantity": 1 } ],
+    "Rewards": [ { "Item": "Moonberry", "Quantity": 20 }, { "Item": "Mana Leaf", "Quantity": 5 } ],
     "PrimaryStat": "Speed",
     "RequiredStats": { "Speed": 15 }
   },
@@ -144,7 +144,7 @@
     "DurationSeconds": 120,
     "Type": "Single",
     "Requirements": [],
-    "Rewards": [ { "Item": "Gold", "Quantity": 500 }, { "Item": "Lost Parchment", "Quantity": 1 } ],
+    "Rewards": [ { "Item": "Gold", "Quantity": 500 }, { "Item": "Lost Parchment", "Quantity": 10 } ],
     "PrimaryStat": "Magic"
   },
   {
@@ -152,7 +152,7 @@
     "DurationSeconds": 300,
     "Type": "Single",
     "Requirements": [],
-    "Rewards": [ { "Item": "Basic Gem", "Quantity": 10 }, { "Item": "Crystal Shards", "Quantity": 1 } ],
+    "Rewards": [ { "Item": "Basic Gem", "Quantity": 10 }, { "Item": "Crystal Shards", "Quantity": 20 } ],
     "PrimaryStat": "Vitality"
   },
   {
@@ -173,10 +173,10 @@
   },
   {
     "Quest": "Sell Gem",
-    "DurationSeconds": 5,
+    "DurationSeconds": 20,
     "Type": "Recurring",
     "Requirements": [ { "Item": "Basic Gem", "Quantity": 1 } ],
-    "Rewards": [ { "Item": "Gold", "Quantity": 25 } ],
+    "Rewards": [ { "Item": "Gold", "Quantity": 250 } ],
     "PrimaryStat": "Speed"
   },
   {
@@ -201,7 +201,7 @@
     "DurationSeconds": 300,
     "Type": "Single",
     "Requirements": [],
-    "Rewards": [ { "Item": "Solar Essence", "Quantity": 1 }, { "Item": "Blue Coral", "Quantity": 1 } ],
+    "Rewards": [ { "Item": "Solar Essence", "Quantity": 1 }, { "Item": "Blue Coral", "Quantity": 20 } ],
     "PrimaryStat": "Vitality",
     "RequiredStats": { "Speed": 25 }
   },
@@ -227,7 +227,7 @@
     "DurationSeconds": 120,
     "Type": "Recurring",
     "Requirements": [],
-    "Rewards": [ { "Item": "Crystal Shards", "Quantity": 2 } ],
+    "Rewards": [ { "Item": "Crystal Shards", "Quantity": 20 } ],
     "PrimaryStat": "Strength",
     "RequiredStats": { "Strength": 30 }
   },
@@ -236,7 +236,7 @@
     "DurationSeconds": 90,
     "Type": "Recurring",
     "Requirements": [],
-    "Rewards": [ { "Item": "Ice Shard", "Quantity": 1 } ],
+    "Rewards": [ { "Item": "Ice Shard", "Quantity": 10 }, { "Item": "Fire Shard", "Quantity": 10 } ],
     "PrimaryStat": "Speed",
     "RequiredStats": { "Speed": 30 }
   },
@@ -245,7 +245,7 @@
     "DurationSeconds": 60,
     "Type": "Recurring",
     "Requirements": [],
-    "Rewards": [ { "Item": "Water", "Quantity": 2 }, { "Item": "Leather", "Quantity": 1 } ],
+    "Rewards": [ { "Item": "Water", "Quantity": 10 }, { "Item": "Leather", "Quantity": 5 } ],
     "PrimaryStat": "Vitality"
   },
   {
@@ -253,7 +253,7 @@
     "DurationSeconds": 150,
     "Type": "Recurring",
     "Requirements": [],
-    "Rewards": [ { "Item": "Blue Coral", "Quantity": 1 } ],
+    "Rewards": [ { "Item": "Blue Coral", "Quantity": 10 } ],
     "PrimaryStat": "Vitality",
     "RequiredStats": { "Vitality": 30 }
   },
@@ -262,7 +262,7 @@
     "DurationSeconds": 180,
     "Type": "Recurring",
     "Requirements": [],
-    "Rewards": [ { "Item": "Lost Parchment", "Quantity": 1 } ],
+    "Rewards": [ { "Item": "Lost Parchment", "Quantity": 20 } ],
     "PrimaryStat": "Magic",
     "RequiredStats": { "Magic": 30 }
   },
