@@ -84,9 +84,15 @@ public partial class LatticeSimulator
             var cadence = cadences.All.First(c => c.Name == cadenceName);
             var unlock = cadence.Abilities.First(a => a.Ability.Name == abilityName);
 
-            if (unlock.Ability.Metadata != null && unlock.Ability.Metadata.TryGetValue("MagicCapacity", out var capStr) && int.TryParse(capStr, out var capVal))
+            if (unlock.Ability.Effects != null)
             {
-                bestCap = Math.Max(bestCap, capVal);
+                foreach (var effect in unlock.Ability.Effects)
+                {
+                    if (effect.Type == EffectType.MagicCapacity)
+                    {
+                        bestCap = Math.Max(bestCap, effect.Value);
+                    }
+                }
             }
         }
 

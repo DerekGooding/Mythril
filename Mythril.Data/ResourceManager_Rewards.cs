@@ -19,14 +19,17 @@ public partial class ResourceManager
                 if (overflow > 0) OnItemOverflow?.Invoke(reward.Item.Name, overflow);
             }
 
-            // Apply permanent stat rewards if any
+            // Apply permanent effects if any
             var questDetail = _questDetails[quest.Quest];
-            if (questDetail.StatRewards != null)
+            if (questDetail.Effects != null)
             {
-                foreach (var statBoost in questDetail.StatRewards)
+                foreach (var effect in questDetail.Effects)
                 {
-                    JunctionManager.AddStatBoost(progress.Character, statBoost.Key, statBoost.Value);
-                    details += $" | +{statBoost.Value} {statBoost.Key}";
+                    if (effect.Type == EffectType.StatBoost && !string.IsNullOrEmpty(effect.Target))
+                    {
+                        JunctionManager.AddStatBoost(progress.Character, effect.Target, effect.Value);
+                        details += $" | +{effect.Value} {effect.Target}";
+                    }
                 }
             }
             

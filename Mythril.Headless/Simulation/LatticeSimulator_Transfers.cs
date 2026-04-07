@@ -82,12 +82,31 @@ public partial class LatticeSimulator
             }
         }
 
+        var nextStatMax = state.StatMax;
+        // Only apply permanent stat boosts when the quest is FIRST reached (transition from infinity to finite time)
+        if (state.QuestTime.GetValueOrDefault(name, double.PositiveInfinity) == double.PositiveInfinity && completionTime < double.PositiveInfinity)
+        {
+            if (detail.Effects != null)
+            {
+                foreach (var effect in detail.Effects)
+                {
+                    if (effect.Type == EffectType.StatBoost && !string.IsNullOrEmpty(effect.Target))
+                    {
+                        int current = nextStatMax.GetValueOrDefault(effect.Target, 10);
+                        nextStatMax = nextStatMax.SetItem(effect.Target, current + effect.Value);
+                        changed = true;
+                    }
+                }
+            }
+        }
+
         if (changed)
         {
             return (true, state with { 
                 QuestTime = nextQuestTime, 
                 ResourceTime = nextResourceTime,
-                UnlockedCadences = nextCadences
+                UnlockedCadences = nextCadences,
+                StatMax = nextStatMax
             });
         }
 
@@ -140,12 +159,18 @@ public partial class LatticeSimulator
             if (!state.UnlockedCadences.Contains(cadence.Name)) continue;
 
             // metadata capacity check
-            if (unlock.Ability.Metadata != null && unlock.Ability.Metadata.TryGetValue("MagicCapacity", out var capStr) && int.TryParse(capStr, out var capVal))
+            if (unlock.Ability.Effects != null)
             {
-                if (capVal > nextCapacity)
+                foreach (var effect in unlock.Ability.Effects)
                 {
-                    nextCapacity = capVal;
-                    changed = true;
+                    if (effect.Type == EffectType.MagicCapacity)
+                    {
+                        if (effect.Value > nextCapacity)
+                        {
+                            nextCapacity = effect.Value;
+                            changed = true;
+                        }
+                    }
                 }
             }
 

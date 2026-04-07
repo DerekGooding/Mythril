@@ -87,7 +87,10 @@ class Program
         var cadDTOs = JsonConvert.DeserializeObject<List<CadenceDTO>>(File.ReadAllText(Path.Combine(dataDir, "cadences.json"))) ?? [];
         cadences.Load(cadDTOs.Select(d => new Cadence(d.Name, d.Description, d.Abilities.Select(a => {
             var baseAbility = abilities.All.First(ab => ab.Name == a.Ability);
-            var abilityWithMeta = baseAbility with { Metadata = a.Metadata ?? [] };
+            var abilityWithMeta = baseAbility with { 
+                Metadata = a.Metadata ?? [],
+                Effects = (a.Effects ?? []).ToArray()
+            };
             return new CadenceUnlock(
                 d.Name,
                 abilityWithMeta,
@@ -105,7 +108,8 @@ class Program
                 Enum.Parse<QuestType>(d.Type),
                 d.PrimaryStat ?? "Vitality",
                 d.RequiredStats,
-                d.StatRewards
+                d.StatRewards,
+                (d.Effects ?? []).ToArray()
             )
         ));
 

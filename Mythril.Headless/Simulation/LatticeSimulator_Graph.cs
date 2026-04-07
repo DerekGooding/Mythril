@@ -107,7 +107,7 @@ public partial class LatticeSimulator
                 }
 
                 // Ability -> Capacity
-                if (unlock.Ability.Metadata != null && unlock.Ability.Metadata.ContainsKey("MagicCapacity"))
+                if (unlock.Ability.Effects != null && unlock.Ability.Effects.Any(e => e.Type == EffectType.MagicCapacity))
                 {
                     AddDep(aItem, new WorklistItem(NodeType.MagicCapacity, ""));
                 }

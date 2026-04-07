@@ -197,8 +197,26 @@ public partial class RoutedSimulator
     {
         // Update Magic Capacity first
         int cap = 30;
-        if (state.UnlockedAbilities.Any(a => a.EndsWith(":Magic Pocket I"))) cap = 60;
-        if (state.UnlockedAbilities.Any(a => a.EndsWith(":Magic Pocket II"))) cap = 100;
+        foreach (var abilityKey in state.UnlockedAbilities)
+        {
+            var parts = abilityKey.Split(':');
+            if (parts.Length < 2) continue;
+            var cadenceName = parts[0];
+            var abilityName = parts[1];
+            
+            var cadence = cadences.All.FirstOrDefault(c => c.Name == cadenceName);
+            var unlock = cadence.Abilities.FirstOrDefault(a => a.Ability.Name == abilityName);
+            if (unlock.Ability.Effects != null)
+            {
+                foreach (var effect in unlock.Ability.Effects)
+                {
+                    if (effect.Type == EffectType.MagicCapacity)
+                    {
+                        cap = Math.Max(cap, effect.Value);
+                    }
+                }
+            }
+        }
         state.MagicCapacity = cap;
 
         if (state.CurrentStats.GetValueOrDefault("Strength", 0) >= 60) state.UnlockedCadences.Add("Geologist");
