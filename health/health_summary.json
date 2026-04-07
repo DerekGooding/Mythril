@@ -1,9 +1,9 @@
 {
-    "is_healthy": false,
-    "failure_count": 3,
+    "is_healthy": true,
+    "failure_count": 0,
     "metrics": {
-        "monoliths": 3,
-        "coverage": 74.47,
+        "monoliths": 0,
+        "coverage": 79.68,
         "mutation_score": 0.0,
         "missing_tests": 0,
         "key_violations": 0,
@@ -12,33 +12,11 @@
         "reachability_passed": {
             "passed": true,
             "time": "55.9m",
-            "sustainable": 13,
+            "sustainable": 34,
             "unsustainable": 0
         },
         "pending_feedback": 0,
         "test_passed": true
     },
-    "failures": [
-        {
-            "category": "monolith",
-            "message": "Mythril.Tests/QuestExecutionTests.cs exceeds 250 lines",
-            "metadata": {
-                "lines": 308
-            }
-        },
-        {
-            "category": "monolith",
-            "message": "Mythril.Headless/Simulation/LatticeSimulator.cs exceeds 250 lines",
-            "metadata": {
-                "lines": 324
-            }
-        },
-        {
-            "category": "monolith",
-            "message": "Mythril.Headless/Simulation/LatticeSimulator_Transfers.cs exceeds 250 lines",
-            "metadata": {
-                "lines": 268
-            }
-        }
-    ]
+    "failures": []
 }
