@@ -75,7 +75,12 @@ public class ContentLoader(
                     var metaDict = new Dictionary<string, string>();
                     if (data.TryGetValue("metadata", out var metaObj) && metaObj is JsonElement metaElem)
                         foreach (var prop in metaElem.EnumerateObject()) metaDict[prop.Name] = prop.Value.ToString();
-                    loadedAbilities.Add(new CadenceAbility(node.Name, "") { Metadata = metaDict });
+                    
+                    var effectList = new List<EffectDefinition>();
+                    if (data.TryGetValue("effects", out var effObj) && effObj is JsonElement effElem && effElem.ValueKind == JsonValueKind.Array)
+                        effectList = JsonSerializer.Deserialize<List<EffectDefinition>>(effElem.GetRawText(), _options) ?? [];
+
+                    loadedAbilities.Add(new CadenceAbility(node.Name, "") { Metadata = metaDict, Effects = effectList.ToArray() });
                     break;
                 case "Quest":
                     loadedQuests.Add(new Quest(node.Name, data["description"].ToString() ?? ""));
@@ -143,9 +148,13 @@ public class ContentLoader(
                 var reqStats = node.Data.TryGetValue("required_stats", out var rs) && rs is JsonElement rsElem ? rsElem.EnumerateObject().ToDictionary(p => propName(p), p => p.Value.GetInt32()) : null;
                 var statRews = node.Data.TryGetValue("stat_rewards", out var sr) && sr is JsonElement srElem ? srElem.EnumerateObject().ToDictionary(p => propName(p), p => p.Value.GetInt32()) : null;
 
+                var questEffects = new List<EffectDefinition>();
+                if (node.Data.TryGetValue("effects", out var effObj) && effObj is JsonElement effElem && effElem.ValueKind == JsonValueKind.Array)
+                    questEffects = JsonSerializer.Deserialize<List<EffectDefinition>>(effElem.GetRawText(), _options) ?? [];
+
                 questDetailDict[quest] = new QuestDetail(int.Parse(node.Data["duration"].ToString() ?? "10"), reqs, rews, 
                     Enum.Parse<QuestType>(node.Data.TryGetValue("quest_type", out var qt) ? qt.ToString() ?? "Single" : "Single"),
-                    node.Data["primary_stat"].ToString() ?? "Vitality", reqStats, statRews);
+                    node.Data["primary_stat"].ToString() ?? "Vitality", reqStats, statRews, questEffects.ToArray());
             }
             else if (node.Type == "Refinement" && node.InEdges.TryGetValue("requires_ability", out var abIds))
             {

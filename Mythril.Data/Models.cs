@@ -37,13 +37,27 @@ public partial record struct Item(string Name, string Description, ItemType Item
 public readonly record struct ItemQuantity(Item Item, int Quantity = 1);
 
 // Cadence types
+// Effect types
+[JsonConverter(typeof(JsonStringEnumConverter))]
+public enum EffectType
+{
+    MagicCapacity,
+    AutoQuest,
+    Logistics,
+    StatBoost,
+}
+
+public record EffectDefinition(EffectType Type, int Value, string? Target = null);
+
 public partial record struct CadenceAbility(string Name, string Description) : INamed
 {
     public Dictionary<string, string> Metadata { get; init; } = [];
+    public EffectDefinition[] Effects { get; init; } = [];
 
     public bool Equals(CadenceAbility other)
     {
         if (Name != other.Name || Description != other.Description) return false;
+        
         var thisMeta = Metadata ?? [];
         var otherMeta = other.Metadata ?? [];
         if (thisMeta.Count != otherMeta.Count) return false;
@@ -51,6 +65,15 @@ public partial record struct CadenceAbility(string Name, string Description) : I
         {
             if (!otherMeta.TryGetValue(kvp.Key, out var val) || val != kvp.Value) return false;
         }
+
+        var thisEffects = Effects ?? [];
+        var otherEffects = other.Effects ?? [];
+        if (thisEffects.Length != otherEffects.Length) return false;
+        for (int i = 0; i < thisEffects.Length; i++)
+        {
+            if (thisEffects[i] != otherEffects[i]) return false;
+        }
+
         return true;
     }
 
@@ -59,12 +82,20 @@ public partial record struct CadenceAbility(string Name, string Description) : I
         var hash = new HashCode();
         hash.Add(Name);
         hash.Add(Description);
+        
         var thisMeta = Metadata ?? [];
         foreach (var kvp in thisMeta.OrderBy(x => x.Key))
         {
             hash.Add(kvp.Key);
             hash.Add(kvp.Value);
         }
+
+        var thisEffects = Effects ?? [];
+        foreach (var effect in thisEffects)
+        {
+            hash.Add(effect);
+        }
+        
         return hash.ToHashCode();
     }
 }
@@ -85,7 +116,7 @@ public partial record struct Stat(string Name, string Description) : INamed;
 public readonly record struct StatAugment(Stat Stat, int ModifierAtFull);
 
 // Details
-public readonly record struct QuestDetail(int DurationSeconds, ItemQuantity[] Requirements, ItemQuantity[] Rewards, QuestType Type, string PrimaryStat = "Vitality", Dictionary<string, int>? RequiredStats = null, Dictionary<string, int>? StatRewards = null);
+public readonly record struct QuestDetail(int DurationSeconds, ItemQuantity[] Requirements, ItemQuantity[] Rewards, QuestType Type, string PrimaryStat = "Vitality", Dictionary<string, int>? RequiredStats = null, Dictionary<string, int>? StatRewards = null, EffectDefinition[]? Effects = null);
 
 // Refinements
 public readonly record struct Recipe(int InputQuantity, Item OutputItem, int OutputQuantity);
@@ -192,9 +223,10 @@ public class CadenceAbilityUnlockDTO
     public List<ItemQuantityDTO> Requirements { get; set; } = []; 
     public string PrimaryStat { get; set; } = "Magic";
     public Dictionary<string, string> Metadata { get; set; } = [];
+    public List<EffectDefinition> Effects { get; set; } = [];
 }
 public class CadenceDTO { public string Name { get; set; } = ""; public string Description { get; set; } = ""; public List<CadenceAbilityUnlockDTO> Abilities { get; set; } = []; }
-public class QuestDetailDTO { public string Quest { get; set; } = ""; public int DurationSeconds { get; set; } = 3; public string Type { get; set; } = "Single"; public List<ItemQuantityDTO> Requirements { get; set; } = []; public List<ItemQuantityDTO> Rewards { get; set; } = []; public string PrimaryStat { get; set; } = "Vitality"; public Dictionary<string, int>? RequiredStats { get; set; } public Dictionary<string, int>? StatRewards { get; set; } }
+public class QuestDetailDTO { public string Quest { get; set; } = ""; public int DurationSeconds { get; set; } = 3; public string Type { get; set; } = "Single"; public List<ItemQuantityDTO> Requirements { get; set; } = []; public List<ItemQuantityDTO> Rewards { get; set; } = []; public string PrimaryStat { get; set; } = "Vitality"; public Dictionary<string, int>? RequiredStats { get; set; } public Dictionary<string, int>? StatRewards { get; set; } public List<EffectDefinition>? Effects { get; set; } }
 public class QuestUnlockDTO { public string Quest { get; set; } = ""; public List<string> Requires { get; set; } = []; }
 public class QuestCadenceUnlockDTO { public string Quest { get; set; } = ""; public List<string> Cadences { get; set; } = []; }
 public class RecipeDTO { public string InputItem { get; set; } = ""; public int InputQuantity { get; set; } = 1; public string OutputItem { get; set; } = ""; public int OutputQuantity { get; set; } = 1; }
