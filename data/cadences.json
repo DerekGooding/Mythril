@@ -6,7 +6,8 @@
       {
         "Ability": "AutoQuest I",
         "Requirements": [ { "Item": "Gold", "Quantity": 100 } ],
-        "PrimaryStat": "Vitality"
+        "PrimaryStat": "Vitality",
+        "Effects": [ { "Type": "AutoQuest", "Value": 1 } ]
       },
       {
         "Ability": "J-Str",
@@ -33,7 +34,7 @@
         "Ability": "Magic Pocket I",
         "Requirements": [ { "Item": "Gold", "Quantity": 1000 }, { "Item": "Mana Leaf", "Quantity": 20 } ],
         "PrimaryStat": "Magic",
-        "Metadata": { "MagicCapacity": "60" }
+        "Effects": [ { "Type": "MagicCapacity", "Value": 60 } ]
       },
       {
         "Ability": "Refine Lightning",
@@ -49,7 +50,8 @@
       {
         "Ability": "AutoQuest I",
         "Requirements": [ { "Item": "Gold", "Quantity": 100 } ],
-        "PrimaryStat": "Vitality"
+        "PrimaryStat": "Vitality",
+        "Effects": [ { "Type": "AutoQuest", "Value": 1 } ]
       },
       {
         "Ability": "Refine Wood",
@@ -75,7 +77,8 @@
       {
         "Ability": "AutoQuest I",
         "Requirements": [ { "Item": "Gold", "Quantity": 100 } ],
-        "PrimaryStat": "Vitality"
+        "PrimaryStat": "Vitality",
+        "Effects": [ { "Type": "AutoQuest", "Value": 1 } ]
       },
       {
         "Ability": "Refine Fire",
@@ -90,115 +93,118 @@
     ]
   },
   {
-  "Name": "Mythril Weaver",
-  "Description": "A master of the arcane and material arts.",
-  "Abilities": [
-    {
-      "Ability": "Logistics I",
-      "Requirements": [ { "Item": "Gold", "Quantity": 2500 } ],
-      "PrimaryStat": "Magic"
-    },
-    {
-      "Ability": "Mass Refine",
-      "Requirements": [ { "Item": "Gold", "Quantity": 5000 }, { "Item": "Mythril Spark", "Quantity": 1 } ],
-      "PrimaryStat": "Magic"
-    },
-    {
-      "Ability": "Essence Harvest",
-      "Requirements": [ { "Item": "Ancient Bark", "Quantity": 20 }, { "Item": "Moonberry", "Quantity": 50 } ],
-      "PrimaryStat": "Vitality"
-    },
-    {
-      "Ability": "J-Vit",
-      "Requirements": [ { "Item": "Gold", "Quantity": 2000 } ],
-      "PrimaryStat": "Vitality"
-    },
-    {
-      "Ability": "Refine Life",
-      "Requirements": [ { "Item": "Ancient Bark", "Quantity": 5 } ],
-      "PrimaryStat": "Magic"
-    }
-  ]
+    "Name": "Mythril Weaver",
+    "Description": "A master of the arcane and material arts.",
+    "Abilities": [
+      {
+        "Ability": "Logistics I",
+        "Requirements": [ { "Item": "Gold", "Quantity": 2500 } ],
+        "PrimaryStat": "Magic",
+        "Effects": [ { "Type": "Logistics", "Value": 1 } ]
+      },
+      {
+        "Ability": "Mass Refine",
+        "Requirements": [ { "Item": "Gold", "Quantity": 5000 }, { "Item": "Mythril Spark", "Quantity": 1 } ],
+        "PrimaryStat": "Magic"
+      },
+      {
+        "Ability": "Essence Harvest",
+        "Requirements": [ { "Item": "Ancient Bark", "Quantity": 20 }, { "Item": "Moonberry", "Quantity": 50 } ],
+        "PrimaryStat": "Vitality"
+      },
+      {
+        "Ability": "J-Vit",
+        "Requirements": [ { "Item": "Gold", "Quantity": 2000 } ],
+        "PrimaryStat": "Vitality"
+      },
+      {
+        "Ability": "Refine Life",
+        "Requirements": [ { "Item": "Ancient Bark", "Quantity": 5 } ],
+        "PrimaryStat": "Magic"
+      }
+    ]
   },
   {
-  "Name": "The Sentinel",
-  "Description": "A defensive job focused on survival and resource management.",
-  "Abilities": [
-    {
-      "Ability": "J-Vit",
-      "Requirements": [ { "Item": "Iron Ore", "Quantity": 50 }, { "Item": "Ancient Bark", "Quantity": 20 }, { "Item": "Gold", "Quantity": 2000 } ],
-      "PrimaryStat": "Vitality"
-    },
-    {
-      "Ability": "Magic Pocket II",
-      "Requirements": [ { "Item": "Gold", "Quantity": 2000 } ],
-      "PrimaryStat": "Magic",
-      "Metadata": { "MagicCapacity": "100" }
-    }
-  ]
+    "Name": "The Sentinel",
+    "Description": "A defensive job focused on survival and resource management.",
+    "Abilities": [
+      {
+        "Ability": "J-Vit",
+        "Requirements": [ { "Item": "Iron Ore", "Quantity": 50 }, { "Item": "Ancient Bark", "Quantity": 20 }, { "Item": "Gold", "Quantity": 2000 } ],
+        "PrimaryStat": "Vitality"
+      },
+      {
+        "Ability": "Magic Pocket II",
+        "Requirements": [ { "Item": "Leather", "Quantity": 10 } ],
+        "PrimaryStat": "Magic",
+        "Effects": [ { "Type": "MagicCapacity", "Value": 100 } ]
+      }
+    ]
   },
   {
-  "Name": "Scholar",
-  "Description": "A highly advanced job specializing in optimization and multi-tasking.",
-  "Abilities": [
-    {
-      "Ability": "Logistics II",
-      "Requirements": [ { "Item": "Gold", "Quantity": 10000 } ],
-      "PrimaryStat": "Magic"
-    },
-    {
-      "Ability": "AutoQuest II",
-      "Requirements": [ { "Item": "Gold", "Quantity": 7500 } ],
-      "PrimaryStat": "Magic"
-    },
-    {
-      "Ability": "Refine Haste",
-      "Requirements": [ { "Item": "Lost Parchment", "Quantity": 5 } ],
-      "PrimaryStat": "Magic"
-    }
-  ]
+    "Name": "Scholar",
+    "Description": "A highly advanced job specializing in optimization and multi-tasking.",
+    "Abilities": [
+      {
+        "Ability": "Logistics II",
+        "Requirements": [ { "Item": "Gold", "Quantity": 10000 } ],
+        "PrimaryStat": "Magic",
+        "Effects": [ { "Type": "Logistics", "Value": 2 } ]
+      },
+      {
+        "Ability": "AutoQuest II",
+        "Requirements": [ { "Item": "Gold", "Quantity": 7500 } ],
+        "PrimaryStat": "Magic",
+        "Effects": [ { "Type": "AutoQuest", "Value": 2 } ]
+      },
+      {
+        "Ability": "Refine Haste",
+        "Requirements": [ { "Item": "Lost Parchment", "Quantity": 5 } ],
+        "PrimaryStat": "Magic"
+      }
+    ]
   },
   {
-  "Name": "Geologist",
-  "Description": "A strength-based specialist focused on harvesting rare earth materials.",
-  "Abilities": [
-    {
-      "Ability": "Mountain Crush",
-      "Requirements": [ { "Item": "Gold", "Quantity": 5000 } ],
-      "PrimaryStat": "Strength"
-    },
-    {
-      "Ability": "Refine Earth",
-      "Requirements": [ { "Item": "Crystal Shards", "Quantity": 10 } ],
-      "PrimaryStat": "Strength"
-    }
-  ]
+    "Name": "Geologist",
+    "Description": "A strength-based specialist focused on harvesting rare earth materials.",
+    "Abilities": [
+      {
+        "Ability": "Mountain Crush",
+        "Requirements": [ { "Item": "Gold", "Quantity": 5000 } ],
+        "PrimaryStat": "Strength"
+      },
+      {
+        "Ability": "Refine Earth",
+        "Requirements": [ { "Item": "Crystal Shards", "Quantity": 10 } ],
+        "PrimaryStat": "Strength"
+      }
+    ]
   },
   {
-  "Name": "Tide-Caller",
-  "Description": "A speed-based specialist focused on exploring deep waters.",
-  "Abilities": [
-    {
-      "Ability": "Deep Dive",
-      "Requirements": [ { "Item": "Gold", "Quantity": 5000 } ],
-      "PrimaryStat": "Speed"
-    },
-    {
-      "Ability": "Refine Water",
-      "Requirements": [ { "Item": "Blue Coral", "Quantity": 10 } ],
-      "PrimaryStat": "Speed"
-    }
-  ]
+    "Name": "Tide-Caller",
+    "Description": "A speed-based specialist focused on exploring deep waters.",
+    "Abilities": [
+      {
+        "Ability": "Deep Dive",
+        "Requirements": [ { "Item": "Gold", "Quantity": 5000 } ],
+        "PrimaryStat": "Speed"
+      },
+      {
+        "Ability": "Refine Water",
+        "Requirements": [ { "Item": "Blue Coral", "Quantity": 10 } ],
+        "PrimaryStat": "Speed"
+      }
+    ]
   },
   {
-  "Name": "Slayer",
-  "Description": "An elite combatant unlocked through mastery of both strength and speed.",
-  "Abilities": [
-    {
-      "Ability": "Master Slayer",
-      "Requirements": [ { "Item": "Gold", "Quantity": 15000 } ],
-      "PrimaryStat": "Strength"
-    }
-  ]
+    "Name": "Slayer",
+    "Description": "An elite combatant unlocked through mastery of both strength and speed.",
+    "Abilities": [
+      {
+        "Ability": "Master Slayer",
+        "Requirements": [ { "Item": "Gold", "Quantity": 15000 } ],
+        "PrimaryStat": "Strength"
+      }
+    ]
   }
 ]
