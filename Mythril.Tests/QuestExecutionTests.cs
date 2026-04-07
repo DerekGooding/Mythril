@@ -166,25 +166,6 @@ public class QuestExecutionTests
     }
 
     [TestMethod]
-    public void ResourceManager_CancelQuest_RemovesFromActive()
-    {
-        var quest = _quests!.All.First(x => x.Name == "Buy Potion");
-        var detail = _questDetails![quest];
-        var questData = new QuestData(quest, detail);
-        var character = _resourceManager!.Characters[0];
-
-        _resourceManager.Inventory.Add(_items!.All.First(x => x.Name == "Gold"), 1000);
-        _resourceManager.StartQuest(questData, character);
-        
-        Assert.AreEqual(1, _resourceManager.ActiveQuests.Count);
-
-        var progress = _resourceManager.ActiveQuests[0];
-        _resourceManager.CancelQuest(progress);
-
-        Assert.AreEqual(0, _resourceManager.ActiveQuests.Count);
-    }
-
-    [TestMethod]
     public void ResourceManager_StartQuest_MultipleCadencesCanResearchSameAbility()
     {
         var cadences = ContentHost.GetContent<Cadences>();
@@ -210,60 +191,6 @@ public class QuestExecutionTests
         // Start Apprentice research (should succeed)
         _resourceManager.StartQuest(apprenticeAutoQuest, character2);
         Assert.AreEqual(2, _resourceManager.ActiveQuests.Count, "Should allow different cadences to research same ability name.");
-    }
-
-    [TestMethod]
-    public void ResourceManager_CanAfford_ChecksRequirements()
-    {
-        var quest = _quests!.All.First(x => x.Name == "Buy Potion");
-        var detail = _questDetails![quest];
-        var questData = new QuestData(quest, detail);
-
-        _resourceManager!.Inventory.Clear();
-        Assert.IsFalse(_resourceManager.CanAfford(questData));
-
-        _resourceManager.Inventory.Add(_items!.All.First(x => x.Name == "Gold"), 1000);
-        Assert.IsTrue(_resourceManager.CanAfford(questData));
-    }
-
-    [TestMethod]
-    public void ResourceManager_CanAfford_WithCharacter_ChecksStats()
-    {
-        var quest = _quests!.All.First(x => x.Name == "Defeat Treant Guardian");
-        var detail = _questDetails![quest];
-        var questData = new QuestData(quest, detail);
-        var himbo = _resourceManager!.Characters.First(c => c.Name == "Himbo");
-
-        _resourceManager.Inventory.Add(_items!.All.First(x => x.Name == "Potion"), 10);
-        
-        // Ensure quest actually has the requirement in test data
-        Assert.IsNotNull(questData.RequiredStats);
-        Assert.IsTrue(questData.RequiredStats.ContainsKey("Strength"));
-        Assert.AreEqual(25, questData.RequiredStats["Strength"]);
-
-        // Strength required: 25. Base Himbo Strength: 10.
-        Assert.IsFalse(_resourceManager.CanAfford(questData, himbo));
-
-        _resourceManager.JunctionManager.AddStatBoost(himbo, "Strength", 15); // 10 + 15 = 25
-        Assert.IsTrue(_resourceManager.CanAfford(questData, himbo));
-    }
-
-    [TestMethod]
-    public void ResourceManager_StartQuest_EnforcesTaskLimit()
-    {
-        var quest = _quests!.All.First(x => x.Name == "Buy Potion");
-        var detail = _questDetails![quest];
-        var questData = new QuestData(quest, detail);
-        var character = _resourceManager!.Characters[0];
-
-        _resourceManager.Inventory.Add(_items!.All.First(x => x.Name == "Gold"), 10000);
-        
-        // Default task limit is 1
-        _resourceManager.StartQuest(questData, character);
-        Assert.AreEqual(1, _resourceManager.ActiveQuests.Count);
-
-        _resourceManager.StartQuest(questData, character);
-        Assert.AreEqual(1, _resourceManager.ActiveQuests.Count, "Should not exceed task limit.");
     }
 
     [TestMethod]

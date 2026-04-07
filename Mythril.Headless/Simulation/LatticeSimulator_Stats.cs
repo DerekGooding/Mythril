@@ -1,0 +1,100 @@
+using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Linq;
+using Mythril.Data;
+
+namespace Mythril.Headless.Simulation;
+
+public partial class LatticeSimulator
+{
+    private (bool, GameState) UpdateStat(string name, GameState state)
+    {
+        int bestVal = state.StatMax.GetValueOrDefault(name, 10);
+        string abilityName = name switch { "Strength" => "J-Str", "Magic" => "J-Magic", "Vitality" => "J-Vit", "Speed" => "J-Speed", _ => "J-" + name };
+        
+        bool hasAbility = state.UnlockedAbilities.Any(ua => ua.EndsWith($":{abilityName}"));
+        if (!hasAbility) return (false, state);
+
+        foreach (var itemKvp in state.ResourceTime)
+        {
+            if (itemKvp.Value == double.PositiveInfinity) continue;
+            
+            var item = items.All.First(i => i.Name == itemKvp.Key);
+            if (item.ItemType != ItemType.Spell) continue;
+
+            var augments = statAugments[item];
+            var augment = augments.FirstOrDefault(a => a.Stat.Name == name);
+            if (augment.Stat.Name != null)
+            {
+                int val = 10 + (int)(state.MagicCapacity * (augment.ModifierAtFull / 100.0));
+                bestVal = Math.Max(bestVal, Math.Min(255, val));
+            }
+        }
+
+        if (bestVal > state.StatMax.GetValueOrDefault(name, 10))
+        {
+            return (true, state with { StatMax = state.StatMax.SetItem(name, bestVal) });
+        }
+
+        return (false, state);
+    }
+
+    private (bool, GameState) UpdateCadence(string name, GameState state)
+    {
+        if (name == "HIDDEN")
+        {
+            var nextCadences = state.UnlockedCadences;
+            bool changed = false;
+
+            void Check(string cad, bool condition)
+            {
+                if (condition && !nextCadences.Contains(cad))
+                {
+                    nextCadences = nextCadences.Add(cad);
+                    changed = true;
+                }
+            }
+
+            Check("Geologist", state.StatMax.GetValueOrDefault("Strength", 0) >= 60);
+            Check("Tide-Caller", state.StatMax.GetValueOrDefault("Speed", 0) >= 60);
+            Check("The Sentinel", state.StatMax.GetValueOrDefault("Vitality", 0) >= 60);
+            Check("Scholar", state.StatMax.GetValueOrDefault("Magic", 0) >= 100);
+            Check("Slayer", state.StatMax.GetValueOrDefault("Strength", 0) >= 100 && state.StatMax.GetValueOrDefault("Speed", 0) >= 100);
+
+            if (changed) return (true, state with { UnlockedCadences = nextCadences });
+        }
+        else
+        {
+            // Quest-based cadences are handled in UpdateQuest
+        }
+
+        return (false, state);
+    }
+
+    private (bool, GameState) UpdateCapacity(GameState state)
+    {
+        int bestCap = 30;
+        foreach (var abilityKey in state.UnlockedAbilities)
+        {
+            var parts = abilityKey.Split(':');
+            var cadenceName = parts[0];
+            var abilityName = parts[1];
+            
+            var cadence = cadences.All.First(c => c.Name == cadenceName);
+            var unlock = cadence.Abilities.First(a => a.Ability.Name == abilityName);
+
+            if (unlock.Ability.Metadata != null && unlock.Ability.Metadata.TryGetValue("MagicCapacity", out var capStr) && int.TryParse(capStr, out var capVal))
+            {
+                bestCap = Math.Max(bestCap, capVal);
+            }
+        }
+
+        if (bestCap > state.MagicCapacity)
+        {
+            return (true, state with { MagicCapacity = bestCap });
+        }
+
+        return (false, state);
+    }
+}

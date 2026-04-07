@@ -78,6 +78,24 @@ public class LatticeSimulatorTests : BunitTestBase
     }
 
     [TestMethod]
+    public void Solver_PropagatesResourceToRefinement()
+    {
+        // 1. Setup seed where we have Log and Refine Wood unlocked
+        var seed = new SimulationSeed(
+            new Dictionary<string, int> { { "Log", 10 } }.ToImmutableDictionary(),
+            Stats.All.ToImmutableDictionary(s => s.Name, _ => 10),
+            ImmutableHashSet.Create("Apprentice"), // Apprentice has Refine Wood
+            ImmutableHashSet.Create("Apprentice:Refine Wood")
+        );
+
+        // 2. Solve
+        var result = _lattice!.Solve(seed);
+
+        // 3. Assert - Herb should be reachable
+        Assert.AreNotEqual(double.PositiveInfinity, result.ResourceTime["Herb"], "Herb should be reachable via refinement when Log is available.");
+    }
+
+    [TestMethod]
     public void StatGate_PreventsUnreachableContent()
     {
         // Arrange - find a quest with high stat req

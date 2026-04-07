@@ -5,26 +5,26 @@ Detailed breakdown of current roadmap initiatives.
 ## 1. Economic Equilibrium Refinement
 Achieving 100% sustainability for all reachable recurring content.
 
-- [ ] **Data Audit**: Identify all "Unsustainable Activities" using `FlowSimulator` report.
-- [ ] **Logistics/Resource Injection**: Update `content_graph.json` to ensure bottleneck resources like `Log`, `Mana Leaf`, and `Ancient Bark` have sustainable production loops.
-- [ ] **Cost-Benefit Balance**: Adjust refinement costs and rewards for late-game content to prevent resource depletion.
-- [ ] **Verification**: Run `check_health.py` and confirm `shield_sustainability` reaches 100%.
+- [x] **Data Audit**: Identify all "Unsustainable Activities" using `FlowSimulator` report.
+- [x] **Logistics/Resource Injection**: Update `content_graph.json` to ensure bottleneck resources like `Log`, `Mana Leaf`, and `Ancient Bark` have sustainable production loops.
+- [x] **Cost-Benefit Balance**: Adjust refinement costs and rewards for late-game content to prevent resource depletion.
+- [x] **Verification**: Run `check_health.py` and confirm `shield_sustainability` reaches 100%.
 
 ## 2. Dependency-Tracked Fixpoint Solver
 Optimizing `LatticeSimulator` performance for large-scale content expansion.
 
-- [ ] **Worklist Architecture**: Implement a queue-based `Solve()` loop in `LatticeSimulator.cs`.
-- [ ] **Dependency Graph Build**: Create an internal map of `Node -> [DependentNodes]` during initialization.
-- [ ] **Delta Propagation**: Only add nodes to the worklist when their inputs (in-edges) change state.
-- [ ] **Validation**: Ensure results are bit-for-bit identical to the exhaustive solver.
+- [x] **Worklist Architecture**: Implement a queue-based `Solve()` loop in `LatticeSimulator.cs`.
+- [x] **Dependency Graph Build**: Create an internal map of `Node -> [DependentNodes]` during initialization.
+- [x] **Delta Propagation**: Only add nodes to the worklist when their inputs (in-edges) change state.
+- [x] **Validation**: Ensure results are bit-for-bit identical to the exhaustive solver.
 
 ## 3. Simulation-Driven Regression Assertions
 Automated pacing and balance checks for CI.
 
-- [ ] **Baseline Establishment**: Record current `Routed Completion Time` as the performance baseline.
-- [ ] **Pacing Logic**: Add logic to `check_health.py` to compare current sim results with baseline.
-- [ ] **Regression Thresholds**: Define acceptable variance (e.g., <15% increase without new content).
-- [ ] **CI Integration**: Fail the health check if pacing regressions are detected.
+- [x] **Baseline Establishment**: Record current `Routed Completion Time` as the performance baseline.
+- [x] **Pacing Logic**: Add logic to `check_health.py` to compare current sim results with baseline.
+- [x] **Regression Thresholds**: Define acceptable variance (e.g., <15% increase without new content).
+- [x] **CI Integration**: Fail the health check if pacing regressions are detected.
 
 ## 4. UI: Predictive Dependency Overlay
 Graph-based navigation assistance for the player.

@@ -56,6 +56,9 @@ public partial class ReachabilitySimulator(
         sb.AppendLine("## 💀 Reachability Analysis");
         
         var unreachableQuests = quests.All.Where(q => state.QuestTime[q.Name] == double.PositiveInfinity).ToList();
+        int reachableCount = quests.All.Length - unreachableQuests.Count;
+        sb.AppendLine($"Total Quests Completed: {reachableCount}");
+
         if (unreachableQuests.Any())
         {
             sb.AppendLine("### Unreachable Quests");

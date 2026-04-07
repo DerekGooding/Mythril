@@ -309,8 +309,11 @@ def check_reachability():
         # Parse the report for metrics
         report_path = Path("simulation_report.md")
         game_time = "Unknown"
+        raw_minutes = 0.0
         sustainable_count = 0
         unsustainable_count = 0
+        reachable_count = 0
+        total_count = 0
         
         if report_path.exists():
             content = report_path.read_text(encoding="utf-8")
@@ -322,8 +325,10 @@ def check_reachability():
             raw_time = "0"
             if routed_match:
                 raw_time = routed_match.group(1)
+                raw_minutes = float(raw_time)
             elif lattice_match:
                 raw_time = lattice_match.group(1)
+                raw_minutes = float(raw_time)
             
             game_time = format_game_time(raw_time)
             
@@ -335,7 +340,43 @@ def check_reachability():
             unsust_match = re.search(r"### ⚠️ Unsustainable Activities.*?\n(.*?)\n\n", content, re.DOTALL)
             if unsust_match:
                 unsustainable_count = len([line for line in unsust_match.group(1).split("\n") if line.strip().startswith("-")])
-        
+
+            # 3. Quest counts
+            unreachable_match = re.search(r"### Unreachable Quests\n(.*?)\n\n", content, re.DOTALL)
+            unreachable_count = 0
+            if unreachable_match:
+                unreachable_count = len([line for line in unreachable_match.group(1).split("\n") if line.strip().startswith("-")])
+            
+            quest_total_match = re.search(r"Total Quests Completed: (\d+)", content)
+            if quest_total_match:
+                reachable_count = int(quest_total_match.group(1))
+                total_count = reachable_count + unreachable_count
+            
+        # Pacing Check against Baseline
+        baseline_path = Path("docs/pacing_baseline.json")
+        if baseline_path.exists():
+            with open(baseline_path, "r") as f:
+                baseline = json.load(f)
+            
+            base_time = baseline.get("routed_completion_time_minutes", 0)
+            if base_time > 0:
+                # 15% regression threshold
+                threshold = base_time * 1.15
+                if raw_minutes > threshold:
+                    record_failure(
+                        "pacing", 
+                        f"Pacing regression detected: {raw_minutes:.1f}m (baseline: {base_time:.1f}m, max: {threshold:.1f}m)",
+                        {"actual": raw_minutes, "baseline": base_time}
+                    )
+            
+            base_reachable = baseline.get("reachable_quests", 0)
+            if reachable_count < base_reachable:
+                record_failure(
+                    "reachability",
+                    f"Content regression: Reachable quests dropped from {base_reachable} to {reachable_count}",
+                    {"actual": reachable_count, "baseline": base_reachable}
+                )
+
         return {
             "passed": True, 
             "time": game_time,
