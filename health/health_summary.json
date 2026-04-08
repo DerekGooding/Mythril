@@ -3,7 +3,7 @@
     "failure_count": 0,
     "metrics": {
         "monoliths": 0,
-        "coverage": 79.96,
+        "coverage": 80.26,
         "mutation_score": 0.0,
         "missing_tests": 0,
         "key_violations": 0,
