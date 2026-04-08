@@ -40,7 +40,8 @@
                     }
                     @foreach (var requirement in QuestData.Requirements)
                     {
-                        <li @key="requirement">
+                        var hasEnough = ResourceManager.Inventory.GetQuantity(requirement.Item) >= requirement.Quantity;
+                        <li @key="requirement" class="@(hasEnough ? "" : "low-resource")" title="@(hasEnough ? "" : $"Missing {requirement.Quantity - ResourceManager.Inventory.GetQuantity(requirement.Item)} units")">
                             <span title="Item Requirement">📦</span> @requirement.Item.Name @requirement.Quantity
                         </li>
                     }
@@ -48,7 +49,9 @@
                     {
                         @foreach (var statReq in QuestData.RequiredStats)
                         {
-                            <li @key="statReq.Key" class="stat-requirement text-info">
+                            var currentStatValue = ResourceManager.JunctionManager.GetStatValue(ResourceManager.Characters[0], statReq.Key);
+                            var meetsStat = currentStatValue >= statReq.Value;
+                            <li @key="statReq.Key" class="stat-requirement text-info @(meetsStat ? "" : "low-stat")" title="@(meetsStat ? "" : $"Need {statReq.Value - currentStatValue} more {statReq.Key}")">
                                 <span title="Stat Requirement">🛡️</span> <strong>@statReq.Key: @statReq.Value</strong>
                             </li>
                         }

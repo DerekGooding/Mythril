@@ -147,6 +147,9 @@ public class ContentNode
     
     [JsonPropertyName("out_edges")]
     public Dictionary<string, List<ContentEdge>> OutEdges { get; set; } = []; // RelationType -> [Edges]
+
+    [JsonPropertyName("effects")]
+    public List<EffectDefinition>? Effects { get; set; }
 }
 
 public class ContentEdge

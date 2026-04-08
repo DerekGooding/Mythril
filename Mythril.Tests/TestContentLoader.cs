@@ -20,8 +20,8 @@ public static class TestContentLoader
             var nodes = JsonSerializer.Deserialize<List<ContentNode>>(File.ReadAllText(Path.Combine(dataDir, "content_graph.json")), options) ?? [];
             var nodeMap = nodes.ToDictionary(n => n.Id);
 
-            LoadBaseEntities(nodes);
-            var (locs, cads, details, unlocks, refinements, abAugs) = ProcessRelationships(nodes, nodeMap);
+            LoadBaseEntities(nodes, options);
+            var (locs, cads, details, unlocks, refinements, abAugs) = ProcessRelationships(nodes, nodeMap, options);
 
             ContentHost.GetContent<Locations>().Load(locs);
             ContentHost.GetContent<Cadences>().Load(cads);
@@ -43,7 +43,7 @@ public static class TestContentLoader
         return Path.Combine(root ?? throw new Exception("No solution root"), "Mythril.Blazor/wwwroot/data");
     }
 
-    private static void LoadBaseEntities(List<ContentNode> nodes)
+    private static void LoadBaseEntities(List<ContentNode> nodes, JsonSerializerOptions options)
     {
         var items = new List<Item>(); var stats = new List<Stat>(); var abils = new List<CadenceAbility>(); var qs = new List<Quest>();
         foreach (var node in nodes) {
@@ -54,9 +54,7 @@ public static class TestContentLoader
                 case "Ability":
                     var meta = new Dictionary<string, string>();
                     if (data.TryGetValue("metadata", out var mo) && mo is JsonElement me) foreach (var p in me.EnumerateObject()) meta[p.Name] = p.Value.ToString();
-                    var effs = new List<EffectDefinition>();
-                    if (data.TryGetValue("effects", out var eo) && eo is JsonElement ee && ee.ValueKind == JsonValueKind.Array)
-                        effs = JsonSerializer.Deserialize<List<EffectDefinition>>(ee.GetRawText(), options) ?? [];
+                    var effs = node.Effects ?? [];
                     abils.Add(new CadenceAbility(node.Name, "") { Metadata = meta, Effects = effs.ToArray() }); break;
                 case "Quest": qs.Add(new Quest(node.Name, data.TryGetValue("description", out var qd) ? qd.ToString() ?? "" : "")); break;
             }
@@ -93,9 +91,7 @@ public static class TestContentLoader
                 var rews = node.OutEdges.TryGetValue("rewards", out var rewards) ? rewards.Select(r => new ItemQuantity(items.All.First(i => i.Name == nodeMap[r.TargetId].Name), r.Quantity)).ToArray() : [];
                 var rs = node.Data.TryGetValue("required_stats", out var rso) && rso is JsonElement rse ? rse.EnumerateObject().ToDictionary(p => p.Name, p => p.Value.GetInt32()) : null;
                 var sr = node.Data.TryGetValue("stat_rewards", out var sro) && sro is JsonElement sre ? sre.EnumerateObject().ToDictionary(p => p.Name, p => p.Value.GetInt32()) : null;
-                var qeffs = new List<EffectDefinition>();
-                if (node.Data.TryGetValue("effects", out var eo) && eo is JsonElement ee && ee.ValueKind == JsonValueKind.Array)
-                    qeffs = JsonSerializer.Deserialize<List<EffectDefinition>>(ee.GetRawText(), options) ?? [];
+                var qeffs = node.Effects ?? [];
                 detailDict[q] = new QuestDetail(int.Parse(node.Data.TryGetValue("duration", out var dur) ? dur.ToString() ?? "10" : "10"), reqs, rews, Enum.Parse<QuestType>(node.Data.TryGetValue("quest_type", out var qt) ? qt.ToString() ?? "Single" : "Single"), node.Data.TryGetValue("primary_stat", out var ps) ? ps.ToString() ?? "Vitality" : "Vitality", rs, sr, qeffs.ToArray());
             } else if (node.Type == "Refinement" && node.InEdges.TryGetValue("requires_ability", out var abIds)) {
                 var an = nodeMap[abIds.First()]; var ab = abils.All.First(a => a.Name == an.Name);

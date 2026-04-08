@@ -43,8 +43,10 @@ public partial class ResourceManager
             var abilityName = parts[1];
             
             var cadence = _cadences.All.FirstOrDefault(c => c.Name == cadenceName);
+            if (cadence.Name == null) continue;
+            
             var unlock = cadence.Abilities.FirstOrDefault(a => a.Ability.Name == abilityName);
-            if (unlock.Ability.Effects != null)
+            if (unlock.Ability.Name != null && unlock.Ability.Effects != null)
             {
                 foreach (var effect in unlock.Ability.Effects)
                 {

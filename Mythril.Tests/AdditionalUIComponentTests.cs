@@ -215,13 +215,11 @@ public class AdditionalUIComponentTests : BunitTestBase
     [TestMethod]
     public void CharacterDisplay_AutoQuestToggle_RendersWhenUnlocked()
     {
-        // Arrange
-        var character = new Character("Hero");
-        var autoQuestAbility = new CadenceAbility("AutoQuest I", "Description");
-        var cadence = new Cadence("Test", "Desc", [new CadenceUnlock("Test", autoQuestAbility, [])]);
-        
-        ResourceManager.UnlockedAbilities.Add("Test:AutoQuest I");
-        JunctionManager.AssignCadence(cadence, character, ResourceManager.UnlockedAbilities);
+        var character = ResourceManager.Characters[0];
+        var recruit = Cadences.All.First(c => c.Name == "Recruit");
+
+        ResourceManager.UnlockedAbilities.Add("Recruit:AutoQuest I");
+        JunctionManager.AssignCadence(recruit, character, ResourceManager.UnlockedAbilities);
 
         // Act
         var cut = RenderComponent<CharacterDisplay>(parameters => parameters

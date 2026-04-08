@@ -221,11 +221,11 @@ public class JunctionStatTests
     {
         Assert.AreEqual(30, _resourceManager!.Inventory.MagicCapacity);
         
-        _resourceManager.UnlockedAbilities.Add("AnyCadence:Magic Pocket I");
+        _resourceManager.UnlockedAbilities.Add("Arcanist:Magic Pocket I");
         _resourceManager.UpdateMagicCapacity();
         Assert.AreEqual(60, _resourceManager.Inventory.MagicCapacity);
 
-        _resourceManager.UnlockedAbilities.Add("AnyCadence:Magic Pocket II");
+        _resourceManager.UnlockedAbilities.Add("The Sentinel:Magic Pocket II");
         _resourceManager.UpdateMagicCapacity();
         Assert.AreEqual(100, _resourceManager.Inventory.MagicCapacity);
     }

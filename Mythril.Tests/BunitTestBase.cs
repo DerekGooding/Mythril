@@ -16,6 +16,7 @@ public abstract class BunitTestBase : TestContextWrapper
     protected InventoryManager InventoryManager { get; private set; } = null!;
     protected DragDropService DragDropService { get; private set; } = null!;
     protected Stats Stats { get; private set; } = null!;
+    protected Cadences Cadences { get; private set; } = null!;
     protected Mock<IJSRuntime> JSRuntimeMock { get; private set; } = null!;
     protected SnackbarService SnackbarService { get; private set; } = null!;
     protected AuthService AuthService { get; private set; } = null!;
@@ -31,7 +32,8 @@ public abstract class BunitTestBase : TestContextWrapper
         InventoryManager = new InventoryManager();
         Stats = ContentHost.GetContent<Stats>();
         var statAugments = ContentHost.GetContent<StatAugments>();
-        var cadences = ContentHost.GetContent<Cadences>();
+        Cadences = ContentHost.GetContent<Cadences>();
+        var cadences = Cadences;
         
         JunctionManager = new JunctionManager(InventoryManager, statAugments, cadences);
         JunctionManager.Initialize();

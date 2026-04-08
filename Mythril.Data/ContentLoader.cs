@@ -76,10 +76,7 @@ public class ContentLoader(
                     if (data.TryGetValue("metadata", out var metaObj) && metaObj is JsonElement metaElem)
                         foreach (var prop in metaElem.EnumerateObject()) metaDict[prop.Name] = prop.Value.ToString();
                     
-                    var effectList = new List<EffectDefinition>();
-                    if (data.TryGetValue("effects", out var effObj) && effObj is JsonElement effElem && effElem.ValueKind == JsonValueKind.Array)
-                        effectList = JsonSerializer.Deserialize<List<EffectDefinition>>(effElem.GetRawText(), _options) ?? [];
-
+                    var effectList = node.Effects ?? [];
                     loadedAbilities.Add(new CadenceAbility(node.Name, "") { Metadata = metaDict, Effects = effectList.ToArray() });
                     break;
                 case "Quest":

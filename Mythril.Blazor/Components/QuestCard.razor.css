@@ -67,3 +67,13 @@
     content: "🛡️";
     margin-right: 4px;
 }
+
+.low-resource {
+    color: #ffc107 !important; /* Warning color */
+    opacity: 0.8;
+}
+
+.low-stat {
+    color: #dc3545 !important; /* Danger color */
+    font-weight: bold;
+}

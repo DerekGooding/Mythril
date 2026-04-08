@@ -54,6 +54,7 @@ public partial class ResourceManager
                 HasUnseenWorkshop = true;
             }
             UpdateMagicCapacity();
+            JunctionManager.UpdatePassiveBoosts(progress.Character, UnlockedAbilities);
         }
         if(item is RefinementData refinement)
         {

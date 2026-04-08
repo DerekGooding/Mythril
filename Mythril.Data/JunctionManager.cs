@@ -12,6 +12,7 @@ public class JunctionManager(
     private Dictionary<Cadence, Character?> _assignedCadences = [];
     public List<Junction> Junctions { get; } = [];
     public Dictionary<string, Dictionary<string, int>> CharacterStatBoosts { get; } = [];
+    private Dictionary<string, Dictionary<string, int>> _passiveAbilitiyBoosts = [];
 
     public event Action<Character>? OnCadenceUnassigned;
 
@@ -20,6 +21,31 @@ public class JunctionManager(
         _assignedCadences = _cadences.All.ToNamedDictionary(_ => (Character?)null);
         Junctions.Clear();
         CharacterStatBoosts.Clear();
+        _passiveAbilitiyBoosts.Clear();
+    }
+
+    public void UpdatePassiveBoosts(Character character, HashSet<string> unlockedAbilities)
+    {
+        var boosts = new Dictionary<string, int>();
+        var assigned = CurrentlyAssigned(character);
+        
+        foreach (var cadence in assigned)
+        {
+            foreach (var unlock in cadence.Abilities)
+            {
+                if (unlockedAbilities.Contains($"{cadence.Name}:{unlock.Ability.Name}") && unlock.Ability.Effects != null)
+                {
+                    foreach (var effect in unlock.Ability.Effects)
+                    {
+                        if (effect.Type == EffectType.StatBoost && !string.IsNullOrEmpty(effect.Target))
+                        {
+                            boosts[effect.Target] = boosts.GetValueOrDefault(effect.Target, 0) + effect.Value;
+                        }
+                    }
+                }
+            }
+        }
+        _passiveAbilitiyBoosts[character.Name] = boosts;
     }
 
     public void AssignCadence(Cadence cadence, Character character, HashSet<string> unlockedAbilities)
@@ -32,6 +58,7 @@ public class JunctionManager(
         }
 
         _assignedCadences[cadence] = character;
+        UpdatePassiveBoosts(character, unlockedAbilities);
     }
 
     public void Unassign(Cadence cadence, HashSet<string> unlockedAbilities)
@@ -39,6 +66,7 @@ public class JunctionManager(
         if (_assignedCadences.TryGetValue(cadence, out var owner) && owner != null)
         {
             _assignedCadences[cadence] = null;
+            UpdatePassiveBoosts(owner.Value, unlockedAbilities);
             
             // Check if any junctions are now invalid because the ability is gone OR locked for remaining cadences
             foreach (var junction in Junctions.Where(j => j.Character.Name == owner.Value.Name).ToList())
@@ -100,10 +128,16 @@ public class JunctionManager(
     {
         int baseValue = 10;
 
-        // Apply permanent boosts
+        // Apply permanent boosts (from quests, etc.)
         if (CharacterStatBoosts.TryGetValue(character.Name, out var boosts))
         {
             baseValue += boosts.GetValueOrDefault(statName, 0);
+        }
+
+        // Apply passive ability boosts (from assigned cadences)
+        if (_passiveAbilitiyBoosts.TryGetValue(character.Name, out var pBoosts))
+        {
+            baseValue += pBoosts.GetValueOrDefault(statName, 0);
         }
 
         var junction = Junctions.FirstOrDefault(j => j.Character.Name == character.Name && j.Stat.Name == statName);
