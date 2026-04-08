@@ -1,215 +1,126 @@
+using System.Collections.Generic;
+using System.Linq;
+
 namespace Mythril.Data;
 
 public partial class ResourceManager
 {
-    public bool CanAfford(object item)
+    public void StartQuest(object item, Character character, double initialSecondsElapsed = 0)
+    {
+        lock (_questLock)
+        {
+            if (ActiveQuests.Count(p => p.Character.Name == character.Name) >= GetTaskLimit(character)) return;
+
+            // Single quests can only be active once
+            if (item is QuestData questData && (questData.Type == QuestType.Single || questData.Type == QuestType.Unlock))
+            {
+                if (IsInProgress(questData) || _gameStore.State.CompletedQuests.Contains(questData.Name)) return;
+            }
+
+            if (!CanAfford(item, character)) return;
+
+            PayCosts(item);
+
+            var description = item is QuestData qd ? qd.Description : (item is CadenceUnlock cu ? cu.Ability.Description : (item is RefinementData rd ? rd.Description : ""));
+            int duration = item is QuestData q ? q.DurationSeconds : (item is CadenceUnlock u ? 30 : (item is RefinementData r ? 15 : 10));
+            
+            // Find free slot
+            var usedSlots = ActiveQuests.Where(p => p.Character.Name == character.Name).Select(p => p.SlotIndex).ToHashSet();
+            int slot = 0;
+            while (usedSlots.Contains(slot)) slot++;
+
+            var progress = new QuestProgress(item, description, duration, character, slot) { SecondsElapsed = initialSecondsElapsed };
+            _gameStore.Dispatch(new StartQuestAction(progress));
+        }
+    }
+
+    public void CancelQuest(QuestProgress progress)
+    {
+        lock (_questLock)
+        {
+            _gameStore.Dispatch(new CancelQuestAction(progress));
+            RefundCosts(progress.Item);
+        }
+    }
+
+    public bool CanAfford(object item, Character? character = null)
     {
         if (item is QuestData quest)
         {
-            foreach (var requirement in quest.Requirements)
+            if (quest.Requirements != null)
             {
-                if (!Inventory.Has(requirement.Item, requirement.Quantity))
+                foreach (var req in quest.Requirements)
                 {
-                    return false;
+                    if (Inventory.GetQuantity(req.Item) < req.Quantity) return false;
                 }
             }
-        }
-
-        if(item is CadenceUnlock ability)
-        {
-            foreach(var requirement in ability.Requirements)
+            if (character != null && quest.RequiredStats != null)
             {
-                if (!Inventory.Has(requirement.Item, requirement.Quantity))
+                foreach (var stat in quest.RequiredStats)
                 {
-                    return false;
+                    if (JunctionManager.GetStatValue(character.Value, stat.Key) < stat.Value) return false;
                 }
             }
+            return true;
         }
-
-        if(item is RefinementData refinement)
+        else if (item is CadenceUnlock unlock)
         {
-            return Inventory.Has(refinement.InputItem, refinement.Recipe.InputQuantity);
-        }
-
-        return true;
-    }
-
-    public bool CanAfford(object item, Character character)
-    {
-        if (!CanAfford(item)) return false;
-
-        if (item is QuestData quest)
-        {
-            if (quest.RequiredStats != null)
+            if (unlock.Requirements != null)
             {
-                foreach (var req in quest.RequiredStats)
+                foreach (var req in unlock.Requirements)
                 {
-                    if (JunctionManager.GetStatValue(character, req.Key) < req.Value)
-                    {
-                        return false;
-                    }
+                    if (Inventory.GetQuantity(req.Item) < req.Quantity) return false;
                 }
             }
+            return true;
         }
-
-        if (item is RefinementData refinement)
+        else if (item is RefinementData refinement)
         {
-            return HasAbility(character, refinement.Ability);
+            if (!Inventory.Has(refinement.InputItem, refinement.Recipe.InputQuantity)) return false;
+            
+            // Refinements require the ability to be UNLOCKED and the cadence ASSIGNED
+            if (character == null) return false;
+            return HasAbility(character.Value, refinement.Ability);
         }
-
-        return true;
+        return false;
     }
-
-    private void LockQuest(Quest quest)
-    {
-        foreach(var location in UsableLocations)
-        {
-            location.Quests.Remove(quest);
-        }
-    }
-
-    private void UnlockQuest(Quest quest)
-    {
-        _completedQuests.Add(quest);
-        UpdateUsableLocations();
-    }
-
-    private bool IsComplete(Quest[] quests) => quests.All(_completedQuests.Contains);
 
     public void PayCosts(object item)
     {
-        if (item is QuestData quest)
+        if (item is QuestData quest && quest.Requirements != null)
         {
-            foreach (var requirement in quest.Requirements)
-                Inventory.Remove(requirement.Item, requirement.Quantity);
+            foreach (var req in quest.Requirements) Inventory.Remove(req.Item, req.Quantity);
         }
-        if(item is CadenceUnlock unlock)
+        else if (item is CadenceUnlock unlock && unlock.Requirements != null)
         {
-            foreach (var requirement in unlock.Requirements)
-                Inventory.Remove(requirement.Item, requirement.Quantity);
+            foreach (var req in unlock.Requirements) Inventory.Remove(req.Item, req.Quantity);
         }
-        if(item is RefinementData refinement)
+        else if (item is RefinementData refinement)
         {
             Inventory.Remove(refinement.InputItem, refinement.Recipe.InputQuantity);
         }
     }
 
-    public void StartQuest(object item, Character character, double initialSecondsElapsed = 0)
+    private void RefundCosts(object item)
     {
-        if (CanAfford(item, character))
+        if (item is QuestData quest && quest.Requirements != null)
         {
-            lock (_questLock)
-            {
-                // Task limit check
-                var charQuests = ActiveQuests.Where(q => q.Character.Name == character.Name).ToList();
-                if (charQuests.Count >= GetTaskLimit(character))
-                {
-                    Console.WriteLine($"Character {character.Name} is already at task limit.");
-                    return;
-                }
-
-                // Safety check for single-use tasks already in progress or completed
-                if (item is CadenceUnlock || (item is QuestData q && (q.Type == QuestType.Single || q.Type == QuestType.Unlock)))
-                {
-                    if (IsInProgress(item))
-                    {
-                        Console.WriteLine($"Attempted to start single-use task '{item}' but it is already in progress.");
-                        return;
-                    }
-
-                    if (item is QuestData q2 && _completedQuests.Contains(q2.Quest))
-                    {
-                        Console.WriteLine($"Attempted to start completed single-use quest '{q2.Name}'.");
-                        return;
-                    }
-                    
-                    if (item is CadenceUnlock cu && UnlockedAbilities.Contains($"{cu.CadenceName}:{cu.Ability.Name}"))
-                    {
-                        Console.WriteLine($"Attempted to start already unlocked ability '{cu.Ability.Name}'.");
-                        return;
-                    }
-                }
-            }
-
-            PayCosts(item);
-            double duration = 10; // Default
-            string primaryStat = "Vitality";
-
-            // Find first available slot
-            int slotIndex = 0;
-            lock(_questLock)
-            {
-                var charQuests = ActiveQuests.Where(q => q.Character.Name == character.Name).ToList();
-                for (int i = 0; i < GetTaskLimit(character); i++)
-                {
-                    if (!charQuests.Any(q => q.SlotIndex == i))
-                    {
-                        slotIndex = i;
-                        break;
-                    }
-                }
-            }
-
-            if (item is QuestData quest)
-            {
-                duration = IsTestMode ? 3 : quest.DurationSeconds;
-                primaryStat = quest.PrimaryStat;
-                
-                duration = ApplyStatModifier(duration, primaryStat, character);
-                duration = Math.Max(0.5, duration);
-
-                lock(_questLock)
-                {
-                    var qp = new QuestProgress(quest, quest.Description, (int)Math.Max(1, duration), character, slotIndex);
-                    qp.SecondsElapsed = initialSecondsElapsed;
-                    ActiveQuests.Add(qp);
-                }
-            }
-            if(item is CadenceUnlock unlock)
-            {
-                duration = IsTestMode ? 3 : 30; // Increased base duration for Cadence unlocks
-                primaryStat = unlock.PrimaryStat;
-
-                duration = ApplyStatModifier(duration, primaryStat, character);
-                duration = Math.Max(0.5, duration);
-
-                lock(_questLock)
-                {
-                    var qp = new QuestProgress(unlock, unlock.Ability.Description, (int)Math.Max(1, duration), character, slotIndex);
-                    qp.SecondsElapsed = initialSecondsElapsed;
-                    ActiveQuests.Add(qp);
-                }
-            }
-            if(item is RefinementData refinement)
-            {
-                duration = IsTestMode ? 2 : 15; // Base duration for refinements
-                primaryStat = refinement.PrimaryStat;
-
-                duration = ApplyStatModifier(duration, primaryStat, character);
-                duration = Math.Max(0.5, duration);
-
-                lock(_questLock)
-                {
-                    var qp = new QuestProgress(refinement, refinement.Description, (int)Math.Max(1, duration), character, slotIndex);
-                    qp.SecondsElapsed = initialSecondsElapsed;
-                    ActiveQuests.Add(qp);
-                }
-            }
+            foreach (var req in quest.Requirements) Inventory.Add(req.Item, req.Quantity);
+        }
+        else if (item is CadenceUnlock unlock && unlock.Requirements != null)
+        {
+            foreach (var req in unlock.Requirements) Inventory.Add(req.Item, req.Quantity);
+        }
+        else if (item is RefinementData refinement)
+        {
+            Inventory.Add(refinement.InputItem, refinement.Recipe.InputQuantity);
         }
     }
 
-    private double ApplyStatModifier(double duration, string primaryStat, Character character)
+    public bool IsInProgress(object item)
     {
-        if (IsTestMode) return duration;
-
-        int statValue = JunctionManager.GetStatValue(character, primaryStat);
-
-        // 10 is the baseline (0% change).
-        // Stat 20 -> 25% reduction (0.75 multiplier).
-        // Stat 30 -> ~44% reduction (0.5625 multiplier).
-        // Formula: multiplier = 0.75 ^ ((Stat - 10) / 10)
-        double multiplier = Math.Pow(0.75, (statValue - 10) / 10.0);
-
-        return duration * multiplier;
+        if (item is QuestData q) return ActiveQuests.Any(p => p.Item is QuestData qd && qd.Name == q.Name);
+        if (item is CadenceUnlock u) return ActiveQuests.Any(p => p.Item is CadenceUnlock ud && ud.Ability.Name == u.Ability.Name && ud.CadenceName == u.CadenceName);
+        return false;
     }
 }

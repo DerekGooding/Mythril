@@ -164,6 +164,7 @@ public class ContentEdge
 // Persistence
 public class SaveData
 {
+    public GameState? State { get; set; }
     public List<KeyValuePair<string, int>> Inventory { get; set; } = [];
     public List<string> UnlockedCadences { get; set; } = [];
     public List<string> UnlockedAbilities { get; set; } = [];

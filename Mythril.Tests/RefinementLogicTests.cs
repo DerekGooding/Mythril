@@ -16,7 +16,8 @@ public class RefinementLogicTests
         TestContentLoader.Load();
         _refinements = ContentHost.GetContent<ItemRefinements>();
         
-        var inventory = new InventoryManager();
+        var gameStore = new GameStore();
+        var inventory = new InventoryManager(gameStore);
         var cadences = ContentHost.GetContent<Cadences>();
         var pathfinding = new PathfindingService(
             ContentHost.GetContent<Locations>(),
@@ -26,9 +27,10 @@ public class RefinementLogicTests
             cadences,
             ContentHost.GetContent<QuestToCadenceUnlocks>()
         );
-        var junctionManager = new JunctionManager(inventory, ContentHost.GetContent<StatAugments>(), cadences);
+        var junctionManager = new JunctionManager(gameStore, inventory, ContentHost.GetContent<StatAugments>(), cadences);
         
         _resourceManager = new ResourceManager(
+            gameStore,
             ContentHost.GetContent<Items>(), 
             ContentHost.GetContent<QuestUnlocks>(), 
             ContentHost.GetContent<QuestToCadenceUnlocks>(), 

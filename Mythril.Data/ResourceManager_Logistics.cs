@@ -25,10 +25,25 @@ public partial class ResourceManager
         return 1 + maxLogistics;
     }
 
-    public int GetAutoQuestLevel(Character character)
+    public void CancelExcessQuests(Character character)
+    {
+        lock (_questLock)
+        {
+            int limit = GetTaskLimit(character);
+            var active = ActiveQuests.Where(p => p.Character.Name == character.Name).OrderBy(p => p.StartTime).ToList();
+            
+            while (active.Count > limit)
+            {
+                var toCancel = active.Last();
+                CancelQuest(toCancel);
+                active.Remove(toCancel);
+            }
+        }
+    }
+
+    public bool CanAutoQuest(Character character)
     {
         var assigned = JunctionManager.CurrentlyAssigned(character);
-        int maxAuto = 0;
         foreach (var cadence in assigned)
         {
             foreach (var unlock in cadence.Abilities)
@@ -37,52 +52,64 @@ public partial class ResourceManager
                 {
                     foreach (var effect in unlock.Ability.Effects)
                     {
-                        if (effect.Type == EffectType.AutoQuest)
-                        {
-                            maxAuto = Math.Max(maxAuto, effect.Value);
-                        }
+                        if (effect.Type == EffectType.AutoQuest) return true;
                     }
                 }
             }
         }
-        return maxAuto;
+        return false;
     }
 
-    public bool CanAutoQuest(Character character) => GetAutoQuestLevel(character) > 0;
+    public bool IsAutoQuestEnabled(Character character) => _gameStore.State.AutoQuestEnabled.GetValueOrDefault(character.Name);
 
-    public bool IsAutoQuestEnabled(Character character) => _autoQuestEnabled.TryGetValue(character.Name, out var enabled) && enabled;
-
-    public void SetAutoQuestEnabled(Character character, bool enabled) => _autoQuestEnabled[character.Name] = enabled;
-
-    public async Task CompleteTaskAsync(QuestProgress completedProgress)
+    public void ToggleAutoQuest(Character character)
     {
-        await ReceiveRewards(completedProgress);
-        RemoveActiveQuest(completedProgress);
+        bool current = IsAutoQuestEnabled(character);
+        _gameStore.Dispatch(new ToggleAutoQuestAction(character.Name, !current));
+    }
 
-        // Auto-restart logic
-        bool isRecurring = (completedProgress.Item is QuestData q && q.Type == QuestType.Recurring) || 
-                          (completedProgress.Item is RefinementData);
-
-        if (isRecurring && IsAutoQuestEnabled(completedProgress.Character))
+    private void CheckAutoQuestTick()
+    {
+        foreach (var character in Characters)
         {
-            int autoLevel = GetAutoQuestLevel(completedProgress.Character);
-            bool shouldRestart = completedProgress.SlotIndex < autoLevel;
-
-            if (shouldRestart && completedProgress.Item is RefinementData refinement)
+            if (IsAutoQuestEnabled(character))
             {
-                if (refinement.Recipe.OutputItem.ItemType == ItemType.Spell && 
-                    Inventory.GetQuantity(refinement.Recipe.OutputItem) >= Inventory.MagicCapacity)
+                int limit = GetTaskLimit(character);
+                int current = ActiveQuests.Count(p => p.Character.Name == character.Name);
+                
+                if (current < limit)
                 {
-                    shouldRestart = false;
-                }
-            }
-
-            if (shouldRestart)
-            {
-                if (CanAfford(completedProgress.Item, completedProgress.Character))
-                {
-                    // Use -1.5 as initialSecondsElapsed to provide a "preparing" visual delay in the UI
-                    StartQuest(completedProgress.Item, completedProgress.Character, -1.5);
+                    // Find the last completed quest for this character in this session
+                    var lastCompleted = Journal.FirstOrDefault(j => j.CharacterName == character.Name);
+                    if (lastCompleted.TaskName != null)
+                    {
+                        // Check if it's a recurring quest or refinement
+                        var quest = _items.All.OfType<Quest>().FirstOrDefault(q => q.Name == lastCompleted.TaskName);
+                        if (quest.Name != null)
+                        {
+                            var detail = _questDetails[quest];
+                            if (detail.Type == QuestType.Recurring)
+                            {
+                                var questData = new QuestData(quest, detail);
+                                if (CanAfford(questData, character))
+                                {
+                                    // Use -1.5 as initialSecondsElapsed to provide a "preparing" visual delay in the UI
+                                    StartQuest(questData, character, -1.5);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            // Check refinements
+                            var refData = _refinements.ByKey.SelectMany(r => r.Value.Recipes.Select(rec => new RefinementData(r.Key, rec.Key, rec.Value, r.Value.PrimaryStat)))
+                                .FirstOrDefault(rd => rd.Name == lastCompleted.TaskName);
+                            
+                            if (refData.Name != null && CanAfford(refData, character))
+                            {
+                                StartQuest(refData, character, -1.5);
+                            }
+                        }
+                    }
                 }
             }
         }

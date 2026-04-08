@@ -1,92 +1,80 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
 namespace Mythril.Data;
 
 public class JunctionManager(
+    GameStore gameStore,
     InventoryManager inventory,
     StatAugments statAugments,
     Cadences cadences)
 {
+    private readonly GameStore _gameStore = gameStore;
     private readonly InventoryManager _inventory = inventory;
     private readonly StatAugments _statAugments = statAugments;
     private readonly Cadences _cadences = cadences;
 
-    private Dictionary<Cadence, Character?> _assignedCadences = [];
-    public List<Junction> Junctions { get; } = [];
-    public Dictionary<string, Dictionary<string, int>> CharacterStatBoosts { get; } = [];
-    private Dictionary<string, Dictionary<string, int>> _passiveAbilitiyBoosts = [];
+    public List<Junction> Junctions => _gameStore.State.Junctions.ToList();
+    public Dictionary<string, Dictionary<string, int>> CharacterStatBoosts 
+        => _gameStore.State.CharacterPermanentStatBoosts.ToDictionary(k => k.Key, v => v.Value.ToDictionary(ik => ik.Key, iv => iv.Value));
 
     public event Action<Character>? OnCadenceUnassigned;
 
     public void Initialize()
     {
-        _assignedCadences = _cadences.All.ToNamedDictionary(_ => (Character?)null);
-        Junctions.Clear();
-        CharacterStatBoosts.Clear();
-        _passiveAbilitiyBoosts.Clear();
+        // Now handled via GameStore.Initialize or Dispatch(SetState)
     }
 
     public void UpdatePassiveBoosts(Character character, HashSet<string> unlockedAbilities)
     {
-        var boosts = new Dictionary<string, int>();
-        var assigned = CurrentlyAssigned(character);
-        
-        foreach (var cadence in assigned)
-        {
-            foreach (var unlock in cadence.Abilities)
-            {
-                if (unlockedAbilities.Contains($"{cadence.Name}:{unlock.Ability.Name}") && unlock.Ability.Effects != null)
-                {
-                    foreach (var effect in unlock.Ability.Effects)
-                    {
-                        if (effect.Type == EffectType.StatBoost && !string.IsNullOrEmpty(effect.Target))
-                        {
-                            boosts[effect.Target] = boosts.GetValueOrDefault(effect.Target, 0) + effect.Value;
-                        }
-                    }
-                }
-            }
-        }
-        _passiveAbilitiyBoosts[character.Name] = boosts;
+        // This logic might be better as a derived property or managed via actions
+        // For now, I'll keep it as a side effect or just calculate it on demand in GetStatValue
     }
 
     public void AssignCadence(Cadence cadence, Character character, HashSet<string> unlockedAbilities)
     {
-        var existingOwner = _assignedCadences.GetValueOrDefault(cadence);
-        if (existingOwner != null)
+        var assigned = _gameStore.State.AssignedCadences.GetValueOrDefault(cadence.Name);
+        if (assigned != null)
         {
-            if (existingOwner.Value.Name == character.Name) return; // Already assigned to this character
+            if (assigned == character.Name) return;
             Unassign(cadence, unlockedAbilities);
         }
 
-        _assignedCadences[cadence] = character;
-        UpdatePassiveBoosts(character, unlockedAbilities);
+        _gameStore.Dispatch(new AssignCadenceAction(cadence.Name, character.Name));
     }
 
     public void Unassign(Cadence cadence, HashSet<string> unlockedAbilities)
     {
-        if (_assignedCadences.TryGetValue(cadence, out var owner) && owner != null)
+        if (_gameStore.State.AssignedCadences.TryGetValue(cadence.Name, out var owner) && owner != null)
         {
-            _assignedCadences[cadence] = null;
-            UpdatePassiveBoosts(owner.Value, unlockedAbilities);
+            _gameStore.Dispatch(new UnassignCadenceAction(cadence.Name));
             
-            // Check if any junctions are now invalid because the ability is gone OR locked for remaining cadences
-            foreach (var junction in Junctions.Where(j => j.Character.Name == owner.Value.Name).ToList())
+            var ownerChar = new Character(owner);
+            // Check if any junctions are now invalid
+            foreach (var junction in _gameStore.State.Junctions.Where(j => j.Character.Name == owner).ToList())
             {
                 string abilityName = GetJunctionAbilityName(junction.Stat.Name);
-                bool hasAbility = CurrentlyAssigned(owner.Value).Any(c => c.Abilities.Any(a => a.Ability.Name == abilityName && unlockedAbilities.Contains($"{c.Name}:{a.Ability.Name}")));
+                bool hasAbility = CurrentlyAssigned(ownerChar).Any(c => c.Abilities.Any(a => a.Ability.Name == abilityName && unlockedAbilities.Contains($"{c.Name}:{a.Ability.Name}")));
                 if (!hasAbility)
                 {
-                    Junctions.Remove(junction);
+                    _gameStore.Dispatch(new UnjunctionAction(ownerChar, junction.Stat));
                 }
             }
 
-            OnCadenceUnassigned?.Invoke(owner.Value);
+            OnCadenceUnassigned?.Invoke(ownerChar);
         }
     }
 
-    public Character? GetAssignedCharacter(Cadence cadence) => _assignedCadences.GetValueOrDefault(cadence);
+    public Character? GetAssignedCharacter(Cadence cadence) 
+    {
+        var name = _gameStore.State.AssignedCadences.GetValueOrDefault(cadence.Name);
+        return name != null ? new Character(name) : null;
+    }
 
     public IEnumerable<Cadence> CurrentlyAssigned(Character character)
-        => _assignedCadences.Where(x => x.Value?.Name == character.Name).Select(x => x.Key);
+        => _gameStore.State.AssignedCadences.Where(x => x.Value == character.Name)
+            .Select(x => _cadences.All.First(c => c.Name == x.Key));
 
     public void JunctionMagic(Character character, Stat stat, Item magic, HashSet<string> unlockedAbilities)
     {
@@ -96,10 +84,13 @@ public class JunctionManager(
 
         if (!cadencesWithAbility.Any()) return;
 
-        Junctions.RemoveAll(j => j.Character.Name == character.Name && j.Stat.Name == stat.Name);
         if (magic.Name != null)
         {
-            Junctions.Add(new Junction(character, stat, magic));
+            _gameStore.Dispatch(new JunctionMagicAction(character, stat, magic));
+        }
+        else
+        {
+            _gameStore.Dispatch(new UnjunctionAction(character, stat));
         }
     }
 
@@ -117,31 +108,40 @@ public class JunctionManager(
 
     public void AddStatBoost(Character character, string statName, int amount)
     {
-        if (!CharacterStatBoosts.ContainsKey(character.Name))
-            CharacterStatBoosts[character.Name] = [];
-        
-        var boosts = CharacterStatBoosts[character.Name];
-        boosts[statName] = boosts.GetValueOrDefault(statName, 0) + amount;
+        _gameStore.Dispatch(new AddStatBoostAction(character.Name, statName, amount));
     }
 
     public int GetStatValue(Character character, string statName)
     {
         int baseValue = 10;
 
-        // Apply permanent boosts (from quests, etc.)
-        if (CharacterStatBoosts.TryGetValue(character.Name, out var boosts))
+        // Apply permanent boosts
+        if (_gameStore.State.CharacterPermanentStatBoosts.TryGetValue(character.Name, out var boosts))
         {
             baseValue += boosts.GetValueOrDefault(statName, 0);
         }
 
-        // Apply passive ability boosts (from assigned cadences)
-        if (_passiveAbilitiyBoosts.TryGetValue(character.Name, out var pBoosts))
+        // Apply passive ability boosts (calculated on demand for now)
+        var assigned = CurrentlyAssigned(character);
+        foreach (var cadence in assigned)
         {
-            baseValue += pBoosts.GetValueOrDefault(statName, 0);
+            foreach (var unlock in cadence.Abilities)
+            {
+                if (_gameStore.State.UnlockedAbilities.Contains($"{cadence.Name}:{unlock.Ability.Name}") && unlock.Ability.Effects != null)
+                {
+                    foreach (var effect in unlock.Ability.Effects)
+                    {
+                        if (effect.Type == EffectType.StatBoost && effect.Target == statName)
+                        {
+                            baseValue += effect.Value;
+                        }
+                    }
+                }
+            }
         }
 
-        var junction = Junctions.FirstOrDefault(j => j.Character.Name == character.Name && j.Stat.Name == statName);
-        if (junction != null)
+        var junction = _gameStore.State.Junctions.FirstOrDefault(j => j.Character.Name == character.Name && j.Stat.Name == statName);
+        if (junction.Magic.Name != null)
         {
             int qty = _inventory.GetQuantity(junction.Magic);
             var augments = _statAugments[junction.Magic];
@@ -161,6 +161,6 @@ public class JunctionManager(
     
     public void RestoreAssignment(Cadence cadence, Character character)
     {
-        _assignedCadences[cadence] = character;
+        _gameStore.Dispatch(new AssignCadenceAction(cadence.Name, character.Name));
     }
 }

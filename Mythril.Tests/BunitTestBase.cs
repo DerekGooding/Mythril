@@ -14,6 +14,7 @@ public abstract class BunitTestBase : TestContextWrapper
     protected ResourceManager ResourceManager { get; private set; } = null!;
     protected JunctionManager JunctionManager { get; private set; } = null!;
     protected InventoryManager InventoryManager { get; private set; } = null!;
+    protected GameStore GameStore { get; private set; } = null!;
     protected DragDropService DragDropService { get; private set; } = null!;
     protected Stats Stats { get; private set; } = null!;
     protected Cadences Cadences { get; private set; } = null!;
@@ -29,7 +30,8 @@ public abstract class BunitTestBase : TestContextWrapper
         
         TestContentLoader.Load();
         
-        InventoryManager = new InventoryManager();
+        GameStore = new GameStore();
+        InventoryManager = new InventoryManager(GameStore);
         Stats = ContentHost.GetContent<Stats>();
         var statAugments = ContentHost.GetContent<StatAugments>();
         Cadences = ContentHost.GetContent<Cadences>();
@@ -43,10 +45,11 @@ public abstract class BunitTestBase : TestContextWrapper
             ContentHost.GetContent<QuestToCadenceUnlocks>()
         );
         
-        JunctionManager = new JunctionManager(InventoryManager, statAugments, cadences);
+        JunctionManager = new JunctionManager(GameStore, InventoryManager, statAugments, cadences);
         JunctionManager.Initialize();
 
         ResourceManager = new ResourceManager(
+            GameStore,
             ContentHost.GetContent<Items>(),
             ContentHost.GetContent<QuestUnlocks>(),
             ContentHost.GetContent<QuestToCadenceUnlocks>(),

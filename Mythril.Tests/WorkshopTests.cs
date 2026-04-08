@@ -19,8 +19,9 @@ public class WorkshopTests
         _refinements = ContentHost.GetContent<ItemRefinements>();
         _cadences = ContentHost.GetContent<Cadences>();
         
-        var inventory = new InventoryManager();
-        var junctionManager = new JunctionManager(inventory, ContentHost.GetContent<StatAugments>(), _cadences);
+        var gameStore = new GameStore();
+        var inventory = new InventoryManager(gameStore);
+        var junctionManager = new JunctionManager(gameStore, inventory, ContentHost.GetContent<StatAugments>(), _cadences);
 
         var pathfinding = new PathfindingService(
             ContentHost.GetContent<Locations>(),
@@ -32,6 +33,7 @@ public class WorkshopTests
         );
 
         _resourceManager = new ResourceManager(
+            gameStore,
             ContentHost.GetContent<Items>(), 
             ContentHost.GetContent<QuestUnlocks>(), 
             ContentHost.GetContent<QuestToCadenceUnlocks>(), 

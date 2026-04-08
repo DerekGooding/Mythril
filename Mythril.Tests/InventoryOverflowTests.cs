@@ -17,10 +17,11 @@ public class InventoryOverflowTests
     {
         TestContentLoader.Load();
         _items = ContentHost.GetContent<Items>();
-        _inventory = new InventoryManager();
+        var gameStore = new GameStore();
+        _inventory = new InventoryManager(gameStore);
         
         var cadences = ContentHost.GetContent<Cadences>();
-        var junctionManager = new JunctionManager(_inventory, ContentHost.GetContent<StatAugments>(), cadences);
+        var junctionManager = new JunctionManager(gameStore, _inventory, ContentHost.GetContent<StatAugments>(), cadences);
         
         var pathfinding = new PathfindingService(
             ContentHost.GetContent<Locations>(),
@@ -32,6 +33,7 @@ public class InventoryOverflowTests
         );
 
         _resourceManager = new ResourceManager(
+            gameStore,
             _items, 
             ContentHost.GetContent<QuestUnlocks>(), 
             ContentHost.GetContent<QuestToCadenceUnlocks>(), 

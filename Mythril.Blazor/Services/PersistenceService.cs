@@ -12,41 +12,18 @@ public class PersistenceService(
     Cadences cadences, 
     Quests quests,
     Stats stats,
-    ItemRefinements refinements)
+    ItemRefinements refinements,
+    GameStore gameStore)
 {
-    private const string STORAGE_KEY = "mythril_save_v1";
+    private const string STORAGE_KEY = "mythril_save_v2";
 
     public async Task SaveAsync()
     {
         var saveData = new SaveData
         {
+            State = gameStore.State,
             LastSaveTime = DateTime.Now,
-            Inventory = resourceManager.Inventory.GetItems()
-                .Concat(resourceManager.Inventory.GetSpells())
-                .Select(x => new KeyValuePair<string, int>(x.Item.Name, x.Quantity))
-                .ToList(),
-            UnlockedCadences = resourceManager.UnlockedCadences.Select(c => c.Name).ToList(),
-            UnlockedAbilities = resourceManager.UnlockedAbilities.ToList(),
-            CompletedQuests = resourceManager.GetCompletedQuests().Select(q => q.Name).ToList(),
-            Junctions = junctionManager.Junctions.Select(j => new JunctionDTO
-            {
-                CharacterName = j.Character.Name,
-                StatName = j.Stat.Name,
-                MagicName = j.Magic.Name
-            }).ToList(),
-            AssignedCadences = resourceManager.Characters
-                .SelectMany(c => junctionManager.CurrentlyAssigned(c).Select(cad => new AssignedCadenceDTO 
-                { 
-                    CharacterName = c.Name, 
-                    CadenceName = cad.Name 
-                }))
-                .ToList(),
-            AutoQuestEnabled = resourceManager.AutoQuestEnabled.ToDictionary(kvp => kvp.Key, kvp => kvp.Value),
-            UnlockedLocations = resourceManager.UnlockedLocationNames.ToList(),
-            StarredRecipes = resourceManager.StarredRecipes.ToList(),
-            HasUnseenCadence = resourceManager.HasUnseenCadence,
-            HasUnseenWorkshop = resourceManager.HasUnseenWorkshop,
-            CharacterStatBoosts = junctionManager.CharacterStatBoosts.ToDictionary(x => x.Key, x => x.Value.ToDictionary(y => y.Key, y => y.Value)),
+            // Keep legacy fields for a while or if needed for specific UI views
             Journal = resourceManager.Journal.Select(j => new JournalEntryDTO
             {
                 TaskName = j.TaskName,
@@ -55,17 +32,8 @@ public class PersistenceService(
                 CompletedAt = j.CompletedAt,
                 IsFirstTime = j.IsFirstTime
             }).ToList(),
-            ActiveQuests = resourceManager.ActiveQuests.Select(q => new QuestProgressDTO
-            {
-                ItemName = q.Item is QuestData qd ? qd.Name : (q.Item is CadenceUnlock cu ? cu.Ability.Name : ""),
-                AbilityName = q.Item is RefinementData rd ? rd.Ability.Name : "",
-                InputItemName = q.Item is RefinementData rd2 ? rd2.InputItem.Name : "",
-                ItemType = q.Item is QuestData ? "Quest" : (q.Item is CadenceUnlock ? "CadenceUnlock" : "Refinement"),
-                CharacterName = q.Character.Name,
-                SecondsElapsed = q.SecondsElapsed,
-                StartTime = q.StartTime,
-                SlotIndex = q.SlotIndex
-            }).ToList()
+            HasUnseenCadence = resourceManager.HasUnseenCadence,
+            HasUnseenWorkshop = resourceManager.HasUnseenWorkshop
         };
 
         var json = JsonConvert.SerializeObject(saveData);
@@ -80,150 +48,33 @@ public class PersistenceService(
         var saveData = JsonConvert.DeserializeObject<SaveData>(json);
         if (saveData == null) return;
 
-        // Restore Inventory
-        resourceManager.Inventory.Clear();
-        foreach (var kvp in saveData.Inventory)
+        if (saveData.State != null)
         {
-            var item = items.All.FirstOrDefault(x => x.Name == kvp.Key);
-            if (item.Name != null) resourceManager.Inventory.Add(item, kvp.Value);
-        }
+            // Calculate bonus time since last save
+            double bonusSeconds = (DateTime.Now - saveData.LastSaveTime).TotalSeconds;
+            
+            var stateWithBonusTime = saveData.State with {
+                ActiveQuests = saveData.State.ActiveQuests
+                    .Select(q => q with { SecondsElapsed = q.SecondsElapsed + bonusSeconds })
+                    .ToImmutableList()
+            };
 
-        // Restore Cadences
-        resourceManager.UnlockedCadences.Clear();
-        foreach (var name in saveData.UnlockedCadences)
-        {
-            var cadence = cadences.All.FirstOrDefault(x => x.Name == name);
-            if (cadence.Name != null) resourceManager.UnlockCadence(cadence);
-        }
-
-        // Restore Abilities
-        resourceManager.UnlockedAbilities.Clear();
-        resourceManager.HasUnseenCadence = saveData.HasUnseenCadence;
-        resourceManager.HasUnseenWorkshop = saveData.HasUnseenWorkshop;
-        foreach (var abilityId in saveData.UnlockedAbilities)
-        {
-            resourceManager.UnlockedAbilities.Add(abilityId);
-        }
-        resourceManager.UpdateMagicCapacity();
-
-        // Restore Completed Quests
-        resourceManager.ClearCompletedQuests();
-        foreach(var name in saveData.CompletedQuests)
-        {
-            var quest = quests.All.FirstOrDefault(q => q.Name == name);
-            if (quest.Name != null) resourceManager.RestoreCompletedQuest(quest);
-        }
-
-        // Restore Assignments
-        junctionManager.Initialize(); 
-        foreach(var dto in saveData.AssignedCadences)
-        {
-            var character = resourceManager.Characters.FirstOrDefault(c => c.Name == dto.CharacterName);
-            var cadence = cadences.All.FirstOrDefault(c => c.Name == dto.CadenceName);
-            if (character.Name != null && cadence.Name != null)
+            gameStore.Dispatch(new SetStateAction(stateWithBonusTime));
+            
+            // Restore non-state fields
+            resourceManager.HasUnseenCadence = saveData.HasUnseenCadence;
+            resourceManager.HasUnseenWorkshop = saveData.HasUnseenWorkshop;
+            
+            resourceManager.Journal.Clear();
+            if (saveData.Journal != null)
             {
-                junctionManager.RestoreAssignment(cadence, character);
-            }
-        }
-
-        // Restore AutoQuest
-        foreach (var kvp in saveData.AutoQuestEnabled)
-        {
-            var character = resourceManager.Characters.FirstOrDefault(c => c.Name == kvp.Key);
-            if (character.Name != null)
-            {
-                resourceManager.SetAutoQuestEnabled(character, kvp.Value);
-            }
-        }
-
-        // Restore Unlocked Locations
-        resourceManager.UnlockedLocationNames.Clear();
-        foreach (var name in saveData.UnlockedLocations)
-        {
-            resourceManager.UnlockedLocationNames.Add(name);
-        }
-        resourceManager.UpdateUsableLocations();
-
-        // Restore Junctions and Boosts
-        junctionManager.Initialize(); // Clears junctions and boosts
-        if (saveData.CharacterStatBoosts != null)
-        {
-            foreach (var charKvp in saveData.CharacterStatBoosts)
-            {
-                foreach (var statKvp in charKvp.Value)
+                foreach (var dto in saveData.Journal)
                 {
-                    var character = resourceManager.Characters.FirstOrDefault(c => c.Name == charKvp.Key);
-                    if (character.Name != null)
-                    {
-                        junctionManager.AddStatBoost(character, statKvp.Key, statKvp.Value);
-                    }
-                }
-            }
-        }
-
-        foreach(var dto in saveData.Junctions)
-        {
-            var character = resourceManager.Characters.FirstOrDefault(c => c.Name == dto.CharacterName);
-            var stat = stats.All.FirstOrDefault(s => s.Name == dto.StatName);
-            var magic = items.All.FirstOrDefault(i => i.Name == dto.MagicName);
-            if (character.Name != null && stat.Name != null && magic.Name != null)
-            {
-                junctionManager.Junctions.Add(new Junction(character, stat, magic));
-            }
-        }
-
-        // Restore Journal
-        resourceManager.Journal.Clear();
-        if (saveData.Journal != null)
-        {
-            foreach (var dto in saveData.Journal)
-            {
-                resourceManager.Journal.Add(new ResourceManager.JournalEntry(dto.TaskName, dto.CharacterName, dto.Details, dto.CompletedAt, dto.IsFirstTime));
-            }
-        }
-
-        // Restore Active Quests
-        resourceManager.ActiveQuests.Clear();
-        double bonusSeconds = (DateTime.Now - saveData.LastSaveTime).TotalSeconds;
-        foreach (var dto in saveData.ActiveQuests)
-        {
-            var character = resourceManager.Characters.FirstOrDefault(c => c.Name == dto.CharacterName);
-            if (character.Name == null) continue;
-
-            QuestProgress? qp = null;
-            if (dto.ItemType == "Quest")
-            {
-                var quest = quests.All.FirstOrDefault(q => q.Name == dto.ItemName);
-                if (quest.Name != null)
-                {
-                    var detail = resourceManager.GetQuestDetails(quest);
-                    qp = new QuestProgress(new QuestData(quest, detail), quest.Description, detail.DurationSeconds, character, dto.SlotIndex);
-                }
-            }
-            else if (dto.ItemType == "CadenceUnlock")
-            {
-                var cadence = cadences.All.FirstOrDefault(c => c.Abilities.Any(a => a.Ability.Name == dto.ItemName));
-                var unlock = cadence.Abilities.FirstOrDefault(a => a.Ability.Name == dto.ItemName);
-                if (unlock.Ability.Name != null)
-                {
-                    qp = new QuestProgress(unlock, unlock.Ability.Description, 10, character, dto.SlotIndex);
-                }
-            }
-            else if (dto.ItemType == "Refinement")
-            {
-                var refinement = refinements.GetRefinement(dto.AbilityName, dto.InputItemName);
-                if (refinement is not null)
-                {
-                    qp = new QuestProgress(refinement.Value, refinement.Value.Description, 15, character, dto.SlotIndex);
+                    resourceManager.Journal.Add(new ResourceManager.JournalEntry(dto.TaskName, dto.CharacterName, dto.Details, dto.CompletedAt, dto.IsFirstTime));
                 }
             }
 
-            if (qp != null)
-            {
-                qp.SecondsElapsed = dto.SecondsElapsed + bonusSeconds;
-                qp.StartTime = dto.StartTime;
-                resourceManager.ActiveQuests.Add(qp);
-            }
+            resourceManager.UpdateUsableLocations();
         }
     }
     

@@ -9,46 +9,56 @@ public partial class ResourceManager
         string characterName = progress.Character.Name;
         string details = "";
 
-        if (item is QuestData quest)
+        if (item is QuestData questData)
         {
-            taskName = quest.Name;
-            details = "Completed Quest";
-            foreach (var reward in quest.Rewards)
+            taskName = questData.Name;
+            details = "Completed " + questData.Name;
+            
+            // Add rewards
+            if (questData.Rewards != null)
             {
-                int overflow = Inventory.Add(reward.Item, reward.Quantity);
-                if (overflow > 0) OnItemOverflow?.Invoke(reward.Item.Name, overflow);
-            }
-
-            // Apply permanent effects if any
-            var questDetail = _questDetails[quest.Quest];
-            if (questDetail.Effects != null)
-            {
-                foreach (var effect in questDetail.Effects)
+                foreach (var reward in questData.Rewards)
                 {
-                    if (effect.Type == EffectType.StatBoost && !string.IsNullOrEmpty(effect.Target))
-                    {
-                        JunctionManager.AddStatBoost(progress.Character, effect.Target, effect.Value);
-                        details += $" | +{effect.Value} {effect.Target}";
-                    }
+                    int overflow = Inventory.Add(reward.Item, reward.Quantity);
+                    if (overflow > 0) OnItemOverflow?.Invoke(reward.Item.Name, overflow);
                 }
             }
-            
-            // If it's single-use, remove it now that it's DONE
-            if (quest.Type == QuestType.Single || quest.Type == QuestType.Unlock) LockQuest(quest.Quest);
 
-            UnlockQuest(quest.Quest);
-            foreach (var cadence in _questToCadenceUnlocks[quest.Quest]) UnlockCadence(cadence);
+            // Stat rewards
+            if (questData.StatRewards != null)
+            {
+                foreach (var statRew in questData.StatRewards)
+                {
+                    JunctionManager.AddStatBoost(progress.Character, statRew.Key, statRew.Value);
+                }
+            }
+
+            // Unlocks
+            if (questData.Type == QuestType.Single || questData.Type == QuestType.Unlock)
+            {
+                _gameStore.Dispatch(new CompleteQuestAction(questData.Quest));
+                
+                // Unlock Cadences
+                var unlockedCadences = _questToCadenceUnlocks[questData.Quest];
+                foreach (var cadence in unlockedCadences)
+                {
+                    UnlockCadence(cadence);
+                }
+
+                // Discover locations
+                UpdateUsableLocations();
+            }
         }
-        if(item is CadenceUnlock unlock)
+        else if (item is CadenceUnlock unlock)
         {
             taskName = unlock.Ability.Name;
-            details = $"Unlocked {unlock.CadenceName} Ability";
-            var alreadyDiscovered = UnlockedAbilities.Any(ua => ua.EndsWith($":{unlock.Ability.Name}"));
-            UnlockedAbilities.Add($"{unlock.CadenceName}:{unlock.Ability.Name}");
+            details = $"Researched {unlock.Ability.Name} for {unlock.CadenceName}";
             
-            // Only set unseen if this ability actually unlocks something in the workshop
-            // AND it wasn't already discovered via another cadence
-            // AND the user isn't already looking at the workshop
+            string abilityKey = $"{unlock.CadenceName}:{unlock.Ability.Name}";
+            bool alreadyDiscovered = UnlockedAbilities.Contains(abilityKey);
+            
+            _gameStore.Dispatch(new UnlockAbilityAction(abilityKey));
+
             if (!alreadyDiscovered && _refinements.ByKey.ContainsKey(unlock.Ability) && ActiveTab != "workshop")
             {
                 HasUnseenWorkshop = true;
@@ -56,28 +66,40 @@ public partial class ResourceManager
             UpdateMagicCapacity();
             JunctionManager.UpdatePassiveBoosts(progress.Character, UnlockedAbilities);
         }
-        if(item is RefinementData refinement)
+        else if (item is RefinementData refinement)
         {
             taskName = refinement.Name;
-            details = $"Refined {refinement.Recipe.OutputQuantity}x {refinement.Recipe.OutputItem.Name}";
+            details = refinement.Description;
+            
             int overflow = Inventory.Add(refinement.Recipe.OutputItem, refinement.Recipe.OutputQuantity);
             if (overflow > 0) OnItemOverflow?.Invoke(refinement.Recipe.OutputItem.Name, overflow);
         }
 
-        AddToJournal(taskName, characterName, details);
-
-        await Task.CompletedTask;
+        // Journal Entry
+        bool isFirstTime = !Journal.Any(j => j.TaskName == taskName);
+        Journal.Insert(0, new JournalEntry(taskName, characterName, details, DateTime.Now, isFirstTime));
+        
+        _gameStore.Dispatch(new CancelQuestAction(progress));
     }
 
-    public async Task ReceiveRewards(object item, Character? character = null)
+    public void UnlockCadence(Cadence cadence)
     {
-        var dummyProgress = new QuestProgress(item, "Manual Completion", 0, character ?? Characters[0], 0);
-        await ReceiveRewards(dummyProgress);
+        if (!UnlockedCadenceNames.Contains(cadence.Name))
+        {
+            _gameStore.Dispatch(new UnlockCadenceAction(cadence.Name));
+            HasUnseenCadence = true;
+        }
+    }
+
+    public async Task ReceiveRewards(object dummyProgress)
+    {
+        // This is for some legacy or generic calls, but usually we have a QuestProgress
+        if (dummyProgress is QuestProgress p) await ReceiveRewards(p);
     }
 
     public void RestoreCompletedQuest(Quest quest)
     {
-        UnlockQuest(quest);
+        _gameStore.Dispatch(new CompleteQuestAction(quest));
         foreach (var cadence in _questToCadenceUnlocks[quest])
         {
             UnlockCadence(cadence);

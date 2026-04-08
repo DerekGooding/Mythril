@@ -23,8 +23,9 @@ public class AutomationTests
         _questDetails = ContentHost.GetContent<QuestDetails>();
         _cadences = ContentHost.GetContent<Cadences>();
         
-        var inventory = new InventoryManager();
-        var junctionManager = new JunctionManager(inventory, ContentHost.GetContent<StatAugments>(), _cadences);
+        var gameStore = new GameStore();
+        var inventory = new InventoryManager(gameStore);
+        var junctionManager = new JunctionManager(gameStore, inventory, ContentHost.GetContent<StatAugments>(), _cadences);
 
         var pathfinding = new PathfindingService(
             ContentHost.GetContent<Locations>(),
@@ -36,6 +37,7 @@ public class AutomationTests
         );
 
         _resourceManager = new ResourceManager(
+            gameStore,
             _items, 
             ContentHost.GetContent<QuestUnlocks>(), 
             ContentHost.GetContent<QuestToCadenceUnlocks>(), 

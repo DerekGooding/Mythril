@@ -1,7 +1,13 @@
+using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Linq;
+
 namespace Mythril.Data;
 
 public partial class ResourceManager
 {
+    private readonly GameStore _gameStore;
     private readonly Items _items;
     private readonly QuestUnlocks _questUnlocks;
     private readonly QuestToCadenceUnlocks _questToCadenceUnlocks;
@@ -14,6 +20,7 @@ public partial class ResourceManager
     public InventoryManager Inventory { get; }
 
     public ResourceManager(
+        GameStore gameStore,
         Items items, 
         QuestUnlocks questUnlocks, 
         QuestToCadenceUnlocks questToCadenceUnlocks, 
@@ -25,6 +32,7 @@ public partial class ResourceManager
         ItemRefinements refinements,
         PathfindingService pathfinding)
     {
+        _gameStore = gameStore;
         _items = items;
         _questUnlocks = questUnlocks;
         _questToCadenceUnlocks = questToCadenceUnlocks;
@@ -43,42 +51,37 @@ public partial class ResourceManager
 
     public QuestDetail GetQuestDetails(Quest quest) => _questDetails[quest];
 
-    private Dictionary<Cadence, bool> _lockedCadences = [];
-
     public readonly Character[] Characters = [new Character("Protagonist"), new Character("Wifu"), new Character("Himbo")];
 
-    private readonly HashSet<Quest> _completedQuests = [];
+    public List<LocationData> UsableLocations { get; private set; } = [];
+    public HashSet<string> UnlockedLocationNames => _gameStore.State.UnlockedLocationNames.ToHashSet();
 
-    public List<LocationData> UsableLocations = [];
-    public readonly HashSet<string> UnlockedLocationNames = [];
+    public List<Cadence> UnlockedCadences => _gameStore.State.UnlockedCadenceNames.Select(name => _cadences.All.First(c => c.Name == name)).ToList();
+    public List<string> UnlockedCadenceNames => _gameStore.State.UnlockedCadenceNames.ToList();
+    public HashSet<string> UnlockedAbilities => _gameStore.State.UnlockedAbilities.ToHashSet();
 
-    public List<Cadence> UnlockedCadences = [];
-    public List<string> UnlockedCadenceNames = [];
-    public HashSet<string> UnlockedAbilities = [];
-
-    public HashSet<string> HighlightedPath { get; private set; } = [];
+    public HashSet<string> HighlightedPath => _gameStore.State.HighlightedPath.ToHashSet();
 
     public void HighlightPath(string targetId)
     {
-        HighlightedPath = _pathfinding.GetPrerequisitePath(targetId, [.. _completedQuests.Select(q => q.Name)], UnlockedAbilities);
+        var path = _pathfinding.GetPrerequisitePath(targetId, [.. _gameStore.State.CompletedQuests], _gameStore.State.UnlockedAbilities);
+        _gameStore.Dispatch(new SetHighlightedPathAction(path.ToImmutableHashSet()));
     }
 
     public void ClearHighlight()
     {
-        HighlightedPath.Clear();
+        _gameStore.Dispatch(new ClearHighlightedPathAction());
     }
 
-    public List<QuestProgress> ActiveQuests { get; } = [];
+    public List<QuestProgress> ActiveQuests => _gameStore.State.ActiveQuests.ToList();
 
-    private readonly Dictionary<string, bool> _autoQuestEnabled = [];
-    public IReadOnlyDictionary<string, bool> AutoQuestEnabled => _autoQuestEnabled;
+    public IReadOnlyDictionary<string, bool> AutoQuestEnabled => _gameStore.State.AutoQuestEnabled;
 
-    public HashSet<string> StarredRecipes = [];
+    public HashSet<string> StarredRecipes => _gameStore.State.StarredRecipes.ToHashSet();
 
     public void ToggleRecipeStar(string recipeKey)
     {
-        if (!StarredRecipes.Add(recipeKey))
-            StarredRecipes.Remove(recipeKey);
+        _gameStore.Dispatch(new ToggleRecipeStarAction(recipeKey));
     }
 
     public bool IsTestMode { get; set; } = false;
@@ -92,28 +95,11 @@ public partial class ResourceManager
     public void Initialize()
     {
         Console.WriteLine("ResourceManager initializing...");
-        Inventory.Clear();
-        ClearJournal();
-        _completedQuests.Clear();
-        UnlockedAbilities.Clear();
-        HighlightedPath.Clear();
-        _autoQuestEnabled.Clear();
-        UnlockedLocationNames.Clear();
-        HasUnseenCadence = false;
-        HasUnseenWorkshop = false;
-        lock(_questLock)
-        {
-            ActiveQuests.Clear();
-        }
+        _gameStore.Dispatch(new SetStateAction(GameState.Initial));
         
-        Console.WriteLine("Initializing Cadences...");
-        _lockedCadences = _cadences.All.ToNamedDictionary(_ => true);
-
         Console.WriteLine("Initializing Locations...");
         UpdateUsableLocations();
         
-        UpdateAvaiableCadences();
-        JunctionManager.Initialize();
         Console.WriteLine("ResourceManager initialized.");
     }
 
@@ -121,19 +107,16 @@ public partial class ResourceManager
 
     public void Tick(double deltaSeconds)
     {
-        lock(_questLock)
-        {
-            foreach (var progress in ActiveQuests)
-            {
-                if (!progress.IsCompleted)
-                {
-                    progress.SecondsElapsed += deltaSeconds;
-                }
-            }
-        }
+        _gameStore.Dispatch(new TickAction(deltaSeconds));
         CheckHiddenCadences();
     }
 
-    public IEnumerable<Quest> GetCompletedQuests() => _completedQuests;
-    public void ClearCompletedQuests() => _completedQuests.Clear();
+    public IEnumerable<Quest> GetCompletedQuests() => _gameStore.State.CompletedQuests.Select(name => _items.All.OfType<Quest>().FirstOrDefault(q => q.Name == name) ?? new Quest(name, ""));
+    public void ClearCompletedQuests() 
+    {
+        foreach(var q in _gameStore.State.CompletedQuests)
+        {
+            _gameStore.Dispatch(new LockQuestAction(new Quest(q, "")));
+        }
+    }
 }

@@ -1,29 +1,39 @@
+using System.Collections.Generic;
+using System.Linq;
+
 namespace Mythril.Data;
 
-public class InventoryManager
+public class InventoryManager(GameStore gameStore)
 {
-    private readonly Dictionary<Item, int> _inventory = [];
-    public int MagicCapacity { get; set; } = 30;
+    private readonly GameStore _gameStore = gameStore;
 
-    private readonly HashSet<string> _pinnedItemNames = [];
+    public int MagicCapacity
+    {
+        get => _gameStore.State.MagicCapacity;
+        set => _gameStore.Dispatch(new SetMagicCapacityAction(value));
+    }
 
     public void TogglePin(string itemName)
     {
-        if (!_pinnedItemNames.Add(itemName))
-            _pinnedItemNames.Remove(itemName);
+        _gameStore.Dispatch(new TogglePinAction(itemName));
     }
 
-    public bool IsPinned(string itemName) => _pinnedItemNames.Contains(itemName);
+    public bool IsPinned(string itemName) => _gameStore.State.PinnedItems.Contains(itemName);
 
     public IEnumerable<ItemQuantity> GetPinnedItems()
-        => _inventory.Where(x => _pinnedItemNames.Contains(x.Key.Name))
-                     .Select(x => new ItemQuantity(x.Key, x.Value));
+    {
+        var items = ContentHost.GetContent<Items>();
+        return _gameStore.State.PinnedItems
+            .Select(name => items.All.FirstOrDefault(i => i.Name == name))
+            .Where(i => i.Name != null)
+            .Select(i => new ItemQuantity(i, _gameStore.State.Inventory.GetValueOrDefault(i.Name)));
+    }
 
     public int Add(Item item, int quantity = 1)
     {
         if (quantity <= 0) return 0;
         
-        int current = _inventory.GetValueOrDefault(item);
+        int current = _gameStore.State.Inventory.GetValueOrDefault(item.Name);
         int next = current + quantity;
         int overflow = 0;
 
@@ -33,40 +43,59 @@ public class InventoryManager
             next = MagicCapacity;
         }
 
-        _inventory[item] = next;
+        _gameStore.Dispatch(new AddResourceAction(item.Name, quantity - overflow));
         return overflow;
     }
 
     public bool Remove(Item item, int quantity = 1)
     {
         if (quantity <= 0) return true;
-        if (!_inventory.TryGetValue(item, out var value) || value < quantity)
+        if (!Has(item, quantity))
             return false;
 
-        _inventory[item] -= quantity;
-        if (_inventory[item] == 0 && item.Name != "Gold")
-            _inventory.Remove(item);
-
+        _gameStore.Dispatch(new SpendResourceAction(item.Name, quantity));
         return true;
     }
 
     public bool Has(Item item, int quantity = 1) 
     {
         if (quantity <= 0) return true;
-        return _inventory.ContainsKey(item) && _inventory[item] >= quantity;
+        return _gameStore.State.Inventory.GetValueOrDefault(item.Name) >= quantity;
     }
 
-    public int GetQuantity(Item item) => _inventory.GetValueOrDefault(item);
+    public int GetQuantity(Item item) => _gameStore.State.Inventory.GetValueOrDefault(item.Name);
 
-    public void Clear() => _inventory.Clear();
+    public void Clear()
+    {
+        // This is a bit heavy, maybe Add a ClearInventoryAction
+        foreach (var item in _gameStore.State.Inventory)
+        {
+            _gameStore.Dispatch(new SpendResourceAction(item.Key, item.Value));
+        }
+    }
 
     public IEnumerable<ItemQuantity> GetAll()
-        => _inventory.Select(x => new ItemQuantity(x.Key, x.Value));
+    {
+        var items = ContentHost.GetContent<Items>();
+        return _gameStore.State.Inventory
+            .Select(kv => new ItemQuantity(items.All.First(i => i.Name == kv.Key), kv.Value));
+    }
 
     public IEnumerable<ItemQuantity> GetItems()
-        => _inventory.Where(x => x.Key.ItemType != ItemType.Spell)
-                     .Select(x => new ItemQuantity(x.Key, x.Value));
+    {
+        var items = ContentHost.GetContent<Items>();
+        return _gameStore.State.Inventory
+            .Select(kv => items.All.First(i => i.Name == kv.Key))
+            .Where(i => i.ItemType != ItemType.Spell)
+            .Select(i => new ItemQuantity(i, _gameStore.State.Inventory[i.Name]));
+    }
+
     public IEnumerable<ItemQuantity> GetSpells()
-        => _inventory.Where(x => x.Key.ItemType == ItemType.Spell)
-                     .Select(x => new ItemQuantity(x.Key, x.Value));
+    {
+        var items = ContentHost.GetContent<Items>();
+        return _gameStore.State.Inventory
+            .Select(kv => items.All.First(i => i.Name == kv.Key))
+            .Where(i => i.ItemType == ItemType.Spell)
+            .Select(i => new ItemQuantity(i, _gameStore.State.Inventory[i.Name]));
+    }
 }
