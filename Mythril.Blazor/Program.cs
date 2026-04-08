@@ -37,6 +37,7 @@ builder.Services.AddSingleton(ContentHost.GetContent<ItemRefinements>());
 
 // Register Loader & Engine
 builder.Services.AddScoped<ContentLoader>();
+builder.Services.AddSingleton<PathfindingService>();
 builder.Services.AddSingleton<InventoryManager>();
 builder.Services.AddSingleton<JunctionManager>();
 builder.Services.AddSingleton<ResourceManager>();

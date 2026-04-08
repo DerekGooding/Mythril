@@ -17,18 +17,28 @@ public class RefinementLogicTests
         _refinements = ContentHost.GetContent<ItemRefinements>();
         
         var inventory = new InventoryManager();
-        var junctionManager = new JunctionManager(inventory, ContentHost.GetContent<StatAugments>(), ContentHost.GetContent<Cadences>());
+        var cadences = ContentHost.GetContent<Cadences>();
+        var pathfinding = new PathfindingService(
+            ContentHost.GetContent<Locations>(),
+            ContentHost.GetContent<Quests>(),
+            ContentHost.GetContent<QuestUnlocks>(),
+            ContentHost.GetContent<QuestDetails>(),
+            cadences,
+            ContentHost.GetContent<QuestToCadenceUnlocks>()
+        );
+        var junctionManager = new JunctionManager(inventory, ContentHost.GetContent<StatAugments>(), cadences);
         
         _resourceManager = new ResourceManager(
             ContentHost.GetContent<Items>(), 
             ContentHost.GetContent<QuestUnlocks>(), 
             ContentHost.GetContent<QuestToCadenceUnlocks>(), 
             ContentHost.GetContent<QuestDetails>(), 
-            ContentHost.GetContent<Cadences>(), 
+            cadences, 
             ContentHost.GetContent<Locations>(),
             junctionManager,
             inventory,
-            _refinements);
+            _refinements,
+            pathfinding);
         _resourceManager.Initialize();
     }
 

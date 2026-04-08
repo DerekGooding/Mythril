@@ -9,6 +9,7 @@ public partial class ResourceManager
     private readonly Cadences _cadences;
     private readonly Locations _locations;
     private readonly ItemRefinements _refinements;
+    private readonly PathfindingService _pathfinding;
     public JunctionManager JunctionManager { get; }
     public InventoryManager Inventory { get; }
 
@@ -21,7 +22,8 @@ public partial class ResourceManager
         Locations locations,
         JunctionManager junctionManager,
         InventoryManager inventory,
-        ItemRefinements refinements)
+        ItemRefinements refinements,
+        PathfindingService pathfinding)
     {
         _items = items;
         _questUnlocks = questUnlocks;
@@ -30,6 +32,7 @@ public partial class ResourceManager
         _cadences = cadences;
         _locations = locations;
         _refinements = refinements;
+        _pathfinding = pathfinding;
         JunctionManager = junctionManager;
         Inventory = inventory;
 
@@ -52,6 +55,18 @@ public partial class ResourceManager
     public List<Cadence> UnlockedCadences = [];
     public List<string> UnlockedCadenceNames = [];
     public HashSet<string> UnlockedAbilities = [];
+
+    public HashSet<string> HighlightedPath { get; private set; } = [];
+
+    public void HighlightPath(string targetId)
+    {
+        HighlightedPath = _pathfinding.GetPrerequisitePath(targetId, [.. _completedQuests.Select(q => q.Name)], UnlockedAbilities);
+    }
+
+    public void ClearHighlight()
+    {
+        HighlightedPath.Clear();
+    }
 
     public List<QuestProgress> ActiveQuests { get; } = [];
 
@@ -81,6 +96,7 @@ public partial class ResourceManager
         ClearJournal();
         _completedQuests.Clear();
         UnlockedAbilities.Clear();
+        HighlightedPath.Clear();
         _autoQuestEnabled.Clear();
         UnlockedLocationNames.Clear();
         HasUnseenCadence = false;

@@ -19,17 +19,27 @@ public class ResourceManagerCoreTests
         _questDetails = ContentHost.GetContent<QuestDetails>();
         
         var inventory = new InventoryManager();
-        var junctionManager = new JunctionManager(inventory, ContentHost.GetContent<StatAugments>(), ContentHost.GetContent<Cadences>());
+        var cadences = ContentHost.GetContent<Cadences>();
+        var pathfinding = new PathfindingService(
+            ContentHost.GetContent<Locations>(),
+            _quests!,
+            ContentHost.GetContent<QuestUnlocks>(),
+            _questDetails!,
+            cadences,
+            ContentHost.GetContent<QuestToCadenceUnlocks>()
+        );
+        var junctionManager = new JunctionManager(inventory, ContentHost.GetContent<StatAugments>(), cadences);
         _resourceManager = new ResourceManager(
             _items, 
             ContentHost.GetContent<QuestUnlocks>(), 
             ContentHost.GetContent<QuestToCadenceUnlocks>(), 
             _questDetails, 
-            ContentHost.GetContent<Cadences>(), 
+            cadences, 
             ContentHost.GetContent<Locations>(),
             junctionManager,
             inventory,
-            ContentHost.GetContent<ItemRefinements>());
+            ContentHost.GetContent<ItemRefinements>(),
+            pathfinding);
         _resourceManager.Initialize();
     }
 

@@ -34,6 +34,14 @@ public abstract class BunitTestBase : TestContextWrapper
         var statAugments = ContentHost.GetContent<StatAugments>();
         Cadences = ContentHost.GetContent<Cadences>();
         var cadences = Cadences;
+        var pathfinding = new PathfindingService(
+            ContentHost.GetContent<Locations>(),
+            ContentHost.GetContent<Quests>(),
+            ContentHost.GetContent<QuestUnlocks>(),
+            ContentHost.GetContent<QuestDetails>(),
+            cadences,
+            ContentHost.GetContent<QuestToCadenceUnlocks>()
+        );
         
         JunctionManager = new JunctionManager(InventoryManager, statAugments, cadences);
         JunctionManager.Initialize();
@@ -47,7 +55,8 @@ public abstract class BunitTestBase : TestContextWrapper
             ContentHost.GetContent<Locations>(),
             JunctionManager,
             InventoryManager,
-            ContentHost.GetContent<ItemRefinements>()
+            ContentHost.GetContent<ItemRefinements>(),
+            pathfinding
         );
         ResourceManager.Initialize();
         

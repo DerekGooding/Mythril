@@ -60,3 +60,9 @@
 .card-side li {
     color: var(--text-color);
 }
+
+.prerequisite-highlight {
+    border-color: #ffeb3b !important; /* Yellow highlight */
+    box-shadow: 0 0 10px #ffeb3b !important;
+    background-color: rgba(255, 235, 59, 0.1) !important;
+}

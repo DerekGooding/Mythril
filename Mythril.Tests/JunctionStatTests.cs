@@ -23,6 +23,16 @@ public class JunctionStatTests
         
         var inventory = new InventoryManager();
         _junctionManager = new JunctionManager(inventory, ContentHost.GetContent<StatAugments>(), _cadences);
+
+        var pathfinding = new PathfindingService(
+            ContentHost.GetContent<Locations>(),
+            ContentHost.GetContent<Quests>(),
+            ContentHost.GetContent<QuestUnlocks>(),
+            ContentHost.GetContent<QuestDetails>(),
+            _cadences,
+            ContentHost.GetContent<QuestToCadenceUnlocks>()
+        );
+
         _resourceManager = new ResourceManager(
             _items, 
             ContentHost.GetContent<QuestUnlocks>(), 
@@ -32,7 +42,8 @@ public class JunctionStatTests
             ContentHost.GetContent<Locations>(),
             _junctionManager,
             inventory,
-            ContentHost.GetContent<ItemRefinements>());
+            ContentHost.GetContent<ItemRefinements>(),
+            pathfinding);
         _resourceManager.Initialize();
     }
 

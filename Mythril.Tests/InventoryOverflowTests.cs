@@ -22,6 +22,15 @@ public class InventoryOverflowTests
         var cadences = ContentHost.GetContent<Cadences>();
         var junctionManager = new JunctionManager(_inventory, ContentHost.GetContent<StatAugments>(), cadences);
         
+        var pathfinding = new PathfindingService(
+            ContentHost.GetContent<Locations>(),
+            ContentHost.GetContent<Quests>(),
+            ContentHost.GetContent<QuestUnlocks>(),
+            ContentHost.GetContent<QuestDetails>(),
+            cadences,
+            ContentHost.GetContent<QuestToCadenceUnlocks>()
+        );
+
         _resourceManager = new ResourceManager(
             _items, 
             ContentHost.GetContent<QuestUnlocks>(), 
@@ -31,7 +40,8 @@ public class InventoryOverflowTests
             ContentHost.GetContent<Locations>(),
             junctionManager,
             _inventory,
-            ContentHost.GetContent<ItemRefinements>());
+            ContentHost.GetContent<ItemRefinements>(),
+            pathfinding);
         _resourceManager.Initialize();
     }
 

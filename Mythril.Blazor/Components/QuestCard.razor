@@ -9,9 +9,14 @@
 @{
     bool inProgress = (QuestData!.Type == QuestType.Single || QuestData.Type == QuestType.Unlock) && ResourceManager.IsInProgress(QuestData);
     var prerequisites = QuestUnlocks[QuestData.Quest];
+    bool isHighlighted = ResourceManager.HighlightedPath.Contains(QuestData.Name);
 }
 
-<div class="card @(inProgress ? "locked" : "")" draggable="@(inProgress ? "false" : "true")" @ondragstart="HandleDragStart">
+<div class="card @(inProgress ? "locked" : "") @(isHighlighted ? "prerequisite-highlight" : "")" 
+     draggable="@(inProgress ? "false" : "true")" 
+     @ondragstart="HandleDragStart"
+     @onmouseenter="() => ResourceManager.HighlightPath(QuestData.Name)"
+     @onmouseleave="() => ResourceManager.ClearHighlight()">
     <div class="card-header">
         <span class="material-icons" style="color: green;">
             @(QuestData!.Type == QuestType.Single ? "flag" : "repeat")

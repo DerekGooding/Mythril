@@ -11,7 +11,7 @@ This roadmap focuses on refining the game's economic balance, optimizing the cor
 - [x] **Eliminate "Magic String" Metadata**: Refactor ability/quest effects into a typed `EffectDefinition` schema.
 - [x] **Predictive Resource Highlighting**: Visual indicators for unaffordable quest requirements in real-time.
 - [x] **Effect-Driven UI Logic**: Passive stat boosts and magic capacity now driven by typed effects.
-- [ ] **Predictive Dependency Overlay**: Implement "Prerequisite Path" highlighting in the `CadenceTree` and `QuestPanel`.
+- [x] **Predictive Dependency Overlay**: Implement "Prerequisite Path" highlighting in the `CadenceTree` and `QuestPanel`.
 
 ## Phase 3: State & Runtime Consolidation
 - [ ] **Unified Deterministic State Store**: Implement a central Reducer-based `GameStateStore` for full simulation/runtime parity.

@@ -77,3 +77,9 @@
     color: #dc3545 !important; /* Danger color */
     font-weight: bold;
 }
+
+.prerequisite-highlight {
+    border-color: #ffeb3b !important; /* Yellow highlight */
+    box-shadow: 0 0 10px #ffeb3b !important;
+    background-color: rgba(255, 235, 59, 0.1) !important;
+}

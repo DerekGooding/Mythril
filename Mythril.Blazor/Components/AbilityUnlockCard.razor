@@ -7,9 +7,15 @@
 
 @{
     bool inProgress = ResourceManager.IsInProgress(Unlock);
+    string abilityKey = $"{Unlock.CadenceName}:{Unlock.Ability.Name}";
+    bool isHighlighted = ResourceManager.HighlightedPath.Contains(abilityKey);
 }
 
-<div class="card @(inProgress ? "locked" : "")" draggable="@(inProgress ? "false" : "true")" @ondragstart="HandleDragStart">
+<div class="card @(inProgress ? "locked" : "") @(isHighlighted ? "prerequisite-highlight" : "")" 
+     draggable="@(inProgress ? "false" : "true")" 
+     @ondragstart="HandleDragStart"
+     @onmouseenter="() => ResourceManager.HighlightPath(abilityKey)"
+     @onmouseleave="() => ResourceManager.ClearHighlight()">
     <div class="card-header">
         @Unlock.Ability.Name
         @if (inProgress)

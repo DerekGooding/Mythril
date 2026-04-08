@@ -143,8 +143,9 @@ class Program
 
         // 2. Initialize Engine
         var inventory = new InventoryManager();
+        var pathfinding = new PathfindingService(locations, quests, questUnlocks, questDetails, cadences, questToCadenceUnlocks);
         var junctionManager = new JunctionManager(inventory, statAugments, cadences);
-        var resourceManager = new ResourceManager(items, questUnlocks, questToCadenceUnlocks, questDetails, cadences, locations, junctionManager, inventory, refinements);
+        var resourceManager = new ResourceManager(items, questUnlocks, questToCadenceUnlocks, questDetails, cadences, locations, junctionManager, inventory, refinements, pathfinding);
         
         resourceManager.Initialize();
 
