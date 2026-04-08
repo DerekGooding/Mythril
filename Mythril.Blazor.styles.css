@@ -922,6 +922,16 @@
     content: "🛡️";
     margin-right: 4px;
 }
+
+.low-resource[b-mekdh8e00x] {
+    color: #ffc107 !important; /* Warning color */
+    opacity: 0.8;
+}
+
+.low-stat[b-mekdh8e00x] {
+    color: #dc3545 !important; /* Danger color */
+    font-weight: bold;
+}
 /* /Components/QuestProgressCard.razor.rz.scp.css */
 .task-progress-card[b-oes0l3to11] {
     display: flex;
