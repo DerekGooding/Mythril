@@ -25,9 +25,7 @@ public class QuestExecutionTests_Advanced
         var cadences = ContentHost.GetContent<Cadences>();
         var pathfinding = new PathfindingService(ContentHost.GetContent<Locations>(), _quests!, ContentHost.GetContent<QuestUnlocks>(), _questDetails!, cadences, ContentHost.GetContent<QuestToCadenceUnlocks>());
         var junctionManager = new JunctionManager(gameStore, inventory, ContentHost.GetContent<StatAugments>(), cadences);
-        _resourceManager = new ResourceManager(
-            gameStore,
-            _items, 
+        _resourceManager = new ResourceManager(gameStore, _items, _quests, 
             ContentHost.GetContent<QuestUnlocks>(), 
             ContentHost.GetContent<QuestToCadenceUnlocks>(), 
             _questDetails, 
@@ -113,3 +111,4 @@ public class QuestExecutionTests_Advanced
         Assert.AreEqual(0, _resourceManager.ActiveQuests.Count);
     }
 }
+

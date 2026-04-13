@@ -9,6 +9,7 @@ namespace Mythril.Tests;
 public class AutomationTests
 {
     private ResourceManager? _resourceManager;
+    private GameStore? _gameStore;
     private Items? _items;
     private Quests? _quests;
     private QuestDetails? _questDetails;
@@ -23,9 +24,9 @@ public class AutomationTests
         _questDetails = ContentHost.GetContent<QuestDetails>();
         _cadences = ContentHost.GetContent<Cadences>();
         
-        var gameStore = new GameStore();
-        var inventory = new InventoryManager(gameStore);
-        var junctionManager = new JunctionManager(gameStore, inventory, ContentHost.GetContent<StatAugments>(), _cadences);
+        _gameStore = new GameStore();
+        var inventory = new InventoryManager(_gameStore);
+        var junctionManager = new JunctionManager(_gameStore, inventory, ContentHost.GetContent<StatAugments>(), _cadences);
 
         var pathfinding = new PathfindingService(
             ContentHost.GetContent<Locations>(),
@@ -36,9 +37,7 @@ public class AutomationTests
             ContentHost.GetContent<QuestToCadenceUnlocks>()
         );
 
-        _resourceManager = new ResourceManager(
-            gameStore,
-            _items, 
+        _resourceManager = new ResourceManager(_gameStore, _items, _quests,
             ContentHost.GetContent<QuestUnlocks>(), 
             ContentHost.GetContent<QuestToCadenceUnlocks>(), 
             _questDetails, 
@@ -57,7 +56,7 @@ public class AutomationTests
         var character = _resourceManager!.Characters[0];
         var recruit = _cadences!.All.First(c => c.Name == "Recruit");
         _resourceManager.UnlockCadence(recruit);
-        _resourceManager.UnlockedAbilities.Add("Recruit:AutoQuest I");
+        _resourceManager.UnlockAbility("Recruit", "AutoQuest I");
         _resourceManager.JunctionManager.AssignCadence(recruit, character, _resourceManager.UnlockedAbilities);
         _resourceManager.SetAutoQuestEnabled(character, true);
 
@@ -65,7 +64,7 @@ public class AutomationTests
         _resourceManager.StartQuest(questGoblins, character); 
 
         var progress = _resourceManager.ActiveQuests.First();
-        await _resourceManager.CompleteTaskAsync(progress);
+        await _resourceManager.ReceiveRewards(progress);
 
         Assert.AreEqual(1, _resourceManager.ActiveQuests.Count, "Slot 0 SHOULD have restarted.");
         Assert.AreEqual(0, _resourceManager.ActiveQuests.First().SlotIndex);
@@ -77,8 +76,8 @@ public class AutomationTests
         var character = _resourceManager!.Characters[0];
         var scholar = _cadences!.All.First(c => c.Name == "Scholar");
         _resourceManager.UnlockCadence(scholar);
-        _resourceManager.UnlockedAbilities.Add("Scholar:Logistics II");
-        _resourceManager.UnlockedAbilities.Add("Scholar:AutoQuest II");
+        _resourceManager.UnlockAbility("Scholar", "Logistics II");
+        _resourceManager.UnlockAbility("Scholar", "AutoQuest II");
         _resourceManager.JunctionManager.AssignCadence(scholar, character, _resourceManager.UnlockedAbilities);
         _resourceManager.SetAutoQuestEnabled(character, true);
 
@@ -89,7 +88,7 @@ public class AutomationTests
         _resourceManager.StartQuest(q2, character); // Slot 1
 
         var progress1 = _resourceManager.ActiveQuests.First(p => p.SlotIndex == 1);
-        await _resourceManager.CompleteTaskAsync(progress1);
+        await _resourceManager.ReceiveRewards(progress1);
 
         Assert.AreEqual(2, _resourceManager.ActiveQuests.Count, "Slot 1 SHOULD have restarted with AutoQuest II.");
         Assert.IsTrue(_resourceManager.ActiveQuests.Any(q => q.SlotIndex == 1));
@@ -101,8 +100,8 @@ public class AutomationTests
         var character = _resourceManager!.Characters[0];
         var scholar = _cadences!.All.First(c => c.Name == "Scholar");
         _resourceManager.UnlockCadence(scholar);
-        _resourceManager.UnlockedAbilities.Add("Scholar:Logistics II");
-        _resourceManager.UnlockedAbilities.Add("Scholar:AutoQuest II");
+        _resourceManager.UnlockAbility("Scholar", "Logistics II");
+        _resourceManager.UnlockAbility("Scholar", "AutoQuest II");
         _resourceManager.JunctionManager.AssignCadence(scholar, character, _resourceManager.UnlockedAbilities);
         _resourceManager.SetAutoQuestEnabled(character, true);
 
@@ -115,7 +114,7 @@ public class AutomationTests
         _resourceManager.StartQuest(q3, character); // Slot 2
 
         var progress2 = _resourceManager.ActiveQuests.First(p => p.SlotIndex == 2);
-        await _resourceManager.CompleteTaskAsync(progress2);
+        await _resourceManager.ReceiveRewards(progress2);
 
         Assert.AreEqual(2, _resourceManager.ActiveQuests.Count, "Slot 2 should NOT have restarted.");
     }
@@ -124,14 +123,14 @@ public class AutomationTests
     public async Task AutoQuest_DoesNotRestart_SingleUseQuest()
     {
         var character = _resourceManager!.Characters[0];
-        _resourceManager.UnlockedAbilities.Add("Recruit:AutoQuest I");
+        _resourceManager.UnlockAbility("Recruit", "AutoQuest I");
         _resourceManager.SetAutoQuestEnabled(character, true);
 
         var prologue = new QuestData(_quests!.All.First(q => q.Name == "Prologue"), _questDetails![_quests.All.First(q => q.Name == "Prologue")]);
         _resourceManager.StartQuest(prologue, character);
 
         var progress = _resourceManager.ActiveQuests.First();
-        await _resourceManager.CompleteTaskAsync(progress);
+        await _resourceManager.ReceiveRewards(progress);
 
         Assert.AreEqual(0, _resourceManager.ActiveQuests.Count, "Single-use quest should NOT auto-restart.");
     }
@@ -142,8 +141,8 @@ public class AutomationTests
         var character = _resourceManager!.Characters[0];
         var student = _cadences!.All.First(c => c.Name == "Student");
         _resourceManager.UnlockCadence(student);
-        _resourceManager.UnlockedAbilities.Add("Student:AutoQuest I");
-        _resourceManager.UnlockedAbilities.Add("Student:Refine Fire");
+        _resourceManager.UnlockAbility("Student", "AutoQuest I");
+        _resourceManager.UnlockAbility("Student", "Refine Fire");
         _resourceManager.JunctionManager.AssignCadence(student, character, _resourceManager.UnlockedAbilities);
         _resourceManager.SetAutoQuestEnabled(character, true);
 
@@ -152,7 +151,7 @@ public class AutomationTests
         Assert.IsNotNull(refData, "Refinement 'Refine Fire' for 'Basic Gem' should exist.");
         
         // Set capacity to 30
-        _resourceManager.Inventory.MagicCapacity = 30;
+        _gameStore!.Dispatch(new SetMagicCapacityAction(30));
         // Fill inventory to capacity
         _resourceManager.Inventory.Add(refData.Value.Recipe.OutputItem, 30);
         // Add input item
@@ -160,8 +159,10 @@ public class AutomationTests
 
         _resourceManager.StartQuest(refData.Value, character);
         var progress = _resourceManager.ActiveQuests.First();
-        await _resourceManager.CompleteTaskAsync(progress);
+        await _resourceManager.ReceiveRewards(progress);
 
         Assert.AreEqual(0, _resourceManager.ActiveQuests.Count, "Refinement producing Magic should NOT restart when capacity reached.");
     }
 }
+
+

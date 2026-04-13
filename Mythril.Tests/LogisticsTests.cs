@@ -35,9 +35,7 @@ public class LogisticsTests
             ContentHost.GetContent<QuestToCadenceUnlocks>()
         );
 
-        _resourceManager = new ResourceManager(
-            gameStore,
-            _items, 
+        _resourceManager = new ResourceManager(gameStore, _items, _quests, 
             ContentHost.GetContent<QuestUnlocks>(), 
             ContentHost.GetContent<QuestToCadenceUnlocks>(), 
             _questDetails, 
@@ -214,3 +212,4 @@ public class LogisticsTests
         Assert.AreEqual(150, _resourceManager.Inventory.GetQuantity(gold), "Gold should be fully refunded on cancellation.");
     }
 }
+

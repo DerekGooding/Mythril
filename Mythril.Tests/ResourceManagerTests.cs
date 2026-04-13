@@ -11,6 +11,7 @@ public class ResourceManagerTests
     private Quests? _quests;
     private QuestDetails? _questDetails;
     private Cadences? _cadences;
+    private GameStore? _gameStore;
 
     [TestInitialize]
     public void Setup()
@@ -21,9 +22,9 @@ public class ResourceManagerTests
         _questDetails = ContentHost.GetContent<QuestDetails>();
         _cadences = ContentHost.GetContent<Cadences>();
         
-        var gameStore = new GameStore();
-        var inventory = new InventoryManager(gameStore);
-        var junctionManager = new JunctionManager(gameStore, inventory, ContentHost.GetContent<StatAugments>(), _cadences);
+        _gameStore = new GameStore();
+        var inventory = new InventoryManager(_gameStore);
+        var junctionManager = new JunctionManager(_gameStore, inventory, ContentHost.GetContent<StatAugments>(), _cadences);
         var pathfinding = new PathfindingService(
             ContentHost.GetContent<Locations>(),
             _quests!,
@@ -33,8 +34,9 @@ public class ResourceManagerTests
             ContentHost.GetContent<QuestToCadenceUnlocks>()
         );
         _resourceManager = new ResourceManager(
-            gameStore,
+            _gameStore,
             items, 
+            _quests!,
             ContentHost.GetContent<QuestUnlocks>(), 
             ContentHost.GetContent<QuestToCadenceUnlocks>(), 
             _questDetails, 
@@ -53,7 +55,7 @@ public class ResourceManagerTests
         var character = _resourceManager!.Characters[0];
         var scholar = _cadences!.All.First(c => c.Name == "Scholar");
         _resourceManager.UnlockCadence(scholar);
-        _resourceManager.UnlockedAbilities.Add("Scholar:Logistics II");
+        _resourceManager.UnlockAbility("Scholar", "Logistics II");
         _resourceManager.JunctionManager.AssignCadence(scholar, character, _resourceManager.UnlockedAbilities);
         
         // Initial limit is 1. With Logistics II, it should be 3.
@@ -159,7 +161,7 @@ public class ResourceManagerTests
         // Need ability to start refinement
         var student = _cadences!.All.First(c => c.Name == "Student");
         _resourceManager.UnlockCadence(student);
-        _resourceManager.UnlockedAbilities.Add("Student:Refine Fire");
+        _resourceManager.UnlockAbility("Student", "Refine Fire");
         _resourceManager.JunctionManager.AssignCadence(student, character, _resourceManager.UnlockedAbilities);
 
         _resourceManager.Inventory.Add(refData.InputItem, refData.Recipe.InputQuantity);
@@ -191,7 +193,7 @@ public class ResourceManagerTests
         Assert.IsFalse(_resourceManager.HasAbility(character, ability));
         
         _resourceManager.UnlockCadence(recruit);
-        _resourceManager.UnlockedAbilities.Add("Recruit:AutoQuest I");
+        _resourceManager.UnlockAbility("Recruit", "AutoQuest I");
         _resourceManager.JunctionManager.AssignCadence(recruit, character, _resourceManager.UnlockedAbilities);
         
         Assert.IsTrue(_resourceManager.HasAbility(character, ability));

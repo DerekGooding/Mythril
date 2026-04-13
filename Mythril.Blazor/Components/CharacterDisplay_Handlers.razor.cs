@@ -24,7 +24,7 @@ public partial class CharacterDisplay
         StateHasChanged();
     }
 
-    private void ToggleAutoQuest() => resourceManager.SetAutoQuestEnabled(Character, !resourceManager.IsAutoQuestEnabled(Character));
+    private void ToggleAutoQuest() => resourceManager.ToggleAutoQuest(Character);
 
     private void CancelQuest(QuestProgress progress) => resourceManager.CancelQuest(progress);
 

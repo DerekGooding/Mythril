@@ -11,17 +11,18 @@ public class InventoryOverflowTests
     private ResourceManager? _resourceManager;
     private Items? _items;
     private InventoryManager? _inventory;
+    private GameStore? _gameStore;
 
     [TestInitialize]
     public void Setup()
     {
         TestContentLoader.Load();
         _items = ContentHost.GetContent<Items>();
-        var gameStore = new GameStore();
-        _inventory = new InventoryManager(gameStore);
+        _gameStore = new GameStore();
+        _inventory = new InventoryManager(_gameStore);
         
         var cadences = ContentHost.GetContent<Cadences>();
-        var junctionManager = new JunctionManager(gameStore, _inventory, ContentHost.GetContent<StatAugments>(), cadences);
+        var junctionManager = new JunctionManager(_gameStore, _inventory, ContentHost.GetContent<StatAugments>(), cadences);
         
         var pathfinding = new PathfindingService(
             ContentHost.GetContent<Locations>(),
@@ -32,9 +33,9 @@ public class InventoryOverflowTests
             ContentHost.GetContent<QuestToCadenceUnlocks>()
         );
 
-        _resourceManager = new ResourceManager(
-            gameStore,
-            _items, 
+        var quests = ContentHost.GetContent<Quests>();
+
+        _resourceManager = new ResourceManager(_gameStore, _items, quests, 
             ContentHost.GetContent<QuestUnlocks>(), 
             ContentHost.GetContent<QuestToCadenceUnlocks>(), 
             ContentHost.GetContent<QuestDetails>(), 
@@ -51,15 +52,21 @@ public class InventoryOverflowTests
     public void InventoryManager_Add_ReturnsOverflow_WhenCapacityReached()
     {
         var fireMagic = _items!.All.First(i => i.Name == "Fire I");
-        _inventory!.MagicCapacity = 30;
+        _gameStore!.Dispatch(new SetMagicCapacityAction(30));
+
+        int overflow = 0;
+        _gameStore.OnItemOverflow += (name, qty) => 
+        {
+            if (name == fireMagic.Name) overflow = qty;
+        };
 
         // 1. Add up to 25 (No overflow)
-        int overflow = _inventory.Add(fireMagic, 25);
+        _inventory!.Add(fireMagic, 25);
         Assert.AreEqual(0, overflow);
         Assert.AreEqual(25, _inventory.GetQuantity(fireMagic));
 
         // 2. Add 10 more (Overflow 5)
-        overflow = _inventory.Add(fireMagic, 10);
+        _inventory.Add(fireMagic, 10);
         Assert.AreEqual(5, overflow);
         Assert.AreEqual(30, _inventory.GetQuantity(fireMagic));
     }
@@ -88,7 +95,7 @@ public class InventoryOverflowTests
         var customDetail = new QuestDetail(1, [], [new ItemQuantity(spell, 50)], QuestType.Single);
         var customQuestData = new QuestData(quest, customDetail);
 
-        _inventory!.MagicCapacity = 30;
+        _gameStore!.Dispatch(new SetMagicCapacityAction(30));
         await _resourceManager.ReceiveRewards(customQuestData);
 
         Assert.AreEqual("Fire I", overflowItem);
@@ -112,7 +119,7 @@ public class InventoryOverflowTests
         string? overflowItem = null;
         _resourceManager!.OnItemOverflow += (name, qty) => overflowItem = name;
 
-        _inventory!.MagicCapacity = 2; // Very low capacity
+        _gameStore!.Dispatch(new SetMagicCapacityAction(2)); // Very low capacity
         await _resourceManager.ReceiveRewards(refinement);
 
         Assert.AreEqual("Fire I", overflowItem);

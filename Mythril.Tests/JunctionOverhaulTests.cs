@@ -18,11 +18,14 @@ public class JunctionOverhaulTests : BunitTestBase
         var magic = new Item("Ultimate Magic", "OP", ItemType.Spell);
         
         // Increase capacity to allow reaching 255
-        InventoryManager.MagicCapacity = 10000;
+        GameStore.Dispatch(new SetMagicCapacityAction(10000));
         InventoryManager.Add(magic, 10000);
         
         // Setup junction
-        JunctionManager.Junctions.Add(new Junction(character, stat, magic));
+        ResourceManager.UnlockedAbilities.Add("Warrior:J-Str");
+        var warrior = new Cadence("Warrior", "Desc", [new CadenceUnlock("Warrior", new CadenceAbility("J-Str", "Desc"), [])]);
+        JunctionManager.AssignCadence(warrior, character, ResourceManager.UnlockedAbilities);
+        JunctionManager.JunctionMagic(character, stat, magic, ResourceManager.UnlockedAbilities);
 
         // Act
         int val = JunctionManager.GetStatValue(character, "Strength");
@@ -66,7 +69,7 @@ public class JunctionOverhaulTests : BunitTestBase
         var stat = Stats.All.First(s => s.Name == "Strength");
         var magic = new Item("Fire", "Burn", ItemType.Spell);
         
-        InventoryManager.MagicCapacity = 100;
+        GameStore.Dispatch(new SetMagicCapacityAction(100));
         InventoryManager.Add(magic, 50); // 50 / 10 = +5 Strength
 
         // Ensure CanJunction returns true

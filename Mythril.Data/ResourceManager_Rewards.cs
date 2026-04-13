@@ -19,8 +19,7 @@ public partial class ResourceManager
             {
                 foreach (var reward in questData.Rewards)
                 {
-                    int overflow = Inventory.Add(reward.Item, reward.Quantity);
-                    if (overflow > 0) OnItemOverflow?.Invoke(reward.Item.Name, overflow);
+                    Inventory.Add(reward.Item, reward.Quantity);
                 }
             }
 
@@ -71,8 +70,7 @@ public partial class ResourceManager
             taskName = refinement.Name;
             details = refinement.Description;
             
-            int overflow = Inventory.Add(refinement.Recipe.OutputItem, refinement.Recipe.OutputQuantity);
-            if (overflow > 0) OnItemOverflow?.Invoke(refinement.Recipe.OutputItem.Name, overflow);
+            Inventory.Add(refinement.Recipe.OutputItem, refinement.Recipe.OutputQuantity);
         }
 
         // Journal Entry
@@ -93,8 +91,10 @@ public partial class ResourceManager
 
     public async Task ReceiveRewards(object dummyProgress)
     {
-        // This is for some legacy or generic calls, but usually we have a QuestProgress
         if (dummyProgress is QuestProgress p) await ReceiveRewards(p);
+        else if (dummyProgress is QuestData qd) await ReceiveRewards(new QuestProgress(qd, qd.Description, 0, new Character("Unknown"), 0));
+        else if (dummyProgress is CadenceUnlock cu) await ReceiveRewards(new QuestProgress(cu, cu.Ability.Description, 0, new Character("Unknown"), 0));
+        else if (dummyProgress is RefinementData rd) await ReceiveRewards(new QuestProgress(rd, rd.Description, 0, new Character("Unknown"), 0));
     }
 
     public void RestoreCompletedQuest(Quest quest)

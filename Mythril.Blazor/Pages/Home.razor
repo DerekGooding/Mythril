@@ -151,7 +151,7 @@
                             QuestProgresses="resourceManager.ActiveQuests"
                             OnQuestDrop="EventCallback.Factory.Create<(object, Character)>(this, TaskDropped)"
                             OnCompletionAnimationEnd="EventCallback.Factory.Create<QuestProgress>(this, OnCompletionAnimationEnd)"
-                            Accepts="resourceManager.CanAfford"
+                            Accepts="(item) => resourceManager.CanAfford(item)"
                             OnUnequip="UnassignCadence" />
             }
             else

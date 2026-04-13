@@ -30,9 +30,9 @@ public class InventoryTests
             ContentHost.GetContent<QuestToCadenceUnlocks>()
         );
 
-        _resourceManager = new ResourceManager(
-            gameStore,
-            _items, 
+        var quests = ContentHost.GetContent<Quests>();
+
+        _resourceManager = new ResourceManager(gameStore, _items, quests, 
             ContentHost.GetContent<QuestUnlocks>(), 
             ContentHost.GetContent<QuestToCadenceUnlocks>(), 
             _questDetails, 
@@ -54,3 +54,4 @@ public class InventoryTests
         Assert.IsNotNull(_resourceManager?.Inventory);
     }
 }
+

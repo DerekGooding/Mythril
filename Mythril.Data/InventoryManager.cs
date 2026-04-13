@@ -7,16 +7,9 @@ public class InventoryManager(GameStore gameStore)
 {
     private readonly GameStore _gameStore = gameStore;
 
-    public int MagicCapacity
-    {
-        get => _gameStore.State.MagicCapacity;
-        set => _gameStore.Dispatch(new SetMagicCapacityAction(value));
-    }
+    public int MagicCapacity => _gameStore.State.MagicCapacity;
 
-    public void TogglePin(string itemName)
-    {
-        _gameStore.Dispatch(new TogglePinAction(itemName));
-    }
+    public void TogglePin(string itemName) => _gameStore.Dispatch(new TogglePinAction(itemName));
 
     public bool IsPinned(string itemName) => _gameStore.State.PinnedItems.Contains(itemName);
 
@@ -29,29 +22,16 @@ public class InventoryManager(GameStore gameStore)
             .Select(i => new ItemQuantity(i, _gameStore.State.Inventory.GetValueOrDefault(i.Name)));
     }
 
-    public int Add(Item item, int quantity = 1)
+    public void Add(Item item, int quantity = 1)
     {
-        if (quantity <= 0) return 0;
-        
-        int current = _gameStore.State.Inventory.GetValueOrDefault(item.Name);
-        int next = current + quantity;
-        int overflow = 0;
-
-        if (item.ItemType == ItemType.Spell && next > MagicCapacity)
-        {
-            overflow = next - MagicCapacity;
-            next = MagicCapacity;
-        }
-
-        _gameStore.Dispatch(new AddResourceAction(item.Name, quantity - overflow));
-        return overflow;
+        if (quantity <= 0) return;
+        _gameStore.Dispatch(new AddResourceAction(item.Name, quantity));
     }
 
     public bool Remove(Item item, int quantity = 1)
     {
         if (quantity <= 0) return true;
-        if (!Has(item, quantity))
-            return false;
+        if (!Has(item, quantity)) return false;
 
         _gameStore.Dispatch(new SpendResourceAction(item.Name, quantity));
         return true;
@@ -65,14 +45,7 @@ public class InventoryManager(GameStore gameStore)
 
     public int GetQuantity(Item item) => _gameStore.State.Inventory.GetValueOrDefault(item.Name);
 
-    public void Clear()
-    {
-        // This is a bit heavy, maybe Add a ClearInventoryAction
-        foreach (var item in _gameStore.State.Inventory)
-        {
-            _gameStore.Dispatch(new SpendResourceAction(item.Key, item.Value));
-        }
-    }
+    public void Clear() => _gameStore.Dispatch(new ClearInventoryAction());
 
     public IEnumerable<ItemQuantity> GetAll()
     {

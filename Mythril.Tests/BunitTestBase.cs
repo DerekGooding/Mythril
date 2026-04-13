@@ -48,9 +48,7 @@ public abstract class BunitTestBase : TestContextWrapper
         JunctionManager = new JunctionManager(GameStore, InventoryManager, statAugments, cadences);
         JunctionManager.Initialize();
 
-        ResourceManager = new ResourceManager(
-            GameStore,
-            ContentHost.GetContent<Items>(),
+        ResourceManager = new ResourceManager(GameStore, ContentHost.GetContent<Items>(), ContentHost.GetContent<Quests>(),
             ContentHost.GetContent<QuestUnlocks>(),
             ContentHost.GetContent<QuestToCadenceUnlocks>(),
             ContentHost.GetContent<QuestDetails>(),
@@ -115,7 +113,8 @@ public abstract class BunitTestBase : TestContextWrapper
             cadences,
             ContentHost.GetContent<Quests>(),
             Stats,
-            ContentHost.GetContent<ItemRefinements>()
+            ContentHost.GetContent<ItemRefinements>(),
+            GameStore
         ).Object);
 
         TestContext.Services.AddSingleton(new Mock<FeedbackService>(JSRuntimeMock.Object, AuthService, httpClient).Object);
@@ -125,3 +124,5 @@ public abstract class BunitTestBase : TestContextWrapper
     [TestCleanup]
     public void TearDown() => TestContext?.Dispose();
 }
+
+

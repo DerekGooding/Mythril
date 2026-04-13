@@ -32,9 +32,7 @@ public class QuestExecutionTests
             ContentHost.GetContent<QuestToCadenceUnlocks>()
         );
 
-        _resourceManager = new ResourceManager(
-            gameStore,
-            _items, 
+        _resourceManager = new ResourceManager(gameStore, _items, _quests, 
             ContentHost.GetContent<QuestUnlocks>(), 
             ContentHost.GetContent<QuestToCadenceUnlocks>(), 
             _questDetails, 
@@ -232,11 +230,11 @@ public class QuestExecutionTests
         var refinementData = new RefinementData(ability, inputItem, recipe, "Strength");
         
         var character = _resourceManager!.Characters[0];
-        _resourceManager.UnlockedAbilities.Add("Apprentice:Refine Wood");
-        _resourceManager.UpdateMagicCapacity();
+        _resourceManager.UnlockAbility("Apprentice", "Refine Wood");
 
         // Assign Apprentice cadence to character so they have the ability
         var apprentice = ContentHost.GetContent<Cadences>().All.First(c => c.Name == "Apprentice");
+        _resourceManager.UnlockCadence(apprentice);
         _resourceManager.JunctionManager.AssignCadence(apprentice, character, _resourceManager.UnlockedAbilities);
 
         _resourceManager.Inventory.Add(inputItem, 10);
@@ -247,3 +245,4 @@ public class QuestExecutionTests
         Assert.AreEqual("Refine Wood (Log): Herb", _resourceManager.ActiveQuests[0].Name);
     }
 }
+

@@ -18,5 +18,6 @@ public class QuestData(Quest quest, QuestDetail detail)
     public string PrimaryStat { get; init; } = detail.PrimaryStat;
 
     public Dictionary<string, int>? RequiredStats { get; init; } = detail.RequiredStats;
+    public Dictionary<string, int>? StatRewards { get; init; } = detail.StatRewards;
 
 }

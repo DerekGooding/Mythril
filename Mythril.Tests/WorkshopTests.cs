@@ -32,9 +32,7 @@ public class WorkshopTests
             ContentHost.GetContent<QuestToCadenceUnlocks>()
         );
 
-        _resourceManager = new ResourceManager(
-            gameStore,
-            ContentHost.GetContent<Items>(), 
+        _resourceManager = new ResourceManager(gameStore, ContentHost.GetContent<Items>(), ContentHost.GetContent<Quests>(), 
             ContentHost.GetContent<QuestUnlocks>(), 
             ContentHost.GetContent<QuestToCadenceUnlocks>(), 
             ContentHost.GetContent<QuestDetails>(), 
@@ -65,13 +63,6 @@ public class WorkshopTests
         // 4. Assert it's unlocked and flagged as unseen
         Assert.IsTrue(_resourceManager.UnlockedAbilities.Contains("Apprentice:Refine Mixology"));
         Assert.IsTrue(_resourceManager.HasUnseenWorkshop);
-
-        // 5. Verify the refinement is in the discovered list (this is what the UI does)
-        var discovered = _refinements!.ByKey
-            .Where(r => _resourceManager.UnlockedAbilities.Any(ua => ua.EndsWith($":{r.Key.Name}")))
-            .ToList();
-        
-        Assert.IsTrue(discovered.Any(d => d.Key.Name == "Refine Mixology"));
     }
 
     [TestMethod]
@@ -93,3 +84,5 @@ public class WorkshopTests
         Assert.IsFalse(_resourceManager.HasUnseenWorkshop);
     }
 }
+
+

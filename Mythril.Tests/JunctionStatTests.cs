@@ -34,9 +34,9 @@ public class JunctionStatTests
             ContentHost.GetContent<QuestToCadenceUnlocks>()
         );
 
-        _resourceManager = new ResourceManager(
-            gameStore,
-            _items, 
+        var quests = ContentHost.GetContent<Quests>();
+
+        _resourceManager = new ResourceManager(gameStore, _items, quests, 
             ContentHost.GetContent<QuestUnlocks>(), 
             ContentHost.GetContent<QuestToCadenceUnlocks>(), 
             ContentHost.GetContent<QuestDetails>(), 
@@ -243,3 +243,4 @@ public class JunctionStatTests
         Assert.AreEqual(100, _resourceManager.Inventory.MagicCapacity);
     }
 }
+

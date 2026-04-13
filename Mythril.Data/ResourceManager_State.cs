@@ -9,6 +9,7 @@ public partial class ResourceManager
 {
     private readonly GameStore _gameStore;
     private readonly Items _items;
+    private readonly Quests _quests;
     private readonly QuestUnlocks _questUnlocks;
     private readonly QuestToCadenceUnlocks _questToCadenceUnlocks;
     private readonly QuestDetails _questDetails;
@@ -22,6 +23,7 @@ public partial class ResourceManager
     public ResourceManager(
         GameStore gameStore,
         Items items, 
+        Quests quests,
         QuestUnlocks questUnlocks, 
         QuestToCadenceUnlocks questToCadenceUnlocks, 
         QuestDetails questDetails,
@@ -34,6 +36,7 @@ public partial class ResourceManager
     {
         _gameStore = gameStore;
         _items = items;
+        _quests = quests;
         _questUnlocks = questUnlocks;
         _questToCadenceUnlocks = questToCadenceUnlocks;
         _questDetails = questDetails;
@@ -45,6 +48,7 @@ public partial class ResourceManager
         Inventory = inventory;
 
         JunctionManager.OnCadenceUnassigned += CancelExcessQuests;
+        _gameStore.OnItemOverflow += (name, qty) => OnItemOverflow?.Invoke(name, qty);
     }
 
     private readonly object _questLock = new();
@@ -105,13 +109,15 @@ public partial class ResourceManager
 
     public ItemRefinements Refinements => _refinements;
 
+    public Location GetLocation(string name) => _locations.All.FirstOrDefault(l => l.Name == name) is var l && l.Name != null ? l : new Location(name, []);
+
     public void Tick(double deltaSeconds)
     {
         _gameStore.Dispatch(new TickAction(deltaSeconds));
         CheckHiddenCadences();
     }
 
-    public IEnumerable<Quest> GetCompletedQuests() => _gameStore.State.CompletedQuests.Select(name => _items.All.OfType<Quest>().FirstOrDefault(q => q.Name == name) ?? new Quest(name, ""));
+    public IEnumerable<Quest> GetCompletedQuests() => _gameStore.State.CompletedQuests.Select(name => _quests.All.FirstOrDefault(q => q.Name == name) is var q && q.Name != null ? q : new Quest(name, ""));
     public void ClearCompletedQuests() 
     {
         foreach(var q in _gameStore.State.CompletedQuests)

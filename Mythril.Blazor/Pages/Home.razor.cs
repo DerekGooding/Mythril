@@ -165,7 +165,7 @@ public partial class Home : IDisposable
 
     protected async Task OnCompletionAnimationEnd(QuestProgress completedProgress)
     {
-        await resourceManager.CompleteTaskAsync(completedProgress);
+        await resourceManager.ReceiveRewards(completedProgress);
         SnackbarService.Show($"Completed: {completedProgress.Name}", "success");
         await InvokeAsync(StateHasChanged);
     }

@@ -6,6 +6,7 @@ namespace Mythril.Tests;
 public class QuestRewardTests
 {
     private ResourceManager? _resourceManager;
+    private GameStore? _gameStore;
     private Items? _items;
     private Quests? _quests;
     private QuestDetails? _questDetails;
@@ -18,10 +19,10 @@ public class QuestRewardTests
         _quests = ContentHost.GetContent<Quests>();
         _questDetails = ContentHost.GetContent<QuestDetails>();
         
-        var gameStore = new GameStore();
-        var inventory = new InventoryManager(gameStore);
+        _gameStore = new GameStore();
+        var inventory = new InventoryManager(_gameStore);
         var cadences = ContentHost.GetContent<Cadences>();
-        var junctionManager = new JunctionManager(gameStore, inventory, ContentHost.GetContent<StatAugments>(), cadences);
+        var junctionManager = new JunctionManager(_gameStore, inventory, ContentHost.GetContent<StatAugments>(), cadences);
 
         var pathfinding = new PathfindingService(
             ContentHost.GetContent<Locations>(),
@@ -32,9 +33,7 @@ public class QuestRewardTests
             ContentHost.GetContent<QuestToCadenceUnlocks>()
         );
 
-        _resourceManager = new ResourceManager(
-            gameStore,
-            _items, 
+        _resourceManager = new ResourceManager(_gameStore, _items, _quests, 
             ContentHost.GetContent<QuestUnlocks>(), 
             ContentHost.GetContent<QuestToCadenceUnlocks>(), 
             _questDetails, 
@@ -228,7 +227,7 @@ public class QuestRewardTests
     {
         var refData = _resourceManager!.Refinements.GetRefinement("Refine Fire", "Basic Gem");
         _resourceManager.Inventory.Clear();
-        _resourceManager.Inventory.MagicCapacity = 10;
+        _gameStore!.Dispatch(new SetMagicCapacityAction(10));
         _resourceManager.Inventory.Add(_items!.All.First(x => x.Name == "Fire I"), 8);
         
         string overflowItem = "";
@@ -245,3 +244,4 @@ public class QuestRewardTests
         Assert.AreEqual(3, overflowQty); // 8 + 5 = 13. 13 - 10 = 3.
     }
 }
+

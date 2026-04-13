@@ -7,10 +7,8 @@ public partial class ResourceManager
         var usable = _locations.All
             .Where(l => string.IsNullOrEmpty(l.RequiredQuest) || _gameStore.State.CompletedQuests.Contains(l.RequiredQuest))
             .Select(l => new LocationData(
-                l.Name,
-                l.Quests.Where(q => _questUnlocks[q].All(req => _gameStore.State.CompletedQuests.Contains(req.Name))),
-                l.Quests.Where(q => !_questUnlocks[q].All(req => _gameStore.State.CompletedQuests.Contains(req.Name))),
-                l.Type ?? "Adventure"
+                l,
+                l.Quests.Where(q => _questUnlocks[q].All(req => _gameStore.State.CompletedQuests.Contains(req.Name)))
             )).ToList();
 
         UsableLocations = usable;
@@ -75,6 +73,16 @@ public partial class ResourceManager
             }
         }
         _gameStore.Dispatch(new SetMagicCapacityAction(capacity));
+    }
+
+    public void UnlockAbility(string cadenceName, string abilityName)
+    {
+        string key = $"{cadenceName}:{abilityName}";
+        if (!UnlockedAbilities.Contains(key))
+        {
+            _gameStore.Dispatch(new UnlockAbilityAction(key));
+            UpdateMagicCapacity();
+        }
     }
 
     public bool HasAbility(Character character, CadenceAbility ability)

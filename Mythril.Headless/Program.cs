@@ -146,7 +146,7 @@ class Program
         var inventory = new InventoryManager(gameStore);
         var pathfinding = new PathfindingService(locations, quests, questUnlocks, questDetails, cadences, questToCadenceUnlocks);
         var junctionManager = new JunctionManager(gameStore, inventory, statAugments, cadences);
-        var resourceManager = new ResourceManager(gameStore, items, questUnlocks, questToCadenceUnlocks, questDetails, cadences, locations, junctionManager, inventory, refinements, pathfinding);
+        var resourceManager = new ResourceManager(gameStore, items, quests, questUnlocks, questToCadenceUnlocks, questDetails, cadences, locations, junctionManager, inventory, refinements, pathfinding);
         
         resourceManager.Initialize();
 

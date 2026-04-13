@@ -62,10 +62,12 @@ public partial class ResourceManager
 
     public bool IsAutoQuestEnabled(Character character) => _gameStore.State.AutoQuestEnabled.GetValueOrDefault(character.Name);
 
+    public void SetAutoQuestEnabled(Character character, bool enabled) => _gameStore.Dispatch(new ToggleAutoQuestAction(character.Name, enabled));
+
     public void ToggleAutoQuest(Character character)
     {
         bool current = IsAutoQuestEnabled(character);
-        _gameStore.Dispatch(new ToggleAutoQuestAction(character.Name, !current));
+        SetAutoQuestEnabled(character, !current);
     }
 
     private void CheckAutoQuestTick()
@@ -84,7 +86,7 @@ public partial class ResourceManager
                     if (lastCompleted.TaskName != null)
                     {
                         // Check if it's a recurring quest or refinement
-                        var quest = _items.All.OfType<Quest>().FirstOrDefault(q => q.Name == lastCompleted.TaskName);
+                        var quest = _quests.All.FirstOrDefault(q => q.Name == lastCompleted.TaskName);
                         if (quest.Name != null)
                         {
                             var detail = _questDetails[quest];

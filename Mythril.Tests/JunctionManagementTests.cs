@@ -33,6 +33,7 @@ public class JunctionManagementTests
         _resourceManager = new ResourceManager(
             gameStore,
             items, 
+            ContentHost.GetContent<Quests>(),
             ContentHost.GetContent<QuestUnlocks>(), 
             ContentHost.GetContent<QuestToCadenceUnlocks>(), 
             ContentHost.GetContent<QuestDetails>(), 

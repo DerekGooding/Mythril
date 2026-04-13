@@ -9,13 +9,15 @@ public class InventoryManagerTests
 {
     private Items? _items;
     private InventoryManager? _inventoryManager;
+    private GameStore? _gameStore;
 
     [TestInitialize]
     public void Setup()
     {
         TestContentLoader.Load();
         _items = ContentHost.GetContent<Items>();
-        _inventoryManager = new InventoryManager();
+        _gameStore = new GameStore();
+        _inventoryManager = new InventoryManager(_gameStore);
     }
 
     [TestMethod]
@@ -152,10 +154,10 @@ public class InventoryManagerTests
     public void InventoryManager_MagicCapacity_Enforcement()
     {
         var fire = _items!.All.First(x => x.Name == "Fire I");
-        _inventoryManager!.MagicCapacity = 30;
+        _gameStore!.Dispatch(new SetMagicCapacityAction(30));
 
         // Try adding 100
-        _inventoryManager.Add(fire, 100);
+        _inventoryManager!.Add(fire, 100);
 
         Assert.AreEqual(30, _inventoryManager.GetQuantity(fire), "Should be capped at capacity.");
     }

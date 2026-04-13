@@ -21,26 +21,12 @@ public class JunctionManager(
 
     public event Action<Character>? OnCadenceUnassigned;
 
-    public void Initialize()
-    {
-        // Now handled via GameStore.Initialize or Dispatch(SetState)
-    }
+    public void Initialize() { }
 
-    public void UpdatePassiveBoosts(Character character, HashSet<string> unlockedAbilities)
-    {
-        // This logic might be better as a derived property or managed via actions
-        // For now, I'll keep it as a side effect or just calculate it on demand in GetStatValue
-    }
+    public void UpdatePassiveBoosts(Character character, HashSet<string> unlockedAbilities) { }
 
     public void AssignCadence(Cadence cadence, Character character, HashSet<string> unlockedAbilities)
     {
-        var assigned = _gameStore.State.AssignedCadences.GetValueOrDefault(cadence.Name);
-        if (assigned != null)
-        {
-            if (assigned == character.Name) return;
-            Unassign(cadence, unlockedAbilities);
-        }
-
         _gameStore.Dispatch(new AssignCadenceAction(cadence.Name, character.Name));
     }
 
@@ -49,20 +35,7 @@ public class JunctionManager(
         if (_gameStore.State.AssignedCadences.TryGetValue(cadence.Name, out var owner) && owner != null)
         {
             _gameStore.Dispatch(new UnassignCadenceAction(cadence.Name));
-            
-            var ownerChar = new Character(owner);
-            // Check if any junctions are now invalid
-            foreach (var junction in _gameStore.State.Junctions.Where(j => j.Character.Name == owner).ToList())
-            {
-                string abilityName = GetJunctionAbilityName(junction.Stat.Name);
-                bool hasAbility = CurrentlyAssigned(ownerChar).Any(c => c.Abilities.Any(a => a.Ability.Name == abilityName && unlockedAbilities.Contains($"{c.Name}:{a.Ability.Name}")));
-                if (!hasAbility)
-                {
-                    _gameStore.Dispatch(new UnjunctionAction(ownerChar, junction.Stat));
-                }
-            }
-
-            OnCadenceUnassigned?.Invoke(ownerChar);
+            OnCadenceUnassigned?.Invoke(new Character(owner));
         }
     }
 
@@ -74,7 +47,8 @@ public class JunctionManager(
 
     public IEnumerable<Cadence> CurrentlyAssigned(Character character)
         => _gameStore.State.AssignedCadences.Where(x => x.Value == character.Name)
-            .Select(x => _cadences.All.First(c => c.Name == x.Key));
+            .Select(x => _cadences.All.FirstOrDefault(c => c.Name == x.Key))
+            .Where(c => c.Name != null);
 
     public void JunctionMagic(Character character, Stat stat, Item magic, HashSet<string> unlockedAbilities)
     {
@@ -141,7 +115,7 @@ public class JunctionManager(
         }
 
         var junction = _gameStore.State.Junctions.FirstOrDefault(j => j.Character.Name == character.Name && j.Stat.Name == statName);
-        if (junction.Magic.Name != null)
+        if (junction != null && junction.Magic.Name != null)
         {
             int qty = _inventory.GetQuantity(junction.Magic);
             var augments = _statAugments[junction.Magic];

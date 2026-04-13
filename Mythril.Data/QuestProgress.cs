@@ -14,9 +14,9 @@ public record QuestProgress(object Item, string Description, int DurationSeconds
         Item is RefinementData r ? r.PrimaryStat :
         "Vitality"; // Default
 
-    public DateTime StartTime { get; init; } = DateTime.Now;
+    public DateTime StartTime { get; set; } = DateTime.Now;
 
-    public double SecondsElapsed { get; init; } = 0;
+    public double SecondsElapsed { get; set; } = 0;
 
     public double Progress => DurationSeconds > 0 ? Math.Clamp(SecondsElapsed / DurationSeconds, 0, 1) : 1;
     public bool IsCompleted => SecondsElapsed >= DurationSeconds;

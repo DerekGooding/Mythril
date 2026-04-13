@@ -1,6 +1,7 @@
 using Microsoft.JSInterop;
 using Newtonsoft.Json;
 using Mythril.Data;
+using System.Collections.Immutable;
 
 namespace Mythril.Blazor.Services;
 

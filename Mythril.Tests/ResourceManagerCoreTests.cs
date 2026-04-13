@@ -30,9 +30,7 @@ public class ResourceManagerCoreTests
             ContentHost.GetContent<QuestToCadenceUnlocks>()
         );
         var junctionManager = new JunctionManager(gameStore, inventory, ContentHost.GetContent<StatAugments>(), cadences);
-        _resourceManager = new ResourceManager(
-            gameStore,
-            _items, 
+        _resourceManager = new ResourceManager(gameStore, _items, _quests, 
             ContentHost.GetContent<QuestUnlocks>(), 
             ContentHost.GetContent<QuestToCadenceUnlocks>(), 
             _questDetails, 
@@ -189,7 +187,7 @@ public class ResourceManagerCoreTests
         var magic = _items!.All.First(i => i.Name == "Fire I");
         
         // Mock ability unlock
-        _resourceManager.UnlockedAbilities.Add("Recruit:J-Str");
+        _resourceManager.UnlockAbility("Recruit", "J-Str");
         var recruit = ContentHost.GetContent<Cadences>().All.First(c => c.Name == "Recruit");
         _resourceManager.JunctionManager.AssignCadence(recruit, character, _resourceManager.UnlockedAbilities);
         
@@ -223,3 +221,4 @@ public class ResourceManagerCoreTests
         Assert.AreEqual("Test", character.Name);
     }
 }
+

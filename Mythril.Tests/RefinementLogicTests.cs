@@ -9,6 +9,7 @@ public class RefinementLogicTests
 {
     private ResourceManager? _resourceManager;
     private ItemRefinements? _refinements;
+    private GameStore? _gameStore;
 
     [TestInitialize]
     public void Setup()
@@ -16,8 +17,8 @@ public class RefinementLogicTests
         TestContentLoader.Load();
         _refinements = ContentHost.GetContent<ItemRefinements>();
         
-        var gameStore = new GameStore();
-        var inventory = new InventoryManager(gameStore);
+        _gameStore = new GameStore();
+        var inventory = new InventoryManager(_gameStore);
         var cadences = ContentHost.GetContent<Cadences>();
         var pathfinding = new PathfindingService(
             ContentHost.GetContent<Locations>(),
@@ -27,11 +28,9 @@ public class RefinementLogicTests
             cadences,
             ContentHost.GetContent<QuestToCadenceUnlocks>()
         );
-        var junctionManager = new JunctionManager(gameStore, inventory, ContentHost.GetContent<StatAugments>(), cadences);
+        var junctionManager = new JunctionManager(_gameStore, inventory, ContentHost.GetContent<StatAugments>(), cadences);
         
-        _resourceManager = new ResourceManager(
-            gameStore,
-            ContentHost.GetContent<Items>(), 
+        _resourceManager = new ResourceManager(_gameStore, ContentHost.GetContent<Items>(), ContentHost.GetContent<Quests>(), 
             ContentHost.GetContent<QuestUnlocks>(), 
             ContentHost.GetContent<QuestToCadenceUnlocks>(), 
             ContentHost.GetContent<QuestDetails>(), 
@@ -58,7 +57,7 @@ public class RefinementLogicTests
     public void WorkshopDiscovery_Logic_Works()
     {
         // Simulate unlocking "Refine Fire" on "Student"
-        _resourceManager!.UnlockedAbilities.Add("Student:Refine Fire");
+        _resourceManager!.UnlockAbility("Student", "Refine Fire");
 
         // Logic from Workshop.razor
         var discoveredRefinements = _refinements!.ByKey
@@ -76,7 +75,7 @@ public class RefinementLogicTests
         var character = _resourceManager!.Characters[0];
 
         // Unlock it
-        _resourceManager.UnlockedAbilities.Add("Student:Refine Fire");
+        _resourceManager.UnlockAbility("Student", "Refine Fire");
         
         // Check if anyone has it (should be false as not assigned)
         var anyoneHasAbility = _resourceManager.Characters.Any(c => _resourceManager.HasAbility(c, ability));
@@ -103,7 +102,7 @@ public class RefinementLogicTests
         var character = _resourceManager!.Characters[0];
 
         // Unlock and Assign cadence so character has ability
-        _resourceManager.UnlockedAbilities.Add("Student:Refine Fire");
+        _resourceManager.UnlockAbility("Student", "Refine Fire");
         _resourceManager.JunctionManager.AssignCadence(student, character, _resourceManager.UnlockedAbilities);
 
         // Ensure inventory is empty
@@ -126,3 +125,4 @@ public class RefinementLogicTests
         Assert.AreEqual(recipe.OutputQuantity, _resourceManager.Inventory.GetQuantity(fireI), "Should have received fire magic from refinement.");
     }
 }
+

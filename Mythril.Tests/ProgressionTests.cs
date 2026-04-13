@@ -18,11 +18,11 @@ public class ProgressionTests : BunitTestBase
         // Setup character with J-Str
         var recruit = ContentHost.GetContent<Cadences>().All.First(c => c.Name == "Recruit");
         ResourceManager.UnlockCadence(recruit);
-        ResourceManager.UnlockedAbilities.Add("Recruit:J-Str");
+        ResourceManager.UnlockAbility("Recruit", "J-Str");
         JunctionManager.AssignCadence(recruit, character, ResourceManager.UnlockedAbilities);
 
         // Act - Increase Strength to 100
-        InventoryManager.MagicCapacity = 1000;
+        GameStore.Dispatch(new SetMagicCapacityAction(1000));
         InventoryManager.Add(magic, 900); // 10 (base) + 900/10 = 100
         JunctionManager.JunctionMagic(character, stat, magic, ResourceManager.UnlockedAbilities);
 
@@ -48,14 +48,14 @@ public class ProgressionTests : BunitTestBase
         var student = ContentHost.GetContent<Cadences>().All.First(c => c.Name == "Student");
         ResourceManager.UnlockCadence(recruit);
         ResourceManager.UnlockCadence(student);
-        ResourceManager.UnlockedAbilities.Add("Recruit:J-Str");
-        ResourceManager.UnlockedAbilities.Add("Student:J-Speed");
+        ResourceManager.UnlockAbility("Recruit", "J-Str");
+        ResourceManager.UnlockAbility("Student", "J-Speed");
         
         JunctionManager.AssignCadence(recruit, character, ResourceManager.UnlockedAbilities);
         JunctionManager.AssignCadence(student, character, ResourceManager.UnlockedAbilities);
 
         // Act - Reach 100 in both STR and SPD
-        InventoryManager.MagicCapacity = 2000;
+        GameStore.Dispatch(new SetMagicCapacityAction(2000));
         InventoryManager.Add(strMagic, 900);
         InventoryManager.Add(spdMagic, 900);
         
@@ -80,7 +80,7 @@ public class ProgressionTests : BunitTestBase
         ResourceManager.UnlockedAbilities.Add("Student:J-Speed");
         JunctionManager.AssignCadence(student, character, ResourceManager.UnlockedAbilities);
 
-        InventoryManager.MagicCapacity = 1000;
+        GameStore.Dispatch(new SetMagicCapacityAction(1000));
         InventoryManager.Add(spdMagic, 500); // 10 (base) + 500/10 = 60
         JunctionManager.JunctionMagic(character, spdStat, spdMagic, ResourceManager.UnlockedAbilities);
 
@@ -100,7 +100,7 @@ public class ProgressionTests : BunitTestBase
         ResourceManager.UnlockedAbilities.Add("Mythril Weaver:J-Vit");
         JunctionManager.AssignCadence(weaver, character, ResourceManager.UnlockedAbilities);
 
-        InventoryManager.MagicCapacity = 1000;
+        GameStore.Dispatch(new SetMagicCapacityAction(1000));
         InventoryManager.Add(vitMagic, 500); // 60 VIT
         JunctionManager.JunctionMagic(character, vitStat, vitMagic, ResourceManager.UnlockedAbilities);
 
@@ -120,7 +120,7 @@ public class ProgressionTests : BunitTestBase
         ResourceManager.UnlockedAbilities.Add("Arcanist:J-Magic");
         JunctionManager.AssignCadence(arcanist, character, ResourceManager.UnlockedAbilities);
 
-        InventoryManager.MagicCapacity = 1000;
+        GameStore.Dispatch(new SetMagicCapacityAction(1000));
         InventoryManager.Add(magMagic, 900); // 100 MAG
         JunctionManager.JunctionMagic(character, magStat, magMagic, ResourceManager.UnlockedAbilities);
 
@@ -172,7 +172,7 @@ public class ProgressionTests : BunitTestBase
         ResourceManager.UnlockedAbilities.Add("Arcanist:J-Magic");
         JunctionManager.AssignCadence(arcanist, character, ResourceManager.UnlockedAbilities);
 
-        InventoryManager.MagicCapacity = 1000;
+        GameStore.Dispatch(new SetMagicCapacityAction(1000));
         InventoryManager.Add(magMagic, 900);
         JunctionManager.JunctionMagic(character, magStat, magMagic, ResourceManager.UnlockedAbilities);
 
@@ -195,4 +195,4 @@ public class ProgressionTests : BunitTestBase
         ResourceManager.StartQuest(data, character);
         Assert.IsTrue(ResourceManager.IsInProgress(data));
     }
-    }
+}
