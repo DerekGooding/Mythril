@@ -1,0 +1,2868 @@
+[
+  {
+    "id": "item_gold",
+    "type": "Item",
+    "name": "Gold",
+    "data": {
+      "description": "The currency of the realm.",
+      "item_type": "Currency"
+    },
+    "in_edges": {},
+    "out_edges": {}
+  },
+  {
+    "id": "item_potion",
+    "type": "Item",
+    "name": "Potion",
+    "data": {
+      "description": "Restores a small amount of health.",
+      "item_type": "Consumable"
+    },
+    "in_edges": {},
+    "out_edges": {}
+  },
+  {
+    "id": "item_basic_gem",
+    "type": "Item",
+    "name": "Basic Gem",
+    "data": {
+      "description": "Is refined into the primary elemental magic.",
+      "item_type": "Material"
+    },
+    "in_edges": {},
+    "out_edges": {}
+  },
+  {
+    "id": "item_log",
+    "type": "Item",
+    "name": "Log",
+    "data": {
+      "description": "A basic piece of wood.",
+      "item_type": "Material"
+    },
+    "in_edges": {},
+    "out_edges": {}
+  },
+  {
+    "id": "item_iron_ore",
+    "type": "Item",
+    "name": "Iron Ore",
+    "data": {
+      "description": "A common ore used in crafting.",
+      "item_type": "Material"
+    },
+    "in_edges": {},
+    "out_edges": {}
+  },
+  {
+    "id": "item_herb",
+    "type": "Item",
+    "name": "Herb",
+    "data": {
+      "description": "A medicinal plant used in potions.",
+      "item_type": "Material"
+    },
+    "in_edges": {},
+    "out_edges": {}
+  },
+  {
+    "id": "item_leather",
+    "type": "Item",
+    "name": "Leather",
+    "data": {
+      "description": "Tough animal hide used in crafting.",
+      "item_type": "Material"
+    },
+    "in_edges": {},
+    "out_edges": {}
+  },
+  {
+    "id": "item_water",
+    "type": "Item",
+    "name": "Water",
+    "data": {
+      "description": "Essential for life and potion-making.",
+      "item_type": "Material"
+    },
+    "in_edges": {},
+    "out_edges": {}
+  },
+  {
+    "id": "item_web",
+    "type": "Item",
+    "name": "Web",
+    "data": {
+      "description": "Sticky silk produced by spiders.",
+      "item_type": "Material"
+    },
+    "in_edges": {},
+    "out_edges": {}
+  },
+  {
+    "id": "item_slime",
+    "type": "Item",
+    "name": "Slime",
+    "data": {
+      "description": "A gelatinous creature's residue.",
+      "item_type": "Material"
+    },
+    "in_edges": {},
+    "out_edges": {}
+  },
+  {
+    "id": "item_moonberry",
+    "type": "Item",
+    "name": "Moonberry",
+    "data": {
+      "description": "A glowing berry from the Whispering Woods.",
+      "item_type": "Consumable"
+    },
+    "in_edges": {},
+    "out_edges": {}
+  },
+  {
+    "id": "item_ancient_bark",
+    "type": "Item",
+    "name": "Ancient Bark",
+    "data": {
+      "description": "Bark from the ancient trees.",
+      "item_type": "Material"
+    },
+    "in_edges": {},
+    "out_edges": {}
+  },
+  {
+    "id": "item_mana_leaf",
+    "type": "Item",
+    "name": "Mana Leaf",
+    "data": {
+      "description": "A leaf pulsing with raw mana.",
+      "item_type": "Material"
+    },
+    "in_edges": {},
+    "out_edges": {}
+  },
+  {
+    "id": "item_fire_shard",
+    "type": "Item",
+    "name": "Fire Shard",
+    "data": {
+      "description": "A crystalline fragment of heat.",
+      "item_type": "Material"
+    },
+    "in_edges": {},
+    "out_edges": {}
+  },
+  {
+    "id": "item_ice_shard",
+    "type": "Item",
+    "name": "Ice Shard",
+    "data": {
+      "description": "A crystalline fragment of frost.",
+      "item_type": "Material"
+    },
+    "in_edges": {},
+    "out_edges": {}
+  },
+  {
+    "id": "item_mythril_spark",
+    "type": "Item",
+    "name": "Mythril Spark",
+    "data": {
+      "description": "A legendary spark of ancient power.",
+      "item_type": "Material"
+    },
+    "in_edges": {},
+    "out_edges": {}
+  },
+  {
+    "id": "item_sun_baked_scale",
+    "type": "Item",
+    "name": "Sun-baked Scale",
+    "data": {
+      "description": "A tough, heat-resistant scale from a desert predator.",
+      "item_type": "Material"
+    },
+    "in_edges": {},
+    "out_edges": {}
+  },
+  {
+    "id": "item_solar_essence",
+    "type": "Item",
+    "name": "Solar Essence",
+    "data": {
+      "description": "Condensed sunlight that pulses with warmth.",
+      "item_type": "Material"
+    },
+    "in_edges": {},
+    "out_edges": {}
+  },
+  {
+    "id": "item_crystal_shards",
+    "type": "Item",
+    "name": "Crystal Shards",
+    "data": {
+      "description": "Prismatic fragments found at high altitudes.",
+      "item_type": "Material"
+    },
+    "in_edges": {},
+    "out_edges": {}
+  },
+  {
+    "id": "item_blue_coral",
+    "type": "Item",
+    "name": "Blue Coral",
+    "data": {
+      "description": "Rare coral harvested from underwater caves.",
+      "item_type": "Material"
+    },
+    "in_edges": {},
+    "out_edges": {}
+  },
+  {
+    "id": "item_lost_parchment",
+    "type": "Item",
+    "name": "Lost Parchment",
+    "data": {
+      "description": "Ancient writings preserved in the library.",
+      "item_type": "Material"
+    },
+    "in_edges": {},
+    "out_edges": {}
+  },
+  {
+    "id": "item_fire_i",
+    "type": "Item",
+    "name": "Fire I",
+    "data": {
+      "description": "A basic fire spell.",
+      "item_type": "Spell"
+    },
+    "in_edges": {},
+    "out_edges": {}
+  },
+  {
+    "id": "item_ice_i",
+    "type": "Item",
+    "name": "Ice I",
+    "data": {
+      "description": "A basic ice spell.",
+      "item_type": "Spell"
+    },
+    "in_edges": {},
+    "out_edges": {}
+  },
+  {
+    "id": "item_lightning_i",
+    "type": "Item",
+    "name": "Lightning I",
+    "data": {
+      "description": "A basic lightning spell.",
+      "item_type": "Spell"
+    },
+    "in_edges": {},
+    "out_edges": {}
+  },
+  {
+    "id": "item_earth_i",
+    "type": "Item",
+    "name": "Earth I",
+    "data": {
+      "description": "A basic earth spell.",
+      "item_type": "Spell"
+    },
+    "in_edges": {},
+    "out_edges": {}
+  },
+  {
+    "id": "item_water_i",
+    "type": "Item",
+    "name": "Water I",
+    "data": {
+      "description": "A basic water spell.",
+      "item_type": "Spell"
+    },
+    "in_edges": {},
+    "out_edges": {}
+  },
+  {
+    "id": "item_haste_i",
+    "type": "Item",
+    "name": "Haste I",
+    "data": {
+      "description": "A basic speed-enhancing spell.",
+      "item_type": "Spell"
+    },
+    "in_edges": {},
+    "out_edges": {}
+  },
+  {
+    "id": "item_cure_i",
+    "type": "Item",
+    "name": "Cure I",
+    "data": {
+      "description": "A basic healing spell.",
+      "item_type": "Spell"
+    },
+    "in_edges": {},
+    "out_edges": {}
+  },
+  {
+    "id": "stat_strength",
+    "type": "Stat",
+    "name": "Strength",
+    "data": {
+      "description": "Determines the physical power of a character."
+    },
+    "in_edges": {},
+    "out_edges": {}
+  },
+  {
+    "id": "stat_vitality",
+    "type": "Stat",
+    "name": "Vitality",
+    "data": {
+      "description": "Affects the speed and evasion of a character."
+    },
+    "in_edges": {},
+    "out_edges": {}
+  },
+  {
+    "id": "stat_magic",
+    "type": "Stat",
+    "name": "Magic",
+    "data": {
+      "description": "Influences the effectiveness of magical abilities."
+    },
+    "in_edges": {},
+    "out_edges": {}
+  },
+  {
+    "id": "stat_speed",
+    "type": "Stat",
+    "name": "Speed",
+    "data": {
+      "description": "Determines the frequency of character actions."
+    },
+    "in_edges": {},
+    "out_edges": {}
+  },
+  {
+    "id": "quest_prologue",
+    "type": "Quest",
+    "name": "Prologue",
+    "data": {
+      "description": "Watch the intro cinematic.",
+      "duration": 5,
+      "quest_type": "Single",
+      "primary_stat": "Vitality",
+      "required_stats": null
+    },
+    "in_edges": {},
+    "out_edges": {
+      "rewards": [
+        {
+          "targetId": "item_gold",
+          "quantity": 100
+        }
+      ]
+    }
+  },
+  {
+    "id": "quest_tutorial_section",
+    "type": "Quest",
+    "name": "Tutorial Section",
+    "data": {
+      "description": "Complete the tutorial section of the game.",
+      "duration": 30,
+      "quest_type": "Recurring",
+      "primary_stat": "Vitality",
+      "required_stats": null
+    },
+    "in_edges": {
+      "requires_quest": [
+        "quest_prologue"
+      ]
+    },
+    "out_edges": {
+      "rewards": [
+        {
+          "targetId": "item_basic_gem",
+          "quantity": 10
+        }
+      ]
+    }
+  },
+  {
+    "id": "quest_visit_starting_town",
+    "type": "Quest",
+    "name": "Visit Starting Town",
+    "data": {
+      "description": "Explore the local village.",
+      "duration": 15,
+      "quest_type": "Single",
+      "primary_stat": "Vitality",
+      "required_stats": null
+    },
+    "in_edges": {
+      "requires_quest": [
+        "quest_tutorial_section"
+      ]
+    },
+    "out_edges": {
+      "rewards": [
+        {
+          "targetId": "item_gold",
+          "quantity": 100
+        }
+      ]
+    }
+  },
+  {
+    "id": "quest_buy_potion",
+    "type": "Quest",
+    "name": "Buy Potion",
+    "data": {
+      "description": "Get a potion from the town shop.",
+      "duration": 45,
+      "quest_type": "Recurring",
+      "primary_stat": "Speed",
+      "required_stats": null
+    },
+    "in_edges": {
+      "requires_quest": [
+        "quest_visit_starting_town"
+      ]
+    },
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_gold",
+          "quantity": 100
+        }
+      ],
+      "rewards": [
+        {
+          "targetId": "item_potion",
+          "quantity": 5
+        }
+      ]
+    }
+  },
+  {
+    "id": "quest_recover_the_ancient_tome",
+    "type": "Quest",
+    "name": "Recover the Ancient Tome",
+    "data": {
+      "description": "Find the lost book of cadences.",
+      "duration": 60,
+      "quest_type": "Single",
+      "primary_stat": "Magic",
+      "required_stats": null
+    },
+    "in_edges": {
+      "requires_quest": [
+        "quest_visit_starting_town"
+      ]
+    },
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_gold",
+          "quantity": 500
+        }
+      ],
+      "rewards": [
+        {
+          "targetId": "item_basic_gem",
+          "quantity": 5
+        }
+      ],
+      "unlocks_cadence": [
+        {
+          "targetId": "cadence_arcanist",
+          "quantity": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "quest_learn_about_cadences",
+    "type": "Quest",
+    "name": "Learn About Cadences",
+    "data": {
+      "description": "Discover the power of your inner voice.",
+      "duration": 30,
+      "quest_type": "Single",
+      "primary_stat": "Magic",
+      "required_stats": null
+    },
+    "in_edges": {
+      "requires_quest": [
+        "quest_visit_starting_town"
+      ]
+    },
+    "out_edges": {
+      "unlocks_cadence": [
+        {
+          "targetId": "cadence_recruit",
+          "quantity": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "quest_learn_about_the_dark_forest",
+    "type": "Quest",
+    "name": "Learn about the Dark Forest",
+    "data": {
+      "description": "Hear the rumors of the corrupted forest.",
+      "duration": 30,
+      "quest_type": "Single",
+      "primary_stat": "Vitality",
+      "required_stats": null
+    },
+    "in_edges": {
+      "requires_quest": [
+        "quest_learn_about_the_mines"
+      ]
+    },
+    "out_edges": {
+      "unlocks_cadence": [
+        {
+          "targetId": "cadence_student",
+          "quantity": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "quest_hunt_goblins",
+    "type": "Quest",
+    "name": "Hunt Goblins",
+    "data": {
+      "description": "Clear out the local goblin encampment.",
+      "duration": 60,
+      "quest_type": "Recurring",
+      "primary_stat": "Strength",
+      "required_stats": null
+    },
+    "in_edges": {
+      "requires_quest": [
+        "quest_learn_about_the_dark_forest"
+      ]
+    },
+    "out_edges": {
+      "rewards": [
+        {
+          "targetId": "item_gold",
+          "quantity": 100
+        },
+        {
+          "targetId": "item_fire_shard",
+          "quantity": 1
+        },
+        {
+          "targetId": "item_mana_leaf",
+          "quantity": 3
+        }
+      ]
+    }
+  },
+  {
+    "id": "quest_chop_wood",
+    "type": "Quest",
+    "name": "Chop Wood",
+    "data": {
+      "description": "Harvest wood from the corrupted forest.",
+      "duration": 75,
+      "quest_type": "Recurring",
+      "primary_stat": "Strength",
+      "required_stats": null
+    },
+    "in_edges": {
+      "requires_quest": [
+        "quest_learn_about_the_dark_forest"
+      ]
+    },
+    "out_edges": {
+      "rewards": [
+        {
+          "targetId": "item_log",
+          "quantity": 10
+        },
+        {
+          "targetId": "item_ancient_bark",
+          "quantity": 5
+        }
+      ]
+    }
+  },
+  {
+    "id": "quest_learn_about_the_mines",
+    "type": "Quest",
+    "name": "Learn about the Mines",
+    "data": {
+      "description": "Find out where the miners went.",
+      "duration": 30,
+      "quest_type": "Single",
+      "primary_stat": "Strength",
+      "required_stats": null
+    },
+    "in_edges": {
+      "requires_quest": [
+        "quest_learn_about_cadences"
+      ]
+    },
+    "out_edges": {
+      "unlocks_cadence": [
+        {
+          "targetId": "cadence_apprentice",
+          "quantity": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "quest_hunt_bats",
+    "type": "Quest",
+    "name": "Hunt Bats",
+    "data": {
+      "description": "Clear the mine entrance of bats.",
+      "duration": 45,
+      "quest_type": "Recurring",
+      "primary_stat": "Speed",
+      "required_stats": null
+    },
+    "in_edges": {
+      "requires_quest": [
+        "quest_learn_about_the_mines"
+      ]
+    },
+    "out_edges": {
+      "rewards": [
+        {
+          "targetId": "item_gold",
+          "quantity": 150
+        }
+      ]
+    }
+  },
+  {
+    "id": "quest_hunt_spiders",
+    "type": "Quest",
+    "name": "Hunt Spiders",
+    "data": {
+      "description": "Venture deeper into the webs.",
+      "duration": 75,
+      "quest_type": "Recurring",
+      "primary_stat": "Vitality",
+      "required_stats": null
+    },
+    "in_edges": {
+      "requires_quest": [
+        "quest_hunt_bats"
+      ]
+    },
+    "out_edges": {
+      "rewards": [
+        {
+          "targetId": "item_web",
+          "quantity": 5
+        }
+      ]
+    }
+  },
+  {
+    "id": "quest_hunt_slimes",
+    "type": "Quest",
+    "name": "Hunt Slimes",
+    "data": {
+      "description": "Clear the lower levels of sticky residue.",
+      "duration": 90,
+      "quest_type": "Recurring",
+      "primary_stat": "Strength",
+      "required_stats": null
+    },
+    "in_edges": {
+      "requires_quest": [
+        "quest_hunt_spiders"
+      ]
+    },
+    "out_edges": {
+      "rewards": [
+        {
+          "targetId": "item_slime",
+          "quantity": 50
+        }
+      ]
+    }
+  },
+  {
+    "id": "quest_unlock_mining",
+    "type": "Quest",
+    "name": "Unlock Mining",
+    "data": {
+      "description": "Obtain permission to mine Iron Ore.",
+      "duration": 120,
+      "quest_type": "Single",
+      "primary_stat": "Strength",
+      "required_stats": null
+    },
+    "in_edges": {
+      "requires_quest": [
+        "quest_hunt_slimes"
+      ]
+    },
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_gold",
+          "quantity": 1000
+        }
+      ]
+    }
+  },
+  {
+    "id": "quest_mine_iron_ore",
+    "type": "Quest",
+    "name": "Mine Iron Ore",
+    "data": {
+      "description": "Extract precious metals from the earth.",
+      "duration": 180,
+      "quest_type": "Recurring",
+      "primary_stat": "Strength",
+      "required_stats": {
+        "Strength": 15
+      }
+    },
+    "in_edges": {
+      "requires_quest": [
+        "quest_unlock_mining"
+      ]
+    },
+    "out_edges": {
+      "rewards": [
+        {
+          "targetId": "item_iron_ore",
+          "quantity": 5
+        }
+      ]
+    }
+  },
+  {
+    "id": "quest_gather_moonberries",
+    "type": "Quest",
+    "name": "Gather Moonberries",
+    "data": {
+      "description": "Pick glowing fruit from the woods.",
+      "duration": 240,
+      "quest_type": "Recurring",
+      "primary_stat": "Speed",
+      "required_stats": {
+        "Speed": 15
+      }
+    },
+    "in_edges": {
+      "requires_quest": [
+        "quest_learn_about_the_dark_forest"
+      ]
+    },
+    "out_edges": {
+      "rewards": [
+        {
+          "targetId": "item_moonberry",
+          "quantity": 20
+        },
+        {
+          "targetId": "item_mana_leaf",
+          "quantity": 5
+        }
+      ]
+    }
+  },
+  {
+    "id": "quest_defeat_treant_guardian",
+    "type": "Quest",
+    "name": "Defeat Treant Guardian",
+    "data": {
+      "description": "Face the protector of the forest.",
+      "duration": 600,
+      "quest_type": "Single",
+      "primary_stat": "Strength",
+      "required_stats": {
+        "Strength": 25
+      }
+    },
+    "in_edges": {
+      "requires_quest": [
+        "quest_gather_moonberries"
+      ]
+    },
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_potion",
+          "quantity": 5
+        }
+      ],
+      "rewards": [
+        {
+          "targetId": "item_ancient_bark",
+          "quantity": 5
+        }
+      ]
+    }
+  },
+  {
+    "id": "quest_ancient_inscriptions",
+    "type": "Quest",
+    "name": "Ancient Inscriptions",
+    "data": {
+      "description": "Decipher the ruins' entrance.",
+      "duration": 120,
+      "quest_type": "Single",
+      "primary_stat": "Magic",
+      "required_stats": null
+    },
+    "in_edges": {
+      "requires_quest": [
+        "quest_learn_about_cadences"
+      ]
+    },
+    "out_edges": {
+      "rewards": [
+        {
+          "targetId": "item_gold",
+          "quantity": 500
+        },
+        {
+          "targetId": "item_lost_parchment",
+          "quantity": 10
+        }
+      ]
+    }
+  },
+  {
+    "id": "quest_finding_the_hearth",
+    "type": "Quest",
+    "name": "Finding the Hearth",
+    "data": {
+      "description": "Locate the central power source of the ruins.",
+      "duration": 300,
+      "quest_type": "Single",
+      "primary_stat": "Vitality",
+      "required_stats": null
+    },
+    "in_edges": {
+      "requires_quest": [
+        "quest_ancient_inscriptions"
+      ]
+    },
+    "out_edges": {
+      "rewards": [
+        {
+          "targetId": "item_basic_gem",
+          "quantity": 10
+        },
+        {
+          "targetId": "item_crystal_shards",
+          "quantity": 20
+        }
+      ]
+    }
+  },
+  {
+    "id": "quest_rekindling_the_spark",
+    "type": "Quest",
+    "name": "Rekindling the Spark",
+    "data": {
+      "description": "Ignite the ancient Mythril Forge.",
+      "duration": 1200,
+      "quest_type": "Single",
+      "primary_stat": "Magic",
+      "required_stats": null
+    },
+    "in_edges": {
+      "requires_quest": [
+        "quest_finding_the_hearth"
+      ]
+    },
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_ancient_bark",
+          "quantity": 10
+        },
+        {
+          "targetId": "item_iron_ore",
+          "quantity": 20
+        }
+      ],
+      "rewards": [
+        {
+          "targetId": "item_mythril_spark",
+          "quantity": 1
+        }
+      ],
+      "unlocks_cadence": [
+        {
+          "targetId": "cadence_mythril_weaver",
+          "quantity": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "quest_help_the_lumberjack",
+    "type": "Quest",
+    "name": "Help the lumberjack",
+    "data": {
+      "description": "Gather fallen wood for the local lumberjack.",
+      "duration": 30,
+      "quest_type": "Single",
+      "primary_stat": "Strength",
+      "required_stats": null
+    },
+    "in_edges": {
+      "requires_quest": [
+        "quest_learn_about_the_dark_forest"
+      ]
+    },
+    "out_edges": {
+      "rewards": [
+        {
+          "targetId": "item_log",
+          "quantity": 10
+        }
+      ]
+    }
+  },
+  {
+    "id": "quest_sell_gem",
+    "type": "Quest",
+    "name": "Sell Gem",
+    "data": {
+      "description": "Trade a basic gem for gold at the town market.",
+      "duration": 20,
+      "quest_type": "Recurring",
+      "primary_stat": "Speed",
+      "required_stats": null
+    },
+    "in_edges": {
+      "requires_quest": [
+        "quest_visit_starting_town"
+      ]
+    },
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_basic_gem",
+          "quantity": 1
+        }
+      ],
+      "rewards": [
+        {
+          "targetId": "item_gold",
+          "quantity": 250
+        }
+      ]
+    }
+  },
+  {
+    "id": "quest_scavenge_scrap",
+    "type": "Quest",
+    "name": "Scavenge Scrap",
+    "data": {
+      "description": "Search the desert sands for abandoned materials.",
+      "duration": 45,
+      "quest_type": "Recurring",
+      "primary_stat": "Vitality",
+      "required_stats": null
+    },
+    "in_edges": {
+      "requires_quest": [
+        "quest_learn_about_the_mines"
+      ]
+    },
+    "out_edges": {
+      "rewards": [
+        {
+          "targetId": "item_iron_ore",
+          "quantity": 2
+        },
+        {
+          "targetId": "item_gold",
+          "quantity": 50
+        }
+      ]
+    }
+  },
+  {
+    "id": "quest_hunt_sand_sharks",
+    "type": "Quest",
+    "name": "Hunt Sand-Sharks",
+    "data": {
+      "description": "Take down the predators of the dunes.",
+      "duration": 90,
+      "quest_type": "Recurring",
+      "primary_stat": "Strength",
+      "required_stats": {
+        "Strength": 20
+      }
+    },
+    "in_edges": {
+      "requires_quest": [
+        "quest_hunt_slimes"
+      ]
+    },
+    "out_edges": {
+      "rewards": [
+        {
+          "targetId": "item_sun_baked_scale",
+          "quantity": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "quest_locate_the_hidden_oasis",
+    "type": "Quest",
+    "name": "Locate the Hidden Oasis",
+    "data": {
+      "description": "Find the legendary sanctuary in the waste.",
+      "duration": 300,
+      "quest_type": "Single",
+      "primary_stat": "Vitality",
+      "required_stats": {
+        "Speed": 25
+      }
+    },
+    "in_edges": {
+      "requires_quest": [
+        "quest_hunt_sand_sharks"
+      ]
+    },
+    "out_edges": {
+      "rewards": [
+        {
+          "targetId": "item_solar_essence",
+          "quantity": 1
+        },
+        {
+          "targetId": "item_blue_coral",
+          "quantity": 20
+        }
+      ]
+    }
+  },
+  {
+    "id": "quest_purify_the_grove",
+    "type": "Quest",
+    "name": "Purify the Grove",
+    "data": {
+      "description": "Use healing magic to cleanse the corruption from the sacred grove.",
+      "duration": 120,
+      "quest_type": "Recurring",
+      "primary_stat": "Magic",
+      "required_stats": null
+    },
+    "in_edges": {
+      "requires_quest": [
+        "quest_defeat_treant_guardian"
+      ]
+    },
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_cure_i",
+          "quantity": 20
+        }
+      ],
+      "rewards": [
+        {
+          "targetId": "item_ancient_bark",
+          "quantity": 10
+        }
+      ]
+    }
+  },
+  {
+    "id": "quest_power_the_forge",
+    "type": "Quest",
+    "name": "Power the Forge",
+    "data": {
+      "description": "Channel intense fire magic to reignite the ancient Mythril Forge.",
+      "duration": 180,
+      "quest_type": "Recurring",
+      "primary_stat": "Magic",
+      "required_stats": {
+        "Magic": 30
+      }
+    },
+    "in_edges": {
+      "requires_quest": [
+        "quest_rekindling_the_spark"
+      ]
+    },
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_fire_i",
+          "quantity": 50
+        }
+      ],
+      "rewards": [
+        {
+          "targetId": "item_mythril_spark",
+          "quantity": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "quest_shatter_the_crystals",
+    "type": "Quest",
+    "name": "Shatter the Crystals",
+    "data": {
+      "description": "Harvest prismatic fragments from the peak's formations.",
+      "duration": 120,
+      "quest_type": "Recurring",
+      "primary_stat": "Strength",
+      "required_stats": {
+        "Strength": 30
+      }
+    },
+    "in_edges": {
+      "requires_quest": [
+        "quest_finding_the_hearth"
+      ]
+    },
+    "out_edges": {
+      "rewards": [
+        {
+          "targetId": "item_crystal_shards",
+          "quantity": 20
+        }
+      ]
+    }
+  },
+  {
+    "id": "quest_high_altitude_survey",
+    "type": "Quest",
+    "name": "High Altitude Survey",
+    "data": {
+      "description": "Map the dangerous heights of the Crystal Peaks.",
+      "duration": 90,
+      "quest_type": "Recurring",
+      "primary_stat": "Speed",
+      "required_stats": {
+        "Speed": 30
+      }
+    },
+    "in_edges": {
+      "requires_quest": [
+        "quest_shatter_the_crystals"
+      ]
+    },
+    "out_edges": {
+      "rewards": [
+        {
+          "targetId": "item_ice_shard",
+          "quantity": 10
+        },
+        {
+          "targetId": "item_fire_shard",
+          "quantity": 10
+        }
+      ]
+    }
+  },
+  {
+    "id": "quest_harvest_sea_life",
+    "type": "Quest",
+    "name": "Harvest Sea-Life",
+    "data": {
+      "description": "Gather biological components from the Tidal Caverns.",
+      "duration": 60,
+      "quest_type": "Recurring",
+      "primary_stat": "Vitality",
+      "required_stats": null
+    },
+    "in_edges": {
+      "requires_quest": [
+        "quest_locate_the_hidden_oasis"
+      ]
+    },
+    "out_edges": {
+      "rewards": [
+        {
+          "targetId": "item_water",
+          "quantity": 10
+        },
+        {
+          "targetId": "item_leather",
+          "quantity": 5
+        }
+      ]
+    }
+  },
+  {
+    "id": "quest_deep_sea_scavenge",
+    "type": "Quest",
+    "name": "Deep Sea Scavenge",
+    "data": {
+      "description": "Search the lightless depths for rare coral.",
+      "duration": 150,
+      "quest_type": "Recurring",
+      "primary_stat": "Vitality",
+      "required_stats": {
+        "Vitality": 30
+      }
+    },
+    "in_edges": {
+      "requires_quest": [
+        "quest_harvest_sea_life"
+      ]
+    },
+    "out_edges": {
+      "rewards": [
+        {
+          "targetId": "item_blue_coral",
+          "quantity": 10
+        }
+      ]
+    }
+  },
+  {
+    "id": "quest_archive_sifting",
+    "type": "Quest",
+    "name": "Archive Sifting",
+    "data": {
+      "description": "Search through stacks of ancient writings.",
+      "duration": 180,
+      "quest_type": "Recurring",
+      "primary_stat": "Magic",
+      "required_stats": {
+        "Magic": 30
+      }
+    },
+    "in_edges": {
+      "requires_quest": [
+        "quest_ancient_inscriptions"
+      ]
+    },
+    "out_edges": {
+      "rewards": [
+        {
+          "targetId": "item_lost_parchment",
+          "quantity": 20
+        }
+      ]
+    }
+  },
+  {
+    "id": "quest_study_ancient_texts",
+    "type": "Quest",
+    "name": "Study Ancient Texts",
+    "data": {
+      "description": "Learn from the preserved knowledge of the library.",
+      "duration": 120,
+      "quest_type": "Recurring",
+      "primary_stat": "Magic",
+      "required_stats": null
+    },
+    "in_edges": {
+      "requires_quest": [
+        "quest_archive_sifting"
+      ]
+    },
+    "out_edges": {
+      "rewards": [
+        {
+          "targetId": "item_gold",
+          "quantity": 100
+        }
+      ]
+    }
+  },
+  {
+    "id": "quest_defeat_the_mythril_construct",
+    "type": "Quest",
+    "name": "Defeat the Mythril Construct",
+    "data": {
+      "description": "Face the ultimate defender of the Mythril Heart.",
+      "duration": 1800,
+      "quest_type": "Single",
+      "primary_stat": "Vitality",
+      "required_stats": {
+        "Strength": 100,
+        "Vitality": 100,
+        "Magic": 100,
+        "Speed": 100
+      }
+    },
+    "in_edges": {
+      "requires_quest": [
+        "quest_power_the_forge"
+      ]
+    },
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_fire_i",
+          "quantity": 100
+        },
+        {
+          "targetId": "item_ice_i",
+          "quantity": 100
+        },
+        {
+          "targetId": "item_earth_i",
+          "quantity": 100
+        },
+        {
+          "targetId": "item_water_i",
+          "quantity": 100
+        }
+      ],
+      "rewards": [
+        {
+          "targetId": "item_mythril_spark",
+          "quantity": 10
+        }
+      ]
+    }
+  },
+  {
+    "id": "quest_ascetic_meditation",
+    "type": "Quest",
+    "name": "Ascetic Meditation",
+    "data": {
+      "description": "Focus your mind to achieve permanent magical growth.",
+      "duration": 600,
+      "quest_type": "Single",
+      "primary_stat": "Magic",
+      "required_stats": {
+        "Magic": 50
+      }
+    },
+    "in_edges": {
+      "requires_quest": [
+        "quest_defeat_the_mythril_construct"
+      ]
+    },
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_potion",
+          "quantity": 20
+        }
+      ]
+    },
+    "effects": [
+      {
+        "Type": "StatBoost",
+        "Value": 5,
+        "Target": "Magic"
+      }
+    ]
+  },
+  {
+    "id": "quest_heavy_training",
+    "type": "Quest",
+    "name": "Heavy Training",
+    "data": {
+      "description": "Push your body to achieve permanent physical growth.",
+      "duration": 600,
+      "quest_type": "Single",
+      "primary_stat": "Strength",
+      "required_stats": {
+        "Strength": 50
+      }
+    },
+    "in_edges": {
+      "requires_quest": [
+        "quest_defeat_the_mythril_construct"
+      ]
+    },
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_potion",
+          "quantity": 20
+        }
+      ]
+    },
+    "effects": [
+      {
+        "Type": "StatBoost",
+        "Value": 5,
+        "Target": "Strength"
+      }
+    ]
+  },
+  {
+    "id": "location_village",
+    "type": "Location",
+    "name": "Village",
+    "data": {
+      "region_type": "Plains"
+    },
+    "in_edges": {},
+    "out_edges": {
+      "contains": [
+        {
+          "targetId": "quest_prologue",
+          "quantity": 1
+        },
+        {
+          "targetId": "quest_tutorial_section",
+          "quantity": 1
+        },
+        {
+          "targetId": "quest_visit_starting_town",
+          "quantity": 1
+        },
+        {
+          "targetId": "quest_buy_potion",
+          "quantity": 1
+        },
+        {
+          "targetId": "quest_sell_gem",
+          "quantity": 1
+        },
+        {
+          "targetId": "quest_learn_about_cadences",
+          "quantity": 1
+        },
+        {
+          "targetId": "quest_learn_about_the_mines",
+          "quantity": 1
+        },
+        {
+          "targetId": "quest_learn_about_the_dark_forest",
+          "quantity": 1
+        },
+        {
+          "targetId": "quest_recover_the_ancient_tome",
+          "quantity": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "location_greenwood_forest",
+    "type": "Location",
+    "name": "Greenwood Forest",
+    "data": {
+      "region_type": "Forest"
+    },
+    "in_edges": {
+      "requires_quest": [
+        "quest_tutorial_section"
+      ]
+    },
+    "out_edges": {
+      "contains": [
+        {
+          "targetId": "quest_chop_wood",
+          "quantity": 1
+        },
+        {
+          "targetId": "quest_gather_moonberries",
+          "quantity": 1
+        },
+        {
+          "targetId": "quest_hunt_spiders",
+          "quantity": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "location_sacred_grove",
+    "type": "Location",
+    "name": "Sacred Grove",
+    "data": {
+      "region_type": "Forest"
+    },
+    "in_edges": {
+      "requires_quest": [
+        "quest_defeat_treant_guardian"
+      ]
+    },
+    "out_edges": {
+      "contains": [
+        {
+          "targetId": "quest_purify_the_grove",
+          "quantity": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "location_dark_forest",
+    "type": "Location",
+    "name": "Dark Forest",
+    "data": {
+      "region_type": "Forest"
+    },
+    "in_edges": {
+      "requires_quest": [
+        "quest_learn_about_the_dark_forest"
+      ]
+    },
+    "out_edges": {
+      "contains": [
+        {
+          "targetId": "quest_defeat_treant_guardian",
+          "quantity": 1
+        },
+        {
+          "targetId": "quest_help_the_lumberjack",
+          "quantity": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "location_sun_drenched_plains",
+    "type": "Location",
+    "name": "Sun-drenched Plains",
+    "data": {
+      "region_type": "Plains"
+    },
+    "in_edges": {
+      "requires_quest": [
+        "quest_visit_starting_town"
+      ]
+    },
+    "out_edges": {
+      "contains": [
+        {
+          "targetId": "quest_hunt_slimes",
+          "quantity": 1
+        },
+        {
+          "targetId": "quest_hunt_goblins",
+          "quantity": 1
+        },
+        {
+          "targetId": "quest_hunt_sand_sharks",
+          "quantity": 1
+        },
+        {
+          "targetId": "quest_locate_the_hidden_oasis",
+          "quantity": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "location_forgotten_mines",
+    "type": "Location",
+    "name": "Forgotten Mines",
+    "data": {
+      "region_type": "Mine"
+    },
+    "in_edges": {
+      "requires_quest": [
+        "quest_learn_about_the_mines"
+      ]
+    },
+    "out_edges": {
+      "contains": [
+        {
+          "targetId": "quest_mine_iron_ore",
+          "quantity": 1
+        },
+        {
+          "targetId": "quest_power_the_forge",
+          "quantity": 1
+        },
+        {
+          "targetId": "quest_scavenge_scrap",
+          "quantity": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "location_deep_mines",
+    "type": "Location",
+    "name": "Deep Mines",
+    "data": {
+      "region_type": "Mine"
+    },
+    "in_edges": {
+      "requires_quest": [
+        "quest_learn_about_the_mines"
+      ]
+    },
+    "out_edges": {
+      "contains": [
+        {
+          "targetId": "quest_hunt_bats",
+          "quantity": 1
+        },
+        {
+          "targetId": "quest_unlock_mining",
+          "quantity": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "location_crystal_peaks",
+    "type": "Location",
+    "name": "Crystal Peaks",
+    "data": {
+      "region_type": "Mine"
+    },
+    "in_edges": {
+      "requires_quest": [
+        "quest_power_the_forge"
+      ]
+    },
+    "out_edges": {
+      "contains": [
+        {
+          "targetId": "quest_shatter_the_crystals",
+          "quantity": 1
+        },
+        {
+          "targetId": "quest_high_altitude_survey",
+          "quantity": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "location_tidal_caverns",
+    "type": "Location",
+    "name": "Tidal Caverns",
+    "data": {
+      "region_type": "Water"
+    },
+    "in_edges": {
+      "requires_quest": [
+        "quest_hunt_sand_sharks"
+      ]
+    },
+    "out_edges": {
+      "contains": [
+        {
+          "targetId": "quest_deep_sea_scavenge",
+          "quantity": 1
+        },
+        {
+          "targetId": "quest_harvest_sea_life",
+          "quantity": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "location_hidden_oasis",
+    "type": "Location",
+    "name": "Hidden Oasis",
+    "data": {
+      "region_type": "Water"
+    },
+    "in_edges": {
+      "requires_quest": [
+        "quest_locate_the_hidden_oasis"
+      ]
+    },
+    "out_edges": {}
+  },
+  {
+    "id": "location_ancient_library",
+    "type": "Location",
+    "name": "Ancient Library",
+    "data": {
+      "region_type": "Library"
+    },
+    "in_edges": {
+      "requires_quest": [
+        "quest_ancient_inscriptions"
+      ]
+    },
+    "out_edges": {
+      "contains": [
+        {
+          "targetId": "quest_archive_sifting",
+          "quantity": 1
+        },
+        {
+          "targetId": "quest_study_ancient_texts",
+          "quantity": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "location_ancient_ruins",
+    "type": "Location",
+    "name": "Ancient Ruins",
+    "data": {
+      "region_type": "Library"
+    },
+    "in_edges": {
+      "requires_quest": [
+        "quest_recover_the_ancient_tome"
+      ]
+    },
+    "out_edges": {
+      "contains": [
+        {
+          "targetId": "quest_ancient_inscriptions",
+          "quantity": 1
+        },
+        {
+          "targetId": "quest_finding_the_hearth",
+          "quantity": 1
+        },
+        {
+          "targetId": "quest_rekindling_the_spark",
+          "quantity": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "location_mythril_sanctum",
+    "type": "Location",
+    "name": "Mythril Sanctum",
+    "data": {
+      "region_type": "Library"
+    },
+    "in_edges": {
+      "requires_quest": [
+        "quest_rekindling_the_spark"
+      ]
+    },
+    "out_edges": {
+      "contains": [
+        {
+          "targetId": "quest_defeat_the_mythril_construct",
+          "quantity": 1
+        },
+        {
+          "targetId": "quest_ascetic_meditation",
+          "quantity": 1
+        },
+        {
+          "targetId": "quest_heavy_training",
+          "quantity": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "ability_autoquest_i",
+    "type": "Ability",
+    "name": "AutoQuest I",
+    "data": {
+      "primary_stat": "Vitality"
+    },
+    "in_edges": {},
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_gold",
+          "quantity": 100
+        }
+      ]
+    },
+    "effects": [
+      {
+        "Type": "AutoQuest",
+        "Value": 1
+      }
+    ]
+  },
+  {
+    "id": "ability_j_str",
+    "type": "Ability",
+    "name": "J-Str",
+    "data": {
+      "primary_stat": "Strength"
+    },
+    "in_edges": {},
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_iron_ore",
+          "quantity": 10
+        }
+      ]
+    }
+  },
+  {
+    "id": "cadence_recruit",
+    "type": "Cadence",
+    "name": "Recruit",
+    "data": {
+      "description": "Foundational adventuring cadence"
+    },
+    "in_edges": {},
+    "out_edges": {
+      "provides_ability": [
+        {
+          "targetId": "ability_autoquest_i",
+          "quantity": 1
+        },
+        {
+          "targetId": "ability_j_str",
+          "quantity": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "ability_refine_ice",
+    "type": "Ability",
+    "name": "Refine Ice",
+    "data": {
+      "primary_stat": "Magic"
+    },
+    "in_edges": {},
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_mana_leaf",
+          "quantity": 5
+        }
+      ]
+    }
+  },
+  {
+    "id": "ability_j_magic",
+    "type": "Ability",
+    "name": "J-Magic",
+    "data": {
+      "primary_stat": "Magic"
+    },
+    "in_edges": {},
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_gold",
+          "quantity": 500
+        },
+        {
+          "targetId": "item_mana_leaf",
+          "quantity": 10
+        }
+      ]
+    }
+  },
+  {
+    "id": "ability_magic_pocket_i",
+    "type": "Ability",
+    "name": "Magic Pocket I",
+    "data": {
+      "primary_stat": "Magic"
+    },
+    "in_edges": {},
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_gold",
+          "quantity": 1000
+        },
+        {
+          "targetId": "item_mana_leaf",
+          "quantity": 20
+        }
+      ]
+    },
+    "effects": [
+      {
+        "Type": "MagicCapacity",
+        "Value": 60
+      }
+    ]
+  },
+  {
+    "id": "ability_refine_lightning",
+    "type": "Ability",
+    "name": "Refine Lightning",
+    "data": {
+      "primary_stat": "Magic"
+    },
+    "in_edges": {},
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_fire_shard",
+          "quantity": 5
+        },
+        {
+          "targetId": "item_ice_shard",
+          "quantity": 5
+        }
+      ]
+    }
+  },
+  {
+    "id": "cadence_arcanist",
+    "type": "Cadence",
+    "name": "Arcanist",
+    "data": {
+      "description": "A starter magic-focused job."
+    },
+    "in_edges": {},
+    "out_edges": {
+      "provides_ability": [
+        {
+          "targetId": "ability_refine_ice",
+          "quantity": 1
+        },
+        {
+          "targetId": "ability_j_magic",
+          "quantity": 1
+        },
+        {
+          "targetId": "ability_magic_pocket_i",
+          "quantity": 1
+        },
+        {
+          "targetId": "ability_refine_lightning",
+          "quantity": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "ability_refine_wood",
+    "type": "Ability",
+    "name": "Refine Wood",
+    "data": {
+      "primary_stat": "Strength"
+    },
+    "in_edges": {},
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_log",
+          "quantity": 10
+        }
+      ]
+    }
+  },
+  {
+    "id": "ability_refine_scrap",
+    "type": "Ability",
+    "name": "Refine Scrap",
+    "data": {
+      "primary_stat": "Speed"
+    },
+    "in_edges": {},
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_gold",
+          "quantity": 1000
+        }
+      ]
+    }
+  },
+  {
+    "id": "ability_refine_mixology",
+    "type": "Ability",
+    "name": "Refine Mixology",
+    "data": {
+      "primary_stat": "Magic"
+    },
+    "in_edges": {},
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_herb",
+          "quantity": 30
+        },
+        {
+          "targetId": "item_iron_ore",
+          "quantity": 10
+        }
+      ]
+    }
+  },
+  {
+    "id": "cadence_apprentice",
+    "type": "Cadence",
+    "name": "Apprentice",
+    "data": {
+      "description": "Has the foundational item refining abilities"
+    },
+    "in_edges": {},
+    "out_edges": {
+      "provides_ability": [
+        {
+          "targetId": "ability_autoquest_i",
+          "quantity": 1
+        },
+        {
+          "targetId": "ability_refine_wood",
+          "quantity": 1
+        },
+        {
+          "targetId": "ability_refine_scrap",
+          "quantity": 1
+        },
+        {
+          "targetId": "ability_refine_mixology",
+          "quantity": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "ability_refine_fire",
+    "type": "Ability",
+    "name": "Refine Fire",
+    "data": {
+      "primary_stat": "Magic"
+    },
+    "in_edges": {},
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_log",
+          "quantity": 10
+        }
+      ]
+    }
+  },
+  {
+    "id": "ability_j_speed",
+    "type": "Ability",
+    "name": "J-Speed",
+    "data": {
+      "primary_stat": "Speed"
+    },
+    "in_edges": {},
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_potion",
+          "quantity": 10
+        }
+      ]
+    }
+  },
+  {
+    "id": "cadence_student",
+    "type": "Cadence",
+    "name": "Student",
+    "data": {
+      "description": "Has the foundational magic refining abilities"
+    },
+    "in_edges": {},
+    "out_edges": {
+      "provides_ability": [
+        {
+          "targetId": "ability_autoquest_i",
+          "quantity": 1
+        },
+        {
+          "targetId": "ability_refine_fire",
+          "quantity": 1
+        },
+        {
+          "targetId": "ability_j_speed",
+          "quantity": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "ability_logistics_i",
+    "type": "Ability",
+    "name": "Logistics I",
+    "data": {
+      "primary_stat": "Magic"
+    },
+    "in_edges": {},
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_gold",
+          "quantity": 2500
+        }
+      ]
+    },
+    "effects": [
+      {
+        "Type": "Logistics",
+        "Value": 1
+      }
+    ]
+  },
+  {
+    "id": "ability_mass_refine",
+    "type": "Ability",
+    "name": "Mass Refine",
+    "data": {
+      "primary_stat": "Magic"
+    },
+    "in_edges": {},
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_gold",
+          "quantity": 5000
+        },
+        {
+          "targetId": "item_mythril_spark",
+          "quantity": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "ability_essence_harvest",
+    "type": "Ability",
+    "name": "Essence Harvest",
+    "data": {
+      "primary_stat": "Vitality"
+    },
+    "in_edges": {},
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_ancient_bark",
+          "quantity": 20
+        },
+        {
+          "targetId": "item_moonberry",
+          "quantity": 50
+        }
+      ]
+    }
+  },
+  {
+    "id": "ability_j_vit",
+    "type": "Ability",
+    "name": "J-Vit",
+    "data": {
+      "primary_stat": "Vitality"
+    },
+    "in_edges": {},
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_gold",
+          "quantity": 2000
+        }
+      ]
+    }
+  },
+  {
+    "id": "ability_refine_life",
+    "type": "Ability",
+    "name": "Refine Life",
+    "data": {
+      "primary_stat": "Magic"
+    },
+    "in_edges": {},
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_ancient_bark",
+          "quantity": 5
+        }
+      ]
+    }
+  },
+  {
+    "id": "cadence_mythril_weaver",
+    "type": "Cadence",
+    "name": "Mythril Weaver",
+    "data": {
+      "description": "A master of the arcane and material arts."
+    },
+    "in_edges": {},
+    "out_edges": {
+      "provides_ability": [
+        {
+          "targetId": "ability_logistics_i",
+          "quantity": 1
+        },
+        {
+          "targetId": "ability_mass_refine",
+          "quantity": 1
+        },
+        {
+          "targetId": "ability_essence_harvest",
+          "quantity": 1
+        },
+        {
+          "targetId": "ability_j_vit",
+          "quantity": 1
+        },
+        {
+          "targetId": "ability_refine_life",
+          "quantity": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "ability_magic_pocket_ii",
+    "type": "Ability",
+    "name": "Magic Pocket II",
+    "data": {
+      "primary_stat": "Magic"
+    },
+    "in_edges": {},
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_gold",
+          "quantity": 2000
+        }
+      ]
+    },
+    "effects": [
+      {
+        "Type": "MagicCapacity",
+        "Value": 100
+      }
+    ]
+  },
+  {
+    "id": "cadence_the_sentinel",
+    "type": "Cadence",
+    "name": "The Sentinel",
+    "data": {
+      "description": "A defensive job focused on survival and resource management."
+    },
+    "in_edges": {},
+    "out_edges": {
+      "provides_ability": [
+        {
+          "targetId": "ability_j_vit",
+          "quantity": 1
+        },
+        {
+          "targetId": "ability_magic_pocket_ii",
+          "quantity": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "ability_logistics_ii",
+    "type": "Ability",
+    "name": "Logistics II",
+    "data": {
+      "primary_stat": "Magic"
+    },
+    "in_edges": {},
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_gold",
+          "quantity": 10000
+        }
+      ]
+    },
+    "effects": [
+      {
+        "Type": "Logistics",
+        "Value": 2
+      }
+    ]
+  },
+  {
+    "id": "ability_autoquest_ii",
+    "type": "Ability",
+    "name": "AutoQuest II",
+    "data": {
+      "primary_stat": "Magic"
+    },
+    "in_edges": {},
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_gold",
+          "quantity": 7500
+        }
+      ]
+    },
+    "effects": [
+      {
+        "Type": "AutoQuest",
+        "Value": 2
+      }
+    ]
+  },
+  {
+    "id": "ability_refine_haste",
+    "type": "Ability",
+    "name": "Refine Haste",
+    "data": {
+      "primary_stat": "Magic"
+    },
+    "in_edges": {},
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_lost_parchment",
+          "quantity": 5
+        }
+      ]
+    }
+  },
+  {
+    "id": "cadence_scholar",
+    "type": "Cadence",
+    "name": "Scholar",
+    "data": {
+      "description": "A highly advanced job specializing in optimization and multi-tasking."
+    },
+    "in_edges": {},
+    "out_edges": {
+      "provides_ability": [
+        {
+          "targetId": "ability_logistics_ii",
+          "quantity": 1
+        },
+        {
+          "targetId": "ability_autoquest_ii",
+          "quantity": 1
+        },
+        {
+          "targetId": "ability_refine_haste",
+          "quantity": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "ability_mountain_crush",
+    "type": "Ability",
+    "name": "Mountain Crush",
+    "data": {
+      "primary_stat": "Strength"
+    },
+    "in_edges": {},
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_gold",
+          "quantity": 5000
+        }
+      ]
+    }
+  },
+  {
+    "id": "ability_refine_earth",
+    "type": "Ability",
+    "name": "Refine Earth",
+    "data": {
+      "primary_stat": "Strength"
+    },
+    "in_edges": {},
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_crystal_shards",
+          "quantity": 10
+        }
+      ]
+    }
+  },
+  {
+    "id": "cadence_geologist",
+    "type": "Cadence",
+    "name": "Geologist",
+    "data": {
+      "description": "A strength-based specialist focused on harvesting rare earth materials."
+    },
+    "in_edges": {},
+    "out_edges": {
+      "provides_ability": [
+        {
+          "targetId": "ability_mountain_crush",
+          "quantity": 1
+        },
+        {
+          "targetId": "ability_refine_earth",
+          "quantity": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "ability_deep_dive",
+    "type": "Ability",
+    "name": "Deep Dive",
+    "data": {
+      "primary_stat": "Speed"
+    },
+    "in_edges": {},
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_gold",
+          "quantity": 5000
+        }
+      ]
+    }
+  },
+  {
+    "id": "ability_refine_water",
+    "type": "Ability",
+    "name": "Refine Water",
+    "data": {
+      "primary_stat": "Speed"
+    },
+    "in_edges": {},
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_blue_coral",
+          "quantity": 10
+        }
+      ]
+    }
+  },
+  {
+    "id": "cadence_tide_caller",
+    "type": "Cadence",
+    "name": "Tide-Caller",
+    "data": {
+      "description": "A speed-based specialist focused on exploring deep waters."
+    },
+    "in_edges": {},
+    "out_edges": {
+      "provides_ability": [
+        {
+          "targetId": "ability_deep_dive",
+          "quantity": 1
+        },
+        {
+          "targetId": "ability_refine_water",
+          "quantity": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "ability_master_slayer",
+    "type": "Ability",
+    "name": "Master Slayer",
+    "data": {
+      "primary_stat": "Strength"
+    },
+    "in_edges": {},
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_gold",
+          "quantity": 15000
+        }
+      ]
+    }
+  },
+  {
+    "id": "cadence_slayer",
+    "type": "Cadence",
+    "name": "Slayer",
+    "data": {
+      "description": "An elite combatant unlocked through mastery of both strength and speed."
+    },
+    "in_edges": {},
+    "out_edges": {
+      "provides_ability": [
+        {
+          "targetId": "ability_master_slayer",
+          "quantity": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "recipe_refine_fire_basic_gem_fire_i",
+    "type": "Refinement",
+    "name": "Refine Fire - Fire I",
+    "data": {
+      "primary_stat": "Magic"
+    },
+    "in_edges": {
+      "requires_ability": [
+        "ability_refine_fire"
+      ]
+    },
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_basic_gem",
+          "quantity": 1
+        }
+      ],
+      "produces": [
+        {
+          "targetId": "item_fire_i",
+          "quantity": 5
+        }
+      ]
+    }
+  },
+  {
+    "id": "recipe_refine_fire_iron_ore_fire_i",
+    "type": "Refinement",
+    "name": "Refine Fire - Fire I",
+    "data": {
+      "primary_stat": "Magic"
+    },
+    "in_edges": {
+      "requires_ability": [
+        "ability_refine_fire"
+      ]
+    },
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_iron_ore",
+          "quantity": 1
+        }
+      ],
+      "produces": [
+        {
+          "targetId": "item_fire_i",
+          "quantity": 5
+        }
+      ]
+    }
+  },
+  {
+    "id": "recipe_refine_ice_mana_leaf_ice_i",
+    "type": "Refinement",
+    "name": "Refine Ice - Ice I",
+    "data": {
+      "primary_stat": "Magic"
+    },
+    "in_edges": {
+      "requires_ability": [
+        "ability_refine_ice"
+      ]
+    },
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_mana_leaf",
+          "quantity": 1
+        }
+      ],
+      "produces": [
+        {
+          "targetId": "item_ice_i",
+          "quantity": 5
+        }
+      ]
+    }
+  },
+  {
+    "id": "recipe_refine_ice_moonberry_ice_i",
+    "type": "Refinement",
+    "name": "Refine Ice - Ice I",
+    "data": {
+      "primary_stat": "Magic"
+    },
+    "in_edges": {
+      "requires_ability": [
+        "ability_refine_ice"
+      ]
+    },
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_moonberry",
+          "quantity": 1
+        }
+      ],
+      "produces": [
+        {
+          "targetId": "item_ice_i",
+          "quantity": 5
+        }
+      ]
+    }
+  },
+  {
+    "id": "recipe_refine_wood_log_herb",
+    "type": "Refinement",
+    "name": "Refine Wood - Herb",
+    "data": {
+      "primary_stat": "Strength"
+    },
+    "in_edges": {
+      "requires_ability": [
+        "ability_refine_wood"
+      ]
+    },
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_log",
+          "quantity": 1
+        }
+      ],
+      "produces": [
+        {
+          "targetId": "item_herb",
+          "quantity": 6
+        }
+      ]
+    }
+  },
+  {
+    "id": "recipe_refine_mixology_herb_potion",
+    "type": "Refinement",
+    "name": "Refine Mixology - Potion",
+    "data": {
+      "primary_stat": "Strength"
+    },
+    "in_edges": {
+      "requires_ability": [
+        "ability_refine_mixology"
+      ]
+    },
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_herb",
+          "quantity": 2
+        }
+      ],
+      "produces": [
+        {
+          "targetId": "item_potion",
+          "quantity": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "recipe_refine_scrap_web_gold",
+    "type": "Refinement",
+    "name": "Refine Scrap - Gold",
+    "data": {
+      "primary_stat": "Speed"
+    },
+    "in_edges": {
+      "requires_ability": [
+        "ability_refine_scrap"
+      ]
+    },
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_web",
+          "quantity": 1
+        }
+      ],
+      "produces": [
+        {
+          "targetId": "item_gold",
+          "quantity": 100
+        }
+      ]
+    }
+  },
+  {
+    "id": "recipe_refine_scrap_slime_gold",
+    "type": "Refinement",
+    "name": "Refine Scrap - Gold",
+    "data": {
+      "primary_stat": "Speed"
+    },
+    "in_edges": {
+      "requires_ability": [
+        "ability_refine_scrap"
+      ]
+    },
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_slime",
+          "quantity": 1
+        }
+      ],
+      "produces": [
+        {
+          "targetId": "item_gold",
+          "quantity": 150
+        }
+      ]
+    }
+  },
+  {
+    "id": "recipe_refine_life_ancient_bark_cure_i",
+    "type": "Refinement",
+    "name": "Refine Life - Cure I",
+    "data": {
+      "primary_stat": "Magic"
+    },
+    "in_edges": {
+      "requires_ability": [
+        "ability_refine_life"
+      ]
+    },
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_ancient_bark",
+          "quantity": 1
+        }
+      ],
+      "produces": [
+        {
+          "targetId": "item_cure_i",
+          "quantity": 5
+        }
+      ]
+    }
+  },
+  {
+    "id": "recipe_refine_lightning_fire_shard_lightning_i",
+    "type": "Refinement",
+    "name": "Refine Lightning - Lightning I",
+    "data": {
+      "primary_stat": "Magic"
+    },
+    "in_edges": {
+      "requires_ability": [
+        "ability_refine_lightning"
+      ]
+    },
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_fire_shard",
+          "quantity": 1
+        }
+      ],
+      "produces": [
+        {
+          "targetId": "item_lightning_i",
+          "quantity": 5
+        }
+      ]
+    }
+  },
+  {
+    "id": "recipe_refine_lightning_ice_shard_lightning_i",
+    "type": "Refinement",
+    "name": "Refine Lightning - Lightning I",
+    "data": {
+      "primary_stat": "Magic"
+    },
+    "in_edges": {
+      "requires_ability": [
+        "ability_refine_lightning"
+      ]
+    },
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_ice_shard",
+          "quantity": 1
+        }
+      ],
+      "produces": [
+        {
+          "targetId": "item_lightning_i",
+          "quantity": 5
+        }
+      ]
+    }
+  },
+  {
+    "id": "recipe_refine_earth_crystal_shards_earth_i",
+    "type": "Refinement",
+    "name": "Refine Earth - Earth I",
+    "data": {
+      "primary_stat": "Strength"
+    },
+    "in_edges": {
+      "requires_ability": [
+        "ability_refine_earth"
+      ]
+    },
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_crystal_shards",
+          "quantity": 1
+        }
+      ],
+      "produces": [
+        {
+          "targetId": "item_earth_i",
+          "quantity": 5
+        }
+      ]
+    }
+  },
+  {
+    "id": "recipe_refine_water_blue_coral_water_i",
+    "type": "Refinement",
+    "name": "Refine Water - Water I",
+    "data": {
+      "primary_stat": "Speed"
+    },
+    "in_edges": {
+      "requires_ability": [
+        "ability_refine_water"
+      ]
+    },
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_blue_coral",
+          "quantity": 1
+        }
+      ],
+      "produces": [
+        {
+          "targetId": "item_water_i",
+          "quantity": 5
+        }
+      ]
+    }
+  },
+  {
+    "id": "recipe_refine_haste_lost_parchment_haste_i",
+    "type": "Refinement",
+    "name": "Refine Haste - Haste I",
+    "data": {
+      "primary_stat": "Magic"
+    },
+    "in_edges": {
+      "requires_ability": [
+        "ability_refine_haste"
+      ]
+    },
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_lost_parchment",
+          "quantity": 1
+        }
+      ],
+      "produces": [
+        {
+          "targetId": "item_haste_i",
+          "quantity": 5
+        }
+      ]
+    }
+  }
+]

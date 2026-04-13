@@ -1,0 +1,607 @@
+[
+  {
+    "Quest": "Prologue",
+    "DurationSeconds": 5,
+    "Type": "Single",
+    "Requirements": [],
+    "Rewards": [
+      {
+        "Item": "Gold",
+        "Quantity": 100
+      }
+    ],
+    "PrimaryStat": "Vitality"
+  },
+  {
+    "Quest": "Tutorial Section",
+    "DurationSeconds": 30,
+    "Type": "Recurring",
+    "Requirements": [],
+    "Rewards": [
+      {
+        "Item": "Basic Gem",
+        "Quantity": 10
+      }
+    ],
+    "PrimaryStat": "Vitality"
+  },
+  {
+    "Quest": "Visit Starting Town",
+    "DurationSeconds": 15,
+    "Type": "Single",
+    "Requirements": [],
+    "Rewards": [
+      {
+        "Item": "Gold",
+        "Quantity": 100
+      }
+    ],
+    "PrimaryStat": "Vitality"
+  },
+  {
+    "Quest": "Buy Potion",
+    "DurationSeconds": 45,
+    "Type": "Recurring",
+    "Requirements": [
+      {
+        "Item": "Gold",
+        "Quantity": 100
+      }
+    ],
+    "Rewards": [
+      {
+        "Item": "Potion",
+        "Quantity": 5
+      }
+    ],
+    "PrimaryStat": "Speed"
+  },
+  {
+    "Quest": "Recover the Ancient Tome",
+    "DurationSeconds": 60,
+    "Type": "Single",
+    "Requirements": [
+      {
+        "Item": "Gold",
+        "Quantity": 500
+      }
+    ],
+    "Rewards": [
+      {
+        "Item": "Basic Gem",
+        "Quantity": 5
+      }
+    ],
+    "PrimaryStat": "Magic"
+  },
+  {
+    "Quest": "Learn About Cadences",
+    "DurationSeconds": 30,
+    "Type": "Single",
+    "Requirements": [],
+    "Rewards": [],
+    "PrimaryStat": "Magic"
+  },
+  {
+    "Quest": "Learn about the Dark Forest",
+    "DurationSeconds": 30,
+    "Type": "Single",
+    "Requirements": [],
+    "Rewards": [],
+    "PrimaryStat": "Vitality"
+  },
+  {
+    "Quest": "Hunt Goblins",
+    "DurationSeconds": 60,
+    "Type": "Recurring",
+    "Requirements": [],
+    "Rewards": [
+      {
+        "Item": "Gold",
+        "Quantity": 100
+      },
+      {
+        "Item": "Fire Shard",
+        "Quantity": 1
+      },
+      {
+        "Item": "Mana Leaf",
+        "Quantity": 3
+      }
+    ],
+    "PrimaryStat": "Strength"
+  },
+  {
+    "Quest": "Chop Wood",
+    "DurationSeconds": 75,
+    "Type": "Recurring",
+    "Requirements": [],
+    "Rewards": [
+      {
+        "Item": "Log",
+        "Quantity": 10
+      },
+      {
+        "Item": "Ancient Bark",
+        "Quantity": 5
+      }
+    ],
+    "PrimaryStat": "Strength"
+  },
+  {
+    "Quest": "Learn about the Mines",
+    "DurationSeconds": 30,
+    "Type": "Single",
+    "Requirements": [],
+    "Rewards": [],
+    "PrimaryStat": "Strength"
+  },
+  {
+    "Quest": "Hunt Bats",
+    "DurationSeconds": 45,
+    "Type": "Recurring",
+    "Requirements": [],
+    "Rewards": [
+      {
+        "Item": "Gold",
+        "Quantity": 150
+      }
+    ],
+    "PrimaryStat": "Speed"
+  },
+  {
+    "Quest": "Hunt Spiders",
+    "DurationSeconds": 75,
+    "Type": "Recurring",
+    "Requirements": [],
+    "Rewards": [
+      {
+        "Item": "Web",
+        "Quantity": 5
+      }
+    ],
+    "PrimaryStat": "Vitality"
+  },
+  {
+    "Quest": "Hunt Slimes",
+    "DurationSeconds": 90,
+    "Type": "Recurring",
+    "Requirements": [],
+    "Rewards": [
+      {
+        "Item": "Slime",
+        "Quantity": 50
+      }
+    ],
+    "PrimaryStat": "Strength"
+  },
+  {
+    "Quest": "Unlock Mining",
+    "DurationSeconds": 120,
+    "Type": "Single",
+    "Requirements": [
+      {
+        "Item": "Gold",
+        "Quantity": 1000
+      }
+    ],
+    "Rewards": [],
+    "PrimaryStat": "Strength"
+  },
+  {
+    "Quest": "Mine Iron Ore",
+    "DurationSeconds": 180,
+    "Type": "Recurring",
+    "Requirements": [],
+    "Rewards": [
+      {
+        "Item": "Iron Ore",
+        "Quantity": 5
+      }
+    ],
+    "PrimaryStat": "Strength",
+    "RequiredStats": {
+      "Strength": 15
+    }
+  },
+  {
+    "Quest": "Gather Moonberries",
+    "DurationSeconds": 240,
+    "Type": "Recurring",
+    "Requirements": [],
+    "Rewards": [
+      {
+        "Item": "Moonberry",
+        "Quantity": 20
+      },
+      {
+        "Item": "Mana Leaf",
+        "Quantity": 5
+      }
+    ],
+    "PrimaryStat": "Speed",
+    "RequiredStats": {
+      "Speed": 15
+    }
+  },
+  {
+    "Quest": "Defeat Treant Guardian",
+    "DurationSeconds": 600,
+    "Type": "Single",
+    "Requirements": [
+      {
+        "Item": "Potion",
+        "Quantity": 5
+      }
+    ],
+    "Rewards": [
+      {
+        "Item": "Ancient Bark",
+        "Quantity": 5
+      }
+    ],
+    "PrimaryStat": "Strength",
+    "RequiredStats": {
+      "Strength": 25
+    }
+  },
+  {
+    "Quest": "Ancient Inscriptions",
+    "DurationSeconds": 120,
+    "Type": "Single",
+    "Requirements": [],
+    "Rewards": [
+      {
+        "Item": "Gold",
+        "Quantity": 500
+      },
+      {
+        "Item": "Lost Parchment",
+        "Quantity": 10
+      }
+    ],
+    "PrimaryStat": "Magic"
+  },
+  {
+    "Quest": "Finding the Hearth",
+    "DurationSeconds": 300,
+    "Type": "Single",
+    "Requirements": [],
+    "Rewards": [
+      {
+        "Item": "Basic Gem",
+        "Quantity": 10
+      },
+      {
+        "Item": "Crystal Shards",
+        "Quantity": 20
+      }
+    ],
+    "PrimaryStat": "Vitality"
+  },
+  {
+    "Quest": "Rekindling the Spark",
+    "DurationSeconds": 1200,
+    "Type": "Single",
+    "Requirements": [
+      {
+        "Item": "Ancient Bark",
+        "Quantity": 10
+      },
+      {
+        "Item": "Iron Ore",
+        "Quantity": 20
+      }
+    ],
+    "Rewards": [
+      {
+        "Item": "Mythril Spark",
+        "Quantity": 1
+      }
+    ],
+    "PrimaryStat": "Magic"
+  },
+  {
+    "Quest": "Help the lumberjack",
+    "DurationSeconds": 30,
+    "Type": "Single",
+    "Requirements": [],
+    "Rewards": [
+      {
+        "Item": "Log",
+        "Quantity": 10
+      }
+    ],
+    "PrimaryStat": "Strength"
+  },
+  {
+    "Quest": "Sell Gem",
+    "DurationSeconds": 20,
+    "Type": "Recurring",
+    "Requirements": [
+      {
+        "Item": "Basic Gem",
+        "Quantity": 1
+      }
+    ],
+    "Rewards": [
+      {
+        "Item": "Gold",
+        "Quantity": 250
+      }
+    ],
+    "PrimaryStat": "Speed"
+  },
+  {
+    "Quest": "Scavenge Scrap",
+    "DurationSeconds": 45,
+    "Type": "Recurring",
+    "Requirements": [],
+    "Rewards": [
+      {
+        "Item": "Iron Ore",
+        "Quantity": 2
+      },
+      {
+        "Item": "Gold",
+        "Quantity": 50
+      }
+    ],
+    "PrimaryStat": "Vitality"
+  },
+  {
+    "Quest": "Hunt Sand-Sharks",
+    "DurationSeconds": 90,
+    "Type": "Recurring",
+    "Requirements": [],
+    "Rewards": [
+      {
+        "Item": "Sun-baked Scale",
+        "Quantity": 1
+      }
+    ],
+    "PrimaryStat": "Strength",
+    "RequiredStats": {
+      "Strength": 20
+    }
+  },
+  {
+    "Quest": "Locate the Hidden Oasis",
+    "DurationSeconds": 300,
+    "Type": "Single",
+    "Requirements": [],
+    "Rewards": [
+      {
+        "Item": "Solar Essence",
+        "Quantity": 1
+      },
+      {
+        "Item": "Blue Coral",
+        "Quantity": 20
+      }
+    ],
+    "PrimaryStat": "Vitality",
+    "RequiredStats": {
+      "Speed": 25
+    }
+  },
+  {
+    "Quest": "Purify the Grove",
+    "DurationSeconds": 120,
+    "Type": "Recurring",
+    "Requirements": [
+      {
+        "Item": "Cure I",
+        "Quantity": 20
+      }
+    ],
+    "Rewards": [
+      {
+        "Item": "Ancient Bark",
+        "Quantity": 10
+      }
+    ],
+    "PrimaryStat": "Magic"
+  },
+  {
+    "Quest": "Power the Forge",
+    "DurationSeconds": 180,
+    "Type": "Recurring",
+    "Requirements": [
+      {
+        "Item": "Fire I",
+        "Quantity": 50
+      }
+    ],
+    "Rewards": [
+      {
+        "Item": "Mythril Spark",
+        "Quantity": 1
+      }
+    ],
+    "PrimaryStat": "Magic",
+    "RequiredStats": {
+      "Magic": 30
+    }
+  },
+  {
+    "Quest": "Shatter the Crystals",
+    "DurationSeconds": 120,
+    "Type": "Recurring",
+    "Requirements": [],
+    "Rewards": [
+      {
+        "Item": "Crystal Shards",
+        "Quantity": 20
+      }
+    ],
+    "PrimaryStat": "Strength",
+    "RequiredStats": {
+      "Strength": 30
+    }
+  },
+  {
+    "Quest": "High Altitude Survey",
+    "DurationSeconds": 90,
+    "Type": "Recurring",
+    "Requirements": [],
+    "Rewards": [
+      {
+        "Item": "Ice Shard",
+        "Quantity": 10
+      },
+      {
+        "Item": "Fire Shard",
+        "Quantity": 10
+      }
+    ],
+    "PrimaryStat": "Speed",
+    "RequiredStats": {
+      "Speed": 30
+    }
+  },
+  {
+    "Quest": "Harvest Sea-Life",
+    "DurationSeconds": 60,
+    "Type": "Recurring",
+    "Requirements": [],
+    "Rewards": [
+      {
+        "Item": "Water",
+        "Quantity": 10
+      },
+      {
+        "Item": "Leather",
+        "Quantity": 5
+      }
+    ],
+    "PrimaryStat": "Vitality"
+  },
+  {
+    "Quest": "Deep Sea Scavenge",
+    "DurationSeconds": 150,
+    "Type": "Recurring",
+    "Requirements": [],
+    "Rewards": [
+      {
+        "Item": "Blue Coral",
+        "Quantity": 10
+      }
+    ],
+    "PrimaryStat": "Vitality",
+    "RequiredStats": {
+      "Vitality": 30
+    }
+  },
+  {
+    "Quest": "Archive Sifting",
+    "DurationSeconds": 180,
+    "Type": "Recurring",
+    "Requirements": [],
+    "Rewards": [
+      {
+        "Item": "Lost Parchment",
+        "Quantity": 20
+      }
+    ],
+    "PrimaryStat": "Magic",
+    "RequiredStats": {
+      "Magic": 30
+    }
+  },
+  {
+    "Quest": "Study Ancient Texts",
+    "DurationSeconds": 120,
+    "Type": "Recurring",
+    "Requirements": [],
+    "Rewards": [
+      {
+        "Item": "Gold",
+        "Quantity": 100
+      }
+    ],
+    "PrimaryStat": "Magic"
+  },
+  {
+    "Quest": "Defeat the Mythril Construct",
+    "DurationSeconds": 1800,
+    "Type": "Single",
+    "Requirements": [
+      {
+        "Item": "Fire I",
+        "Quantity": 100
+      },
+      {
+        "Item": "Ice I",
+        "Quantity": 100
+      },
+      {
+        "Item": "Earth I",
+        "Quantity": 100
+      },
+      {
+        "Item": "Water I",
+        "Quantity": 100
+      }
+    ],
+    "Rewards": [
+      {
+        "Item": "Mythril Spark",
+        "Quantity": 10
+      }
+    ],
+    "PrimaryStat": "Vitality",
+    "RequiredStats": {
+      "Strength": 100,
+      "Vitality": 100,
+      "Magic": 100,
+      "Speed": 100
+    }
+  },
+  {
+    "Quest": "Ascetic Meditation",
+    "DurationSeconds": 600,
+    "Type": "Single",
+    "Requirements": [
+      {
+        "Item": "Potion",
+        "Quantity": 20
+      }
+    ],
+    "Rewards": [],
+    "PrimaryStat": "Magic",
+    "RequiredStats": {
+      "Magic": 50
+    },
+    "Effects": [
+      {
+        "Type": "StatBoost",
+        "Value": 5,
+        "Target": "Magic"
+      }
+    ]
+  },
+  {
+    "Quest": "Heavy Training",
+    "DurationSeconds": 600,
+    "Type": "Single",
+    "Requirements": [
+      {
+        "Item": "Potion",
+        "Quantity": 20
+      }
+    ],
+    "Rewards": [],
+    "PrimaryStat": "Strength",
+    "RequiredStats": {
+      "Strength": 50
+    },
+    "Effects": [
+      {
+        "Type": "StatBoost",
+        "Value": 5,
+        "Target": "Strength"
+      }
+    ]
+  }
+]
