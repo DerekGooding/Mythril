@@ -56,7 +56,7 @@ public class ResourceManagerCoreTests
         // Assert
         var village = _resourceManager!.UsableLocations.First(l => l.Name == "Village");
         var quest = village.Quests.FirstOrDefault(c => c.Name == "Prologue");
-        Assert.IsNotNull(quest);
+        Assert.AreNotEqual(default, quest);
         Assert.AreEqual("Prologue", quest.Name);
     }
 

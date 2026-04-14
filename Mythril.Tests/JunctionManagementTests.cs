@@ -127,7 +127,7 @@ public class JunctionManagementTests
         var strStat = ContentHost.GetContent<Stats>().All.First(s => s.Name == "Strength");
         var fire = ContentHost.GetContent<Items>().All.First(i => i.Name == "Fire I");
 
-        _resourceManager.UnlockedAbilities.Add("Recruit:J-Str");
+        _resourceManager.UnlockAbility("Recruit", "J-Str");
         _junctionManager!.AssignCadence(recruit, character, _resourceManager.UnlockedAbilities);
         
         _junctionManager.JunctionMagic(character, strStat, fire, _resourceManager.UnlockedAbilities);

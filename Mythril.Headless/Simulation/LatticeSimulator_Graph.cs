@@ -22,7 +22,7 @@ public partial class LatticeSimulator
             if (!_dependents[trigger].Contains(dependent)) _dependents[trigger].Add(dependent);
         }
 
-        var itemMap = items.All.ToDictionary(i => i.Name);
+        var itemMap = items.All.ToNamedDictionary();
 
         // 1. Quest Dependencies
         foreach (var quest in quests.All)

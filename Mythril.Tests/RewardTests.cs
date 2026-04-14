@@ -93,7 +93,7 @@ public class RewardTests : BunitTestBase
         
         // This is a bit internal, but we need to set up the mapping
         // In a real scenario, this is loaded from JSON
-        var questToCadence = TestContext.Services.GetRequiredService<QuestToCadenceUnlocks>();
+        var questToCadence = TestContext!.Services.GetRequiredService<QuestToCadenceUnlocks>();
         questToCadence.Load(new Dictionary<Quest, Cadence[]> { { quest, [cadence] } });
 
         // Act

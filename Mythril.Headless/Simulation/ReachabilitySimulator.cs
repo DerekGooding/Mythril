@@ -22,7 +22,7 @@ public partial class ReachabilitySimulator(
     public void Run()
     {
         var lattice = new LatticeSimulator(items, quests, questDetails, questUnlocks, questToCadenceUnlocks, cadences, locations, refinements, statAugments, stats);
-        var flowSim = new FlowSimulator(items, quests, questDetails, refinements, cadences);
+        var flowSim = new FlowSimulator(items, quests, questDetails, refinements);
         
         var seed = new SimulationSeed(
             ImmutableDictionary<string, int>.Empty,

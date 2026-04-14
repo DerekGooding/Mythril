@@ -21,8 +21,7 @@ public class FlowSimulator(
     Items items,
     Quests quests,
     QuestDetails questDetails,
-    ItemRefinements refinements,
-    Cadences cadences)
+    ItemRefinements refinements)
 {
     public QuantitativeFlowState Solve(GameState reachabilityResult, SimulationSeed seed)
     {
@@ -56,7 +55,7 @@ public class FlowSimulator(
     private List<ActivityFlow> ExtractFlows(GameState reachabilityResult)
     {
         var flows = new List<ActivityFlow>();
-        var questMap = quests.All.ToDictionary(q => q.Name);
+        var questMap = quests.All.ToNamedDictionary();
 
         // 1. Recurring Quests
         foreach (var qTime in reachabilityResult.QuestTime)
@@ -112,7 +111,7 @@ public class FlowSimulator(
     private QuantitativeFlowState Step(QuantitativeFlowState state, List<ActivityFlow> allFlows, Dictionary<string, ActivityFlow> flowMap, SimulationSeed seed)
     {
         var nextSustainable = state.SustainableActivities.ToBuilder();
-        var nextNet = items.All.ToDictionary(i => i.Name, _ => 0.0);
+        var nextNet = items.All.ToNamedDictionary(i => 0.0);
 
         // Add infinite contribution from starting seed resources for sustainability check
         foreach (var starting in seed.StartingResources)

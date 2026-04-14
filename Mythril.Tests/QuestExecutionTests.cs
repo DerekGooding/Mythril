@@ -78,6 +78,7 @@ public class QuestExecutionTests
         Assert.AreEqual(0, progress.SecondsElapsed);
 
         _resourceManager.Tick(1.0); 
+        progress = _resourceManager.ActiveQuests[0];
         Assert.AreEqual(1.0, progress.SecondsElapsed);
     }
 
@@ -100,10 +101,12 @@ public class QuestExecutionTests
         Assert.AreEqual(0, progress.Progress, "Progress should be 0 during delay.");
 
         _resourceManager.Tick(1.0); 
+        progress = _resourceManager.ActiveQuests[0];
         Assert.AreEqual(-0.5, progress.SecondsElapsed);
         Assert.AreEqual(0, progress.Progress, "Progress should still be 0 during delay.");
 
         _resourceManager.Tick(1.0); 
+        progress = _resourceManager.ActiveQuests[0];
         Assert.AreEqual(0.5, progress.SecondsElapsed);
         Assert.IsTrue(progress.Progress > 0, "Progress should be positive after delay.");
     }

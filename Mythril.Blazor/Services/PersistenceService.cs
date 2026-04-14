@@ -8,12 +8,6 @@ namespace Mythril.Blazor.Services;
 public class PersistenceService(
     IJSRuntime js, 
     ResourceManager resourceManager, 
-    JunctionManager junctionManager,
-    Items items, 
-    Cadences cadences, 
-    Quests quests,
-    Stats stats,
-    ItemRefinements refinements,
     GameStore gameStore)
 {
     private const string STORAGE_KEY = "mythril_save_v2";

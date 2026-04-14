@@ -60,7 +60,7 @@ public class RequirementIconTests : BunitTestBase
 
         // Assert
         var prereqIcon = cut.Find("span[title='Prerequisite']");
-        Assert.AreEqual("🔑", prereqIcon.TextContent.Trim());
+        Assert.AreEqual("🔑", prereqIcon!.TextContent!.Trim());
     }
 
     [TestMethod]
@@ -78,6 +78,6 @@ public class RequirementIconTests : BunitTestBase
 
         // Assert
         var itemIcon = cut.Find("span[title='Item Requirement']");
-        Assert.AreEqual("📦", itemIcon.TextContent.Trim());
+        Assert.AreEqual("📦", itemIcon!.TextContent!.Trim());
     }
 }

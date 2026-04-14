@@ -23,7 +23,7 @@ public class FlowSimulatorTests : BunitTestBase
         var refinements = ContentHost.GetContent<ItemRefinements>();
         var cadences = ContentHost.GetContent<Cadences>();
 
-        _flow = new FlowSimulator(items, quests, details, refinements, cadences);
+        _flow = new FlowSimulator(items, quests, details, refinements);
         
         _lattice = new LatticeSimulator(
             items, quests, details, 

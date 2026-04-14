@@ -19,7 +19,7 @@ public class InventoryManager(GameStore gameStore)
         return _gameStore.State.PinnedItems
             .Select(name => items.All.FirstOrDefault(i => i.Name == name))
             .Where(i => i.Name != null)
-            .Select(i => new ItemQuantity(i, _gameStore.State.Inventory.GetValueOrDefault(i.Name)));
+            .Select(i => new ItemQuantity(i, _gameStore.State.Inventory.GetValueOrDefault(i.Name!)));
     }
 
     public void Add(Item item, int quantity = 1)
@@ -51,24 +51,26 @@ public class InventoryManager(GameStore gameStore)
     {
         var items = ContentHost.GetContent<Items>();
         return _gameStore.State.Inventory
-            .Select(kv => new ItemQuantity(items.All.First(i => i.Name == kv.Key), kv.Value));
+            .Select(kv => new { Item = items.All.FirstOrDefault(i => i.Name == kv.Key), Quantity = kv.Value })
+            .Where(x => x.Item.Name != null)
+            .Select(x => new ItemQuantity(x.Item, x.Quantity));
     }
 
     public IEnumerable<ItemQuantity> GetItems()
     {
         var items = ContentHost.GetContent<Items>();
         return _gameStore.State.Inventory
-            .Select(kv => items.All.First(i => i.Name == kv.Key))
-            .Where(i => i.ItemType != ItemType.Spell)
-            .Select(i => new ItemQuantity(i, _gameStore.State.Inventory[i.Name]));
+            .Select(kv => items.All.FirstOrDefault(i => i.Name == kv.Key))
+            .Where(i => i.Name != null && i.ItemType != ItemType.Spell)
+            .Select(i => new ItemQuantity(i, _gameStore.State.Inventory[i.Name!]));
     }
 
     public IEnumerable<ItemQuantity> GetSpells()
     {
         var items = ContentHost.GetContent<Items>();
         return _gameStore.State.Inventory
-            .Select(kv => items.All.First(i => i.Name == kv.Key))
-            .Where(i => i.ItemType == ItemType.Spell)
-            .Select(i => new ItemQuantity(i, _gameStore.State.Inventory[i.Name]));
+            .Select(kv => items.All.FirstOrDefault(i => i.Name == kv.Key))
+            .Where(i => i.Name != null && i.ItemType == ItemType.Spell)
+            .Select(i => new ItemQuantity(i, _gameStore.State.Inventory[i.Name!]));
     }
 }

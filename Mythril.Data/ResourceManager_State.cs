@@ -114,6 +114,7 @@ public partial class ResourceManager
     public void Tick(double deltaSeconds)
     {
         _gameStore.Dispatch(new TickAction(deltaSeconds));
+        CheckAutoQuestTick();
         CheckHiddenCadences();
     }
 

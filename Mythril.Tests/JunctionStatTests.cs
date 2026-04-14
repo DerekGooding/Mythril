@@ -59,8 +59,8 @@ public class JunctionStatTests
         var strengthStat = _stats!.All.First(s => s.Name == "Strength");
         var fireMagic = _items!.All.First(i => i.Name == "Fire I");
 
-        _resourceManager.UnlockedAbilities.Add("Extra Cadence:J-Str");
-        _resourceManager.UnlockedAbilities.Add($"{cadence1.Name}:J-Str");
+        _resourceManager.UnlockAbility("Extra Cadence", "J-Str");
+        _resourceManager.UnlockAbility(cadence1.Name, "J-Str");
         _junctionManager!.AssignCadence(cadence1, character, _resourceManager.UnlockedAbilities);
         _junctionManager!.AssignCadence(cadence2, character, _resourceManager.UnlockedAbilities);
         
@@ -86,7 +86,7 @@ public class JunctionStatTests
         var strengthStat = _stats!.All.First(s => s.Name == "Strength");
         var fireMagic = _items!.All.First(i => i.Name == "Fire I");
 
-        _resourceManager.UnlockedAbilities.Add($"{cadenceWithJStr.Name}:J-Str");
+        _resourceManager.UnlockAbility(cadenceWithJStr.Name, "J-Str");
         _junctionManager!.AssignCadence(cadenceWithoutJStr, character, _resourceManager.UnlockedAbilities);
         _junctionManager!.AssignCadence(cadenceWithJStr, character, _resourceManager.UnlockedAbilities);
 
@@ -102,7 +102,7 @@ public class JunctionStatTests
         var cadenceWithoutAuto = _cadences!.All.First(c => c.Name == "Arcanist");
         var cadenceWithAuto = _cadences!.All.First(c => c.Abilities.Any(a => a.Ability.Name == "AutoQuest I"));
 
-        _resourceManager.UnlockedAbilities.Add($"{cadenceWithAuto.Name}:AutoQuest I");
+        _resourceManager.UnlockAbility(cadenceWithAuto.Name, "AutoQuest I");
         
         Assert.IsFalse(_resourceManager.CanAutoQuest(character));
 
@@ -120,7 +120,7 @@ public class JunctionStatTests
         var recruit = _cadences!.All.First(c => c.Name == "Recruit");
         var apprentice = _cadences!.All.First(c => c.Name == "Apprentice");
 
-        _resourceManager.UnlockedAbilities.Add("Recruit:AutoQuest I");
+        _resourceManager.UnlockAbility("Recruit", "AutoQuest I");
 
         _junctionManager!.AssignCadence(recruit, character, _resourceManager.UnlockedAbilities);
         Assert.IsTrue(_resourceManager.CanAutoQuest(character));
@@ -151,7 +151,7 @@ public class JunctionStatTests
         var strengthStat = _stats!.All.First(s => s.Name == "Strength");
         var fireMagic = _items!.All.First(i => i.Name == "Fire I");
 
-        _resourceManager.UnlockedAbilities.Add($"{cadence.Name}:J-Str");
+        _resourceManager.UnlockAbility(cadence.Name, "J-Str");
         _junctionManager!.AssignCadence(cadence, character, _resourceManager.UnlockedAbilities);
         _resourceManager.Inventory.Add(fireMagic, 100);
 
@@ -170,7 +170,7 @@ public class JunctionStatTests
         var log = _items!.All.First(i => i.Name == "Log");
         var logSpell = log with { ItemType = ItemType.Spell };
 
-        _resourceManager.UnlockedAbilities.Add($"{cadence.Name}:J-Str");
+        _resourceManager.UnlockAbility(cadence.Name, "J-Str");
         _junctionManager!.AssignCadence(cadence, character, _resourceManager.UnlockedAbilities);
         _resourceManager.Inventory.Add(logSpell, 20);
 
@@ -218,7 +218,7 @@ public class JunctionStatTests
         var strengthStat = _stats!.All.First(s => s.Name == "Strength");
         var fireMagic = _items!.All.First(i => i.Name == "Fire I");
 
-        _resourceManager.UnlockedAbilities.Add("Apprentice:AutoQuest I");
+        _resourceManager.UnlockAbility("Apprentice", "AutoQuest I");
         _junctionManager!.AssignCadence(apprentice, character, _resourceManager.UnlockedAbilities);
 
         // Act: Try to junction Strength magic.
@@ -234,11 +234,11 @@ public class JunctionStatTests
     {
         Assert.AreEqual(30, _resourceManager!.Inventory.MagicCapacity);
         
-        _resourceManager.UnlockedAbilities.Add("Arcanist:Magic Pocket I");
+        _resourceManager.UnlockAbility("Arcanist", "Magic Pocket I");
         _resourceManager.UpdateMagicCapacity();
         Assert.AreEqual(60, _resourceManager.Inventory.MagicCapacity);
 
-        _resourceManager.UnlockedAbilities.Add("The Sentinel:Magic Pocket II");
+        _resourceManager.UnlockAbility("The Sentinel", "Magic Pocket II");
         _resourceManager.UpdateMagicCapacity();
         Assert.AreEqual(100, _resourceManager.Inventory.MagicCapacity);
     }

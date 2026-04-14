@@ -114,7 +114,7 @@ public class GameStore
         return action switch
         {
             AddResourceAction a => AddResource(state, a, out overflowItem, out overflowQty),
-            SpendResourceAction a => state with { Inventory = state.Inventory.SetItem(a.ItemName, Math.Max(0, state.Inventory.GetValueOrDefault(a.ItemName) - a.Quantity)) },
+            SpendResourceAction a => SpendResource(state, a),
             CompleteQuestAction a => state with { CompletedQuests = state.CompletedQuests.Add(a.Quest.Name) },
             LockQuestAction a => state with { CompletedQuests = state.CompletedQuests.Remove(a.Quest.Name) },
             StartQuestAction a => state with { ActiveQuests = state.ActiveQuests.Add(a.Progress) },
@@ -158,12 +158,11 @@ public class GameStore
 
         var items = ContentHost.GetContent<Items>();
         var item = items.All.FirstOrDefault(i => i.Name == a.ItemName);
-        if (item.Name == null) return state;
-
+        
         int current = state.Inventory.GetValueOrDefault(a.ItemName);
         int next = current + a.Quantity;
 
-        if (item.ItemType == ItemType.Spell && next > state.MagicCapacity)
+        if (item.Name != null && item.ItemType == ItemType.Spell && next > state.MagicCapacity)
         {
             overflowQty = next - state.MagicCapacity;
             overflowItem = a.ItemName;
@@ -206,6 +205,14 @@ public class GameStore
         return newState;
     }
 
+    private static GameState SpendResource(GameState state, SpendResourceAction a)
+    {
+        int current = state.Inventory.GetValueOrDefault(a.ItemName);
+        int next = current - a.Quantity;
+        if (next <= 0) return state with { Inventory = state.Inventory.Remove(a.ItemName) };
+        return state with { Inventory = state.Inventory.SetItem(a.ItemName, next) };
+    }
+
     private static string GetJunctionAbilityName(string statName) => statName switch
     {
         "Strength" => "J-Str",
@@ -214,4 +221,13 @@ public class GameStore
         "Speed" => "J-Speed",
         _ => "J-" + statName
     };
+}
+
+public static class NamedExtensions
+{
+    public static Dictionary<string, T> ToNamedDictionary<T>(this IEnumerable<T> source) where T : INamed
+        => source.ToDictionary(x => x.Name);
+
+    public static Dictionary<string, TValue> ToNamedDictionary<T, TValue>(this IEnumerable<T> source, Func<T, TValue> valueSelector) where T : INamed
+        => source.ToDictionary(x => x.Name, valueSelector);
 }

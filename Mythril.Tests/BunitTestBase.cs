@@ -108,12 +108,6 @@ public abstract class BunitTestBase : TestContextWrapper
         TestContext.Services.AddSingleton(new Mock<PersistenceService>(
             JSRuntimeMock.Object,
             ResourceManager,
-            JunctionManager,
-            ContentHost.GetContent<Items>(),
-            cadences,
-            ContentHost.GetContent<Quests>(),
-            Stats,
-            ContentHost.GetContent<ItemRefinements>(),
             GameStore
         ).Object);
 

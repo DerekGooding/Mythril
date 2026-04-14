@@ -77,7 +77,7 @@ public class ProgressionTests : BunitTestBase
         
         var student = ContentHost.GetContent<Cadences>().All.First(c => c.Name == "Student");
         ResourceManager.UnlockCadence(student);
-        ResourceManager.UnlockedAbilities.Add("Student:J-Speed");
+        ResourceManager.UnlockAbility("Student", "J-Speed");
         JunctionManager.AssignCadence(student, character, ResourceManager.UnlockedAbilities);
 
         GameStore.Dispatch(new SetMagicCapacityAction(1000));
@@ -97,7 +97,7 @@ public class ProgressionTests : BunitTestBase
         
         var weaver = ContentHost.GetContent<Cadences>().All.First(c => c.Name == "Mythril Weaver");
         ResourceManager.UnlockCadence(weaver);
-        ResourceManager.UnlockedAbilities.Add("Mythril Weaver:J-Vit");
+        ResourceManager.UnlockAbility("Mythril Weaver", "J-Vit");
         JunctionManager.AssignCadence(weaver, character, ResourceManager.UnlockedAbilities);
 
         GameStore.Dispatch(new SetMagicCapacityAction(1000));
@@ -117,7 +117,7 @@ public class ProgressionTests : BunitTestBase
         
         var arcanist = ContentHost.GetContent<Cadences>().All.First(c => c.Name == "Arcanist");
         ResourceManager.UnlockCadence(arcanist);
-        ResourceManager.UnlockedAbilities.Add("Arcanist:J-Magic");
+        ResourceManager.UnlockAbility("Arcanist", "J-Magic");
         JunctionManager.AssignCadence(arcanist, character, ResourceManager.UnlockedAbilities);
 
         GameStore.Dispatch(new SetMagicCapacityAction(1000));
@@ -133,11 +133,11 @@ public class ProgressionTests : BunitTestBase
     {
         Assert.AreEqual(30, InventoryManager.MagicCapacity);
 
-        ResourceManager.UnlockedAbilities.Add("Arcanist:Magic Pocket I");
+        ResourceManager.UnlockAbility("Arcanist", "Magic Pocket I");
         ResourceManager.UpdateMagicCapacity();
         Assert.AreEqual(60, InventoryManager.MagicCapacity);
 
-        ResourceManager.UnlockedAbilities.Add("The Sentinel:Magic Pocket II");
+        ResourceManager.UnlockAbility("The Sentinel", "Magic Pocket II");
         ResourceManager.UpdateMagicCapacity();
         Assert.AreEqual(100, InventoryManager.MagicCapacity);
     }
@@ -169,7 +169,7 @@ public class ProgressionTests : BunitTestBase
 
         var arcanist = ContentHost.GetContent<Cadences>().All.First(c => c.Name == "Arcanist");
         ResourceManager.UnlockCadence(arcanist);
-        ResourceManager.UnlockedAbilities.Add("Arcanist:J-Magic");
+        ResourceManager.UnlockAbility("Arcanist", "J-Magic");
         JunctionManager.AssignCadence(arcanist, character, ResourceManager.UnlockedAbilities);
 
         GameStore.Dispatch(new SetMagicCapacityAction(1000));

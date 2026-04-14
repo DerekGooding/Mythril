@@ -83,7 +83,7 @@ public partial class ResourceManager
                 {
                     // Find the last completed quest for this character in this session
                     var lastCompleted = Journal.FirstOrDefault(j => j.CharacterName == character.Name);
-                    if (lastCompleted.TaskName != null)
+                    if (lastCompleted?.TaskName != null)
                     {
                         // Check if it's a recurring quest or refinement
                         var quest = _quests.All.FirstOrDefault(q => q.Name == lastCompleted.TaskName);

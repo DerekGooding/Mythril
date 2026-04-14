@@ -218,7 +218,7 @@ public class AdditionalUIComponentTests : BunitTestBase
         var character = ResourceManager.Characters[0];
         var recruit = Cadences.All.First(c => c.Name == "Recruit");
 
-        ResourceManager.UnlockedAbilities.Add("Recruit:AutoQuest I");
+        ResourceManager.UnlockAbility("Recruit", "AutoQuest I");
         JunctionManager.AssignCadence(recruit, character, ResourceManager.UnlockedAbilities);
 
         // Act

@@ -63,7 +63,7 @@ public class LogisticsTests
         
         // Unlock and assign
         _resourceManager.UnlockCadence(weaver);
-        _resourceManager.UnlockedAbilities.Add("Mythril Weaver:Logistics I");
+        _resourceManager.UnlockAbility("Mythril Weaver", "Logistics I");
         _resourceManager.JunctionManager.AssignCadence(weaver, character, _resourceManager.UnlockedAbilities);
 
         Assert.AreEqual(2, _resourceManager.GetTaskLimit(character));
@@ -76,7 +76,7 @@ public class LogisticsTests
         var scholar = _cadences!.All.First(c => c.Name == "Scholar");
         
         _resourceManager.UnlockCadence(scholar);
-        _resourceManager.UnlockedAbilities.Add("Scholar:Logistics II");
+        _resourceManager.UnlockAbility("Scholar", "Logistics II");
         _resourceManager.JunctionManager.AssignCadence(scholar, character, _resourceManager.UnlockedAbilities);
 
         Assert.AreEqual(3, _resourceManager.GetTaskLimit(character));
@@ -106,7 +106,7 @@ public class LogisticsTests
         var character = _resourceManager!.Characters[0];
         var weaver = _cadences!.All.First(c => c.Name == "Mythril Weaver");
         _resourceManager.UnlockCadence(weaver);
-        _resourceManager.UnlockedAbilities.Add("Mythril Weaver:Logistics I");
+        _resourceManager.UnlockAbility("Mythril Weaver", "Logistics I");
         _resourceManager.JunctionManager.AssignCadence(weaver, character, _resourceManager.UnlockedAbilities);
 
         var gold = _items!.All.First(x => x.Name == "Gold");
@@ -160,7 +160,7 @@ public class LogisticsTests
         var scholar = _cadences!.All.First(c => c.Name == "Scholar");
         
         _resourceManager.UnlockCadence(scholar);
-        _resourceManager.UnlockedAbilities.Add("Scholar:Logistics II");
+        _resourceManager.UnlockAbility("Scholar", "Logistics II");
         _resourceManager.JunctionManager.AssignCadence(scholar, character, _resourceManager.UnlockedAbilities);
 
         var questData = new QuestData(_quests!.All.First(q => q.Name == "Buy Potion"), _questDetails![_quests.All.First(q => q.Name == "Buy Potion")]);
