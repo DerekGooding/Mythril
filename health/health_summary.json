@@ -1,9 +1,9 @@
 {
     "is_healthy": false,
-    "failure_count": 7,
+    "failure_count": 8,
     "metrics": {
-        "monoliths": 0,
-        "coverage": 74.42,
+        "monoliths": 1,
+        "coverage": 76.34,
         "mutation_score": 0.0,
         "missing_tests": 0,
         "key_violations": 0,
@@ -23,6 +23,13 @@
             "category": "tests",
             "message": "dotnet test failed",
             "metadata": {}
+        },
+        {
+            "category": "monolith",
+            "message": "Mythril.Tests/QuestExecutionTests.cs exceeds 250 lines",
+            "metadata": {
+                "lines": 251
+            }
         },
         {
             "category": "file_coverage",
