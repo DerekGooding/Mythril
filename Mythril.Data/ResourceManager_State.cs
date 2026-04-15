@@ -57,7 +57,19 @@ public partial class ResourceManager
 
     public readonly Character[] Characters = [new Character("Protagonist"), new Character("Wifu"), new Character("Himbo")];
 
-    public List<LocationData> UsableLocations { get; private set; } = [];
+    public List<LocationData> UsableLocations => _locations.All
+        .Where(l => string.IsNullOrEmpty(l.RequiredQuest) || _gameStore.State.CompletedQuests.Contains(l.RequiredQuest))
+        .Select(l => new LocationData(
+            l,
+            l.Quests.Where(q => {
+                var detail = _questDetails[q];
+                bool meetsPrereqs = _questUnlocks[q].All(req => _gameStore.State.CompletedQuests.Contains(req.Name));
+                bool alreadyCompleted = _gameStore.State.CompletedQuests.Contains(q.Name);
+                bool isSingle = detail.Type == QuestType.Single || detail.Type == QuestType.Unlock;
+                return meetsPrereqs && !(isSingle && alreadyCompleted);
+            })
+        )).ToList();
+
     public HashSet<string> UnlockedLocationNames => _gameStore.State.UnlockedLocationNames.ToHashSet();
 
     public List<Cadence> UnlockedCadences => _gameStore.State.UnlockedCadenceNames.Select(name => _cadences.All.First(c => c.Name == name)).ToList();

@@ -53,9 +53,8 @@
 @code {
     private bool _showFirstTimeOnly;
 
-    private IEnumerable<ResourceManager.JournalEntry> FilteredJournal => 
+    private IEnumerable<JournalEntry> FilteredJournal =>
         _showFirstTimeOnly ? ResourceManager.Journal.Where(j => j.IsFirstTime) : ResourceManager.Journal;
-
     protected override void OnInitialized()
     {
         ResourceManager.OnJournalUpdated += HandleJournalUpdated;

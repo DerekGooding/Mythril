@@ -22,6 +22,9 @@ public record GameState(
     ImmutableHashSet<string> UnlockedLocationNames,
     ImmutableHashSet<string> UnlockedCadenceNames,
     ImmutableHashSet<string> HighlightedPath,
+    ImmutableList<JournalEntry> Journal,
+    ImmutableDictionary<string, ImmutableList<string>> CharacterMiniLogs,
+    ImmutableHashSet<string> EverPerformedActivities,
     double CurrentTime
 )
 {
@@ -40,6 +43,9 @@ public record GameState(
         UnlockedLocationNames: ImmutableHashSet<string>.Empty,
         UnlockedCadenceNames: ImmutableHashSet<string>.Empty,
         HighlightedPath: ImmutableHashSet<string>.Empty,
+        Journal: ImmutableList<JournalEntry>.Empty,
+        CharacterMiniLogs: ImmutableDictionary<string, ImmutableList<string>>.Empty,
+        EverPerformedActivities: ImmutableHashSet<string>.Empty,
         CurrentTime: 0
     );
 }
@@ -57,6 +63,7 @@ public record UnassignCadenceAction(string CadenceName) : IGameAction;
 public record JunctionMagicAction(Character Character, Stat Stat, Item Magic) : IGameAction;
 public record UnjunctionAction(Character Character, Stat Stat) : IGameAction;
 public record TickAction(double DeltaSeconds) : IGameAction;
+public record SkipTimeAction(double Seconds) : IGameAction;
 public record UnlockAbilityAction(string AbilityKey) : IGameAction;
 public record UnlockCadenceAction(string CadenceName) : IGameAction;
 public record ToggleAutoQuestAction(string CharacterName, bool Enabled) : IGameAction;
@@ -69,6 +76,8 @@ public record AddStatBoostAction(string CharacterName, string StatName, int Amou
 public record UnlockLocationAction(string LocationName) : IGameAction;
 public record SetHighlightedPathAction(ImmutableHashSet<string> Path) : IGameAction;
 public record ClearHighlightedPathAction() : IGameAction;
+public record AddToJournalAction(string TaskName, string CharacterName, string Details) : IGameAction;
+public record ClearJournalAction() : IGameAction;
 
 public class GameStore
 {
@@ -81,6 +90,7 @@ public class GameStore
     public GameState State { get; private set; } = GameState.Initial;
     public event Action<GameState>? OnStateChanged;
     public event Action<string, int>? OnItemOverflow;
+    public event Action? OnJournalUpdated;
 
     public string ExportState() => JsonSerializer.Serialize(State, _options);
     public void ImportState(string json)
@@ -104,6 +114,10 @@ public class GameStore
         {
             OnItemOverflow?.Invoke(overflowItem, overflowQty);
         }
+        if (action is AddToJournalAction || action is ClearJournalAction || action is SetStateAction)
+        {
+            OnJournalUpdated?.Invoke();
+        }
     }
 
     private static GameState Reduce(GameState state, IGameAction action, out string? overflowItem, out int overflowQty)
@@ -118,7 +132,7 @@ public class GameStore
             CompleteQuestAction a => state with { CompletedQuests = state.CompletedQuests.Add(a.Quest.Name) },
             LockQuestAction a => state with { CompletedQuests = state.CompletedQuests.Remove(a.Quest.Name) },
             StartQuestAction a => state with { ActiveQuests = state.ActiveQuests.Add(a.Progress) },
-            CancelQuestAction a => state with { ActiveQuests = state.ActiveQuests.Remove(a.Progress) },
+            CancelQuestAction a => state with { ActiveQuests = state.ActiveQuests.RemoveAll(q => q.StartTime == a.Progress.StartTime && q.Character.Name == a.Progress.Character.Name) },
             AssignCadenceAction a => state with { AssignedCadences = state.AssignedCadences.SetItem(a.CadenceName, a.CharacterName) },
             UnassignCadenceAction a => UnassignCadence(state, a),
             JunctionMagicAction a => state with { 
@@ -131,6 +145,7 @@ public class GameStore
                 CurrentTime = state.CurrentTime + a.DeltaSeconds,
                 ActiveQuests = state.ActiveQuests.Select(q => q.IsCompleted ? q : q with { SecondsElapsed = q.SecondsElapsed + a.DeltaSeconds }).ToImmutableList()
             },
+            SkipTimeAction a => state with { CurrentTime = state.CurrentTime + a.Seconds },
             UnlockAbilityAction a => state with { UnlockedAbilities = state.UnlockedAbilities.Add(a.AbilityKey) },
             UnlockCadenceAction a => state with { UnlockedCadenceNames = state.UnlockedCadenceNames.Add(a.CadenceName) },
             ToggleAutoQuestAction a => state with { AutoQuestEnabled = state.AutoQuestEnabled.SetItem(a.CharacterName, a.Enabled) },
@@ -147,7 +162,32 @@ public class GameStore
             UnlockLocationAction a => state with { UnlockedLocationNames = state.UnlockedLocationNames.Add(a.LocationName) },
             SetHighlightedPathAction a => state with { HighlightedPath = a.Path },
             ClearHighlightedPathAction a => state with { HighlightedPath = ImmutableHashSet<string>.Empty },
+            AddToJournalAction a => AddToJournal(state, a),
+            ClearJournalAction a => state with { 
+                Journal = ImmutableList<JournalEntry>.Empty, 
+                CharacterMiniLogs = ImmutableDictionary<string, ImmutableList<string>>.Empty,
+                EverPerformedActivities = ImmutableHashSet<string>.Empty
+            },
             _ => state
+        };
+    }
+
+    private static GameState AddToJournal(GameState state, AddToJournalAction a)
+    {
+        bool isFirstTime = !state.EverPerformedActivities.Contains(a.TaskName);
+        var entry = new JournalEntry(a.TaskName, a.CharacterName, a.Details, DateTime.Now, isFirstTime);
+        
+        var newJournal = state.Journal.Insert(0, entry);
+        if (newJournal.Count > 50) newJournal = newJournal.RemoveAt(newJournal.Count - 1);
+
+        var characterLog = state.CharacterMiniLogs.GetValueOrDefault(a.CharacterName, ImmutableList<string>.Empty);
+        characterLog = characterLog.Add(a.TaskName);
+        if (characterLog.Count > 3) characterLog = characterLog.RemoveAt(0);
+
+        return state with { 
+            Journal = newJournal,
+            CharacterMiniLogs = state.CharacterMiniLogs.SetItem(a.CharacterName, characterLog),
+            EverPerformedActivities = state.EverPerformedActivities.Add(a.TaskName)
         };
     }
 

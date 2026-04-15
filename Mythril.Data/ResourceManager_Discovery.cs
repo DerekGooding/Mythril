@@ -4,20 +4,7 @@ public partial class ResourceManager
 {
     public void UpdateUsableLocations()
     {
-        var usable = _locations.All
-            .Where(l => string.IsNullOrEmpty(l.RequiredQuest) || _gameStore.State.CompletedQuests.Contains(l.RequiredQuest))
-            .Select(l => new LocationData(
-                l,
-                l.Quests.Where(q => {
-                    var detail = _questDetails[q];
-                    bool meetsPrereqs = _questUnlocks[q].All(req => _gameStore.State.CompletedQuests.Contains(req.Name));
-                    bool alreadyCompleted = _gameStore.State.CompletedQuests.Contains(q.Name);
-                    bool isSingle = detail.Type == QuestType.Single || detail.Type == QuestType.Unlock;
-                    return meetsPrereqs && !(isSingle && alreadyCompleted);
-                })
-            )).ToList();
-
-        UsableLocations = usable;
+        var usable = UsableLocations;
         
         foreach (var loc in usable)
         {

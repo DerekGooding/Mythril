@@ -218,6 +218,8 @@ public class JournalEntryDTO
     public bool IsFirstTime { get; set; }
 }
 
+public record JournalEntry(string TaskName, string CharacterName, string Details, DateTime CompletedAt, bool IsFirstTime = false);
+
 // Data Transfer Objects for JSON Loading
 public class ItemQuantityDTO { public string Item { get; set; } = ""; public int Quantity { get; set; } = 1; }
 public class LocationDTO { public string Name { get; set; } = ""; public List<string> Quests { get; set; } = []; public string? RequiredQuest { get; set; } public string? Type { get; set; } }

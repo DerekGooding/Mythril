@@ -18,15 +18,6 @@ public class PersistenceService(
         {
             State = gameStore.State,
             LastSaveTime = DateTime.Now,
-            // Keep legacy fields for a while or if needed for specific UI views
-            Journal = resourceManager.Journal.Select(j => new JournalEntryDTO
-            {
-                TaskName = j.TaskName,
-                CharacterName = j.CharacterName,
-                Details = j.Details,
-                CompletedAt = j.CompletedAt,
-                IsFirstTime = j.IsFirstTime
-            }).ToList(),
             HasUnseenCadence = resourceManager.HasUnseenCadence,
             HasUnseenWorkshop = resourceManager.HasUnseenWorkshop
         };
@@ -59,15 +50,6 @@ public class PersistenceService(
             // Restore non-state fields
             resourceManager.HasUnseenCadence = saveData.HasUnseenCadence;
             resourceManager.HasUnseenWorkshop = saveData.HasUnseenWorkshop;
-            
-            resourceManager.Journal.Clear();
-            if (saveData.Journal != null)
-            {
-                foreach (var dto in saveData.Journal)
-                {
-                    resourceManager.Journal.Add(new ResourceManager.JournalEntry(dto.TaskName, dto.CharacterName, dto.Details, dto.CompletedAt, dto.IsFirstTime));
-                }
-            }
 
             resourceManager.UpdateUsableLocations();
         }

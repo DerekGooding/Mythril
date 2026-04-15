@@ -53,10 +53,11 @@ public class JournalTests
     [TestMethod]
     public void Journal_Clear_Works()
     {
-        _resourceManager!.Journal.Add(new ResourceManager.JournalEntry("Test", "Hero", "Details", DateTime.Now));
+        _resourceManager!.AddToJournal("Test", "Hero", "Details");
         Assert.AreEqual(1, _resourceManager.Journal.Count);
-        
+
         _resourceManager.ClearJournal();
         Assert.AreEqual(0, _resourceManager.Journal.Count);
     }
+
 }
