@@ -78,6 +78,7 @@ public partial class ResourceManager
         Journal.Insert(0, new JournalEntry(taskName, characterName, details, DateTime.Now, isFirstTime));
         
         _gameStore.Dispatch(new CancelQuestAction(progress));
+        CheckAutoQuestTick();
     }
 
     public void UnlockCadence(Cadence cadence)

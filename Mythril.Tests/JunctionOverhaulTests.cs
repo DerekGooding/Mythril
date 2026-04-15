@@ -22,8 +22,9 @@ public class JunctionOverhaulTests : BunitTestBase
         InventoryManager.Add(magic, 10000);
         
         // Setup junction
-        ResourceManager.UnlockedAbilities.Add("Warrior:J-Str");
+        GameStore.Dispatch(new UnlockAbilityAction("Warrior:J-Str"));
         var warrior = new Cadence("Warrior", "Desc", [new CadenceUnlock("Warrior", new CadenceAbility("J-Str", "Desc"), [])]);
+        Cadences.Load(Cadences.All.Concat([warrior]));
         JunctionManager.AssignCadence(warrior, character, ResourceManager.UnlockedAbilities);
         JunctionManager.JunctionMagic(character, stat, magic, ResourceManager.UnlockedAbilities);
 
@@ -40,6 +41,7 @@ public class JunctionOverhaulTests : BunitTestBase
         // Arrange
         var character = new Character("Hero");
         var cadence = new Cadence("Warrior", "Desc", []);
+        Cadences.Load(Cadences.All.Concat([cadence]));
         JunctionManager.AssignCadence(cadence, character, []);
 
         var cut = RenderComponent<CharacterDisplay>(p => p
@@ -74,8 +76,9 @@ public class JunctionOverhaulTests : BunitTestBase
 
         // Ensure CanJunction returns true
         var cadence = new Cadence("Warrior", "Desc", [new CadenceUnlock("Warrior", new CadenceAbility("J-Str", "Desc"), [])]);
+        Cadences.Load(Cadences.All.Concat([cadence]));
         JunctionManager.AssignCadence(cadence, character, ["Warrior:J-Str"]);
-        ResourceManager.UnlockedAbilities.Add("Warrior:J-Str");
+        GameStore.Dispatch(new UnlockAbilityAction("Warrior:J-Str"));
 
         // Mock dragging the item
         DragDropService.Data = magic;

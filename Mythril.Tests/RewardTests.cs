@@ -89,7 +89,11 @@ public class RewardTests : BunitTestBase
     {
         // Arrange
         var quest = new Quest("Unlock Quest", "Desc");
+        var quests = TestContext!.Services.GetRequiredService<Quests>();
+        quests.Load(quests.All.Concat([quest]));
+        
         var cadence = new Cadence("Secret Cadence", "Desc", []);
+        Cadences.Load(Cadences.All.Concat([cadence]));
         
         // This is a bit internal, but we need to set up the mapping
         // In a real scenario, this is loaded from JSON

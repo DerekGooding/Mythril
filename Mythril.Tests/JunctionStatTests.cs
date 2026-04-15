@@ -56,6 +56,7 @@ public class JunctionStatTests
         var abilityJStr = _abilities!.All.First(a => a.Name == "J-Str");
         var cadence1 = _cadences!.All.First(c => c.Abilities.Any(a => a.Ability.Name == "J-Str"));
         var cadence2 = new Cadence("Extra Cadence", "Desc", [new CadenceUnlock("Extra Cadence", abilityJStr, [])]);
+        _cadences.Load(_cadences.All.Concat([cadence2]));
         var strengthStat = _stats!.All.First(s => s.Name == "Strength");
         var fireMagic = _items!.All.First(i => i.Name == "Fire I");
 

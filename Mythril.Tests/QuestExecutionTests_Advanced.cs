@@ -110,5 +110,45 @@ public class QuestExecutionTests_Advanced
 
         Assert.AreEqual(0, _resourceManager.ActiveQuests.Count);
     }
+
+    [TestMethod]
+    public void ResourceManager_StartQuest_PreventsDuplicateSingleUseTasks()
+    {
+        var quest = _quests!.All.First(x => x.Name == "Prologue");
+        var detail = _questDetails![quest];
+        var questData = new QuestData(quest, detail);
+        var character = _resourceManager!.Characters[0];
+
+        _resourceManager.StartQuest(questData, character);
+        Assert.AreEqual(1, _resourceManager.ActiveQuests.Count);
+
+        _resourceManager.StartQuest(questData, character);
+        Assert.AreEqual(1, _resourceManager.ActiveQuests.Count, "Should not start single-use quest twice.");
+    }
+
+    [TestMethod]
+    public void ResourceManager_StartQuest_Refinement_Works()
+    {
+        var refinements = ContentHost.GetContent<ItemRefinements>();
+        var ability = refinements.ByKey.Keys.First(a => a.Name == "Refine Wood");
+        var inputItem = _items!.All.First(x => x.Name == "Log");
+        var recipe = refinements.ByKey[ability].Recipes[inputItem];
+        var refinementData = new RefinementData(ability, inputItem, recipe, "Strength");        
+
+        var character = _resourceManager!.Characters[0];
+        _resourceManager.UnlockAbility("Apprentice", "Refine Wood");
+
+        // Assign Apprentice cadence to character so they have the ability
+        var apprentice = ContentHost.GetContent<Cadences>().All.First(c => c.Name == "Apprentice");
+        _resourceManager.UnlockCadence(apprentice);
+        _resourceManager.JunctionManager.AssignCadence(apprentice, character, _resourceManager.UnlockedAbilities);
+
+        _resourceManager.Inventory.Add(inputItem, 10);
+
+        _resourceManager.StartQuest(refinementData, character);
+
+        Assert.AreEqual(1, _resourceManager.ActiveQuests.Count);
+        Assert.AreEqual("Refine Wood (Log): Herb", _resourceManager.ActiveQuests[0].Name);      
+    }
 }
 

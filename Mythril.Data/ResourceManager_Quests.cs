@@ -11,10 +11,14 @@ public partial class ResourceManager
         {
             if (ActiveQuests.Count(p => p.Character.Name == character.Name) >= GetTaskLimit(character)) return;
 
-            // Single quests can only be active once
+            // Single tasks can only be active once
             if (item is QuestData questData && (questData.Type == QuestType.Single || questData.Type == QuestType.Unlock))
             {
                 if (IsInProgress(questData) || _gameStore.State.CompletedQuests.Contains(questData.Name)) return;
+            }
+            else if (item is CadenceUnlock unlock)
+            {
+                if (IsInProgress(unlock) || _gameStore.State.UnlockedAbilities.Contains($"{unlock.CadenceName}:{unlock.Ability.Name}")) return;
             }
 
             if (!CanAfford(item, character)) return;

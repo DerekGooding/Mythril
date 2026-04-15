@@ -87,6 +87,7 @@ public abstract class BunitTestBase : TestContextWrapper
         TestContext.Services.AddSingleton(ContentHost.GetContent<QuestDetails>());
         TestContext.Services.AddSingleton(ContentHost.GetContent<QuestToCadenceUnlocks>());
         TestContext.Services.AddSingleton(ContentHost.GetContent<CadenceAbilities>());
+        TestContext.Services.AddSingleton(ContentHost.GetContent<Quests>());
         TestContext.Services.AddSingleton(ContentHost.GetContent<Stats>());
         
         TestContext.Services.AddSingleton(ResourceManager);

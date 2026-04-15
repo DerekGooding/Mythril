@@ -148,16 +148,28 @@ public class ProgressionTests : BunitTestBase
         ResourceManager.UpdateUsableLocations();
         var forest = ContentHost.GetContent<Locations>().All.First(l => l.Name == "Greenwood Forest");
         var reqQuestName = forest.RequiredQuest;
-        Assert.IsNotNull(reqQuestName);
+        Assert.IsNotNull(reqQuestName, "RequiredQuest should not be null for Greenwood Forest");
 
-        Assert.IsFalse(ResourceManager.UnlockedLocationNames.Contains("Greenwood Forest"));
+        Assert.IsFalse(ResourceManager.UnlockedLocationNames.Contains("Greenwood Forest"), "Forest should not be unlocked initially");
 
         // Complete the required quest
-        var quest = ContentHost.GetContent<Quests>().All.First(q => q.Name == reqQuestName);
-        ResourceManager.ReceiveRewards(new QuestData(quest, ContentHost.GetContent<QuestDetails>()[quest])).Wait();
+        var quests = ContentHost.GetContent<Quests>();
+        var quest = quests.All.First(q => q.Name == reqQuestName);
+        var questDetails = ContentHost.GetContent<QuestDetails>();
+        var questData = new QuestData(quest, questDetails[quest]);
+        
+        ResourceManager.ReceiveRewards(questData).Wait();
+
+        // Check if quest is completed in state
+        Assert.IsTrue(GameStore.State.CompletedQuests.Contains(reqQuestName), $"Quest {reqQuestName} should be completed in state");
 
         ResourceManager.UpdateUsableLocations();
-        Assert.IsTrue(ResourceManager.UnlockedLocationNames.Contains("Greenwood Forest"));
+        
+        // Diagnostic check of UsableLocations
+        var isUsable = ResourceManager.UsableLocations.Any(l => l.Name == "Greenwood Forest");
+        Assert.IsTrue(isUsable, "Greenwood Forest should be in UsableLocations after completion");
+
+        Assert.IsTrue(ResourceManager.UnlockedLocationNames.Contains("Greenwood Forest"), "Greenwood Forest should be in UnlockedLocationNames");
     }
 
     [TestMethod]

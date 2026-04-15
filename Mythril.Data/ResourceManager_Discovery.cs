@@ -8,7 +8,13 @@ public partial class ResourceManager
             .Where(l => string.IsNullOrEmpty(l.RequiredQuest) || _gameStore.State.CompletedQuests.Contains(l.RequiredQuest))
             .Select(l => new LocationData(
                 l,
-                l.Quests.Where(q => _questUnlocks[q].All(req => _gameStore.State.CompletedQuests.Contains(req.Name)))
+                l.Quests.Where(q => {
+                    var detail = _questDetails[q];
+                    bool meetsPrereqs = _questUnlocks[q].All(req => _gameStore.State.CompletedQuests.Contains(req.Name));
+                    bool alreadyCompleted = _gameStore.State.CompletedQuests.Contains(q.Name);
+                    bool isSingle = detail.Type == QuestType.Single || detail.Type == QuestType.Unlock;
+                    return meetsPrereqs && !(isSingle && alreadyCompleted);
+                })
             )).ToList();
 
         UsableLocations = usable;

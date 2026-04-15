@@ -20,6 +20,9 @@ public class UIComponentTests : BunitTestBase
         var item2 = new Item("Ether", "Restores 20 MP", ItemType.Consumable);
         var spell1 = new Item("Fire", "Fire damage", ItemType.Spell);
         
+        var items = Services.GetRequiredService<Items>();
+        items.Load(items.All.Concat([item1, item2, spell1]));
+        
         var inventory = Services.GetRequiredService<InventoryManager>();
         inventory.Clear();
         inventory.Add(item1, 5);

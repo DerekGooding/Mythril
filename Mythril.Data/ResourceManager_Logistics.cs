@@ -70,6 +70,29 @@ public partial class ResourceManager
         SetAutoQuestEnabled(character, !current);
     }
 
+    public int GetAutoQuestLimit(Character character)
+    {
+        var assigned = JunctionManager.CurrentlyAssigned(character);
+        int maxAuto = 0;
+        foreach (var cadence in assigned)
+        {
+            foreach (var unlock in cadence.Abilities)
+            {
+                if (UnlockedAbilities.Contains($"{cadence.Name}:{unlock.Ability.Name}") && unlock.Ability.Effects != null)
+                {
+                    foreach (var effect in unlock.Ability.Effects)
+                    {
+                        if (effect.Type == EffectType.AutoQuest)
+                        {
+                            maxAuto = Math.Max(maxAuto, effect.Value);
+                        }
+                    }
+                }
+            }
+        }
+        return maxAuto;
+    }
+
     private void CheckAutoQuestTick()
     {
         foreach (var character in Characters)
@@ -77,6 +100,7 @@ public partial class ResourceManager
             if (IsAutoQuestEnabled(character))
             {
                 int limit = GetTaskLimit(character);
+                int autoLimit = GetAutoQuestLimit(character);
                 int current = ActiveQuests.Count(p => p.Character.Name == character.Name);
                 
                 if (current < limit)
@@ -85,6 +109,10 @@ public partial class ResourceManager
                     var lastCompleted = Journal.FirstOrDefault(j => j.CharacterName == character.Name);
                     if (lastCompleted?.TaskName != null)
                     {
+                        // Check if we are allowed to restart in the next free slot
+                        // If current = 0, we are filling slot 0. If current = 1, we are filling slot 1.
+                        if (current >= autoLimit) continue;
+
                         // Check if it's a recurring quest or refinement
                         var quest = _quests.All.FirstOrDefault(q => q.Name == lastCompleted.TaskName);
                         if (quest.Name != null)

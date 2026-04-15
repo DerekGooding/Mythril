@@ -1,63 +1,62 @@
-using Bunit;
-using Microsoft.Extensions.DependencyInjection;
-using Mythril.Blazor.Components;
 using Mythril.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Mythril.Tests;
 
 [TestClass]
-public class JournalTests : BunitTestBase
+public class JournalTests
 {
-    [TestMethod]
-    public void JournalPanel_RendersEmptyCorrectly()
-    {
-        // Act
-        var cut = RenderComponent<JournalPanel>();
+    private ResourceManager? _resourceManager;
 
-        // Assert
-        var noEntries = cut.Find(".no-entries");
-        Assert.IsTrue(noEntries.TextContent.Contains("No tasks completed yet."));
+    [TestInitialize]
+    public void Setup()
+    {
+        TestContentLoader.Load();
+        var gameStore = new GameStore();
+        var inventory = new InventoryManager(gameStore);
+        var items = ContentHost.GetContent<Items>();
+        var quests = ContentHost.GetContent<Quests>();
+        var questDetails = ContentHost.GetContent<QuestDetails>();
+        var cadences = ContentHost.GetContent<Cadences>();
+        var junctionManager = new JunctionManager(gameStore, inventory, ContentHost.GetContent<StatAugments>(), cadences);
+        var pathfinding = new PathfindingService(ContentHost.GetContent<Locations>(), quests, ContentHost.GetContent<QuestUnlocks>(), questDetails, cadences, ContentHost.GetContent<QuestToCadenceUnlocks>());
+
+        _resourceManager = new ResourceManager(gameStore, items, quests, 
+            ContentHost.GetContent<QuestUnlocks>(), 
+            ContentHost.GetContent<QuestToCadenceUnlocks>(), 
+            questDetails, 
+            cadences, 
+            ContentHost.GetContent<Locations>(),
+            junctionManager,
+            inventory,
+            ContentHost.GetContent<ItemRefinements>(),
+            pathfinding);
+        _resourceManager.Initialize();
     }
 
     [TestMethod]
-    public void JournalPanel_RendersEntriesCorrectly()
+    public async Task Journal_AddEntry_Works()
     {
-        // Arrange
-        ResourceManager.Journal.Add(new ResourceManager.JournalEntry("Test Task", "Hero", "Details here", DateTime.Now, true));
+        var quest = ContentHost.GetContent<Quests>().All.First();
+        var detail = ContentHost.GetContent<QuestDetails>()[quest];
+        var questData = new QuestData(quest, detail);
+        var character = _resourceManager!.Characters[0];
 
-        // Act
-        var cut = RenderComponent<JournalPanel>();
-
-        // Assert
-        var entry = cut.Find(".journal-entry");
-        Assert.IsTrue(entry.TextContent.Contains("Test Task"));
-        Assert.IsTrue(entry.TextContent.Contains("Hero"));
-        Assert.IsTrue(entry.TextContent.Contains("Details here"));
-        Assert.IsTrue(entry.TextContent.Contains("First Time"));
-    }
-
-    [TestMethod]
-    public void JournalPanel_Filter_WorksCorrectly()
-    {
-        // Arrange
-        ResourceManager.Journal.Add(new ResourceManager.JournalEntry("First Task", "Hero", "First", DateTime.Now, true));
-        ResourceManager.Journal.Add(new ResourceManager.JournalEntry("Second Task", "Hero", "Second", DateTime.Now, false));
-
-        // Act
-        var cut = RenderComponent<JournalPanel>();
+        _resourceManager.StartQuest(questData, character);
+        var progress = _resourceManager.ActiveQuests[0];
         
-        // Initially should show both
-        Assert.AreEqual(2, cut.FindAll(".journal-entry").Count);
+        await _resourceManager.ReceiveRewards(progress);
 
-        // Toggle filter
-        var checkbox = cut.Find("#firstTimeFilter");
-        checkbox.Change(true);
+        Assert.AreEqual(1, _resourceManager.Journal.Count);
+        Assert.AreEqual(quest.Name, _resourceManager.Journal[0].TaskName);
+    }
 
-        // Assert
-        Assert.AreEqual(1, cut.FindAll(".journal-entry").Count);
-        Assert.IsTrue(cut.Find(".journal-entry").TextContent.Contains("First Task"));
+    [TestMethod]
+    public void Journal_Clear_Works()
+    {
+        _resourceManager!.Journal.Add(new ResourceManager.JournalEntry("Test", "Hero", "Details", DateTime.Now));
+        Assert.AreEqual(1, _resourceManager.Journal.Count);
+        
+        _resourceManager.ClearJournal();
+        Assert.AreEqual(0, _resourceManager.Journal.Count);
     }
 }

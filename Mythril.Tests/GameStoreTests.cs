@@ -59,4 +59,60 @@ public class GameStoreTests
         Assert.AreEqual(5.0, store.State.ActiveQuests[0].SecondsElapsed);
         Assert.AreEqual(5.0, store.State.CurrentTime);
     }
+
+    [TestMethod]
+    public void GameStore_UnlockLocation_UpdatesState()
+    {
+        var store = new GameStore();
+        store.Dispatch(new UnlockLocationAction("New Zone"));
+        Assert.IsTrue(store.State.UnlockedLocationNames.Contains("New Zone"));
+    }
+
+    [TestMethod]
+    public void GameStore_UnlockCadence_UpdatesState()
+    {
+        var store = new GameStore();
+        store.Dispatch(new UnlockCadenceAction("Secret Job"));
+        Assert.IsTrue(store.State.UnlockedCadenceNames.Contains("Secret Job"));
+    }
+
+    [TestMethod]
+    public void GameStore_UnlockAbility_UpdatesState()
+    {
+        var store = new GameStore();
+        store.Dispatch(new UnlockAbilityAction("Job:Skill"));
+        Assert.IsTrue(store.State.UnlockedAbilities.Contains("Job:Skill"));
+    }
+
+    [TestMethod]
+    public void GameStore_JunctionMagic_UpdatesState()
+    {
+        var store = new GameStore();
+        var hero = new Character("Hero");
+        var str = new Stat("Strength", "");
+        var fire = new Item("Fire", "", ItemType.Spell);
+        
+        store.Dispatch(new JunctionMagicAction(hero, str, fire));
+        Assert.AreEqual(1, store.State.Junctions.Count);
+        Assert.AreEqual("Fire", store.State.Junctions[0].Magic.Name);
+    }
+
+    [TestMethod]
+    public void GameStore_AssignCadence_UpdatesState()
+    {
+        var store = new GameStore();
+        store.Dispatch(new AssignCadenceAction("Warrior", "Hero"));
+        Assert.AreEqual("Hero", store.State.AssignedCadences["Warrior"]);
+    }
+
+    [TestMethod]
+    public void GameStore_AddStatBoost_UpdatesState()
+    {
+        var store = new GameStore();
+        store.Dispatch(new AddStatBoostAction("Hero", "Strength", 5));
+        Assert.AreEqual(5, store.State.CharacterPermanentStatBoosts["Hero"]["Strength"]);
+        
+        store.Dispatch(new AddStatBoostAction("Hero", "Strength", 10));
+        Assert.AreEqual(15, store.State.CharacterPermanentStatBoosts["Hero"]["Strength"]);
+    }
 }

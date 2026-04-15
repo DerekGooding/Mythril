@@ -184,7 +184,8 @@ public class GameStore
         var ownerChar = new Character(owner);
         var remainingCadences = newState.AssignedCadences
             .Where(x => x.Value == owner)
-            .Select(x => cadences.All.First(c => c.Name == x.Key))
+            .Select(x => cadences.All.FirstOrDefault(c => c.Name == x.Key))
+            .Where(c => c.Name != null)
             .ToList();
 
         var invalidJunctions = newState.Junctions
