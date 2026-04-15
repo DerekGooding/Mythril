@@ -1,9 +1,9 @@
 {
     "is_healthy": false,
-    "failure_count": 7,
+    "failure_count": 8,
     "metrics": {
-        "monoliths": 0,
-        "coverage": 78.33,
+        "monoliths": 1,
+        "coverage": 78.37,
         "mutation_score": 0.0,
         "missing_tests": 1,
         "key_violations": 0,
@@ -25,11 +25,10 @@
             "metadata": {}
         },
         {
-            "category": "file_coverage",
-            "message": "Mythril.Data/GameStateStore.cs below minimum coverage: 0.00% (required: 25.0%)",
+            "category": "monolith",
+            "message": "Mythril.Data/GameStateStore.cs exceeds 250 lines",
             "metadata": {
-                "actual": 0.0,
-                "required": 25.0
+                "lines": 274
             }
         },
         {
@@ -58,7 +57,15 @@
         },
         {
             "category": "file_coverage",
-            "message": "Mythril.Data/ResourceManager_Inventory.cs below minimum coverage: 0.00% (required: 25.0%)",
+            "message": "Mythril.Data/GameStateStore.cs below minimum coverage: 0.00% (required: 25.0%)",
+            "metadata": {
+                "actual": 0.0,
+                "required": 25.0
+            }
+        },
+        {
+            "category": "file_coverage",
+            "message": "Mythril.Data/GameStateStore.cs below minimum coverage: 0.00% (required: 25.0%)",
             "metadata": {
                 "actual": 0.0,
                 "required": 25.0
