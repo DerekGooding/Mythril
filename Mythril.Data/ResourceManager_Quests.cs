@@ -54,6 +54,7 @@ public partial class ResourceManager
 
     public bool CanAfford(object item, Character? character = null)
     {
+        if (item is Cadence) return true;
         if (item is QuestData quest)
         {
             if (quest.Requirements != null)
