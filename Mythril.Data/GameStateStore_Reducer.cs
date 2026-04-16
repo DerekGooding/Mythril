@@ -52,6 +52,7 @@ public partial class GameStore
             SetActiveTabAction a => state with { ActiveTab = a.TabName },
             SetUnseenFlagsAction a => state with { HasUnseenCadence = a.Cadence, HasUnseenWorkshop = a.Workshop },
             SetTestModeAction a => state with { IsTestMode = a.IsTestMode },
+            ToggleMiniLogsAction a => state with { ShowMiniLogs = !state.ShowMiniLogs },
             _ => state
         };
     }

@@ -122,6 +122,9 @@ public partial class ResourceManager
         set => _gameStore.Dispatch(new SetActiveTabAction(value)); 
     }
 
+    public bool ShowMiniLogs => _gameStore.State.ShowMiniLogs;
+    public void ToggleMiniLogs() => _gameStore.Dispatch(new ToggleMiniLogsAction());
+
     public event Action<string, int>? OnItemOverflow;
 
     public void Initialize()

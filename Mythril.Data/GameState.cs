@@ -24,7 +24,8 @@ public record GameState(
     bool IsTestMode,
     bool HasUnseenCadence,
     bool HasUnseenWorkshop,
-    string ActiveTab
+    string ActiveTab,
+    bool ShowMiniLogs
 )
 {
     public static GameState Initial => new(
@@ -49,7 +50,8 @@ public record GameState(
         IsTestMode: false,
         HasUnseenCadence: false,
         HasUnseenWorkshop: false,
-        ActiveTab: "hand"
+        ActiveTab: "hand",
+        ShowMiniLogs: false
     );
 }
 

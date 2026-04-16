@@ -99,7 +99,7 @@
             </div>
         </div>
 
-        @if (resourceManager.CharacterMiniLogs.TryGetValue(Character.Name, out var log) && log.Any())
+        @if (resourceManager.ShowMiniLogs && resourceManager.CharacterMiniLogs.TryGetValue(Character.Name, out var log) && log.Any())
         {
             <div class="mini-log mt-1">
                 @foreach (var entry in log.Reverse())
