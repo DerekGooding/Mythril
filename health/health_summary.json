@@ -1,9 +1,9 @@
 {
     "is_healthy": false,
-    "failure_count": 8,
+    "failure_count": 7,
     "metrics": {
         "monoliths": 1,
-        "coverage": 78.37,
+        "coverage": 79.68,
         "mutation_score": 0.0,
         "missing_tests": 1,
         "key_violations": 0,
@@ -16,19 +16,14 @@
             "unsustainable": 0
         },
         "pending_feedback": 0,
-        "test_passed": false
+        "test_passed": true
     },
     "failures": [
-        {
-            "category": "tests",
-            "message": "dotnet test failed",
-            "metadata": {}
-        },
         {
             "category": "monolith",
             "message": "Mythril.Data/GameStateStore.cs exceeds 250 lines",
             "metadata": {
-                "lines": 274
+                "lines": 428
             }
         },
         {
