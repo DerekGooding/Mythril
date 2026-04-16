@@ -134,11 +134,11 @@ public class ProgressionTests : BunitTestBase
         Assert.AreEqual(30, InventoryManager.MagicCapacity);
 
         ResourceManager.UnlockAbility("Arcanist", "Magic Pocket I");
-        ResourceManager.UpdateMagicCapacity();
+
         Assert.AreEqual(60, InventoryManager.MagicCapacity);
 
         ResourceManager.UnlockAbility("The Sentinel", "Magic Pocket II");
-        ResourceManager.UpdateMagicCapacity();
+
         Assert.AreEqual(100, InventoryManager.MagicCapacity);
     }
 

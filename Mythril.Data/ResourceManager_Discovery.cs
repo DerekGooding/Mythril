@@ -40,41 +40,12 @@ public partial class ResourceManager
         if (cadence.Name != null) UnlockCadence(cadence);
     }
 
-    public void UpdateMagicCapacity()
-    {
-        int capacity = 30;
-        foreach (var abilityKey in UnlockedAbilities)
-        {
-            var parts = abilityKey.Split(':');
-            if (parts.Length < 2) continue;
-            var cadenceName = parts[0];
-            var abilityName = parts[1];
-            
-            var cadence = _cadences.All.FirstOrDefault(c => c.Name == cadenceName);
-            if (cadence.Name == null) continue;
-            
-            var unlock = cadence.Abilities.FirstOrDefault(a => a.Ability.Name == abilityName);
-            if (unlock.Ability.Name != null && unlock.Ability.Effects != null)
-            {
-                foreach (var effect in unlock.Ability.Effects)
-                {
-                    if (effect.Type == EffectType.MagicCapacity)
-                    {
-                        capacity = Math.Max(capacity, effect.Value);
-                    }
-                }
-            }
-        }
-        _gameStore.Dispatch(new SetMagicCapacityAction(capacity));
-    }
-
     public void UnlockAbility(string cadenceName, string abilityName)
     {
         string key = $"{cadenceName}:{abilityName}";
         if (!UnlockedAbilities.Contains(key))
         {
             _gameStore.Dispatch(new UnlockAbilityAction(key));
-            UpdateMagicCapacity();
         }
     }
 

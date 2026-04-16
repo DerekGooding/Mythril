@@ -236,11 +236,9 @@ public class JunctionStatTests
         Assert.AreEqual(30, _resourceManager!.Inventory.MagicCapacity);
         
         _resourceManager.UnlockAbility("Arcanist", "Magic Pocket I");
-        _resourceManager.UpdateMagicCapacity();
         Assert.AreEqual(60, _resourceManager.Inventory.MagicCapacity);
 
         _resourceManager.UnlockAbility("The Sentinel", "Magic Pocket II");
-        _resourceManager.UpdateMagicCapacity();
         Assert.AreEqual(100, _resourceManager.Inventory.MagicCapacity);
     }
 }

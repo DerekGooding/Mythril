@@ -100,11 +100,27 @@ public partial class ResourceManager
         _gameStore.Dispatch(new ToggleRecipeStarAction(recipeKey));
     }
 
-    public bool IsTestMode { get; set; } = false;
+    public bool IsTestMode 
+    { 
+        get => _gameStore.State.IsTestMode; 
+        set => _gameStore.Dispatch(new SetTestModeAction(value)); 
+    }
 
-    public bool HasUnseenCadence { get; set; } = false;
-    public bool HasUnseenWorkshop { get; set; } = false;
-    public string ActiveTab { get; set; } = "hand";
+    public bool HasUnseenCadence 
+    { 
+        get => _gameStore.State.HasUnseenCadence; 
+        set => _gameStore.Dispatch(new SetUnseenFlagsAction(value, HasUnseenWorkshop)); 
+    }
+    public bool HasUnseenWorkshop 
+    { 
+        get => _gameStore.State.HasUnseenWorkshop; 
+        set => _gameStore.Dispatch(new SetUnseenFlagsAction(HasUnseenCadence, value)); 
+    }
+    public string ActiveTab 
+    { 
+        get => _gameStore.State.ActiveTab; 
+        set => _gameStore.Dispatch(new SetActiveTabAction(value)); 
+    }
 
     public event Action<string, int>? OnItemOverflow;
 

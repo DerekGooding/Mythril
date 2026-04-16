@@ -4,80 +4,27 @@ public partial class ResourceManager
 {
     public async Task ReceiveRewards(QuestProgress progress)
     {
-        object item = progress.Item;
-        string taskName = "Unknown";
-        string characterName = progress.Character.Name;
-        string details = "";
-
-        if (item is QuestData questData)
+        bool alreadyDiscovered = false;
+        if (progress.Item is CadenceUnlock unlock)
         {
-            taskName = questData.Name;
-            details = "Completed " + questData.Name;
-            
-            // Add rewards
-            if (questData.Rewards != null)
-            {
-                foreach (var reward in questData.Rewards)
-                {
-                    Inventory.Add(reward.Item, reward.Quantity);
-                }
-            }
-
-            // Stat rewards
-            if (questData.StatRewards != null)
-            {
-                foreach (var statRew in questData.StatRewards)
-                {
-                    JunctionManager.AddStatBoost(progress.Character, statRew.Key, statRew.Value);
-                }
-            }
-
-            // Unlocks
-            if (questData.Type == QuestType.Single || questData.Type == QuestType.Unlock)
-            {
-                _gameStore.Dispatch(new CompleteQuestAction(questData.Quest));
-                
-                // Unlock Cadences
-                var unlockedCadences = _questToCadenceUnlocks[questData.Quest];
-                foreach (var cadence in unlockedCadences)
-                {
-                    UnlockCadence(cadence);
-                }
-
-                // Discover locations
-                UpdateUsableLocations();
-            }
+            alreadyDiscovered = UnlockedAbilities.Contains($"{unlock.CadenceName}:{unlock.Ability.Name}");
         }
-        else if (item is CadenceUnlock unlock)
-        {
-            taskName = unlock.Ability.Name;
-            details = $"Researched {unlock.Ability.Name} for {unlock.CadenceName}";
-            
-            string abilityKey = $"{unlock.CadenceName}:{unlock.Ability.Name}";
-            bool alreadyDiscovered = UnlockedAbilities.Contains(abilityKey);
-            
-            _gameStore.Dispatch(new UnlockAbilityAction(abilityKey));
 
-            if (!alreadyDiscovered && _refinements.ByKey.ContainsKey(unlock.Ability) && ActiveTab != "workshop")
+        _gameStore.Dispatch(new FinishQuestAction(progress));
+        
+        // Handle side effects that are still in manager for now
+        if (progress.Item is QuestData questData && (questData.Type == QuestType.Single || questData.Type == QuestType.Unlock))
+        {
+            UpdateUsableLocations();
+        }
+        else if (progress.Item is CadenceUnlock unlock2)
+        {
+            if (!alreadyDiscovered && _refinements.ByKey.ContainsKey(unlock2.Ability) && ActiveTab != "workshop")
             {
                 HasUnseenWorkshop = true;
             }
-            UpdateMagicCapacity();
-            JunctionManager.UpdatePassiveBoosts(progress.Character, UnlockedAbilities);
-        }
-        else if (item is RefinementData refinement)
-        {
-            taskName = refinement.Name;
-            details = refinement.Description;
-            
-            Inventory.Add(refinement.Recipe.OutputItem, refinement.Recipe.OutputQuantity);
         }
 
-        // Journal Entry
-        bool isFirstTime = !Journal.Any(j => j.TaskName == taskName);
-        Journal.Insert(0, new JournalEntry(taskName, characterName, details, DateTime.Now, isFirstTime));
-        
-        _gameStore.Dispatch(new CancelQuestAction(progress));
         CheckAutoQuestTick();
     }
 
