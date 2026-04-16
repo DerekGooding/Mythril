@@ -141,7 +141,28 @@ def main():
     with open(ITEMS_JSON, 'r') as f:
         items = json.load(f)
     
-    spells_emojis = {
+    emoji_mapping = {
+        "Gold": "💰",
+        "Potion": "🧪",
+        "Basic Gem": "💎",
+        "Log": "🪵",
+        "Iron Ore": "🧱",
+        "Herb": "🌿",
+        "Leather": "📜",
+        "Water": "🥛",
+        "Web": "🕸️",
+        "Slime": "🟢",
+        "Moonberry": "🫐",
+        "Ancient Bark": "🍂",
+        "Mana Leaf": "🍃",
+        "Fire Shard": "🔥",
+        "Ice Shard": "🧊",
+        "Mythril Spark": "✨",
+        "Sun-baked Scale": "🛡️",
+        "Solar Essence": "☀️",
+        "Crystal Shards": "🔮",
+        "Blue Coral": "🪸",
+        "Lost Parchment": "📜",
         "Fire I": "🔥",
         "Ice I": "❄️",
         "Lightning I": "⚡",
@@ -153,14 +174,9 @@ def main():
 
     for item in items:
         name = item["Name"]
-        item_type = item["ItemType"]
-        
-        if item_type == "Spell" and name in spells_emojis:
-            bake_emoji(name, spells_emojis[name])
-            print(f"Baked emoji for {name}")
-        else:
-            generate_symmetrical_sprite(name)
-            print(f"Generated sprite for {name}")
+        emoji = emoji_mapping.get(name, "📦") # Box as fallback
+        bake_emoji(name, emoji)
+        print(f"Baked emoji for {name}")
 
 if __name__ == "__main__":
     main()
