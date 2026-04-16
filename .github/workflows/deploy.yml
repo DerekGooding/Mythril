@@ -42,6 +42,10 @@ jobs:
         if: always()
         run: |
           dotnet publish Mythril.Blazor/Mythril.Blazor.csproj -c Release -o output
+          # Ensure .nojekyll exists
+          touch output/wwwroot/.nojekyll
+          # Create 404.html for routing
+          cp output/wwwroot/index.html output/wwwroot/404.html
           # Copy health metrics to hosted directory
           mkdir -p output/wwwroot/health
           cp scripts/data/*.json output/wwwroot/health/

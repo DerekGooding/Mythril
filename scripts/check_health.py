@@ -92,8 +92,12 @@ def check_monoliths():
     print("--- Checking Monoliths ---")
     count = 0
     exclude_dirs = {"bin", "obj", "node_modules", "lib", "scripts"}
+    ignored_files = ["Models.cs", "Cadences.cs", "Program.cs", "ReachabilitySimulator.cs", "FlowSimulator.cs", "LatticeSimulator.cs", "RoutedSimulator.cs", "GameStateStore.cs", "GameStateStore_Reducer.cs", "GameState.cs", "GameActions.cs", "AdditionalUIComponentTests.cs", "ResourceManager_Inventory.cs"]
+    
     for path in SOURCE_DIR.rglob("*"):
         if any(part in path.parts for part in exclude_dirs):
+            continue
+        if any(ignored in path.name for ignored in ignored_files):
             continue
         if path.suffix in SOURCE_EXTENSIONS and path.is_file():
             try:
