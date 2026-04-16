@@ -14,7 +14,7 @@ This roadmap focuses on refining the game's economic balance, optimizing the cor
 - [x] **Predictive Dependency Overlay**: Implement "Prerequisite Path" highlighting in the `CadenceTree` and `QuestPanel`.
 
 ## Phase 3: State & Runtime Consolidation
-- [ ] **Unified Deterministic State Store**: Implement a central Reducer-based `GameStateStore` for full simulation/runtime parity.
+- [x] **Unified Deterministic State Store**: Implement a central Reducer-based `GameStateStore` for full simulation/runtime parity.
 
 ---
 *Last Updated: 2026-04-08*

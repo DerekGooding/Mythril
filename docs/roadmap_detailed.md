@@ -44,10 +44,10 @@ Type-safe ability and quest effects.
 ## 6. Unified Deterministic State Store
 Full parity between simulation and Blazor runtime.
 
-- [ ] **State Record**: Create a single `GameStoreState` immutable record.
-- [ ] **Actions & Reducers**: Define formal `Actions` (e.g., `CompleteQuest`, `SpendResource`) and a pure `Reducer` function.
-- [ ] **Manager Refactor**: Convert `ResourceManager`, `JunctionManager`, and `InventoryManager` to be view-only subscribers to the `GameStateStore`.
-- [ ] **Snapshot Support**: Implement a one-click snapshot/restore feature for testing and save-games.
+- [x] **State Record**: Create a single `GameStoreState` immutable record.
+- [x] **Actions & Reducers**: Define formal `Actions` (e.g., `CompleteQuest`, `SpendResource`) and a pure `Reducer` function.
+- [x] **Manager Refactor**: Convert `ResourceManager`, `JunctionManager`, and `InventoryManager` to be view-only subscribers to the `GameStateStore`.
+- [x] **Snapshot Support**: Implement a one-click snapshot/restore feature for testing and save-games.
 
 ---
 *Last Updated: 2026-04-06*
