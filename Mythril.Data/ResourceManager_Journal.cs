@@ -17,9 +17,9 @@ public partial class ResourceManager
 
     public ImmutableDictionary<string, ImmutableList<string>> CharacterMiniLogs => _gameStore.State.CharacterMiniLogs;
 
-    public void AddToJournal(string taskName, string characterName, string details)
+    public void AddToJournal(string taskName, string characterName, string details, bool wasCancelled = false)
     {
-        _gameStore.Dispatch(new AddToJournalAction(taskName, characterName, details));
+        _gameStore.Dispatch(new AddToJournalAction(taskName, characterName, details, wasCancelled));
         OnJournalUpdated?.Invoke();
     }
 }

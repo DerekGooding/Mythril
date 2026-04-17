@@ -202,7 +202,7 @@ public partial class GameStore
     private static GameState AddToJournal(GameState state, AddToJournalAction a)
     {
         bool isFirstTime = !state.EverPerformedActivities.Contains(a.TaskName);
-        var entry = new JournalEntry(a.TaskName, a.CharacterName, a.Details, DateTime.Now, isFirstTime);
+        var entry = new JournalEntry(a.TaskName, a.CharacterName, a.Details, DateTime.Now, isFirstTime, a.WasCancelled);
         
         var newJournal = state.Journal.Insert(0, entry);
         if (newJournal.Count > 50) newJournal = newJournal.RemoveAt(newJournal.Count - 1);
