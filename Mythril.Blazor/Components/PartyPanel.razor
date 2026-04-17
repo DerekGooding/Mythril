@@ -6,6 +6,7 @@
         <h3>Party</h3>
         <button class="btn btn-xs @(resourceManager.ShowMiniLogs ? "btn-secondary" : "btn-outline-secondary")" 
                 @onclick="resourceManager.ToggleMiniLogs"
+                data-testid="toggle-minilogs"
                 title="Toggle Mini-Logs">
             <span class="material-icons" style="font-size: 14px;">@(resourceManager.ShowMiniLogs ? "visibility" : "visibility_off")</span>
         </button>
