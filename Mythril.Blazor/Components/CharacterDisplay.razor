@@ -41,12 +41,7 @@
     <div class="flex-grow-1 min-width-0">
         <div class="character-header">
             <div class="d-flex flex-column flex-grow-1 min-width-0">
-                <DropZone OnQuestDrop="HandleTaskDrop" 
-                          OnDropFailed="HandleDropFailed"
-                          Accepts="(item) => item is Cadence"
-                          Message="">
-                    <h4 class="character-name text-truncate m-0">@Character.Name</h4>
-                </DropZone>
+                <h4 class="character-name text-truncate m-0">@Character.Name</h4>
                 <div class="cadence-info small text-muted">
                     @if (assignedCadences.Any())
                     {
@@ -133,7 +128,7 @@
                     {
                         <DropZone OnQuestDrop="HandleTaskDrop" 
                                   OnDropFailed="HandleDropFailed"
-                                  Accepts="(item) => resourceManager.CanAfford(item, Character)" />
+                                  Accepts="(item) => item is Cadence || resourceManager.CanAfford(item, Character)" />
                     }
                 </div>
             }
