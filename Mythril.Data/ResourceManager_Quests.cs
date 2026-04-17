@@ -91,6 +91,12 @@ public partial class ResourceManager
         {
             if (!Inventory.Has(refinement.InputItem, refinement.Recipe.InputQuantity)) return false;
             
+            // If it produces a spell, check against Magic Capacity
+            if (refinement.Recipe.OutputItem.ItemType == ItemType.Spell)
+            {
+                if (Inventory.GetQuantity(refinement.Recipe.OutputItem) >= Inventory.MagicCapacity) return false;
+            }
+
             // Refinements require the ability to be UNLOCKED and the cadence ASSIGNED
             if (character == null) return false;
             return HasAbility(character.Value, refinement.Ability);

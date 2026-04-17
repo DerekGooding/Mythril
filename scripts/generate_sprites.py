@@ -121,7 +121,9 @@ def bake_emoji(name, emoji, size=32):
         bbox = draw.textbbox((0, 0), emoji, font=font, embedded_color=True)
         w = bbox[2] - bbox[0]
         h = bbox[3] - bbox[1]
-        draw.text(((render_size - w) // 2, (render_size - h) // 2 - bbox[1]), emoji, font=font, fill=(255, 255, 255, 255), embedded_color=True)
+        x = (render_size - w) // 2 - bbox[0]
+        y = (render_size - h) // 2 - bbox[1]
+        draw.text((x, y), emoji, font=font, fill=(255, 255, 255, 255), embedded_color=True)
     else:
         # Fallback to initials if no emoji font
         draw.text((render_size//4, render_size//4), name[0], fill=(255, 255, 255, 255))
@@ -175,6 +177,8 @@ def main():
     for item in items:
         name = item["Name"]
         emoji = emoji_mapping.get(name, "📦") # Box as fallback
+        # Strip variation selector-16 which causes double-width bbox in some Pillow versions
+        emoji = emoji.replace('\ufe0f', '')
         bake_emoji(name, emoji)
         print(f"Baked emoji for {name}")
 
