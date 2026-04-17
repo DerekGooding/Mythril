@@ -164,8 +164,9 @@ public class ContentEdge
 // Persistence
 public class SaveData
 {
-    public GameState? State { get; set; }
-    public List<KeyValuePair<string, int>> Inventory { get; set; } = [];
+    public Dictionary<string, int> Inventory { get; set; } = [];
+    public int MagicCapacity { get; set; } = 30;
+    public List<string> PinnedItems { get; set; } = [];
     public List<string> UnlockedCadences { get; set; } = [];
     public List<string> UnlockedAbilities { get; set; } = [];
     public List<string> CompletedQuests { get; set; } = [];
@@ -176,8 +177,14 @@ public class SaveData
     public Dictionary<string, bool> AutoQuestEnabled { get; set; } = [];
     public List<string> UnlockedLocations { get; set; } = []; 
     public List<string> StarredRecipes { get; set; } = [];
+    public Dictionary<string, List<string>> CharacterMiniLogs { get; set; } = [];
+    public List<string> EverPerformedActivities { get; set; } = [];
     public bool HasUnseenCadence { get; set; }
     public bool HasUnseenWorkshop { get; set; }
+    public double CurrentTime { get; set; }
+    public bool IsTestMode { get; set; }
+    public string ActiveTab { get; set; } = "hand";
+    public bool ShowMiniLogs { get; set; }
     public DateTime LastSaveTime { get; set; }
     public Dictionary<string, Dictionary<string, int>> CharacterStatBoosts { get; set; } = [];
 }
@@ -207,6 +214,8 @@ public class QuestProgressDTO
     public double SecondsElapsed { get; set; }
     public DateTime StartTime { get; set; }
     public int SlotIndex { get; set; }
+    public string Description { get; set; } = string.Empty;
+    public int DurationSeconds { get; set; }
 }
 
 public class JournalEntryDTO
