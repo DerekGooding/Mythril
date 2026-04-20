@@ -43,25 +43,28 @@ def enrich_data(nodes):
 
     # 2. BFS for Tiers
     tiers = {n["id"]: 0 for n in nodes}
-    visited = set()
     
-    # Start BFS from prologue or any node with no requirements
     roots = [n["id"] for n in nodes if n["id"] == "quest_prologue"]
     if not roots:
         roots = [n["id"] for n in nodes if not n.get("in_edges")]
     
     queue = deque([(root, 0) for root in roots])
-    for r in roots: visited.add(r)
+    visited_depth = {r: 0 for r in roots}
     
     while queue:
         curr_id, d = queue.popleft()
-        tiers[curr_id] = max(tiers.get(curr_id, 0), d)
         
         for neighbor in adj[curr_id]:
-            if neighbor not in visited or tiers[neighbor] < d + 1:
-                visited.add(neighbor)
+            if neighbor not in visited_depth or visited_depth[neighbor] < d + 1:
+                visited_depth[neighbor] = d + 1
                 tiers[neighbor] = d + 1
                 queue.append((neighbor, d + 1))
+
+    # Special handling for nodes with hardcoded requirements not in the graph
+    max_bfs_tier = max(tiers.values()) if tiers else 0
+    for n in nodes:
+        if n["id"] == "cadence_slayer" or "slayer" in n["id"].lower():
+            tiers[n["id"]] = max_bfs_tier + 1
 
     # 3. Cluster Identification
     clusters = {} # NodeID -> ClusterID
@@ -405,11 +408,16 @@ def generate_html(nodes, cluster_names):
         const svg = document.getElementById('graph-svg');
         const tooltip = document.getElementById('tooltip');
         const sidebar = document.getElementById('sidebar');
-        
+
         let nodes = [];
         let edges = [];
         let transform = {{ x: 50, y: 50, k: 0.6 }};
         let nodeMap = new Map();
+        let simulationFrame = 0;
+        const MAX_SIM_FRAMES = 300;
+        let isSimulating = true;
+        let draggedNode = null;
+
         
         // --- Initialization ---
         function init() {{
@@ -573,11 +581,23 @@ def generate_html(nodes, cluster_names):
 
         function simulationStep() {{
             if (currentView !== 'lattice') return;
+            if (!isSimulating && !draggedNode) return;
+
+            // Increment frame only if not dragging
+            if (isSimulating && !draggedNode) {{
+                simulationFrame++;
+                if (simulationFrame > MAX_SIM_FRAMES) {{
+                    isSimulating = false;
+                    console.log("Simulation settled.");
+                }}
+            }}
 
             // 1. Calculate Forces
             const clusters = new Map();
 
             nodes.forEach(n => {{
+                if (n === draggedNode) return;
+
                 // PROGRESSION FORCE (Snap to X tier)
                 const targetX = n.tier * TIER_WIDTH;
                 n.vx += (targetX - n.x) * 0.05;
@@ -830,6 +850,17 @@ def generate_html(nodes, cluster_names):
         }}
 
         function setupInteractions() {{
+            document.querySelectorAll('.node').forEach(nodeEl => {{
+                nodeEl.addEventListener('mousedown', e => {{
+                    if (currentView !== 'lattice') return;
+                    e.stopPropagation();
+                    const nodeId = nodeEl.id.replace('node-', '');
+                    draggedNode = nodeMap.get(nodeId);
+                    isSimulating = true; // Wake up simulation
+                    svg.style.cursor = 'grabbing';
+                }});
+            }});
+
             document.getElementById('btn-lattice').addEventListener('click', () => {{
                 currentView = 'lattice';
                 document.getElementById('btn-lattice').classList.add('active');
@@ -871,7 +902,11 @@ def generate_html(nodes, cluster_names):
             }});
 
             window.addEventListener('mousemove', e => {{
-                if (isDragging) {{
+                if (draggedNode) {{
+                    const rect = svg.getBoundingClientRect();
+                    draggedNode.x = (e.clientX - rect.left - transform.x) / transform.k;
+                    draggedNode.y = (e.clientY - rect.top - transform.y) / transform.k;
+                }} else if (isDragging) {{
                     transform.x = e.clientX - startPos.x;
                     transform.y = e.clientY - startPos.y;
                     updateTransform();
@@ -884,6 +919,7 @@ def generate_html(nodes, cluster_names):
 
             window.addEventListener('mouseup', () => {{
                 isDragging = false;
+                draggedNode = null;
                 svg.style.cursor = 'grab';
             }});
 
