@@ -399,7 +399,7 @@ def generate_html(nodes, cluster_names):
         const clusterNames = {json.dumps(cluster_names)};
         
         // --- Configuration ---
-        const TIER_WIDTH = 450;
+        const TIER_WIDTH = 800;
         const NODE_RADIUS = 15;
         
         // --- State ---
@@ -432,9 +432,9 @@ def generate_html(nodes, cluster_names):
         function processData() {{
             nodes = nodesData.map(d => ({{
                 ...d,
-                // Initial position based on tier
-                x: d.tier * TIER_WIDTH + (Math.random() - 0.5) * 200,
-                y: (window.innerHeight / 2) + (Math.random() - 0.5) * 600,
+                // Initial position based on tier with wider vertical spread
+                x: d.tier * TIER_WIDTH + (Math.random() - 0.5) * 400,
+                y: (window.innerHeight / 2) + (Math.random() - 0.5) * 2000,
                 vx: 0,
                 vy: 0
             }}));
@@ -602,21 +602,23 @@ def generate_html(nodes, cluster_names):
                 const targetX = n.tier * TIER_WIDTH;
                 n.vx += (targetX - n.x) * 0.05;
 
-                // CENTER Y FORCE
-                n.vy += (window.innerHeight / 2 - n.y) * 0.005;
+                // CENTER Y FORCE (Stronger to keep them centered vertically)
+                n.vy += (window.innerHeight / 2 - n.y) * 0.01;
 
-                // REPULSION
+                // REPULSION (Stronger to maintain spacing)
                 nodes.forEach(m => {{
                     if (n === m) return;
                     const dx = n.x - m.x;
                     const dy = n.y - m.y;
                     const distSq = dx * dx + dy * dy || 1;
-                    if (distSq < 2500) {{ // Very close repulsion
-                        const force = 50 / distSq;
-                        n.vx += dx * force;
-                        n.vy += dy * force;
-                    }} else if (distSq < 40000) {{ // Distant repulsion
-                        const force = 10 / distSq;
+                    
+                    // Min separation 60px (2 nodes height)
+                    if (distSq < 3600) {{ 
+                        const force = 100 / Math.sqrt(distSq);
+                        n.vx += dx * force * 0.5;
+                        n.vy += dy * force * 0.5;
+                    }} else if (distSq < 100000) {{
+                        const force = 20 / distSq;
                         n.vx += dx * force;
                         n.vy += dy * force;
                     }}
