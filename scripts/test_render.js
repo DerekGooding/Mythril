@@ -11,29 +11,44 @@ const fs = require('fs');
         console.log(`PAGE LOG [${msg.type()}]: ${msg.text()}`);
     });
 
-    const filePath = path.resolve('output/graph_visualizer_test.html');
+    // We expect visual_dashboard.html to be generated in output/
+    const filePath = path.resolve('output/visual_dashboard.html');
+    if (!fs.existsSync(filePath)) {
+        console.error(`[FAIL] File not found: ${filePath}`);
+        process.exit(1);
+    }
+
     const url = 'file://' + filePath;
     console.log('Loading ' + url);
     
     await page.goto(url);
     
-    // Wait for either the SVG or the error message
-    console.log('Waiting for mermaid output...');
-    await page.waitForTimeout(5000); // Give it plenty of time
+    console.log('Waiting for graph to render...');
+    // The new visualizer uses requestAnimationFrame for simulation
+    // We'll wait for nodes to appear
+    try {
+        await page.waitForSelector('.node', { timeout: 10000 });
+        console.log('[SUCCESS] Nodes detected in the lattice view.');
+    } catch (e) {
+        console.error('[FAIL] Timeout waiting for .node elements.');
+        await browser.close();
+        process.exit(1);
+    }
     
-    // Take a full page screenshot
-    const screenshotPath = 'output/graph_debug.png';
+    // Switch to Hierarchy View
+    console.log('Testing Hierarchy View...');
+    await page.click('#btn-hierarchy');
+    try {
+        await page.waitForSelector('.tier-column', { timeout: 5000 });
+        console.log('[SUCCESS] Tier columns detected in hierarchy view.');
+    } catch (e) {
+        console.error('[FAIL] Timeout waiting for .tier-column elements.');
+    }
+
+    // Take a screenshot for manual verification if needed
+    const screenshotPath = 'output/visual_debug.png';
     await page.screenshot({ path: screenshotPath, fullPage: true });
     console.log(`Screenshot saved to ${screenshotPath}`);
     
-    // Check for error text in the page
-    const content = await page.content();
-    if (content.includes('Syntax error') || content.includes('Parser error')) {
-        console.log('[FAIL] Syntax error detected in page content.');
-    } else {
-        const svgExists = await page.locator('.mermaid svg').count() > 0;
-        console.log(`SVG element exists: ${svgExists}`);
-    }
-
     await browser.close();
 })();
