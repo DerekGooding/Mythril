@@ -152,8 +152,8 @@ public class AutomationTests
         
         // Set capacity to 30
         _gameStore!.Dispatch(new SetMagicCapacityAction(30));
-        // Fill inventory to capacity
-        _resourceManager.Inventory.Add(refData.Value.Recipe.OutputItem, 30);
+        // Fill inventory to near capacity (29/30)
+        _resourceManager.Inventory.Add(refData.Value.Recipe.OutputItem, 29);
         // Add input item
         _resourceManager.Inventory.Add(refData.Value.InputItem, 1);
 

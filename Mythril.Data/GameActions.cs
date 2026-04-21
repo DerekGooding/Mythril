@@ -35,3 +35,4 @@ public record SetActiveTabAction(string TabName) : IGameAction;
 public record SetUnseenFlagsAction(bool Cadence, bool Workshop) : IGameAction;
 public record SetTestModeAction(bool IsTestMode) : IGameAction;
 public record ToggleMiniLogsAction() : IGameAction;
+public record MarkContentSeenAction(string ContentId) : IGameAction;

@@ -82,6 +82,12 @@ public partial class Home : IDisposable
             resourceManager.HasUnseenWorkshop = false;
             _ = persistenceService.SaveAsync();
         }
+        resourceManager.MarkSeen("workshop");
+    }
+
+    private void MarkLocationsAsSeen()
+    {
+        resourceManager.ActiveTab = "hand";
     }
 
     private async Task ToggleTheme()

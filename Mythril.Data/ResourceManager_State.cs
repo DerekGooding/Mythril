@@ -125,6 +125,41 @@ public partial class ResourceManager
     public bool ShowMiniLogs => _gameStore.State.ShowMiniLogs;
     public void ToggleMiniLogs() => _gameStore.Dispatch(new ToggleMiniLogsAction());
 
+    public HashSet<string> SeenContent => _gameStore.State.SeenContent.ToHashSet();
+
+    public void MarkSeen(string contentId) => _gameStore.Dispatch(new MarkContentSeenAction(contentId));
+
+    public bool HasUnseenContent(LocationData location)
+    {
+        if (!SeenContent.Contains($"loc:{location.Name}")) return true;
+        return location.Quests.Any(q => !SeenContent.Contains($"quest:{q.Name}"));
+    }
+
+    public bool HasUnseenContent(Cadence cadence)
+    {
+        if (!SeenContent.Contains($"cadence:{cadence.Name}")) return true;
+        return cadence.Abilities.Any(a => UnlockedAbilities.Contains($"{cadence.Name}:{a.Ability.Name}") && !SeenContent.Contains($"ability:{cadence.Name}:{a.Ability.Name}"));
+    }
+
+    public bool HasAnyUnseenLocation => UsableLocations.Any(l => HasUnseenContent(l));
+    public bool HasAnyUnseenCadence => UnlockedCadences.Any(c => HasUnseenContent(c));
+
+    public void MarkLocationAsSeen(LocationData location)
+    {
+        MarkSeen($"loc:{location.Name}");
+        foreach (var q in location.Quests) MarkSeen($"quest:{q.Name}");
+    }
+
+    public void MarkCadenceAsSeen(Cadence cadence)
+    {
+        MarkSeen($"cadence:{cadence.Name}");
+        foreach (var a in cadence.Abilities)
+        {
+            if (UnlockedAbilities.Contains($"{cadence.Name}:{a.Ability.Name}"))
+                MarkSeen($"ability:{cadence.Name}:{a.Ability.Name}");
+        }
+    }
+
     public event Action<string, int>? OnItemOverflow;
 
     public void Initialize()

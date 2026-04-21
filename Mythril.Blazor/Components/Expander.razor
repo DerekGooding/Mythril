@@ -8,6 +8,10 @@
                 <span class="active-dot pulse" title="Active Task In Progress"></span>
             }
             <span class="header-text">@Header</span>
+            @if (IsUnseen)
+            {
+                <span class="notification-dot ms-1" title="New content available"></span>
+            }
             @if (TotalCount > 0)
             {
                 <span class="completion-counter small text-muted">(@CompletedCount/@TotalCount)</span>
@@ -34,6 +38,8 @@
     [Parameter] public string? Type { get; set; }
     [Parameter] public bool IsActive { get; set; }
     [Parameter] public bool IsDefaultCollapsed { get; set; }
+    [Parameter] public bool IsUnseen { get; set; }
+    [Parameter] public EventCallback OnToggle { get; set; }
 
     private bool isExpanded;
     private bool IsCompact => TotalCount > 0 && CompletedCount >= TotalCount;
@@ -50,8 +56,12 @@
 
     private bool initialSet = false;
 
-    private void Toggle()
+    private async Task Toggle()
     {
         isExpanded = !isExpanded;
+        if (isExpanded)
+        {
+            await OnToggle.InvokeAsync();
+        }
     }
 }

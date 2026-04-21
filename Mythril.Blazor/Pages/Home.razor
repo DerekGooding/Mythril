@@ -92,47 +92,51 @@
             {
                 <ul class="nav nav-tabs flex-shrink-0" id="myTab" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="hand-tab" data-testid="locations-tab" data-bs-toggle="tab" data-bs-target="#hand" type="button" role="tab" @onclick='() => resourceManager.ActiveTab = "hand"'>
+                        <button class="nav-link @(resourceManager.ActiveTab == "hand" ? "active" : "")" id="hand-tab" data-testid="locations-tab" data-bs-toggle="tab" data-bs-target="#hand" type="button" role="tab" @onclick="MarkLocationsAsSeen">
                             Locations
+                            @if (resourceManager.HasAnyUnseenLocation && resourceManager.ActiveTab != "hand")
+                            {
+                                <span class="notification-dot"></span>
+                            }
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="cadence-tab" data-testid="cadence-tab" data-bs-toggle="tab" data-bs-target="#cadence" type="button" role="tab" @onclick="MarkCadencesAsSeen">
+                        <button class="nav-link @(resourceManager.ActiveTab == "cadence" ? "active" : "")" id="cadence-tab" data-testid="cadence-tab" data-bs-toggle="tab" data-bs-target="#cadence" type="button" role="tab" @onclick="MarkCadencesAsSeen">
                             Cadence
-                            @if (resourceManager.HasUnseenCadence)
+                            @if ((resourceManager.HasAnyUnseenCadence || resourceManager.HasUnseenCadence) && resourceManager.ActiveTab != "cadence")
                             {
                                 <span class="notification-dot"></span>
                             }
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="workshop-tab" data-testid="workshop-tab" data-bs-toggle="tab" data-bs-target="#workshop" type="button" role="tab" @onclick="MarkWorkshopAsSeen">
+                        <button class="nav-link @(resourceManager.ActiveTab == "workshop" ? "active" : "")" id="workshop-tab" data-testid="workshop-tab" data-bs-toggle="tab" data-bs-target="#workshop" type="button" role="tab" @onclick="MarkWorkshopAsSeen">
                             Workshop
-                            @if (resourceManager.HasUnseenWorkshop)
+                            @if (resourceManager.HasUnseenWorkshop && resourceManager.ActiveTab != "workshop")
                             {
                                 <span class="notification-dot"></span>
                             }
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="journal-tab" data-testid="journal-tab" data-bs-toggle="tab" data-bs-target="#journal" type="button" role="tab" @onclick='() => resourceManager.ActiveTab = "journal"'>
+                        <button class="nav-link @(resourceManager.ActiveTab == "journal" ? "active" : "")" id="journal-tab" data-testid="journal-tab" data-bs-toggle="tab" data-bs-target="#journal" type="button" role="tab" @onclick='() => resourceManager.ActiveTab = "journal"'>
                             Journal
                         </button>
                     </li>
                 </ul>
                 <div class="tab-content border border-top-0">
-                    <div class="tab-pane active" id="hand" role="tabpanel">
+                    <div class="tab-pane @(resourceManager.ActiveTab == "hand" ? "active" : "")" id="hand" role="tabpanel">
                         <HandPanel Locations="resourceManager.UsableLocations" />
                     </div>
-                    <div class="tab-pane" id="cadence" role="tabpanel">
+                    <div class="tab-pane @(resourceManager.ActiveTab == "cadence" ? "active" : "")" id="cadence" role="tabpanel">
                         <CadencePanel UnlockedCadences="resourceManager.UnlockedCadences" 
                                       UnlockedCadenceNamesCount="resourceManager.UnlockedCadenceNames.Count"
                                       OnUnequip="UnassignCadence" />
                     </div>
-                    <div class="tab-pane" id="workshop" role="tabpanel">
+                    <div class="tab-pane @(resourceManager.ActiveTab == "workshop" ? "active" : "")" id="workshop" role="tabpanel">
                         <Workshop UnlockedAbilities="resourceManager.UnlockedAbilities" @key="@resourceManager.UnlockedAbilities.Count" />
                     </div>
-                    <div class="tab-pane" id="journal" role="tabpanel">
+                    <div class="tab-pane @(resourceManager.ActiveTab == "journal" ? "active" : "")" id="journal" role="tabpanel">
                         <JournalPanel />
                     </div>
                 </div>

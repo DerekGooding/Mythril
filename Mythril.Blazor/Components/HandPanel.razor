@@ -20,8 +20,10 @@
                           @key="@location.Name"
                           Type="@GetLocationType(location)"
                           IsActive="@isActive"
+                          IsUnseen="@ResourceManager.HasUnseenContent(location)"
                           CompletedCount="@stats.Completed"
-                          TotalCount="@stats.Total">
+                          TotalCount="@stats.Total"
+                          OnToggle="@(() => ResourceManager.MarkLocationAsSeen(location))">
                     @{
                         var quests = location.Quests.ToList();
                         var sortedQuests = _sortByDuration 

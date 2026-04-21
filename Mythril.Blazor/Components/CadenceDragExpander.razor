@@ -18,6 +18,10 @@
             <div class="d-flex flex-column text-start">
                 <div class="d-flex align-items-center gap-2">
                     <span class="item-name">@Cadence.Name</span>
+                    @if (IsUnseen)
+                    {
+                        <span class="notification-dot" title="New content available"></span>
+                    }
                     @if (TotalCount > 0)
                     {
                         <span class="completion-counter small text-muted">(@CompletedCount/@TotalCount)</span>
@@ -48,13 +52,22 @@
     [Parameter] public int TotalCount { get; set; }
     [Parameter] public RenderFragment? ChildContent { get; set; }
     [Parameter] public bool IsHighlighted { get; set; }
+    [Parameter] public bool IsUnseen { get; set; }
+    [Parameter] public EventCallback OnToggle { get; set; }
 
     private bool isExpanded = false;
     private Character? assignedCharacter => ResourceManager.JunctionManager.GetAssignedCharacter(Cadence);
     private bool isEquipped => assignedCharacter.HasValue;
     private int ProgressPercent => TotalCount > 0 ? (CompletedCount * 100 / TotalCount) : 0;
 
-    private void Toggle() => isExpanded = !isExpanded;
+    private async Task Toggle()
+    {
+        isExpanded = !isExpanded;
+        if (isExpanded)
+        {
+            await OnToggle.InvokeAsync();
+        }
+    }
 
     private void HandleDragStart(DragEventArgs args)
     {

@@ -53,6 +53,7 @@ public partial class GameStore
             SetUnseenFlagsAction a => state with { HasUnseenCadence = a.Cadence, HasUnseenWorkshop = a.Workshop },
             SetTestModeAction a => state with { IsTestMode = a.IsTestMode },
             ToggleMiniLogsAction a => state with { ShowMiniLogs = !state.ShowMiniLogs },
+            MarkContentSeenAction a => state with { SeenContent = state.SeenContent.Add(a.ContentId) },
             _ => state
         };
     }

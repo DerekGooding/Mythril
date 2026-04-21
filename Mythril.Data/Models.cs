@@ -179,6 +179,7 @@ public class SaveData
     public List<string> StarredRecipes { get; set; } = [];
     public Dictionary<string, List<string>> CharacterMiniLogs { get; set; } = [];
     public List<string> EverPerformedActivities { get; set; } = [];
+    public List<string> SeenContent { get; set; } = [];
     public bool HasUnseenCadence { get; set; }
     public bool HasUnseenWorkshop { get; set; }
     public double CurrentTime { get; set; }
