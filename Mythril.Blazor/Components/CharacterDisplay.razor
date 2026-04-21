@@ -4,186 +4,190 @@
 
 @implements IDisposable
 
-<div class="character-display shadow-theme @(QuestProgresses.Any() ? "has-active-task" : "") @(QuestProgresses.Any(p => p.IsCompleted) ? "completed" : "") d-flex align-items-center gap-2">
-    @{
-        var assignedCadences = JunctionManager.CurrentlyAssigned(Character).ToList();
-        var taskLimit = resourceManager.GetTaskLimit(Character);
-    }
-    
-    <div class="character-controls d-flex flex-column gap-1">
-        @if (assignedCadences.Any())
-        {
-            <div class="btn-group btn-group-xs w-100">
-                <button class="btn btn-xs @(_isRemovalMode ? "btn-danger" : "btn-outline-danger")" 
-                        title="Remove Junctions" 
-                        @onclick="ToggleRemovalMode">
-                    <span class="material-icons" style="font-size: 14px;">link_off</span>
-                </button>
-                <button class="btn btn-xs @(_showJunctionMenu ? "btn-primary" : "btn-outline-primary")" 
-                        title="Junction Menu"
-                        @onclick="ToggleJunctionMenu">
-                    <span class="material-icons" style="font-size: 14px;">menu</span>
-                </button>
-            </div>
-            
-            @if (resourceManager.CanAutoQuest(Character))
-            {
-                var isAuto = resourceManager.IsAutoQuestEnabled(Character);
-                <button class="btn btn-xs @(isAuto ? "btn-success" : "btn-outline-secondary")" 
-                        data-testid="autoquest-toggle"
-                        @onclick="ToggleAutoQuest">
-                    Auto: @(isAuto ? "ON" : "OFF")
-                </button>
-            }
+<DropZone Class="character-drop-zone"
+          OnQuestDrop="HandleTaskDrop"
+          Accepts="(item) => item is Cadence">
+    <div class="character-display shadow-theme @(QuestProgresses.Any() ? "has-active-task" : "") @(QuestProgresses.Any(p => p.IsCompleted) ? "completed" : "") d-flex align-items-center gap-2">
+        @{
+            var assignedCadences = JunctionManager.CurrentlyAssigned(Character).ToList();
+            var taskLimit = resourceManager.GetTaskLimit(Character);
         }
-    </div>
-
-    <div class="flex-grow-1 min-width-0">
-        <div class="character-header">
-            <div class="d-flex flex-column flex-grow-1 min-width-0">
-                <h4 class="character-name text-truncate m-0">@Character.Name</h4>
-                <div class="cadence-info small text-muted">
-                    @if (assignedCadences.Any())
-                    {
-                        <div class="d-flex flex-wrap gap-1 mt-1">
-                            @foreach (var cadence in assignedCadences)
-                            {
-                                <div class="badge bg-secondary d-flex align-items-center gap-1">
-                                    <span class="text-truncate" style="max-width: 80px;">@cadence.Name</span>
-                                    <button class="btn btn-xs p-0 text-white" @onclick="() => OnUnequip.InvokeAsync(cadence)" title="Unequip">&times;</button>
-                                </div>
-                            }
-                        </div>
-                    }
-                    else
-                    {
-                        <span>Cadence: None</span>
-                    }
+        
+        <div class="character-controls d-flex flex-column gap-1">
+            @if (assignedCadences.Any())
+            {
+                <div class="btn-group btn-group-xs w-100">
+                    <button class="btn btn-xs @(_isRemovalMode ? "btn-danger" : "btn-outline-danger")" 
+                            title="Remove Junctions" 
+                            @onclick="ToggleRemovalMode">
+                        <span class="material-icons" style="font-size: 14px;">link_off</span>
+                    </button>
+                    <button class="btn btn-xs @(_showJunctionMenu ? "btn-primary" : "btn-outline-primary")" 
+                            title="Junction Menu"
+                            @onclick="ToggleJunctionMenu">
+                        <span class="material-icons" style="font-size: 14px;">menu</span>
+                    </button>
                 </div>
-            </div>
-            <div class="stats-container">
-                <div class="stats-mini">
-                    @foreach (var stat in statsContent.All)
-                    {
-                        var val = JunctionManager.GetStatValue(Character, stat.Name);
-                        var junction = JunctionManager.Junctions.FirstOrDefault(j => j.Character.Name == Character.Name && j.Stat.Name == stat.Name);
-                        var delta = GetPredictionDelta(stat);
-                        var isHovered = DragDropService.HoveredTarget?.character.Name == Character.Name && DragDropService.HoveredTarget?.stat.Name == stat.Name;
-                        bool canJunction = CanJunction(stat);
-                        
-                        <span @key="stat.Name" 
-                              class="stat-badge @(junction != null ? "junctioned" : "") @(isHovered ? "hovered" : "") @(canJunction ? "can-junction" : "locked") @(_isRemovalMode && junction != null ? "removal-target" : "")" 
-                              draggable="@(junction != null ? "true" : "false")"
-                              @ondragstart="() => HandleStatDragStart(stat, junction)"
-                              title="@stat.Description @(junction != null ? $"(J: {junction.Magic.Name})" : "")"
-                              @onclick="() => { if(_isRemovalMode && junction != null) ClearJunction(stat); }"
-                              @ondragenter="() => HandleStatDragEnter(stat)"
-                              @ondragleave="HandleStatDragLeave"
-                              @ondragover:preventDefault
-                              @ondrop="() => HandleStatDrop(stat)">
-                            @stat.Name[0]: @val
-                            @if (delta != 0)
-                            {
-                                <span class="stat-delta @(delta > 0 ? "text-success" : "text-danger")">
-                                    @(delta > 0 ? "↑" : "↓")@Math.Abs(delta)
-                                </span>
-                            }
-                        </span>
-                    }
-                </div>
-            </div>
-        </div>
-
-        @if (resourceManager.ShowMiniLogs && resourceManager.CharacterMiniLogs.TryGetValue(Character.Name, out var log) && log.Any())
-        {
-            <div class="mini-log mt-1">
-                @foreach (var entry in log.Reverse())
+                
+                @if (resourceManager.CanAutoQuest(Character))
                 {
-                    <div class="log-entry text-truncate">@entry</div>
+                    var isAuto = resourceManager.IsAutoQuestEnabled(Character);
+                    <button class="btn btn-xs @(isAuto ? "btn-success" : "btn-outline-secondary")" 
+                            data-testid="autoquest-toggle"
+                            @onclick="ToggleAutoQuest">
+                        Auto: @(isAuto ? "ON" : "OFF")
+                    </button>
                 }
-            </div>
-        }
-
-        <div class="task-slots-container mt-2 d-flex flex-column gap-2">
-            @for (int i = 0; i < taskLimit; i++)
-            {
-                var index = i;
-                var progress = QuestProgresses.ElementAtOrDefault(index);
-                <div class="task-slot d-flex align-items-center gap-2">
-                    @if (progress != null)
-                    {
-                        <div class="flex-grow-1">
-                            <QuestProgressCard QuestProgress="progress" OnCompletionAnimationEnd="() => OnCompletionAnimationEnd.InvokeAsync(progress)" />
-                        </div>
-                        @if (!progress.IsCompleted)
-                        {
-                            <button class="btn btn-xs btn-outline-warning h-100" 
-                                    data-testid="cancel-quest"
-                                    @onclick="() => CancelQuest(progress)">
-                                Cancel
-                            </button>
-                        }
-                    }
-                    else
-                    {
-                        <DropZone OnQuestDrop="HandleTaskDrop" 
-                                  OnDropFailed="HandleDropFailed"
-                                  Accepts="(item) => item is Cadence || resourceManager.CanAfford(item, Character)" />
-                    }
-                </div>
             }
         </div>
-    </div>
-    
-    @if (QuestProgresses.Any())
-    {
-        <div class="character-card-progress-container">
-            @foreach (var progress in QuestProgresses.OrderBy(p => p.SlotIndex))
-            {
-                <div class="character-card-progress" @key="progress">
-                    @{
-                        var progressValue = progress.Progress;
-                        if (double.IsNaN(progressValue) || double.IsInfinity(progressValue)) progressValue = 0.0;
-                        var progressPercent = Math.Clamp(progressValue * 100, 0, 100);
-                        var progressStyle = $"width: {progressPercent.ToString("0.##", CultureInfo.InvariantCulture)}%";
-                    }
-                    <div class="progress-bar" style="@progressStyle"></div>
-                </div>
-            }
-        </div>
-    }
 
-    @if (_showJunctionMenu)
-    {
-        <div class="junction-menu card p-2">
-            <h6>Junction Magic</h6>
-            <div class="junction-grid">
-                @foreach (var stat in statsContent.All)
-                {
-                    bool canJunction = CanJunction(stat);
-                    var currentJ = JunctionManager.Junctions.FirstOrDefault(j => j.Character.Name == Character.Name && j.Stat.Name == stat.Name);
-                    
-                    <div @key="stat.Name" class="junction-row d-flex justify-content-between align-items-center mb-1">
-                        <span class="small @(canJunction ? "" : "text-muted")">@stat.Name</span>
-                        @if (canJunction)
+        <div class="flex-grow-1 min-width-0">
+            <div class="character-header">
+                <div class="d-flex flex-column flex-grow-1 min-width-0">
+                    <h4 class="character-name text-truncate m-0">@Character.Name</h4>
+                    <div class="cadence-info small text-muted">
+                        @if (assignedCadences.Any())
                         {
-                            <select class="form-select form-select-sm w-auto" data-testid="junction-select" @onchange="(e) => HandleJunctionChange(stat, e)">
-                                <option value="">None</option>
-                                @foreach (var spell in resourceManager.Inventory.GetSpells())
+                            <div class="d-flex flex-wrap gap-1 mt-1">
+                                @foreach (var cadence in assignedCadences)
                                 {
-                                    <option @key="spell.Item.Name" value="@spell.Item.Name" selected="@(currentJ?.Magic.Name == spell.Item.Name)">
-                                        @spell.Item.Name (@spell.Quantity)
-                                    </option>
+                                    <div class="badge bg-secondary d-flex align-items-center gap-1">
+                                        <span class="text-truncate" style="max-width: 80px;">@cadence.Name</span>
+                                        <button class="btn btn-xs p-0 text-white" @onclick="() => OnUnequip.InvokeAsync(cadence)" title="Unequip">&times;</button>
+                                    </div>
                                 }
-                            </select>
+                            </div>
                         }
                         else
                         {
-                            <span class="badge bg-light text-dark small">Locked</span>
+                            <span>Cadence: None</span>
+                        }
+                    </div>
+                </div>
+                <div class="stats-container">
+                    <div class="stats-mini">
+                        @foreach (var stat in statsContent.All)
+                        {
+                            var val = JunctionManager.GetStatValue(Character, stat.Name);
+                            var junction = JunctionManager.Junctions.FirstOrDefault(j => j.Character.Name == Character.Name && j.Stat.Name == stat.Name);
+                            var delta = GetPredictionDelta(stat);
+                            var isHovered = DragDropService.HoveredTarget?.character.Name == Character.Name && DragDropService.HoveredTarget?.stat.Name == stat.Name;
+                            bool canJunction = CanJunction(stat);
+                            
+                            <span @key="stat.Name" 
+                                  class="stat-badge @(junction != null ? "junctioned" : "") @(isHovered ? "hovered" : "") @(canJunction ? "can-junction" : "locked") @(_isRemovalMode && junction != null ? "removal-target" : "")" 
+                                  draggable="@(junction != null ? "true" : "false")"
+                                  @ondragstart="() => HandleStatDragStart(stat, junction)"
+                                  title="@stat.Description @(junction != null ? $"(J: {junction.Magic.Name})" : "")"
+                                  @onclick="() => { if(_isRemovalMode && junction != null) ClearJunction(stat); }"
+                                  @ondragenter="() => HandleStatDragEnter(stat)"
+                                  @ondragleave="HandleStatDragLeave"
+                                  @ondragover:preventDefault
+                                  @ondrop="() => HandleStatDrop(stat)">
+                                @stat.Name[0]: @val
+                                @if (delta != 0)
+                                {
+                                    <span class="stat-delta @(delta > 0 ? "text-success" : "text-danger")">
+                                        @(delta > 0 ? "↑" : "↓")@Math.Abs(delta)
+                                    </span>
+                                }
+                            </span>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            @if (resourceManager.ShowMiniLogs && resourceManager.CharacterMiniLogs.TryGetValue(Character.Name, out var log) && log.Any())
+            {
+                <div class="mini-log mt-1">
+                    @foreach (var entry in log.Reverse())
+                    {
+                        <div class="log-entry text-truncate">@entry</div>
+                    }
+                </div>
+            }
+
+            <div class="task-slots-container mt-2 d-flex flex-column gap-2">
+                @for (int i = 0; i < taskLimit; i++)
+                {
+                    var index = i;
+                    var progress = QuestProgresses.ElementAtOrDefault(index);
+                    <div class="task-slot d-flex align-items-center gap-2">
+                        @if (progress != null)
+                        {
+                            <div class="flex-grow-1">
+                                <QuestProgressCard QuestProgress="progress" OnCompletionAnimationEnd="() => OnCompletionAnimationEnd.InvokeAsync(progress)" />
+                            </div>
+                            @if (!progress.IsCompleted)
+                            {
+                                <button class="btn btn-xs btn-outline-warning h-100" 
+                                        data-testid="cancel-quest"
+                                        @onclick="() => CancelQuest(progress)">
+                                    Cancel
+                                </button>
+                            }
+                        }
+                        else
+                        {
+                            <DropZone OnQuestDrop="HandleTaskDrop" 
+                                      OnDropFailed="HandleDropFailed"
+                                      Accepts="(item) => item is Cadence || resourceManager.CanAfford(item, Character)" />
                         }
                     </div>
                 }
             </div>
         </div>
-    }
-</div>
+        
+        @if (QuestProgresses.Any())
+        {
+            <div class="character-card-progress-container">
+                @foreach (var progress in QuestProgresses.OrderBy(p => p.SlotIndex))
+                {
+                    <div class="character-card-progress" @key="progress">
+                        @{
+                            var progressValue = progress.Progress;
+                            if (double.IsNaN(progressValue) || double.IsInfinity(progressValue)) progressValue = 0.0;
+                            var progressPercent = Math.Clamp(progressValue * 100, 0, 100);
+                            var progressStyle = $"width: {progressPercent.ToString("0.##", CultureInfo.InvariantCulture)}%";
+                        }
+                        <div class="progress-bar" style="@progressStyle"></div>
+                    </div>
+                }
+            </div>
+        }
+
+        @if (_showJunctionMenu)
+        {
+            <div class="junction-menu card p-2">
+                <h6>Junction Magic</h6>
+                <div class="junction-grid">
+                    @foreach (var stat in statsContent.All)
+                    {
+                        bool canJunction = CanJunction(stat);
+                        var currentJ = JunctionManager.Junctions.FirstOrDefault(j => j.Character.Name == Character.Name && j.Stat.Name == stat.Name);
+                        
+                        <div @key="stat.Name" class="junction-row d-flex justify-content-between align-items-center mb-1">
+                            <span class="small @(canJunction ? "" : "text-muted")">@stat.Name</span>
+                            @if (canJunction)
+                            {
+                                <select class="form-select form-select-sm w-auto" data-testid="junction-select" @onchange="(e) => HandleJunctionChange(stat, e)">
+                                    <option value="">None</option>
+                                    @foreach (var spell in resourceManager.Inventory.GetSpells())
+                                    {
+                                        <option @key="spell.Item.Name" value="@spell.Item.Name" selected="@(currentJ?.Magic.Name == spell.Item.Name)">
+                                            @spell.Item.Name (@spell.Quantity)
+                                        </option>
+                                    }
+                                </select>
+                            }
+                            else
+                            {
+                                <span class="badge bg-light text-dark small">Locked</span>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+</DropZone>

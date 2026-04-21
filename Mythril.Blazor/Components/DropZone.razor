@@ -6,7 +6,7 @@
 @inject IJSRuntime JS
 
 
-<div class="drop-zone @(isShaking ? "shake" : "")"
+<div class="drop-zone @Class @(isShaking ? "shake" : "")"
     @ondragover="HandleDragOver"
     @ondragover:preventDefault="true"
     @ondrop="HandleDrop"
@@ -23,6 +23,9 @@
 </div>
 
 @code {
+    [Parameter]
+    public string Class { get; set; } = "";
+
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
 
