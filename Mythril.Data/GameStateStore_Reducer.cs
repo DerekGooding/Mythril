@@ -17,7 +17,7 @@ public partial class GameStore
             LockQuestAction a => state with { CompletedQuests = state.CompletedQuests.Remove(a.Quest.Name) },
             StartQuestAction a => StartQuest(state, a),
             CancelQuestAction a => state with { ActiveQuests = state.ActiveQuests.RemoveAll(q => q.StartTime == a.Progress.StartTime && q.Character.Name == a.Progress.Character.Name) },
-            AssignCadenceAction a => state with { AssignedCadences = state.AssignedCadences.SetItem(a.CadenceName, a.CharacterName) },
+            AssignCadenceAction a => AssignCadence(state, a),
             UnassignCadenceAction a => UnassignCadence(state, a),
             JunctionMagicAction a => state with { 
                 Junctions = state.Junctions.RemoveAll(j => j.Character.Name == a.Character.Name && j.Stat.Name == a.Stat.Name).Add(new Junction(a.Character, a.Stat, a.Magic)) 
@@ -240,38 +240,56 @@ public partial class GameStore
         return state with { Inventory = state.Inventory.SetItem(a.ItemName, next) };
     }
 
+    private static GameState AssignCadence(GameState state, AssignCadenceAction a)
+    {
+        // Get previous owner if any
+        string? prevOwner = state.AssignedCadences.GetValueOrDefault(a.CadenceName);
+        
+        var newState = state with { AssignedCadences = state.AssignedCadences.SetItem(a.CadenceName, a.CharacterName) };
+        
+        // If it was "stolen", cleanup junctions for previous owner
+        if (prevOwner != null && prevOwner != a.CharacterName)
+        {
+            newState = CleanupJunctions(newState, prevOwner);
+        }
+
+        return newState;
+    }
+
+    private static GameState CleanupJunctions(GameState state, string owner)
+    {
+        var cadences = ContentHost.GetContent<Cadences>();
+        var remainingCadences = state.AssignedCadences
+            .Where(x => x.Value == owner)
+            .Select(x => cadences.All.FirstOrDefault(c => c.Name == x.Key))
+            .Where(c => c.Name != null)
+            .ToList();
+
+        var invalidJunctions = state.Junctions
+            .Where(j => j.Character.Name == owner)
+            .Where(j => {
+                string abilityName = GetJunctionAbilityName(j.Stat.Name);
+                return !remainingCadences.Any(c => c.Abilities.Any(ua => ua.Ability.Name == abilityName && state.UnlockedAbilities.Contains($"{c.Name}:{ua.Ability.Name}")));
+            })
+            .ToList();
+
+        if (invalidJunctions.Any())
+        {
+            var junctions = state.Junctions.ToBuilder();
+            foreach (var ij in invalidJunctions) junctions.Remove(ij);
+            return state with { Junctions = junctions.ToImmutable() };
+        }
+
+        return state;
+    }
+
     private static GameState UnassignCadence(GameState state, UnassignCadenceAction a)
     {
         if (!state.AssignedCadences.TryGetValue(a.CadenceName, out var owner) || owner == null)
             return state;
 
         var newState = state with { AssignedCadences = state.AssignedCadences.SetItem(a.CadenceName, null) };
-        
-        // Re-calculate validity for all junctions of this owner
-        var cadences = ContentHost.GetContent<Cadences>();
-        var ownerChar = new Character(owner);
-        var remainingCadences = newState.AssignedCadences
-            .Where(x => x.Value == owner)
-            .Select(x => cadences.All.FirstOrDefault(c => c.Name == x.Key))
-            .Where(c => c.Name != null)
-            .ToList();
-
-        var invalidJunctions = newState.Junctions
-            .Where(j => j.Character.Name == owner)
-            .Where(j => {
-                string abilityName = GetJunctionAbilityName(j.Stat.Name);
-                return !remainingCadences.Any(c => c.Abilities.Any(ua => ua.Ability.Name == abilityName && newState.UnlockedAbilities.Contains($"{c.Name}:{ua.Ability.Name}")));
-            })
-            .ToList();
-
-        if (invalidJunctions.Any())
-        {
-            var junctions = newState.Junctions.ToBuilder();
-            foreach (var ij in invalidJunctions) junctions.Remove(ij);
-            newState = newState with { Junctions = junctions.ToImmutable() };
-        }
-
-        return newState;
+        return CleanupJunctions(newState, owner);
     }
 
     private static GameState SpendResource(GameState state, SpendResourceAction a)

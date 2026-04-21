@@ -20,6 +20,7 @@ public class JunctionManager(
         => _gameStore.State.CharacterPermanentStatBoosts.ToDictionary(k => k.Key, v => v.Value.ToDictionary(ik => ik.Key, iv => iv.Value));
 
     public event Action<Character>? OnCadenceUnassigned;
+    public event Action<Character>? OnJunctionChanged;
 
     public void Initialize() { }
 
@@ -27,7 +28,14 @@ public class JunctionManager(
 
     public void AssignCadence(Cadence cadence, Character character, HashSet<string> unlockedAbilities)
     {
+        var prevOwner = GetAssignedCharacter(cadence);
         _gameStore.Dispatch(new AssignCadenceAction(cadence.Name, character.Name));
+        
+        if (prevOwner.HasValue && prevOwner.Value.Name != character.Name)
+        {
+            OnCadenceUnassigned?.Invoke(prevOwner.Value);
+        }
+        OnJunctionChanged?.Invoke(character);
     }
 
     public void Unassign(Cadence cadence, HashSet<string> unlockedAbilities)
@@ -66,6 +74,7 @@ public class JunctionManager(
         {
             _gameStore.Dispatch(new UnjunctionAction(character, stat));
         }
+        OnJunctionChanged?.Invoke(character);
     }
 
     private string GetJunctionAbilityName(string statName)

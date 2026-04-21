@@ -25,13 +25,23 @@ public partial class ResourceManager
         return 1 + maxLogistics;
     }
 
-    public void CancelExcessQuests(Character character)
+    public void ReevaluateActiveQuests(Character character)
     {
         lock (_questLock)
         {
-            int limit = GetTaskLimit(character);
+            // 1. Check requirement failures (stats, abilities)
             var active = ActiveQuests.Where(p => p.Character.Name == character.Name).OrderBy(p => p.StartTime).ToList();
-            
+            foreach (var progress in active.ToList())
+            {
+                if (!MeetsRequirements(progress.Item, character))
+                {
+                    CancelQuest(progress);
+                    active.Remove(progress);
+                }
+            }
+
+            // 2. Check task limit
+            int limit = GetTaskLimit(character);
             while (active.Count > limit)
             {
                 var toCancel = active.Last();

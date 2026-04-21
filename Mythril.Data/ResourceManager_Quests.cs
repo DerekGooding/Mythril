@@ -142,4 +142,29 @@ public partial class ResourceManager
         if (item is CadenceUnlock u) return ActiveQuests.Any(p => p.Item is CadenceUnlock ud && ud.Ability.Name == u.Ability.Name && ud.CadenceName == u.CadenceName);
         return false;
     }
+
+    public bool MeetsRequirements(object item, Character character)
+    {
+        if (item is Cadence) return true;
+        if (item is QuestData quest)
+        {
+            if (quest.RequiredStats != null)
+            {
+                foreach (var stat in quest.RequiredStats)
+                {
+                    if (JunctionManager.GetStatValue(character, stat.Key) < stat.Value) return false;
+                }
+            }
+            return true;
+        }
+        else if (item is CadenceUnlock unlock)
+        {
+            return true; // Cadence unlocks only have item requirements which are upfront costs
+        }
+        else if (item is RefinementData refinement)
+        {
+            return HasAbility(character, refinement.Ability);
+        }
+        return false;
+    }
 }

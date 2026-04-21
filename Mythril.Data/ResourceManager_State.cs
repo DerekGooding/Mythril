@@ -47,7 +47,8 @@ public partial class ResourceManager
         JunctionManager = junctionManager;
         Inventory = inventory;
 
-        JunctionManager.OnCadenceUnassigned += CancelExcessQuests;
+        JunctionManager.OnCadenceUnassigned += ReevaluateActiveQuests;
+        JunctionManager.OnJunctionChanged += ReevaluateActiveQuests;
         _gameStore.OnItemOverflow += (name, qty) => OnItemOverflow?.Invoke(name, qty);
     }
 
