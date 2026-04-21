@@ -4,12 +4,12 @@
 @inject DragDropService DragDropService
 @inject ResourceManager ResourceManager
 
-<div class="expander shadow-theme @(IsHighlighted ? "highlighted" : "") @(isEquipped ? "equipped" : "")">
+<div class="expander shadow-theme @(IsHighlighted ? "highlighted" : "") @(isEquipped ? "equipped" : "")" style="@(assignedCharacter.HasValue ? $"border-left-color: {assignedCharacter.Value.Color};" : "")">
     <div class="expander-header d-flex align-items-center" @onclick="Toggle">
         @if (assignedCharacter.HasValue)
         {
-            <div class="equipped-portrait me-2" title="Equipped by @assignedCharacter.Value.Name">
-                <span class="material-icons" style="font-size: 20px;">account_circle</span>
+            <div class="equipped-portrait me-2" title="Equipped by @assignedCharacter.Value.Name" style="color: @assignedCharacter.Value.Color;">
+                <span class="material-icons" style="font-size: 20px;">@assignedCharacter.Value.Icon</span>
                 <span class="character-initial">@assignedCharacter.Value.Name[0]</span>
             </div>
         }

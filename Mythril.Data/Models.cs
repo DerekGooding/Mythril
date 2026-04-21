@@ -108,7 +108,24 @@ public partial record struct Cadence(string Name, string Description, CadenceUnl
 public partial record struct Location(string Name, IEnumerable<Quest> Quests, string? RequiredQuest = null, string? Type = null) : INamed;
 
 // Character
-public partial record struct Character(string Name);
+public partial record struct Character(string Name)
+{
+    public string Color => Name switch
+    {
+        "Protagonist" => "#ff4444",
+        "Wifu" => "#4444ff",
+        "Himbo" => "#44ff44",
+        _ => "#00adb5"
+    };
+
+    public string Icon => Name switch
+    {
+        "Protagonist" => "person",
+        "Wifu" => "face",
+        "Himbo" => "sentiment_satisfied_alt",
+        _ => "account_circle"
+    };
+}
 
 // Stats
 public partial record struct Stat(string Name, string Description) : INamed;
