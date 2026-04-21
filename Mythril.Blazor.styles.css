@@ -228,6 +228,15 @@
     position: relative;
     margin-bottom: 0.5rem;
 }
+
+.character-drop-zone[b-tzawi3ksml] {
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: transparent !important;
+    display: block;
+}
+
 .character-controls[b-tzawi3ksml] {
     flex-shrink: 0;
     min-width: 65px;
