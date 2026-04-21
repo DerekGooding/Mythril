@@ -38,16 +38,6 @@
     color: var(--accent-color);
 }
 
-.character-initial {
-    position: absolute;
-    font-size: 0.6rem;
-    font-weight: bold;
-    color: var(--panel-bg);
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
 .expander-icon {
     transition: transform 0.2s;
     opacity: 0.5;
