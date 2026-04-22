@@ -41,17 +41,17 @@ public class RequirementIconTests : BunitTestBase
     }
 
     [TestMethod]
-    public void QuestCard_RendersPrerequisiteIcon()
+    public void QuestCard_RendersUnlockIcon()
     {
         // Arrange
-        var prereqQuest = new Quest("Prereq", "Desc");
+        var targetQuest = new Quest("Next Quest", "Desc");
         var quest = new Quest("Icon Test", "Desc");
         var detail = new QuestDetail(10, [], [], QuestType.Single);
         var questData = new QuestData(quest, detail);
 
-        // Inject prerequisite into the service (using the one from ContentHost/TestContentLoader)
+        // Inject prerequisite into the service: Next Quest requires Icon Test
         var questUnlocks = TestContext.Services.GetRequiredService<QuestUnlocks>();
-        questUnlocks.Load(new Dictionary<Quest, Quest[]> { { quest, [prereqQuest] } });
+        questUnlocks.Load(new Dictionary<Quest, Quest[]> { { targetQuest, [quest] } });
 
         // Act
         var cut = RenderComponent<QuestCard>(parameters => parameters
@@ -59,8 +59,9 @@ public class RequirementIconTests : BunitTestBase
         );
 
         // Assert
-        var prereqIcon = cut.Find("span[title='Prerequisite']");
-        Assert.AreEqual("🔑", prereqIcon!.TextContent!.Trim());
+        var unlockIcon = cut.Find("span[title='Unlocks']");
+        Assert.AreEqual("✨", unlockIcon!.TextContent!.Trim());
+        Assert.IsTrue(cut.Markup.Contains("unlock new quest"));
     }
 
     [TestMethod]

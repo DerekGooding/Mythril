@@ -4,11 +4,9 @@
 @using Mythril.Blazor.Services
 @inject DragDropService DragDropService
 @inject ResourceManager ResourceManager
-@inject QuestUnlocks QuestUnlocks
 
 @{
     bool inProgress = (QuestData!.Type == QuestType.Single || QuestData.Type == QuestType.Unlock) && ResourceManager.IsInProgress(QuestData);
-    var prerequisites = QuestUnlocks[QuestData.Quest];
     bool isHighlighted = ResourceManager.HighlightedPath.Contains(QuestData.Name);
 }
 
@@ -34,13 +32,16 @@
             <p>@QuestData.DurationSeconds s <span class="text-info small ms-2" title="Stat used to improve task time">⚡ @QuestData.PrimaryStat</span></p>
         </div>
         <div class="card-side">
-            @if (QuestData.Requirements.Length > 0 || (QuestData.RequiredStats != null && QuestData.RequiredStats.Count > 0) || prerequisites.Length > 0)
+            @{
+                var forwardUnlocks = ResourceManager.GetForwardUnlocks(QuestData.Quest);
+            }
+            @if (QuestData.Requirements.Length > 0 || (QuestData.RequiredStats != null && QuestData.RequiredStats.Count > 0) || forwardUnlocks.Count > 0)
             {
                 <ul>
-                    @foreach (var prereq in prerequisites)
+                    @foreach (var unlock in forwardUnlocks)
                     {
-                        <li @key="prereq.Name" class="text-warning">
-                            <span title="Prerequisite">🔑</span> @prereq.Name
+                        <li @key="unlock" class="text-warning">
+                            <span title="Unlocks">✨</span> @unlock
                         </li>
                     }
                     @foreach (var requirement in QuestData.Requirements)
