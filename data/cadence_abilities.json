@@ -1,31 +1,122 @@
 [
-  { "Name": "AutoQuest I", "Description": "Allows a Quest to be looped indefinitely" },
-  { "Name": "Refine Fire", "Description": "Refine items into fire magic" },
-  { "Name": "Refine Ice", "Description": "Refine items into ice magic" },
-  { "Name": "Refine Wood", "Description": "Refine logs into herbs" },
-  { "Name": "Refine Mixology", "Description": "Refine herbs into potions" },
-  { "Name": "Refine Scrap", "Description": "Refine basic items into gold" },
-  { "Name": "Augment Strength", "Description": "Directly increase physical power" },
-  { "Name": "Augment Vitality", "Description": "Directly increase health and defense" },
-  { "Name": "Augment Magic", "Description": "Directly increase magical power" },
-  { "Name": "Augment Speed", "Description": "Directly increase action speed" },
-  { "Name": "Mass Refine", "Description": "Reduces refinement costs." },
-  { "Name": "Essence Harvest", "Description": "Increases drop rates." },
-  { "Name": "J-Str", "Description": "Allows junctioning magic to the Strength stat" },
-  { "Name": "J-Magic", "Description": "Allows junctioning magic to the Magic stat" },
-  { "Name": "J-Vit", "Description": "Allows junctioning magic to the Vitality stat" },
-  { "Name": "J-Speed", "Description": "Allows junctioning magic to the Speed stat" },
-  { "Name": "Magic Pocket I", "Description": "Increases global magic capacity to 60" },
-  { "Name": "Magic Pocket II", "Description": "Advanced space-folding techniques further expand magic storage to 100." },
-  { "Name": "Logistics I", "Description": "Allows a character to perform two tasks at once" },
-  { "Name": "Logistics II", "Description": "Allows a character to perform three tasks at once" },
-  { "Name": "AutoQuest II", "Description": "Enables auto-restart for the second task slot" },
-  { "Name": "Mountain Crush", "Description": "Gather rare minerals with high strength" },
-  { "Name": "Deep Dive", "Description": "Explore the depths with high speed" },
-  { "Name": "Master Slayer", "Description": "Defeat high-tier threats" },
-  { "Name": "Refine Life", "Description": "Refine ancient components into life magic" },
-  { "Name": "Refine Earth", "Description": "Refine minerals into earth magic" },
-  { "Name": "Refine Water", "Description": "Refine coral into water magic" },
-  { "Name": "Refine Haste", "Description": "Refine ancient parchment into haste magic" },
-  { "Name": "Refine Lightning", "Description": "Refine shards into lightning magic" }
+  {
+    "Name": "AutoQuest I",
+    "Description": "Allows a Quest to be looped indefinitely"
+  },
+  {
+    "Name": "Refine Fire",
+    "Description": "Refine items into fire magic"
+  },
+  {
+    "Name": "Refine Ice",
+    "Description": "Refine items into ice magic"
+  },
+  {
+    "Name": "Refine Wood",
+    "Description": "Refine logs into herbs"
+  },
+  {
+    "Name": "Refine Mixology",
+    "Description": "Refine herbs into potions"
+  },
+  {
+    "Name": "Refine Scrap",
+    "Description": "Refine basic items into gold"
+  },
+  {
+    "Name": "Augment Strength",
+    "Description": "Directly increase physical power"
+  },
+  {
+    "Name": "Augment Vitality",
+    "Description": "Directly increase health and defense"
+  },
+  {
+    "Name": "Augment Magic",
+    "Description": "Directly increase magical power"
+  },
+  {
+    "Name": "Augment Speed",
+    "Description": "Directly increase action speed"
+  },
+  {
+    "Name": "Mass Refine",
+    "Description": "Reduces refinement costs."
+  },
+  {
+    "Name": "Essence Harvest",
+    "Description": "Increases drop rates."
+  },
+  {
+    "Name": "J-Str",
+    "Description": "Allows junctioning magic to the Strength stat"
+  },
+  {
+    "Name": "J-Magic",
+    "Description": "Allows junctioning magic to the Magic stat"
+  },
+  {
+    "Name": "J-Vit",
+    "Description": "Allows junctioning magic to the Vitality stat"
+  },
+  {
+    "Name": "J-Speed",
+    "Description": "Allows junctioning magic to the Speed stat"
+  },
+  {
+    "Name": "Magic Pocket I",
+    "Description": "Increases global magic capacity to 60"
+  },
+  {
+    "Name": "Magic Pocket II",
+    "Description": "Advanced space-folding techniques further expand magic storage to 100."
+  },
+  {
+    "Name": "Logistics I",
+    "Description": "Allows a character to perform two tasks at once"
+  },
+  {
+    "Name": "Logistics II",
+    "Description": "Allows a character to perform three tasks at once"
+  },
+  {
+    "Name": "AutoQuest II",
+    "Description": "Enables auto-restart for the second task slot"
+  },
+  {
+    "Name": "Mountain Crush",
+    "Description": "Gather rare minerals with high strength"
+  },
+  {
+    "Name": "Deep Dive",
+    "Description": "Explore the depths with high speed"
+  },
+  {
+    "Name": "Master Slayer",
+    "Description": "Defeat high-tier threats"
+  },
+  {
+    "Name": "Refine Life",
+    "Description": "Refine ancient components into life magic"
+  },
+  {
+    "Name": "Refine Earth",
+    "Description": "Refine minerals into earth magic"
+  },
+  {
+    "Name": "Refine Water",
+    "Description": "Refine coral into water magic"
+  },
+  {
+    "Name": "Refine Haste",
+    "Description": "Refine ancient parchment into haste magic"
+  },
+  {
+    "Name": "Refine Lightning",
+    "Description": "Refine shards into lightning magic"
+  },
+  {
+    "Name": "Alchemy I",
+    "Description": "Convert items into gold. Think of it like selling your goods. "
+  }
 ]

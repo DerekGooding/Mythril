@@ -142,5 +142,17 @@
         "OutputQuantity": 5
       }
     ]
+  },
+  {
+    "PrimaryStat": "Speed",
+    "Recipes": [
+      {
+        "InputItem": "Basic Gem",
+        "InputQuantity": 1,
+        "OutputItem": "Gold",
+        "OutputQuantity": 250
+      }
+    ],
+    "Ability": "AutoQuest I"
   }
 ]

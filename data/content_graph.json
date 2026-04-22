@@ -2875,5 +2875,32 @@
         }
       ]
     }
+  },
+  {
+    "id": "recipe_autoquest_i_basic_gem_gold",
+    "type": "Refinement",
+    "name": "AutoQuest I - Gold",
+    "data": {
+      "primary_stat": "Speed"
+    },
+    "in_edges": {
+      "requires_ability": [
+        "ability_autoquest_i"
+      ]
+    },
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_basic_gem",
+          "quantity": 1
+        }
+      ],
+      "produces": [
+        {
+          "targetId": "item_gold",
+          "quantity": 250
+        }
+      ]
+    }
   }
 ]
