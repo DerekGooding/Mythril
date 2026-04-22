@@ -1819,6 +1819,17 @@
     }
   },
   {
+    "id": "ability_alchemy_i",
+    "type": "Ability",
+    "name": "Alchemy I",
+    "data": {
+      "primary_stat": "Magic",
+      "metadata": {}
+    },
+    "in_edges": {},
+    "out_edges": {}
+  },
+  {
     "id": "cadence_recruit",
     "type": "Cadence",
     "name": "Recruit",
@@ -1834,6 +1845,10 @@
         },
         {
           "targetId": "ability_j_str",
+          "quantity": 1
+        },
+        {
+          "targetId": "ability_alchemy_i",
           "quantity": 1
         }
       ]
@@ -2877,15 +2892,15 @@
     }
   },
   {
-    "id": "recipe_autoquest_i_basic_gem_gold",
+    "id": "recipe_alchemy_i_basic_gem_gold",
     "type": "Refinement",
-    "name": "AutoQuest I - Gold",
+    "name": "Alchemy I - Gold",
     "data": {
       "primary_stat": "Speed"
     },
     "in_edges": {
       "requires_ability": [
-        "ability_autoquest_i"
+        "ability_alchemy_i"
       ]
     },
     "out_edges": {

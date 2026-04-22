@@ -28,6 +28,11 @@
           }
         ],
         "PrimaryStat": "Strength"
+      },
+      {
+        "Ability": "Alchemy I",
+        "Requirements": [],
+        "PrimaryStat": "Magic"
       }
     ]
   },
