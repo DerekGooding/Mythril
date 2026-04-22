@@ -1787,6 +1787,7 @@
     "type": "Ability",
     "name": "AutoQuest I",
     "data": {
+      "description": "Allows a Quest to be looped indefinitely",
       "primary_stat": "Vitality",
       "metadata": {}
     },
@@ -1798,13 +1799,20 @@
           "quantity": 100
         }
       ]
-    }
+    },
+    "effects": [
+      {
+        "Type": "AutoQuest",
+        "Value": 1
+      }
+    ]
   },
   {
     "id": "ability_j_str",
     "type": "Ability",
     "name": "J-Str",
     "data": {
+      "description": "Allows junctioning magic to the Strength stat",
       "primary_stat": "Strength",
       "metadata": {}
     },
@@ -1823,11 +1831,19 @@
     "type": "Ability",
     "name": "Alchemy I",
     "data": {
+      "description": "Convert items into gold. Think of it like selling your goods. ",
       "primary_stat": "Magic",
       "metadata": {}
     },
     "in_edges": {},
-    "out_edges": {}
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_basic_gem",
+          "quantity": 10
+        }
+      ]
+    }
   },
   {
     "id": "cadence_recruit",
@@ -1859,6 +1875,7 @@
     "type": "Ability",
     "name": "Refine Ice",
     "data": {
+      "description": "Refine items into ice magic",
       "primary_stat": "Magic",
       "metadata": {}
     },
@@ -1877,6 +1894,7 @@
     "type": "Ability",
     "name": "J-Magic",
     "data": {
+      "description": "Allows junctioning magic to the Magic stat",
       "primary_stat": "Magic",
       "metadata": {}
     },
@@ -1899,6 +1917,7 @@
     "type": "Ability",
     "name": "Magic Pocket I",
     "data": {
+      "description": "Increases global magic capacity to 60",
       "primary_stat": "Magic",
       "metadata": {}
     },
@@ -1914,13 +1933,20 @@
           "quantity": 20
         }
       ]
-    }
+    },
+    "effects": [
+      {
+        "Type": "MagicCapacity",
+        "Value": 60
+      }
+    ]
   },
   {
     "id": "ability_refine_lightning",
     "type": "Ability",
     "name": "Refine Lightning",
     "data": {
+      "description": "Refine shards into lightning magic",
       "primary_stat": "Magic",
       "metadata": {}
     },
@@ -1972,6 +1998,7 @@
     "type": "Ability",
     "name": "Refine Wood",
     "data": {
+      "description": "Refine logs into herbs",
       "primary_stat": "Strength",
       "metadata": {}
     },
@@ -1990,6 +2017,7 @@
     "type": "Ability",
     "name": "Refine Scrap",
     "data": {
+      "description": "Refine basic items into gold",
       "primary_stat": "Speed",
       "metadata": {}
     },
@@ -2008,6 +2036,7 @@
     "type": "Ability",
     "name": "Refine Mixology",
     "data": {
+      "description": "Refine herbs into potions",
       "primary_stat": "Magic",
       "metadata": {}
     },
@@ -2059,6 +2088,7 @@
     "type": "Ability",
     "name": "Refine Fire",
     "data": {
+      "description": "Refine items into fire magic",
       "primary_stat": "Magic",
       "metadata": {}
     },
@@ -2077,6 +2107,7 @@
     "type": "Ability",
     "name": "J-Speed",
     "data": {
+      "description": "Allows junctioning magic to the Speed stat",
       "primary_stat": "Speed",
       "metadata": {}
     },
@@ -2120,6 +2151,7 @@
     "type": "Ability",
     "name": "Logistics I",
     "data": {
+      "description": "Allows a character to perform two tasks at once",
       "primary_stat": "Magic",
       "metadata": {}
     },
@@ -2131,13 +2163,20 @@
           "quantity": 2500
         }
       ]
-    }
+    },
+    "effects": [
+      {
+        "Type": "Logistics",
+        "Value": 1
+      }
+    ]
   },
   {
     "id": "ability_mass_refine",
     "type": "Ability",
     "name": "Mass Refine",
     "data": {
+      "description": "Reduces refinement costs.",
       "primary_stat": "Magic",
       "metadata": {}
     },
@@ -2160,6 +2199,7 @@
     "type": "Ability",
     "name": "Essence Harvest",
     "data": {
+      "description": "Increases drop rates.",
       "primary_stat": "Vitality",
       "metadata": {}
     },
@@ -2182,6 +2222,7 @@
     "type": "Ability",
     "name": "J-Vit",
     "data": {
+      "description": "Allows junctioning magic to the Vitality stat",
       "primary_stat": "Vitality",
       "metadata": {}
     },
@@ -2200,6 +2241,7 @@
     "type": "Ability",
     "name": "Refine Life",
     "data": {
+      "description": "Refine ancient components into life magic",
       "primary_stat": "Magic",
       "metadata": {}
     },
@@ -2251,6 +2293,7 @@
     "type": "Ability",
     "name": "Magic Pocket II",
     "data": {
+      "description": "Advanced space-folding techniques further expand magic storage to 100.",
       "primary_stat": "Magic",
       "metadata": {}
     },
@@ -2262,7 +2305,13 @@
           "quantity": 10
         }
       ]
-    }
+    },
+    "effects": [
+      {
+        "Type": "MagicCapacity",
+        "Value": 100
+      }
+    ]
   },
   {
     "id": "cadence_the_sentinel",
@@ -2290,6 +2339,7 @@
     "type": "Ability",
     "name": "Logistics II",
     "data": {
+      "description": "Allows a character to perform three tasks at once",
       "primary_stat": "Magic",
       "metadata": {}
     },
@@ -2301,13 +2351,20 @@
           "quantity": 10000
         }
       ]
-    }
+    },
+    "effects": [
+      {
+        "Type": "Logistics",
+        "Value": 2
+      }
+    ]
   },
   {
     "id": "ability_autoquest_ii",
     "type": "Ability",
     "name": "AutoQuest II",
     "data": {
+      "description": "Enables auto-restart for the second task slot",
       "primary_stat": "Magic",
       "metadata": {}
     },
@@ -2319,13 +2376,20 @@
           "quantity": 7500
         }
       ]
-    }
+    },
+    "effects": [
+      {
+        "Type": "AutoQuest",
+        "Value": 2
+      }
+    ]
   },
   {
     "id": "ability_refine_haste",
     "type": "Ability",
     "name": "Refine Haste",
     "data": {
+      "description": "Refine ancient parchment into haste magic",
       "primary_stat": "Magic",
       "metadata": {}
     },
@@ -2369,6 +2433,7 @@
     "type": "Ability",
     "name": "Mountain Crush",
     "data": {
+      "description": "Gather rare minerals with high strength",
       "primary_stat": "Strength",
       "metadata": {}
     },
@@ -2387,6 +2452,7 @@
     "type": "Ability",
     "name": "Refine Earth",
     "data": {
+      "description": "Refine minerals into earth magic",
       "primary_stat": "Strength",
       "metadata": {}
     },
@@ -2426,6 +2492,7 @@
     "type": "Ability",
     "name": "Deep Dive",
     "data": {
+      "description": "Explore the depths with high speed",
       "primary_stat": "Speed",
       "metadata": {}
     },
@@ -2444,6 +2511,7 @@
     "type": "Ability",
     "name": "Refine Water",
     "data": {
+      "description": "Refine coral into water magic",
       "primary_stat": "Speed",
       "metadata": {}
     },
@@ -2483,6 +2551,7 @@
     "type": "Ability",
     "name": "Master Slayer",
     "data": {
+      "description": "Defeat high-tier threats",
       "primary_stat": "Strength",
       "metadata": {}
     },

@@ -31,7 +31,12 @@
       },
       {
         "Ability": "Alchemy I",
-        "Requirements": [],
+        "Requirements": [
+          {
+            "Item": "Basic Gem",
+            "Quantity": 10
+          }
+        ],
         "PrimaryStat": "Magic"
       }
     ]
