@@ -145,17 +145,15 @@ def edit_cadence_abilities(abilities_list, key_prefix):
         with st.container(border=True):
             col1, col2, col3 = st.columns([3, 2, 1])
             with col1:
-                # The nested structure is {"Ability": {"Name": "...", "Description": "..."}, "Requirements": [...], "PrimaryStat": "..."}
-                current_ab_name = ab_entry["Ability"]["Name"]
+                # The structure in JSON is {"Ability": "Name", "Requirements": [...], "PrimaryStat": "..."}
+                current_ab_name = ab_entry["Ability"]
                 new_ab_name = st.selectbox(f"Ability {i}", all_ability_names, index=all_ability_names.index(current_ab_name) if current_ab_name in all_ability_names else 0, key=f"{key_prefix}_ab_{i}")
                 
                 if new_ab_name != current_ab_name:
-                    source_ab = next(a for a in manager.unified_data["abilities"] if a["Name"] == new_ab_name)
-                    ab_entry["Ability"]["Name"] = source_ab["Name"]
-                    ab_entry["Ability"]["Description"] = source_ab["Description"]
+                    ab_entry["Ability"] = new_ab_name
             
             with col2:
-                ab_entry["PrimaryStat"] = st.selectbox(f"Stat {i}", stat_names, index=stat_names.index(ab_entry["PrimaryStat"]) if ab_entry["PrimaryStat"] in stat_names else 0, key=f"{key_prefix}_stat_{i}")
+                ab_entry["PrimaryStat"] = st.selectbox(f"Stat {i}", stat_names, index=stat_names.index(ab_entry["PrimaryStat"]) if ab_entry.get("PrimaryStat") in stat_names else 0, key=f"{key_prefix}_stat_{i}")
             
             with col3:
                 if st.button("🗑️ Remove Ability", key=f"{key_prefix}_del_{i}"):
@@ -171,7 +169,7 @@ def edit_cadence_abilities(abilities_list, key_prefix):
     if st.button("➕ Add Ability to Cadence", key=f"{key_prefix}_add"):
         source_ab = manager.unified_data["abilities"][0]
         abilities_list.append({
-            "Ability": {"Name": source_ab["Name"], "Description": source_ab["Description"]},
+            "Ability": source_ab["Name"],
             "Requirements": [],
             "PrimaryStat": "Magic"
         })
