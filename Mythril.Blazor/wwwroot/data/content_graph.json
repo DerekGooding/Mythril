@@ -356,7 +356,8 @@
       "duration": 5,
       "quest_type": "Single",
       "primary_stat": "Vitality",
-      "required_stats": null
+      "required_stats": {},
+      "stat_rewards": {}
     },
     "in_edges": {},
     "out_edges": {
@@ -377,7 +378,8 @@
       "duration": 30,
       "quest_type": "Recurring",
       "primary_stat": "Vitality",
-      "required_stats": null
+      "required_stats": {},
+      "stat_rewards": {}
     },
     "in_edges": {
       "requires_quest": [
@@ -388,7 +390,7 @@
       "rewards": [
         {
           "targetId": "item_basic_gem",
-          "quantity": 10
+          "quantity": 3
         }
       ]
     }
@@ -402,7 +404,8 @@
       "duration": 15,
       "quest_type": "Single",
       "primary_stat": "Vitality",
-      "required_stats": null
+      "required_stats": {},
+      "stat_rewards": {}
     },
     "in_edges": {
       "requires_quest": [
@@ -427,7 +430,8 @@
       "duration": 45,
       "quest_type": "Recurring",
       "primary_stat": "Speed",
-      "required_stats": null
+      "required_stats": {},
+      "stat_rewards": {}
     },
     "in_edges": {
       "requires_quest": [
@@ -458,7 +462,8 @@
       "duration": 60,
       "quest_type": "Single",
       "primary_stat": "Magic",
-      "required_stats": null
+      "required_stats": {},
+      "stat_rewards": {}
     },
     "in_edges": {
       "requires_quest": [
@@ -495,7 +500,8 @@
       "duration": 30,
       "quest_type": "Single",
       "primary_stat": "Magic",
-      "required_stats": null
+      "required_stats": {},
+      "stat_rewards": {}
     },
     "in_edges": {
       "requires_quest": [
@@ -520,7 +526,8 @@
       "duration": 30,
       "quest_type": "Single",
       "primary_stat": "Vitality",
-      "required_stats": null
+      "required_stats": {},
+      "stat_rewards": {}
     },
     "in_edges": {
       "requires_quest": [
@@ -545,7 +552,8 @@
       "duration": 60,
       "quest_type": "Recurring",
       "primary_stat": "Strength",
-      "required_stats": null
+      "required_stats": {},
+      "stat_rewards": {}
     },
     "in_edges": {
       "requires_quest": [
@@ -578,7 +586,8 @@
       "duration": 75,
       "quest_type": "Recurring",
       "primary_stat": "Strength",
-      "required_stats": null
+      "required_stats": {},
+      "stat_rewards": {}
     },
     "in_edges": {
       "requires_quest": [
@@ -607,7 +616,8 @@
       "duration": 30,
       "quest_type": "Single",
       "primary_stat": "Strength",
-      "required_stats": null
+      "required_stats": {},
+      "stat_rewards": {}
     },
     "in_edges": {
       "requires_quest": [
@@ -632,7 +642,8 @@
       "duration": 45,
       "quest_type": "Recurring",
       "primary_stat": "Speed",
-      "required_stats": null
+      "required_stats": {},
+      "stat_rewards": {}
     },
     "in_edges": {
       "requires_quest": [
@@ -657,7 +668,8 @@
       "duration": 75,
       "quest_type": "Recurring",
       "primary_stat": "Vitality",
-      "required_stats": null
+      "required_stats": {},
+      "stat_rewards": {}
     },
     "in_edges": {
       "requires_quest": [
@@ -682,7 +694,8 @@
       "duration": 90,
       "quest_type": "Recurring",
       "primary_stat": "Strength",
-      "required_stats": null
+      "required_stats": {},
+      "stat_rewards": {}
     },
     "in_edges": {
       "requires_quest": [
@@ -707,7 +720,8 @@
       "duration": 120,
       "quest_type": "Single",
       "primary_stat": "Strength",
-      "required_stats": null
+      "required_stats": {},
+      "stat_rewards": {}
     },
     "in_edges": {
       "requires_quest": [
@@ -734,7 +748,8 @@
       "primary_stat": "Strength",
       "required_stats": {
         "Strength": 15
-      }
+      },
+      "stat_rewards": {}
     },
     "in_edges": {
       "requires_quest": [
@@ -761,7 +776,8 @@
       "primary_stat": "Speed",
       "required_stats": {
         "Speed": 15
-      }
+      },
+      "stat_rewards": {}
     },
     "in_edges": {
       "requires_quest": [
@@ -792,7 +808,8 @@
       "primary_stat": "Strength",
       "required_stats": {
         "Strength": 25
-      }
+      },
+      "stat_rewards": {}
     },
     "in_edges": {
       "requires_quest": [
@@ -823,7 +840,8 @@
       "duration": 120,
       "quest_type": "Single",
       "primary_stat": "Magic",
-      "required_stats": null
+      "required_stats": {},
+      "stat_rewards": {}
     },
     "in_edges": {
       "requires_quest": [
@@ -852,7 +870,8 @@
       "duration": 300,
       "quest_type": "Single",
       "primary_stat": "Vitality",
-      "required_stats": null
+      "required_stats": {},
+      "stat_rewards": {}
     },
     "in_edges": {
       "requires_quest": [
@@ -881,7 +900,8 @@
       "duration": 1200,
       "quest_type": "Single",
       "primary_stat": "Magic",
-      "required_stats": null
+      "required_stats": {},
+      "stat_rewards": {}
     },
     "in_edges": {
       "requires_quest": [
@@ -922,7 +942,8 @@
       "duration": 30,
       "quest_type": "Single",
       "primary_stat": "Strength",
-      "required_stats": null
+      "required_stats": {},
+      "stat_rewards": {}
     },
     "in_edges": {
       "requires_quest": [
@@ -947,7 +968,8 @@
       "duration": 20,
       "quest_type": "Recurring",
       "primary_stat": "Speed",
-      "required_stats": null
+      "required_stats": {},
+      "stat_rewards": {}
     },
     "in_edges": {
       "requires_quest": [
@@ -978,7 +1000,8 @@
       "duration": 45,
       "quest_type": "Recurring",
       "primary_stat": "Vitality",
-      "required_stats": null
+      "required_stats": {},
+      "stat_rewards": {}
     },
     "in_edges": {
       "requires_quest": [
@@ -1009,7 +1032,8 @@
       "primary_stat": "Strength",
       "required_stats": {
         "Strength": 20
-      }
+      },
+      "stat_rewards": {}
     },
     "in_edges": {
       "requires_quest": [
@@ -1036,7 +1060,8 @@
       "primary_stat": "Vitality",
       "required_stats": {
         "Speed": 25
-      }
+      },
+      "stat_rewards": {}
     },
     "in_edges": {
       "requires_quest": [
@@ -1065,7 +1090,8 @@
       "duration": 120,
       "quest_type": "Recurring",
       "primary_stat": "Magic",
-      "required_stats": null
+      "required_stats": {},
+      "stat_rewards": {}
     },
     "in_edges": {
       "requires_quest": [
@@ -1098,7 +1124,8 @@
       "primary_stat": "Magic",
       "required_stats": {
         "Magic": 30
-      }
+      },
+      "stat_rewards": {}
     },
     "in_edges": {
       "requires_quest": [
@@ -1131,7 +1158,8 @@
       "primary_stat": "Strength",
       "required_stats": {
         "Strength": 30
-      }
+      },
+      "stat_rewards": {}
     },
     "in_edges": {
       "requires_quest": [
@@ -1158,7 +1186,8 @@
       "primary_stat": "Speed",
       "required_stats": {
         "Speed": 30
-      }
+      },
+      "stat_rewards": {}
     },
     "in_edges": {
       "requires_quest": [
@@ -1187,7 +1216,8 @@
       "duration": 60,
       "quest_type": "Recurring",
       "primary_stat": "Vitality",
-      "required_stats": null
+      "required_stats": {},
+      "stat_rewards": {}
     },
     "in_edges": {
       "requires_quest": [
@@ -1218,7 +1248,8 @@
       "primary_stat": "Vitality",
       "required_stats": {
         "Vitality": 30
-      }
+      },
+      "stat_rewards": {}
     },
     "in_edges": {
       "requires_quest": [
@@ -1245,7 +1276,8 @@
       "primary_stat": "Magic",
       "required_stats": {
         "Magic": 30
-      }
+      },
+      "stat_rewards": {}
     },
     "in_edges": {
       "requires_quest": [
@@ -1270,7 +1302,8 @@
       "duration": 120,
       "quest_type": "Recurring",
       "primary_stat": "Magic",
-      "required_stats": null
+      "required_stats": {},
+      "stat_rewards": {}
     },
     "in_edges": {
       "requires_quest": [
@@ -1300,7 +1333,8 @@
         "Vitality": 100,
         "Magic": 100,
         "Speed": 100
-      }
+      },
+      "stat_rewards": {}
     },
     "in_edges": {
       "requires_quest": [
@@ -1345,7 +1379,8 @@
       "primary_stat": "Magic",
       "required_stats": {
         "Magic": 50
-      }
+      },
+      "stat_rewards": {}
     },
     "in_edges": {
       "requires_quest": [
@@ -1359,14 +1394,7 @@
           "quantity": 20
         }
       ]
-    },
-    "effects": [
-      {
-        "Type": "StatBoost",
-        "Value": 5,
-        "Target": "Magic"
-      }
-    ]
+    }
   },
   {
     "id": "quest_heavy_training",
@@ -1379,7 +1407,8 @@
       "primary_stat": "Strength",
       "required_stats": {
         "Strength": 50
-      }
+      },
+      "stat_rewards": {}
     },
     "in_edges": {
       "requires_quest": [
@@ -1393,14 +1422,7 @@
           "quantity": 20
         }
       ]
-    },
-    "effects": [
-      {
-        "Type": "StatBoost",
-        "Value": 5,
-        "Target": "Strength"
-      }
-    ]
+    }
   },
   {
     "id": "location_village",
@@ -1765,7 +1787,8 @@
     "type": "Ability",
     "name": "AutoQuest I",
     "data": {
-      "primary_stat": "Vitality"
+      "primary_stat": "Vitality",
+      "metadata": {}
     },
     "in_edges": {},
     "out_edges": {
@@ -1775,20 +1798,15 @@
           "quantity": 100
         }
       ]
-    },
-    "effects": [
-      {
-        "Type": "AutoQuest",
-        "Value": 1
-      }
-    ]
+    }
   },
   {
     "id": "ability_j_str",
     "type": "Ability",
     "name": "J-Str",
     "data": {
-      "primary_stat": "Strength"
+      "primary_stat": "Strength",
+      "metadata": {}
     },
     "in_edges": {},
     "out_edges": {
@@ -1826,7 +1844,8 @@
     "type": "Ability",
     "name": "Refine Ice",
     "data": {
-      "primary_stat": "Magic"
+      "primary_stat": "Magic",
+      "metadata": {}
     },
     "in_edges": {},
     "out_edges": {
@@ -1843,7 +1862,8 @@
     "type": "Ability",
     "name": "J-Magic",
     "data": {
-      "primary_stat": "Magic"
+      "primary_stat": "Magic",
+      "metadata": {}
     },
     "in_edges": {},
     "out_edges": {
@@ -1864,7 +1884,8 @@
     "type": "Ability",
     "name": "Magic Pocket I",
     "data": {
-      "primary_stat": "Magic"
+      "primary_stat": "Magic",
+      "metadata": {}
     },
     "in_edges": {},
     "out_edges": {
@@ -1878,20 +1899,15 @@
           "quantity": 20
         }
       ]
-    },
-    "effects": [
-      {
-        "Type": "MagicCapacity",
-        "Value": 60
-      }
-    ]
+    }
   },
   {
     "id": "ability_refine_lightning",
     "type": "Ability",
     "name": "Refine Lightning",
     "data": {
-      "primary_stat": "Magic"
+      "primary_stat": "Magic",
+      "metadata": {}
     },
     "in_edges": {},
     "out_edges": {
@@ -1941,7 +1957,8 @@
     "type": "Ability",
     "name": "Refine Wood",
     "data": {
-      "primary_stat": "Strength"
+      "primary_stat": "Strength",
+      "metadata": {}
     },
     "in_edges": {},
     "out_edges": {
@@ -1958,7 +1975,8 @@
     "type": "Ability",
     "name": "Refine Scrap",
     "data": {
-      "primary_stat": "Speed"
+      "primary_stat": "Speed",
+      "metadata": {}
     },
     "in_edges": {},
     "out_edges": {
@@ -1975,7 +1993,8 @@
     "type": "Ability",
     "name": "Refine Mixology",
     "data": {
-      "primary_stat": "Magic"
+      "primary_stat": "Magic",
+      "metadata": {}
     },
     "in_edges": {},
     "out_edges": {
@@ -2025,7 +2044,8 @@
     "type": "Ability",
     "name": "Refine Fire",
     "data": {
-      "primary_stat": "Magic"
+      "primary_stat": "Magic",
+      "metadata": {}
     },
     "in_edges": {},
     "out_edges": {
@@ -2042,7 +2062,8 @@
     "type": "Ability",
     "name": "J-Speed",
     "data": {
-      "primary_stat": "Speed"
+      "primary_stat": "Speed",
+      "metadata": {}
     },
     "in_edges": {},
     "out_edges": {
@@ -2084,7 +2105,8 @@
     "type": "Ability",
     "name": "Logistics I",
     "data": {
-      "primary_stat": "Magic"
+      "primary_stat": "Magic",
+      "metadata": {}
     },
     "in_edges": {},
     "out_edges": {
@@ -2094,20 +2116,15 @@
           "quantity": 2500
         }
       ]
-    },
-    "effects": [
-      {
-        "Type": "Logistics",
-        "Value": 1
-      }
-    ]
+    }
   },
   {
     "id": "ability_mass_refine",
     "type": "Ability",
     "name": "Mass Refine",
     "data": {
-      "primary_stat": "Magic"
+      "primary_stat": "Magic",
+      "metadata": {}
     },
     "in_edges": {},
     "out_edges": {
@@ -2128,7 +2145,8 @@
     "type": "Ability",
     "name": "Essence Harvest",
     "data": {
-      "primary_stat": "Vitality"
+      "primary_stat": "Vitality",
+      "metadata": {}
     },
     "in_edges": {},
     "out_edges": {
@@ -2149,7 +2167,8 @@
     "type": "Ability",
     "name": "J-Vit",
     "data": {
-      "primary_stat": "Vitality"
+      "primary_stat": "Vitality",
+      "metadata": {}
     },
     "in_edges": {},
     "out_edges": {
@@ -2166,7 +2185,8 @@
     "type": "Ability",
     "name": "Refine Life",
     "data": {
-      "primary_stat": "Magic"
+      "primary_stat": "Magic",
+      "metadata": {}
     },
     "in_edges": {},
     "out_edges": {
@@ -2216,23 +2236,18 @@
     "type": "Ability",
     "name": "Magic Pocket II",
     "data": {
-      "primary_stat": "Magic"
+      "primary_stat": "Magic",
+      "metadata": {}
     },
     "in_edges": {},
     "out_edges": {
       "consumes": [
         {
-          "targetId": "item_gold",
-          "quantity": 2000
+          "targetId": "item_leather",
+          "quantity": 10
         }
       ]
-    },
-    "effects": [
-      {
-        "Type": "MagicCapacity",
-        "Value": 100
-      }
-    ]
+    }
   },
   {
     "id": "cadence_the_sentinel",
@@ -2260,7 +2275,8 @@
     "type": "Ability",
     "name": "Logistics II",
     "data": {
-      "primary_stat": "Magic"
+      "primary_stat": "Magic",
+      "metadata": {}
     },
     "in_edges": {},
     "out_edges": {
@@ -2270,20 +2286,15 @@
           "quantity": 10000
         }
       ]
-    },
-    "effects": [
-      {
-        "Type": "Logistics",
-        "Value": 2
-      }
-    ]
+    }
   },
   {
     "id": "ability_autoquest_ii",
     "type": "Ability",
     "name": "AutoQuest II",
     "data": {
-      "primary_stat": "Magic"
+      "primary_stat": "Magic",
+      "metadata": {}
     },
     "in_edges": {},
     "out_edges": {
@@ -2293,20 +2304,15 @@
           "quantity": 7500
         }
       ]
-    },
-    "effects": [
-      {
-        "Type": "AutoQuest",
-        "Value": 2
-      }
-    ]
+    }
   },
   {
     "id": "ability_refine_haste",
     "type": "Ability",
     "name": "Refine Haste",
     "data": {
-      "primary_stat": "Magic"
+      "primary_stat": "Magic",
+      "metadata": {}
     },
     "in_edges": {},
     "out_edges": {
@@ -2348,7 +2354,8 @@
     "type": "Ability",
     "name": "Mountain Crush",
     "data": {
-      "primary_stat": "Strength"
+      "primary_stat": "Strength",
+      "metadata": {}
     },
     "in_edges": {},
     "out_edges": {
@@ -2365,7 +2372,8 @@
     "type": "Ability",
     "name": "Refine Earth",
     "data": {
-      "primary_stat": "Strength"
+      "primary_stat": "Strength",
+      "metadata": {}
     },
     "in_edges": {},
     "out_edges": {
@@ -2403,7 +2411,8 @@
     "type": "Ability",
     "name": "Deep Dive",
     "data": {
-      "primary_stat": "Speed"
+      "primary_stat": "Speed",
+      "metadata": {}
     },
     "in_edges": {},
     "out_edges": {
@@ -2420,7 +2429,8 @@
     "type": "Ability",
     "name": "Refine Water",
     "data": {
-      "primary_stat": "Speed"
+      "primary_stat": "Speed",
+      "metadata": {}
     },
     "in_edges": {},
     "out_edges": {
@@ -2458,7 +2468,8 @@
     "type": "Ability",
     "name": "Master Slayer",
     "data": {
-      "primary_stat": "Strength"
+      "primary_stat": "Strength",
+      "metadata": {}
     },
     "in_edges": {},
     "out_edges": {
