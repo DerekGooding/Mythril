@@ -152,6 +152,16 @@ class ContentManager:
         self._save_json("refinements.json", new_refinements)
         self._save_json("stats.json", self.unified_data["stats"])
 
+        # Automatically recompile the content graph
+        print("Recompiling content graph...")
+        migrate_script = os.path.join(PROJECT_ROOT, "scripts", "migrate_to_graph.py")
+        import subprocess
+        try:
+            subprocess.run(["python", migrate_script], check=True, cwd=PROJECT_ROOT)
+            print("Content graph recompiled successfully.")
+        except Exception as e:
+            print(f"Error recompiling content graph: {e}")
+
     def _save_json(self, filename, data):
         path = os.path.join(self.data_dir, filename)
         with open(path, 'w', encoding='utf-8') as f:
