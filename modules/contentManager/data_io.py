@@ -19,7 +19,8 @@ class ContentManager:
             "cadences": [],
             "locations": [],
             "refinements": [],
-            "stats": []
+            "stats": [],
+            "abilities": []
         }
         self.load_all()
 
@@ -36,7 +37,8 @@ class ContentManager:
             "items.json", "stat_augments.json", "quests.json", 
             "quest_details.json", "quest_unlocks.json", 
             "quest_cadence_unlocks.json", "cadences.json", 
-            "locations.json", "refinements.json", "stats.json"
+            "locations.json", "refinements.json", "stats.json",
+            "cadence_abilities.json"
         ]
         for f in files:
             self.raw_data[f] = self._load_json(f)
@@ -47,6 +49,10 @@ class ContentManager:
         self._unify_locations()
         self._unify_refinements()
         self._unify_stats()
+        self._unify_abilities()
+
+    def _unify_abilities(self):
+        self.unified_data["abilities"] = [a.copy() for a in self.raw_data["cadence_abilities.json"]]
 
     def _unify_items(self):
         augments = { a["Item"]: a["Augments"] for a in self.raw_data["stat_augments.json"] }
