@@ -37,6 +37,16 @@ if st.sidebar.button("🔨 Compile & Verify"):
         else:
             st.sidebar.error(f"Verification Failed:\n{res2.stdout}")
 
+st.sidebar.write("---")
+st.sidebar.subheader("⚠️ Content Warnings")
+warnings = manager.get_warnings()
+if not warnings:
+    st.sidebar.success("No issues detected!")
+else:
+    for w in warnings:
+        st.sidebar.warning(f"**{w['type']} [{w['name']}]**: {w['msg']}")
+
+
 def edit_list(data_list, key_prefix):
     to_delete = None
     for i, entry in enumerate(data_list):
