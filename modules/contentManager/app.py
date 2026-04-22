@@ -12,7 +12,7 @@ if 'manager' not in st.session_state:
 manager = st.session_state.manager
 
 st.sidebar.title("💎 Mythril CMS")
-page = st.sidebar.selectbox("Navigate", ["Quests", "Items", "Cadences", "Locations", "Refinements", "Stats"])
+page = st.sidebar.selectbox("Navigate", ["Quests", "Items", "Cadences", "Abilities", "Locations", "Refinements", "Stats"])
 
 if st.sidebar.button("💾 Save All Changes"):
     manager.save_all()

@@ -157,6 +157,7 @@ class ContentManager:
         self._save_json("locations.json", self.unified_data["locations"])
         self._save_json("refinements.json", new_refinements)
         self._save_json("stats.json", self.unified_data["stats"])
+        self._save_json("cadence_abilities.json", self.unified_data["abilities"])
 
         # Automatically recompile the content graph
         print("Recompiling content graph...")
