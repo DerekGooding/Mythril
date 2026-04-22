@@ -12,10 +12,23 @@ def run_visualization(no_serve=False):
         graph_data = dp.load_graph()
         nodes, cluster_names = dp.enrich_data(graph_data)
         
-        # 2. Load JS Engine (from file)
-        js_path = os.path.join(os.path.dirname(__file__), "lattice_engine.js")
-        with open(js_path, "r", encoding="utf-8") as f:
-            js_code = f.read()
+        # 2. Load JS Engine (from split files)
+        js_files = [
+            "lattice_config.js",
+            "lattice_state.js",
+            "lattice_data.js",
+            "lattice_rendering.js",
+            "lattice_simulation.js",
+            "lattice_interactions.js",
+            "lattice_main.js"
+        ]
+        js_code = ""
+        base_path = os.path.dirname(__file__)
+        for js_file in js_files:
+            file_path = os.path.join(base_path, js_file)
+            with open(file_path, "r", encoding="utf-8") as f:
+                js_code += f"\n// --- {js_file} ---\n"
+                js_code += f.read() + "\n"
 
         # 3. Generate HTML
         html = te.generate_full_html(nodes, cluster_names, js_code)
