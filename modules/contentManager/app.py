@@ -77,6 +77,39 @@ def edit_list(data_list, key_prefix, item_pool=None):
         data_list.append({"Item": item_pool[0], "Quantity": 1})
         st.rerun()
 
+def edit_dict_list(data_dict, key_prefix, label_name="Stat"):
+    to_delete = None
+    keys = list(data_dict.keys())
+    for i, key in enumerate(keys):
+        col1, col2, col3 = st.columns([3, 2, 1])
+        with col1:
+            stat_names = [s["Name"] for s in manager.unified_data["stats"]]
+            current_index = 0
+            if key in stat_names:
+                current_index = stat_names.index(key)
+            
+            new_key = st.selectbox(f"{label_name} {i}", stat_names, index=current_index, key=f"{key_prefix}_key_{i}")
+            if new_key != key:
+                data_dict[new_key] = data_dict.pop(key)
+                st.rerun()
+                
+        with col2:
+            data_dict[new_key] = st.number_input(f"Value {i}", value=data_dict[new_key], key=f"{key_prefix}_val_{i}")
+            
+        with col3:
+            if st.button("🗑️", key=f"{key_prefix}_del_{i}"):
+                to_delete = key
+                
+    if to_delete is not None:
+        del data_dict[to_delete]
+        st.rerun()
+    
+    if st.button(f"➕ Add {label_name}", key=f"{key_prefix}_add"):
+        available = [s["Name"] for s in manager.unified_data["stats"] if s["Name"] not in data_dict]
+        if available:
+            data_dict[available[0]] = 1
+            st.rerun()
+
 def edit_recipes(recipes, key_prefix):
     to_delete = None
     item_names = [i["Name"] for i in manager.unified_data["items"]]
