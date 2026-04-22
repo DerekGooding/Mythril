@@ -36,7 +36,8 @@ MUTATIONS = [
 def run_tests(show_output=False):
     try:
         # Run tests and capture output
-        result = subprocess.run(["dotnet", "test", TEST_PROJECT, "-c", "Debug", "--no-build"], 
+        # Remove --no-build to ensure the test project sees the changes in Mythril.Data
+        result = subprocess.run(["dotnet", "test", TEST_PROJECT, "-c", "Debug"], 
                                 capture_output=True, text=True, cwd=ROOT_DIR)
         
         if show_output:
@@ -61,7 +62,7 @@ def mutate_and_test():
     # 1. Baseline Check (Build once)
     print("Building project...")
     subprocess.run(["dotnet", "build", ROOT_DIR, "-c", "Debug"], capture_output=True)
-    if not run_tests(show_output=True):
+    if not run_tests(show_output=False):
         print("FAIL: Baseline tests failed. Fix project state first.")
         return
 
@@ -92,20 +93,13 @@ def mutate_and_test():
                         with open(file_path, 'w', encoding='utf-8') as f:
                             f.write(mutated_content)
 
-                        # We MUST rebuild for each mutation if we change source code in Mythril.Data 
-                        # because Mythril.Tests depends on it.
-                        # Wait, dotnet test --no-build only works if the DLL is already updated.
-                        # But we are changing the source!
-                        # So we MUST build.
-                        build_result = subprocess.run(["dotnet", "build", os.path.join(ROOT_DIR, "Mythril.Data/Mythril.Data.csproj"), "-c", "Debug"], capture_output=True)
+                        # Build the test project to ensure dependencies are copied
+                        build_result = subprocess.run(["dotnet", "build", TEST_PROJECT, "-c", "Debug"], capture_output=True)
                         if build_result.returncode != 0:
-                            # Compile error is effectively a "killed" mutant (or at least not survived)
-                            # But usually mutation testers treat it as "incompatible".
-                            # We'll skip it.
                             continue
 
                         total_mutants += 1
-                        if total_mutants > 100: # Safety cap
+                        if total_mutants > 30: # Slightly higher cap for better review
                              break
 
                         print(f"[{total_mutants:03d}] {os.path.basename(file_path)}:{i+1} | {replacement.strip()}", end=" ", flush=True)

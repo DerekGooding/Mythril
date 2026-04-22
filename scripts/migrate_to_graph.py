@@ -27,8 +27,12 @@ def migrate():
     quest_cadence = load_json("quest_cadence_unlocks.json")
     refinements = load_json("refinements.json")
     stats = load_json("stats.json")
+    abilities_meta = load_json("cadence_abilities.json")
 
     print(f"Loaded {len(items)} items, {len(quests)} quests, {len(locations)} locations...")
+
+    # Ability info map
+    ab_map = { a["Name"]: a for a in abilities_meta }
 
     # 1. Items
     for item in items:
@@ -81,6 +85,9 @@ def migrate():
             "out_edges": {}
         }
 
+        if "Effects" in detail:
+            node["effects"] = detail["Effects"]
+
         # Requirements (In-Edges)
         reqs = []
         if q_name in unlocks_map:
@@ -89,13 +96,6 @@ def migrate():
         if reqs:
             node["in_edges"]["requires_quest"] = reqs
 
-        item_reqs = []
-        if "Requirements" in detail:
-            for req in detail["Requirements"]:
-                item_reqs.append(generate_id("item", req["Item"])) # Simplified for now, quantity needs edge property
-                # Ideally edge logic: out_edges: { "consumes": [ { target: "item_id", qty: 5 } ] }
-                # But for migration, we are just mapping IDs first.
-        
         # Item Costs (Consumes)
         consumes = []
         if "Requirements" in detail:
@@ -162,14 +162,23 @@ def migrate():
         for abil in cad.get("Abilities", []):
             # Ability Node
             ab_id = generate_id("ability", abil["Ability"])
+            ab_info = ab_map.get(abil["Ability"], {})
+
             ab_node = {
                 "id": ab_id,
                 "type": "Ability",
                 "name": abil["Ability"],
-                "data": { "primary_stat": abil.get("PrimaryStat", "Magic"), "metadata": abil.get("Metadata", {}) },
-                "in_edges": {}, # Requirements handled on edge or separate? 
+                "data": { 
+                    "description": ab_info.get("Description", ""),
+                    "primary_stat": abil.get("PrimaryStat", "Magic"), 
+                    "metadata": abil.get("Metadata", {}) 
+                },
+                "in_edges": {}, 
                 "out_edges": {}
             }
+
+            if "Effects" in abil:
+                ab_node["effects"] = abil["Effects"]
             
             # Ability Requirements (Unlock Cost)
             consumes = []
@@ -178,9 +187,7 @@ def migrate():
             if consumes:
                 ab_node["out_edges"]["consumes"] = consumes
 
-            # Check if duplicate ability node already exists (shared abilities?)
-            # Usually abilities are unique per cadence in Mythril or shared by name.
-            # We'll treat them as unique nodes for now, or check existence.
+            # Shared ability node check
             if not any(n["id"] == ab_id for n in nodes):
                 nodes.append(ab_node)
             
@@ -190,21 +197,17 @@ def migrate():
 
     # 6. Refinements (Workshop)
     for ref in refinements:
-        # Refinement is usually bound to an ability
         ab_id = generate_id("ability", ref["Ability"])
-        
-        # Find the ability node to attach refinement data or create refinement nodes?
-        # Let's create Recipe Nodes linked to the Ability.
         
         for recipe in ref["Recipes"]:
             r_name = f"{ref['Ability']} - {recipe['OutputItem']}"
-            # Unique ID including input item to avoid collisions for multiple recipes for same ability/output
             r_id = generate_id("recipe", f"{ref['Ability']}_{recipe['InputItem']}_{recipe['OutputItem']}")
 
             node = {
                 "id": r_id,
                 "type": "Refinement",
-                "name": r_name,                "data": { "primary_stat": ref.get("PrimaryStat", "Strength") },
+                "name": r_name,
+                "data": { "primary_stat": ref.get("PrimaryStat", "Strength") },
                 "in_edges": {
                     "requires_ability": [ab_id]
                 },
