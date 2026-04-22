@@ -202,8 +202,18 @@ class ContentManager:
 
         # 2. Items with no sink
         for item_name in produced_items:
-            if item_name not in consumed_items and item_name in items and items[item_name]["ItemType"] not in ["Currency", "KeyItem", "Consumable"]:
-                warnings.append({ "type": "Item", "name": item_name, "msg": "Has source but no sink (nothing to spend it on)." })
+            # An item has a sink if:
+            # - It's consumed by something (quest, refinement, cadence)
+            # - It's a special type (Currency, KeyItem, Consumable)
+            # - It can be JUNCTIONED (has augments)
+            has_sink = (
+                item_name in consumed_items or 
+                (item_name in items and items[item_name]["ItemType"] in ["Currency", "KeyItem", "Consumable"]) or
+                (item_name in items and len(items[item_name].get("Augments", [])) > 0)
+            )
+            
+            if not has_sink:
+                warnings.append({ "type": "Item", "name": item_name, "msg": "Has source but no sink (nothing to spend it on and cannot be junctioned)." })
 
         # 3. Useless recurring quests
         for q in quests:
