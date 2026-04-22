@@ -3,7 +3,11 @@ import os
 import shutil
 from datetime import datetime
 
-DATA_DIR = "Mythril.Blazor/wwwroot/data"
+# Resolve DATA_DIR relative to this file's location (modules/contentManager/data_io.py)
+# Root is two levels up from this file
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, "..", ".."))
+DATA_DIR = os.path.join(PROJECT_ROOT, "Mythril.Blazor", "wwwroot", "data")
 
 class ContentManager:
     def __init__(self, data_dir=DATA_DIR):
