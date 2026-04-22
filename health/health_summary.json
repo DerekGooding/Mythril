@@ -28,7 +28,7 @@
             "category": "monolith",
             "message": "modules/contentManager/app.py exceeds 250 lines",
             "metadata": {
-                "lines": 257
+                "lines": 290
             }
         }
     ]
