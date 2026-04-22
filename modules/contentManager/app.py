@@ -34,24 +34,66 @@ if st.sidebar.button("🔨 Compile & Verify"):
             st.sidebar.error(f"Verification Failed:\n{res2.stdout}")
 
 def edit_list(data_list, key_prefix):
-    new_list = []
-    for i, item in enumerate(data_list):
+    to_delete = None
+    for i, entry in enumerate(data_list):
         col1, col2, col3 = st.columns([3, 2, 1])
         with col1:
-            name = st.selectbox(f"Item {i}", [i["Name"] for i in manager.unified_data["items"]], 
-                               index=[i["Name"] for i in manager.unified_data["items"]].index(item["Item"]) if item["Item"] in [i["Name"] for i in manager.unified_data["items"]] else 0,
-                               key=f"{key_prefix}_name_{i}")
+            # Safely find index of current item
+            item_names = [it["Name"] for i in [manager.unified_data["items"]] for it in i]
+            current_index = 0
+            if entry["Item"] in item_names:
+                current_index = item_names.index(entry["Item"])
+            
+            new_name = st.selectbox(f"Item {i}", item_names, index=current_index, key=f"{key_prefix}_name_{i}")
+            entry["Item"] = new_name
+            
         with col2:
-            qty = st.number_input(f"Qty {i}", value=item["Quantity"], min_value=1, key=f"{key_prefix}_qty_{i}")
+            entry["Quantity"] = st.number_input(f"Qty {i}", value=entry["Quantity"], min_value=1, key=f"{key_prefix}_qty_{i}")
+            
         with col3:
             if st.button("🗑️", key=f"{key_prefix}_del_{i}"):
-                continue
-        new_list.append({"Item": name, "Quantity": qty})
+                to_delete = i
+                
+    if to_delete is not None:
+        data_list.pop(to_delete)
+        st.rerun()
     
     if st.button("➕ Add Entry", key=f"{key_prefix}_add"):
-        new_list.append({"Item": manager.unified_data["items"][0]["Name"], "Quantity": 1})
+        data_list.append({"Item": manager.unified_data["items"][0]["Name"], "Quantity": 1})
         st.rerun()
-    return new_list
+
+def edit_dict_list(data_dict, key_prefix, label_name="Stat"):
+    to_delete = None
+    keys = list(data_dict.keys())
+    for i, key in enumerate(keys):
+        col1, col2, col3 = st.columns([3, 2, 1])
+        with col1:
+            stat_names = [s["Name"] for s in manager.unified_data["stats"]]
+            current_index = 0
+            if key in stat_names:
+                current_index = stat_names.index(key)
+            
+            new_key = st.selectbox(f"{label_name} {i}", stat_names, index=current_index, key=f"{key_prefix}_key_{i}")
+            if new_key != key:
+                data_dict[new_key] = data_dict.pop(key)
+                st.rerun()
+                
+        with col2:
+            data_dict[new_key] = st.number_input(f"Value {i}", value=data_dict[new_key], key=f"{key_prefix}_val_{i}")
+            
+        with col3:
+            if st.button("🗑️", key=f"{key_prefix}_del_{i}"):
+                to_delete = key
+                
+    if to_delete is not None:
+        del data_dict[to_delete]
+        st.rerun()
+    
+    if st.button(f"➕ Add {label_name}", key=f"{key_prefix}_add"):
+        available = [s["Name"] for s in manager.unified_data["stats"] if s["Name"] not in data_dict]
+        if available:
+            data_dict[available[0]] = 1
+            st.rerun()
 
 # --- Page Rendering ---
 
@@ -127,9 +169,16 @@ else:
     # Nested data management outside the form
     if page == "Quests":
         st.subheader("📦 Requirements")
-        item["Requirements"] = edit_list(item["Requirements"], "req")
+        edit_list(item["Requirements"], "req")
+        
         st.subheader("💎 Rewards")
-        item["Rewards"] = edit_list(item["Rewards"], "rew")
+        edit_list(item["Rewards"], "rew")
+
+        st.subheader("🛡️ Required Stats")
+        edit_dict_list(item["RequiredStats"], "req_stat")
+
+        st.subheader("📈 Stat Rewards")
+        edit_dict_list(item["StatRewards"], "rew_stat")
 
     if st.button("🔥 Delete Entity", type="secondary"):
         manager.unified_data[page.lower()].remove(item)
