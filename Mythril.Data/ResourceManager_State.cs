@@ -186,6 +186,8 @@ public partial class ResourceManager
     }
 
     public IEnumerable<Quest> GetCompletedQuests() => _gameStore.State.CompletedQuests.Select(name => _quests.All.FirstOrDefault(q => q.Name == name) is var q && q.Name != null ? q : new Quest(name, ""));
+    public bool IsCompleted(string questName) => _gameStore.State.CompletedQuests.Contains(questName);
+    
     public void ClearCompletedQuests() 
     {
         foreach(var q in _gameStore.State.CompletedQuests)

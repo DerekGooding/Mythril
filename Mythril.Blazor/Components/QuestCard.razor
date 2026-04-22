@@ -20,6 +20,10 @@
             @(QuestData!.Type == QuestType.Single ? "flag" : "repeat")
         </span>
         @QuestData.Name
+        @if (ResourceManager.IsCompleted(QuestData.Name))
+        {
+            <span class="ms-1 text-success material-icons" style="font-size: 1rem;" title="Completed at least once">check_circle</span>
+        }
         @if (inProgress)
         {
             <span class="ms-auto badge bg-warning text-dark small">In Progress</span>
@@ -34,15 +38,19 @@
         <div class="card-side">
             @{
                 var forwardUnlocks = ResourceManager.GetForwardUnlocks(QuestData.Quest);
+                bool isCompleted = ResourceManager.IsCompleted(QuestData.Name);
             }
-            @if (QuestData.Requirements.Length > 0 || (QuestData.RequiredStats != null && QuestData.RequiredStats.Count > 0) || forwardUnlocks.Count > 0)
+            @if (QuestData.Requirements.Length > 0 || (QuestData.RequiredStats != null && QuestData.RequiredStats.Count > 0) || (forwardUnlocks.Count > 0 && !isCompleted))
             {
                 <ul>
-                    @foreach (var unlock in forwardUnlocks)
+                    @if (!isCompleted)
                     {
-                        <li @key="unlock" class="text-warning">
-                            <span title="Unlocks">✨</span> @unlock
-                        </li>
+                        @foreach (var unlock in forwardUnlocks)
+                        {
+                            <li @key="unlock" class="text-warning">
+                                <span title="Unlocks">✨</span> @unlock
+                            </li>
+                        }
                     }
                     @foreach (var requirement in QuestData.Requirements)
                     {
