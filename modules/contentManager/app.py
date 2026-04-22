@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-from data_io import ContentManager
+from data_io import ContentManager, PROJECT_ROOT
 import subprocess
 import os
 
@@ -20,8 +20,12 @@ if st.sidebar.button("💾 Save All Changes"):
 
 if st.sidebar.button("🔨 Compile & Verify"):
     with st.spinner("Compiling content graph..."):
-        res1 = subprocess.run(["python", "scripts/migrate_to_graph.py"], capture_output=True, text=True)
-        res2 = subprocess.run(["python", "scripts/verify_graph.py"], capture_output=True, text=True)
+        # Run from project root so scripts can find their own paths
+        migrate_script = os.path.join(PROJECT_ROOT, "scripts", "migrate_to_graph.py")
+        verify_script = os.path.join(PROJECT_ROOT, "scripts", "verify_graph.py")
+        
+        res1 = subprocess.run(["python", migrate_script], capture_output=True, text=True, cwd=PROJECT_ROOT)
+        res2 = subprocess.run(["python", verify_script], capture_output=True, text=True, cwd=PROJECT_ROOT)
         
         if res1.returncode == 0:
             st.sidebar.success("Compiled successfully")
