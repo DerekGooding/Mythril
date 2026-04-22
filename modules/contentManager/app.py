@@ -213,12 +213,12 @@ else:
     with st.form(f"edit_{page}_{selected_name}"):
         st.subheader(f"Editing: {selected_name}")
         
-        if page != "Refinements": # Refinements use 'Ability' as name, handled in data_io
-            name = st.text_input("Name", item["Name"])
-            description = st.text_area("Description", item.get("Description", ""))
+        if page == "Refinements":
+            name = st.selectbox("Linked Ability", [a["Name"] for a in manager.unified_data["abilities"]], index=[a["Name"] for a in manager.unified_data["abilities"]].index(item["Name"]) if item["Name"] in [a["Name"] for a in manager.unified_data["abilities"]] else 0)
         else:
-            name = st.selectbox("Ability Base", [a["Name"] for a in manager.unified_data["abilities"]], index=[a["Name"] for a in manager.unified_data["abilities"]].index(item["Name"]) if item["Name"] in [a["Name"] for a in manager.unified_data["abilities"]] else 0)
-            description = "" # Not used for refinements
+            name = st.text_input("Name", item["Name"])
+            
+        description = st.text_area("Description", item.get("Description", "")) if "Description" in item else ""
             
         if page == "Quests":
             col1, col2, col3 = st.columns(3)
@@ -238,7 +238,7 @@ else:
             i_type = st.selectbox("Type", ["Material", "Currency", "Consumable", "Spell", "KeyItem"], index=["Material", "Currency", "Consumable", "Spell", "KeyItem"].index(item["ItemType"]))
         
         elif page == "Refinements":
-             stat = st.selectbox("Primary Stat", [s["Name"] for s in manager.unified_data["stats"]], index=[s["Name"] for s in manager.unified_data["stats"]].index(item["PrimaryStat"]))
+             stat = st.selectbox("Primary Stat", [s["Name"] for s in manager.unified_data["stats"]], index=[s["Name"] for s in manager.unified_data["stats"]].index(item["PrimaryStat"]) if item["PrimaryStat"] in [s["Name"] for s in manager.unified_data["stats"]] else 0)
             
         if st.form_submit_button("Update Basic Info"):
             item["Name"] = name
