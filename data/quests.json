@@ -1,39 +1,146 @@
 [
-  { "Name": "Prologue", "Description": "Watch the intro cinematic." },
-  { "Name": "Tutorial Section", "Description": "Complete the tutorial section of the game." },
-  { "Name": "Visit Starting Town", "Description": "Explore the local village." },
-  { "Name": "Buy Potion", "Description": "Get a potion from the town shop." },
-  { "Name": "Recover the Ancient Tome", "Description": "Find the lost book of cadences." },
-  { "Name": "Learn About Cadences", "Description": "Discover the power of your inner voice." },
-  { "Name": "Learn about the Dark Forest", "Description": "Hear the rumors of the corrupted forest." },
-  { "Name": "Hunt Goblins", "Description": "Clear out the local goblin encampment." },
-  { "Name": "Chop Wood", "Description": "Harvest wood from the corrupted forest." },
-  { "Name": "Learn about the Mines", "Description": "Find out where the miners went." },
-  { "Name": "Hunt Bats", "Description": "Clear the mine entrance of bats." },
-  { "Name": "Hunt Spiders", "Description": "Venture deeper into the webs." },
-
-  { "Name": "Hunt Slimes", "Description": "Clear the lower levels of sticky residue." },
-  { "Name": "Unlock Mining", "Description": "Obtain permission to mine Iron Ore." },
-  { "Name": "Mine Iron Ore", "Description": "Extract precious metals from the earth." },
-  { "Name": "Gather Moonberries", "Description": "Pick glowing fruit from the woods." },
-  { "Name": "Defeat Treant Guardian", "Description": "Face the protector of the forest." },
-  { "Name": "Ancient Inscriptions", "Description": "Decipher the ruins' entrance." },
-  { "Name": "Finding the Hearth", "Description": "Locate the central power source of the ruins." },
-  { "Name": "Rekindling the Spark", "Description": "Ignite the ancient Mythril Forge." },
-  { "Name": "Help the lumberjack", "Description": "Gather fallen wood for the local lumberjack." },
-  { "Name": "Sell Gem", "Description": "Trade a basic gem for gold at the town market." },
-  { "Name": "Scavenge Scrap", "Description": "Search the desert sands for abandoned materials." },
-  { "Name": "Hunt Sand-Sharks", "Description": "Take down the predators of the dunes." },
-  { "Name": "Locate the Hidden Oasis", "Description": "Find the legendary sanctuary in the waste." },
-  { "Name": "Purify the Grove", "Description": "Use healing magic to cleanse the corruption from the sacred grove." },
-  { "Name": "Power the Forge", "Description": "Channel intense fire magic to reignite the ancient Mythril Forge." },
-  { "Name": "Shatter the Crystals", "Description": "Harvest prismatic fragments from the peak's formations." },
-  { "Name": "High Altitude Survey", "Description": "Map the dangerous heights of the Crystal Peaks." },
-  { "Name": "Harvest Sea-Life", "Description": "Gather biological components from the Tidal Caverns." },
-  { "Name": "Deep Sea Scavenge", "Description": "Search the lightless depths for rare coral." },
-  { "Name": "Archive Sifting", "Description": "Search through stacks of ancient writings." },
-  { "Name": "Study Ancient Texts", "Description": "Learn from the preserved knowledge of the library." },
-  { "Name": "Defeat the Mythril Construct", "Description": "Face the ultimate defender of the Mythril Heart." },
-  { "Name": "Ascetic Meditation", "Description": "Focus your mind to achieve permanent magical growth." },
-  { "Name": "Heavy Training", "Description": "Push your body to achieve permanent physical growth." }
+  {
+    "Name": "Prologue",
+    "Description": "Watch the intro cinematic."
+  },
+  {
+    "Name": "Tutorial Section",
+    "Description": "Complete the tutorial section of the game."
+  },
+  {
+    "Name": "Visit Starting Town",
+    "Description": "Explore the local village."
+  },
+  {
+    "Name": "Buy Potion",
+    "Description": "Get a potion from the town shop."
+  },
+  {
+    "Name": "Recover the Ancient Tome",
+    "Description": "Find the lost book of cadences."
+  },
+  {
+    "Name": "Learn About Cadences",
+    "Description": "Discover the power of your inner voice."
+  },
+  {
+    "Name": "Learn about the Dark Forest",
+    "Description": "Hear the rumors of the corrupted forest."
+  },
+  {
+    "Name": "Hunt Goblins",
+    "Description": "Clear out the local goblin encampment."
+  },
+  {
+    "Name": "Chop Wood",
+    "Description": "Harvest wood from the corrupted forest."
+  },
+  {
+    "Name": "Learn about the Mines",
+    "Description": "Find out where the miners went."
+  },
+  {
+    "Name": "Hunt Bats",
+    "Description": "Clear the mine entrance of bats."
+  },
+  {
+    "Name": "Hunt Spiders",
+    "Description": "Venture deeper into the webs."
+  },
+  {
+    "Name": "Hunt Slimes",
+    "Description": "Clear the lower levels of sticky residue."
+  },
+  {
+    "Name": "Unlock Mining",
+    "Description": "Obtain permission to mine Iron Ore."
+  },
+  {
+    "Name": "Mine Iron Ore",
+    "Description": "Extract precious metals from the earth."
+  },
+  {
+    "Name": "Gather Moonberries",
+    "Description": "Pick glowing fruit from the woods."
+  },
+  {
+    "Name": "Defeat Treant Guardian",
+    "Description": "Face the protector of the forest."
+  },
+  {
+    "Name": "Ancient Inscriptions",
+    "Description": "Decipher the ruins' entrance."
+  },
+  {
+    "Name": "Finding the Hearth",
+    "Description": "Locate the central power source of the ruins."
+  },
+  {
+    "Name": "Rekindling the Spark",
+    "Description": "Ignite the ancient Mythril Forge."
+  },
+  {
+    "Name": "Help the lumberjack",
+    "Description": "Gather fallen wood for the local lumberjack."
+  },
+  {
+    "Name": "Sell Gem",
+    "Description": "Trade a basic gem for gold at the town market."
+  },
+  {
+    "Name": "Scavenge Scrap",
+    "Description": "Search the desert sands for abandoned materials."
+  },
+  {
+    "Name": "Hunt Sand-Sharks",
+    "Description": "Take down the predators of the dunes."
+  },
+  {
+    "Name": "Locate the Hidden Oasis",
+    "Description": "Find the legendary sanctuary in the waste."
+  },
+  {
+    "Name": "Purify the Grove",
+    "Description": "Use healing magic to cleanse the corruption from the sacred grove."
+  },
+  {
+    "Name": "Power the Forge",
+    "Description": "Channel intense fire magic to reignite the ancient Mythril Forge."
+  },
+  {
+    "Name": "Shatter the Crystals",
+    "Description": "Harvest prismatic fragments from the peak's formations."
+  },
+  {
+    "Name": "High Altitude Survey",
+    "Description": "Map the dangerous heights of the Crystal Peaks."
+  },
+  {
+    "Name": "Harvest Sea-Life",
+    "Description": "Gather biological components from the Tidal Caverns."
+  },
+  {
+    "Name": "Deep Sea Scavenge",
+    "Description": "Search the lightless depths for rare coral."
+  },
+  {
+    "Name": "Archive Sifting",
+    "Description": "Search through stacks of ancient writings."
+  },
+  {
+    "Name": "Study Ancient Texts",
+    "Description": "Learn from the preserved knowledge of the library."
+  },
+  {
+    "Name": "Defeat the Mythril Construct",
+    "Description": "Face the ultimate defender of the Mythril Heart."
+  },
+  {
+    "Name": "Ascetic Meditation",
+    "Description": "Focus your mind to achieve permanent magical growth."
+  },
+  {
+    "Name": "Heavy Training",
+    "Description": "Push your body to achieve permanent physical growth."
+  }
 ]

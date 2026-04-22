@@ -1,6 +1,6 @@
 {
     "is_healthy": false,
-    "failure_count": 2,
+    "failure_count": 3,
     "metrics": {
         "monoliths": 2,
         "coverage": 79.71,
@@ -11,7 +11,7 @@
         "stale_docs": 0,
         "reachability_passed": {
             "passed": true,
-            "time": "60.8m",
+            "time": "64.7m",
             "sustainable": 34,
             "unsustainable": 0
         },
@@ -31,6 +31,14 @@
             "message": "modules/visualization/lattice_engine.js exceeds 250 lines",
             "metadata": {
                 "lines": 415
+            }
+        },
+        {
+            "category": "pacing",
+            "message": "Pacing regression detected: 64.7m (baseline: 55.9m, max: 64.3m)",
+            "metadata": {
+                "actual": 64.7,
+                "baseline": 55.9
             }
         }
     ]

@@ -10,7 +10,9 @@
         "Quantity": 100
       }
     ],
-    "PrimaryStat": "Vitality"
+    "PrimaryStat": "Vitality",
+    "RequiredStats": {},
+    "StatRewards": {}
   },
   {
     "Quest": "Tutorial Section",
@@ -20,10 +22,12 @@
     "Rewards": [
       {
         "Item": "Basic Gem",
-        "Quantity": 10
+        "Quantity": 3
       }
     ],
-    "PrimaryStat": "Vitality"
+    "PrimaryStat": "Vitality",
+    "RequiredStats": {},
+    "StatRewards": {}
   },
   {
     "Quest": "Visit Starting Town",
@@ -36,7 +40,9 @@
         "Quantity": 100
       }
     ],
-    "PrimaryStat": "Vitality"
+    "PrimaryStat": "Vitality",
+    "RequiredStats": {},
+    "StatRewards": {}
   },
   {
     "Quest": "Buy Potion",
@@ -54,7 +60,9 @@
         "Quantity": 5
       }
     ],
-    "PrimaryStat": "Speed"
+    "PrimaryStat": "Speed",
+    "RequiredStats": {},
+    "StatRewards": {}
   },
   {
     "Quest": "Recover the Ancient Tome",
@@ -72,7 +80,9 @@
         "Quantity": 5
       }
     ],
-    "PrimaryStat": "Magic"
+    "PrimaryStat": "Magic",
+    "RequiredStats": {},
+    "StatRewards": {}
   },
   {
     "Quest": "Learn About Cadences",
@@ -80,7 +90,9 @@
     "Type": "Single",
     "Requirements": [],
     "Rewards": [],
-    "PrimaryStat": "Magic"
+    "PrimaryStat": "Magic",
+    "RequiredStats": {},
+    "StatRewards": {}
   },
   {
     "Quest": "Learn about the Dark Forest",
@@ -88,7 +100,9 @@
     "Type": "Single",
     "Requirements": [],
     "Rewards": [],
-    "PrimaryStat": "Vitality"
+    "PrimaryStat": "Vitality",
+    "RequiredStats": {},
+    "StatRewards": {}
   },
   {
     "Quest": "Hunt Goblins",
@@ -109,7 +123,9 @@
         "Quantity": 3
       }
     ],
-    "PrimaryStat": "Strength"
+    "PrimaryStat": "Strength",
+    "RequiredStats": {},
+    "StatRewards": {}
   },
   {
     "Quest": "Chop Wood",
@@ -126,7 +142,9 @@
         "Quantity": 5
       }
     ],
-    "PrimaryStat": "Strength"
+    "PrimaryStat": "Strength",
+    "RequiredStats": {},
+    "StatRewards": {}
   },
   {
     "Quest": "Learn about the Mines",
@@ -134,7 +152,9 @@
     "Type": "Single",
     "Requirements": [],
     "Rewards": [],
-    "PrimaryStat": "Strength"
+    "PrimaryStat": "Strength",
+    "RequiredStats": {},
+    "StatRewards": {}
   },
   {
     "Quest": "Hunt Bats",
@@ -147,7 +167,9 @@
         "Quantity": 150
       }
     ],
-    "PrimaryStat": "Speed"
+    "PrimaryStat": "Speed",
+    "RequiredStats": {},
+    "StatRewards": {}
   },
   {
     "Quest": "Hunt Spiders",
@@ -160,7 +182,9 @@
         "Quantity": 5
       }
     ],
-    "PrimaryStat": "Vitality"
+    "PrimaryStat": "Vitality",
+    "RequiredStats": {},
+    "StatRewards": {}
   },
   {
     "Quest": "Hunt Slimes",
@@ -173,7 +197,9 @@
         "Quantity": 50
       }
     ],
-    "PrimaryStat": "Strength"
+    "PrimaryStat": "Strength",
+    "RequiredStats": {},
+    "StatRewards": {}
   },
   {
     "Quest": "Unlock Mining",
@@ -186,7 +212,9 @@
       }
     ],
     "Rewards": [],
-    "PrimaryStat": "Strength"
+    "PrimaryStat": "Strength",
+    "RequiredStats": {},
+    "StatRewards": {}
   },
   {
     "Quest": "Mine Iron Ore",
@@ -202,7 +230,8 @@
     "PrimaryStat": "Strength",
     "RequiredStats": {
       "Strength": 15
-    }
+    },
+    "StatRewards": {}
   },
   {
     "Quest": "Gather Moonberries",
@@ -222,7 +251,8 @@
     "PrimaryStat": "Speed",
     "RequiredStats": {
       "Speed": 15
-    }
+    },
+    "StatRewards": {}
   },
   {
     "Quest": "Defeat Treant Guardian",
@@ -243,7 +273,8 @@
     "PrimaryStat": "Strength",
     "RequiredStats": {
       "Strength": 25
-    }
+    },
+    "StatRewards": {}
   },
   {
     "Quest": "Ancient Inscriptions",
@@ -260,7 +291,9 @@
         "Quantity": 10
       }
     ],
-    "PrimaryStat": "Magic"
+    "PrimaryStat": "Magic",
+    "RequiredStats": {},
+    "StatRewards": {}
   },
   {
     "Quest": "Finding the Hearth",
@@ -277,7 +310,9 @@
         "Quantity": 20
       }
     ],
-    "PrimaryStat": "Vitality"
+    "PrimaryStat": "Vitality",
+    "RequiredStats": {},
+    "StatRewards": {}
   },
   {
     "Quest": "Rekindling the Spark",
@@ -299,7 +334,9 @@
         "Quantity": 1
       }
     ],
-    "PrimaryStat": "Magic"
+    "PrimaryStat": "Magic",
+    "RequiredStats": {},
+    "StatRewards": {}
   },
   {
     "Quest": "Help the lumberjack",
@@ -312,7 +349,9 @@
         "Quantity": 10
       }
     ],
-    "PrimaryStat": "Strength"
+    "PrimaryStat": "Strength",
+    "RequiredStats": {},
+    "StatRewards": {}
   },
   {
     "Quest": "Sell Gem",
@@ -330,7 +369,9 @@
         "Quantity": 250
       }
     ],
-    "PrimaryStat": "Speed"
+    "PrimaryStat": "Speed",
+    "RequiredStats": {},
+    "StatRewards": {}
   },
   {
     "Quest": "Scavenge Scrap",
@@ -347,7 +388,9 @@
         "Quantity": 50
       }
     ],
-    "PrimaryStat": "Vitality"
+    "PrimaryStat": "Vitality",
+    "RequiredStats": {},
+    "StatRewards": {}
   },
   {
     "Quest": "Hunt Sand-Sharks",
@@ -363,7 +406,8 @@
     "PrimaryStat": "Strength",
     "RequiredStats": {
       "Strength": 20
-    }
+    },
+    "StatRewards": {}
   },
   {
     "Quest": "Locate the Hidden Oasis",
@@ -383,7 +427,8 @@
     "PrimaryStat": "Vitality",
     "RequiredStats": {
       "Speed": 25
-    }
+    },
+    "StatRewards": {}
   },
   {
     "Quest": "Purify the Grove",
@@ -401,7 +446,9 @@
         "Quantity": 10
       }
     ],
-    "PrimaryStat": "Magic"
+    "PrimaryStat": "Magic",
+    "RequiredStats": {},
+    "StatRewards": {}
   },
   {
     "Quest": "Power the Forge",
@@ -422,7 +469,8 @@
     "PrimaryStat": "Magic",
     "RequiredStats": {
       "Magic": 30
-    }
+    },
+    "StatRewards": {}
   },
   {
     "Quest": "Shatter the Crystals",
@@ -438,7 +486,8 @@
     "PrimaryStat": "Strength",
     "RequiredStats": {
       "Strength": 30
-    }
+    },
+    "StatRewards": {}
   },
   {
     "Quest": "High Altitude Survey",
@@ -458,7 +507,8 @@
     "PrimaryStat": "Speed",
     "RequiredStats": {
       "Speed": 30
-    }
+    },
+    "StatRewards": {}
   },
   {
     "Quest": "Harvest Sea-Life",
@@ -475,7 +525,9 @@
         "Quantity": 5
       }
     ],
-    "PrimaryStat": "Vitality"
+    "PrimaryStat": "Vitality",
+    "RequiredStats": {},
+    "StatRewards": {}
   },
   {
     "Quest": "Deep Sea Scavenge",
@@ -491,7 +543,8 @@
     "PrimaryStat": "Vitality",
     "RequiredStats": {
       "Vitality": 30
-    }
+    },
+    "StatRewards": {}
   },
   {
     "Quest": "Archive Sifting",
@@ -507,7 +560,8 @@
     "PrimaryStat": "Magic",
     "RequiredStats": {
       "Magic": 30
-    }
+    },
+    "StatRewards": {}
   },
   {
     "Quest": "Study Ancient Texts",
@@ -520,7 +574,9 @@
         "Quantity": 100
       }
     ],
-    "PrimaryStat": "Magic"
+    "PrimaryStat": "Magic",
+    "RequiredStats": {},
+    "StatRewards": {}
   },
   {
     "Quest": "Defeat the Mythril Construct",
@@ -556,7 +612,8 @@
       "Vitality": 100,
       "Magic": 100,
       "Speed": 100
-    }
+    },
+    "StatRewards": {}
   },
   {
     "Quest": "Ascetic Meditation",
@@ -573,13 +630,7 @@
     "RequiredStats": {
       "Magic": 50
     },
-    "Effects": [
-      {
-        "Type": "StatBoost",
-        "Value": 5,
-        "Target": "Magic"
-      }
-    ]
+    "StatRewards": {}
   },
   {
     "Quest": "Heavy Training",
@@ -596,12 +647,6 @@
     "RequiredStats": {
       "Strength": 50
     },
-    "Effects": [
-      {
-        "Type": "StatBoost",
-        "Value": 5,
-        "Target": "Strength"
-      }
-    ]
+    "StatRewards": {}
   }
 ]

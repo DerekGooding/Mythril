@@ -5,13 +5,28 @@
     "Abilities": [
       {
         "Ability": "AutoQuest I",
-        "Requirements": [ { "Item": "Gold", "Quantity": 100 } ],
+        "Requirements": [
+          {
+            "Item": "Gold",
+            "Quantity": 100
+          }
+        ],
         "PrimaryStat": "Vitality",
-        "Effects": [ { "Type": "AutoQuest", "Value": 1 } ]
+        "Effects": [
+          {
+            "Type": "AutoQuest",
+            "Value": 1
+          }
+        ]
       },
       {
         "Ability": "J-Str",
-        "Requirements": [ { "Item": "Iron Ore", "Quantity": 10 } ],
+        "Requirements": [
+          {
+            "Item": "Iron Ore",
+            "Quantity": 10
+          }
+        ],
         "PrimaryStat": "Strength"
       }
     ]
@@ -22,23 +37,60 @@
     "Abilities": [
       {
         "Ability": "Refine Ice",
-        "Requirements": [ { "Item": "Mana Leaf", "Quantity": 5 } ],
+        "Requirements": [
+          {
+            "Item": "Mana Leaf",
+            "Quantity": 5
+          }
+        ],
         "PrimaryStat": "Magic"
       },
       {
         "Ability": "J-Magic",
-        "Requirements": [ { "Item": "Gold", "Quantity": 500 }, { "Item": "Mana Leaf", "Quantity": 10 } ],
+        "Requirements": [
+          {
+            "Item": "Gold",
+            "Quantity": 500
+          },
+          {
+            "Item": "Mana Leaf",
+            "Quantity": 10
+          }
+        ],
         "PrimaryStat": "Magic"
       },
       {
         "Ability": "Magic Pocket I",
-        "Requirements": [ { "Item": "Gold", "Quantity": 1000 }, { "Item": "Mana Leaf", "Quantity": 20 } ],
+        "Requirements": [
+          {
+            "Item": "Gold",
+            "Quantity": 1000
+          },
+          {
+            "Item": "Mana Leaf",
+            "Quantity": 20
+          }
+        ],
         "PrimaryStat": "Magic",
-        "Effects": [ { "Type": "MagicCapacity", "Value": 60 } ]
+        "Effects": [
+          {
+            "Type": "MagicCapacity",
+            "Value": 60
+          }
+        ]
       },
       {
         "Ability": "Refine Lightning",
-        "Requirements": [ { "Item": "Fire Shard", "Quantity": 5 }, { "Item": "Ice Shard", "Quantity": 5 } ],
+        "Requirements": [
+          {
+            "Item": "Fire Shard",
+            "Quantity": 5
+          },
+          {
+            "Item": "Ice Shard",
+            "Quantity": 5
+          }
+        ],
         "PrimaryStat": "Magic"
       }
     ]
@@ -49,23 +101,52 @@
     "Abilities": [
       {
         "Ability": "AutoQuest I",
-        "Requirements": [ { "Item": "Gold", "Quantity": 100 } ],
+        "Requirements": [
+          {
+            "Item": "Gold",
+            "Quantity": 100
+          }
+        ],
         "PrimaryStat": "Vitality",
-        "Effects": [ { "Type": "AutoQuest", "Value": 1 } ]
+        "Effects": [
+          {
+            "Type": "AutoQuest",
+            "Value": 1
+          }
+        ]
       },
       {
         "Ability": "Refine Wood",
-        "Requirements": [ { "Item": "Log", "Quantity": 10 } ],
+        "Requirements": [
+          {
+            "Item": "Log",
+            "Quantity": 10
+          }
+        ],
         "PrimaryStat": "Strength"
       },
       {
         "Ability": "Refine Scrap",
-        "Requirements": [ { "Item": "Gold", "Quantity": 1000 } ],
+        "Requirements": [
+          {
+            "Item": "Gold",
+            "Quantity": 1000
+          }
+        ],
         "PrimaryStat": "Speed"
       },
       {
         "Ability": "Refine Mixology",
-        "Requirements": [ { "Item": "Herb", "Quantity": 30 }, { "Item": "Iron Ore", "Quantity": 10 } ],
+        "Requirements": [
+          {
+            "Item": "Herb",
+            "Quantity": 30
+          },
+          {
+            "Item": "Iron Ore",
+            "Quantity": 10
+          }
+        ],
         "PrimaryStat": "Magic"
       }
     ]
@@ -76,18 +157,38 @@
     "Abilities": [
       {
         "Ability": "AutoQuest I",
-        "Requirements": [ { "Item": "Gold", "Quantity": 100 } ],
+        "Requirements": [
+          {
+            "Item": "Gold",
+            "Quantity": 100
+          }
+        ],
         "PrimaryStat": "Vitality",
-        "Effects": [ { "Type": "AutoQuest", "Value": 1 } ]
+        "Effects": [
+          {
+            "Type": "AutoQuest",
+            "Value": 1
+          }
+        ]
       },
       {
         "Ability": "Refine Fire",
-        "Requirements": [ { "Item": "Log", "Quantity": 10 } ],
+        "Requirements": [
+          {
+            "Item": "Log",
+            "Quantity": 10
+          }
+        ],
         "PrimaryStat": "Magic"
       },
       {
         "Ability": "J-Speed",
-        "Requirements": [ { "Item": "Potion", "Quantity": 10 } ],
+        "Requirements": [
+          {
+            "Item": "Potion",
+            "Quantity": 10
+          }
+        ],
         "PrimaryStat": "Speed"
       }
     ]
@@ -98,28 +199,66 @@
     "Abilities": [
       {
         "Ability": "Logistics I",
-        "Requirements": [ { "Item": "Gold", "Quantity": 2500 } ],
+        "Requirements": [
+          {
+            "Item": "Gold",
+            "Quantity": 2500
+          }
+        ],
         "PrimaryStat": "Magic",
-        "Effects": [ { "Type": "Logistics", "Value": 1 } ]
+        "Effects": [
+          {
+            "Type": "Logistics",
+            "Value": 1
+          }
+        ]
       },
       {
         "Ability": "Mass Refine",
-        "Requirements": [ { "Item": "Gold", "Quantity": 5000 }, { "Item": "Mythril Spark", "Quantity": 1 } ],
+        "Requirements": [
+          {
+            "Item": "Gold",
+            "Quantity": 5000
+          },
+          {
+            "Item": "Mythril Spark",
+            "Quantity": 1
+          }
+        ],
         "PrimaryStat": "Magic"
       },
       {
         "Ability": "Essence Harvest",
-        "Requirements": [ { "Item": "Ancient Bark", "Quantity": 20 }, { "Item": "Moonberry", "Quantity": 50 } ],
+        "Requirements": [
+          {
+            "Item": "Ancient Bark",
+            "Quantity": 20
+          },
+          {
+            "Item": "Moonberry",
+            "Quantity": 50
+          }
+        ],
         "PrimaryStat": "Vitality"
       },
       {
         "Ability": "J-Vit",
-        "Requirements": [ { "Item": "Gold", "Quantity": 2000 } ],
+        "Requirements": [
+          {
+            "Item": "Gold",
+            "Quantity": 2000
+          }
+        ],
         "PrimaryStat": "Vitality"
       },
       {
         "Ability": "Refine Life",
-        "Requirements": [ { "Item": "Ancient Bark", "Quantity": 5 } ],
+        "Requirements": [
+          {
+            "Item": "Ancient Bark",
+            "Quantity": 5
+          }
+        ],
         "PrimaryStat": "Magic"
       }
     ]
@@ -130,14 +269,37 @@
     "Abilities": [
       {
         "Ability": "J-Vit",
-        "Requirements": [ { "Item": "Iron Ore", "Quantity": 50 }, { "Item": "Ancient Bark", "Quantity": 20 }, { "Item": "Gold", "Quantity": 2000 } ],
+        "Requirements": [
+          {
+            "Item": "Iron Ore",
+            "Quantity": 50
+          },
+          {
+            "Item": "Ancient Bark",
+            "Quantity": 20
+          },
+          {
+            "Item": "Gold",
+            "Quantity": 2000
+          }
+        ],
         "PrimaryStat": "Vitality"
       },
       {
         "Ability": "Magic Pocket II",
-        "Requirements": [ { "Item": "Leather", "Quantity": 10 } ],
+        "Requirements": [
+          {
+            "Item": "Leather",
+            "Quantity": 10
+          }
+        ],
         "PrimaryStat": "Magic",
-        "Effects": [ { "Type": "MagicCapacity", "Value": 100 } ]
+        "Effects": [
+          {
+            "Type": "MagicCapacity",
+            "Value": 100
+          }
+        ]
       }
     ]
   },
@@ -147,19 +309,44 @@
     "Abilities": [
       {
         "Ability": "Logistics II",
-        "Requirements": [ { "Item": "Gold", "Quantity": 10000 } ],
+        "Requirements": [
+          {
+            "Item": "Gold",
+            "Quantity": 10000
+          }
+        ],
         "PrimaryStat": "Magic",
-        "Effects": [ { "Type": "Logistics", "Value": 2 } ]
+        "Effects": [
+          {
+            "Type": "Logistics",
+            "Value": 2
+          }
+        ]
       },
       {
         "Ability": "AutoQuest II",
-        "Requirements": [ { "Item": "Gold", "Quantity": 7500 } ],
+        "Requirements": [
+          {
+            "Item": "Gold",
+            "Quantity": 7500
+          }
+        ],
         "PrimaryStat": "Magic",
-        "Effects": [ { "Type": "AutoQuest", "Value": 2 } ]
+        "Effects": [
+          {
+            "Type": "AutoQuest",
+            "Value": 2
+          }
+        ]
       },
       {
         "Ability": "Refine Haste",
-        "Requirements": [ { "Item": "Lost Parchment", "Quantity": 5 } ],
+        "Requirements": [
+          {
+            "Item": "Lost Parchment",
+            "Quantity": 5
+          }
+        ],
         "PrimaryStat": "Magic"
       }
     ]
@@ -170,12 +357,22 @@
     "Abilities": [
       {
         "Ability": "Mountain Crush",
-        "Requirements": [ { "Item": "Gold", "Quantity": 5000 } ],
+        "Requirements": [
+          {
+            "Item": "Gold",
+            "Quantity": 5000
+          }
+        ],
         "PrimaryStat": "Strength"
       },
       {
         "Ability": "Refine Earth",
-        "Requirements": [ { "Item": "Crystal Shards", "Quantity": 10 } ],
+        "Requirements": [
+          {
+            "Item": "Crystal Shards",
+            "Quantity": 10
+          }
+        ],
         "PrimaryStat": "Strength"
       }
     ]
@@ -186,12 +383,22 @@
     "Abilities": [
       {
         "Ability": "Deep Dive",
-        "Requirements": [ { "Item": "Gold", "Quantity": 5000 } ],
+        "Requirements": [
+          {
+            "Item": "Gold",
+            "Quantity": 5000
+          }
+        ],
         "PrimaryStat": "Speed"
       },
       {
         "Ability": "Refine Water",
-        "Requirements": [ { "Item": "Blue Coral", "Quantity": 10 } ],
+        "Requirements": [
+          {
+            "Item": "Blue Coral",
+            "Quantity": 10
+          }
+        ],
         "PrimaryStat": "Speed"
       }
     ]
@@ -202,7 +409,12 @@
     "Abilities": [
       {
         "Ability": "Master Slayer",
-        "Requirements": [ { "Item": "Gold", "Quantity": 15000 } ],
+        "Requirements": [
+          {
+            "Item": "Gold",
+            "Quantity": 15000
+          }
+        ],
         "PrimaryStat": "Strength"
       }
     ]
