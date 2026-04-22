@@ -84,7 +84,11 @@ class ContentManager:
         self.unified_data["locations"] = [l.copy() for l in self.raw_data["locations.json"]]
 
     def _unify_refinements(self):
-        self.unified_data["refinements"] = [r.copy() for r in self.raw_data["refinements.json"]]
+        self.unified_data["refinements"] = []
+        for r in self.raw_data["refinements.json"]:
+            rc = r.copy()
+            rc["Name"] = r["Ability"]
+            self.unified_data["refinements"].append(rc)
 
     def _unify_stats(self):
         self.unified_data["stats"] = [s.copy() for s in self.raw_data["stats.json"]]
@@ -127,6 +131,12 @@ class ContentManager:
             if q.get("UnlocksCadences"):
                 new_cadence_unlocks.append({ "Quest": q["Name"], "Cadences": q["UnlocksCadences"] })
 
+        new_refinements = []
+        for r in self.unified_data["refinements"]:
+            rc = { k: v for k, v in r.items() if k != "Name" }
+            rc["Ability"] = r["Name"] # Ensure Ability is updated if Name was changed
+            new_refinements.append(rc)
+
         self._save_json("items.json", new_items)
         self._save_json("stat_augments.json", new_augments)
         self._save_json("quests.json", new_quests)
@@ -135,7 +145,7 @@ class ContentManager:
         self._save_json("quest_cadence_unlocks.json", new_cadence_unlocks)
         self._save_json("cadences.json", self.unified_data["cadences"])
         self._save_json("locations.json", self.unified_data["locations"])
-        self._save_json("refinements.json", self.unified_data["refinements"])
+        self._save_json("refinements.json", new_refinements)
         self._save_json("stats.json", self.unified_data["stats"])
 
     def _save_json(self, filename, data):

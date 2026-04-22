@@ -60,11 +60,15 @@ st.title(f"Manage {page}")
 data = manager.unified_data[page.lower()]
 df = pd.DataFrame(data)
 
-search = st.text_input(f"Search {page}...", "")
-if search:
-    df = df[df['Name'].str.contains(search, case=False)]
+if not df.empty and "Name" in df.columns:
+    search = st.text_input(f"Search {page}...", "")
+    if search:
+        df = df[df['Name'].str.contains(search, case=False)]
+    
+    selected_name = st.selectbox(f"Select {page} to Edit", ["-- New --"] + df['Name'].tolist())
+else:
+    selected_name = st.selectbox(f"Select {page} to Edit", ["-- New --"])
 
-selected_name = st.selectbox(f"Select {page} to Edit", ["-- New --"] + df['Name'].tolist())
 
 if selected_name == "-- New --":
     if st.button(f"Create New {page}"):
