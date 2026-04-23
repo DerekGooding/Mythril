@@ -104,6 +104,10 @@ else:
             
             st.write("---")
             st.subheader("Unlocks & Dependencies")
+            col_l1, col_l2 = st.columns(2)
+            with col_l1:
+                item["Location"] = st.selectbox("Current Location", ["None"] + [l["Name"] for l in manager.unified_data["locations"]], index=([l["Name"] for l in manager.unified_data["locations"]].index(item["Location"]) + 1) if item.get("Location") in [l["Name"] for l in manager.unified_data["locations"]] else 0)
+            
             requires = st.multiselect("Prerequisite Quests", [q["Name"] for q in manager.unified_data["quests"] if q["Name"] != name], default=item["Requires"])
             unlocks_c = st.multiselect("Unlocks Cadences", [c["Name"] for c in manager.unified_data["cadences"]], default=item["UnlocksCadences"])
 

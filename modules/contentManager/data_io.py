@@ -68,6 +68,12 @@ class ContentManager:
         unlocks = { u["Quest"]: u["Requires"] for u in self.raw_data["quest_unlocks.json"] }
         cadence_unlocks = { q["Quest"]: q["Cadences"] for q in self.raw_data["quest_cadence_unlocks.json"] }
         
+        # Build map of quest name -> location name
+        quest_to_loc = {}
+        for loc in self.raw_data.get("locations.json", []):
+            for q_name in loc.get("Quests", []):
+                quest_to_loc[q_name] = loc["Name"]
+
         self.unified_data["quests"] = []
         for quest in self.raw_data["quests.json"]:
             q_name = quest["Name"]
@@ -85,7 +91,8 @@ class ContentManager:
                 "StatRewards": deepcopy(q_detail.get("StatRewards", {})),
                 "Requires": deepcopy(unlocks.get(q_name, [])),
                 "UnlocksCadences": deepcopy(cadence_unlocks.get(q_name, [])),
-                "Effects": deepcopy(q_detail.get("Effects", []))
+                "Effects": deepcopy(q_detail.get("Effects", [])),
+                "Location": quest_to_loc.get(q_name, "None")
             }
             self.unified_data["quests"].append(unified_q)
 
@@ -127,6 +134,10 @@ class ContentManager:
         new_details = []
         new_unlocks = []
         new_cadence_unlocks = []
+        
+        # Build quest groups by location for locations.json
+        loc_to_quests = {}
+
         for q in self.unified_data["quests"]:
             new_quests.append({ "Name": q["Name"], "Description": q["Description"] })
             detail = {
@@ -148,11 +159,24 @@ class ContentManager:
             if q.get("UnlocksCadences"):
                 new_cadence_unlocks.append({ "Quest": q["Name"], "Cadences": q["UnlocksCadences"] })
 
+            # Track location membership
+            loc_name = q.get("Location", "None")
+            if loc_name != "None":
+                if loc_name not in loc_to_quests: loc_to_quests[loc_name] = []
+                loc_to_quests[loc_name].append(q["Name"])
+
         new_refinements = []
         for r in self.unified_data["refinements"]:
             rc = { k: v for k, v in r.items() if k != "Name" }
             rc["Ability"] = r["Name"] # Ensure Ability is updated if Name was changed
             new_refinements.append(rc)
+
+        # Update locations based on quest assignments
+        updated_locations = []
+        for loc in self.unified_data["locations"]:
+            lc = deepcopy(loc)
+            lc["Quests"] = loc_to_quests.get(loc["Name"], [])
+            updated_locations.append(lc)
 
         self._save_json("items.json", new_items)
         self._save_json("stat_augments.json", new_augments)
@@ -161,7 +185,7 @@ class ContentManager:
         self._save_json("quest_unlocks.json", new_unlocks)
         self._save_json("quest_cadence_unlocks.json", new_cadence_unlocks)
         self._save_json("cadences.json", self.unified_data["cadences"])
-        self._save_json("locations.json", self.unified_data["locations"])
+        self._save_json("locations.json", updated_locations)
         self._save_json("refinements.json", new_refinements)
         self._save_json("stats.json", self.unified_data["stats"])
         self._save_json("cadence_abilities.json", self.unified_data["abilities"])

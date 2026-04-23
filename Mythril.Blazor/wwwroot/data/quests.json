@@ -12,14 +12,6 @@
     "Description": "Explore the local village."
   },
   {
-    "Name": "Buy Potion",
-    "Description": "Purchase a healing potion from the local merchant."
-  },
-  {
-    "Name": "Sell Gem",
-    "Description": "Sell a basic gem to the local merchant."
-  },
-  {
     "Name": "Recover the Ancient Tome",
     "Description": "Find the lost book of cadences."
   },

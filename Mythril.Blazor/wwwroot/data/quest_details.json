@@ -45,46 +45,6 @@
     "StatRewards": {}
   },
   {
-    "Quest": "Buy Potion",
-    "DurationSeconds": 5,
-    "Type": "Recurring",
-    "Requirements": [
-      {
-        "Item": "Gold",
-        "Quantity": 100
-      }
-    ],
-    "Rewards": [
-      {
-        "Item": "Potion",
-        "Quantity": 1
-      }
-    ],
-    "PrimaryStat": "Vitality",
-    "RequiredStats": {},
-    "StatRewards": {}
-  },
-  {
-    "Quest": "Sell Gem",
-    "DurationSeconds": 5,
-    "Type": "Recurring",
-    "Requirements": [
-      {
-        "Item": "Basic Gem",
-        "Quantity": 1
-      }
-    ],
-    "Rewards": [
-      {
-        "Item": "Gold",
-        "Quantity": 150
-      }
-    ],
-    "PrimaryStat": "Speed",
-    "RequiredStats": {},
-    "StatRewards": {}
-  },
-  {
     "Quest": "Recover the Ancient Tome",
     "DurationSeconds": 60,
     "Type": "Single",

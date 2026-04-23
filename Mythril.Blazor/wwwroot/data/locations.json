@@ -6,12 +6,10 @@
       "Prologue",
       "Tutorial Section",
       "Visit Starting Town",
-      "Buy Potion",
-      "Sell Gem",
+      "Recover the Ancient Tome",
       "Learn About Cadences",
-      "Learn about the Mines",
       "Learn about the Dark Forest",
-      "Recover the Ancient Tome"
+      "Learn about the Mines"
     ]
   },
   {
@@ -20,8 +18,8 @@
     "RequiredQuest": "Tutorial Section",
     "Quests": [
       "Chop Wood",
-      "Gather Moonberries",
-      "Hunt Spiders"
+      "Hunt Spiders",
+      "Gather Moonberries"
     ]
   },
   {
@@ -46,8 +44,8 @@
     "Type": "Plains",
     "RequiredQuest": "Visit Starting Town",
     "Quests": [
-      "Hunt Slimes",
       "Hunt Goblins",
+      "Hunt Slimes",
       "Hunt Sand-Sharks",
       "Locate the Hidden Oasis"
     ]
@@ -58,8 +56,8 @@
     "RequiredQuest": "Learn about the Mines",
     "Quests": [
       "Mine Iron Ore",
-      "Power the Forge",
-      "Scavenge Scrap"
+      "Scavenge Scrap",
+      "Power the Forge"
     ]
   },
   {
@@ -85,8 +83,8 @@
     "Type": "Water",
     "RequiredQuest": "Hunt Sand-Sharks",
     "Quests": [
-      "Deep Sea Scavenge",
-      "Harvest Sea-Life"
+      "Harvest Sea-Life",
+      "Deep Sea Scavenge"
     ]
   },
   {
