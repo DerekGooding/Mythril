@@ -2,6 +2,7 @@ import json
 import os
 import shutil
 from datetime import datetime
+from copy import deepcopy
 
 # Resolve DATA_DIR relative to this file's location (modules/contentManager/data_io.py)
 # Root is two levels up from this file
@@ -52,13 +53,13 @@ class ContentManager:
         self._unify_abilities()
 
     def _unify_abilities(self):
-        self.unified_data["abilities"] = [a.copy() for a in self.raw_data["cadence_abilities.json"]]
+        self.unified_data["abilities"] = [deepcopy(a) for a in self.raw_data["cadence_abilities.json"]]
 
     def _unify_items(self):
         augments = { a["Item"]: a["Augments"] for a in self.raw_data["stat_augments.json"] }
         self.unified_data["items"] = []
         for item in self.raw_data["items.json"]:
-            item_copy = item.copy()
+            item_copy = deepcopy(item)
             item_copy["Augments"] = augments.get(item["Name"], [])
             self.unified_data["items"].append(item_copy)
 
@@ -77,31 +78,33 @@ class ContentManager:
                 "Description": quest.get("Description", ""),
                 "DurationSeconds": q_detail.get("DurationSeconds", 10),
                 "Type": q_detail.get("Type", "Single"),
-                "Requirements": q_detail.get("Requirements", []),
-                "Rewards": q_detail.get("Rewards", []),
+                "Requirements": deepcopy(q_detail.get("Requirements", [])),
+                "Rewards": deepcopy(q_detail.get("Rewards", [])),
                 "PrimaryStat": q_detail.get("PrimaryStat", "Vitality"),
-                "RequiredStats": q_detail.get("RequiredStats", {}),
-                "StatRewards": q_detail.get("StatRewards", {}),
-                "Requires": unlocks.get(q_name, []),
-                "UnlocksCadences": cadence_unlocks.get(q_name, [])
+                "RequiredStats": deepcopy(q_detail.get("RequiredStats", {})),
+                "StatRewards": deepcopy(q_detail.get("StatRewards", {})),
+                "Requires": deepcopy(unlocks.get(q_name, [])),
+                "UnlocksCadences": deepcopy(cadence_unlocks.get(q_name, [])),
+                "Effects": deepcopy(q_detail.get("Effects", []))
             }
             self.unified_data["quests"].append(unified_q)
 
     def _unify_cadences(self):
-        self.unified_data["cadences"] = [c.copy() for c in self.raw_data["cadences.json"]]
+        self.unified_data["cadences"] = [deepcopy(c) for c in self.raw_data["cadences.json"]]
 
     def _unify_locations(self):
-        self.unified_data["locations"] = [l.copy() for l in self.raw_data["locations.json"]]
+        self.unified_data["locations"] = [deepcopy(l) for l in self.raw_data["locations.json"]]
 
     def _unify_refinements(self):
         self.unified_data["refinements"] = []
         for r in self.raw_data["refinements.json"]:
-            rc = r.copy()
+            rc = deepcopy(r)
             rc["Name"] = r["Ability"]
             self.unified_data["refinements"].append(rc)
 
     def _unify_stats(self):
-        self.unified_data["stats"] = [s.copy() for s in self.raw_data["stats.json"]]
+        self.unified_data["stats"] = [deepcopy(s) for s in self.raw_data["stats.json"]]
+
 
     def save_all(self):
         # Create backup
@@ -126,7 +129,7 @@ class ContentManager:
         new_cadence_unlocks = []
         for q in self.unified_data["quests"]:
             new_quests.append({ "Name": q["Name"], "Description": q["Description"] })
-            new_details.append({
+            detail = {
                 "Quest": q["Name"],
                 "DurationSeconds": q["DurationSeconds"],
                 "Type": q["Type"],
@@ -135,7 +138,11 @@ class ContentManager:
                 "PrimaryStat": q["PrimaryStat"],
                 "RequiredStats": q["RequiredStats"],
                 "StatRewards": q["StatRewards"]
-            })
+            }
+            if q.get("Effects"):
+                detail["Effects"] = q["Effects"]
+            new_details.append(detail)
+            
             if q.get("Requires"):
                 new_unlocks.append({ "Quest": q["Name"], "Requires": q["Requires"] })
             if q.get("UnlocksCadences"):

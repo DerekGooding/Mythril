@@ -89,6 +89,30 @@ def edit_recipes(manager, recipes, key_prefix):
         recipes.append({"InputItem": item_names[0], "InputQuantity": 1, "OutputItem": item_names[0], "OutputQuantity": 1})
         st.rerun()
 
+def edit_effects(manager, effects, key_prefix):
+    to_delete = None
+    effect_types = ["MagicCapacity", "AutoQuest", "Logistics", "StatBoost"]
+    
+    for i, effect in enumerate(effects):
+        col1, col2, col3, col4 = st.columns([2, 1, 2, 0.5])
+        with col1:
+            effect["Type"] = st.selectbox(f"Type {i}", effect_types, index=effect_types.index(effect["Type"]) if effect["Type"] in effect_types else 0, key=f"{key_prefix}_type_{i}")
+        with col2:
+            effect["Value"] = st.number_input(f"Val {i}", value=effect["Value"], key=f"{key_prefix}_val_{i}")
+        with col3:
+            effect["Target"] = st.text_input(f"Target {i}", value=effect.get("Target", ""), placeholder="Stat/Slot (Optional)", key=f"{key_prefix}_tar_{i}")
+        with col4:
+            if st.button("🗑️", key=f"{key_prefix}_del_{i}"):
+                to_delete = i
+                
+    if to_delete is not None:
+        effects.pop(to_delete)
+        st.rerun()
+        
+    if st.button("➕ Add Effect", key=f"{key_prefix}_add"):
+        effects.append({"Type": "StatBoost", "Value": 1})
+        st.rerun()
+
 def edit_cadence_abilities(manager, abilities_list, key_prefix):
     to_delete = None
     all_ability_names = [a["Name"] for a in manager.unified_data["abilities"]]
@@ -112,12 +136,24 @@ def edit_cadence_abilities(manager, abilities_list, key_prefix):
                 if st.button("🗑️ Remove Ability", key=f"{key_prefix}_del_{i}"):
                     to_delete = i
             
+            # Find the original ability definition to show/edit its effects
+            # Note: In our current data structure, Effects are sometimes in the cadence_abilities.json (Global)
+            # and sometimes in the Cadence-specific entry.
+            # But the C# code looks at unlock.Ability.Effects.
+            
             st.write("**Requirements**")
             edit_list(manager, ab_entry["Requirements"], f"{key_prefix}_req_{i}")
+            
+            if "Effects" not in ab_entry:
+                ab_entry["Effects"] = []
+                
+            st.write("**Effects**")
+            edit_effects(manager, ab_entry["Effects"], f"{key_prefix}_eff_{i}")
 
     if to_delete is not None:
         abilities_list.pop(to_delete)
         st.rerun()
+
 
     if st.button("➕ Add Ability to Cadence", key=f"{key_prefix}_add"):
         source_ab = manager.unified_data["abilities"][0]

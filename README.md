@@ -31,6 +31,7 @@ From architectural design and core logic implementation to the Blazor frontend a
     - `JunctionManager`: Handles the complex stat-calculation logic and magic assignments.
     - `InventoryManager`: Manages resource collection, pinning, and capacity limits.
 - **State Management**: Serialized state preservation via `PersistenceService` in `LocalStorage`.
+- **Content Management**: A Python-based **Content Manager Module** (`modules/contentManager`) provides a GUI for rapidly editing game data (Quests, Items, Cadences, Refinements) with built-in validation and automated backups.
 - **Testing**: Comprehensive suite using MSTest, Moq, and bUnit. Line coverage is maintained at **>75%**.
 
 ## ⚖️ Quality Assurance & Automated Balancing
@@ -49,18 +50,18 @@ Mythril features a job-based progression system where you manage a party of char
 
 *For detailed gameplay mechanics, see the [How to Play](docs/instructions.md) guide.*
 
-## 🚀 Recent Updates (March 6, 2026)
-- **Optimal Path Optimization**: Enhanced the Path-Routed Simulator to prioritize critical progression quests, bringing the simulated end-game time to a realistic **~5.7h**.
-- **Coverage Expansion**: Increased project line coverage to **77.6%** by adding exhaustive tests for simulation logic and resource management.
-- **Intelligent Shield Reporting**: Implemented adaptive time formatting for completion badges (Days/Hours/Minutes).
-- **Refinement Automation**: Fixed edge cases in AutoQuest logic to ensure magic capacity limits are strictly respected during automated loops.
-- **Architectural Decoupling**: Refactored complex simulation logic into partial classes to maintain strict monolith prevention compliance.
+## 🚀 Recent Updates (April 23, 2026)
+- **Content Manager Overhaul**: Implemented `deepcopy` persistence and unique Streamlit keys to fix data leaking between refinements and ensure all fields (including Effects) are preserved.
+- **UI Polish & Accessibility**: Added animated "in-process" icons (active-dot) for quests and unlocks with standardized margins for better readability.
+- **Visual Determinism**: Refactored `Expander` and `QuestCard` headers to flexbox-based layouts for consistent icon positioning.
+- **Agentic Health Verification**: Integrated real-time content manager integrity checks directly into the DevOps pipeline.
 
 ## 🚀 Getting Started
 1. **Build**: `dotnet build`
 2. **Test**: `dotnet test`
 3. **Health Check**: `python scripts/check_health.py`
-4. **Run**: `dotnet run --project Mythril.Blazor`
+4. **Run CMS**: `python modules/contentManager/app.py` (Requires Streamlit)
+5. **Run Game**: `dotnet run --project Mythril.Blazor`
 
 ---
 *Developed with 💖 by Gemini CLI.*

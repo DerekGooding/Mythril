@@ -130,26 +130,33 @@ else:
             st.rerun()
 
     # Nested data management outside the form
+    # We use selected_name in keys to ensure Streamlit treats them as unique per-entity
+    safe_key = selected_name.replace(" ", "_").lower()
+    
     if page == "Quests":
         st.subheader("📦 Requirements")
-        ui.edit_list(manager, item["Requirements"], "req")
+        ui.edit_list(manager, item["Requirements"], f"req_{safe_key}")
         
         st.subheader("💎 Rewards")
-        ui.edit_list(manager, item["Rewards"], "rew")
+        ui.edit_list(manager, item["Rewards"], f"rew_{safe_key}")
 
         st.subheader("🛡️ Required Stats")
-        ui.edit_dict_list(manager, item["RequiredStats"], "req_stat")
+        ui.edit_dict_list(manager, item["RequiredStats"], f"req_stat_{safe_key}")
 
         st.subheader("📈 Stat Rewards")
-        ui.edit_dict_list(manager, item["StatRewards"], "rew_stat")
+        ui.edit_dict_list(manager, item["StatRewards"], f"rew_stat_{safe_key}")
+
+        st.subheader("✨ Effects")
+        if "Effects" not in item: item["Effects"] = []
+        ui.edit_effects(manager, item["Effects"], f"eff_{safe_key}")
     
     elif page == "Cadences":
         st.subheader("⚡ Abilities")
-        ui.edit_cadence_abilities(manager, item["Abilities"], "cad_ab")
+        ui.edit_cadence_abilities(manager, item["Abilities"], f"cad_ab_{safe_key}")
 
     elif page == "Refinements":
         st.subheader("🧪 Recipes")
-        ui.edit_recipes(manager, item["Recipes"], "ref_rec")
+        ui.edit_recipes(manager, item["Recipes"], f"ref_rec_{safe_key}")
 
     elif page == "Abilities":
         st.info("Abilities themselves are simple Name/Description. Use the Cadence page to assign them and define requirements.")
