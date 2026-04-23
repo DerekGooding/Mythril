@@ -493,26 +493,6 @@
 .library .expander-header[b-h1r0ru8wr5] { border-left: 4px solid #6f42c1; }
 
 .header-text[b-h1r0ru8wr5] {
-    flex-grow: 1;
-}
-
-.active-dot[b-h1r0ru8wr5] {
-    width: 8px;
-    height: 8px;
-    background-color: var(--accent-color);
-    border-radius: 50%;
-    display: inline-block;
-    box-shadow: 0 0 5px var(--accent-color);
-}
-
-.pulse[b-h1r0ru8wr5] {
-    animation: dot-pulse-b-h1r0ru8wr5 1.5s infinite;
-}
-
-@keyframes dot-pulse-b-h1r0ru8wr5 {
-    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 171, 0, 0.7); }
-    70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(255, 171, 0, 0); }
-    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 171, 0, 0); }
 }
 
 .compact[b-h1r0ru8wr5] {
