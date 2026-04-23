@@ -12,18 +12,6 @@
     ]
   },
   {
-    "Quest": "Buy Potion",
-    "Requires": [
-      "Visit Starting Town"
-    ]
-  },
-  {
-    "Quest": "Sell Gem",
-    "Requires": [
-      "Visit Starting Town"
-    ]
-  },
-  {
     "Quest": "Recover the Ancient Tome",
     "Requires": [
       "Visit Starting Town"
