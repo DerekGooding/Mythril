@@ -17,6 +17,10 @@
             <div class="d-flex flex-column text-start">
                 <div class="d-flex align-items-center gap-2">
                     <span class="item-name">@Cadence.Name</span>
+                    @if (IsActive)
+                    {
+                        <span class="active-dot pulse ms-1" title="Active Task In Progress"></span>
+                    }
                     @if (IsUnseen)
                     {
                         <span class="notification-dot" title="New content available"></span>
@@ -52,6 +56,7 @@
     [Parameter] public RenderFragment? ChildContent { get; set; }
     [Parameter] public bool IsHighlighted { get; set; }
     [Parameter] public bool IsUnseen { get; set; }
+    [Parameter] public bool IsActive { get; set; }
     [Parameter] public EventCallback OnToggle { get; set; }
 
     private bool isExpanded = false;

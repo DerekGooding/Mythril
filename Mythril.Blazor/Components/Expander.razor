@@ -3,11 +3,11 @@
 <div class="expander @(IsCompact ? "compact" : "") @(Type?.ToLower())">
     <div class="expander-header" @onclick="Toggle" data-testid="expander-header-@Header?.Replace(" ", "-").ToLower()">
         <div class="d-flex align-items-center gap-2 flex-grow-1">
+            <span class="header-text">@Header</span>
             @if (IsActive)
             {
-                <span class="active-dot pulse" title="Active Task In Progress"></span>
+                <span class="active-dot pulse ms-2" title="Active Task In Progress"></span>
             }
-            <span class="header-text">@Header</span>
             @if (IsUnseen)
             {
                 <span class="notification-dot ms-1" title="New content available"></span>

@@ -16,10 +16,11 @@
      @ondragstart="HandleDragStart"
      @onmouseenter="() => ResourceManager.HighlightPath(abilityKey)"
      @onmouseleave="() => ResourceManager.ClearHighlight()">
-    <div class="card-header">
+    <div class="card-header d-flex align-items-center">
         @Unlock.Ability.Name
         @if (inProgress)
         {
+            <span class="active-dot pulse ms-2" title="Active Task In Progress"></span>
             <span class="ms-auto badge bg-warning text-dark small">In Progress</span>
         }
     </div>

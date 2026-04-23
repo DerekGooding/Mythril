@@ -17,6 +17,7 @@
             @foreach (var cadence in FilteredCadences)
             {
                 var stats = GetCompletionStats(cadence);
+                bool isActive = resourceManager.ActiveQuests.Any(q => q.Item is CadenceUnlock unlock && unlock.CadenceName == cadence.Name);
                 bool matchesSearch = !string.IsNullOrWhiteSpace(_abilitySearchTerm) && 
                                      cadence.Abilities.Any(a => a.Ability.Name.Contains(_abilitySearchTerm, StringComparison.OrdinalIgnoreCase));
 
@@ -24,6 +25,7 @@
                                      @key="@cadence.Name"
                                      IsHighlighted="@matchesSearch"
                                      IsUnseen="@resourceManager.HasUnseenContent(cadence)"
+                                     IsActive="@isActive"
                                      CompletedCount="@stats.Completed"
                                      TotalCount="@stats.Total"
                                      OnToggle="@(() => resourceManager.MarkCadenceAsSeen(cadence))">

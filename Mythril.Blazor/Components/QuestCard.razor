@@ -15,11 +15,15 @@
      @ondragstart="HandleDragStart"
      @onmouseenter="() => ResourceManager.HighlightPath(QuestData.Name)"
      @onmouseleave="() => ResourceManager.ClearHighlight()">
-    <div class="card-header">
+    <div class="card-header d-flex align-items-center gap-1">
         <span class="material-icons" style="color: green;">
             @(QuestData!.Type == QuestType.Single ? "flag" : "repeat")
         </span>
-        @QuestData.Name
+        <span class="header-text ms-1">@QuestData.Name</span>
+        @if (inProgress)
+        {
+            <span class="active-dot pulse ms-2" title="Active Task In Progress"></span>
+        }
         @if (ResourceManager.IsCompleted(QuestData.Name))
         {
             <span class="ms-1 text-success material-icons" style="font-size: 1rem;" title="Completed at least once">check_circle</span>
