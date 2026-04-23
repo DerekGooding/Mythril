@@ -113,6 +113,10 @@ else:
         elif page == "Refinements":
              stat = st.selectbox("Primary Stat", [s["Name"] for s in manager.unified_data["stats"]], index=[s["Name"] for s in manager.unified_data["stats"]].index(item["PrimaryStat"]) if item["PrimaryStat"] in [s["Name"] for s in manager.unified_data["stats"]] else 0)
             
+        elif page == "Locations":
+            required_quest = st.selectbox("Required Quest", ["None"] + [q["Name"] for q in manager.unified_data["quests"]], index=([q["Name"] for q in manager.unified_data["quests"]].index(item["RequiredQuest"]) + 1) if item.get("RequiredQuest") in [q["Name"] for q in manager.unified_data["quests"]] else 0)
+            loc_type = st.text_input("Type (Icon)", item.get("Type", "Plains"))
+
         if st.form_submit_button("Update Basic Info"):
             item["Name"] = name
             if "Description" in item: item["Description"] = description
@@ -126,6 +130,9 @@ else:
                 item["ItemType"] = i_type
             elif page == "Refinements":
                 item["PrimaryStat"] = stat
+            elif page == "Locations":
+                item["RequiredQuest"] = required_quest if required_quest != "None" else None
+                item["Type"] = loc_type
             st.success("Updated basic info in memory.")
             st.rerun()
 
@@ -157,6 +164,11 @@ else:
     elif page == "Refinements":
         st.subheader("🧪 Recipes")
         ui.edit_recipes(manager, item["Recipes"], f"ref_rec_{safe_key}")
+
+    elif page == "Locations":
+        st.subheader("🗺️ Quests in Location")
+        if "Quests" not in item: item["Quests"] = []
+        ui.edit_string_list(manager, item["Quests"], [q["Name"] for q in manager.unified_data["quests"]], "location_quests")
 
     elif page == "Abilities":
         st.info("Abilities themselves are simple Name/Description. Use the Cadence page to assign them and define requirements.")

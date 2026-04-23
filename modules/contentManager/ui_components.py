@@ -163,3 +163,27 @@ def edit_cadence_abilities(manager, abilities_list, key_prefix):
             "PrimaryStat": "Magic"
         })
         st.rerun()
+
+def edit_string_list(manager, string_list, pool, key_prefix):
+    to_delete = None
+    for i, s in enumerate(string_list):
+        col1, col2 = st.columns([5, 1])
+        with col1:
+            current_index = 0
+            if s in pool:
+                current_index = pool.index(s)
+            
+            new_val = st.selectbox(f"Entry {i}", pool, index=current_index, key=f"{key_prefix}_{i}")
+            string_list[i] = new_val
+        with col2:
+            if st.button("🗑️", key=f"{key_prefix}_del_{i}"):
+                to_delete = i
+                
+    if to_delete is not None:
+        string_list.pop(to_delete)
+        st.rerun()
+        
+    if st.button("➕ Add Entry", key=f"{key_prefix}_add"):
+        if pool:
+            string_list.append(pool[0])
+            st.rerun()

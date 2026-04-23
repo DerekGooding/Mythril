@@ -34,7 +34,26 @@
                 Ability = g.Key,
                 Recipes = g.Value.Recipes.Select(r => new RefinementData(g.Key, r.Key, r.Value, g.Value.PrimaryStat))
                     .Where(rd => !_showAffordableOnly || resourceManager.Inventory.Has(rd.InputItem, rd.Recipe.InputQuantity))
-                    .Where(rd => _activeFilter == "All" || (rd.Recipe.OutputItem.ItemType.ToString() + "s").Contains(_activeFilter, StringComparison.OrdinalIgnoreCase))
+                    .Where(rd => {
+                        if (_activeFilter == "All") return true;
+                        
+                        // Check if output matches filter
+                        var outType = rd.Recipe.OutputItem.ItemType.ToString() + "s";
+                        if (outType.Contains(_activeFilter, StringComparison.OrdinalIgnoreCase)) return true;
+                        
+                        // If output is NOT a standard Material/Spell category (e.g. Currency like Gold)
+                        // then check if the INPUT matches the filter.
+                        bool outputIsStandard = outType.Contains("Material", StringComparison.OrdinalIgnoreCase) || 
+                                              outType.Contains("Spell", StringComparison.OrdinalIgnoreCase);
+                                              
+                        if (!outputIsStandard)
+                        {
+                            var inType = rd.InputItem.ItemType.ToString() + "s";
+                            return inType.Contains(_activeFilter, StringComparison.OrdinalIgnoreCase);
+                        }
+                        
+                        return false;
+                    })
                     .ToList(),
                 PrimaryStat = g.Value.PrimaryStat
             }).Where(g => g.Recipes.Any()).ToList();

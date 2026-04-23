@@ -1,77 +1,77 @@
 # Game Content Health Report
-Generated: 2026-04-23 09:42:19
+Generated: 2026-04-23 10:16:33
 
 ## 💀 Reachability Analysis
 Total Quests Completed: 36
 ✅ All quests reachable.
 Estimated End-Game Time: 0.6m
-Routed Completion Time: 66.0m
+Routed Completion Time: 65.5m
 
 ## ⚖️ Economic Sustainability
 ### Sustainable Recurring Activities
-- Refine Lightning:Fire Shard->Lightning I
 - Refine Life:Ancient Bark->Cure I
-- Refine Wood:Log->Herb
-- Buy Potion
-- Gather Moonberries
-- Tutorial Section
-- Hunt Bats
-- Chop Wood
-- Refine Fire:Basic Gem->Fire I
-- Study Ancient Texts
-- Purify the Grove
-- Sell Gem
-- Hunt Spiders
-- High Altitude Survey
-- Mine Iron Ore
-- Refine Scrap:Web->Gold
-- Refine Mixology:Herb->Potion
-- Refine Lightning:Ice Shard->Lightning I
-- Harvest Sea-Life
-- Hunt Slimes
-- Refine Water:Blue Coral->Water I
-- Shatter the Crystals
-- Refine Ice:Mana Leaf->Ice I
-- Refine Earth:Crystal Shards->Earth I
-- Refine Ice:Moonberry->Ice I
-- Refine Scrap:Slime->Gold
-- Hunt Sand-Sharks
-- Scavenge Scrap
-- Deep Sea Scavenge
-- Archive Sifting
-- Refine Fire:Iron Ore->Fire I
-- Power the Forge
 - Hunt Goblins
+- Alchemy I:Basic Gem->Gold
+- Study Ancient Texts
+- Hunt Spiders
+- Mine Iron Ore
+- Refine Water:Blue Coral->Water I
+- Refine Mixology:Herb->Potion
 - Refine Haste:Lost Parchment->Haste I
+- Refine Fire:Basic Gem->Fire I
+- Hunt Bats
+- Shatter the Crystals
+- Refine Earth:Crystal Shards->Earth I
+- Purify the Grove
+- Harvest Sea-Life
+- Deep Sea Scavenge
+- Refine Lightning:Ice Shard->Lightning I
+- Refine Scrap:Web->Gold
+- Archive Sifting
+- Scavenge Scrap
+- High Altitude Survey
+- Chop Wood
+- Refine Fire:Iron Ore->Fire I
+- Buy Potion
+- Refine Scrap:Slime->Gold
+- Tutorial Section
+- Refine Lightning:Fire Shard->Lightning I
+- Gather Moonberries
+- Hunt Slimes
+- Hunt Sand-Sharks
+- Refine Ice:Moonberry->Ice I
+- Power the Forge
+- Refine Wood:Log->Herb
+- Refine Ice:Mana Leaf->Ice I
 
 ### ⚠️ Unsustainable Activities (Reachable but starving)
-- Alchemy I:Basic Gem->Gold
+- Sell Gem
 
 ### Net Resource Rates (per second)
-- **Mana Leaf**: 5.3223/s
-- **Mythril Spark**: 0.4157/s
-- **Fire Shard**: 31.2959/s
-- **Crystal Shards**: 7.4831/s
-- **Ancient Bark**: 6.2359/s
-- **Iron Ore**: 11.1049/s
+- **Log**: 4.9887/s
 - **Moonberry**: 21.2893/s
-- **Cure I**: 12.4718/s
-- **Herb**: 19.9549/s
-- **Basic Gem**: 10.7781/s
-- **Potion**: 40.0262/s
-- **Leather**: 26.2781/s
-- **Earth I**: 24.9436/s
+- **Haste I**: 24.9436/s
 - **Ice Shard**: 30.0487/s
 - **Sun-baked Scale**: 0.8315/s
-- **Log**: 4.9887/s
+- **Ancient Bark**: 6.2359/s
+- **Cure I**: 12.4718/s
+- **Basic Gem**: 5.5225/s
 - **Lightning I**: 49.8873/s
-- **Gold**: 10085.1508/s
+- **Iron Ore**: 11.1049/s
+- **Crystal Shards**: 7.4831/s
+- **Gold**: 5793.0658/s
+- **Mana Leaf**: 5.3223/s
+- **Fire Shard**: 31.2959/s
+- **Earth I**: 24.9436/s
+- **Ice I**: 49.8873/s
 - **Water**: 52.5561/s
 - **Slime**: 20.5503/s
+- **Potion**: 68.0561/s
 - **Lost Parchment**: 3.3258/s
-- **Ice I**: 49.8873/s
+- **Herb**: 19.9549/s
 - **Water I**: 105.1123/s
-- **Haste I**: 24.9436/s
+- **Mythril Spark**: 0.4157/s
+- **Leather**: 26.2781/s
 - **Fire I**: 29.1009/s
 
 ## 🔄 Feedback Loops

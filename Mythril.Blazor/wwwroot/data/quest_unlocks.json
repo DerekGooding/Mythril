@@ -18,6 +18,12 @@
     ]
   },
   {
+    "Quest": "Sell Gem",
+    "Requires": [
+      "Visit Starting Town"
+    ]
+  },
+  {
     "Quest": "Recover the Ancient Tome",
     "Requires": [
       "Visit Starting Town"
@@ -117,12 +123,6 @@
     "Quest": "Help the lumberjack",
     "Requires": [
       "Learn about the Dark Forest"
-    ]
-  },
-  {
-    "Quest": "Sell Gem",
-    "Requires": [
-      "Visit Starting Town"
     ]
   },
   {

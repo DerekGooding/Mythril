@@ -5,3 +5,7 @@
 - [DONE] the content manager is having an issue loading refinements. It always loads the abilities from the topmost refinement. Review. (See [docs/resolution/2026-04-23_refinement_loading_fix.md](resolution/2026-04-23_refinement_loading_fix.md))
 
 - [DONE] AutoQuest unlock no longer shows a toggle button to automate tasks. Review. (See [docs/resolution/2026-04-23_autoquest_toggle_fix.md](resolution/2026-04-23_autoquest_toggle_fix.md))
+
+- [DONE] Sorting of the workshop only sorts by the output item. But if the output is neither materials OR spells, it should revert to sorting by the input item. For example, some workshop refinement tasks turn gold into a material or a material into gold. Those should show up in the materials tab. (See [docs/resolution/2026-04-23_workshop_location_fix.md](resolution/2026-04-23_workshop_location_fix.md))
+
+- [DONE] The content manager should show what exists in a given location and allow modifying what quests exist in that given location. (See [docs/resolution/2026-04-23_workshop_location_fix.md](resolution/2026-04-23_workshop_location_fix.md))

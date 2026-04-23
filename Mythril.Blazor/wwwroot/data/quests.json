@@ -13,7 +13,11 @@
   },
   {
     "Name": "Buy Potion",
-    "Description": "Get a potion from the town shop."
+    "Description": "Purchase a healing potion from the local merchant."
+  },
+  {
+    "Name": "Sell Gem",
+    "Description": "Sell a basic gem to the local merchant."
   },
   {
     "Name": "Recover the Ancient Tome",
@@ -82,10 +86,6 @@
   {
     "Name": "Help the lumberjack",
     "Description": "Gather fallen wood for the local lumberjack."
-  },
-  {
-    "Name": "Sell Gem",
-    "Description": "Trade a basic gem for gold at the town market."
   },
   {
     "Name": "Scavenge Scrap",

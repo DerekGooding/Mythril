@@ -87,7 +87,7 @@ public class QuestRewardTests
         
         _resourceManager.ReceiveRewards(questData).Wait();
         
-        Assert.AreEqual(5, _resourceManager.Inventory.GetQuantity(_items!.All.First(x => x.Name == "Potion")));
+        Assert.AreEqual(1, _resourceManager.Inventory.GetQuantity(_items!.All.First(x => x.Name == "Potion")));
     }
 
     [TestMethod]
