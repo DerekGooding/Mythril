@@ -168,7 +168,7 @@ else:
     elif page == "Locations":
         st.subheader("🗺️ Quests in Location")
         if "Quests" not in item: item["Quests"] = []
-        ui.edit_string_list(manager, item["Quests"], [q["Name"] for q in manager.unified_data["quests"]], "location_quests")
+        ui.edit_string_list(manager, item["Quests"], [q["Name"] for q in manager.unified_data["quests"]], f"location_quests_{safe_key}")
 
     elif page == "Abilities":
         st.info("Abilities themselves are simple Name/Description. Use the Cadence page to assign them and define requirements.")
