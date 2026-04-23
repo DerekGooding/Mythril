@@ -46,7 +46,7 @@
   },
   {
     "Quest": "Buy Potion",
-    "DurationSeconds": 45,
+    "DurationSeconds": 5,
     "Type": "Recurring",
     "Requirements": [
       {
@@ -57,7 +57,27 @@
     "Rewards": [
       {
         "Item": "Potion",
-        "Quantity": 5
+        "Quantity": 1
+      }
+    ],
+    "PrimaryStat": "Vitality",
+    "RequiredStats": {},
+    "StatRewards": {}
+  },
+  {
+    "Quest": "Sell Gem",
+    "DurationSeconds": 5,
+    "Type": "Recurring",
+    "Requirements": [
+      {
+        "Item": "Basic Gem",
+        "Quantity": 1
+      }
+    ],
+    "Rewards": [
+      {
+        "Item": "Gold",
+        "Quantity": 150
       }
     ],
     "PrimaryStat": "Speed",
@@ -350,26 +370,6 @@
       }
     ],
     "PrimaryStat": "Strength",
-    "RequiredStats": {},
-    "StatRewards": {}
-  },
-  {
-    "Quest": "Sell Gem",
-    "DurationSeconds": 20,
-    "Type": "Recurring",
-    "Requirements": [
-      {
-        "Item": "Basic Gem",
-        "Quantity": 1
-      }
-    ],
-    "Rewards": [
-      {
-        "Item": "Gold",
-        "Quantity": 250
-      }
-    ],
-    "PrimaryStat": "Speed",
     "RequiredStats": {},
     "StatRewards": {}
   },

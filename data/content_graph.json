@@ -426,10 +426,10 @@
     "type": "Quest",
     "name": "Buy Potion",
     "data": {
-      "description": "Get a potion from the town shop.",
-      "duration": 45,
+      "description": "Purchase a healing potion from the local merchant.",
+      "duration": 5,
       "quest_type": "Recurring",
-      "primary_stat": "Speed",
+      "primary_stat": "Vitality",
       "required_stats": {},
       "stat_rewards": {}
     },
@@ -448,7 +448,39 @@
       "rewards": [
         {
           "targetId": "item_potion",
-          "quantity": 5
+          "quantity": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "quest_sell_gem",
+    "type": "Quest",
+    "name": "Sell Gem",
+    "data": {
+      "description": "Sell a basic gem to the local merchant.",
+      "duration": 5,
+      "quest_type": "Recurring",
+      "primary_stat": "Speed",
+      "required_stats": {},
+      "stat_rewards": {}
+    },
+    "in_edges": {
+      "requires_quest": [
+        "quest_visit_starting_town"
+      ]
+    },
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_basic_gem",
+          "quantity": 1
+        }
+      ],
+      "rewards": [
+        {
+          "targetId": "item_gold",
+          "quantity": 150
         }
       ]
     }
@@ -955,38 +987,6 @@
         {
           "targetId": "item_log",
           "quantity": 10
-        }
-      ]
-    }
-  },
-  {
-    "id": "quest_sell_gem",
-    "type": "Quest",
-    "name": "Sell Gem",
-    "data": {
-      "description": "Trade a basic gem for gold at the town market.",
-      "duration": 20,
-      "quest_type": "Recurring",
-      "primary_stat": "Speed",
-      "required_stats": {},
-      "stat_rewards": {}
-    },
-    "in_edges": {
-      "requires_quest": [
-        "quest_visit_starting_town"
-      ]
-    },
-    "out_edges": {
-      "consumes": [
-        {
-          "targetId": "item_basic_gem",
-          "quantity": 1
-        }
-      ],
-      "rewards": [
-        {
-          "targetId": "item_gold",
-          "quantity": 250
         }
       ]
     }
