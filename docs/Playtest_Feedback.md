@@ -65,3 +65,7 @@
 - *** Alchemy II does not offer a refinement of potions. Something is wrong ***
 
 - Review Moonberry. It's farmed in large amounts of only used to refine into ice I in very limited amounts. 
+
+- Ice increases magic and speed stats too much. Reduce efficacy to fall more inline with fire. 
+
+- consider refining something into ice shards or an earlier source, so lightning can be unlocked. Then lightning will be the primary source of speed junctioning early. 
