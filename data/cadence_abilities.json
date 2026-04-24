@@ -118,5 +118,9 @@
   {
     "Name": "Alchemy I",
     "Description": "Convert items into gold. Think of it like selling your goods. "
+  },
+  {
+    "Name": "Alchemy II",
+    "Description": "Convert advanced items into gold. Think of it like selling your goods. "
   }
 ]

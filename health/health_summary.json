@@ -1,6 +1,6 @@
 {
     "is_healthy": false,
-    "failure_count": 3,
+    "failure_count": 4,
     "metrics": {
         "monoliths": 2,
         "coverage": 78.75,
@@ -12,8 +12,8 @@
         "reachability_passed": {
             "passed": true,
             "time": "87.1m",
-            "sustainable": 33,
-            "unsustainable": 0
+            "sustainable": 32,
+            "unsustainable": 3
         },
         "pending_feedback": 0,
         "test_passed": false
@@ -36,6 +36,14 @@
             "message": "modules/contentManager/data_io.py exceeds 250 lines",
             "metadata": {
                 "lines": 269
+            }
+        },
+        {
+            "category": "reachability",
+            "message": "Content regression: Reachable quests dropped from 34 to 31",
+            "metadata": {
+                "actual": 31,
+                "baseline": 34
             }
         }
     ]

@@ -77,17 +77,6 @@
     "out_edges": {}
   },
   {
-    "id": "item_water",
-    "type": "Item",
-    "name": "Water",
-    "data": {
-      "description": "Essential for life and potion-making.",
-      "item_type": "Material"
-    },
-    "in_edges": {},
-    "out_edges": {}
-  },
-  {
     "id": "item_web",
     "type": "Item",
     "name": "Web",
@@ -902,32 +891,6 @@
     }
   },
   {
-    "id": "quest_help_the_lumberjack",
-    "type": "Quest",
-    "name": "Help the lumberjack",
-    "data": {
-      "description": "Gather fallen wood for the local lumberjack.",
-      "duration": 30,
-      "quest_type": "Single",
-      "primary_stat": "Strength",
-      "required_stats": {},
-      "stat_rewards": {}
-    },
-    "in_edges": {
-      "requires_quest": [
-        "quest_learn_about_the_dark_forest"
-      ]
-    },
-    "out_edges": {
-      "rewards": [
-        {
-          "targetId": "item_log",
-          "quantity": 10
-        }
-      ]
-    }
-  },
-  {
     "id": "quest_scavenge_scrap",
     "type": "Quest",
     "name": "Scavenge Scrap",
@@ -1163,7 +1126,7 @@
     "out_edges": {
       "rewards": [
         {
-          "targetId": "item_water",
+          "targetId": "item_gold",
           "quantity": 10
         },
         {
@@ -1416,6 +1379,10 @@
     "out_edges": {
       "contains": [
         {
+          "targetId": "quest_hunt_goblins",
+          "quantity": 1
+        },
+        {
           "targetId": "quest_chop_wood",
           "quantity": 1
         },
@@ -1445,32 +1412,11 @@
     "out_edges": {
       "contains": [
         {
-          "targetId": "quest_purify_the_grove",
-          "quantity": 1
-        }
-      ]
-    }
-  },
-  {
-    "id": "location_dark_forest",
-    "type": "Location",
-    "name": "Dark Forest",
-    "data": {
-      "region_type": "Forest"
-    },
-    "in_edges": {
-      "requires_quest": [
-        "quest_learn_about_the_dark_forest"
-      ]
-    },
-    "out_edges": {
-      "contains": [
-        {
           "targetId": "quest_defeat_treant_guardian",
           "quantity": 1
         },
         {
-          "targetId": "quest_help_the_lumberjack",
+          "targetId": "quest_purify_the_grove",
           "quantity": 1
         }
       ]
@@ -1490,10 +1436,6 @@
     },
     "out_edges": {
       "contains": [
-        {
-          "targetId": "quest_hunt_goblins",
-          "quantity": 1
-        },
         {
           "targetId": "quest_hunt_slimes",
           "quantity": 1
@@ -1524,6 +1466,10 @@
     "out_edges": {
       "contains": [
         {
+          "targetId": "quest_hunt_bats",
+          "quantity": 1
+        },
+        {
           "targetId": "quest_mine_iron_ore",
           "quantity": 1
         },
@@ -1533,31 +1479,6 @@
         },
         {
           "targetId": "quest_power_the_forge",
-          "quantity": 1
-        }
-      ]
-    }
-  },
-  {
-    "id": "location_deep_mines",
-    "type": "Location",
-    "name": "Deep Mines",
-    "data": {
-      "region_type": "Mine"
-    },
-    "in_edges": {
-      "requires_quest": [
-        "quest_learn_about_the_mines"
-      ]
-    },
-    "out_edges": {
-      "contains": [
-        {
-          "targetId": "quest_hunt_bats",
-          "quantity": 1
-        },
-        {
-          "targetId": "quest_unlock_mining",
           "quantity": 1
         }
       ]
@@ -1731,7 +1652,8 @@
     "effects": [
       {
         "Type": "AutoQuest",
-        "Value": 1
+        "Value": 1,
+        "Target": ""
       }
     ]
   },
@@ -1752,7 +1674,8 @@
           "quantity": 10
         }
       ]
-    }
+    },
+    "effects": []
   },
   {
     "id": "ability_alchemy_i",
@@ -1771,7 +1694,8 @@
           "quantity": 10
         }
       ]
-    }
+    },
+    "effects": []
   },
   {
     "id": "cadence_recruit",
@@ -1938,7 +1862,8 @@
           "quantity": 10
         }
       ]
-    }
+    },
+    "effects": []
   },
   {
     "id": "ability_refine_scrap",
@@ -1957,7 +1882,8 @@
           "quantity": 1000
         }
       ]
-    }
+    },
+    "effects": []
   },
   {
     "id": "ability_refine_mixology",
@@ -1980,7 +1906,32 @@
           "quantity": 10
         }
       ]
-    }
+    },
+    "effects": []
+  },
+  {
+    "id": "ability_alchemy_ii",
+    "type": "Ability",
+    "name": "Alchemy II",
+    "data": {
+      "description": "Convert advanced items into gold. Think of it like selling your goods. ",
+      "primary_stat": "Magic",
+      "metadata": {}
+    },
+    "in_edges": {},
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_sun_baked_scale",
+          "quantity": 5
+        },
+        {
+          "targetId": "item_potion",
+          "quantity": 1
+        }
+      ]
+    },
+    "effects": []
   },
   {
     "id": "cadence_apprentice",
@@ -2006,6 +1957,14 @@
         },
         {
           "targetId": "ability_refine_mixology",
+          "quantity": 1
+        },
+        {
+          "targetId": "ability_j_str",
+          "quantity": 1
+        },
+        {
+          "targetId": "ability_alchemy_ii",
           "quantity": 1
         }
       ]
@@ -2754,6 +2713,33 @@
     }
   },
   {
+    "id": "recipe_refine_life_solar_essence_gold",
+    "type": "Refinement",
+    "name": "Refine Life - Gold",
+    "data": {
+      "primary_stat": "Magic"
+    },
+    "in_edges": {
+      "requires_ability": [
+        "ability_refine_life"
+      ]
+    },
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_solar_essence",
+          "quantity": 1
+        }
+      ],
+      "produces": [
+        {
+          "targetId": "item_gold",
+          "quantity": 10
+        }
+      ]
+    }
+  },
+  {
     "id": "recipe_refine_lightning_fire_shard_lightning_i",
     "type": "Refinement",
     "name": "Refine Lightning - Lightning I",
@@ -2910,7 +2896,61 @@
       "produces": [
         {
           "targetId": "item_gold",
-          "quantity": 250
+          "quantity": 150
+        }
+      ]
+    }
+  },
+  {
+    "id": "recipe_alchemy_ii_sun_baked_scale_gold",
+    "type": "Refinement",
+    "name": "Alchemy II - Gold",
+    "data": {
+      "primary_stat": "Speed"
+    },
+    "in_edges": {
+      "requires_ability": [
+        "ability_alchemy_ii"
+      ]
+    },
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_sun_baked_scale",
+          "quantity": 1
+        }
+      ],
+      "produces": [
+        {
+          "targetId": "item_gold",
+          "quantity": 500
+        }
+      ]
+    }
+  },
+  {
+    "id": "recipe_alchemy_ii_potion_gold",
+    "type": "Refinement",
+    "name": "Alchemy II - Gold",
+    "data": {
+      "primary_stat": "Speed"
+    },
+    "in_edges": {
+      "requires_ability": [
+        "ability_alchemy_ii"
+      ]
+    },
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_potion",
+          "quantity": 1
+        }
+      ],
+      "produces": [
+        {
+          "targetId": "item_gold",
+          "quantity": 800
         }
       ]
     }

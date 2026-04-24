@@ -15,7 +15,8 @@
         "Effects": [
           {
             "Type": "AutoQuest",
-            "Value": 1
+            "Value": 1,
+            "Target": ""
           }
         ]
       },
@@ -27,7 +28,8 @@
             "Quantity": 10
           }
         ],
-        "PrimaryStat": "Strength"
+        "PrimaryStat": "Strength",
+        "Effects": []
       },
       {
         "Ability": "Alchemy I",
@@ -37,7 +39,8 @@
             "Quantity": 10
           }
         ],
-        "PrimaryStat": "Magic"
+        "PrimaryStat": "Magic",
+        "Effects": []
       }
     ]
   },
@@ -121,7 +124,8 @@
         "Effects": [
           {
             "Type": "AutoQuest",
-            "Value": 1
+            "Value": 1,
+            "Target": ""
           }
         ]
       },
@@ -133,7 +137,8 @@
             "Quantity": 10
           }
         ],
-        "PrimaryStat": "Strength"
+        "PrimaryStat": "Strength",
+        "Effects": []
       },
       {
         "Ability": "Refine Scrap",
@@ -143,7 +148,8 @@
             "Quantity": 1000
           }
         ],
-        "PrimaryStat": "Speed"
+        "PrimaryStat": "Speed",
+        "Effects": []
       },
       {
         "Ability": "Refine Mixology",
@@ -157,7 +163,38 @@
             "Quantity": 10
           }
         ],
-        "PrimaryStat": "Magic"
+        "PrimaryStat": "Magic",
+        "Effects": []
+      },
+      {
+        "Ability": "J-Str",
+        "Requirements": [
+          {
+            "Item": "Iron Ore",
+            "Quantity": 10
+          },
+          {
+            "Item": "Herb",
+            "Quantity": 5
+          }
+        ],
+        "PrimaryStat": "Magic",
+        "Effects": []
+      },
+      {
+        "Ability": "Alchemy II",
+        "Requirements": [
+          {
+            "Item": "Sun-baked Scale",
+            "Quantity": 5
+          },
+          {
+            "Item": "Potion",
+            "Quantity": 1
+          }
+        ],
+        "PrimaryStat": "Magic",
+        "Effects": []
       }
     ]
   },

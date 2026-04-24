@@ -319,21 +319,6 @@
     "StatRewards": {}
   },
   {
-    "Quest": "Help the lumberjack",
-    "DurationSeconds": 30,
-    "Type": "Single",
-    "Requirements": [],
-    "Rewards": [
-      {
-        "Item": "Log",
-        "Quantity": 10
-      }
-    ],
-    "PrimaryStat": "Strength",
-    "RequiredStats": {},
-    "StatRewards": {}
-  },
-  {
     "Quest": "Scavenge Scrap",
     "DurationSeconds": 45,
     "Type": "Recurring",
@@ -477,7 +462,7 @@
     "Requirements": [],
     "Rewards": [
       {
-        "Item": "Water",
+        "Item": "Gold",
         "Quantity": 10
       },
       {
