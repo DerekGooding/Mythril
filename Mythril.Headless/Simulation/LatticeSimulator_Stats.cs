@@ -81,8 +81,10 @@ public partial class LatticeSimulator
             var cadenceName = parts[0];
             var abilityName = parts[1];
             
-            var cadence = cadences.All.First(c => c.Name == cadenceName);
-            var unlock = cadence.Abilities.First(a => a.Ability.Name == abilityName);
+            var cadence = cadences.All.FirstOrDefault(c => c.Name == cadenceName);
+            if (cadence.Name == null) continue;
+            var unlock = cadence.Abilities.FirstOrDefault(a => a.Ability.Name == abilityName);
+            if (unlock.Ability.Name == null) continue;
 
             if (unlock.Ability.Effects != null)
             {

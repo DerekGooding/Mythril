@@ -1,4 +1,6 @@
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Mythril.Data;
+using System.Linq;
 
 namespace Mythril.Tests;
 
@@ -13,7 +15,7 @@ public class ResourceManagerCoreTests
     [TestInitialize]
     public void Setup()
     {
-        TestContentLoader.Load();
+        SandboxContent.Load();
         _items = ContentHost.GetContent<Items>();
         _quests = ContentHost.GetContent<Quests>();
         _questDetails = ContentHost.GetContent<QuestDetails>();
@@ -47,6 +49,7 @@ public class ResourceManagerCoreTests
     public void ResourceManager_StoresAndRetrievesData_Correctly()
     {
         // Assert
+        // Sandbox has 2 UsableLocations: Starting Area and Forest (initially locked)
         Assert.AreEqual(1, _resourceManager!.UsableLocations.Count);  
         Assert.AreEqual(3, _resourceManager.Characters.Length);      
     }
@@ -54,16 +57,16 @@ public class ResourceManagerCoreTests
     public void ResourceManager_RetrievesQuestData_Correctly()
     {
         // Assert
-        var village = _resourceManager!.UsableLocations.First(l => l.Name == "Village");
-        var quest = village.Quests.FirstOrDefault(c => c.Name == "Prologue");
+        var area = _resourceManager!.UsableLocations.First(l => l.Name == "Starting Area");
+        var quest = area.Quests.FirstOrDefault(c => c.Name == SandboxContent.Prologue);
         Assert.AreNotEqual(default, quest);
-        Assert.AreEqual("Prologue", quest.Name);
+        Assert.AreEqual(SandboxContent.Prologue, quest.Name);
     }
 
     [TestMethod]
     public void QuestData_Properties_ReturnCorrectValues()
     {
-        var quest = _quests!.All.First(x => x.Name == "Prologue");
+        var quest = _quests!.All.First(x => x.Name == SandboxContent.Prologue);
         var detail = _questDetails![quest];
         var questData = new QuestData(quest, detail);
 
@@ -95,7 +98,7 @@ public class ResourceManagerCoreTests
     {
         var stats = ContentHost.GetContent<Stats>();
         Assert.AreEqual(4, stats.All.Length);
-        Assert.IsTrue(stats.All.Any(s => s.Name == "Vitality"));
+        Assert.IsTrue(stats.All.Any(s => s.Name == SandboxContent.Vitality));
     }
 
     [TestMethod]
@@ -115,26 +118,30 @@ public class ResourceManagerCoreTests
         var unlock = cadence.Abilities[0];
 
         _resourceManager!.Inventory.Clear();
-        Assert.IsFalse(_resourceManager.CanAfford(unlock));
-
-        foreach(var req in unlock.Requirements)
-        {
-            _resourceManager.Inventory.Add(req.Item, req.Quantity);
-        }
-        
+        // Sandbox abilities don't have item requirements, so CanAfford should be true if it has no requirements
+        // Wait, let's re-read SandboxContent. None have requirements.
         Assert.IsTrue(_resourceManager.CanAfford(unlock));
+
+        // Let's add a requirement for the sake of the test
+        var reqUnlock = new CadenceUnlock(unlock.CadenceName, unlock.Ability, [new ItemQuantity(_items!.All.First(i => i.Name == SandboxContent.Gold), 100)], unlock.PrimaryStat);
+        
+        _resourceManager.Inventory.Clear();
+        Assert.IsFalse(_resourceManager.CanAfford(reqUnlock));
+
+        _resourceManager.Inventory.Add(_items.All.First(i => i.Name == SandboxContent.Gold), 100);
+        Assert.IsTrue(_resourceManager.CanAfford(reqUnlock));
     }
 
     [TestMethod]
     public void LocationData_LockedQuests_ReturnsCorrectValues()
     {
-        var village = _resourceManager!.UsableLocations.First(l => l.Name == "Village");
-        var initialQuestCount = village.Quests.Count;
+        var area = _resourceManager!.UsableLocations.First(l => l.Name == "Starting Area");
+        var initialQuestCount = area.Quests.Count;
         
-        var allVillageQuests = ContentHost.GetContent<Locations>().All.First(l => l.Name == "Village").Quests;
-        var locked = village.LockedQuests.ToList();
+        var allAreaQuests = ContentHost.GetContent<Locations>().All.First(l => l.Name == "Starting Area").Quests;
+        var locked = area.LockedQuests.ToList();
         
-        Assert.AreEqual(allVillageQuests.Count() - initialQuestCount, locked.Count);
+        Assert.AreEqual(allAreaQuests.Count() - initialQuestCount, locked.Count);
     }
 
     [TestMethod]
@@ -168,10 +175,11 @@ public class ResourceManagerCoreTests
     public void ResourceManager_PayCosts_CadenceUnlock_RemovesItems()
     {
         var cadence = ContentHost.GetContent<Cadences>().All.First();
-        var unlock = cadence.Abilities[0];
+        var ability = cadence.Abilities[0].Ability;
+        var unlock = new CadenceUnlock(cadence.Name, ability, [new ItemQuantity(_items!.All.First(i => i.Name == SandboxContent.Gold), 100)], "Magic");
 
         _resourceManager!.Inventory.Clear();
-        foreach(var req in unlock.Requirements) _resourceManager.Inventory.Add(req.Item, req.Quantity);
+        _resourceManager.Inventory.Add(_items.All.First(i => i.Name == SandboxContent.Gold), 100);
         
         _resourceManager.PayCosts(unlock);
         
@@ -184,11 +192,11 @@ public class ResourceManagerCoreTests
         // Setup a junction
         var character = _resourceManager!.Characters[0];
         var stat = ContentHost.GetContent<Stats>().All.First();
-        var magic = _items!.All.First(i => i.Name == "Fire I");
+        var magic = _items!.All.First(i => i.Name == SandboxContent.FireI);
         
         // Mock ability unlock
-        _resourceManager.UnlockAbility("Recruit", "J-Str");
-        var recruit = ContentHost.GetContent<Cadences>().All.First(c => c.Name == "Recruit");
+        _resourceManager.UnlockAbility(SandboxContent.Recruit, SandboxContent.JStr);
+        var recruit = ContentHost.GetContent<Cadences>().All.First(c => c.Name == SandboxContent.Recruit);
         _resourceManager.JunctionManager.AssignCadence(recruit, character, _resourceManager.UnlockedAbilities);
         
         _resourceManager.JunctionManager.JunctionMagic(character, stat, magic, _resourceManager.UnlockedAbilities);
@@ -210,8 +218,9 @@ public class ResourceManagerCoreTests
 
         // Assert
         Assert.AreEqual(2, _resourceManager.Journal.Count);
-        Assert.IsTrue(_resourceManager.Journal[1].IsFirstTime, "First completion should be marked as first time.");
-        Assert.IsFalse(_resourceManager.Journal[0].IsFirstTime, "Second completion should NOT be marked as first time.");
+        // Note: Journal order is newest first in implementation
+        Assert.IsTrue(_resourceManager.Journal[1].IsFirstTime, "First completion (older) should be marked as first time.");
+        Assert.IsFalse(_resourceManager.Journal[0].IsFirstTime, "Second completion (newer) should NOT be marked as first time.");
     }
 
     [TestMethod]
@@ -221,4 +230,3 @@ public class ResourceManagerCoreTests
         Assert.AreEqual("Test", character.Name);
     }
 }
-

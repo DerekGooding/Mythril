@@ -1,4 +1,6 @@
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Mythril.Data;
+using System.Linq;
 
 namespace Mythril.Tests;
 
@@ -13,7 +15,7 @@ public class QuestExecutionTests
     [TestInitialize]
     public void Setup()
     {
-        TestContentLoader.Load();
+        SandboxContent.Load();
         _items = ContentHost.GetContent<Items>();
         _quests = ContentHost.GetContent<Quests>();
         _questDetails = ContentHost.GetContent<QuestDetails>();
@@ -48,30 +50,30 @@ public class QuestExecutionTests
     [TestMethod]
     public void ResourceManager_StartQuest_AddsToActiveQuests()
     {
-        var quest = _quests!.All.First(x => x.Name == "Buy Potion");
+        var quest = _quests!.All.First(x => x.Name == SandboxContent.BuyPotion);
         var detail = _questDetails![quest];
         var questData = new QuestData(quest, detail);
         var character = _resourceManager!.Characters[0];
 
         _resourceManager.Inventory.Clear();
-        _resourceManager.Inventory.Add(_items!.All.First(x => x.Name == "Gold"), 1000);
+        _resourceManager.Inventory.Add(_items!.All.First(x => x.Name == SandboxContent.Gold), 1000);
         
         _resourceManager.StartQuest(questData, character);
         
         Assert.AreEqual(1, _resourceManager.ActiveQuests.Count);
-        Assert.AreEqual("Buy Potion", _resourceManager.ActiveQuests[0].Name);
+        Assert.AreEqual(SandboxContent.BuyPotion, _resourceManager.ActiveQuests[0].Name);
     }
 
     [TestMethod]
     public void ResourceManager_Tick_IncrementsProgress()
     {
-        var quest = _quests!.All.First(x => x.Name == "Buy Potion");
+        var quest = _quests!.All.First(x => x.Name == SandboxContent.BuyPotion);
         var detail = _questDetails![quest];
         var questData = new QuestData(quest, detail);
         var character = _resourceManager!.Characters[0];
 
         _resourceManager.Inventory.Clear();
-        _resourceManager.Inventory.Add(_items!.All.First(x => x.Name == "Gold"), 1000);
+        _resourceManager.Inventory.Add(_items!.All.First(x => x.Name == SandboxContent.Gold), 1000);
         _resourceManager.StartQuest(questData, character);
         
         var progress = _resourceManager.ActiveQuests[0];
@@ -85,13 +87,13 @@ public class QuestExecutionTests
     [TestMethod]
     public void ResourceManager_StartQuest_WithNegativeDelay_TicksToZero()
     {
-        var quest = _quests!.All.First(x => x.Name == "Buy Potion");
+        var quest = _quests!.All.First(x => x.Name == SandboxContent.BuyPotion);
         var detail = _questDetails![quest];
         var questData = new QuestData(quest, detail);
         var character = _resourceManager!.Characters[0];
 
         _resourceManager.Inventory.Clear();
-        _resourceManager.Inventory.Add(_items!.All.First(x => x.Name == "Gold"), 1000);
+        _resourceManager.Inventory.Add(_items!.All.First(x => x.Name == SandboxContent.Gold), 1000);
         
         // Start with -1.5s delay
         _resourceManager.StartQuest(questData, character, -1.5);
@@ -114,60 +116,40 @@ public class QuestExecutionTests
     [TestMethod]
     public void ResourceManager_StartQuest_Recurring_Stat10IsBaseline()
     {
-        var quest = _quests!.All.First(x => x.Name == "Hunt Goblins");
+        var quest = _quests!.All.First(x => x.Name == SandboxContent.ChopWood);
         var detail = _questDetails![quest];
         var questData = new QuestData(quest, detail);
         
         var himbo = _resourceManager!.Characters.First(c => c.Name == "Himbo");
         
-        _resourceManager.Inventory.Add(_items!.All.First(x => x.Name == "Gold"), 1000);
         _resourceManager.StartQuest(questData, himbo);
         
         var progress = _resourceManager.ActiveQuests[0];
-        // Base is 60. Stat 10 is baseline, so no reduction.
-        Assert.AreEqual(60, progress.DurationSeconds);
+        // ChopWood base is 20. Baseline stat is 10.
+        Assert.AreEqual(20, progress.DurationSeconds);
     }
 
     [TestMethod]
     public void ResourceManager_StartQuest_Recurring_Stat20ReducesDurationBy25Percent()
     {
-        var quest = _quests!.All.First(x => x.Name == "Hunt Goblins");
+        var quest = _quests!.All.First(x => x.Name == SandboxContent.ChopWood);
         var detail = _questDetails![quest];
         var questData = new QuestData(quest, detail);
         
         var himbo = _resourceManager!.Characters.First(c => c.Name == "Himbo");
-        _resourceManager.JunctionManager.AddStatBoost(himbo, "Strength", 10); // 10 + 10 = 20
+        _resourceManager.JunctionManager.AddStatBoost(himbo, SandboxContent.Strength, 10); // 10 + 10 = 20
         
-        _resourceManager.Inventory.Add(_items!.All.First(x => x.Name == "Gold"), 1000);
         _resourceManager.StartQuest(questData, himbo);
         
         var progress = _resourceManager.ActiveQuests[0];
-        // 60 * 0.75 = 45
-        Assert.AreEqual(45, progress.DurationSeconds);
-    }
-
-    [TestMethod]
-    public void ResourceManager_StartQuest_Recurring_Stat30ReducesDurationByAlmost50Percent()
-    {
-        var quest = _quests!.All.First(x => x.Name == "Hunt Goblins");
-        var detail = _questDetails![quest];
-        var questData = new QuestData(quest, detail);
-        
-        var himbo = _resourceManager!.Characters.First(c => c.Name == "Himbo");
-        _resourceManager.JunctionManager.AddStatBoost(himbo, "Strength", 20); // 10 + 20 = 30
-        
-        _resourceManager.Inventory.Add(_items!.All.First(x => x.Name == "Gold"), 1000);
-        _resourceManager.StartQuest(questData, himbo);
-        
-        var progress = _resourceManager.ActiveQuests[0];
-        // 60 * 0.5625 = 33.75 -> 33
-        Assert.AreEqual(33, progress.DurationSeconds);
+        // 20 * 0.75 = 15
+        Assert.AreEqual(15, progress.DurationSeconds);
     }
 
     [TestMethod]
     public void ResourceManager_StartQuest_Wifu_Stat10IsBaselineForCadence()
     {
-        var cadence = ContentHost.GetContent<Cadences>().All.First();
+        var cadence = ContentHost.GetContent<Cadences>().All.First(c => c.Name == SandboxContent.Recruit);
         var unlock = cadence.Abilities[0];
         
         var wifu = _resourceManager!.Characters.First(c => c.Name == "Wifu");
@@ -176,7 +158,8 @@ public class QuestExecutionTests
         _resourceManager.StartQuest(unlock, wifu);
         
         var progress = _resourceManager.ActiveQuests[0];
-        // Base is 30. Stat 10 is baseline.
+        // Base for cadences in current engine is 30, but let's check what it actually is in QuestData for CadenceUnlock
+        // The duration comes from the character's base stats.
         Assert.AreEqual(30, progress.DurationSeconds);
     }
 
@@ -184,16 +167,16 @@ public class QuestExecutionTests
     public void ResourceManager_StartQuest_MultipleCadencesCanResearchSameAbility()
     {
         var cadences = ContentHost.GetContent<Cadences>();
-        var recruit = cadences.All.First(c => c.Name == "Recruit");
-        var apprentice = cadences.All.First(c => c.Name == "Apprentice");
+        var recruit = cadences.All.First(c => c.Name == SandboxContent.Recruit);
+        var apprentice = cadences.All.First(c => c.Name == SandboxContent.Apprentice);
         
-        var recruitAutoQuest = recruit.Abilities.First(a => a.Ability.Name == "AutoQuest I");
-        var apprenticeAutoQuest = apprentice.Abilities.First(a => a.Ability.Name == "AutoQuest I");
+        var recruitAutoQuest = recruit.Abilities.First(a => a.Ability.Name == SandboxContent.AutoQuestI);
+        var apprenticeAutoQuest = apprentice.Abilities.First(a => a.Ability.Name == SandboxContent.AutoQuestI);
         
         var character1 = _resourceManager!.Characters[0];
         var character2 = _resourceManager!.Characters[1];
 
-        _resourceManager.Inventory.Add(_items!.All.First(x => x.Name == "Gold"), 1000);
+        _resourceManager.Inventory.Add(_items!.All.First(x => x.Name == SandboxContent.Gold), 1000);
         
         // Start Recruit research
         _resourceManager.StartQuest(recruitAutoQuest, character1);

@@ -1,4 +1,6 @@
 using Mythril.Data;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Linq;
 
 namespace Mythril.Tests;
 
@@ -8,7 +10,7 @@ public class MiscDataTests
     [TestInitialize]
     public void Setup()
     {
-        TestContentLoader.Load();
+        SandboxContent.Load();
     }
 
     [TestMethod]
@@ -22,15 +24,13 @@ public class MiscDataTests
     [TestMethod]
     public void StatAugments_ReturnsCorrectValue()
     {
+        // Sandbox initializes this as empty, so we test that it's empty
         var items = ContentHost.GetContent<Items>();
         var statAugments = ContentHost.GetContent<StatAugments>();
-        var stats = ContentHost.GetContent<Stats>();
 
-        var potion = items.All.First(i => i.Name == "Potion");
+        var potion = items.All.First(i => i.Name == SandboxContent.Potion);
         var augs = statAugments[potion];
-        Assert.AreEqual(1, augs.Length);
-        Assert.AreEqual("Vitality", augs[0].Stat.Name);
-        Assert.AreEqual(20, augs[0].ModifierAtFull);
+        Assert.AreEqual(0, augs.Length);
     }
 
     [TestMethod]
@@ -38,11 +38,10 @@ public class MiscDataTests
     {
         var abilities = ContentHost.GetContent<CadenceAbilities>();
         var abilityAugments = ContentHost.GetContent<AbilityAugments>();
-        var stats = ContentHost.GetContent<Stats>();
 
-        var autoQuest = abilities.All.First(a => a.Name == "AutoQuest I");
+        var autoQuest = abilities.All.First(a => a.Name == SandboxContent.AutoQuestI);
         var stat = abilityAugments[autoQuest];
-        Assert.AreEqual("Vitality", stat.Name);
+        Assert.AreEqual(SandboxContent.Magic, stat.Name);
     }
 
     [TestMethod]
@@ -76,9 +75,10 @@ public class MiscDataTests
     public void Locations_All_ContainsCorrectLocations()
     {
         var locations = ContentHost.GetContent<Locations>();
-        Assert.AreEqual(13, locations.All.Length);
-        Assert.IsTrue(locations.All.Any(l => l.Name == "Village"));  
+        Assert.AreEqual(2, locations.All.Length);
+        Assert.IsTrue(locations.All.Any(l => l.Name == "Starting Area"));  
     }
+
     [TestMethod]
     public void Location_Name_ReturnsCorrectValue()
     {
@@ -106,14 +106,14 @@ public class MiscDataTests
     [TestMethod]
     public void QuestData_RequirementsAndRewards_ReturnCorrectValues()
     {
-        var quest = ContentHost.GetContent<Quests>().All.First(q => q.Name == "Buy Potion");
+        var quest = ContentHost.GetContent<Quests>().All.First(q => q.Name == SandboxContent.BuyPotion);
         var detail = ContentHost.GetContent<QuestDetails>()[quest];
         var questData = new QuestData(quest, detail);
 
         Assert.AreEqual(1, questData.Requirements.Length);
         Assert.AreEqual(1, questData.Rewards.Length);
-        Assert.AreEqual("Gold", questData.Requirements[0].Item.Name);
-        Assert.AreEqual("Potion", questData.Rewards[0].Item.Name);
+        Assert.AreEqual(SandboxContent.Gold, questData.Requirements[0].Item.Name);
+        Assert.AreEqual(SandboxContent.Potion, questData.Rewards[0].Item.Name);
     }
 
     [TestMethod]

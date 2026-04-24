@@ -12,7 +12,7 @@ public class ResourceManager_QuestTests : ResourceManagerTestBase
     public void ResourceManager_IsInProgress_Works()
     {
         var character = _resourceManager!.Characters[0];
-        var q1 = new QuestData(_quests!.All.First(q => q.Name == "Hunt Goblins"), _questDetails![_quests.All.First(q => q.Name == "Hunt Goblins")]);
+        var q1 = new QuestData(_quests!.All.First(q => q.Name == SandboxContent.HuntGoblins), _questDetails![_quests.All.First(q => q.Name == SandboxContent.HuntGoblins)]);
         
         Assert.IsFalse(_resourceManager.IsInProgress(q1));
         
@@ -24,7 +24,7 @@ public class ResourceManager_QuestTests : ResourceManagerTestBase
     public void StartQuest_PreventsDuplicateInProgress()
     {
         var character = _resourceManager!.Characters[0];
-        var prologue = new QuestData(_quests!.All.First(q => q.Name == "Prologue"), _questDetails![_quests.All.First(q => q.Name == "Prologue")]);
+        var prologue = new QuestData(_quests!.All.First(q => q.Name == SandboxContent.Prologue), _questDetails![_quests.All.First(q => q.Name == SandboxContent.Prologue)]);
         
         _resourceManager.StartQuest(prologue, character);
         Assert.AreEqual(1, _resourceManager.ActiveQuests.Count);
@@ -37,7 +37,7 @@ public class ResourceManager_QuestTests : ResourceManagerTestBase
     public void StartQuest_PreventsCompletedSingleUse()
     {
         var character = _resourceManager!.Characters[0];
-        var prologue = new QuestData(_quests!.All.First(q => q.Name == "Prologue"), _questDetails![_quests.All.First(q => q.Name == "Prologue")]);
+        var prologue = new QuestData(_quests!.All.First(q => q.Name == SandboxContent.Prologue), _questDetails![_quests.All.First(q => q.Name == SandboxContent.Prologue)]);
         
         _resourceManager.ReceiveRewards(prologue).Wait();
         Assert.IsTrue(_resourceManager.GetCompletedQuests().Contains(prologue.Quest));
@@ -50,11 +50,9 @@ public class ResourceManager_QuestTests : ResourceManagerTestBase
     public void StartQuest_CadenceUnlock_Works()
     {
         var character = _resourceManager!.Characters[0];
-        var arcanist = _cadences!.All.First(c => c.Name == "Arcanist");
-        var unlock = arcanist.Abilities.First(a => a.Ability.Name == "Refine Ice");
-        
-        // Find requirements for Refine Ice in Arcanist
-        foreach(var req in unlock.Requirements) _resourceManager.Inventory.Add(req.Item, req.Quantity);
+        var arcanist = _cadences!.All.First(c => c.Name == SandboxContent.Arcanist);
+        var ability = arcanist.Abilities.First(a => a.Ability.Name == SandboxContent.MagicPocketI).Ability;
+        var unlock = new CadenceUnlock(SandboxContent.Arcanist, ability, [], SandboxContent.Magic);
         
         _resourceManager.StartQuest(unlock, character);
         

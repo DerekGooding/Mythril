@@ -12,7 +12,7 @@ public partial class RoutedSimulator(
     ItemRefinements refinements, StatAugments statAugments, Stats stats)
 {
     private readonly HashSet<string> _farmingStack = [];
-    private const string END_QUEST = "Defeat the Mythril Construct";
+    public string EndQuest { get; set; } = "Defeat the Mythril Construct";
 
     public void Run(SimulationSeed? seed = null)
     {
@@ -29,14 +29,14 @@ public partial class RoutedSimulator(
         {
             steps++;
             progressed = AttemptStep(state, steps);
-            if (state.CompletedQuests.Contains(END_QUEST)) { Console.WriteLine($"[SUCCESS] End Game reached!"); break; }
+            if (state.CompletedQuests.Contains(EndQuest)) { Console.WriteLine($"[SUCCESS] End Game reached!"); break; }
             if (state.CurrentTime > 3600 * 24 * 365) break; 
         }
         Console.WriteLine($"Routed Completion Time: {(state.CurrentTime / 60.0):F1} minutes");
         Console.WriteLine($"Total Quests Completed: {state.CompletedQuests.Count}");
-        if (!state.CompletedQuests.Contains(END_QUEST)) {
+        if (!state.CompletedQuests.Contains(EndQuest)) {
             Console.WriteLine("[FAIL] End Game node never reached.");
-            var endQuestObj = quests.All.First(q => q.Name == END_QUEST);
+            var endQuestObj = quests.All.First(q => q.Name == EndQuest);
             var endQuestDet = questDetails[endQuestObj];
             Console.WriteLine($"[DEBUG] End Game Stats Required: {string.Join(", ", endQuestDet.RequiredStats?.Select(kvp => $"{kvp.Key}: {kvp.Value}") ?? ["None"])}");
             Console.WriteLine($"[DEBUG] Current Stats: {string.Join(", ", state.CurrentStats.Select(kvp => $"{kvp.Key}: {kvp.Value}"))}");
@@ -45,7 +45,7 @@ public partial class RoutedSimulator(
         
         // Expose time for ReachabilitySimulator to report
         LastRunTime = state.CurrentTime;
-        EndGameReached = state.CompletedQuests.Contains(END_QUEST);
+        EndGameReached = state.CompletedQuests.Contains(EndQuest);
     }
 
     public double LastRunTime { get; private set; }

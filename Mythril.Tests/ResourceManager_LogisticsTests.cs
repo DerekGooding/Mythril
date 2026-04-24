@@ -12,17 +12,17 @@ public class ResourceManager_LogisticsTests : ResourceManagerTestBase
     public void ResourceManager_ReevaluateActiveQuests_Works()
     {
         var character = _resourceManager!.Characters[0];
-        var scholar = _cadences!.All.First(c => c.Name == "Scholar");
+        var scholar = _cadences!.All.First(c => c.Name == SandboxContent.Scholar);
         _resourceManager.UnlockCadence(scholar);
-        _resourceManager.UnlockAbility("Scholar", "Logistics II");
+        _resourceManager.UnlockAbility(SandboxContent.Scholar, SandboxContent.LogisticsII);
         _resourceManager.JunctionManager.AssignCadence(scholar, character, _resourceManager.UnlockedAbilities);
         
-        // Initial limit is 1. With Logistics II, it should be 3.
+        // Initial limit is 1. With Logistics II (Effect Logistics, 2), it should be 1 + 2 = 3.
         Assert.AreEqual(3, _resourceManager.GetTaskLimit(character));
         
-        var q1 = new QuestData(_quests!.All.First(q => q.Name == "Hunt Goblins"), _questDetails![_quests.All.First(q => q.Name == "Hunt Goblins")]);
-        var q2 = new QuestData(_quests.All.First(q => q.Name == "Hunt Bats"), _questDetails[_quests.All.First(q => q.Name == "Hunt Bats")]);
-        var q3 = new QuestData(_quests.All.First(q => q.Name == "Hunt Spiders"), _questDetails[_quests.All.First(q => q.Name == "Hunt Spiders")]);
+        var q1 = new QuestData(_quests!.All.First(q => q.Name == SandboxContent.HuntGoblins), _questDetails![_quests.All.First(q => q.Name == SandboxContent.HuntGoblins)]);
+        var q2 = new QuestData(_quests.All.First(q => q.Name == SandboxContent.HuntBats), _questDetails[_quests.All.First(q => q.Name == SandboxContent.HuntBats)]);
+        var q3 = new QuestData(_quests.All.First(q => q.Name == SandboxContent.HuntSpiders), _questDetails[_quests.All.First(q => q.Name == SandboxContent.HuntSpiders)]);
         
         _resourceManager.StartQuest(q1, character);
         _resourceManager.StartQuest(q2, character);
@@ -43,46 +43,52 @@ public class ResourceManager_LogisticsTests : ResourceManagerTestBase
     public void ReevaluateActiveQuests_CancelsOnRequirementFailure()
     {
         var character = _resourceManager!.Characters[0];
-        var recruit = _cadences!.All.First(c => c.Name == "Recruit");
+        var recruit = _cadences!.All.First(c => c.Name == SandboxContent.Recruit);
         _resourceManager.UnlockCadence(recruit);
-        _resourceManager.UnlockAbility("Recruit", "J-Str");
+        _resourceManager.UnlockAbility(SandboxContent.Recruit, SandboxContent.JStr);
         _resourceManager.JunctionManager.AssignCadence(recruit, character, _resourceManager.UnlockedAbilities);
 
-        // Add 100 Magic I to inventory for Strength junction
-        var magicI = new Item("Magic I", "Magic", ItemType.Spell);
-        _resourceManager.Inventory.Add(magicI, 100);
-        _resourceManager.JunctionManager.JunctionMagic(character, new Stat("Strength", ""), magicI, _resourceManager.UnlockedAbilities);
+        // Add 50 Fire I to inventory for Strength junction
+        var fireI = _items!.All.First(i => i.Name == SandboxContent.FireI);
+        _resourceManager.Inventory.Add(fireI, 50);
+        _resourceManager.JunctionManager.JunctionMagic(character, new Stat(SandboxContent.Strength, ""), fireI, _resourceManager.UnlockedAbilities);
 
-        // Verify strength > 10 (base 10 + 100/10 = 20)
-        Assert.IsTrue(_resourceManager.JunctionManager.GetStatValue(character, "Strength") >= 20);
+        // Verify strength >= 15 (base 10 + 50/10 = 15)
+        Assert.IsTrue(_resourceManager.JunctionManager.GetStatValue(character, SandboxContent.Strength) >= 15);
 
-        // Create quest with Strength 15 requirement
-        var quest = new Quest("Str Quest", "Requires 15 Str");
-        var detail = new QuestDetail(10, [], [], QuestType.Recurring, RequiredStats: new Dictionary<string, int> { { "Strength", 15 } });
+        // Create quest with Strength 16 requirement
+        var quest = new Quest("Str Quest", "Requires 16 Str");
+        var detail = new QuestDetail(10, [], [], QuestType.Recurring, RequiredStats: new Dictionary<string, int> { { SandboxContent.Strength, 16 } });
         var questData = new QuestData(quest, detail);
 
         _resourceManager.StartQuest(questData, character);
-        Assert.AreEqual(1, _resourceManager.ActiveQuests.Count);
+        // StartQuest should fail because 15 < 16.
+        // Wait, the test expects it to START then CANCEL.
+        // So let's make the requirement 15 and then lower strength.
+        
+        var quest15 = new QuestData(quest, new QuestDetail(10, [], [], QuestType.Recurring, RequiredStats: new Dictionary<string, int> { { SandboxContent.Strength, 15 } }));
+        _resourceManager.StartQuest(quest15, character);
+        Assert.AreEqual(1, _resourceManager.ActiveQuests.Count, "Quest should start with 15 Strength.");
 
         // Remove magic junction -> strength falls to 10
-        _resourceManager.JunctionManager.JunctionMagic(character, new Stat("Strength", ""), new Item(), _resourceManager.UnlockedAbilities);
-        Assert.AreEqual(10, _resourceManager.JunctionManager.GetStatValue(character, "Strength"));
+        _resourceManager.JunctionManager.JunctionMagic(character, new Stat(SandboxContent.Strength, ""), new Item(), _resourceManager.UnlockedAbilities);
+        Assert.AreEqual(10, _resourceManager.JunctionManager.GetStatValue(character, SandboxContent.Strength));
 
         // Reevaluate should cancel the quest
         _resourceManager.ReevaluateActiveQuests(character);
-        Assert.AreEqual(0, _resourceManager.ActiveQuests.Count);
+        Assert.AreEqual(0, _resourceManager.ActiveQuests.Count, "Quest should be cancelled after Strength drop.");
     }
 
     [TestMethod]
     public void ReevaluateActiveQuests_CancelsRefinementOnAbilityLoss()
     {
         var character = _resourceManager!.Characters[0];
-        var refData = _resourceManager.Refinements.GetRefinement("Refine Fire", "Basic Gem")!.Value;
+        var refData = _resourceManager.Refinements.GetRefinement(SandboxContent.RefineFire, SandboxContent.BasicGem)!.Value;
         
         // Need ability to start refinement
-        var student = _cadences!.All.First(c => c.Name == "Student");
+        var student = _cadences!.All.First(c => c.Name == SandboxContent.Student);
         _resourceManager.UnlockCadence(student);
-        _resourceManager.UnlockAbility("Student", "Refine Fire");
+        _resourceManager.UnlockAbility(SandboxContent.Student, SandboxContent.RefineFire);
         _resourceManager.JunctionManager.AssignCadence(student, character, _resourceManager.UnlockedAbilities);
 
         _resourceManager.Inventory.Add(refData.InputItem, refData.Recipe.InputQuantity);

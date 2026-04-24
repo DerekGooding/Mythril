@@ -1,4 +1,6 @@
 using Mythril.Data;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Linq;
 
 namespace Mythril.Tests;
 
@@ -15,7 +17,7 @@ public class JunctionStatTests
     [TestInitialize]
     public void Setup()
     {
-        TestContentLoader.Load();
+        SandboxContent.Load();
         _items = ContentHost.GetContent<Items>();
         _stats = ContentHost.GetContent<Stats>();
         _cadences = ContentHost.GetContent<Cadences>();
@@ -47,21 +49,22 @@ public class JunctionStatTests
             ContentHost.GetContent<ItemRefinements>(),
             pathfinding);
         _resourceManager.Initialize();
+        _resourceManager.Inventory.Clear();
     }
 
     [TestMethod]
     public void JunctionManager_Unassign_OnlyClearsInvalidJunctions()
     {
         var character = _resourceManager!.Characters[0];
-        var abilityJStr = _abilities!.All.First(a => a.Name == "J-Str");
-        var cadence1 = _cadences!.All.First(c => c.Abilities.Any(a => a.Ability.Name == "J-Str"));
+        var abilityJStr = _abilities!.All.First(a => a.Name == SandboxContent.JStr);
+        var cadence1 = _cadences!.All.First(c => c.Abilities.Any(a => a.Ability.Name == SandboxContent.JStr));
         var cadence2 = new Cadence("Extra Cadence", "Desc", [new CadenceUnlock("Extra Cadence", abilityJStr, [])]);
         _cadences.Load(_cadences.All.Concat([cadence2]));
-        var strengthStat = _stats!.All.First(s => s.Name == "Strength");
-        var fireMagic = _items!.All.First(i => i.Name == "Fire I");
+        var strengthStat = _stats!.All.First(s => s.Name == SandboxContent.Strength);
+        var fireMagic = _items!.All.First(i => i.Name == SandboxContent.FireI);
 
-        _resourceManager.UnlockAbility("Extra Cadence", "J-Str");
-        _resourceManager.UnlockAbility(cadence1.Name, "J-Str");
+        _resourceManager.UnlockAbility("Extra Cadence", SandboxContent.JStr);
+        _resourceManager.UnlockAbility(cadence1.Name, SandboxContent.JStr);
         _junctionManager!.AssignCadence(cadence1, character, _resourceManager.UnlockedAbilities);
         _junctionManager!.AssignCadence(cadence2, character, _resourceManager.UnlockedAbilities);
         
@@ -81,13 +84,13 @@ public class JunctionStatTests
     public void JunctionManager_JunctionMagic_ChecksAllAssignedCadences()
     {
         var character = _resourceManager!.Characters[0];
-        var abilityJStr = _abilities!.All.First(a => a.Name == "J-Str");
-        var cadenceWithoutJStr = _cadences!.All.First(c => c.Name == "Arcanist");
-        var cadenceWithJStr = _cadences!.All.First(c => c.Abilities.Any(a => a.Ability.Name == "J-Str"));
-        var strengthStat = _stats!.All.First(s => s.Name == "Strength");
-        var fireMagic = _items!.All.First(i => i.Name == "Fire I");
+        var abilityJStr = _abilities!.All.First(a => a.Name == SandboxContent.JStr);
+        var cadenceWithoutJStr = _cadences!.All.First(c => c.Name == SandboxContent.Apprentice);
+        var cadenceWithJStr = _cadences!.All.First(c => c.Abilities.Any(a => a.Ability.Name == SandboxContent.JStr));
+        var strengthStat = _stats!.All.First(s => s.Name == SandboxContent.Strength);
+        var fireMagic = _items!.All.First(i => i.Name == SandboxContent.FireI);
 
-        _resourceManager.UnlockAbility(cadenceWithJStr.Name, "J-Str");
+        _resourceManager.UnlockAbility(cadenceWithJStr.Name, SandboxContent.JStr);
         _junctionManager!.AssignCadence(cadenceWithoutJStr, character, _resourceManager.UnlockedAbilities);
         _junctionManager!.AssignCadence(cadenceWithJStr, character, _resourceManager.UnlockedAbilities);
 
@@ -99,11 +102,11 @@ public class JunctionStatTests
     public void ResourceManager_CanAutoQuest_ChecksAllAssignedCadences()
     {
         var character = _resourceManager!.Characters[0];
-        var autoQuestAbility = _abilities!.All.First(a => a.Name == "AutoQuest I");
-        var cadenceWithoutAuto = _cadences!.All.First(c => c.Name == "Arcanist");
-        var cadenceWithAuto = _cadences!.All.First(c => c.Abilities.Any(a => a.Ability.Name == "AutoQuest I"));
+        var autoQuestAbility = _abilities!.All.First(a => a.Name == SandboxContent.AutoQuestI);
+        var cadenceWithoutAuto = _cadences!.All.First(c => c.Name == SandboxContent.Arcanist);
+        var cadenceWithAuto = _cadences!.All.First(c => c.Abilities.Any(a => a.Ability.Name == SandboxContent.AutoQuestI));
 
-        _resourceManager.UnlockAbility(cadenceWithAuto.Name, "AutoQuest I");
+        _resourceManager.UnlockAbility(cadenceWithAuto.Name, SandboxContent.AutoQuestI);
         
         Assert.IsFalse(_resourceManager.CanAutoQuest(character));
 
@@ -118,10 +121,10 @@ public class JunctionStatTests
     public void ResourceManager_UnlockedAbilities_ArePerCadence()
     {
         var character = _resourceManager!.Characters[0];
-        var recruit = _cadences!.All.First(c => c.Name == "Recruit");
-        var apprentice = _cadences!.All.First(c => c.Name == "Apprentice");
+        var recruit = _cadences!.All.First(c => c.Name == SandboxContent.Recruit);
+        var apprentice = _cadences!.All.First(c => c.Name == SandboxContent.Apprentice);
 
-        _resourceManager.UnlockAbility("Recruit", "AutoQuest I");
+        _resourceManager.UnlockAbility(SandboxContent.Recruit, SandboxContent.AutoQuestI);
 
         _junctionManager!.AssignCadence(recruit, character, _resourceManager.UnlockedAbilities);
         Assert.IsTrue(_resourceManager.CanAutoQuest(character));
@@ -136,11 +139,11 @@ public class JunctionStatTests
     public void JunctionManager_GetStatValue_BaseValues()
     {
         var protagonist = _resourceManager!.Characters.First(c => c.Name == "Protagonist");
-        var strength = _junctionManager!.GetStatValue(protagonist, "Strength");
+        var strength = _junctionManager!.GetStatValue(protagonist, SandboxContent.Strength);
         Assert.AreEqual(10, strength);
 
         var wifu = _resourceManager.Characters.First(c => c.Name == "Wifu");
-        var magic = _junctionManager.GetStatValue(wifu, "Magic");
+        var magic = _junctionManager.GetStatValue(wifu, SandboxContent.Magic);
         Assert.AreEqual(10, magic);
     }
 
@@ -148,53 +151,58 @@ public class JunctionStatTests
     public void JunctionManager_JunctionMagic_IncreasesStats()
     {
         var character = _resourceManager!.Characters[0];
-        var cadence = _cadences!.All.First(c => c.Abilities.Any(a => a.Ability.Name == "J-Str"));
-        var strengthStat = _stats!.All.First(s => s.Name == "Strength");
-        var fireMagic = _items!.All.First(i => i.Name == "Fire I");
+        var cadence = _cadences!.All.First(c => c.Abilities.Any(a => a.Ability.Name == SandboxContent.JStr));
+        var strengthStat = _stats!.All.First(s => s.Name == SandboxContent.Strength);
+        var fireMagic = _items!.All.First(i => i.Name == SandboxContent.FireI);
 
-        _resourceManager.UnlockAbility(cadence.Name, "J-Str");
+        _resourceManager.UnlockAbility(cadence.Name, SandboxContent.JStr);
         _junctionManager!.AssignCadence(cadence, character, _resourceManager.UnlockedAbilities);
-        _resourceManager.Inventory.Add(fireMagic, 100);
+        
+        // Add 50 units
+        _resourceManager.Inventory.Add(fireMagic, 50);
 
         _junctionManager.JunctionMagic(character, strengthStat, fireMagic, _resourceManager.UnlockedAbilities);
 
-        var val = _junctionManager.GetStatValue(character, "Strength");
-        Assert.AreEqual(25, val); // Base 10 + (30 items * (50/100)) = 10 + 15 = 25
+        var val = _junctionManager.GetStatValue(character, SandboxContent.Strength);
+        // Base 10 + (50 items / 10) = 10 + 5 = 15
+        Assert.AreEqual(15, val); 
     }
 
     [TestMethod]
     public void JunctionManager_JunctionMagic_FallbackLogic()
     {
         var character = _resourceManager!.Characters[0];
-        var cadence = _cadences!.All.First(c => c.Abilities.Any(a => a.Ability.Name == "J-Str"));
-        var strengthStat = _stats!.All.First(s => s.Name == "Strength");
-        var log = _items!.All.First(i => i.Name == "Log");
-        var logSpell = log with { ItemType = ItemType.Spell };
+        var cadence = _cadences!.All.First(c => c.Abilities.Any(a => a.Ability.Name == SandboxContent.JStr));
+        var strengthStat = _stats!.All.First(s => s.Name == SandboxContent.Strength);
+        var log = _items!.All.First(i => i.Name == SandboxContent.Log);
 
-        _resourceManager.UnlockAbility(cadence.Name, "J-Str");
+        _resourceManager.UnlockAbility(cadence.Name, SandboxContent.JStr);
         _junctionManager!.AssignCadence(cadence, character, _resourceManager.UnlockedAbilities);
-        _resourceManager.Inventory.Add(logSpell, 20);
+        
+        // Add 10 units
+        _resourceManager.Inventory.Add(log, 10);
 
-        _junctionManager.JunctionMagic(character, strengthStat, logSpell, _resourceManager.UnlockedAbilities);
+        _junctionManager.JunctionMagic(character, strengthStat, log, _resourceManager.UnlockedAbilities);
 
-        var val = _junctionManager.GetStatValue(character, "Strength");
-        Assert.AreEqual(12, val);
+        var val = _junctionManager.GetStatValue(character, SandboxContent.Strength);
+        // Base 10 + (10 / 10) = 11
+        Assert.AreEqual(11, val);
     }
 
     [TestMethod]
     public void JunctionManager_JunctionMagic_RequiresAbility()
     {
         var character = _resourceManager!.Characters[0];
-        var cadence = _cadences!.All.First(c => c.Abilities.Any(a => a.Ability.Name == "J-Str"));
-        var strengthStat = _stats!.All.First(s => s.Name == "Strength");
-        var fireMagic = _items!.All.First(i => i.Name == "Fire I");
+        var cadence = _cadences!.All.First(c => c.Abilities.Any(a => a.Ability.Name == SandboxContent.JStr));
+        var strengthStat = _stats!.All.First(s => s.Name == SandboxContent.Strength);
+        var fireMagic = _items!.All.First(i => i.Name == SandboxContent.FireI);
 
         _junctionManager!.AssignCadence(cadence, character, _resourceManager.UnlockedAbilities);
         _resourceManager.Inventory.Add(fireMagic, 10);
 
         _junctionManager.JunctionMagic(character, strengthStat, fireMagic, _resourceManager.UnlockedAbilities);
 
-        var val = _junctionManager.GetStatValue(character, "Strength");
+        var val = _junctionManager.GetStatValue(character, SandboxContent.Strength);
         Assert.AreEqual(10, val);
     }
 
@@ -202,8 +210,8 @@ public class JunctionStatTests
     public void JunctionManager_JunctionMagic_NoCadence()
     {
         var character = _resourceManager!.Characters[0];
-        var strengthStat = _stats!.All.First(s => s.Name == "Strength");
-        var fireMagic = _items!.All.First(i => i.Name == "Fire I");
+        var strengthStat = _stats!.All.First(s => s.Name == SandboxContent.Strength);
+        var fireMagic = _items!.All.First(i => i.Name == SandboxContent.FireI);
 
         _junctionManager!.JunctionMagic(character, strengthStat, fireMagic, _resourceManager.UnlockedAbilities);
         
@@ -215,11 +223,11 @@ public class JunctionStatTests
     {
         var character = _resourceManager!.Characters[0];
         // Apprentice has "AutoQuest I" but NOT "J-Str"
-        var apprentice = _cadences!.All.First(c => c.Name == "Apprentice");
-        var strengthStat = _stats!.All.First(s => s.Name == "Strength");
-        var fireMagic = _items!.All.First(i => i.Name == "Fire I");
+        var apprentice = _cadences!.All.First(c => c.Name == SandboxContent.Apprentice);
+        var strengthStat = _stats!.All.First(s => s.Name == SandboxContent.Strength);
+        var fireMagic = _items!.All.First(i => i.Name == SandboxContent.FireI);
 
-        _resourceManager.UnlockAbility("Apprentice", "AutoQuest I");
+        _resourceManager.UnlockAbility(SandboxContent.Apprentice, SandboxContent.AutoQuestI);
         _junctionManager!.AssignCadence(apprentice, character, _resourceManager.UnlockedAbilities);
 
         // Act: Try to junction Strength magic.
@@ -235,11 +243,10 @@ public class JunctionStatTests
     {
         Assert.AreEqual(30, _resourceManager!.Inventory.MagicCapacity);
         
-        _resourceManager.UnlockAbility("Arcanist", "Magic Pocket I");
+        _resourceManager.UnlockAbility(SandboxContent.Arcanist, SandboxContent.MagicPocketI);
         Assert.AreEqual(60, _resourceManager.Inventory.MagicCapacity);
 
-        _resourceManager.UnlockAbility("The Sentinel", "Magic Pocket II");
+        _resourceManager.UnlockAbility(SandboxContent.Sentinel, SandboxContent.MagicPocketII);
         Assert.AreEqual(100, _resourceManager.Inventory.MagicCapacity);
     }
 }
-

@@ -8,6 +8,7 @@ namespace Mythril.Tests;
 public abstract class ResourceManagerTestBase
 {
     protected ResourceManager? _resourceManager;
+    protected Items? _items;
     protected Quests? _quests;
     protected QuestDetails? _questDetails;
     protected Cadences? _cadences;
@@ -16,8 +17,8 @@ public abstract class ResourceManagerTestBase
     [TestInitialize]
     public void Setup()
     {
-        TestContentLoader.Load();
-        var items = ContentHost.GetContent<Items>();
+        SandboxContent.Load();
+        _items = ContentHost.GetContent<Items>();
         _quests = ContentHost.GetContent<Quests>();
         _questDetails = ContentHost.GetContent<QuestDetails>();
         _cadences = ContentHost.GetContent<Cadences>();
@@ -35,7 +36,7 @@ public abstract class ResourceManagerTestBase
         );
         _resourceManager = new ResourceManager(
             _gameStore,
-            items, 
+            _items, 
             _quests!,
             ContentHost.GetContent<QuestUnlocks>(), 
             ContentHost.GetContent<QuestToCadenceUnlocks>(), 

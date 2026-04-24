@@ -18,7 +18,7 @@ public class AutomationTests
     [TestInitialize]
     public void Setup()
     {
-        TestContentLoader.Load();
+        SandboxContent.Load();
         _items = ContentHost.GetContent<Items>();
         _quests = ContentHost.GetContent<Quests>();
         _questDetails = ContentHost.GetContent<QuestDetails>();
@@ -54,13 +54,13 @@ public class AutomationTests
     public async Task AutoQuest_RestartsSlotZero()
     {
         var character = _resourceManager!.Characters[0];
-        var recruit = _cadences!.All.First(c => c.Name == "Recruit");
+        var recruit = _cadences!.All.First(c => c.Name == SandboxContent.Recruit);
         _resourceManager.UnlockCadence(recruit);
-        _resourceManager.UnlockAbility("Recruit", "AutoQuest I");
+        _resourceManager.UnlockAbility(SandboxContent.Recruit, SandboxContent.AutoQuestI);
         _resourceManager.JunctionManager.AssignCadence(recruit, character, _resourceManager.UnlockedAbilities);
         _resourceManager.SetAutoQuestEnabled(character, true);
 
-        var questGoblins = new QuestData(_quests!.All.First(q => q.Name == "Hunt Goblins"), _questDetails![_quests.All.First(q => q.Name == "Hunt Goblins")]);
+        var questGoblins = new QuestData(_quests!.All.First(q => q.Name == SandboxContent.HuntGoblins), _questDetails![_quests.All.First(q => q.Name == SandboxContent.HuntGoblins)]);
         _resourceManager.StartQuest(questGoblins, character); 
 
         var progress = _resourceManager.ActiveQuests.First();
@@ -74,15 +74,15 @@ public class AutomationTests
     public async Task AutoQuestII_RestartsSlotOne()
     {
         var character = _resourceManager!.Characters[0];
-        var scholar = _cadences!.All.First(c => c.Name == "Scholar");
+        var scholar = _cadences!.All.First(c => c.Name == SandboxContent.Scholar);
         _resourceManager.UnlockCadence(scholar);
-        _resourceManager.UnlockAbility("Scholar", "Logistics II");
-        _resourceManager.UnlockAbility("Scholar", "AutoQuest II");
+        _resourceManager.UnlockAbility(SandboxContent.Scholar, SandboxContent.LogisticsII);
+        _resourceManager.UnlockAbility(SandboxContent.Scholar, SandboxContent.AutoQuestII);
         _resourceManager.JunctionManager.AssignCadence(scholar, character, _resourceManager.UnlockedAbilities);
         _resourceManager.SetAutoQuestEnabled(character, true);
 
-        var q1 = new QuestData(_quests!.All.First(q => q.Name == "Hunt Goblins"), _questDetails![_quests.All.First(q => q.Name == "Hunt Goblins")]);
-        var q2 = new QuestData(_quests.All.First(q => q.Name == "Hunt Bats"), _questDetails[_quests.All.First(q => q.Name == "Hunt Bats")]);
+        var q1 = new QuestData(_quests!.All.First(q => q.Name == SandboxContent.HuntGoblins), _questDetails![_quests.All.First(q => q.Name == SandboxContent.HuntGoblins)]);
+        var q2 = new QuestData(_quests.All.First(q => q.Name == SandboxContent.HuntBats), _questDetails[_quests.All.First(q => q.Name == SandboxContent.HuntBats)]);
 
         _resourceManager.StartQuest(q1, character); // Slot 0
         _resourceManager.StartQuest(q2, character); // Slot 1
@@ -98,16 +98,16 @@ public class AutomationTests
     public async Task SlotTwo_NeverAutoRestarts()
     {
         var character = _resourceManager!.Characters[0];
-        var scholar = _cadences!.All.First(c => c.Name == "Scholar");
+        var scholar = _cadences!.All.First(c => c.Name == SandboxContent.Scholar);
         _resourceManager.UnlockCadence(scholar);
-        _resourceManager.UnlockAbility("Scholar", "Logistics II");
-        _resourceManager.UnlockAbility("Scholar", "AutoQuest II");
+        _resourceManager.UnlockAbility(SandboxContent.Scholar, SandboxContent.LogisticsII);
+        _resourceManager.UnlockAbility(SandboxContent.Scholar, SandboxContent.AutoQuestII);
         _resourceManager.JunctionManager.AssignCadence(scholar, character, _resourceManager.UnlockedAbilities);
         _resourceManager.SetAutoQuestEnabled(character, true);
 
-        var q1 = new QuestData(_quests!.All.First(q => q.Name == "Hunt Goblins"), _questDetails![_quests.All.First(q => q.Name == "Hunt Goblins")]);
-        var q2 = new QuestData(_quests.All.First(q => q.Name == "Hunt Bats"), _questDetails[_quests.All.First(q => q.Name == "Hunt Bats")]);
-        var q3 = new QuestData(_quests.All.First(q => q.Name == "Hunt Spiders"), _questDetails[_quests.All.First(q => q.Name == "Hunt Spiders")]);
+        var q1 = new QuestData(_quests!.All.First(q => q.Name == SandboxContent.HuntGoblins), _questDetails![_quests.All.First(q => q.Name == SandboxContent.HuntGoblins)]);
+        var q2 = new QuestData(_quests.All.First(q => q.Name == SandboxContent.HuntBats), _questDetails[_quests.All.First(q => q.Name == SandboxContent.HuntBats)]);
+        var q3 = new QuestData(_quests.All.First(q => q.Name == SandboxContent.HuntSpiders), _questDetails[_quests.All.First(q => q.Name == SandboxContent.HuntSpiders)]);
 
         _resourceManager.StartQuest(q1, character); 
         _resourceManager.StartQuest(q2, character);
@@ -123,10 +123,10 @@ public class AutomationTests
     public async Task AutoQuest_DoesNotRestart_SingleUseQuest()
     {
         var character = _resourceManager!.Characters[0];
-        _resourceManager.UnlockAbility("Recruit", "AutoQuest I");
+        _resourceManager.UnlockAbility(SandboxContent.Recruit, SandboxContent.AutoQuestI);
         _resourceManager.SetAutoQuestEnabled(character, true);
 
-        var prologue = new QuestData(_quests!.All.First(q => q.Name == "Prologue"), _questDetails![_quests.All.First(q => q.Name == "Prologue")]);
+        var prologue = new QuestData(_quests!.All.First(q => q.Name == SandboxContent.Prologue), _questDetails![_quests.All.First(q => q.Name == SandboxContent.Prologue)]);
         _resourceManager.StartQuest(prologue, character);
 
         var progress = _resourceManager.ActiveQuests.First();
@@ -139,15 +139,15 @@ public class AutomationTests
     public async Task Refinement_AutoQuest_RespectsMagicCapacity()
     {
         var character = _resourceManager!.Characters[0];
-        var student = _cadences!.All.First(c => c.Name == "Student");
+        var student = _cadences!.All.First(c => c.Name == SandboxContent.Student);
         _resourceManager.UnlockCadence(student);
-        _resourceManager.UnlockAbility("Student", "AutoQuest I");
-        _resourceManager.UnlockAbility("Student", "Refine Fire");
+        _resourceManager.UnlockAbility(SandboxContent.Student, SandboxContent.AutoQuestI);
+        _resourceManager.UnlockAbility(SandboxContent.Student, SandboxContent.RefineFire);
         _resourceManager.JunctionManager.AssignCadence(student, character, _resourceManager.UnlockedAbilities);
         _resourceManager.SetAutoQuestEnabled(character, true);
 
         // Get "Refine Fire" refinement for "Basic Gem" input
-        var refData = _resourceManager.Refinements.GetRefinement("Refine Fire", "Basic Gem");
+        var refData = _resourceManager.Refinements.GetRefinement(SandboxContent.RefineFire, SandboxContent.BasicGem);
         Assert.IsNotNull(refData, "Refinement 'Refine Fire' for 'Basic Gem' should exist.");
         
         // Set capacity to 30
@@ -164,5 +164,3 @@ public class AutomationTests
         Assert.AreEqual(0, _resourceManager.ActiveQuests.Count, "Refinement producing Magic should NOT restart when capacity reached.");
     }
 }
-
-

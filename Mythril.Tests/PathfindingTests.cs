@@ -14,7 +14,7 @@ public class PathfindingTests
     [TestInitialize]
     public void Setup()
     {
-        TestContentLoader.Load();
+        SandboxContent.Load();
         _quests = ContentHost.GetContent<Quests>();
         
         _pathfinding = new PathfindingService(
@@ -30,7 +30,7 @@ public class PathfindingTests
     [TestMethod]
     public void GetPrerequisitePath_ReturnsTarget()
     {
-        var target = "Prologue";
+        var target = SandboxContent.Prologue;
         var path = _pathfinding!.GetPrerequisitePath(target, [], []);
         
         Assert.IsTrue(path.Contains(target));
@@ -39,35 +39,34 @@ public class PathfindingTests
     [TestMethod]
     public void GetPrerequisitePath_ReturnsPrerequisites()
     {
-        // "Buy Potion" requires "Prologue"
-        var target = "Buy Potion";
+        // Buy Potion -> Tutorial -> Prologue
+        var target = SandboxContent.BuyPotion;
         var path = _pathfinding!.GetPrerequisitePath(target, [], []);
         
         Assert.IsTrue(path.Contains(target));
-        Assert.IsTrue(path.Contains("Prologue"), "Path should contain prerequisite quest.");
+        Assert.IsTrue(path.Contains(SandboxContent.Tutorial));
+        Assert.IsTrue(path.Contains(SandboxContent.Prologue), "Path should contain prerequisite quest.");
     }
 
     [TestMethod]
     public void GetPrerequisitePath_RespectsCompletedQuests()
     {
-        var target = "Buy Potion";
-        var completed = new HashSet<string> { "Prologue" };
+        var target = SandboxContent.BuyPotion;
+        var completed = new HashSet<string> { SandboxContent.Tutorial };
         var path = _pathfinding!.GetPrerequisitePath(target, completed, []);
         
         Assert.IsTrue(path.Contains(target));
-        // Should NOT contain Prologue in the "needed" path because it's already completed
-        // Wait, my implementation adds everything it visits to 'path'. 
-        // Let's check the implementation logic.
+        Assert.IsFalse(path.Contains(SandboxContent.Prologue), "Should not contain quests before already completed ones.");
     }
 
     [TestMethod]
     public void GetPrerequisitePath_HandlesAbilities()
     {
-        var target = "Recruit:AutoQuest I";
+        var target = $"{SandboxContent.Recruit}:{SandboxContent.AutoQuestI}";
         var path = _pathfinding!.GetPrerequisitePath(target, [], []);
         
         Assert.IsTrue(path.Contains(target));
         // Recruit is unlocked by Prologue
-        Assert.IsTrue(path.Contains("Prologue"), "Should contain the quest that unlocks the cadence.");
+        Assert.IsTrue(path.Contains(SandboxContent.Prologue), "Should contain the quest that unlocks the cadence.");
     }
 }

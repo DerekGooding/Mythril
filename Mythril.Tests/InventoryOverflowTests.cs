@@ -16,7 +16,7 @@ public class InventoryOverflowTests
     [TestInitialize]
     public void Setup()
     {
-        TestContentLoader.Load();
+        SandboxContent.Load();
         _items = ContentHost.GetContent<Items>();
         _gameStore = new GameStore();
         _inventory = new InventoryManager(_gameStore);
@@ -51,7 +51,7 @@ public class InventoryOverflowTests
     [TestMethod]
     public void InventoryManager_Add_ReturnsOverflow_WhenCapacityReached()
     {
-        var fireMagic = _items!.All.First(i => i.Name == "Fire I");
+        var fireMagic = _items!.All.First(i => i.Name == SandboxContent.FireI);
         _gameStore!.Dispatch(new SetMagicCapacityAction(30));
 
         int overflow = 0;
@@ -74,12 +74,8 @@ public class InventoryOverflowTests
     [TestMethod]
     public async Task ReceiveRewards_TriggersOverflowEvent_ForQuests()
     {
-        var gold = _items!.All.First(i => i.Name == "Gold");
-        var quest = ContentHost.GetContent<Quests>().All.First(q => q.Name == "Prologue");
-        var detail = ContentHost.GetContent<QuestDetails>()[quest];
-        // Ensure prologue rewards gold
-        var questData = new QuestData(quest, detail);
-
+        var quest = ContentHost.GetContent<Quests>().All.First(q => q.Name == SandboxContent.Prologue);
+        
         string? overflowItem = null;
         int overflowQty = 0;
         _resourceManager!.OnItemOverflow += (name, qty) => 
@@ -88,33 +84,29 @@ public class InventoryOverflowTests
             overflowQty = qty;
         };
 
-        // Quests don't currently have capacity limits (Gold is unlimited), 
-        // but let's test if we added a spell reward.
-        // Let's mock a quest reward that is a spell.
-        var spell = _items.All.First(i => i.Name == "Fire I");
+        var spell = _items!.All.First(i => i.Name == SandboxContent.FireI);
         var customDetail = new QuestDetail(1, [], [new ItemQuantity(spell, 50)], QuestType.Single);
         var customQuestData = new QuestData(quest, customDetail);
 
         _gameStore!.Dispatch(new SetMagicCapacityAction(30));
         await _resourceManager.ReceiveRewards(customQuestData);
 
-        Assert.AreEqual("Fire I", overflowItem);
+        Assert.AreEqual(SandboxContent.FireI, overflowItem);
         Assert.AreEqual(20, overflowQty); // 50 - 30 = 20
     }
 
     [TestMethod]
     public async Task ReceiveRewards_TriggersOverflowEvent_ForRefinements()
     {
-        var basicGem = _items!.All.First(i => i.Name == "Basic Gem");
-        var fireI = _items.All.First(i => i.Name == "Fire I");
-        var student = ContentHost.GetContent<Cadences>().All.First(c => c.Name == "Student");
+        var basicGem = _items!.All.First(i => i.Name == SandboxContent.BasicGem);
+        var student = ContentHost.GetContent<Cadences>().All.First(c => c.Name == SandboxContent.Student);
         
         // Find the specific ability object from the cadence content
-        var ability = student.Abilities.First(a => a.Ability.Name == "Refine Fire").Ability;
+        var ability = student.Abilities.First(a => a.Ability.Name == SandboxContent.RefineFire).Ability;
         var recipe = ContentHost.GetContent<ItemRefinements>().ByKey[ability].Recipes[basicGem];
         // Recipe produces 5x Fire I
         
-        var refinement = new RefinementData(ability, basicGem, recipe, "Magic");
+        var refinement = new RefinementData(ability, basicGem, recipe, SandboxContent.Magic);
 
         string? overflowItem = null;
         _resourceManager!.OnItemOverflow += (name, qty) => overflowItem = name;
@@ -122,6 +114,6 @@ public class InventoryOverflowTests
         _gameStore!.Dispatch(new SetMagicCapacityAction(2)); // Very low capacity
         await _resourceManager.ReceiveRewards(refinement);
 
-        Assert.AreEqual("Fire I", overflowItem);
+        Assert.AreEqual(SandboxContent.FireI, overflowItem);
     }
 }

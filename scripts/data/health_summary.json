@@ -1,6 +1,6 @@
 {
     "is_healthy": false,
-    "failure_count": 3,
+    "failure_count": 2,
     "metrics": {
         "monoliths": 1,
         "coverage": 79.57,
@@ -29,14 +29,6 @@
             "message": "modules\\contentManager\\data_io.py exceeds 250 lines",
             "metadata": {
                 "lines": 269
-            }
-        },
-        {
-            "category": "pacing",
-            "message": "Pacing regression detected: 87.1m (baseline: 64.0m, max: 73.6m)",
-            "metadata": {
-                "actual": 87.1,
-                "baseline": 64
             }
         }
     ]

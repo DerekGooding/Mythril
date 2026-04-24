@@ -16,7 +16,7 @@ public class LogisticsTests
     [TestInitialize]
     public void Setup()
     {
-        TestContentLoader.Load();
+        SandboxContent.Load();
         _items = ContentHost.GetContent<Items>();
         _quests = ContentHost.GetContent<Quests>();
         _questDetails = ContentHost.GetContent<QuestDetails>();
@@ -59,11 +59,11 @@ public class LogisticsTests
     public void Character_WithLogisticsI_TaskLimit_IsTwo()
     {
         var character = _resourceManager!.Characters[0];
-        var weaver = _cadences!.All.First(c => c.Name == "Mythril Weaver");
+        var weaver = _cadences!.All.First(c => c.Name == SandboxContent.Weaver);
         
         // Unlock and assign
         _resourceManager.UnlockCadence(weaver);
-        _resourceManager.UnlockAbility("Mythril Weaver", "Logistics I");
+        _resourceManager.UnlockAbility(SandboxContent.Weaver, SandboxContent.LogisticsI);
         _resourceManager.JunctionManager.AssignCadence(weaver, character, _resourceManager.UnlockedAbilities);
 
         Assert.AreEqual(2, _resourceManager.GetTaskLimit(character));
@@ -73,10 +73,10 @@ public class LogisticsTests
     public void Character_WithLogisticsII_TaskLimit_IsThree()
     {
         var character = _resourceManager!.Characters[0];
-        var scholar = _cadences!.All.First(c => c.Name == "Scholar");
+        var scholar = _cadences!.All.First(c => c.Name == SandboxContent.Scholar);
         
         _resourceManager.UnlockCadence(scholar);
-        _resourceManager.UnlockAbility("Scholar", "Logistics II");
+        _resourceManager.UnlockAbility(SandboxContent.Scholar, SandboxContent.LogisticsII);
         _resourceManager.JunctionManager.AssignCadence(scholar, character, _resourceManager.UnlockedAbilities);
 
         Assert.AreEqual(3, _resourceManager.GetTaskLimit(character));
@@ -86,11 +86,11 @@ public class LogisticsTests
     public void Character_CannotExceedTaskLimit()
     {
         var character = _resourceManager!.Characters[0];
-        var gold = _items!.All.First(x => x.Name == "Gold");
+        var gold = _items!.All.First(x => x.Name == SandboxContent.Gold);
         _resourceManager.Inventory.Add(gold, 1000);
 
-        var quest1 = new QuestData(_quests!.All.First(q => q.Name == "Prologue"), _questDetails![_quests.All.First(q => q.Name == "Prologue")]);
-        var quest2 = new QuestData(_quests.All.First(q => q.Name == "Visit Starting Town"), _questDetails[_quests.All.First(q => q.Name == "Visit Starting Town")]);
+        var quest1 = new QuestData(_quests!.All.First(q => q.Name == SandboxContent.Prologue), _questDetails![_quests.All.First(q => q.Name == SandboxContent.Prologue)]);
+        var quest2 = new QuestData(_quests.All.First(q => q.Name == SandboxContent.Tutorial), _questDetails[_quests.All.First(q => q.Name == SandboxContent.Tutorial)]);
 
         // Limit is 1
         _resourceManager.StartQuest(quest1, character);
@@ -104,24 +104,24 @@ public class LogisticsTests
     public void LosingLogisticsI_CancelsAndRefundsExcessTask()
     {
         var character = _resourceManager!.Characters[0];
-        var weaver = _cadences!.All.First(c => c.Name == "Mythril Weaver");
+        var weaver = _cadences!.All.First(c => c.Name == SandboxContent.Weaver);
         _resourceManager.UnlockCadence(weaver);
-        _resourceManager.UnlockAbility("Mythril Weaver", "Logistics I");
+        _resourceManager.UnlockAbility(SandboxContent.Weaver, SandboxContent.LogisticsI);
         _resourceManager.JunctionManager.AssignCadence(weaver, character, _resourceManager.UnlockedAbilities);
 
-        var gold = _items!.All.First(x => x.Name == "Gold");
-        var iron = _items.All.First(x => x.Name == "Iron Ore");
+        var gold = _items!.All.First(x => x.Name == SandboxContent.Gold);
+        var iron = _items.All.First(x => x.Name == SandboxContent.IronOre);
         
         _resourceManager.Inventory.Clear();
         _resourceManager.Inventory.Add(gold, 1000);
         _resourceManager.Inventory.Add(iron, 100);
 
-        var quest1 = new QuestData(_quests!.All.First(q => q.Name == "Buy Potion"), _questDetails![_quests.All.First(q => q.Name == "Buy Potion")]); 
-        
-        // "Rekindling the Spark" costs Iron Ore
-        var questSpark = new QuestData(_quests.All.First(q => q.Name == "Rekindling the Spark"), _questDetails[_quests.All.First(q => q.Name == "Rekindling the Spark")]); 
-        var bark = _items.All.First(x => x.Name == "Ancient Bark");
-        _resourceManager.Inventory.Add(bark, 10);
+        // Mark prerequisites done
+        _resourceManager.RestoreCompletedQuest(_quests!.All.First(q => q.Name == SandboxContent.Prologue));
+        _resourceManager.RestoreCompletedQuest(_quests.All.First(q => q.Name == SandboxContent.Tutorial));
+
+        var quest1 = new QuestData(_quests!.All.First(q => q.Name == SandboxContent.BuyPotion), _questDetails![_quests.All.First(q => q.Name == SandboxContent.BuyPotion)]); 
+        var questSpark = new QuestData(_quests.All.First(q => q.Name == SandboxContent.RekindlingTheSpark), _questDetails[_quests.All.First(q => q.Name == SandboxContent.RekindlingTheSpark)]); 
 
         _resourceManager.StartQuest(quest1, character);
         _resourceManager.StartQuest(questSpark, character);
@@ -134,14 +134,15 @@ public class LogisticsTests
         _resourceManager.JunctionManager.Unassign(weaver, _resourceManager.UnlockedAbilities);
 
         Assert.AreEqual(1, _resourceManager.ActiveQuests.Count(q => q.Character.Name == character.Name));
-        Assert.AreEqual(ironAfterStart + 20, _resourceManager.Inventory.GetQuantity(iron), "Second quest SHOULD be refunded.");
+        // BuyPotion costs 100 Gold. RekindlingTheSpark costs 10 Iron Ore.
+        Assert.AreEqual(ironAfterStart + 10, _resourceManager.Inventory.GetQuantity(iron), "Second quest SHOULD be refunded.");
     }
 
     [TestMethod]
     public void StartQuest_PreventsCompletedSingleUseLooping()
     {
         var character = _resourceManager!.Characters[0];
-        var quest = new QuestData(_quests!.All.First(q => q.Name == "Prologue"), _questDetails![_quests.All.First(q => q.Name == "Prologue")]);
+        var quest = new QuestData(_quests!.All.First(q => q.Name == SandboxContent.Prologue), _questDetails![_quests.All.First(q => q.Name == SandboxContent.Prologue)]);
 
         // Complete it
         _resourceManager.ReceiveRewards(quest).Wait();
@@ -157,15 +158,18 @@ public class LogisticsTests
     public void Character_TaskLimit_SlotAllocation_Correctness()
     {
         var character = _resourceManager!.Characters[0];
-        var scholar = _cadences!.All.First(c => c.Name == "Scholar");
+        var scholar = _cadences!.All.First(c => c.Name == SandboxContent.Scholar);
         
         _resourceManager.UnlockCadence(scholar);
-        _resourceManager.UnlockAbility("Scholar", "Logistics II");
+        _resourceManager.UnlockAbility(SandboxContent.Scholar, SandboxContent.LogisticsII);
         _resourceManager.JunctionManager.AssignCadence(scholar, character, _resourceManager.UnlockedAbilities);
 
-        var questData = new QuestData(_quests!.All.First(q => q.Name == "Buy Potion"), _questDetails![_quests.All.First(q => q.Name == "Buy Potion")]);
-        _resourceManager.Inventory.Add(_items!.All.First(i => i.Name == "Gold"), 1000);
-        _resourceManager.JunctionManager.AddStatBoost(character, "Speed", 10); // Meet requirement
+        // Mark prerequisites done for Buy Potion
+        _resourceManager.RestoreCompletedQuest(_quests!.All.First(q => q.Name == SandboxContent.Prologue));
+        _resourceManager.RestoreCompletedQuest(_quests.All.First(q => q.Name == SandboxContent.Tutorial));
+
+        var questData = new QuestData(_quests!.All.First(q => q.Name == SandboxContent.BuyPotion), _questDetails![_quests.All.First(q => q.Name == SandboxContent.BuyPotion)]);
+        _resourceManager.Inventory.Add(_items!.All.First(i => i.Name == SandboxContent.Gold), 1000);
 
         // Fill slots
         _resourceManager.StartQuest(questData, character); // Slot 0
@@ -183,33 +187,24 @@ public class LogisticsTests
     public void ResourceManager_CancelQuest_RefundsCorrectly()
     {
         var character = _resourceManager!.Characters[0];
-        var questData = new QuestData(_quests!.All.First(q => q.Name == "Buy Potion"), _questDetails![_quests.All.First(q => q.Name == "Buy Potion")]);
-        var gold = _items!.All.First(i => i.Name == "Gold");
+        // Mark prerequisites done
+        _resourceManager.RestoreCompletedQuest(_quests!.All.First(q => q.Name == SandboxContent.Prologue));
+        _resourceManager.RestoreCompletedQuest(_quests.All.First(q => q.Name == SandboxContent.Tutorial));
+
+        var questData = new QuestData(_quests!.All.First(q => q.Name == SandboxContent.BuyPotion), _questDetails![_quests.All.First(q => q.Name == SandboxContent.BuyPotion)]);
+        var gold = _items!.All.First(i => i.Name == SandboxContent.Gold);
         
         _resourceManager.Inventory.Clear();
         _resourceManager.Inventory.Add(gold, 250);
-        _resourceManager.JunctionManager.AddStatBoost(character, "Speed", 10); // Meet 15 Speed requirement
         
-        // Unlock 'Buy Potion' by completing its prerequisites
-        var prologue = _quests.All.First(q => q.Name == "Prologue");
-        var tutorial = _quests.All.First(q => q.Name == "Tutorial Section");
-        var town = _quests.All.First(q => q.Name == "Visit Starting Town");
-        _resourceManager.ReceiveRewards(new QuestData(prologue, _questDetails[prologue])).Wait();
-        _resourceManager.ReceiveRewards(new QuestData(tutorial, _questDetails[tutorial])).Wait();
-        _resourceManager.ReceiveRewards(new QuestData(town, _questDetails[town])).Wait();
-
-        _resourceManager.Inventory.Clear();
-        _resourceManager.Inventory.Add(gold, 150);
-
         _resourceManager.StartQuest(questData, character);
-        // Quantity should be 50 here because quest costs 100 gold
-        Assert.AreEqual(50, _resourceManager.Inventory.GetQuantity(gold));
+        // Quantity should be 150 here because quest costs 100 gold
+        Assert.AreEqual(150, _resourceManager.Inventory.GetQuantity(gold));
 
         var active = _resourceManager.ActiveQuests.First();
         _resourceManager.CancelQuest(active);
 
-        // Should be 150 now after refund
-        Assert.AreEqual(150, _resourceManager.Inventory.GetQuantity(gold), "Gold should be fully refunded on cancellation.");
+        // Should be 250 now after refund
+        Assert.AreEqual(250, _resourceManager.Inventory.GetQuantity(gold), "Gold should be fully refunded on cancellation.");
     }
 }
-

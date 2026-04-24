@@ -12,7 +12,7 @@ public partial class RoutedSimulator
         var available = GetAvailableQuests(state);
 
         // Priority 0: End Game if available and affordable
-        var endQuest = available.FirstOrDefault(q => q.Quest.Name == END_QUEST);
+        var endQuest = available.FirstOrDefault(q => q.Quest.Name == EndQuest);
         if (endQuest.Quest.Name != null && CanAffordEventually(state, endQuest.Detail.Requirements)) {
             ExecuteQuest(state, endQuest.Quest, endQuest.Detail, steps); return true;
         }
@@ -113,7 +113,7 @@ public partial class RoutedSimulator
             .Select(req => req.Item.Name)
             .Distinct().ToHashSet();
 
-        return available.OrderByDescending(q => q.Item1.Name == END_QUEST ? 1000 : 0)
+        return available.OrderByDescending(q => q.Item1.Name == EndQuest ? 1000 : 0)
                         .ThenByDescending(q => q.Item2.Rewards?.Any(r => neededItems.Contains(r.Item.Name)) ?? false ? 100 : 0)
                         .ThenBy(q => q.Item2.DurationSeconds)
                         .ToList();
