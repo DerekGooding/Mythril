@@ -17,6 +17,7 @@
     "Type": "Forest",
     "RequiredQuest": "Tutorial Section",
     "Quests": [
+      "Hunt Goblins",
       "Chop Wood",
       "Hunt Spiders",
       "Gather Moonberries"
@@ -27,16 +28,8 @@
     "Type": "Forest",
     "RequiredQuest": "Defeat Treant Guardian",
     "Quests": [
-      "Purify the Grove"
-    ]
-  },
-  {
-    "Name": "Dark Forest",
-    "Type": "Forest",
-    "RequiredQuest": "Learn about the Dark Forest",
-    "Quests": [
       "Defeat Treant Guardian",
-      "Help the lumberjack"
+      "Purify the Grove"
     ]
   },
   {
@@ -44,7 +37,6 @@
     "Type": "Plains",
     "RequiredQuest": "Visit Starting Town",
     "Quests": [
-      "Hunt Goblins",
       "Hunt Slimes",
       "Hunt Sand-Sharks",
       "Locate the Hidden Oasis"
@@ -55,18 +47,10 @@
     "Type": "Mine",
     "RequiredQuest": "Learn about the Mines",
     "Quests": [
+      "Hunt Bats",
       "Mine Iron Ore",
       "Scavenge Scrap",
       "Power the Forge"
-    ]
-  },
-  {
-    "Name": "Deep Mines",
-    "Type": "Mine",
-    "RequiredQuest": "Learn about the Mines",
-    "Quests": [
-      "Hunt Bats",
-      "Unlock Mining"
     ]
   },
   {

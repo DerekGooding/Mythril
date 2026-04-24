@@ -108,12 +108,6 @@
     ]
   },
   {
-    "Quest": "Help the lumberjack",
-    "Requires": [
-      "Learn about the Dark Forest"
-    ]
-  },
-  {
     "Quest": "Scavenge Scrap",
     "Requires": [
       "Learn about the Mines"

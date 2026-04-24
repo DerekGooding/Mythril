@@ -86,6 +86,12 @@
         "InputQuantity": 1,
         "OutputItem": "Cure I",
         "OutputQuantity": 5
+      },
+      {
+        "InputItem": "Solar Essence",
+        "InputQuantity": 1,
+        "OutputItem": "Gold",
+        "OutputQuantity": 10
       }
     ]
   },
@@ -150,9 +156,27 @@
         "InputItem": "Basic Gem",
         "InputQuantity": 1,
         "OutputItem": "Gold",
-        "OutputQuantity": 250
+        "OutputQuantity": 150
       }
     ],
     "Ability": "Alchemy I"
+  },
+  {
+    "PrimaryStat": "Speed",
+    "Recipes": [
+      {
+        "InputItem": "Sun-baked Scale",
+        "InputQuantity": 1,
+        "OutputItem": "Gold",
+        "OutputQuantity": 500
+      },
+      {
+        "InputItem": "Potion",
+        "InputQuantity": 1,
+        "OutputItem": "Gold",
+        "OutputQuantity": 800
+      }
+    ],
+    "Ability": "Alchemy II"
   }
 ]

@@ -35,11 +35,6 @@
     "ItemType": "Material"
   },
   {
-    "Name": "Water",
-    "Description": "Essential for life and potion-making.",
-    "ItemType": "Material"
-  },
-  {
     "Name": "Web",
     "Description": "Sticky silk produced by spiders.",
     "ItemType": "Material"
