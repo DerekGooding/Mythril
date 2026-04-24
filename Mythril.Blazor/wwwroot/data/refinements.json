@@ -90,8 +90,8 @@
       {
         "InputItem": "Solar Essence",
         "InputQuantity": 1,
-        "OutputItem": "Gold",
-        "OutputQuantity": 10
+        "OutputItem": "Cure I",
+        "OutputQuantity": 15
       }
     ]
   },

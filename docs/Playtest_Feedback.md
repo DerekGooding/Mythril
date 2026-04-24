@@ -62,9 +62,7 @@
 
 - Quest "Locate the Hidden Oasis" should be driven by speed, not vitality.
 
-- *** Alchemy II does not offer a refinement of potions. Something is wrong ***
-
-- Review Moonberry. It's farmed in large amounts of only used to refine into ice I in very limited amounts. 
+- Review Moonberry. It's farmed in large amounts of only used to refine into ice I in very limited amounts. => Does unlock Essence Harvest
 
 - Ice increases magic and speed stats too much. Reduce efficacy to fall more inline with fire. 
 

@@ -2713,9 +2713,9 @@
     }
   },
   {
-    "id": "recipe_refine_life_solar_essence_gold",
+    "id": "recipe_refine_life_solar_essence_cure_i",
     "type": "Refinement",
-    "name": "Refine Life - Gold",
+    "name": "Refine Life - Cure I",
     "data": {
       "primary_stat": "Magic"
     },
@@ -2733,8 +2733,8 @@
       ],
       "produces": [
         {
-          "targetId": "item_gold",
-          "quantity": 10
+          "targetId": "item_cure_i",
+          "quantity": 15
         }
       ]
     }
