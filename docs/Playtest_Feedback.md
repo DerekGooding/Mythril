@@ -69,3 +69,5 @@
 - Ice increases magic and speed stats too much. Reduce efficacy to fall more inline with fire. 
 
 - consider refining something into ice shards or an earlier source, so lightning can be unlocked. Then lightning will be the primary source of speed junctioning early. 
+
+- review mass Refine and Essence Harvest
