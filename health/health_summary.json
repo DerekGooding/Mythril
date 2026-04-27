@@ -1,19 +1,17 @@
 {
     "is_healthy": false,
-    "failure_count": 5,
+    "failure_count": 7,
     "metrics": {
         "monoliths": 2,
-        "coverage": 75.36,
+        "coverage": 72.62,
         "mutation_score": 0.0,
         "missing_tests": 0,
         "key_violations": 0,
         "testid_violations": 1,
         "stale_docs": 0,
         "reachability_passed": {
-            "passed": true,
-            "time": "87.1m",
-            "sustainable": 32,
-            "unsustainable": 3
+            "passed": false,
+            "time": "N/A"
         },
         "pending_feedback": 0,
         "test_passed": false
@@ -39,17 +37,30 @@
             }
         },
         {
+            "category": "file_coverage",
+            "message": "Mythril.Data/ContentLoader.cs below minimum coverage: 0.00% (required: 25.0%)",
+            "metadata": {
+                "actual": 0.0,
+                "required": 25.0
+            }
+        },
+        {
+            "category": "file_coverage",
+            "message": "Mythril.Data/ContentLoader.cs below minimum coverage: 0.00% (required: 25.0%)",
+            "metadata": {
+                "actual": 0.0,
+                "required": 25.0
+            }
+        },
+        {
             "category": "razor_testid",
             "message": "Interactive elements missing data-testid in Mythril.Blazor/Components/HandPanel.razor",
             "metadata": {}
         },
         {
             "category": "reachability",
-            "message": "Content regression: Reachable quests dropped from 34 to 31",
-            "metadata": {
-                "actual": 31,
-                "baseline": 34
-            }
+            "message": "Simulation failed: One or more quests are mathematically unreachable.",
+            "metadata": {}
         }
     ]
 }
