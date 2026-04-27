@@ -3,16 +3,20 @@
 @inject ResourceManager ResourceManager
 
 <div class="hand-panel">
-    <div class="hand-controls p-2 d-flex justify-content-end">
+    <div class="hand-controls p-2 d-flex justify-content-end gap-3 border-bottom">
         <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="sortDuration" data-testid="sort-duration-switch" @bind="_sortByDuration" />
-            <label class="form-check-label small ms-1" for="sortDuration">Sort by Duration</label>
+            <input class="form-check-input" type="checkbox" id="hideCompletedQuests" @bind="_hideCompletedQuests" />
+            <label class="form-check-label small ms-1" for="hideCompletedQuests">Hide Done Quests</label>
+        </div>
+        <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" id="hideCompletedLocations" @bind="_hideCompletedLocations" />
+            <label class="form-check-label small ms-1" for="hideCompletedLocations">Hide Done Locations</label>
         </div>
     </div>
     <div class="hand-content">
         @if (Locations is not null)
         {
-            @foreach (var location in Locations.Where(l => l.Quests.Any()))
+            @foreach (var location in FilteredLocations)
             {
                 var stats = GetCompletionStats(location);
                 bool isActive = IsLocationActive(location);
@@ -26,9 +30,11 @@
                           OnToggle="@(() => ResourceManager.MarkLocationAsSeen(location))">
                     @{
                         var quests = location.Quests.ToList();
-                        var sortedQuests = _sortByDuration 
-                            ? quests.OrderBy(q => ResourceManager.GetQuestDetails(q).DurationSeconds).ToList()
-                            : quests.OrderBy(q => ResourceManager.GetQuestDetails(q).Type == QuestType.Recurring).ToList();
+                        if (_hideCompletedQuests)
+                        {
+                            quests = quests.Where(q => !ResourceManager.IsCompleted(q.Name)).ToList();
+                        }
+                        var sortedQuests = quests.OrderBy(q => ResourceManager.GetQuestDetails(q).Type == QuestType.Recurring).ToList();
                     }
                     @foreach (var quest in sortedQuests)
                     {
@@ -46,7 +52,27 @@
     [Parameter]
     public List<LocationData>? Locations { get; set; }
 
-    private bool _sortByDuration;
+    private bool _hideCompletedQuests;
+    private bool _hideCompletedLocations;
+
+    private IEnumerable<LocationData> FilteredLocations
+    {
+        get
+        {
+            if (Locations == null) return [];
+            var valid = Locations.Where(l => l.Quests.Any());
+            
+            if (_hideCompletedLocations)
+            {
+                valid = valid.Where(l => {
+                    var stats = GetCompletionStats(l);
+                    return stats.Total == 0 || stats.Completed < stats.Total;
+                });
+            }
+            
+            return valid;
+        }
+    }
 
     public QuestData QuestToData(Quest quest) => new QuestData(quest, ResourceManager.GetQuestDetails(quest));
 

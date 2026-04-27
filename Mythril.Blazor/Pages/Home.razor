@@ -25,7 +25,6 @@
                         <li><kbd>1</kbd> - Locations</li>
                         <li><kbd>2</kbd> - Cadences</li>
                         <li><kbd>3</kbd> - Workshop</li>
-                        <li><kbd>4</kbd> - Journal</li>
                         <li><kbd>?</kbd> - Toggle Help</li>
                     </ul>
                 </section>
@@ -126,11 +125,6 @@
                             }
                         </button>
                     </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link @(resourceManager.ActiveTab == "journal" ? "active" : "")" id="journal-tab" data-testid="journal-tab" data-bs-toggle="tab" data-bs-target="#journal" type="button" role="tab" @onclick='() => resourceManager.ActiveTab = "journal"'>
-                            Journal
-                        </button>
-                    </li>
                 </ul>
                 <div class="tab-content border border-top-0">
                     <div class="tab-pane @(resourceManager.ActiveTab == "hand" ? "active" : "")" id="hand" role="tabpanel">
@@ -143,9 +137,6 @@
                     </div>
                     <div class="tab-pane @(resourceManager.ActiveTab == "workshop" ? "active" : "")" id="workshop" role="tabpanel">
                         <Workshop UnlockedAbilities="resourceManager.UnlockedAbilities" @key="@resourceManager.UnlockedAbilities.Count" />
-                    </div>
-                    <div class="tab-pane @(resourceManager.ActiveTab == "journal" ? "active" : "")" id="journal" role="tabpanel">
-                        <JournalPanel />
                     </div>
                 </div>
             }

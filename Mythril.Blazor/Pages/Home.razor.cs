@@ -30,7 +30,6 @@ public partial class Home : IDisposable
         if (e.Key == "1") await SwitchTab("hand-tab");
         if (e.Key == "2") await SwitchTab("cadence-tab");
         if (e.Key == "3") await SwitchTab("workshop-tab");
-        if (e.Key == "4") await SwitchTab("journal-tab");
         if (e.Key == "?" || e.Key == "/") _showHelp = !_showHelp;
     }
 

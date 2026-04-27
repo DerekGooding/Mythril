@@ -123,9 +123,6 @@ public partial class ResourceManager
         set => _gameStore.Dispatch(new SetActiveTabAction(value)); 
     }
 
-    public bool ShowMiniLogs => _gameStore.State.ShowMiniLogs;
-    public void ToggleMiniLogs() => _gameStore.Dispatch(new ToggleMiniLogsAction());
-
     public double CurrentTime => _gameStore.State.CurrentTime;
     public string CurrentTimeFormatted 
     {

@@ -188,21 +188,17 @@ public class SaveData
     public List<string> UnlockedAbilities { get; set; } = [];
     public List<string> CompletedQuests { get; set; } = [];
     public List<QuestProgressDTO> ActiveQuests { get; set; } = [];
-    public List<JournalEntryDTO> Journal { get; set; } = [];
     public List<JunctionDTO> Junctions { get; set; } = [];
     public List<AssignedCadenceDTO> AssignedCadences { get; set; } = [];
     public Dictionary<string, bool> AutoQuestEnabled { get; set; } = [];
     public List<string> UnlockedLocations { get; set; } = []; 
     public List<string> StarredRecipes { get; set; } = [];
-    public Dictionary<string, List<string>> CharacterMiniLogs { get; set; } = [];
-    public List<string> EverPerformedActivities { get; set; } = [];
     public List<string> SeenContent { get; set; } = [];
     public bool HasUnseenCadence { get; set; }
     public bool HasUnseenWorkshop { get; set; }
     public double CurrentTime { get; set; }
     public bool IsTestMode { get; set; }
     public string ActiveTab { get; set; } = "hand";
-    public bool ShowMiniLogs { get; set; }
     public DateTime LastSaveTime { get; set; }
     public Dictionary<string, Dictionary<string, int>> CharacterStatBoosts { get; set; } = [];
 }
@@ -235,18 +231,6 @@ public class QuestProgressDTO
     public string Description { get; set; } = string.Empty;
     public int DurationSeconds { get; set; }
 }
-
-public class JournalEntryDTO
-{
-    public string TaskName { get; set; } = "";
-    public string CharacterName { get; set; } = "";
-    public string Details { get; set; } = "";
-    public DateTime CompletedAt { get; set; }
-    public bool IsFirstTime { get; set; }
-    public bool WasCancelled { get; set; }
-}
-
-public record JournalEntry(string TaskName, string CharacterName, string Details, DateTime CompletedAt, bool IsFirstTime = false, bool WasCancelled = false);
 
 // Data Transfer Objects for JSON Loading
 public class ItemQuantityDTO { public string Item { get; set; } = ""; public int Quantity { get; set; } = 1; }

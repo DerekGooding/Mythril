@@ -28,11 +28,8 @@ public record AddStatBoostAction(string CharacterName, string StatName, int Amou
 public record UnlockLocationAction(string LocationName) : IGameAction;
 public record SetHighlightedPathAction(ImmutableHashSet<string> Path) : IGameAction;
 public record ClearHighlightedPathAction() : IGameAction;
-public record AddToJournalAction(string TaskName, string CharacterName, string Details, bool WasCancelled = false) : IGameAction;
-public record ClearJournalAction() : IGameAction;
 public record FinishQuestAction(QuestProgress Progress) : IGameAction;
 public record SetActiveTabAction(string TabName) : IGameAction;
 public record SetUnseenFlagsAction(bool Cadence, bool Workshop) : IGameAction;
 public record SetTestModeAction(bool IsTestMode) : IGameAction;
-public record ToggleMiniLogsAction() : IGameAction;
 public record MarkContentSeenAction(string ContentId) : IGameAction;

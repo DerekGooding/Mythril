@@ -5,6 +5,8 @@
     @foreach (var abilityUnlock in CadenceData.Abilities)
     {
         var isUnlocked = resourceManager.UnlockedAbilities.Contains($"{CadenceData.Name}:{abilityUnlock.Ability.Name}");
+        if (HideLearned && isUnlocked) continue;
+
         var canAfford = resourceManager.CanAfford(abilityUnlock);
         var stateClass = isUnlocked ? "unlocked" : canAfford ? "affordable" : "locked";
 
@@ -74,6 +76,9 @@
 @code {
     [Parameter]
     public Cadence CadenceData { get; set; }
+
+    [Parameter]
+    public bool HideLearned { get; set; }
 
     private string GetTooltip(CadenceUnlock unlock)
     {

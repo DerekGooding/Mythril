@@ -7,8 +7,6 @@
 - Rework lightning. Currently it's only unlockable very late in the game and the magic itself is vastly outclassed by other options by that point, making it a chain of orphaned content. => Fire and Ice shards both being part of this chain and also pointless. 
 - Review and rework the entire stats system related to task performance. Right now, it's relatively random what requires vitality or speed, etc. I need to map things out and make larger design choices with intention. Just map for now. 
 
-- Add a clock and record the time when the final upgrade is completed.
-
 - hunt spiders should be in the mines, not the forest
 - hunt slimes should be in the mines, not the plains
 - Question "learn about the dark forest" should be renamed to Greenwood Forest
@@ -21,21 +19,11 @@
 
 - Consider limiting unlocking an ability to the equiped character. Playtest both ways. 
 
-- Add a UI Toggle in Cadence menu to hide all learned abilities
-- Add a UI Toggle in Cadence menu to hide all fully learned Cadences
-- Add a UI Toggle in Locations to hide once-completed quests
-- Add a UI Toggle in Locations to hide once-completed locations
-- Remove Sort by Duration toggle in Locations
-
 - review junction UI drag and drop glitch. Size change causing mouse hover over failure. 
 
 - Fire II => Refined from Fire Shards
 - Ice II => Refined from Ice Shards???   Part of lighting rework 
 - Consider refining I magic into II magic. Fire/Ice
-
-- remove the "last 3 completed quests" feature
-- remove the journal tab
-- Consider a stats page that includes historical production rates
 
 - review Slime vs Spider economies. Maybe slime needs to be refined into something that is then refined into gold. 
 
@@ -56,10 +44,6 @@
 - Tide-Caller could use some more abilities (consider j-str and j-magic)
 - Review what Deep Dive actually does as an unlock. Maybe improve UI to better explain.
 
-- Relabel "Spells" as "Magic" in the Workshop tab to match inventory sorting
-
-- Consider an appendix tab that lists and explains all unlocked items, locations, cadences and abilities. Make it searchable. 
-
 - Quest "Locate the Hidden Oasis" should be driven by speed, not vitality.
 
 - Review Moonberry. It's farmed in large amounts of only used to refine into ice I in very limited amounts. => Does unlock Essence Harvest
@@ -69,3 +53,21 @@
 - consider refining something into ice shards or an earlier source, so lightning can be unlocked. Then lightning will be the primary source of speed junctioning early. 
 
 - review mass Refine and Essence Harvest
+
+- Consider a stats page that includes historical production rates
+
+**In processes**
+
+- Relabel "Spells" as "Magic" in the Workshop tab to match inventory sorting
+
+- Consider an appendix tab that lists and explains all unlocked items, locations, cadences and abilities. Make it searchable. 
+
+- remove the "last 3 completed quests" feature
+- remove the journal tab
+
+**Next prompt**
+- Add a UI Toggle in Cadence menu to hide all learned abilities
+- Add a UI Toggle in Cadence menu to hide all fully learned Cadences
+- Add a UI Toggle in Locations to hide once-completed quests
+- Add a UI Toggle in Locations to hide once-completed locations
+- Remove Sort by Duration toggle in Locations

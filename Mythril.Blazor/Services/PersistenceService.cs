@@ -39,14 +39,6 @@ public class PersistenceService(
                 Description = q.Description,
                 DurationSeconds = q.DurationSeconds
             }).ToList(),
-            Journal = state.Journal.Select(j => new JournalEntryDTO {
-                TaskName = j.TaskName,
-                CharacterName = j.CharacterName,
-                Details = j.Details,
-                CompletedAt = j.CompletedAt,
-                IsFirstTime = j.IsFirstTime,
-                WasCancelled = j.WasCancelled
-            }).ToList(),
             Junctions = state.Junctions.Select(j => new JunctionDTO {
                 CharacterName = j.Character.Name,
                 StatName = j.Stat.Name,
@@ -59,15 +51,12 @@ public class PersistenceService(
             AutoQuestEnabled = state.AutoQuestEnabled.ToDictionary(k => k.Key, v => v.Value),
             UnlockedLocations = state.UnlockedLocationNames.ToList(),
             StarredRecipes = state.StarredRecipes.ToList(),
-            CharacterMiniLogs = state.CharacterMiniLogs.ToDictionary(k => k.Key, v => v.Value.ToList()),
-            EverPerformedActivities = state.EverPerformedActivities.ToList(),
             SeenContent = state.SeenContent.ToList(),
             HasUnseenCadence = state.HasUnseenCadence,
             HasUnseenWorkshop = state.HasUnseenWorkshop,
             CurrentTime = state.CurrentTime,
             IsTestMode = state.IsTestMode,
             ActiveTab = state.ActiveTab,
-            ShowMiniLogs = state.ShowMiniLogs,
             LastSaveTime = DateTime.Now,
             CharacterStatBoosts = state.CharacterPermanentStatBoosts.ToDictionary(k => k.Key, v => v.Value.ToDictionary(ik => ik.Key, iv => iv.Value))
         };

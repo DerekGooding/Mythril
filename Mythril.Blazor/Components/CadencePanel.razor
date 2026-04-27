@@ -4,11 +4,20 @@
 @inject ResourceManager resourceManager
 
 <div class="cadence-panel d-flex flex-column h-100">
-    <div class="cadence-controls p-2 border-bottom">
-        <input type="text" class="form-control form-control-sm" 
+    <div class="cadence-controls p-2 border-bottom d-flex align-items-center gap-3">
+        <input type="text" class="form-control form-control-sm flex-grow-1" 
                placeholder="Search abilities (e.g. J-Str)..." 
                data-testid="cadence-ability-search"
                @bind="_abilitySearchTerm" @bind:event="oninput" />
+        
+        <div class="form-check form-switch text-nowrap">
+            <input class="form-check-input" type="checkbox" id="hideDoneAbilities" @bind="_hideLearnedAbilities" />
+            <label class="form-check-label small ms-1" for="hideDoneAbilities">Hide Done Abilities</label>
+        </div>
+        <div class="form-check form-switch text-nowrap">
+            <input class="form-check-input" type="checkbox" id="hideDoneCadences" @bind="_hideLearnedCadences" />
+            <label class="form-check-label small ms-1" for="hideDoneCadences">Hide Done Cadences</label>
+        </div>
     </div>
 
     <div class="flex-grow-1 overflow-auto mt-2">
@@ -29,7 +38,7 @@
                                      CompletedCount="@stats.Completed"
                                      TotalCount="@stats.Total"
                                      OnToggle="@(() => resourceManager.MarkCadenceAsSeen(cadence))">
-                    <CadenceTree CadenceData="cadence" />
+                    <CadenceTree CadenceData="cadence" HideLearned="@_hideLearnedAbilities" />
                 </CadenceDragExpander>
             }
         }
@@ -53,11 +62,33 @@
     public EventCallback<Cadence> OnUnequip { get; set; }
 
     private string _abilitySearchTerm = "";
+    private bool _hideLearnedAbilities;
+    private bool _hideLearnedCadences;
 
-    private IEnumerable<Cadence>? FilteredCadences => UnlockedCadences; 
-    // We don't filter out the cadences themselves, just highlight them in CadenceDragExpander if the ability matches.
-    // Actually, usually search filters the list. But the requirement says "Highlight Cadences containing specific searched abilities".
-    // I'll keep the full list but highlight.
+    private IEnumerable<Cadence>? FilteredCadences
+    {
+        get
+        {
+            if (UnlockedCadences == null) return null;
+            var list = UnlockedCadences;
+
+            if (!string.IsNullOrWhiteSpace(_abilitySearchTerm))
+            {
+                list = list.Where(c => c.Name.Contains(_abilitySearchTerm, StringComparison.OrdinalIgnoreCase) || 
+                                       c.Abilities.Any(a => a.Ability.Name.Contains(_abilitySearchTerm, StringComparison.OrdinalIgnoreCase)));
+            }
+
+            if (_hideLearnedCadences)
+            {
+                list = list.Where(c => {
+                    var stats = GetCompletionStats(c);
+                    return stats.Total == 0 || stats.Completed < stats.Total;
+                });
+            }
+
+            return list;
+        }
+    }
 
     private async Task HandleUnequip(object cadenceObj)
     {

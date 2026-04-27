@@ -42,17 +42,10 @@ public partial class GameStore
             UnlockLocationAction a => state with { UnlockedLocationNames = state.UnlockedLocationNames.Add(a.LocationName) },
             SetHighlightedPathAction a => state with { HighlightedPath = a.Path },
             ClearHighlightedPathAction a => state with { HighlightedPath = ImmutableHashSet<string>.Empty },
-            AddToJournalAction a => AddToJournal(state, a),
-            ClearJournalAction a => state with { 
-                Journal = ImmutableList<JournalEntry>.Empty, 
-                CharacterMiniLogs = ImmutableDictionary<string, ImmutableList<string>>.Empty,
-                EverPerformedActivities = ImmutableHashSet<string>.Empty
-            },
             FinishQuestAction a => FinishQuest(state, a, out overflowItem, out overflowQty),
             SetActiveTabAction a => state with { ActiveTab = a.TabName },
             SetUnseenFlagsAction a => state with { HasUnseenCadence = a.Cadence, HasUnseenWorkshop = a.Workshop },
             SetTestModeAction a => state with { IsTestMode = a.IsTestMode },
-            ToggleMiniLogsAction a => state with { ShowMiniLogs = !state.ShowMiniLogs },
             MarkContentSeenAction a => state with { SeenContent = state.SeenContent.Add(a.ContentId) },
             _ => state
         };
@@ -189,34 +182,12 @@ public partial class GameStore
             if (oI != null) { overflowItem = oI; overflowQty = oQ; }
         }
 
-        // Journal Entry
-        nextState = AddToJournal(nextState, new AddToJournalAction(taskName, characterName, details));
-
         // Remove from active quests
         nextState = nextState with { 
             ActiveQuests = nextState.ActiveQuests.RemoveAll(q => q.StartTime == progress.StartTime && q.Character.Name == progress.Character.Name) 
         };
 
         return nextState;
-    }
-
-    private static GameState AddToJournal(GameState state, AddToJournalAction a)
-    {
-        bool isFirstTime = !state.EverPerformedActivities.Contains(a.TaskName);
-        var entry = new JournalEntry(a.TaskName, a.CharacterName, a.Details, DateTime.Now, isFirstTime, a.WasCancelled);
-        
-        var newJournal = state.Journal.Insert(0, entry);
-        if (newJournal.Count > 50) newJournal = newJournal.RemoveAt(newJournal.Count - 1);
-
-        var characterLog = state.CharacterMiniLogs.GetValueOrDefault(a.CharacterName, ImmutableList<string>.Empty);
-        characterLog = characterLog.Add(a.TaskName);
-        if (characterLog.Count > 3) characterLog = characterLog.RemoveAt(0);
-
-        return state with { 
-            Journal = newJournal,
-            CharacterMiniLogs = state.CharacterMiniLogs.SetItem(a.CharacterName, characterLog),
-            EverPerformedActivities = state.EverPerformedActivities.Add(a.TaskName)
-        };
     }
 
     private static GameState AddResource(GameState state, AddResourceAction a, out string? overflowItem, out int overflowQty)
