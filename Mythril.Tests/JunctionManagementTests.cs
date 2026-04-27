@@ -3,49 +3,8 @@ using Mythril.Data;
 namespace Mythril.Tests;
 
 [TestClass]
-public class JunctionManagementTests
+public class JunctionManagementTests : ResourceManagerTestBase
 {
-    private ResourceManager? _resourceManager;
-    private JunctionManager? _junctionManager;
-    private Cadences? _cadences;
-
-    [TestInitialize]
-    public void Setup()
-    {
-        TestContentLoader.Load();
-        var items = ContentHost.GetContent<Items>();
-        var stats = ContentHost.GetContent<Stats>();
-        _cadences = ContentHost.GetContent<Cadences>();
-        
-        var gameStore = new GameStore();
-        var inventory = new InventoryManager(gameStore);
-        _junctionManager = new JunctionManager(gameStore, inventory, ContentHost.GetContent<StatAugments>(), _cadences);
-
-        var pathfinding = new PathfindingService(
-            ContentHost.GetContent<Locations>(),
-            ContentHost.GetContent<Quests>(),
-            ContentHost.GetContent<QuestUnlocks>(),
-            ContentHost.GetContent<QuestDetails>(),
-            _cadences,
-            ContentHost.GetContent<QuestToCadenceUnlocks>()
-        );
-
-        _resourceManager = new ResourceManager(
-            gameStore,
-            items, 
-            ContentHost.GetContent<Quests>(),
-            ContentHost.GetContent<QuestUnlocks>(), 
-            ContentHost.GetContent<QuestToCadenceUnlocks>(), 
-            ContentHost.GetContent<QuestDetails>(), 
-            _cadences, 
-            ContentHost.GetContent<Locations>(),
-            _junctionManager,
-            inventory,
-            ContentHost.GetContent<ItemRefinements>(),
-            pathfinding);
-        _resourceManager.Initialize();
-    }
-
     [TestMethod]
     public void JunctionManager_AssignCadence_SupportsMultipleCadences()
     {
@@ -53,10 +12,10 @@ public class JunctionManagementTests
         var cadence1 = _cadences!.All[0];
         var cadence2 = _cadences!.All[1];
         
-        _junctionManager!.AssignCadence(cadence1, character, _resourceManager.UnlockedAbilities);
-        _junctionManager!.AssignCadence(cadence2, character, _resourceManager.UnlockedAbilities);
+        _resourceManager.JunctionManager.AssignCadence(cadence1, character, _resourceManager.UnlockedAbilities);
+        _resourceManager.JunctionManager.AssignCadence(cadence2, character, _resourceManager.UnlockedAbilities);
         
-        var assigned = _junctionManager.CurrentlyAssigned(character).ToList();
+        var assigned = _resourceManager.JunctionManager.CurrentlyAssigned(character).ToList();
         Assert.AreEqual(2, assigned.Count);
         Assert.IsTrue(assigned.Contains(cadence1));
         Assert.IsTrue(assigned.Contains(cadence2));
@@ -69,11 +28,11 @@ public class JunctionManagementTests
         var character2 = _resourceManager!.Characters[1];
         var cadence = _cadences!.All[0];
         
-        _junctionManager!.AssignCadence(cadence, character1, _resourceManager.UnlockedAbilities);
-        _junctionManager!.AssignCadence(cadence, character2, _resourceManager.UnlockedAbilities);
+        _resourceManager.JunctionManager.AssignCadence(cadence, character1, _resourceManager.UnlockedAbilities);
+        _resourceManager.JunctionManager.AssignCadence(cadence, character2, _resourceManager.UnlockedAbilities);
         
-        Assert.IsFalse(_junctionManager.CurrentlyAssigned(character1).Contains(cadence));
-        Assert.IsTrue(_junctionManager.CurrentlyAssigned(character2).Contains(cadence));
+        Assert.IsFalse(_resourceManager.JunctionManager.CurrentlyAssigned(character1).Contains(cadence));
+        Assert.IsTrue(_resourceManager.JunctionManager.CurrentlyAssigned(character2).Contains(cadence));
     }
 
     [TestMethod]
@@ -82,9 +41,9 @@ public class JunctionManagementTests
         var character = _resourceManager!.Characters[0];
         var cadence = _cadences!.All.First();
         
-        _junctionManager!.AssignCadence(cadence, character, _resourceManager.UnlockedAbilities);
+        _resourceManager.JunctionManager.AssignCadence(cadence, character, _resourceManager.UnlockedAbilities);
         
-        Assert.AreEqual(cadence, _junctionManager.CurrentlyAssigned(character).First());
+        Assert.AreEqual(cadence, _resourceManager.JunctionManager.CurrentlyAssigned(character).First());
     }
 
     [TestMethod]
@@ -93,8 +52,8 @@ public class JunctionManagementTests
         var character = _resourceManager!.Characters[0];
         var cadence = _cadences!.All.First();
         
-        _junctionManager!.AssignCadence(cadence, character, _resourceManager.UnlockedAbilities);
-        var assigned = _junctionManager.CurrentlyAssigned(character);
+        _resourceManager.JunctionManager.AssignCadence(cadence, character, _resourceManager.UnlockedAbilities);
+        var assigned = _resourceManager.JunctionManager.CurrentlyAssigned(character);
         
         Assert.IsTrue(assigned.Contains(cadence));
     }
@@ -105,10 +64,10 @@ public class JunctionManagementTests
         var character = _resourceManager!.Characters[0];
         var cadence = _cadences!.All.First();
         
-        _junctionManager!.AssignCadence(cadence, character, _resourceManager.UnlockedAbilities);
-        _junctionManager.Unassign(cadence, _resourceManager.UnlockedAbilities);
+        _resourceManager.JunctionManager.AssignCadence(cadence, character, _resourceManager.UnlockedAbilities);
+        _resourceManager.JunctionManager.Unassign(cadence, _resourceManager.UnlockedAbilities);
         
-        Assert.IsFalse(_junctionManager.CurrentlyAssigned(character).Any());
+        Assert.IsFalse(_resourceManager.JunctionManager.CurrentlyAssigned(character).Any());
     }
 
     [TestMethod]
@@ -116,7 +75,7 @@ public class JunctionManagementTests
     {
         var cadence = _cadences!.All.First();
         // Should not throw
-        _junctionManager!.Unassign(cadence, _resourceManager!.UnlockedAbilities);
+        _resourceManager!.JunctionManager.Unassign(cadence, _resourceManager!.UnlockedAbilities);
     }
 
     [TestMethod]
@@ -128,13 +87,13 @@ public class JunctionManagementTests
         var fire = ContentHost.GetContent<Items>().All.First(i => i.Name == "Fire I");
 
         _resourceManager.UnlockAbility("Recruit", "J-Str");
-        _junctionManager!.AssignCadence(recruit, character, _resourceManager.UnlockedAbilities);
+        _resourceManager.JunctionManager.AssignCadence(recruit, character, _resourceManager.UnlockedAbilities);
         
-        _junctionManager.JunctionMagic(character, strStat, fire, _resourceManager.UnlockedAbilities);
-        Assert.AreEqual(1, _junctionManager.Junctions.Count);
+        _resourceManager.JunctionManager.JunctionMagic(character, strStat, fire, _resourceManager.UnlockedAbilities);
+        Assert.AreEqual(1, _resourceManager.JunctionManager.Junctions.Count);
 
-        _junctionManager.Unassign(recruit, _resourceManager.UnlockedAbilities);
-        Assert.AreEqual(0, _junctionManager.Junctions.Count, "Junction should be removed when ability is lost.");
+        _resourceManager.JunctionManager.Unassign(recruit, _resourceManager.UnlockedAbilities);
+        Assert.AreEqual(0, _resourceManager.JunctionManager.Junctions.Count, "Junction should be removed when ability is lost.");
     }
 
     [TestMethod]
@@ -144,7 +103,7 @@ public class JunctionManagementTests
         var strStat = ContentHost.GetContent<Stats>().All.First(s => s.Name == "Strength");
         var fire = ContentHost.GetContent<Items>().All.First(i => i.Name == "Fire I");
 
-        _junctionManager!.JunctionMagic(character, strStat, fire, _resourceManager!.UnlockedAbilities);
-        Assert.AreEqual(0, _junctionManager.Junctions.Count);
+        _resourceManager!.JunctionManager.JunctionMagic(character, strStat, fire, _resourceManager!.UnlockedAbilities);
+        Assert.AreEqual(0, _resourceManager.JunctionManager.Junctions.Count);
     }
 }

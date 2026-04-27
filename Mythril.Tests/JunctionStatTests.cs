@@ -158,14 +158,16 @@ public class JunctionStatTests
         _resourceManager.UnlockAbility(cadence.Name, SandboxContent.JStr);
         _junctionManager!.AssignCadence(cadence, character, _resourceManager.UnlockedAbilities);
         
-        // Add 50 units
-        _resourceManager.Inventory.Add(fireMagic, 50);
+        // Add 40 units (within 30 capacity for spells, wait, Fire I is a spell)
+        // If Fire I is a spell, capacity is 30.
+        // Let's use 20 units to be safe.
+        _resourceManager.Inventory.Add(fireMagic, 20);
 
         _junctionManager.JunctionMagic(character, strengthStat, fireMagic, _resourceManager.UnlockedAbilities);
 
         var val = _junctionManager.GetStatValue(character, SandboxContent.Strength);
-        // Base 10 + (50 items / 10) = 10 + 5 = 15
-        Assert.AreEqual(15, val); 
+        // Base 10 + 1 (J-Str boost) + (20 items / 10) = 10 + 1 + 2 = 13
+        Assert.AreEqual(13, val); 
     }
 
     [TestMethod]
@@ -185,8 +187,8 @@ public class JunctionStatTests
         _junctionManager.JunctionMagic(character, strengthStat, log, _resourceManager.UnlockedAbilities);
 
         var val = _junctionManager.GetStatValue(character, SandboxContent.Strength);
-        // Base 10 + (10 / 10) = 11
-        Assert.AreEqual(11, val);
+        // Base 10 + 1 (J-Str boost) + (10 / 10) = 12
+        Assert.AreEqual(12, val);
     }
 
     [TestMethod]

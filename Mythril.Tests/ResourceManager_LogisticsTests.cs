@@ -46,6 +46,7 @@ public class ResourceManager_LogisticsTests : ResourceManagerTestBase
         var recruit = _cadences!.All.First(c => c.Name == SandboxContent.Recruit);
         _resourceManager.UnlockCadence(recruit);
         _resourceManager.UnlockAbility(SandboxContent.Recruit, SandboxContent.JStr);
+        _resourceManager.UnlockAbility(SandboxContent.Arcanist, SandboxContent.MagicPocketI); // Increase capacity to 60
         _resourceManager.JunctionManager.AssignCadence(recruit, character, _resourceManager.UnlockedAbilities);
 
         // Add 50 Fire I to inventory for Strength junction
@@ -53,26 +54,24 @@ public class ResourceManager_LogisticsTests : ResourceManagerTestBase
         _resourceManager.Inventory.Add(fireI, 50);
         _resourceManager.JunctionManager.JunctionMagic(character, new Stat(SandboxContent.Strength, ""), fireI, _resourceManager.UnlockedAbilities);
 
-        // Verify strength >= 15 (base 10 + 50/10 = 15)
-        Assert.IsTrue(_resourceManager.JunctionManager.GetStatValue(character, SandboxContent.Strength) >= 15);
+        // Verify strength == 16 (base 10 + 1 boost + 50/10 = 16)
+        Assert.AreEqual(16, _resourceManager.JunctionManager.GetStatValue(character, SandboxContent.Strength));
 
-        // Create quest with Strength 16 requirement
-        var quest = new Quest("Str Quest", "Requires 16 Str");
-        var detail = new QuestDetail(10, [], [], QuestType.Recurring, RequiredStats: new Dictionary<string, int> { { SandboxContent.Strength, 16 } });
+        // Create quest with Strength 17 requirement
+        var quest = new Quest("Str Quest", "Requires 17 Str");
+        var detail = new QuestDetail(10, [], [], QuestType.Recurring, RequiredStats: new Dictionary<string, int> { { SandboxContent.Strength, 17 } });
         var questData = new QuestData(quest, detail);
 
         _resourceManager.StartQuest(questData, character);
-        // StartQuest should fail because 15 < 16.
-        // Wait, the test expects it to START then CANCEL.
-        // So let's make the requirement 15 and then lower strength.
+        // StartQuest should fail because 16 < 17.
         
-        var quest15 = new QuestData(quest, new QuestDetail(10, [], [], QuestType.Recurring, RequiredStats: new Dictionary<string, int> { { SandboxContent.Strength, 15 } }));
-        _resourceManager.StartQuest(quest15, character);
-        Assert.AreEqual(1, _resourceManager.ActiveQuests.Count, "Quest should start with 15 Strength.");
+        var quest16 = new QuestData(quest, new QuestDetail(10, [], [], QuestType.Recurring, RequiredStats: new Dictionary<string, int> { { SandboxContent.Strength, 16 } }));
+        _resourceManager.StartQuest(quest16, character);
+        Assert.AreEqual(1, _resourceManager.ActiveQuests.Count, "Quest should start with 16 Strength.");
 
-        // Remove magic junction -> strength falls to 10
+        // Remove magic junction -> strength falls to 11 (base 10 + 1 boost)
         _resourceManager.JunctionManager.JunctionMagic(character, new Stat(SandboxContent.Strength, ""), new Item(), _resourceManager.UnlockedAbilities);
-        Assert.AreEqual(10, _resourceManager.JunctionManager.GetStatValue(character, SandboxContent.Strength));
+        Assert.AreEqual(11, _resourceManager.JunctionManager.GetStatValue(character, SandboxContent.Strength));
 
         // Reevaluate should cancel the quest
         _resourceManager.ReevaluateActiveQuests(character);

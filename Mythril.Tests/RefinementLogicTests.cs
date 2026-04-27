@@ -5,51 +5,15 @@ using System.Linq;
 namespace Mythril.Tests;
 
 [TestClass]
-public class RefinementLogicTests
+public class RefinementLogicTests : ResourceManagerTestBase
 {
-    private ResourceManager? _resourceManager;
-    private ItemRefinements? _refinements;
-    private GameStore? _gameStore;
-
-    [TestInitialize]
-    public void Setup()
-    {
-        TestContentLoader.Load();
-        _refinements = ContentHost.GetContent<ItemRefinements>();
-        
-        _gameStore = new GameStore();
-        var inventory = new InventoryManager(_gameStore);
-        var cadences = ContentHost.GetContent<Cadences>();
-        var pathfinding = new PathfindingService(
-            ContentHost.GetContent<Locations>(),
-            ContentHost.GetContent<Quests>(),
-            ContentHost.GetContent<QuestUnlocks>(),
-            ContentHost.GetContent<QuestDetails>(),
-            cadences,
-            ContentHost.GetContent<QuestToCadenceUnlocks>()
-        );
-        var junctionManager = new JunctionManager(_gameStore, inventory, ContentHost.GetContent<StatAugments>(), cadences);
-        
-        _resourceManager = new ResourceManager(_gameStore, ContentHost.GetContent<Items>(), ContentHost.GetContent<Quests>(), 
-            ContentHost.GetContent<QuestUnlocks>(), 
-            ContentHost.GetContent<QuestToCadenceUnlocks>(), 
-            ContentHost.GetContent<QuestDetails>(), 
-            cadences, 
-            ContentHost.GetContent<Locations>(),
-            junctionManager,
-            inventory,
-            _refinements,
-            pathfinding);
-        _resourceManager.Initialize();
-    }
-
     [TestMethod]
     public void ItemRefinements_ByKey_IsPopulated()
     {
-        Assert.IsNotNull(_refinements);
-        Assert.IsTrue(_refinements.ByKey.Count > 0, "Refinements should be loaded.");
+        Assert.IsNotNull(_resourceManager!.Refinements);
+        Assert.IsTrue(_resourceManager.Refinements.ByKey.Count > 0, "Refinements should be loaded.");
         
-        var hasFire = _refinements.ByKey.Any(r => r.Key.Name == "Refine Fire");
+        var hasFire = _resourceManager.Refinements.ByKey.Any(r => r.Key.Name == "Refine Fire");
         Assert.IsTrue(hasFire, "Refine Fire should be in the refinements dictionary.");
     }
 
@@ -60,7 +24,7 @@ public class RefinementLogicTests
         _resourceManager!.UnlockAbility("Student", "Refine Fire");
 
         // Logic from Workshop.razor
-        var discoveredRefinements = _refinements!.ByKey
+        var discoveredRefinements = _resourceManager.Refinements.ByKey
             .Where(r => _resourceManager.UnlockedAbilities.Any(ua => ua.EndsWith($":{r.Key.Name}")))
             .ToList();
 
@@ -96,7 +60,7 @@ public class RefinementLogicTests
         var ability = student.Abilities.First(a => a.Ability.Name == "Refine Fire").Ability;
         var basicGem = ContentHost.GetContent<Items>().All.First(i => i.Name == "Basic Gem");
         var fireI = ContentHost.GetContent<Items>().All.First(i => i.Name == "Fire I");
-        var recipe = _refinements!.ByKey[ability].Recipes[basicGem];
+        var recipe = _resourceManager!.Refinements.ByKey[ability].Recipes[basicGem];
         
         var refinementData = new RefinementData(ability, basicGem, recipe, "Magic");
         var character = _resourceManager!.Characters[0];

@@ -28,7 +28,7 @@ public abstract class BunitTestBase : TestContextWrapper
     {
         TestContext = new Bunit.TestContext();
         
-        TestContentLoader.Load();
+        SandboxContent.Load();
         
         GameStore = new GameStore();
         InventoryManager = new InventoryManager(GameStore);

@@ -3,36 +3,8 @@ using Mythril.Data;
 namespace Mythril.Tests;
 
 [TestClass]
-public class JournalTests
+public class JournalTests : ResourceManagerTestBase
 {
-    private ResourceManager? _resourceManager;
-
-    [TestInitialize]
-    public void Setup()
-    {
-        TestContentLoader.Load();
-        var gameStore = new GameStore();
-        var inventory = new InventoryManager(gameStore);
-        var items = ContentHost.GetContent<Items>();
-        var quests = ContentHost.GetContent<Quests>();
-        var questDetails = ContentHost.GetContent<QuestDetails>();
-        var cadences = ContentHost.GetContent<Cadences>();
-        var junctionManager = new JunctionManager(gameStore, inventory, ContentHost.GetContent<StatAugments>(), cadences);
-        var pathfinding = new PathfindingService(ContentHost.GetContent<Locations>(), quests, ContentHost.GetContent<QuestUnlocks>(), questDetails, cadences, ContentHost.GetContent<QuestToCadenceUnlocks>());
-
-        _resourceManager = new ResourceManager(gameStore, items, quests, 
-            ContentHost.GetContent<QuestUnlocks>(), 
-            ContentHost.GetContent<QuestToCadenceUnlocks>(), 
-            questDetails, 
-            cadences, 
-            ContentHost.GetContent<Locations>(),
-            junctionManager,
-            inventory,
-            ContentHost.GetContent<ItemRefinements>(),
-            pathfinding);
-        _resourceManager.Initialize();
-    }
-
     [TestMethod]
     public async Task Journal_AddEntry_Works()
     {

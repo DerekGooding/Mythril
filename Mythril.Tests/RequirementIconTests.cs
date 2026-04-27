@@ -60,7 +60,7 @@ public class RequirementIconTests : BunitTestBase
 
         // Assert
         var unlockIcon = cut.Find("span[title='Unlocks']");
-        Assert.AreEqual("✨", unlockIcon!.TextContent!.Trim());
+        Assert.AreEqual("✨", (unlockIcon.TextContent ?? "").Trim());
         Assert.IsTrue(cut.Markup.Contains("unlock new quest"));
     }
 
@@ -79,6 +79,6 @@ public class RequirementIconTests : BunitTestBase
 
         // Assert
         var itemIcon = cut.Find("span[title='Item Requirement']");
-        Assert.AreEqual("📦", itemIcon!.TextContent!.Trim());
+        Assert.AreEqual("📦", itemIcon.TextContent?.Trim());
     }
 }

@@ -7,62 +7,23 @@ using System.Collections.Generic;
 namespace Mythril.Tests;
 
 [TestClass]
-public class AutoQuestCancellationTests
+public class AutoQuestCancellationTests : ResourceManagerTestBase
 {
-    private ResourceManager? _resourceManager;
-    private GameStore? _gameStore;
-    private Quests? _quests;
-    private QuestDetails? _questDetails;
-
-    [TestInitialize]
-    public void Setup()
-    {
-        TestContentLoader.Load();
-
-        _gameStore = new GameStore();
-        var items = ContentHost.GetContent<Items>();
-        var inventory = new InventoryManager(_gameStore);
-        var statAugments = ContentHost.GetContent<StatAugments>();
-        var cadences = ContentHost.GetContent<Cadences>();
-        var junctionManager = new JunctionManager(_gameStore, inventory, statAugments, cadences);
-        
-        _quests = ContentHost.GetContent<Quests>();
-        _questDetails = ContentHost.GetContent<QuestDetails>();
-        var questUnlocks = ContentHost.GetContent<QuestUnlocks>();
-        var questToCadenceUnlocks = ContentHost.GetContent<QuestToCadenceUnlocks>();
-        var locations = ContentHost.GetContent<Locations>();
-        var refinements = ContentHost.GetContent<ItemRefinements>();
-        var pathfinding = new PathfindingService(locations, _quests, questUnlocks, _questDetails, cadences, questToCadenceUnlocks);
-
-        _resourceManager = new ResourceManager(
-            _gameStore, 
-            items,
-            _quests, 
-            questUnlocks, 
-            questToCadenceUnlocks, 
-            _questDetails, 
-            cadences, 
-            locations,
-            junctionManager,
-            inventory,
-            refinements,
-            pathfinding);
-        
-        _resourceManager.Initialize();
-    }
-
     [TestMethod]
     public void CancelledQuest_DoesNotAutoRestart_EvenIfAutoQuestEnabled()
     {
         // Arrange
         var character = _resourceManager!.Characters[0];
-        var recurringQuest = _quests!.All.First(q => _questDetails![q].Type == QuestType.Recurring);
+        var recurringQuest = _quests!.All.First(q => q.Name == SandboxContent.BuyPotion);
         var questData = new QuestData(recurringQuest, _questDetails![recurringQuest]);
 
+        // Add Gold for requirements
+        _resourceManager.Inventory.Add(_items!.All.First(i => i.Name == SandboxContent.Gold), 100);
+
         // Enable AutoQuest (mocking the ability unlock)
-        var recruit = ContentHost.GetContent<Cadences>().All.First(c => c.Name == "Recruit");
+        var recruit = _cadences!.All.First(c => c.Name == SandboxContent.Recruit);
         _resourceManager.UnlockCadence(recruit);
-        _resourceManager.UnlockAbility("Recruit", "AutoQuest I");
+        _resourceManager.UnlockAbility(SandboxContent.Recruit, SandboxContent.AutoQuestI);
         _resourceManager.JunctionManager.AssignCadence(recruit, character, _resourceManager.UnlockedAbilities);
         _resourceManager.SetAutoQuestEnabled(character, true);
 
@@ -84,13 +45,16 @@ public class AutoQuestCancellationTests
     {
         // Arrange
         var character = _resourceManager!.Characters[0];
-        var recurringQuest = _quests!.All.First(q => _questDetails![q].Type == QuestType.Recurring);
+        var recurringQuest = _quests!.All.First(q => q.Name == SandboxContent.BuyPotion);
         var questData = new QuestData(recurringQuest, _questDetails![recurringQuest]);
 
+        // Add Gold for requirements
+        _resourceManager.Inventory.Add(_items!.All.First(i => i.Name == SandboxContent.Gold), 200);
+
         // Enable AutoQuest
-        var recruit = ContentHost.GetContent<Cadences>().All.First(c => c.Name == "Recruit");
+        var recruit = _cadences!.All.First(c => c.Name == SandboxContent.Recruit);
         _resourceManager.UnlockCadence(recruit);
-        _resourceManager.UnlockAbility("Recruit", "AutoQuest I");
+        _resourceManager.UnlockAbility(SandboxContent.Recruit, SandboxContent.AutoQuestI);
         _resourceManager.JunctionManager.AssignCadence(recruit, character, _resourceManager.UnlockedAbilities);
         _resourceManager.SetAutoQuestEnabled(character, true);
 
