@@ -32,13 +32,13 @@
   {
     "Quest": "Hunt Goblins",
     "Requires": [
-      "Learn about the Dark Forest"
+      "Learn about Greenwood Forest"
     ]
   },
   {
     "Quest": "Chop Wood",
     "Requires": [
-      "Learn about the Dark Forest"
+      "Learn about Greenwood Forest"
     ]
   },
   {
@@ -80,7 +80,7 @@
   {
     "Quest": "Gather Moonberries",
     "Requires": [
-      "Learn about the Dark Forest"
+      "Learn about Greenwood Forest"
     ]
   },
   {

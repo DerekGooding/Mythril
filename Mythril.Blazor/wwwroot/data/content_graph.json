@@ -524,7 +524,7 @@
     },
     "in_edges": {
       "requires_quest": [
-        "quest_learn_about_the_dark_forest"
+        "quest_learn_about_greenwood_forest"
       ]
     },
     "out_edges": {
@@ -558,7 +558,7 @@
     },
     "in_edges": {
       "requires_quest": [
-        "quest_learn_about_the_dark_forest"
+        "quest_learn_about_greenwood_forest"
       ]
     },
     "out_edges": {
@@ -748,7 +748,7 @@
     },
     "in_edges": {
       "requires_quest": [
-        "quest_learn_about_the_dark_forest"
+        "quest_learn_about_greenwood_forest"
       ]
     },
     "out_edges": {
