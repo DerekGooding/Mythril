@@ -49,10 +49,10 @@ public partial class ResourceManager
         {
             _gameStore.Dispatch(new CancelQuestAction(progress));
             RefundCosts(progress.Item);
-            
-            // Add to journal as cancelled so AutoQuest knows not to repeat it
-            AddToJournal(progress.Name, progress.Character.Name, $"Cancelled {progress.Name}", wasCancelled: true);
         }
+
+        //TODO: Send a singal to whatever is managing autoquest for the character
+        
     }
 
     public bool CanAfford(object item, Character? character = null)

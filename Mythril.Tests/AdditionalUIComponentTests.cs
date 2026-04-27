@@ -238,13 +238,6 @@ public class AdditionalUIComponentTests : BunitTestBase
     }
 
     [TestMethod]
-    public void JournalPanel_RendersCorrectly()
-    {
-        var cut = RenderComponent<JournalPanel>();
-        Assert.IsTrue(cut.Markup.Contains("journal-panel"));
-    }
-
-    [TestMethod]
     public void App_RendersCorrectly()
     {
         var cut = RenderComponent<App>();

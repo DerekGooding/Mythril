@@ -24,11 +24,11 @@ public class PersistenceService(
         {
             Inventory = state.Inventory.ToDictionary(k => k.Key, v => v.Value),
             MagicCapacity = state.MagicCapacity,
-            PinnedItems = state.PinnedItems.ToList(),
-            UnlockedCadences = state.UnlockedCadenceNames.ToList(),
-            UnlockedAbilities = state.UnlockedAbilities.ToList(),
-            CompletedQuests = state.CompletedQuests.ToList(),
-            ActiveQuests = state.ActiveQuests.Select(q => new QuestProgressDTO {
+            PinnedItems = [.. state.PinnedItems],
+            UnlockedCadences = [.. state.UnlockedCadenceNames],
+            UnlockedAbilities = [.. state.UnlockedAbilities],
+            CompletedQuests = [.. state.CompletedQuests],
+            ActiveQuests = [.. state.ActiveQuests.Select(q => new QuestProgressDTO {
                 ItemName = q.Name,
                 AbilityName = q.Item is CadenceUnlock cu ? cu.CadenceName : "",
                 ItemType = q.Item is QuestData ? "Quest" : (q.Item is CadenceUnlock ? "CadenceUnlock" : "Refinement"),
@@ -38,20 +38,20 @@ public class PersistenceService(
                 SlotIndex = q.SlotIndex,
                 Description = q.Description,
                 DurationSeconds = q.DurationSeconds
-            }).ToList(),
-            Junctions = state.Junctions.Select(j => new JunctionDTO {
+            })],
+            Junctions = [.. state.Junctions.Select(j => new JunctionDTO {
                 CharacterName = j.Character.Name,
                 StatName = j.Stat.Name,
                 MagicName = j.Magic.Name
-            }).ToList(),
-            AssignedCadences = state.AssignedCadences.Where(kvp => kvp.Value != null).Select(kvp => new AssignedCadenceDTO {
+            })],
+            AssignedCadences = [.. state.AssignedCadences.Where(kvp => kvp.Value != null).Select(kvp => new AssignedCadenceDTO {
                 CadenceName = kvp.Key,
                 CharacterName = kvp.Value!
-            }).ToList(),
+            })],
             AutoQuestEnabled = state.AutoQuestEnabled.ToDictionary(k => k.Key, v => v.Value),
-            UnlockedLocations = state.UnlockedLocationNames.ToList(),
-            StarredRecipes = state.StarredRecipes.ToList(),
-            SeenContent = state.SeenContent.ToList(),
+            UnlockedLocations = [.. state.UnlockedLocationNames],
+            StarredRecipes = [.. state.StarredRecipes],
+            SeenContent = [.. state.SeenContent],
             HasUnseenCadence = state.HasUnseenCadence,
             HasUnseenWorkshop = state.HasUnseenWorkshop,
             CurrentTime = state.CurrentTime,
@@ -119,8 +119,6 @@ public class PersistenceService(
         double bonusSeconds = (DateTime.Now - saveData.LastSaveTime).TotalSeconds;
         var activeQuestsWithBonus = activeQuests.Select(q => q with { SecondsElapsed = q.SecondsElapsed + Math.Max(0, bonusSeconds) }).ToImmutableList();
 
-        var journal = saveData.Journal.Select(j => new JournalEntry(j.TaskName, j.CharacterName, j.Details, j.CompletedAt, j.IsFirstTime, j.WasCancelled)).ToImmutableList();
-
         var state = new GameState(
             Inventory: inventory,
             MagicCapacity: saveData.MagicCapacity,
@@ -128,24 +126,22 @@ public class PersistenceService(
             AssignedCadences: saveData.AssignedCadences.ToImmutableDictionary(x => x.CadenceName, x => (string?)x.CharacterName),
             Junctions: junctions,
             CharacterPermanentStatBoosts: saveData.CharacterStatBoosts.ToImmutableDictionary(k => k.Key, v => v.Value.ToImmutableDictionary()),
-            CompletedQuests: saveData.CompletedQuests.ToImmutableHashSet(),
-            UnlockedAbilities: saveData.UnlockedAbilities.ToImmutableHashSet(),
+            CompletedQuests: [.. saveData.CompletedQuests],
+            UnlockedAbilities: [.. saveData.UnlockedAbilities],
             ActiveQuests: activeQuestsWithBonus,
             AutoQuestEnabled: saveData.AutoQuestEnabled.ToImmutableDictionary(),
-            StarredRecipes: saveData.StarredRecipes.ToImmutableHashSet(),
-            UnlockedLocationNames: saveData.UnlockedLocations.ToImmutableHashSet(),
-            UnlockedCadenceNames: saveData.UnlockedCadences.ToImmutableHashSet(),
-            HighlightedPath: ImmutableHashSet<string>.Empty,
-            Journal: journal,
-            CharacterMiniLogs: saveData.CharacterMiniLogs.ToImmutableDictionary(kvp => kvp.Key, kvp => kvp.Value.ToImmutableList<string>()),
-            EverPerformedActivities: saveData.EverPerformedActivities.ToImmutableHashSet(),
-            SeenContent: saveData.SeenContent.ToImmutableHashSet(),
+            StarredRecipes: [.. saveData.StarredRecipes],
+            UnlockedLocationNames: [.. saveData.UnlockedLocations],
+            UnlockedCadenceNames: [.. saveData.UnlockedCadences],
+            LastFinishedActivity: saveData.LastFinishedActivities.ToImmutableDictionary(),
+            HighlightedPath: [],
+            EverPerformedActivities: [.. saveData.EverPerformedActivities],
+            SeenContent: [.. saveData.SeenContent],
             CurrentTime: saveData.CurrentTime,
             IsTestMode: saveData.IsTestMode,
             HasUnseenCadence: saveData.HasUnseenCadence,
             HasUnseenWorkshop: saveData.HasUnseenWorkshop,
-            ActiveTab: saveData.ActiveTab,
-            ShowMiniLogs: saveData.ShowMiniLogs
+            ActiveTab: saveData.ActiveTab
         );
 
         gameStore.Dispatch(new SetStateAction(state));

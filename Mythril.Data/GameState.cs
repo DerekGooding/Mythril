@@ -24,34 +24,32 @@ public record GameState(
     bool IsTestMode,
     bool HasUnseenCadence,
     bool HasUnseenWorkshop,
-    string ActiveTab,
-    bool ShowMiniLogs
+    string ActiveTab
 )
 {
     public static GameState Initial => new(
-        Inventory: ImmutableDictionary<string, int>.Empty,
+        Inventory: [],
         MagicCapacity: 30,
-        PinnedItems: ImmutableHashSet<string>.Empty,
-        AssignedCadences: ImmutableDictionary<string, string?>.Empty,
-        Junctions: ImmutableList<Junction>.Empty,
-        CharacterPermanentStatBoosts: ImmutableDictionary<string, ImmutableDictionary<string, int>>.Empty,
-        CompletedQuests: ImmutableHashSet<string>.Empty,
-        UnlockedAbilities: ImmutableHashSet<string>.Empty,
-        ActiveQuests: ImmutableList<QuestProgress>.Empty,
-        AutoQuestEnabled: ImmutableDictionary<string, bool>.Empty,
-        LastFinishedActivity: ImmutableDictionary<string, string?>.Empty,
-        StarredRecipes: ImmutableHashSet<string>.Empty,
-        UnlockedLocationNames: ImmutableHashSet<string>.Empty,
-        UnlockedCadenceNames: ImmutableHashSet<string>.Empty,
-        HighlightedPath: ImmutableHashSet<string>.Empty,
-        EverPerformedActivities: ImmutableHashSet<string>.Empty,
-        SeenContent: ImmutableHashSet<string>.Empty,
+        PinnedItems: [],
+        AssignedCadences: [],
+        Junctions: [],
+        CharacterPermanentStatBoosts: [],
+        CompletedQuests: [],
+        UnlockedAbilities: [],
+        ActiveQuests: [],
+        AutoQuestEnabled: [],
+        LastFinishedActivity: [],
+        StarredRecipes: [],
+        UnlockedLocationNames: [],
+        UnlockedCadenceNames: [],
+        HighlightedPath: [],
+        EverPerformedActivities: [],
+        SeenContent: [],
         CurrentTime: 0,
         IsTestMode: false,
         HasUnseenCadence: false,
         HasUnseenWorkshop: false,
-        ActiveTab: "hand",
-        ShowMiniLogs: false
+        ActiveTab: "hand"
     );
 }
 

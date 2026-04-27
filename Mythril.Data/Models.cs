@@ -201,6 +201,8 @@ public class SaveData
     public string ActiveTab { get; set; } = "hand";
     public DateTime LastSaveTime { get; set; }
     public Dictionary<string, Dictionary<string, int>> CharacterStatBoosts { get; set; } = [];
+    public Dictionary<string, string?> LastFinishedActivities {get; set;} = [];
+    public List<string> EverPerformedActivities = [];
 }
 
 public class AssignedCadenceDTO

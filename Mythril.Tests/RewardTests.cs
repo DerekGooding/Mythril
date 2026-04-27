@@ -8,7 +8,7 @@ namespace Mythril.Tests;
 public class RewardTests : BunitTestBase
 {
     [TestMethod]
-    public async Task ReceiveRewards_Quest_AddsItemsToInventoryAndJournal()
+    public async Task ReceiveRewards_Quest_AddsItemsToInventory()
     {
         // Arrange
         var item = new Item("Stone", "Desc", ItemType.Material);
@@ -26,13 +26,10 @@ public class RewardTests : BunitTestBase
 
         // Assert
         Assert.AreEqual(5, InventoryManager.GetQuantity(item));
-        Assert.AreEqual(1, ResourceManager.Journal.Count);
-        Assert.AreEqual("Test Quest", ResourceManager.Journal[0].TaskName);
-        Assert.AreEqual("Hero", ResourceManager.Journal[0].CharacterName);
     }
 
     [TestMethod]
-    public async Task ReceiveRewards_CadenceUnlock_AddsAbilityAndJournal()
+    public async Task ReceiveRewards_CadenceUnlock_AddsAbility()
     {
         // Arrange
         var ability = new CadenceAbility("Fire Ball", "Desc");
@@ -47,12 +44,10 @@ public class RewardTests : BunitTestBase
 
         // Assert
         Assert.IsTrue(ResourceManager.UnlockedAbilities.Contains("Mage:Fire Ball"));
-        Assert.AreEqual(1, ResourceManager.Journal.Count);
-        Assert.AreEqual("Fire Ball", ResourceManager.Journal[0].TaskName);
     }
 
     [TestMethod]
-    public async Task ReceiveRewards_Refinement_AddsOutputAndJournal()
+    public async Task ReceiveRewards_Refinement_AddsOutput()
     {
         // Arrange
         var ability = new CadenceAbility("Refine", "Desc");
@@ -81,7 +76,6 @@ public class RewardTests : BunitTestBase
 
         // Assert
         Assert.AreEqual(2, InventoryManager.GetQuantity(output));
-        Assert.AreEqual(1, ResourceManager.Journal.Count);
     }
 
     [TestMethod]

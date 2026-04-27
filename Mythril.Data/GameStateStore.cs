@@ -18,7 +18,6 @@ public partial class GameStore
     public GameState State { get; private set; } = GameState.Initial;
     public event Action<GameState>? OnStateChanged;
     public event Action<string, int>? OnItemOverflow;
-    public event Action? OnJournalUpdated;
 
     public string ExportState() => JsonSerializer.Serialize(State, _options);
     public void ImportState(string json)
@@ -41,10 +40,6 @@ public partial class GameStore
         if (overflowItem != null && overflowQty > 0)
         {
             OnItemOverflow?.Invoke(overflowItem, overflowQty);
-        }
-        if (action is AddToJournalAction || action is ClearJournalAction || action is SetStateAction || action is FinishQuestAction)
-        {
-            OnJournalUpdated?.Invoke();
         }
     }
 }

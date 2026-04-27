@@ -113,43 +113,45 @@ public partial class ResourceManager
                 int autoLimit = GetAutoQuestLimit(character);
                 int current = ActiveQuests.Count(p => p.Character.Name == character.Name);
                 
+
+                //TODO => Fix autoquest now that journal is gone. Need a new standalone mapping of last tasks
                 if (current < limit)
                 {
-                    // Find the last entry for this character in this session
-                    var lastEntry = Journal.FirstOrDefault(j => j.CharacterName == character.Name);
-                    if (lastEntry?.TaskName != null && !lastEntry.WasCancelled)
-                    {
-                        // Check if we are allowed to restart in the next free slot
-                        // If current = 0, we are filling slot 0. If current = 1, we are filling slot 1.
-                        if (current >= autoLimit) continue;
+                    // // Find the last entry for this character in this session
+                    // var lastEntry = Journal.FirstOrDefault(j => j.CharacterName == character.Name);
+                    // if (lastEntry?.TaskName != null && !lastEntry.WasCancelled)
+                    // {
+                    //     // Check if we are allowed to restart in the next free slot
+                    //     // If current = 0, we are filling slot 0. If current = 1, we are filling slot 1.
+                    //     if (current >= autoLimit) continue;
 
-                        // Check if it's a recurring quest or refinement
-                        var quest = _quests.All.FirstOrDefault(q => q.Name == lastEntry.TaskName);
-                        if (quest.Name != null)
-                        {
-                            var detail = _questDetails[quest];
-                            if (detail.Type == QuestType.Recurring)
-                            {
-                                var questData = new QuestData(quest, detail);
-                                if (CanAfford(questData, character))
-                                {
-                                    // Use -1.5 as initialSecondsElapsed to provide a "preparing" visual delay in the UI
-                                    StartQuest(questData, character, -1.5);
-                                }
-                            }
-                        }
-                        else
-                        {
-                            // Check refinements
-                            var refData = _refinements.ByKey.SelectMany(r => r.Value.Recipes.Select(rec => new RefinementData(r.Key, rec.Key, rec.Value, r.Value.PrimaryStat)))
-                                .FirstOrDefault(rd => rd.Name == lastEntry.TaskName);
+                    //     // Check if it's a recurring quest or refinement
+                    //     var quest = _quests.All.FirstOrDefault(q => q.Name == lastEntry.TaskName);
+                    //     if (quest.Name != null)
+                    //     {
+                    //         var detail = _questDetails[quest];
+                    //         if (detail.Type == QuestType.Recurring)
+                    //         {
+                    //             var questData = new QuestData(quest, detail);
+                    //             if (CanAfford(questData, character))
+                    //             {
+                    //                 // Use -1.5 as initialSecondsElapsed to provide a "preparing" visual delay in the UI
+                    //                 StartQuest(questData, character, -1.5);
+                    //             }
+                    //         }
+                    //     }
+                    //     else
+                    //     {
+                    //         // Check refinements
+                    //         var refData = _refinements.ByKey.SelectMany(r => r.Value.Recipes.Select(rec => new RefinementData(r.Key, rec.Key, rec.Value, r.Value.PrimaryStat)))
+                    //             .FirstOrDefault(rd => rd.Name == lastEntry.TaskName);
                             
-                            if (refData.Name != null && CanAfford(refData, character))
-                            {
-                                StartQuest(refData, character, -1.5);
-                            }
-                        }
-                    }
+                    //         if (refData.Name != null && CanAfford(refData, character))
+                    //         {
+                    //             StartQuest(refData, character, -1.5);
+                    //         }
+                    //     }
+                    // }
                 }
             }
         }
