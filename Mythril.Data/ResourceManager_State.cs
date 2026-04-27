@@ -126,6 +126,18 @@ public partial class ResourceManager
     public bool ShowMiniLogs => _gameStore.State.ShowMiniLogs;
     public void ToggleMiniLogs() => _gameStore.Dispatch(new ToggleMiniLogsAction());
 
+    public double CurrentTime => _gameStore.State.CurrentTime;
+    public string CurrentTimeFormatted 
+    {
+        get
+        {
+            var ts = TimeSpan.FromSeconds(CurrentTime);
+            return ts.TotalHours >= 1 
+                ? $"{(int)ts.TotalHours}:{ts.Minutes:D2}:{ts.Seconds:D2}" 
+                : $"{ts.Minutes}:{ts.Seconds:D2}";
+        }
+    }
+
     public HashSet<string> SeenContent => _gameStore.State.SeenContent.ToHashSet();
 
     public void MarkSeen(string contentId) => _gameStore.Dispatch(new MarkContentSeenAction(contentId));

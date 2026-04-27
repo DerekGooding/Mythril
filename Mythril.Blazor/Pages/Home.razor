@@ -52,7 +52,15 @@
     <div class="header-row flex-shrink-0 p-2 d-flex align-items-center gap-3">
         <div class="d-flex flex-column gap-1">
             <button class="btn btn-sm btn-primary" data-testid="theme-toggle" @onclick="ToggleTheme">Toggle Theme</button>
-            <button class="btn btn-sm btn-outline-danger" data-testid="reset-game" @onclick="ResetGame">Reset Game</button>
+            <div class="d-flex align-items-center gap-2">
+                <button class="btn btn-sm btn-outline-danger" data-testid="reset-game" @onclick="ResetGame">Reset Game</button>
+                @if (resourceManager is not null)
+                {
+                    <span class="game-timer badge bg-dark text-light border border-secondary" title="Total Play Time">
+                        🕒 @resourceManager.CurrentTimeFormatted
+                    </span>
+                }
+            </div>
             @if (AuthService.IsAuthenticated)
             {
                 <button class="btn btn-sm @(resourceManager.IsTestMode ? "btn-warning" : "btn-outline-secondary")" 
