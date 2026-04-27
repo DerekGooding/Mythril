@@ -1,8 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Linq;
 using Mythril.Data;
+using System.Collections.Immutable;
 
 namespace Mythril.Headless.Simulation;
 
@@ -108,7 +105,7 @@ public partial class LatticeSimulator(
     {
         BuildDependencyGraph();
         var state = Bottom(seed);
-        
+
         var worklist = new Queue<WorklistItem>();
         var inWorklist = new HashSet<WorklistItem>();
 
@@ -122,7 +119,7 @@ public partial class LatticeSimulator(
         foreach (var stat in seed.StartingStats) Enqueue(new WorklistItem(NodeType.Stat, stat.Key));
         foreach (var ability in seed.StartingUnlockedAbilities) Enqueue(new WorklistItem(NodeType.Ability, ability.Split(':').Last()));
         foreach (var cad in seed.StartingUnlockedCadences) Enqueue(new WorklistItem(NodeType.Cadence, cad));
-        
+
         // Add all quests that have no prerequisites to start the chain
         foreach (var quest in quests.All)
         {
@@ -134,7 +131,7 @@ public partial class LatticeSimulator(
         foreach (var stat in stats.All) Enqueue(new WorklistItem(NodeType.Stat, stat.Name));
         Enqueue(new WorklistItem(NodeType.Cadence, "HIDDEN"));
 
-        int iterations = 0;
+        var iterations = 0;
         while (worklist.Count > 0)
         {
             iterations++;
@@ -161,20 +158,17 @@ public partial class LatticeSimulator(
         return state;
     }
 
-    private (bool, GameState) UpdateNode(WorklistItem item, GameState state)
+    private (bool, GameState) UpdateNode(WorklistItem item, GameState state) => item.Type switch
     {
-        return item.Type switch
-        {
-            NodeType.Quest => UpdateQuest(item.Name, state),
-            NodeType.Resource => (true, state),
-            NodeType.Refinement => UpdateRefinement(item.Name, state),
-            NodeType.Ability => UpdateAbility(item.Name, state),
-            NodeType.Stat => UpdateStat(item.Name, state),
-            NodeType.Cadence => UpdateCadence(item.Name, state),
-            NodeType.MagicCapacity => UpdateCapacity(state),
-            _ => (false, state)
-        };
-    }
+        NodeType.Quest => UpdateQuest(item.Name, state),
+        NodeType.Resource => (true, state),
+        NodeType.Refinement => UpdateRefinement(item.Name, state),
+        NodeType.Ability => UpdateAbility(item.Name, state),
+        NodeType.Stat => UpdateStat(item.Name, state),
+        NodeType.Cadence => UpdateCadence(item.Name, state),
+        NodeType.MagicCapacity => UpdateCapacity(state),
+        _ => (false, state)
+    };
 
     private void ValidateMonotonicity(GameState oldState, GameState newState)
     {

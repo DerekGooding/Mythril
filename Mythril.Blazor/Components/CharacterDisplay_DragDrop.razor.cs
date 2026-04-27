@@ -1,6 +1,5 @@
-using Microsoft.AspNetCore.Components;
-using Mythril.Data;
 using Mythril.Blazor.Services;
+using Mythril.Data;
 
 namespace Mythril.Blazor.Components;
 
@@ -19,10 +18,10 @@ public partial class CharacterDisplay
             return 0;
 
         Item activeMagic = (Item)draggedMagic;
-        int currentVal = JunctionManager.GetStatValue(Character, stat.Name);
-        
-        int newVal = 10;
-        int qty = resourceManager.Inventory.GetQuantity(activeMagic);
+        var currentVal = JunctionManager.GetStatValue(Character, stat.Name);
+
+        var newVal = 10;
+        var qty = resourceManager.Inventory.GetQuantity(activeMagic);
         var augments = ContentHost.GetContent<StatAugments>()[activeMagic];
         var augment = augments.FirstOrDefault(a => a.Stat.Name == stat.Name);
         if (augment.Stat.Name != null)
@@ -45,7 +44,7 @@ public partial class CharacterDisplay
 
     private void HandleStatDragEnter(Stat stat)
     {
-        bool isValid = false;
+        var isValid = false;
         if (DragDropService.Data is ItemQuantity iq && iq.Item.ItemType == ItemType.Spell) isValid = true;
         if (DragDropService.Data is Item i && i.ItemType == ItemType.Spell) isValid = true;
         if (DragDropService.Data is Junction) isValid = true;

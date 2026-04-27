@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Mythril.Data;
 
 namespace Mythril.Headless.Simulation;
@@ -13,40 +10,50 @@ public partial class RoutedSimulator
 
         // Priority 0: End Game if available and affordable
         var endQuest = available.FirstOrDefault(q => q.Quest.Name == EndQuest);
-        if (endQuest.Quest.Name != null && CanAffordEventually(state, endQuest.Detail.Requirements)) {
+        if (endQuest.Quest.Name != null && CanAffordEventually(state, endQuest.Detail.Requirements))
+        {
             ExecuteQuest(state, endQuest.Quest, endQuest.Detail, steps); return true;
         }
 
         // Priority 1: Unlocked Abilities (they cost resources but enable progression)
-        foreach (var cadName in state.UnlockedCadences) {
+        foreach (var cadName in state.UnlockedCadences)
+        {
             var cadence = cadences.All.FirstOrDefault(c => c.Name == cadName);
             if (cadence.Name == null || cadence.Abilities == null) continue;
-            foreach (var unlock in cadence.Abilities) {
-                string key = $"{cadName}:{unlock.Ability.Name}";
+            foreach (var unlock in cadence.Abilities)
+            {
+                var key = $"{cadName}:{unlock.Ability.Name}";
                 if (state.UnlockedAbilities.Contains(key)) continue;
-                if (unlock.Requirements != null && CanAffordEventually(state, unlock.Requirements)) {
+                if (unlock.Requirements != null && CanAffordEventually(state, unlock.Requirements))
+                {
                     ExecuteAbilityUnlock(state, unlock, steps); return true;
                 }
             }
         }
 
         // Priority 2: Targetable Quests (Single first, then Recurring)
-        var targetable = available.Where(q => !state.CompletedQuests.Contains(q.Item1.Name)).OrderByDescending(q => q.Item2.Type != QuestType.Recurring ? 1 : 0).ThenBy(q => q.Item2.DurationSeconds).ToList();
-        
-        foreach (var target in targetable) {
-            if (CanAffordEventually(state, target.Item2.Requirements)) {
-                ExecuteQuest(state, target.Item1, target.Item2, steps); return true;
+        var targetable = available.Where(q => !state.CompletedQuests.Contains(q.Quest.Name)).OrderByDescending(q => q.Detail.Type != QuestType.Recurring ? 1 : 0).ThenBy(q => q.Detail.DurationSeconds).ToList();
+
+        foreach (var target in targetable)
+        {
+            if (CanAffordEventually(state, target.Detail.Requirements))
+            {
+                ExecuteQuest(state, target.Quest, target.Detail, steps); return true;
             }
         }
 
         // Priority 3: Prerequisites for uncompleted single quests
         var uncompletedSingles = locations.All.SelectMany(l => l.Quests ?? []).Where(q => (questDetails[q].Type != QuestType.Recurring) && !state.CompletedQuests.Contains(q.Name)).ToList();
-        foreach (var q in uncompletedSingles) {
+        foreach (var q in uncompletedSingles)
+        {
             var prereqs = questUnlocks[q]; if (prereqs == null) continue;
-            foreach (var pre in prereqs) {
-                if (!state.CompletedQuests.Contains(pre.Name)) {
+            foreach (var pre in prereqs)
+            {
+                if (!state.CompletedQuests.Contains(pre.Name))
+                {
                     var match = available.FirstOrDefault(x => x.Quest.Name == pre.Name);
-                    if (match.Quest.Name != null && CanAffordEventually(state, match.Detail.Requirements)) {
+                    if (match.Quest.Name != null && CanAffordEventually(state, match.Detail.Requirements))
+                    {
                         ExecuteQuest(state, match.Quest, match.Detail, steps); return true;
                     }
                 }
@@ -58,33 +65,32 @@ public partial class RoutedSimulator
 
     private void ExecuteAbilityUnlock(SimulationState state, CadenceUnlock unlock, int steps)
     {
-        if (unlock.Requirements != null) {
+        if (unlock.Requirements != null)
+        {
             foreach (var req in unlock.Requirements) FarmResource(state, req.Item, req.Quantity, steps);
             foreach (var req in unlock.Requirements) SubtractFromInventory(state, req.Item.Name, req.Quantity);
         }
         state.CurrentTime += 30.0 * Math.Pow(0.75, (state.CurrentStats.GetValueOrDefault(unlock.PrimaryStat ?? "Magic", 10) - 10) / 10.0);
         state.UnlockedAbilities.Add($"{unlock.CadenceName}:{unlock.Ability.Name}");
-        Console.WriteLine($"[DEBUG] Unlocked Ability: {unlock.CadenceName}:{unlock.Ability.Name} at {state.CurrentTime/60.0:F1}m");
+        Console.WriteLine($"[DEBUG] Unlocked Ability: {unlock.CadenceName}:{unlock.Ability.Name} at {state.CurrentTime / 60.0:F1}m");
         UpdateStats(state, steps);
     }
 
     private void SubtractFromInventory(SimulationState state, string itemName, long quantity)
     {
-        if (state.Inventory.TryGetValue(itemName, out long current))
+        if (state.Inventory.TryGetValue(itemName, out var current))
             state.Inventory[itemName] = current - quantity;
         else
             state.Inventory[itemName] = -quantity;
     }
 
-    private long GetFromInventory(SimulationState state, string itemName)
-    {
-        return state.Inventory.TryGetValue(itemName, out long current) ? current : 0;
-    }
+    private long GetFromInventory(SimulationState state, string itemName) => state.Inventory.TryGetValue(itemName, out var current) ? current : 0;
 
     private bool CanAffordEventually(SimulationState state, ItemQuantity[] requirements)
     {
         if (requirements == null) return true;
-        foreach (var req in requirements) {
+        foreach (var req in requirements)
+        {
             if (req.Item.Name == null) continue;
             if (GetFromInventory(state, req.Item.Name) >= req.Quantity) continue;
             var source = GetBestSource(state, req.Item);
@@ -96,10 +102,12 @@ public partial class RoutedSimulator
     private List<(Quest Quest, QuestDetail Detail)> GetAvailableQuests(SimulationState state)
     {
         var available = new List<(Quest, QuestDetail)>();
-        foreach (var loc in locations.All) {
+        foreach (var loc in locations.All)
+        {
             if (!string.IsNullOrEmpty(loc.RequiredQuest) && !state.CompletedQuests.Contains(loc.RequiredQuest)) continue;
             if (loc.Quests == null) continue;
-            foreach (var q in loc.Quests) {
+            foreach (var q in loc.Quests)
+            {
                 if (questUnlocks[q]?.Any(req => !state.CompletedQuests.Contains(req.Name)) ?? false) continue;
                 var det = questDetails[q];
                 if (det.RequiredStats?.All(rs => state.CurrentStats.GetValueOrDefault(rs.Key, 0) >= rs.Value) ?? true) available.Add((q, det));
@@ -113,14 +121,15 @@ public partial class RoutedSimulator
             .Select(req => req.Item.Name)
             .Distinct().ToHashSet();
 
-        return available.OrderByDescending(q => q.Item1.Name == EndQuest ? 1000 : 0)
+        return [.. available.OrderByDescending(q => q.Item1.Name == EndQuest ? 1000 : 0)
                         .ThenByDescending(q => q.Item2.Rewards?.Any(r => neededItems.Contains(r.Item.Name)) ?? false ? 100 : 0)
-                        .ThenBy(q => q.Item2.DurationSeconds)
-                        .ToList();
-        }
+                        .ThenBy(q => q.Item2.DurationSeconds)];
+    }
+
     private void ExecuteQuest(SimulationState state, Quest q, QuestDetail detail, int steps)
     {
-        if (detail.Requirements != null) {
+        if (detail.Requirements != null)
+        {
             foreach (var req in detail.Requirements) FarmResource(state, req.Item, req.Quantity, steps);
             foreach (var req in detail.Requirements) SubtractFromInventory(state, req.Item.Name, req.Quantity);
         }
@@ -136,26 +145,32 @@ public partial class RoutedSimulator
     {
         if (_farmingStack.Contains(item.Name)) return false;
         _farmingStack.Add(item.Name);
-        try {
-            long current = GetFromInventory(state, item.Name);
+        try
+        {
+            var current = GetFromInventory(state, item.Name);
             if (current >= quantityNeeded) return true;
             var source = GetBestSource(state, item);
             var sq = source.Quest; var sd = source.Detail;
-            if (sq?.Name != null && sd?.DurationSeconds > 0) {
+            if (sq?.Name != null && sd?.DurationSeconds > 0)
+            {
                 var rewards = ((QuestDetail)sd).Rewards;
-                if (rewards != null) {
+                if (rewards != null)
+                {
                     var reward = rewards.First(r => r.Item == item);
-                    int runs = (int)Math.Min(1000, Math.Ceiling((double)(quantityNeeded - current) / reward.Quantity));
-                    for (int i = 0; i < runs; i++) ExecuteQuest(state, (Quest)sq, (QuestDetail)sd, steps);
+                    var runs = (int)Math.Min(1000, Math.Ceiling((double)(quantityNeeded - current) / reward.Quantity));
+                    for (var i = 0; i < runs; i++) ExecuteQuest(state, (Quest)sq, (QuestDetail)sd, steps);
                     return GetFromInventory(state, item.Name) >= quantityNeeded;
                 }
-            } else if (source.Ability?.Name != null && source.Recipes != null) {
+            }
+            else if (source.Ability?.Name != null && source.Recipes != null)
+            {
                 var recipe = source.Recipes.First(x => x.Value.OutputItem == item);
-                int runs = (int)Math.Min(1000, Math.Ceiling((double)(quantityNeeded - current) / recipe.Value.OutputQuantity));
-                for (int i = 0; i < runs; i++) ExecuteRefinement(state, (CadenceAbility)source.Ability, (string)source.PrimaryStat!, recipe.Key, recipe.Value, steps);
+                var runs = (int)Math.Min(1000, Math.Ceiling((double)(quantityNeeded - current) / recipe.Value.OutputQuantity));
+                for (var i = 0; i < runs; i++) ExecuteRefinement(state, (CadenceAbility)source.Ability, (string)source.PrimaryStat!, recipe.Key, recipe.Value, steps);
                 return GetFromInventory(state, item.Name) >= quantityNeeded;
             }
             return false;
-        } finally { _farmingStack.Remove(item.Name); }
+        }
+        finally { _farmingStack.Remove(item.Name); }
     }
 }

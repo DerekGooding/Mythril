@@ -1,9 +1,5 @@
-using System;
-using System.IO;
-using System.Collections.Generic;
-using System.Linq;
-using Newtonsoft.Json;
 using Mythril.Data;
+using Newtonsoft.Json;
 
 namespace Mythril.Headless;
 
@@ -34,9 +30,9 @@ public class HeadlessGameState
     public List<string> UnlockedCadences { get; set; } = [];
 }
 
-class Program
+internal static class Program
 {
-    static void Main(string[] args)
+    private static void Main(string[] args)
     {
         if (args.Length < 1)
         {
@@ -45,9 +41,9 @@ class Program
             Environment.Exit(1);
         }
 
-        bool isSimMode = args[0].Equals("--run-sim", StringComparison.OrdinalIgnoreCase);
-        string commandFilePath = isSimMode ? "" : args[0];
-        string outputFilePath = args.Length > 1 ? args[1] : "state.json";
+        var isSimMode = args[0].Equals("--run-sim", StringComparison.OrdinalIgnoreCase);
+        var commandFilePath = isSimMode ? "" : args[0];
+        var outputFilePath = args.Length > 1 ? args[1] : "state.json";
 
         // 1. Initialize Content (Manual load for Headless)
         var items = ContentHost.GetContent<Items>();
@@ -61,55 +57,55 @@ class Program
         var cadences = ContentHost.GetContent<Cadences>();
         var statAugments = ContentHost.GetContent<StatAugments>();
 
-        string currentDir = AppDomain.CurrentDomain.BaseDirectory;
-        string? rootDir = currentDir;
+        var currentDir = AppDomain.CurrentDomain.BaseDirectory;
+        var rootDir = currentDir;
         while (rootDir != null && !File.Exists(Path.Combine(rootDir, "Mythril.sln")))
         {
             rootDir = Path.GetDirectoryName(rootDir);
         }
-        
+
         if (rootDir == null)
         {
             Console.WriteLine("Error: Could not find solution root.");
             Environment.Exit(1);
         }
 
-        string dataDir = Path.Combine(rootDir, "Mythril.Blazor/wwwroot/data");
-        
+        var dataDir = Path.Combine(rootDir, "Mythril.Blazor/wwwroot/data");
+
         items.Load(JsonConvert.DeserializeObject<List<Item>>(File.ReadAllText(Path.Combine(dataDir, "items.json"))) ?? []);
         quests.Load(JsonConvert.DeserializeObject<List<Quest>>(File.ReadAllText(Path.Combine(dataDir, "quests.json"))) ?? []);
         stats.Load(JsonConvert.DeserializeObject<List<Stat>>(File.ReadAllText(Path.Combine(dataDir, "stats.json"))) ?? []);
         abilities.Load(JsonConvert.DeserializeObject<List<CadenceAbility>>(File.ReadAllText(Path.Combine(dataDir, "cadence_abilities.json"))) ?? []);
 
         var locDTOs = JsonConvert.DeserializeObject<List<LocationDTO>>(File.ReadAllText(Path.Combine(dataDir, "locations.json"))) ?? [];
-        locations.Load(locDTOs.Select(d => new Location(d.Name, d.Quests.Select(qn => quests.All.First(q => q.Name == qn)), d.RequiredQuest, d.Type)).ToList());
+        locations.Load(locDTOs.ConvertAll(d => new Location(d.Name, d.Quests.Select(qn => quests.All.First(q => q.Name == qn)), d.RequiredQuest, d.Type)));
 
         var cadDTOs = JsonConvert.DeserializeObject<List<CadenceDTO>>(File.ReadAllText(Path.Combine(dataDir, "cadences.json"))) ?? [];
-        cadences.Load(cadDTOs.Select(d => new Cadence(d.Name, d.Description, d.Abilities.Select(a => {
+        cadences.Load(cadDTOs.ConvertAll(d => new Cadence(d.Name, d.Description, [.. d.Abilities.Select(a => {
             var baseAbility = abilities.All.First(ab => ab.Name == a.Ability);
-            var abilityWithMeta = baseAbility with { 
+            var abilityWithMeta = baseAbility with {
                 Metadata = a.Metadata ?? [],
-                Effects = (a.Effects ?? []).ToArray()
+                Effects = [.. (a.Effects ?? [])]
             };
             return new CadenceUnlock(
                 d.Name,
                 abilityWithMeta,
-                a.Requirements.Select(r => new ItemQuantity(items.All.First(i => i.Name == r.Item), r.Quantity)).ToArray(),
+                [.. a.Requirements.Select(r => new ItemQuantity(items.All.First(i => i.Name == r.Item), r.Quantity))],
                 a.PrimaryStat ?? "Magic"
             );
-        }).ToArray())).ToList());
+        })])));
 
         var detailDTOs = JsonConvert.DeserializeObject<List<QuestDetailDTO>>(File.ReadAllText(Path.Combine(dataDir, "quest_details.json"))) ?? [];
         questDetails.Load(detailDTOs.ToDictionary(
             d => quests.All.First(q => q.Name == d.Quest),
-            d => new QuestDetail(d.DurationSeconds, 
-                d.Requirements.Select(r => new ItemQuantity(items.All.First(i => i.Name == r.Item), r.Quantity)).ToArray(),
-                d.Rewards.Select(r => new ItemQuantity(items.All.First(i => i.Name == r.Item), r.Quantity)).ToArray(),
+            d => new QuestDetail(d.DurationSeconds,
+                [.. d.Requirements.Select(r => new ItemQuantity(items.All.First(i => i.Name == r.Item), r.Quantity))],
+                [.. d.Rewards.Select(r => new ItemQuantity(items.All.First(i => i.Name == r.Item), r.Quantity))],
                 Enum.Parse<QuestType>(d.Type),
                 d.PrimaryStat ?? "Vitality",
                 d.RequiredStats,
                 d.StatRewards,
-                (d.Effects ?? []).ToArray()
+                [.. (d.Effects ?? [])]
             )
         ));
 
@@ -147,7 +143,7 @@ class Program
         var pathfinding = new PathfindingService(locations, quests, questUnlocks, questDetails, cadences, questToCadenceUnlocks);
         var junctionManager = new JunctionManager(gameStore, inventory, statAugments, cadences);
         var resourceManager = new ResourceManager(gameStore, items, quests, questUnlocks, questToCadenceUnlocks, questDetails, cadences, locations, junctionManager, inventory, refinements, pathfinding);
-        
+
         resourceManager.Initialize();
 
         if (isSimMode)
@@ -171,14 +167,14 @@ class Program
         foreach (var cmd in commandFile.Commands)
         {
             Console.WriteLine($"Executing: {cmd.Action} {cmd.Target}");
-            
+
             switch (cmd.Action.ToLower())
             {
                 case "add_item":
                     var item = items.All.FirstOrDefault(i => i.Name.Equals(cmd.Target, StringComparison.OrdinalIgnoreCase));
                     if (item.Name != null) resourceManager.Inventory.Add(item, cmd.Quantity);
                     break;
-                
+
                 case "complete_quest":
                     var quest = quests.All.FirstOrDefault(q => q.Name.Equals(cmd.Target, StringComparison.OrdinalIgnoreCase));
                     if (quest.Name != null)
@@ -189,7 +185,7 @@ class Program
                         resourceManager.ReceiveRewards(progress).Wait();
                     }
                     break;
-                
+
                 case "unlock_cadence":
                     var cadence = cadences.All.FirstOrDefault(c => c.Name.Equals(cmd.Target, StringComparison.OrdinalIgnoreCase));
                     if (cadence.Name != null) resourceManager.UnlockCadence(cadence);
@@ -199,31 +195,33 @@ class Program
 
         var finalState = new HeadlessGameState
         {
-            Inventory = resourceManager.Inventory.GetItems().Select(i => new KeyValuePair<string, int>(i.Item.Name, i.Quantity)).ToList(),
-            UnlockedCadences = resourceManager.UnlockedCadences.Select(c => c.Name).ToList(),
+            Inventory = [.. resourceManager.Inventory.GetItems().Select(i => new KeyValuePair<string, int>(i.Item.Name, i.Quantity))],
+            UnlockedCadences = [.. resourceManager.UnlockedCadences.Select(c => c.Name)],
         };
 
         File.WriteAllText(outputFilePath, JsonConvert.SerializeObject(finalState, Formatting.Indented));
         Console.WriteLine($"Final state saved to {outputFilePath}");
 
         // Assertions
-        bool allPassed = true;
+        var allPassed = true;
         foreach (var assertion in commandFile.Assertions)
         {
-            bool passed = false;
+            var passed = false;
             switch (assertion.Type.ToLower())
             {
                 case "inventorycount":
                     var item = items.All.FirstOrDefault(i => i.Name.Equals(assertion.Target, StringComparison.OrdinalIgnoreCase));
-                    int count = resourceManager.Inventory.GetQuantity(item);
+                    var count = resourceManager.Inventory.GetQuantity(item);
                     passed = count == assertion.ExpectedValue;
                     Console.WriteLine($"Assertion: InventoryCount {assertion.Target} expected {assertion.ExpectedValue}, got {count} - {(passed ? "PASS" : "FAIL")}");
                     break;
+
                 case "cadenceunlocked":
-                    bool unlocked = resourceManager.UnlockedCadences.Any(c => c.Name.Equals(assertion.Target, StringComparison.OrdinalIgnoreCase));
+                    var unlocked = resourceManager.UnlockedCadences.Any(c => c.Name.Equals(assertion.Target, StringComparison.OrdinalIgnoreCase));
                     passed = unlocked == (assertion.ExpectedValue == 1);
                     Console.WriteLine($"Assertion: CadenceUnlocked {assertion.Target} expected {assertion.ExpectedValue == 1}, got {unlocked} - {(passed ? "PASS" : "FAIL")}");
                     break;
+
                 default:
                     Console.WriteLine($"Warning: Unknown assertion type '{assertion.Type}'");
                     break;

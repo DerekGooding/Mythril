@@ -1,10 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Mythril.Data;
 using Mythril.Headless.Simulation;
+using System.Collections.Immutable;
 
 namespace Mythril.Tests;
 
@@ -34,17 +30,17 @@ public class LatticeSimulatorTests : BunitTestBase
     [TestMethod]
     public void Join_IsIdempotent()
     {
-        var state = _lattice!.Bottom(new SimulationSeed(ImmutableDictionary<string, int>.Empty, Stats.All.ToImmutableDictionary(s => s.Name, _ => 10), ImmutableHashSet<string>.Empty, ImmutableHashSet<string>.Empty));
-        
+        var state = _lattice!.Bottom(new SimulationSeed([], Stats.All.ToImmutableDictionary(s => s.Name, _ => 10), [], []));
+
         var join1 = _lattice.Join(state, state);
-        
+
         Assert.AreEqual(state, join1);
     }
 
     [TestMethod]
     public void Join_IsCommutative()
     {
-        var a = _lattice!.Bottom(new SimulationSeed(ImmutableDictionary<string, int>.Empty, Stats.All.ToImmutableDictionary(s => s.Name, _ => 10), ImmutableHashSet<string>.Empty, ImmutableHashSet<string>.Empty));
+        var a = _lattice!.Bottom(new SimulationSeed([], Stats.All.ToImmutableDictionary(s => s.Name, _ => 10), [], []));
         var b = a with { MagicCapacity = 100 };
 
         var join1 = _lattice.Join(a, b);
@@ -58,14 +54,14 @@ public class LatticeSimulatorTests : BunitTestBase
     public void Solver_ConvergesOnCircularQuestDependency()
     {
         var seed = new SimulationSeed(
-            ImmutableDictionary<string, int>.Empty,
+            [],
             Stats.All.ToImmutableDictionary(s => s.Name, _ => 10),
-            ImmutableHashSet.Create(SandboxContent.Recruit),
-            ImmutableHashSet<string>.Empty
+            [SandboxContent.Recruit],
+            []
         );
 
         var result = _lattice!.Solve(seed);
-        
+
         Assert.IsNotNull(result);
     }
 
@@ -76,8 +72,8 @@ public class LatticeSimulatorTests : BunitTestBase
         var seed = new SimulationSeed(
             new Dictionary<string, int> { { SandboxContent.Scrap, 10 } }.ToImmutableDictionary(),
             Stats.All.ToImmutableDictionary(s => s.Name, _ => 10),
-            ImmutableHashSet.Create(SandboxContent.Recruit),
-            ImmutableHashSet.Create($"{SandboxContent.Recruit}:{SandboxContent.RefineScrap}")
+            [SandboxContent.Recruit],
+            [$"{SandboxContent.Recruit}:{SandboxContent.RefineScrap}"]
         );
 
         // 2. Solve
@@ -92,16 +88,16 @@ public class LatticeSimulatorTests : BunitTestBase
     {
         // Sandbox Scholar needs 100 Magic
         var seed = new SimulationSeed(
-            ImmutableDictionary<string, int>.Empty,
+            [],
             Stats.All.ToImmutableDictionary(s => s.Name, _ => 10),
-            ImmutableHashSet.Create(SandboxContent.Recruit),
-            ImmutableHashSet<string>.Empty
+            [SandboxContent.Recruit],
+            []
         );
 
         // Act
         var result = _lattice!.Solve(seed);
 
         // Assert
-        Assert.IsFalse(result.UnlockedCadences.Contains(SandboxContent.Scholar));
+        Assert.DoesNotContain(SandboxContent.Scholar, result.UnlockedCadences);
     }
 }

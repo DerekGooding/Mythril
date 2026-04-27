@@ -5,7 +5,7 @@ public class LocationData(Location location, IEnumerable<Quest> startingUnlocked
     private readonly Location _location = location;
     public string Name => _location.Name;
 
-    public List<Quest> Quests { get; set; } = [..startingUnlockedQuests];
+    public List<Quest> Quests { get; set; } = [.. startingUnlockedQuests];
 
     public IEnumerable<Quest> AllQuests => _location.Quests;
 

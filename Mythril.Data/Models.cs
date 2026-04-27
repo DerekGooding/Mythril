@@ -57,7 +57,7 @@ public partial record struct CadenceAbility(string Name, string Description) : I
     public bool Equals(CadenceAbility other)
     {
         if (Name != other.Name || Description != other.Description) return false;
-        
+
         var thisMeta = Metadata ?? [];
         var otherMeta = other.Metadata ?? [];
         if (thisMeta.Count != otherMeta.Count) return false;
@@ -69,7 +69,7 @@ public partial record struct CadenceAbility(string Name, string Description) : I
         var thisEffects = Effects ?? [];
         var otherEffects = other.Effects ?? [];
         if (thisEffects.Length != otherEffects.Length) return false;
-        for (int i = 0; i < thisEffects.Length; i++)
+        for (var i = 0; i < thisEffects.Length; i++)
         {
             if (thisEffects[i] != otherEffects[i]) return false;
         }
@@ -82,7 +82,7 @@ public partial record struct CadenceAbility(string Name, string Description) : I
         var hash = new HashCode();
         hash.Add(Name);
         hash.Add(Description);
-        
+
         var thisMeta = Metadata ?? [];
         foreach (var kvp in thisMeta.OrderBy(x => x.Key))
         {
@@ -95,7 +95,7 @@ public partial record struct CadenceAbility(string Name, string Description) : I
         {
             hash.Add(effect);
         }
-        
+
         return hash.ToHashCode();
     }
 }
@@ -149,19 +149,19 @@ public class ContentNode
 {
     [JsonPropertyName("id")]
     public string Id { get; set; } = "";
-    
+
     [JsonPropertyName("type")]
     public string Type { get; set; } = ""; // Quest, Location, Cadence, Item, Refinement
-    
+
     [JsonPropertyName("name")]
     public string Name { get; set; } = "";
-    
+
     [JsonPropertyName("data")]
     public Dictionary<string, object> Data { get; set; } = [];
-    
+
     [JsonPropertyName("in_edges")]
     public Dictionary<string, List<string>> InEdges { get; set; } = []; // RelationType -> [NodeIds]
-    
+
     [JsonPropertyName("out_edges")]
     public Dictionary<string, List<ContentEdge>> OutEdges { get; set; } = []; // RelationType -> [Edges]
 
@@ -173,7 +173,7 @@ public class ContentEdge
 {
     [JsonPropertyName("targetId")]
     public string TargetId { get; set; } = "";
-    
+
     [JsonPropertyName("quantity")]
     public int Quantity { get; set; } = 1;
 }
@@ -191,7 +191,7 @@ public class SaveData
     public List<JunctionDTO> Junctions { get; set; } = [];
     public List<AssignedCadenceDTO> AssignedCadences { get; set; } = [];
     public Dictionary<string, bool> AutoQuestEnabled { get; set; } = [];
-    public List<string> UnlockedLocations { get; set; } = []; 
+    public List<string> UnlockedLocations { get; set; } = [];
     public List<string> StarredRecipes { get; set; } = [];
     public List<string> SeenContent { get; set; } = [];
     public bool HasUnseenCadence { get; set; }
@@ -201,7 +201,7 @@ public class SaveData
     public string ActiveTab { get; set; } = "hand";
     public DateTime LastSaveTime { get; set; }
     public Dictionary<string, Dictionary<string, int>> CharacterStatBoosts { get; set; } = [];
-    public Dictionary<string, string?> LastFinishedActivities {get; set;} = [];
+    public Dictionary<string, string?> LastFinishedActivities { get; set; } = [];
     public List<string> EverPerformedActivities = [];
 }
 
@@ -235,21 +235,41 @@ public class QuestProgressDTO
 }
 
 // Data Transfer Objects for JSON Loading
-public class ItemQuantityDTO { public string Item { get; set; } = ""; public int Quantity { get; set; } = 1; }
-public class LocationDTO { public string Name { get; set; } = ""; public List<string> Quests { get; set; } = []; public string? RequiredQuest { get; set; } public string? Type { get; set; } }
-public class CadenceAbilityUnlockDTO 
-{ 
-    public string Ability { get; set; } = ""; 
-    public List<ItemQuantityDTO> Requirements { get; set; } = []; 
+public class ItemQuantityDTO
+{ public string Item { get; set; } = ""; public int Quantity { get; set; } = 1; }
+
+public class LocationDTO
+{ public string Name { get; set; } = ""; public List<string> Quests { get; set; } = []; public string? RequiredQuest { get; set; } public string? Type { get; set; } }
+
+public class CadenceAbilityUnlockDTO
+{
+    public string Ability { get; set; } = "";
+    public List<ItemQuantityDTO> Requirements { get; set; } = [];
     public string PrimaryStat { get; set; } = "Magic";
     public Dictionary<string, string> Metadata { get; set; } = [];
     public List<EffectDefinition> Effects { get; set; } = [];
 }
-public class CadenceDTO { public string Name { get; set; } = ""; public string Description { get; set; } = ""; public List<CadenceAbilityUnlockDTO> Abilities { get; set; } = []; }
-public class QuestDetailDTO { public string Quest { get; set; } = ""; public int DurationSeconds { get; set; } = 3; public string Type { get; set; } = "Single"; public List<ItemQuantityDTO> Requirements { get; set; } = []; public List<ItemQuantityDTO> Rewards { get; set; } = []; public string PrimaryStat { get; set; } = "Vitality"; public Dictionary<string, int>? RequiredStats { get; set; } public Dictionary<string, int>? StatRewards { get; set; } public List<EffectDefinition>? Effects { get; set; } }
-public class QuestUnlockDTO { public string Quest { get; set; } = ""; public List<string> Requires { get; set; } = []; }
-public class QuestCadenceUnlockDTO { public string Quest { get; set; } = ""; public List<string> Cadences { get; set; } = []; }
-public class RecipeDTO { public string InputItem { get; set; } = ""; public int InputQuantity { get; set; } = 1; public string OutputItem { get; set; } = ""; public int OutputQuantity { get; set; } = 1; }
-public class RefinementDTO { public string Ability { get; set; } = ""; public List<RecipeDTO> Recipes { get; set; } = []; public string PrimaryStat { get; set; } = "Strength"; }
-public class StatAugmentEntryDTO { public string Stat { get; set; } = ""; public int ModifierAtFull { get; set; } = 0; }
-public class StatAugmentItemDTO { public string Item { get; set; } = ""; public List<StatAugmentEntryDTO> Augments { get; set; } = []; }
+
+public class CadenceDTO
+{ public string Name { get; set; } = ""; public string Description { get; set; } = ""; public List<CadenceAbilityUnlockDTO> Abilities { get; set; } = []; }
+
+public class QuestDetailDTO
+{ public string Quest { get; set; } = ""; public int DurationSeconds { get; set; } = 3; public string Type { get; set; } = "Single"; public List<ItemQuantityDTO> Requirements { get; set; } = []; public List<ItemQuantityDTO> Rewards { get; set; } = []; public string PrimaryStat { get; set; } = "Vitality"; public Dictionary<string, int>? RequiredStats { get; set; } public Dictionary<string, int>? StatRewards { get; set; } public List<EffectDefinition>? Effects { get; set; } }
+
+public class QuestUnlockDTO
+{ public string Quest { get; set; } = ""; public List<string> Requires { get; set; } = []; }
+
+public class QuestCadenceUnlockDTO
+{ public string Quest { get; set; } = ""; public List<string> Cadences { get; set; } = []; }
+
+public class RecipeDTO
+{ public string InputItem { get; set; } = ""; public int InputQuantity { get; set; } = 1; public string OutputItem { get; set; } = ""; public int OutputQuantity { get; set; } = 1; }
+
+public class RefinementDTO
+{ public string Ability { get; set; } = ""; public List<RecipeDTO> Recipes { get; set; } = []; public string PrimaryStat { get; set; } = "Strength"; }
+
+public class StatAugmentEntryDTO
+{ public string Stat { get; set; } = ""; public int ModifierAtFull { get; set; } = 0; }
+
+public class StatAugmentItemDTO
+{ public string Item { get; set; } = ""; public List<StatAugmentEntryDTO> Augments { get; set; } = []; }

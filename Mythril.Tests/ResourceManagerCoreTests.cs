@@ -1,6 +1,4 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Mythril.Data;
-using System.Linq;
 
 namespace Mythril.Tests;
 
@@ -19,7 +17,7 @@ public class ResourceManagerCoreTests
         _items = ContentHost.GetContent<Items>();
         _quests = ContentHost.GetContent<Quests>();
         _questDetails = ContentHost.GetContent<QuestDetails>();
-        
+
         var gameStore = new GameStore();
         var inventory = new InventoryManager(gameStore);
         var cadences = ContentHost.GetContent<Cadences>();
@@ -32,11 +30,11 @@ public class ResourceManagerCoreTests
             ContentHost.GetContent<QuestToCadenceUnlocks>()
         );
         var junctionManager = new JunctionManager(gameStore, inventory, ContentHost.GetContent<StatAugments>(), cadences);
-        _resourceManager = new ResourceManager(gameStore, _items, _quests, 
-            ContentHost.GetContent<QuestUnlocks>(), 
-            ContentHost.GetContent<QuestToCadenceUnlocks>(), 
-            _questDetails, 
-            cadences, 
+        _resourceManager = new ResourceManager(gameStore, _items, _quests,
+            ContentHost.GetContent<QuestUnlocks>(),
+            ContentHost.GetContent<QuestToCadenceUnlocks>(),
+            _questDetails,
+            cadences,
             ContentHost.GetContent<Locations>(),
             junctionManager,
             inventory,
@@ -50,9 +48,10 @@ public class ResourceManagerCoreTests
     {
         // Assert
         // Sandbox has 2 UsableLocations: Starting Area and Forest (initially locked)
-        Assert.AreEqual(1, _resourceManager!.UsableLocations.Count);  
-        Assert.AreEqual(3, _resourceManager.Characters.Length);      
+        Assert.HasCount(1, _resourceManager!.UsableLocations);
+        Assert.HasCount(3, _resourceManager.Characters);
     }
+
     [TestMethod]
     public void ResourceManager_RetrievesQuestData_Correctly()
     {
@@ -79,42 +78,42 @@ public class ResourceManagerCoreTests
     [TestMethod]
     public void ResourceManager_CadenceAssignment_WorksCorrectly()
     {
-        var cadence = ContentHost.GetContent<Cadences>().All.First();
+        var cadence = ContentHost.GetContent<Cadences>().All[0];
         var character = _resourceManager!.Characters[0];
 
         _resourceManager.JunctionManager.AssignCadence(cadence, character, _resourceManager.UnlockedAbilities);
         var assigned = _resourceManager.JunctionManager.CurrentlyAssigned(character).ToList();
-        
-        Assert.AreEqual(1, assigned.Count);
+
+        Assert.HasCount(1, assigned);
         Assert.AreEqual(cadence.Name, assigned[0].Name);
 
         _resourceManager.JunctionManager.Unassign(cadence, _resourceManager.UnlockedAbilities);
-        assigned = _resourceManager.JunctionManager.CurrentlyAssigned(character).ToList();
-        Assert.AreEqual(0, assigned.Count);
+        assigned = [.. _resourceManager.JunctionManager.CurrentlyAssigned(character)];
+        Assert.IsEmpty(assigned);
     }
 
     [TestMethod]
     public void Stats_All_ContainsAllStats()
     {
         var stats = ContentHost.GetContent<Stats>();
-        Assert.AreEqual(4, stats.All.Length);
-        Assert.IsTrue(stats.All.Any(s => s.Name == SandboxContent.Vitality));
+        Assert.HasCount(4, stats.All);
+        Assert.Contains(s => s.Name == SandboxContent.Vitality, stats.All);
     }
 
     [TestMethod]
     public void ResourceManager_UnlockCadence_UpdatesUnlockedList()
     {
-        var cadence = ContentHost.GetContent<Cadences>().All.First();
-        
+        var cadence = ContentHost.GetContent<Cadences>().All[0];
+
         _resourceManager!.UnlockCadence(cadence);
-        
-        Assert.IsTrue(_resourceManager.UnlockedCadences.Contains(cadence));
+
+        Assert.Contains(cadence, _resourceManager.UnlockedCadences);
     }
 
     [TestMethod]
     public void ResourceManager_CanAfford_CadenceUnlock_ReturnsCorrectValue()
     {
-        var cadence = ContentHost.GetContent<Cadences>().All.First();
+        var cadence = ContentHost.GetContent<Cadences>().All[0];
         var unlock = cadence.Abilities[0];
 
         _resourceManager!.Inventory.Clear();
@@ -124,7 +123,7 @@ public class ResourceManagerCoreTests
 
         // Let's add a requirement for the sake of the test
         var reqUnlock = new CadenceUnlock(unlock.CadenceName, unlock.Ability, [new ItemQuantity(_items!.All.First(i => i.Name == SandboxContent.Gold), 100)], unlock.PrimaryStat);
-        
+
         _resourceManager.Inventory.Clear();
         Assert.IsFalse(_resourceManager.CanAfford(reqUnlock));
 
@@ -137,52 +136,52 @@ public class ResourceManagerCoreTests
     {
         var area = _resourceManager!.UsableLocations.First(l => l.Name == "Starting Area");
         var initialQuestCount = area.Quests.Count;
-        
+
         var allAreaQuests = ContentHost.GetContent<Locations>().All.First(l => l.Name == "Starting Area").Quests;
         var locked = area.LockedQuests.ToList();
-        
-        Assert.AreEqual(allAreaQuests.Count() - initialQuestCount, locked.Count);
+
+        Assert.HasCount(allAreaQuests.Count() - initialQuestCount, locked);
     }
 
     [TestMethod]
     public void ResourceManager_ReceiveRewards_CadenceAbility_AddsToUnlocked()
     {
-        var cadence = ContentHost.GetContent<Cadences>().All.First();
+        var cadence = ContentHost.GetContent<Cadences>().All[0];
         var unlock = cadence.Abilities[0];
 
-        _resourceManager!.ReceiveRewards(unlock).Wait();
-        
-        Assert.IsTrue(_resourceManager.UnlockedAbilities.Contains($"{unlock.CadenceName}:{unlock.Ability.Name}"));
+        _resourceManager!.ReceiveRewards(unlock).Wait(TestContext.CancellationToken);
+
+        Assert.Contains($"{unlock.CadenceName}:{unlock.Ability.Name}", _resourceManager.UnlockedAbilities);
     }
 
     [TestMethod]
     public void ResourceManager_StartQuest_CadenceUnlock_AddsToActiveQuests()
     {
-        var cadence = ContentHost.GetContent<Cadences>().All.First();
+        var cadence = ContentHost.GetContent<Cadences>().All[0];
         var unlock = cadence.Abilities[0];
         var character = _resourceManager!.Characters[0];
 
         _resourceManager.Inventory.Clear();
-        foreach(var req in unlock.Requirements) _resourceManager.Inventory.Add(req.Item, req.Quantity);
-        
+        foreach (var req in unlock.Requirements) _resourceManager.Inventory.Add(req.Item, req.Quantity);
+
         _resourceManager.StartQuest(unlock, character);
-        
-        Assert.AreEqual(1, _resourceManager.ActiveQuests.Count);
+
+        Assert.HasCount(1, _resourceManager.ActiveQuests);
         Assert.AreEqual(unlock.Ability.Name, _resourceManager.ActiveQuests[0].Name);
     }
 
     [TestMethod]
     public void ResourceManager_PayCosts_CadenceUnlock_RemovesItems()
     {
-        var cadence = ContentHost.GetContent<Cadences>().All.First();
+        var cadence = ContentHost.GetContent<Cadences>().All[0];
         var ability = cadence.Abilities[0].Ability;
         var unlock = new CadenceUnlock(cadence.Name, ability, [new ItemQuantity(_items!.All.First(i => i.Name == SandboxContent.Gold), 100)], "Magic");
 
         _resourceManager!.Inventory.Clear();
         _resourceManager.Inventory.Add(_items.All.First(i => i.Name == SandboxContent.Gold), 100);
-        
+
         _resourceManager.PayCosts(unlock);
-        
+
         Assert.AreEqual(0, _resourceManager.Inventory.GetQuantity(unlock.Requirements[0].Item));
     }
 
@@ -191,24 +190,23 @@ public class ResourceManagerCoreTests
     {
         // Setup a junction
         var character = _resourceManager!.Characters[0];
-        var stat = ContentHost.GetContent<Stats>().All.First();
+        var stat = ContentHost.GetContent<Stats>().All[0];
         var magic = _items!.All.First(i => i.Name == SandboxContent.FireI);
-        
+
         // Mock ability unlock
         _resourceManager.UnlockAbility(SandboxContent.Recruit, SandboxContent.JStr);
         var recruit = ContentHost.GetContent<Cadences>().All.First(c => c.Name == SandboxContent.Recruit);
         _resourceManager.JunctionManager.AssignCadence(recruit, character, _resourceManager.UnlockedAbilities);
-        
+
         _resourceManager.JunctionManager.JunctionMagic(character, stat, magic, _resourceManager.UnlockedAbilities);
-        Assert.AreEqual(1, _resourceManager.JunctionManager.Junctions.Count);
+        Assert.HasCount(1, _resourceManager.JunctionManager.Junctions);
 
         // Initialize
         _resourceManager.Initialize();
 
         // Assert
-        Assert.AreEqual(0, _resourceManager.JunctionManager.Junctions.Count, "Junctions should be cleared on initialization.");
+        Assert.IsEmpty(_resourceManager.JunctionManager.Junctions, "Junctions should be cleared on initialization.");
     }
-
 
     [TestMethod]
     public void Character_Name_ReturnsCorrectValue()
@@ -216,4 +214,6 @@ public class ResourceManagerCoreTests
         var character = new Character("Test");
         Assert.AreEqual("Test", character.Name);
     }
+
+    public TestContext TestContext { get; set; }
 }

@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
-
 namespace Mythril.Data;
 
 public partial class ResourceManager
@@ -26,16 +23,16 @@ public partial class ResourceManager
             PayCosts(item);
 
             var description = item is QuestData qd ? qd.Description : (item is CadenceUnlock cu ? cu.Ability.Description : (item is RefinementData rd ? rd.Description : ""));
-            int baseDuration = item is QuestData q ? q.DurationSeconds : (item is CadenceUnlock u ? 30 : (item is RefinementData r ? 15 : 10));
-            
+            var baseDuration = item is QuestData q ? q.DurationSeconds : (item is CadenceUnlock u ? 30 : (item is RefinementData r ? 15 : 10));
+
             // Apply stat-based duration scaling
-            string primaryStat = item is QuestData q2 ? q2.PrimaryStat : (item is CadenceUnlock u2 ? u2.PrimaryStat : (item is RefinementData r2 ? r2.PrimaryStat : "Vitality"));
+            var primaryStat = item is QuestData q2 ? q2.PrimaryStat : (item is CadenceUnlock u2 ? u2.PrimaryStat : (item is RefinementData r2 ? r2.PrimaryStat : "Vitality"));
             double statValue = JunctionManager.GetStatValue(character, primaryStat);
-            int duration = (int)(baseDuration * Math.Pow(0.75, (statValue - 10) / 10.0));
+            var duration = (int)(baseDuration * Math.Pow(0.75, (statValue - 10) / 10.0));
 
             // Find free slot
             var usedSlots = ActiveQuests.Where(p => p.Character.Name == character.Name).Select(p => p.SlotIndex).ToHashSet();
-            int slot = 0;
+            var slot = 0;
             while (usedSlots.Contains(slot)) slot++;
 
             var progress = new QuestProgress(item, description, duration, character, slot) { SecondsElapsed = initialSecondsElapsed };
@@ -52,7 +49,6 @@ public partial class ResourceManager
         }
 
         //TODO: Send a singal to whatever is managing autoquest for the character
-        
     }
 
     public bool CanAfford(object item, Character? character = null)
@@ -90,7 +86,7 @@ public partial class ResourceManager
         else if (item is RefinementData refinement)
         {
             if (!Inventory.Has(refinement.InputItem, refinement.Recipe.InputQuantity)) return false;
-            
+
             // If it produces a spell, check against Magic Capacity
             if (refinement.Recipe.OutputItem.ItemType == ItemType.Spell)
             {

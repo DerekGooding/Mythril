@@ -4,14 +4,14 @@ public partial class ResourceManager
 {
     public async Task ReceiveRewards(QuestProgress progress)
     {
-        bool alreadyDiscovered = false;
+        var alreadyDiscovered = false;
         if (progress.Item is CadenceUnlock unlock)
         {
             alreadyDiscovered = UnlockedAbilities.Contains($"{unlock.CadenceName}:{unlock.Ability.Name}");
         }
 
         _gameStore.Dispatch(new FinishQuestAction(progress));
-        
+
         // Handle side effects that are still in manager for now
         if (progress.Item is QuestData questData && (questData.Type == QuestType.Single || questData.Type == QuestType.Unlock))
         {

@@ -1,6 +1,4 @@
 using Mythril.Data;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Linq;
 
 namespace Mythril.Tests;
 
@@ -14,7 +12,7 @@ public class ProgressionTests : BunitTestBase
         var character = ResourceManager.Characters[0];
         var stat = Stats.All.First(s => s.Name == SandboxContent.Strength);
         var magic = new Item("Strength Magic", "Desc", ItemType.Spell);
-        
+
         // Setup character with J-Str
         var recruit = ContentHost.GetContent<Cadences>().All.First(c => c.Name == SandboxContent.Recruit);
         ResourceManager.UnlockCadence(recruit);
@@ -30,7 +28,7 @@ public class ProgressionTests : BunitTestBase
         ResourceManager.Tick(1.0);
 
         // Assert
-        Assert.IsTrue(ResourceManager.UnlockedCadenceNames.Contains(SandboxContent.Geologist), "Geologist should be unlocked at 100 STR");
+        Assert.Contains(SandboxContent.Geologist, ResourceManager.UnlockedCadenceNames, "Geologist should be unlocked at 100 STR");
     }
 
     [TestMethod]
@@ -42,7 +40,7 @@ public class ProgressionTests : BunitTestBase
         var spdStat = Stats.All.First(s => s.Name == SandboxContent.Speed);
         var strMagic = new Item("Str Magic", "Desc", ItemType.Spell);
         var spdMagic = new Item("Spd Magic", "Desc", ItemType.Spell);
-        
+
         // Setup character with J-Str and J-Speed
         var recruit = ContentHost.GetContent<Cadences>().All.First(c => c.Name == SandboxContent.Recruit);
         var student = ContentHost.GetContent<Cadences>().All.First(c => c.Name == SandboxContent.Student);
@@ -50,7 +48,7 @@ public class ProgressionTests : BunitTestBase
         ResourceManager.UnlockCadence(student);
         ResourceManager.UnlockAbility(SandboxContent.Recruit, SandboxContent.JStr);
         ResourceManager.UnlockAbility(SandboxContent.Student, SandboxContent.JSpd);
-        
+
         JunctionManager.AssignCadence(recruit, character, ResourceManager.UnlockedAbilities);
         JunctionManager.AssignCadence(student, character, ResourceManager.UnlockedAbilities);
 
@@ -58,14 +56,14 @@ public class ProgressionTests : BunitTestBase
         GameStore.Dispatch(new SetMagicCapacityAction(2000));
         InventoryManager.Add(strMagic, 900);
         InventoryManager.Add(spdMagic, 900);
-        
+
         JunctionManager.JunctionMagic(character, strStat, strMagic, ResourceManager.UnlockedAbilities);
         JunctionManager.JunctionMagic(character, spdStat, spdMagic, ResourceManager.UnlockedAbilities);
 
         ResourceManager.Tick(1.0);
 
         // Assert
-        Assert.IsTrue(ResourceManager.UnlockedCadenceNames.Contains(SandboxContent.Slayer), "Slayer should be unlocked at 100 STR AND 100 SPD");
+        Assert.Contains(SandboxContent.Slayer, ResourceManager.UnlockedCadenceNames, "Slayer should be unlocked at 100 STR AND 100 SPD");
     }
 
     [TestMethod]
@@ -74,7 +72,7 @@ public class ProgressionTests : BunitTestBase
         var character = ResourceManager.Characters[0];
         var spdStat = Stats.All.First(s => s.Name == SandboxContent.Speed);
         var spdMagic = new Item("Spd Magic", "Desc", ItemType.Spell);
-        
+
         var student = ContentHost.GetContent<Cadences>().All.First(c => c.Name == SandboxContent.Student);
         ResourceManager.UnlockCadence(student);
         ResourceManager.UnlockAbility(SandboxContent.Student, SandboxContent.JSpd);
@@ -85,7 +83,7 @@ public class ProgressionTests : BunitTestBase
         JunctionManager.JunctionMagic(character, spdStat, spdMagic, ResourceManager.UnlockedAbilities);
 
         ResourceManager.Tick(1.0);
-        Assert.IsTrue(ResourceManager.UnlockedCadenceNames.Contains(SandboxContent.TideCaller));
+        Assert.Contains(SandboxContent.TideCaller, ResourceManager.UnlockedCadenceNames);
     }
 
     [TestMethod]
@@ -94,7 +92,7 @@ public class ProgressionTests : BunitTestBase
         var character = ResourceManager.Characters[0];
         var vitStat = Stats.All.First(s => s.Name == SandboxContent.Vitality);
         var vitMagic = new Item("Vit Magic", "Desc", ItemType.Spell);
-        
+
         var weaver = ContentHost.GetContent<Cadences>().All.First(c => c.Name == SandboxContent.Weaver);
         ResourceManager.UnlockCadence(weaver);
         ResourceManager.UnlockAbility(SandboxContent.Weaver, SandboxContent.JVit);
@@ -105,7 +103,7 @@ public class ProgressionTests : BunitTestBase
         JunctionManager.JunctionMagic(character, vitStat, vitMagic, ResourceManager.UnlockedAbilities);
 
         ResourceManager.Tick(1.0);
-        Assert.IsTrue(ResourceManager.UnlockedCadenceNames.Contains(SandboxContent.Sentinel));
+        Assert.Contains(SandboxContent.Sentinel, ResourceManager.UnlockedCadenceNames);
     }
 
     [TestMethod]
@@ -114,7 +112,7 @@ public class ProgressionTests : BunitTestBase
         var character = ResourceManager.Characters[0];
         var magStat = Stats.All.First(s => s.Name == SandboxContent.Magic);
         var magMagic = new Item("Mag Magic", "Desc", ItemType.Spell);
-        
+
         var arcanist = ContentHost.GetContent<Cadences>().All.First(c => c.Name == SandboxContent.Arcanist);
         ResourceManager.UnlockCadence(arcanist);
         ResourceManager.UnlockAbility(SandboxContent.Arcanist, SandboxContent.JMag);
@@ -125,7 +123,7 @@ public class ProgressionTests : BunitTestBase
         JunctionManager.JunctionMagic(character, magStat, magMagic, ResourceManager.UnlockedAbilities);
 
         ResourceManager.Tick(1.0);
-        Assert.IsTrue(ResourceManager.UnlockedCadenceNames.Contains(SandboxContent.Scholar));
+        Assert.Contains(SandboxContent.Scholar, ResourceManager.UnlockedCadenceNames);
     }
 
     [TestMethod]
@@ -151,26 +149,26 @@ public class ProgressionTests : BunitTestBase
         var reqQuestName = forest.RequiredQuest;
         Assert.IsNotNull(reqQuestName, "RequiredQuest should not be null for Forest");
 
-        Assert.IsFalse(ResourceManager.UnlockedLocationNames.Contains("Forest"), "Forest should not be unlocked initially");
+        Assert.DoesNotContain("Forest", ResourceManager.UnlockedLocationNames, "Forest should not be unlocked initially");
 
         // Complete the required quest
         var quests = ContentHost.GetContent<Quests>();
         var quest = quests.All.First(q => q.Name == reqQuestName);
         var questDetails = ContentHost.GetContent<QuestDetails>();
         var questData = new QuestData(quest, questDetails[quest]);
-        
-        ResourceManager.ReceiveRewards(questData).Wait();
+
+        ResourceManager.ReceiveRewards(questData).Wait(TestContext.CancellationToken);
 
         // Check if quest is completed in state
-        Assert.IsTrue(GameStore.State.CompletedQuests.Contains(reqQuestName), $"Quest {reqQuestName} should be completed in state");
+        Assert.Contains(reqQuestName, GameStore.State.CompletedQuests, $"Quest {reqQuestName} should be completed in state");
 
         ResourceManager.UpdateUsableLocations();
-        
+
         // Diagnostic check of UsableLocations
         var isUsable = ResourceManager.UsableLocations.Any(l => l.Name == "Forest");
         Assert.IsTrue(isUsable, "Forest should be in UsableLocations after completion");
 
-        Assert.IsTrue(ResourceManager.UnlockedLocationNames.Contains("Forest"), "Forest should be in UnlockedLocationNames");
+        Assert.Contains("Forest", ResourceManager.UnlockedLocationNames, "Forest should be in UnlockedLocationNames");
     }
 
     [TestMethod]
@@ -193,14 +191,14 @@ public class ProgressionTests : BunitTestBase
         ResourceManager.CheckHiddenCadences();
 
         // Assert
-        Assert.IsTrue(ResourceManager.UnlockedCadenceNames.Contains(SandboxContent.Scholar));
+        Assert.Contains(SandboxContent.Scholar, ResourceManager.UnlockedCadenceNames);
     }
 
     [TestMethod]
     public void IsInProgress_QuestData_Works()
     {
         var character = ResourceManager.Characters[0];
-        var quest = ContentHost.GetContent<Quests>().All.First();
+        var quest = ContentHost.GetContent<Quests>().All[0];
         var data = new QuestData(quest, ContentHost.GetContent<QuestDetails>()[quest]);
 
         Assert.IsFalse(ResourceManager.IsInProgress(data));
@@ -208,4 +206,6 @@ public class ProgressionTests : BunitTestBase
         ResourceManager.StartQuest(data, character);
         Assert.IsTrue(ResourceManager.IsInProgress(data));
     }
+
+    public TestContext TestContext { get; set; }
 }

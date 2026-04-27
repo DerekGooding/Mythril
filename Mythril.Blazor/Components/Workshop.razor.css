@@ -20,16 +20,16 @@
     background-color: var(--card-bg);
 }
 
-.refinement-group.locked {
-    opacity: 0.6;
-    filter: grayscale(0.5);
-    background-color: rgba(0, 0, 0, 0.05);
-}
+    .refinement-group.locked {
+        opacity: 0.6;
+        filter: grayscale(0.5);
+        background-color: rgba(0, 0, 0, 0.05);
+    }
 
-.refinement-group.starred {
-    border: 1px solid rgba(255, 193, 7, 0.3);
-    background-color: rgba(255, 193, 7, 0.02);
-}
+    .refinement-group.starred {
+        border: 1px solid rgba(255, 193, 7, 0.3);
+        background-color: rgba(255, 193, 7, 0.02);
+    }
 
 .group-header {
     margin-bottom: 8px;

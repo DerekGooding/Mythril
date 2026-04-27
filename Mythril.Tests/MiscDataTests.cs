@@ -1,6 +1,4 @@
 using Mythril.Data;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Linq;
 
 namespace Mythril.Tests;
 
@@ -8,10 +6,7 @@ namespace Mythril.Tests;
 public class MiscDataTests
 {
     [TestInitialize]
-    public void Setup()
-    {
-        SandboxContent.Load();
-    }
+    public void Setup() => SandboxContent.Load();
 
     [TestMethod]
     public void Quest_Equality_WorksCorrectly()
@@ -30,7 +25,7 @@ public class MiscDataTests
 
         var potion = items.All.First(i => i.Name == SandboxContent.Potion);
         var augs = statAugments[potion];
-        Assert.AreEqual(0, augs.Length);
+        Assert.IsEmpty(augs);
     }
 
     [TestMethod]
@@ -48,12 +43,12 @@ public class MiscDataTests
     public void QuestProgress_Properties_ReturnCorrectValues()
     {
         var character = new Character("Hero");
-        var quest = ContentHost.GetContent<Quests>().All.First();
+        var quest = ContentHost.GetContent<Quests>().All[0];
         var detail = ContentHost.GetContent<QuestDetails>()[quest];
         var questData = new QuestData(quest, detail);
 
         var progress = new QuestProgress(questData, "Testing", 10, character);
-        
+
         Assert.AreEqual(questData.Name, progress.Name);
         Assert.AreEqual("Testing", progress.Description);
         Assert.AreEqual(10, progress.DurationSeconds);
@@ -75,15 +70,15 @@ public class MiscDataTests
     public void Locations_All_ContainsCorrectLocations()
     {
         var locations = ContentHost.GetContent<Locations>();
-        Assert.AreEqual(2, locations.All.Length);
-        Assert.IsTrue(locations.All.Any(l => l.Name == "Starting Area"));  
+        Assert.HasCount(2, locations.All);
+        Assert.Contains(l => l.Name == "Starting Area", locations.All);
     }
 
     [TestMethod]
     public void Location_Name_ReturnsCorrectValue()
     {
         var quests = ContentHost.GetContent<Quests>();
-        var location = new Location("Test", [quests.All.First()]);
+        var location = new Location("Test", [quests.All[0]]);
         Assert.AreEqual("Test", location.Name);
         Assert.AreEqual(1, location.Quests.Count());
     }
@@ -92,11 +87,11 @@ public class MiscDataTests
     public void QuestProgress_WithCadenceUnlock_Properties_ReturnCorrectValues()
     {
         var character = new Character("Hero");
-        var cadence = ContentHost.GetContent<Cadences>().All.First();
+        var cadence = ContentHost.GetContent<Cadences>().All[0];
         var unlock = cadence.Abilities[0];
 
         var progress = new QuestProgress(unlock, "Unlocking", 5, character);
-        
+
         Assert.AreEqual(unlock.Ability.Name, progress.Name);
         Assert.AreEqual("Unlocking", progress.Description);
         Assert.AreEqual(5, progress.DurationSeconds);
@@ -110,8 +105,8 @@ public class MiscDataTests
         var detail = ContentHost.GetContent<QuestDetails>()[quest];
         var questData = new QuestData(quest, detail);
 
-        Assert.AreEqual(1, questData.Requirements.Length);
-        Assert.AreEqual(1, questData.Rewards.Length);
+        Assert.HasCount(1, questData.Requirements);
+        Assert.HasCount(1, questData.Rewards);
         Assert.AreEqual(SandboxContent.Gold, questData.Requirements[0].Item.Name);
         Assert.AreEqual(SandboxContent.Potion, questData.Rewards[0].Item.Name);
     }
@@ -120,8 +115,8 @@ public class MiscDataTests
     public void ItemQuantity_Properties_ReturnCorrectValues()
     {
         var items = ContentHost.GetContent<Items>();
-        var iq = new ItemQuantity(items.All.First(), 100);
-        Assert.AreEqual(items.All.First(), iq.Item);
+        var iq = new ItemQuantity(items.All[0], 100);
+        Assert.AreEqual(items.All[0], iq.Item);
         Assert.AreEqual(100, iq.Quantity);
     }
 }

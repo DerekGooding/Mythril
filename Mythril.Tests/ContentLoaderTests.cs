@@ -1,8 +1,8 @@
-using System.Net;
-using System.Text;
-using Mythril.Data;
 using Moq;
 using Moq.Protected;
+using Mythril.Data;
+using System.Net;
+using System.Text;
 
 namespace Mythril.Tests;
 
@@ -14,8 +14,8 @@ public class ContentLoaderTests
     {
         // 1. Setup Mock Http
         var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
-        
-        string dataDir = GetTestDataDir();
+
+        var dataDir = GetTestDataDir();
 
         // Helper to setup mock response for a file
         void SetupMock(string url, string fileName)
@@ -33,8 +33,8 @@ public class ContentLoaderTests
                )
                .ReturnsAsync(new HttpResponseMessage()
                {
-                  StatusCode = HttpStatusCode.OK,
-                  Content = new StringContent(content, Encoding.UTF8, "application/json"),
+                   StatusCode = HttpStatusCode.OK,
+                   Content = new StringContent(content, Encoding.UTF8, "application/json"),
                });
         }
 
@@ -43,7 +43,6 @@ public class ContentLoaderTests
         SetupMock("data/stat_augments.json", "stat_augments.json");
 
         var httpClient = new HttpClient(handlerMock.Object) { BaseAddress = new Uri("http://test.com/") };
-
 
         // 2. Instantiate ContentLoader
         var loader = new ContentLoader(
@@ -66,14 +65,14 @@ public class ContentLoaderTests
         await loader.LoadAllAsync();
 
         // 4. Assert
-        Assert.IsTrue(ContentHost.GetContent<Items>().All.Any());
-        Assert.IsTrue(ContentHost.GetContent<Quests>().All.Any());
+        Assert.IsNotEmpty(ContentHost.GetContent<Items>().All);
+        Assert.IsNotEmpty(ContentHost.GetContent<Quests>().All);
     }
 
     private string GetTestDataDir()
     {
-        string currentDir = AppDomain.CurrentDomain.BaseDirectory;
-        string? rootDir = currentDir;
+        var currentDir = AppDomain.CurrentDomain.BaseDirectory;
+        var rootDir = currentDir;
         while (rootDir != null && !File.Exists(Path.Combine(rootDir, "Mythril.sln")))
         {
             rootDir = Path.GetDirectoryName(rootDir);

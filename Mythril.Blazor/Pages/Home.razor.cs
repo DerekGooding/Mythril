@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
 using Mythril.Blazor.Services;
 using Mythril.Data;
-using System.Timers;
 
 namespace Mythril.Blazor.Pages;
 
@@ -30,20 +29,17 @@ public partial class Home : IDisposable
         if (e.Key == "1") await SwitchTab("hand-tab");
         if (e.Key == "2") await SwitchTab("cadence-tab");
         if (e.Key == "3") await SwitchTab("workshop-tab");
-        if (e.Key == "?" || e.Key == "/") _showHelp = !_showHelp;
+        if (e.Key is "?" or "/") _showHelp = !_showHelp;
     }
 
-    private async Task SwitchTab(string tabId)
-    {
-        await JS.InvokeVoidAsync("eval", $"document.getElementById('{tabId}').click()");
-    }
+    private async Task SwitchTab(string tabId) => await JS.InvokeVoidAsync("eval", $"document.getElementById('{tabId}').click()");
 
     protected override async Task OnInitializedAsync()
     {
         await persistenceService.LoadAsync();
-        
+
         timer = new System.Timers.Timer(100);
-        timer.Elapsed += (sender, args) => { _ = Task.Run(OnTimerElapsed); };
+        timer.Elapsed += (sender, args) => _ = Task.Run(OnTimerElapsed);
         timer.AutoReset = true;
         timer.Enabled = true;
 
@@ -58,10 +54,7 @@ public partial class Home : IDisposable
         inventoryService.NotifyOverflow(itemName);
     }
 
-    private async void HandleUpdateAvailable()
-    {
-        await InvokeAsync(StateHasChanged);
-    }
+    private async void HandleUpdateAvailable() => await InvokeAsync(StateHasChanged);
 
     private void MarkCadencesAsSeen()
     {
@@ -84,24 +77,15 @@ public partial class Home : IDisposable
         resourceManager.MarkSeen("workshop");
     }
 
-    private void MarkLocationsAsSeen()
-    {
-        resourceManager.ActiveTab = "hand";
-    }
+    private void MarkLocationsAsSeen() => resourceManager.ActiveTab = "hand";
 
-    private async Task ToggleTheme()
-    {
-        await themeService.ToggleTheme();
-    }
+    private async Task ToggleTheme() => await themeService.ToggleTheme();
 
-    private void ToggleTestMode()
-    {
-        resourceManager.IsTestMode = !resourceManager.IsTestMode;
-    }
+    private void ToggleTestMode() => resourceManager.IsTestMode = !resourceManager.IsTestMode;
 
     private async Task ResetGame()
     {
-        bool confirmed = await JS.InvokeAsync<bool>("confirm", "Are you sure you want to reset all progress? This cannot be undone.");
+        var confirmed = await JS.InvokeAsync<bool>("confirm", "Are you sure you want to reset all progress? This cannot be undone.");
         if (confirmed)
         {
             await persistenceService.ClearSaveAsync();
@@ -145,8 +129,8 @@ public partial class Home : IDisposable
 
     private async Task OnTimerElapsed()
     {
-        resourceManager.Tick(0.1); 
-        
+        resourceManager.Tick(0.1);
+
         saveCounter++;
         if (saveCounter >= 300) // Save every 30 seconds
         {
@@ -159,6 +143,7 @@ public partial class Home : IDisposable
 
     public void Dispose()
     {
+        GC.SuppressFinalize(this);
         if (timer != null)
         {
             timer.Enabled = false;
@@ -180,7 +165,7 @@ public partial class Home : IDisposable
         _versionClicks++;
         if (_versionClicks >= 3)
         {
-            bool newState = !AuthService.IsAuthenticated;
+            var newState = !AuthService.IsAuthenticated;
             await AuthService.SetDevMode(newState);
             _versionClicks = 0;
             SnackbarService.Show(newState ? "Developer mode unlocked!" : "Developer mode disabled.", newState ? "success" : "info");

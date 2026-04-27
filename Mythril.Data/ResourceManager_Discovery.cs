@@ -5,7 +5,7 @@ public partial class ResourceManager
     public void UpdateUsableLocations()
     {
         var usable = UsableLocations;
-        
+
         foreach (var loc in usable)
         {
             if (!UnlockedLocationNames.Contains(loc.Name))
@@ -18,11 +18,11 @@ public partial class ResourceManager
     public void CheckHiddenCadences()
     {
         // Recruit is always unlocked by Prologue completion
-        
+
         // Potential Cadence: Arcanist (Strength + Speed > 50) - Logic from original
         // Let's use the actual thresholds from simulation logic if they exist
         // Currently they are hardcoded in RoutedSimulator.UpdateStats
-        
+
         // I'll keep them here for runtime discovery
         foreach (var character in Characters)
         {
@@ -42,17 +42,14 @@ public partial class ResourceManager
 
     public void UnlockAbility(string cadenceName, string abilityName)
     {
-        string key = $"{cadenceName}:{abilityName}";
+        var key = $"{cadenceName}:{abilityName}";
         if (!UnlockedAbilities.Contains(key))
         {
             _gameStore.Dispatch(new UnlockAbilityAction(key));
         }
     }
 
-    public bool HasAbility(Character character, CadenceAbility ability)
-    {
-        return JunctionManager.CurrentlyAssigned(character).Any(cad => 
-            cad.Abilities.Any(a => a.Ability.Name == ability.Name && UnlockedAbilities.Contains($"{cad.Name}:{a.Ability.Name}"))
+    public bool HasAbility(Character character, CadenceAbility ability) => JunctionManager.CurrentlyAssigned(character).Any(cad =>
+                                                                                    cad.Abilities.Any(a => a.Ability.Name == ability.Name && UnlockedAbilities.Contains($"{cad.Name}:{a.Ability.Name}"))
         );
-    }
 }

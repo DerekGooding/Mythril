@@ -1,8 +1,4 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Mythril.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Collections.Generic;
 
 namespace Mythril.Tests;
 
@@ -37,7 +33,7 @@ public class AutoQuestCancellationTests : ResourceManagerTestBase
 
         // Assert
         var activeAfterTick = _resourceManager.ActiveQuests.Where(p => p.Character.Name == character.Name).ToList();
-        Assert.AreEqual(0, activeAfterTick.Count, "Quest should not have auto-restarted after cancellation.");
+        Assert.IsEmpty(activeAfterTick, "Quest should not have auto-restarted after cancellation.");
     }
 
     [TestMethod]
@@ -61,7 +57,7 @@ public class AutoQuestCancellationTests : ResourceManagerTestBase
         // Act: Start and complete the quest
         _resourceManager.StartQuest(questData, character);
         var progress = _resourceManager.ActiveQuests.First(p => p.Character.Name == character.Name);
-        
+
         // Complete the quest by ticking
         _resourceManager.Tick(questData.DurationSeconds + 1);
 
@@ -73,7 +69,7 @@ public class AutoQuestCancellationTests : ResourceManagerTestBase
 
         // Assert
         var activeAfterTick = _resourceManager.ActiveQuests.Where(p => p.Character.Name == character.Name).ToList();
-        Assert.IsTrue(activeAfterTick.Any(), "Quest should have auto-restarted after completion.");
+        Assert.IsNotEmpty(activeAfterTick, "Quest should have auto-restarted after completion.");
         Assert.AreEqual(recurringQuest.Name, activeAfterTick[0].Name);
     }
 }

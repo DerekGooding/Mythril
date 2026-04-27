@@ -62,7 +62,7 @@
             </div>
             @if (AuthService.IsAuthenticated)
             {
-                <button class="btn btn-sm @(resourceManager.IsTestMode ? "btn-warning" : "btn-outline-secondary")" 
+                <button class="btn btn-sm @(resourceManager!.IsTestMode ? "btn-warning" : "btn-outline-secondary")" 
                         data-testid="test-mode-toggle"
                         @onclick="ToggleTestMode">
                     Test Mode: @(resourceManager.IsTestMode ? "ON" : "OFF")

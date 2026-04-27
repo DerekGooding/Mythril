@@ -2,7 +2,6 @@ namespace Mythril.Data;
 
 public class QuestData(Quest quest, QuestDetail detail)
 {
-
     public Quest Quest { get; } = quest;
 
     public string Name => Quest.Name;
@@ -19,5 +18,4 @@ public class QuestData(Quest quest, QuestDetail detail)
 
     public Dictionary<string, int>? RequiredStats { get; init; } = detail.RequiredStats;
     public Dictionary<string, int>? StatRewards { get; init; } = detail.StatRewards;
-
 }

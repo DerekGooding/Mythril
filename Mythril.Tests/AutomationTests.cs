@@ -1,7 +1,4 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Mythril.Data;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Mythril.Tests;
 
@@ -23,7 +20,7 @@ public class AutomationTests
         _quests = ContentHost.GetContent<Quests>();
         _questDetails = ContentHost.GetContent<QuestDetails>();
         _cadences = ContentHost.GetContent<Cadences>();
-        
+
         _gameStore = new GameStore();
         var inventory = new InventoryManager(_gameStore);
         var junctionManager = new JunctionManager(_gameStore, inventory, ContentHost.GetContent<StatAugments>(), _cadences);
@@ -38,10 +35,10 @@ public class AutomationTests
         );
 
         _resourceManager = new ResourceManager(_gameStore, _items, _quests,
-            ContentHost.GetContent<QuestUnlocks>(), 
-            ContentHost.GetContent<QuestToCadenceUnlocks>(), 
-            _questDetails, 
-            _cadences, 
+            ContentHost.GetContent<QuestUnlocks>(),
+            ContentHost.GetContent<QuestToCadenceUnlocks>(),
+            _questDetails,
+            _cadences,
             ContentHost.GetContent<Locations>(),
             junctionManager,
             inventory,
@@ -61,13 +58,13 @@ public class AutomationTests
         _resourceManager.SetAutoQuestEnabled(character, true);
 
         var questGoblins = new QuestData(_quests!.All.First(q => q.Name == SandboxContent.HuntGoblins), _questDetails![_quests.All.First(q => q.Name == SandboxContent.HuntGoblins)]);
-        _resourceManager.StartQuest(questGoblins, character); 
+        _resourceManager.StartQuest(questGoblins, character);
 
-        var progress = _resourceManager.ActiveQuests.First();
+        var progress = _resourceManager.ActiveQuests[0];
         await _resourceManager.ReceiveRewards(progress);
 
-        Assert.AreEqual(1, _resourceManager.ActiveQuests.Count, "Slot 0 SHOULD have restarted.");
-        Assert.AreEqual(0, _resourceManager.ActiveQuests.First().SlotIndex);
+        Assert.HasCount(1, _resourceManager.ActiveQuests, "Slot 0 SHOULD have restarted.");
+        Assert.AreEqual(0, _resourceManager.ActiveQuests[0].SlotIndex);
     }
 
     [TestMethod]
@@ -90,8 +87,8 @@ public class AutomationTests
         var progress1 = _resourceManager.ActiveQuests.First(p => p.SlotIndex == 1);
         await _resourceManager.ReceiveRewards(progress1);
 
-        Assert.AreEqual(2, _resourceManager.ActiveQuests.Count, "Slot 1 SHOULD have restarted with AutoQuest II.");
-        Assert.IsTrue(_resourceManager.ActiveQuests.Any(q => q.SlotIndex == 1));
+        Assert.HasCount(2, _resourceManager.ActiveQuests, "Slot 1 SHOULD have restarted with AutoQuest II.");
+        Assert.Contains(q => q.SlotIndex == 1, _resourceManager.ActiveQuests);
     }
 
     [TestMethod]
@@ -109,14 +106,14 @@ public class AutomationTests
         var q2 = new QuestData(_quests.All.First(q => q.Name == SandboxContent.HuntBats), _questDetails[_quests.All.First(q => q.Name == SandboxContent.HuntBats)]);
         var q3 = new QuestData(_quests.All.First(q => q.Name == SandboxContent.HuntSpiders), _questDetails[_quests.All.First(q => q.Name == SandboxContent.HuntSpiders)]);
 
-        _resourceManager.StartQuest(q1, character); 
+        _resourceManager.StartQuest(q1, character);
         _resourceManager.StartQuest(q2, character);
         _resourceManager.StartQuest(q3, character); // Slot 2
 
         var progress2 = _resourceManager.ActiveQuests.First(p => p.SlotIndex == 2);
         await _resourceManager.ReceiveRewards(progress2);
 
-        Assert.AreEqual(2, _resourceManager.ActiveQuests.Count, "Slot 2 should NOT have restarted.");
+        Assert.HasCount(2, _resourceManager.ActiveQuests, "Slot 2 should NOT have restarted.");
     }
 
     [TestMethod]
@@ -129,10 +126,10 @@ public class AutomationTests
         var prologue = new QuestData(_quests!.All.First(q => q.Name == SandboxContent.Prologue), _questDetails![_quests.All.First(q => q.Name == SandboxContent.Prologue)]);
         _resourceManager.StartQuest(prologue, character);
 
-        var progress = _resourceManager.ActiveQuests.First();
+        var progress = _resourceManager.ActiveQuests[0];
         await _resourceManager.ReceiveRewards(progress);
 
-        Assert.AreEqual(0, _resourceManager.ActiveQuests.Count, "Single-use quest should NOT auto-restart.");
+        Assert.IsEmpty(_resourceManager.ActiveQuests, "Single-use quest should NOT auto-restart.");
     }
 
     [TestMethod]
@@ -149,7 +146,7 @@ public class AutomationTests
         // Get "Refine Fire" refinement for "Basic Gem" input
         var refData = _resourceManager.Refinements.GetRefinement(SandboxContent.RefineFire, SandboxContent.BasicGem);
         Assert.IsNotNull(refData, "Refinement 'Refine Fire' for 'Basic Gem' should exist.");
-        
+
         // Set capacity to 30
         _gameStore!.Dispatch(new SetMagicCapacityAction(30));
         // Fill inventory to near capacity (29/30)
@@ -158,9 +155,9 @@ public class AutomationTests
         _resourceManager.Inventory.Add(refData.Value.InputItem, 1);
 
         _resourceManager.StartQuest(refData.Value, character);
-        var progress = _resourceManager.ActiveQuests.First();
+        var progress = _resourceManager.ActiveQuests[0];
         await _resourceManager.ReceiveRewards(progress);
 
-        Assert.AreEqual(0, _resourceManager.ActiveQuests.Count, "Refinement producing Magic should NOT restart when capacity reached.");
+        Assert.IsEmpty(_resourceManager.ActiveQuests, "Refinement producing Magic should NOT restart when capacity reached.");
     }
 }

@@ -50,7 +50,7 @@ public class FeedbackService(IJSRuntime js, AuthService auth, HttpClient http)
         try
         {
             Console.WriteLine($"[FeedbackService] Syncing {entry.Type} to bridge...");
-            
+
             // Explicitly set options to ensure PascalCase and String Enums
             var options = new System.Text.Json.JsonSerializerOptions
             {
@@ -73,8 +73,8 @@ public class FeedbackService(IJSRuntime js, AuthService auth, HttpClient http)
 
     public async Task CaptureError(string message, string? stackTrace = null)
     {
-        string logs = "";
-        try 
+        var logs = "";
+        try
         {
             logs = await js.InvokeAsync<string>("window.getRecentLogs") ?? "";
         }
@@ -106,10 +106,7 @@ public class FeedbackService(IJSRuntime js, AuthService auth, HttpClient http)
         await js.InvokeVoidAsync("localStorage.setItem", STORAGE_KEY, json);
     }
 
-    public async Task ClearFeedback()
-    {
-        await js.InvokeVoidAsync("localStorage.removeItem", STORAGE_KEY);
-    }
+    public async Task ClearFeedback() => await js.InvokeVoidAsync("localStorage.removeItem", STORAGE_KEY);
 
     public string GetGitHubIssueUrl(FeedbackEntry entry)
     {

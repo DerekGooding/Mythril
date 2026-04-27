@@ -1,6 +1,4 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Mythril.Data;
-using System.Collections.Immutable;
 using System.Text.Json;
 
 namespace Mythril.Tests;
@@ -11,14 +9,16 @@ public class SerializationTests
     [TestMethod]
     public void SaveData_RoundTrip_SystemTextJson()
     {
-        var saveData = new SaveData {
+        var saveData = new SaveData
+        {
             Inventory = new Dictionary<string, int> { { "Gold", 100 } },
             MagicCapacity = 50,
             PinnedItems = ["Potion"],
             LastSaveTime = DateTime.Now
         };
 
-        var options = new JsonSerializerOptions {
+        var options = new JsonSerializerOptions
+        {
             PropertyNameCaseInsensitive = true
         };
         var json = JsonSerializer.Serialize(saveData, options);
@@ -33,7 +33,8 @@ public class SerializationTests
     [TestMethod]
     public void QuestProgressDTO_RoundTrip()
     {
-        var dto = new QuestProgressDTO {
+        var dto = new QuestProgressDTO
+        {
             ItemName = "Test Quest",
             ItemType = "Quest",
             CharacterName = "Hero",

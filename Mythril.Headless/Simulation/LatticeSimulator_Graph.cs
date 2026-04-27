@@ -1,24 +1,23 @@
-using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Linq;
 using Mythril.Data;
+using System.Collections.Immutable;
 
 namespace Mythril.Headless.Simulation;
 
 public partial class LatticeSimulator
 {
-    private enum NodeType { Quest, Resource, Refinement, Ability, Stat, Cadence, MagicCapacity }
+    private enum NodeType
+    { Quest, Resource, Refinement, Ability, Stat, Cadence, MagicCapacity }
+
     private record WorklistItem(NodeType Type, string Name);
 
-    private Dictionary<WorklistItem, List<WorklistItem>> _dependents = new();
+    private Dictionary<WorklistItem, List<WorklistItem>> _dependents = [];
 
     private void BuildDependencyGraph()
     {
         _dependents.Clear();
         void AddDep(WorklistItem trigger, WorklistItem dependent)
         {
-            if (!_dependents.ContainsKey(trigger)) _dependents[trigger] = new();
+            if (!_dependents.ContainsKey(trigger)) _dependents[trigger] = [];
             if (!_dependents[trigger].Contains(dependent)) _dependents[trigger].Add(dependent);
         }
 
@@ -107,7 +106,7 @@ public partial class LatticeSimulator
                 }
 
                 // Ability -> Capacity
-                if (unlock.Ability.Effects != null && unlock.Ability.Effects.Any(e => e.Type == EffectType.MagicCapacity))
+                if (unlock.Ability.Effects?.Any(e => e.Type == EffectType.MagicCapacity) == true)
                 {
                     AddDep(aItem, new WorklistItem(NodeType.MagicCapacity, ""));
                 }
@@ -118,8 +117,8 @@ public partial class LatticeSimulator
         foreach (var stat in stats.All)
         {
             var sItem = new WorklistItem(NodeType.Stat, stat.Name);
-            string abilityName = stat.Name switch { "Strength" => "J-Str", "Magic" => "J-Magic", "Vitality" => "J-Vit", "Speed" => "J-Speed", _ => "J-" + stat.Name };
-            
+            var abilityName = stat.Name switch { "Strength" => "J-Str", "Magic" => "J-Magic", "Vitality" => "J-Vit", "Speed" => "J-Speed", _ => "J-" + stat.Name };
+
             AddDep(new WorklistItem(NodeType.Ability, abilityName), sItem);
             AddDep(new WorklistItem(NodeType.MagicCapacity, ""), sItem);
 
@@ -129,7 +128,7 @@ public partial class LatticeSimulator
             }
 
             // Hidden Cadence unlocks
-            if (stat.Name == "Strength" || stat.Name == "Speed" || stat.Name == "Vitality" || stat.Name == "Magic")
+            if (stat.Name is "Strength" or "Speed" or "Vitality" or "Magic")
             {
                 AddDep(sItem, new WorklistItem(NodeType.Cadence, "HIDDEN"));
             }

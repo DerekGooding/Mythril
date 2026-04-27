@@ -5,12 +5,9 @@ public readonly partial record struct Cadence;
 [Singleton]
 public partial class Cadences : IContent<Cadence>
 {
-    public Cadence[] All { get; private set; } = [ new("Placeholder", "Dummy", []) ];
+    public Cadence[] All { get; private set; } = [new("Placeholder", "Dummy", [])];
 
-    public void Load(IEnumerable<Cadence> data)
-    {
-        All = [.. data];
-    }
+    public void Load(IEnumerable<Cadence> data) => All = [.. data];
 }
 
 public static class CadenceBuilder

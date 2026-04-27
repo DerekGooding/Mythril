@@ -1,11 +1,7 @@
 using Bunit;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.JSInterop;
-using Moq;
 using Mythril.Blazor.Components;
 using Mythril.Data;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Mythril.Tests;
 
@@ -19,10 +15,10 @@ public class UIComponentTests : BunitTestBase
         var item1 = new Item("Potion", "Heals 50 HP", ItemType.Consumable);
         var item2 = new Item("Ether", "Restores 20 MP", ItemType.Consumable);
         var spell1 = new Item("Fire", "Fire damage", ItemType.Spell);
-        
+
         var items = Services.GetRequiredService<Items>();
         items.Load(items.All.Concat([item1, item2, spell1]));
-        
+
         var inventory = Services.GetRequiredService<InventoryManager>();
         inventory.Clear();
         inventory.Add(item1, 5);
@@ -31,15 +27,15 @@ public class UIComponentTests : BunitTestBase
 
         // Act
         var cut = RenderComponent<InventoryPanel>();
-        
+
         // Ensure we show ALL items for the test count to match
         var allTab = cut.Find("[data-testid='inventory-tab-all']");
         allTab.Click();
 
         // Assert
         var itemElements = cut.FindComponents<InventoryItem>();
-        Assert.AreEqual(3, itemElements.Count);
-        
+        Assert.HasCount(3, itemElements);
+
         var potion = itemElements.FirstOrDefault(i => i.Instance.Item.Item.Name == "Potion");
         Assert.IsNotNull(potion);
         Assert.AreEqual(5, potion.Instance.Item.Quantity);
@@ -65,7 +61,7 @@ public class UIComponentTests : BunitTestBase
         var progressBar = cut.Find(".progress-bar");
         var style = progressBar.GetAttribute("style");
         Assert.IsNotNull(style);
-        Assert.IsTrue(style.Contains("width: 50%"), $"Expected width: 50%, got {style}");
+        Assert.Contains("width: 50%", style, $"Expected width: 50%, got {style}");
 
         // 2. Verify duration display
         var durationDisplay = cut.Find(".task-duration");
@@ -91,7 +87,7 @@ public class UIComponentTests : BunitTestBase
         var progressBar = cut.Find(".progress-bar");
         var style = progressBar.GetAttribute("style");
         Assert.IsNotNull(style);
-        Assert.IsTrue(style.Contains("width: 0%"), $"Expected width: 0%, got {style}");
+        Assert.Contains("width: 0%", style, $"Expected width: 0%, got {style}");
     }
 
     [TestMethod]
@@ -99,7 +95,7 @@ public class UIComponentTests : BunitTestBase
     {
         // Arrange
         var character = new Character("Hero");
-        
+
         // Act
         var cut = RenderComponent<CharacterDisplay>(parameters => parameters
             .Add(p => p.Character, character)
@@ -109,9 +105,9 @@ public class UIComponentTests : BunitTestBase
         // Assert
         var nameHeader = cut.Find("h4");
         Assert.AreEqual("Hero", nameHeader.TextContent.Trim());
-        
+
         var cadenceInfo = cut.Find(".cadence-info");
-        Assert.IsTrue(cadenceInfo.TextContent.Contains("Cadence: None"));
+        Assert.Contains("Cadence: None", cadenceInfo.TextContent);
     }
 
     [TestMethod]
@@ -122,10 +118,10 @@ public class UIComponentTests : BunitTestBase
         var quest1 = new Quest("Quest 1", "Desc");
         var quest2 = new Quest("Quest 2", "Desc");
         var detail = new QuestDetail(10, [], [], QuestType.Single);
-        
+
         var progress1 = new QuestProgress(new QuestData(quest1, detail), "Desc", 10, character, 0);
         var progress2 = new QuestProgress(new QuestData(quest2, detail), "Desc", 10, character, 1);
-        
+
         var progresses = new List<QuestProgress> { progress1, progress2 };
 
         // Act
@@ -137,7 +133,7 @@ public class UIComponentTests : BunitTestBase
         // Assert
         var container = cut.Find(".character-card-progress-container");
         var progressBars = container.QuerySelectorAll(".character-card-progress");
-        
+
         Assert.AreEqual(2, progressBars.Length, "Should render two mini progress bars at the bottom.");
     }
 
@@ -146,7 +142,7 @@ public class UIComponentTests : BunitTestBase
     {
         // Arrange
         var unlockedCadences = new List<Cadence>();
-        
+
         // Act
         var cut = RenderComponent<CadencePanel>(parameters => parameters
             .Add(p => p.UnlockedCadences, unlockedCadences)
@@ -155,7 +151,7 @@ public class UIComponentTests : BunitTestBase
 
         // Assert
         var noCadences = cut.Find(".no-cadences");
-        Assert.IsTrue(noCadences.TextContent.Contains("No Cadences discovered"));
+        Assert.Contains("No Cadences discovered", noCadences.TextContent);
     }
 
     [TestMethod]
@@ -175,8 +171,8 @@ public class UIComponentTests : BunitTestBase
 
         // Assert
         var text = cut.Find(".refinement-info").TextContent;
-        Assert.IsTrue(text.Contains("1 Basic Gem"));
-        Assert.IsTrue(text.Contains("5 Fire I"));
+        Assert.Contains("1 Basic Gem", text);
+        Assert.Contains("5 Fire I", text);
     }
 
     [TestMethod]
@@ -192,9 +188,9 @@ public class UIComponentTests : BunitTestBase
         // Should have spell-glow class for spells
         var container = cut.Find("[data-testid='item-icon-fire-i']");
         Assert.IsTrue(container.ClassList.Contains("spell-glow"));
-        
+
         // Initially shows sprite
-        Assert.IsTrue(cut.FindAll(".item-sprite").Count > 0);
+        Assert.IsNotEmpty(cut.FindAll(".item-sprite"));
 
         // Simulate error
         var img = cut.Find(".item-sprite");

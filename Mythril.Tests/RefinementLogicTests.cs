@@ -1,6 +1,4 @@
 using Mythril.Data;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Linq;
 
 namespace Mythril.Tests;
 
@@ -11,8 +9,8 @@ public class RefinementLogicTests : ResourceManagerTestBase
     public void ItemRefinements_ByKey_IsPopulated()
     {
         Assert.IsNotNull(_resourceManager!.Refinements);
-        Assert.IsTrue(_resourceManager.Refinements.ByKey.Count > 0, "Refinements should be loaded.");
-        
+        Assert.IsNotEmpty(_resourceManager.Refinements.ByKey, "Refinements should be loaded.");
+
         var hasFire = _resourceManager.Refinements.ByKey.Any(r => r.Key.Name == "Refine Fire");
         Assert.IsTrue(hasFire, "Refine Fire should be in the refinements dictionary.");
     }
@@ -28,7 +26,7 @@ public class RefinementLogicTests : ResourceManagerTestBase
             .Where(r => _resourceManager.UnlockedAbilities.Any(ua => ua.EndsWith($":{r.Key.Name}")))
             .ToList();
 
-        Assert.IsTrue(discoveredRefinements.Any(r => r.Key.Name == "Refine Fire"), "Refine Fire should be discovered.");
+        Assert.Contains(r => r.Key.Name == "Refine Fire", discoveredRefinements, "Refine Fire should be discovered.");
     }
 
     [TestMethod]
@@ -40,7 +38,7 @@ public class RefinementLogicTests : ResourceManagerTestBase
 
         // Unlock it
         _resourceManager.UnlockAbility("Student", "Refine Fire");
-        
+
         // Check if anyone has it (should be false as not assigned)
         var anyoneHasAbility = _resourceManager.Characters.Any(c => _resourceManager.HasAbility(c, ability));
         Assert.IsFalse(anyoneHasAbility, "Should be false because cadence is not assigned.");
@@ -61,7 +59,7 @@ public class RefinementLogicTests : ResourceManagerTestBase
         var basicGem = ContentHost.GetContent<Items>().All.First(i => i.Name == "Basic Gem");
         var fireI = ContentHost.GetContent<Items>().All.First(i => i.Name == "Fire I");
         var recipe = _resourceManager!.Refinements.ByKey[ability].Recipes[basicGem];
-        
+
         var refinementData = new RefinementData(ability, basicGem, recipe, "Magic");
         var character = _resourceManager!.Characters[0];
 
@@ -85,8 +83,7 @@ public class RefinementLogicTests : ResourceManagerTestBase
 
         // Finish quest (Receive rewards)
         await _resourceManager.ReceiveRewards(progress.Item);
-        
+
         Assert.AreEqual(recipe.OutputQuantity, _resourceManager.Inventory.GetQuantity(fireI), "Should have received fire magic from refinement.");
     }
 }
-

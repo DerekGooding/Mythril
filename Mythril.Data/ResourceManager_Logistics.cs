@@ -5,7 +5,7 @@ public partial class ResourceManager
     public int GetTaskLimit(Character character)
     {
         var assigned = JunctionManager.CurrentlyAssigned(character);
-        int maxLogistics = 0;
+        var maxLogistics = 0;
         foreach (var cadence in assigned)
         {
             foreach (var unlock in cadence.Abilities)
@@ -41,7 +41,7 @@ public partial class ResourceManager
             }
 
             // 2. Check task limit
-            int limit = GetTaskLimit(character);
+            var limit = GetTaskLimit(character);
             while (active.Count > limit)
             {
                 var toCancel = active.Last();
@@ -76,14 +76,14 @@ public partial class ResourceManager
 
     public void ToggleAutoQuest(Character character)
     {
-        bool current = IsAutoQuestEnabled(character);
+        var current = IsAutoQuestEnabled(character);
         SetAutoQuestEnabled(character, !current);
     }
 
     public int GetAutoQuestLimit(Character character)
     {
         var assigned = JunctionManager.CurrentlyAssigned(character);
-        int maxAuto = 0;
+        var maxAuto = 0;
         foreach (var cadence in assigned)
         {
             foreach (var unlock in cadence.Abilities)
@@ -109,10 +109,9 @@ public partial class ResourceManager
         {
             if (IsAutoQuestEnabled(character))
             {
-                int limit = GetTaskLimit(character);
-                int autoLimit = GetAutoQuestLimit(character);
-                int current = ActiveQuests.Count(p => p.Character.Name == character.Name);
-                
+                var limit = GetTaskLimit(character);
+                var autoLimit = GetAutoQuestLimit(character);
+                var current = ActiveQuests.Count(p => p.Character.Name == character.Name);
 
                 //TODO => Fix autoquest now that journal is gone. Need a new standalone mapping of last tasks
                 if (current < limit)
@@ -145,7 +144,7 @@ public partial class ResourceManager
                     //         // Check refinements
                     //         var refData = _refinements.ByKey.SelectMany(r => r.Value.Recipes.Select(rec => new RefinementData(r.Key, rec.Key, rec.Value, r.Value.PrimaryStat)))
                     //             .FirstOrDefault(rd => rd.Name == lastEntry.TaskName);
-                            
+
                     //         if (refData.Name != null && CanAfford(refData, character))
                     //         {
                     //             StartQuest(refData, character, -1.5);

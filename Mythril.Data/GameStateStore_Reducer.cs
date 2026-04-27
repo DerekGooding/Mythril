@@ -19,15 +19,18 @@ public partial class GameStore
             CancelQuestAction a => state with { ActiveQuests = state.ActiveQuests.RemoveAll(q => q.StartTime == a.Progress.StartTime && q.Character.Name == a.Progress.Character.Name) },
             AssignCadenceAction a => AssignCadence(state, a),
             UnassignCadenceAction a => UnassignCadence(state, a),
-            JunctionMagicAction a => state with { 
-                Junctions = state.Junctions.RemoveAll(j => j.Character.Name == a.Character.Name && j.Stat.Name == a.Stat.Name).Add(new Junction(a.Character, a.Stat, a.Magic)) 
+            JunctionMagicAction a => state with
+            {
+                Junctions = state.Junctions.RemoveAll(j => j.Character.Name == a.Character.Name && j.Stat.Name == a.Stat.Name).Add(new Junction(a.Character, a.Stat, a.Magic))
             },
-            UnjunctionAction a => state with {
+            UnjunctionAction a => state with
+            {
                 Junctions = state.Junctions.RemoveAll(j => j.Character.Name == a.Character.Name && j.Stat.Name == a.Stat.Name)
             },
-            TickAction a => state with { 
+            TickAction a => state with
+            {
                 CurrentTime = state.CurrentTime + a.DeltaSeconds,
-                ActiveQuests = state.ActiveQuests.Select(q => q.IsCompleted ? q : q with { SecondsElapsed = q.SecondsElapsed + a.DeltaSeconds }).ToImmutableList()
+                ActiveQuests = [.. state.ActiveQuests.Select(q => q.IsCompleted ? q : q with { SecondsElapsed = q.SecondsElapsed + a.DeltaSeconds })]
             },
             SkipTimeAction a => state with { CurrentTime = state.CurrentTime + a.Seconds },
             UnlockAbilityAction a => UnlockAbility(state, a),
@@ -36,12 +39,12 @@ public partial class GameStore
             TogglePinAction a => state with { PinnedItems = state.PinnedItems.Contains(a.ItemName) ? state.PinnedItems.Remove(a.ItemName) : state.PinnedItems.Add(a.ItemName) },
             ToggleRecipeStarAction a => state with { StarredRecipes = state.StarredRecipes.Contains(a.RecipeKey) ? state.StarredRecipes.Remove(a.RecipeKey) : state.StarredRecipes.Add(a.RecipeKey) },
             SetMagicCapacityAction a => state with { MagicCapacity = a.Capacity },
-            ClearInventoryAction a => state with { Inventory = ImmutableDictionary<string, int>.Empty },
+            ClearInventoryAction a => state with { Inventory = [] },
             SetStateAction a => a.NewState,
             AddStatBoostAction a => AddStatBoost(state, a.CharacterName, a.StatName, a.Amount),
             UnlockLocationAction a => state with { UnlockedLocationNames = state.UnlockedLocationNames.Add(a.LocationName) },
             SetHighlightedPathAction a => state with { HighlightedPath = a.Path },
-            ClearHighlightedPathAction a => state with { HighlightedPath = ImmutableHashSet<string>.Empty },
+            ClearHighlightedPathAction a => state with { HighlightedPath = [] },
             FinishQuestAction a => FinishQuest(state, a, out overflowItem, out overflowQty),
             SetActiveTabAction a => state with { ActiveTab = a.TabName },
             SetUnseenFlagsAction a => state with { HasUnseenCadence = a.Cadence, HasUnseenWorkshop = a.Workshop },
@@ -51,29 +54,27 @@ public partial class GameStore
         };
     }
 
-    private static GameState StartQuest(GameState state, StartQuestAction a)
-    {
+    private static GameState StartQuest(GameState state, StartQuestAction a) =>
         // Costs are already paid in manager for now to keep it simple, but we could move it here
-        return state with { ActiveQuests = state.ActiveQuests.Add(a.Progress) };
-    }
+        state with { ActiveQuests = state.ActiveQuests.Add(a.Progress) };
 
     private static GameState UnlockAbility(GameState state, UnlockAbilityAction a)
     {
         var newState = state with { UnlockedAbilities = state.UnlockedAbilities.Add(a.AbilityKey) };
-        
+
         // Update Magic Capacity
         var cadences = ContentHost.GetContent<Cadences>();
-        int capacity = 30;
+        var capacity = 30;
         foreach (var abilityKey in newState.UnlockedAbilities)
         {
             var parts = abilityKey.Split(':');
             if (parts.Length < 2) continue;
             var cadenceName = parts[0];
             var abilityName = parts[1];
-            
+
             var cadence = cadences.All.FirstOrDefault(c => c.Name == cadenceName);
             if (cadence.Name == null) continue;
-            
+
             var unlock = cadence.Abilities.FirstOrDefault(au => au.Ability.Name == abilityName);
             if (unlock.Ability.Name != null && unlock.Ability.Effects != null)
             {
@@ -92,9 +93,10 @@ public partial class GameStore
 
     private static GameState AddStatBoost(GameState state, string characterName, string statName, int amount)
     {
-        var boosts = state.CharacterPermanentStatBoosts.GetValueOrDefault(characterName, ImmutableDictionary<string, int>.Empty);
-        int current = boosts.GetValueOrDefault(statName, 0);
-        return state with {
+        var boosts = state.CharacterPermanentStatBoosts.GetValueOrDefault(characterName, []);
+        var current = boosts.GetValueOrDefault(statName, 0);
+        return state with
+        {
             CharacterPermanentStatBoosts = state.CharacterPermanentStatBoosts.SetItem(characterName, boosts.SetItem(statName, current + amount))
         };
     }
@@ -105,10 +107,10 @@ public partial class GameStore
         overflowQty = 0;
 
         var progress = a.Progress;
-        object item = progress.Item;
-        string taskName = "Unknown";
-        string characterName = progress.Character.Name;
-        string details = "";
+        var item = progress.Item;
+        var taskName = "Unknown";
+        var characterName = progress.Character.Name;
+        var details = "";
 
         var nextState = state;
 
@@ -116,7 +118,7 @@ public partial class GameStore
         {
             taskName = questData.Name;
             details = "Completed " + questData.Name;
-            
+
             // Add rewards
             if (questData.Rewards != null)
             {
@@ -139,7 +141,7 @@ public partial class GameStore
             // Unlocks
             nextState = nextState with { CompletedQuests = nextState.CompletedQuests.Add(questData.Quest.Name) };
 
-            if (questData.Type == QuestType.Single || questData.Type == QuestType.Unlock)
+            if (questData.Type is QuestType.Single or QuestType.Unlock)
             {
                 // Unlock Cadences
                 var qToC = ContentHost.GetContent<QuestToCadenceUnlocks>();
@@ -151,12 +153,12 @@ public partial class GameStore
 
                 // Discover locations
                 var locations = ContentHost.GetContent<Locations>();
-                
+
                 foreach (var loc in locations.All)
                 {
                     if (!nextState.UnlockedLocationNames.Contains(loc.Name))
                     {
-                        bool isUsable = string.IsNullOrEmpty(loc.RequiredQuest) || nextState.CompletedQuests.Contains(loc.RequiredQuest);
+                        var isUsable = string.IsNullOrEmpty(loc.RequiredQuest) || nextState.CompletedQuests.Contains(loc.RequiredQuest);
                         if (isUsable)
                         {
                             nextState = nextState with { UnlockedLocationNames = nextState.UnlockedLocationNames.Add(loc.Name) };
@@ -169,25 +171,24 @@ public partial class GameStore
         {
             taskName = unlock.Ability.Name;
             details = $"Researched {unlock.Ability.Name} for {unlock.CadenceName}";
-            
-            string abilityKey = $"{unlock.CadenceName}:{unlock.Ability.Name}";
+
+            var abilityKey = $"{unlock.CadenceName}:{unlock.Ability.Name}";
             nextState = UnlockAbility(nextState, new UnlockAbilityAction(abilityKey));
         }
         else if (item is RefinementData refinement)
         {
             taskName = refinement.Name;
             details = refinement.Description;
-            
+
             nextState = AddResource(nextState, new AddResourceAction(refinement.Recipe.OutputItem.Name, refinement.Recipe.OutputQuantity), out var oI, out var oQ);
             if (oI != null) { overflowItem = oI; overflowQty = oQ; }
         }
 
         // Remove from active quests
-        nextState = nextState with { 
-            ActiveQuests = nextState.ActiveQuests.RemoveAll(q => q.StartTime == progress.StartTime && q.Character.Name == progress.Character.Name) 
+        return nextState with
+        {
+            ActiveQuests = nextState.ActiveQuests.RemoveAll(q => q.StartTime == progress.StartTime && q.Character.Name == progress.Character.Name)
         };
-
-        return nextState;
     }
 
     private static GameState AddResource(GameState state, AddResourceAction a, out string? overflowItem, out int overflowQty)
@@ -197,9 +198,9 @@ public partial class GameStore
 
         var items = ContentHost.GetContent<Items>();
         var item = items.All.FirstOrDefault(i => i.Name == a.ItemName);
-        
-        int current = state.Inventory.GetValueOrDefault(a.ItemName);
-        int next = current + a.Quantity;
+
+        var current = state.Inventory.GetValueOrDefault(a.ItemName);
+        var next = current + a.Quantity;
 
         if (item.Name != null && item.ItemType == ItemType.Spell && next > state.MagicCapacity)
         {
@@ -214,10 +215,10 @@ public partial class GameStore
     private static GameState AssignCadence(GameState state, AssignCadenceAction a)
     {
         // Get previous owner if any
-        string? prevOwner = state.AssignedCadences.GetValueOrDefault(a.CadenceName);
-        
+        var prevOwner = state.AssignedCadences.GetValueOrDefault(a.CadenceName);
+
         var newState = state with { AssignedCadences = state.AssignedCadences.SetItem(a.CadenceName, a.CharacterName) };
-        
+
         // If it was "stolen", cleanup junctions for previous owner
         if (prevOwner != null && prevOwner != a.CharacterName)
         {
@@ -238,13 +239,14 @@ public partial class GameStore
 
         var invalidJunctions = state.Junctions
             .Where(j => j.Character.Name == owner)
-            .Where(j => {
-                string abilityName = GetJunctionAbilityName(j.Stat.Name);
+            .Where(j =>
+            {
+                var abilityName = GetJunctionAbilityName(j.Stat.Name);
                 return !remainingCadences.Any(c => c.Abilities.Any(ua => ua.Ability.Name == abilityName && state.UnlockedAbilities.Contains($"{c.Name}:{ua.Ability.Name}")));
             })
             .ToList();
 
-        if (invalidJunctions.Any())
+        if (invalidJunctions.Count != 0)
         {
             var junctions = state.Junctions.ToBuilder();
             foreach (var ij in invalidJunctions) junctions.Remove(ij);
@@ -265,8 +267,8 @@ public partial class GameStore
 
     private static GameState SpendResource(GameState state, SpendResourceAction a)
     {
-        int current = state.Inventory.GetValueOrDefault(a.ItemName);
-        int next = current - a.Quantity;
+        var current = state.Inventory.GetValueOrDefault(a.ItemName);
+        var next = current - a.Quantity;
         if (next <= 0) return state with { Inventory = state.Inventory.Remove(a.ItemName) };
         return state with { Inventory = state.Inventory.SetItem(a.ItemName, next) };
     }

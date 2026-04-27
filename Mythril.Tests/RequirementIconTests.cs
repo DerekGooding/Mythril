@@ -2,8 +2,6 @@ using Bunit;
 using Microsoft.Extensions.DependencyInjection;
 using Mythril.Blazor.Components;
 using Mythril.Data;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Mythril.Tests;
 
@@ -16,13 +14,13 @@ public class RequirementIconTests : BunitTestBase
         // Arrange
         var item = new Item("Stone", "Common stone", ItemType.Material);
         var quest = new Quest("Icon Test", "Desc");
-        var detail = new QuestDetail(10, 
-            [new ItemQuantity(item, 5)], 
-            [], 
-            QuestType.Single, 
-            "Strength", 
+        var detail = new QuestDetail(10,
+            [new ItemQuantity(item, 5)],
+            [],
+            QuestType.Single,
+            "Strength",
             new Dictionary<string, int> { { "Strength", 20 } });
-        
+
         var questData = new QuestData(quest, detail);
 
         // Act
@@ -50,7 +48,7 @@ public class RequirementIconTests : BunitTestBase
         var questData = new QuestData(quest, detail);
 
         // Inject prerequisite into the service: Next Quest requires Icon Test
-        var questUnlocks = TestContext.Services.GetRequiredService<QuestUnlocks>();
+        var questUnlocks = TestContext!.Services.GetRequiredService<QuestUnlocks>();
         questUnlocks.Load(new Dictionary<Quest, Quest[]> { { targetQuest, [quest] } });
 
         // Act
@@ -61,7 +59,7 @@ public class RequirementIconTests : BunitTestBase
         // Assert
         var unlockIcon = cut.Find("span[title='Unlocks']");
         Assert.AreEqual("✨", (unlockIcon.TextContent ?? "").Trim());
-        Assert.IsTrue(cut.Markup.Contains("unlock new quest"));
+        Assert.Contains("unlock new quest", cut.Markup);
     }
 
     [TestMethod]

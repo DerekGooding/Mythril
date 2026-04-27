@@ -1,6 +1,3 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Mythril.Data;
-
 namespace Mythril.Tests;
 
 [TestClass]
@@ -9,10 +6,10 @@ public class GameTimerTests : ResourceManagerTestBase
     [TestMethod]
     public void ResourceManager_Tick_IncrementsCurrentTime()
     {
-        double initialTime = _resourceManager!.CurrentTime;
+        var initialTime = _resourceManager!.CurrentTime;
         _resourceManager.Tick(1.0);
         Assert.AreEqual(initialTime + 1.0, _resourceManager.CurrentTime);
-        
+
         _resourceManager.Tick(0.5);
         Assert.AreEqual(initialTime + 1.5, _resourceManager.CurrentTime);
     }
@@ -22,7 +19,7 @@ public class GameTimerTests : ResourceManagerTestBase
     {
         _resourceManager!.Tick(100.0);
         Assert.AreEqual(100.0, _resourceManager.CurrentTime);
-        
+
         _resourceManager.Initialize();
         Assert.AreEqual(0, _resourceManager.CurrentTime);
     }

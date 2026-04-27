@@ -7,15 +7,15 @@
     user-select: none;
 }
 
-.card:active {
-    cursor: grabbing;
-}
+    .card:active {
+        cursor: grabbing;
+    }
 
-.card.locked {
-    cursor: not-allowed;
-    filter: grayscale(0.8);
-    opacity: 0.7;
-}
+    .card.locked {
+        cursor: not-allowed;
+        filter: grayscale(0.8);
+        opacity: 0.7;
+    }
 
 .card-header {
     font-weight: bold;
@@ -45,21 +45,21 @@
     border-radius: 4px;
 }
 
-.card-side h6 {
-    margin: 0 0 0.25rem 0;
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    color: var(--text-muted);
-}
+    .card-side h6 {
+        margin: 0 0 0.25rem 0;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        color: var(--text-muted);
+    }
 
-.card-side ul {
-    margin: 0;
-    padding-left: 1rem;
-}
+    .card-side ul {
+        margin: 0;
+        padding-left: 1rem;
+    }
 
-.card-side li {
-    color: var(--text-color);
-}
+    .card-side li {
+        color: var(--text-color);
+    }
 
 .prerequisite-highlight {
     border-color: #ffeb3b !important; /* Yellow highlight */

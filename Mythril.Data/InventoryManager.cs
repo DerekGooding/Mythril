@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
-
 namespace Mythril.Data;
 
 public class InventoryManager(GameStore gameStore)
@@ -37,7 +34,7 @@ public class InventoryManager(GameStore gameStore)
         return true;
     }
 
-    public bool Has(Item item, int quantity = 1) 
+    public bool Has(Item item, int quantity = 1)
     {
         if (quantity <= 0) return true;
         return _gameStore.State.Inventory.GetValueOrDefault(item.Name) >= quantity;

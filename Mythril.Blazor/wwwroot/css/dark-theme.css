@@ -51,10 +51,10 @@ body {
     border-color: var(--primary-hover);
 }
 
-.btn-primary:hover {
-    background-color: var(--primary-hover);
-    border-color: var(--primary-hover);
-}
+    .btn-primary:hover {
+        background-color: var(--primary-hover);
+        border-color: var(--primary-hover);
+    }
 
 a, .btn-link {
     color: var(--primary-color);
@@ -66,12 +66,12 @@ a, .btn-link {
     border-color: var(--input-border);
 }
 
-.form-control:focus {
-    background-color: var(--input-bg);
-    color: var(--input-text);
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 0.25rem rgba(187, 134, 252, 0.25);
-}
+    .form-control:focus {
+        background-color: var(--input-bg);
+        color: var(--input-text);
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 0.25rem rgba(187, 134, 252, 0.25);
+    }
 
 .card {
     background-color: var(--card-bg);
@@ -84,15 +84,15 @@ a, .btn-link {
     border-color: var(--border-color);
 }
 
-.nav-tabs .nav-link.active {
-    background-color: var(--tab-active-bg);
-    color: var(--primary-color);
-    border-color: var(--border-color) var(--border-color) var(--tab-active-bg);
-}
+    .nav-tabs .nav-link.active {
+        background-color: var(--tab-active-bg);
+        color: var(--primary-color);
+        border-color: var(--border-color) var(--border-color) var(--tab-active-bg);
+    }
 
-.nav-tabs .nav-link:hover {
-    border-color: #444;
-}
+    .nav-tabs .nav-link:hover {
+        border-color: #444;
+    }
 
 .tab-content {
     background-color: var(--tab-bg);
@@ -109,9 +109,9 @@ a, .btn-link {
     color: var(--text-color);
 }
 
-.expander-header:hover {
-    background-color: var(--item-hover-bg);
-}
+    .expander-header:hover {
+        background-color: var(--item-hover-bg);
+    }
 
 .expander-content {
     background-color: var(--panel-bg);
@@ -163,9 +163,9 @@ a, .btn-link {
     background-color: var(--drop-zone-bg);
 }
 
-.drop-target:hover {
-    background-color: var(--badge-bg);
-}
+    .drop-target:hover {
+        background-color: var(--badge-bg);
+    }
 
 .text-muted {
     color: var(--text-muted) !important;

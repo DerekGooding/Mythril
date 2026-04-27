@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Linq;
 using Mythril.Data;
 
 namespace Mythril.Headless.Simulation;
@@ -18,23 +14,25 @@ public partial class RoutedSimulator(
     {
         Console.WriteLine("Starting Path-Routed Simulation...");
         var state = new SimulationState(stats);
-        if (seed != null) {
+        if (seed != null)
+        {
             foreach (var s in seed.StartingStats) state.CurrentStats[s.Key] = s.Value;
             foreach (var c in seed.StartingUnlockedCadences) state.UnlockedCadences.Add(c);
             foreach (var a in seed.StartingUnlockedAbilities) state.UnlockedAbilities.Add(a);
         }
-        
-        bool progressed = true; int steps = 0; const int MAX_STEPS = 10000;
+
+        var progressed = true; var steps = 0; const int MAX_STEPS = 10000;
         while (progressed && steps < MAX_STEPS)
         {
             steps++;
             progressed = AttemptStep(state, steps);
             if (state.CompletedQuests.Contains(EndQuest)) { Console.WriteLine($"[SUCCESS] End Game reached!"); break; }
-            if (state.CurrentTime > 3600 * 24 * 365) break; 
+            if (state.CurrentTime > 3600 * 24 * 365) break;
         }
-        Console.WriteLine($"Routed Completion Time: {(state.CurrentTime / 60.0):F1} minutes");
+        Console.WriteLine($"Routed Completion Time: {state.CurrentTime / 60.0:F1} minutes");
         Console.WriteLine($"Total Quests Completed: {state.CompletedQuests.Count}");
-        if (!state.CompletedQuests.Contains(EndQuest)) {
+        if (!state.CompletedQuests.Contains(EndQuest))
+        {
             Console.WriteLine("[FAIL] End Game node never reached.");
             var endQuestObj = quests.All.First(q => q.Name == EndQuest);
             var endQuestDet = questDetails[endQuestObj];
@@ -42,7 +40,7 @@ public partial class RoutedSimulator(
             Console.WriteLine($"[DEBUG] Current Stats: {string.Join(", ", state.CurrentStats.Select(kvp => $"{kvp.Key}: {kvp.Value}"))}");
             Console.WriteLine($"[DEBUG] Magic Capacity: {state.MagicCapacity}");
         }
-        
+
         // Expose time for ReachabilitySimulator to report
         LastRunTime = state.CurrentTime;
         EndGameReached = state.CompletedQuests.Contains(EndQuest);

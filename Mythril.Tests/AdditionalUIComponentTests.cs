@@ -1,14 +1,10 @@
 using Bunit;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.JSInterop;
-using Moq;
 using Mythril.Blazor;
 using Mythril.Blazor.Components;
 using Mythril.Blazor.Layout;
 using Mythril.Blazor.Pages;
 using Mythril.Data;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Mythril.Tests;
 
@@ -21,7 +17,7 @@ public class AdditionalUIComponentTests : BunitTestBase
         var ability = new CadenceAbility("Test Ability", "Description");
         var unlock = new CadenceUnlock("Test Cadence", ability, []);
         var cut = RenderComponent<AbilityUnlockCard>(parameters => parameters.Add(p => p.Unlock, unlock));
-        Assert.IsTrue(cut.Markup.Contains("Test Ability"));
+        Assert.Contains("Test Ability", cut.Markup);
     }
 
     [TestMethod]
@@ -29,7 +25,7 @@ public class AdditionalUIComponentTests : BunitTestBase
     {
         var cadence = new Cadence("Test Cadence", "Description", []);
         var cut = RenderComponent<CadenceDragExpander>(parameters => parameters.Add(p => p.Cadence, cadence));
-        Assert.IsTrue(cut.Markup.Contains("Test Cadence"));
+        Assert.Contains("Test Cadence", cut.Markup);
     }
 
     [TestMethod]
@@ -37,51 +33,51 @@ public class AdditionalUIComponentTests : BunitTestBase
     {
         var cadence = new Cadence("Test Cadence", "Description", []);
         var cut = RenderComponent<CadenceTree>(parameters => parameters.Add(p => p.CadenceData, cadence));
-        Assert.IsTrue(cut.Markup.Contains("cadence-tree"));
+        Assert.Contains("cadence-tree", cut.Markup);
     }
 
     [TestMethod]
     public void DropZone_RendersCorrectly()
     {
         var cut = RenderComponent<DropZone>();
-        Assert.IsTrue(cut.Markup.Contains("drop-zone"));
+        Assert.Contains("drop-zone", cut.Markup);
     }
 
     [TestMethod]
     public void DropZone_cadence_RendersCorrectly()
     {
         var cut = RenderComponent<DropZone_cadence>();
-        Assert.IsTrue(cut.Markup.Contains("drop-zone"));
+        Assert.Contains("drop-zone", cut.Markup);
     }
 
     [TestMethod]
     public void DropZone_item_RendersCorrectly()
     {
         var cut = RenderComponent<DropZone_item>();
-        Assert.IsTrue(cut.Markup.Contains("drop-zone"));
+        Assert.Contains("drop-zone", cut.Markup);
     }
 
     [TestMethod]
     public void Expander_RendersCorrectly()
     {
         var cut = RenderComponent<Expander>(parameters => parameters.AddChildContent("Test Content"));
-        Assert.IsTrue(cut.Markup.Contains("Test Content"));
+        Assert.Contains("Test Content", cut.Markup);
     }
 
     [TestMethod]
     public void FeedbackPanel_RendersCorrectly()
     {
         var cut = RenderComponent<FeedbackPanel>();
-        Assert.IsTrue(cut.Markup.Contains("Submit Feedback"));
+        Assert.Contains("Submit Feedback", cut.Markup);
     }
 
     [TestMethod]
     public void HandPanel_RendersCorrectly()
     {
         var quest = new Quest("Test Quest", "Description");
-        var locations = new List<LocationData> { new LocationData(new Location("Test Location", [quest]), [quest]) };
+        var locations = new List<LocationData> { new(new Location("Test Location", [quest]), [quest]) };
         var cut = RenderComponent<HandPanel>(parameters => parameters.Add(p => p.Locations, locations));
-        Assert.IsTrue(cut.Markup.Contains("Test Location"));
+        Assert.Contains("Test Location", cut.Markup);
     }
 
     [TestMethod]
@@ -89,7 +85,7 @@ public class AdditionalUIComponentTests : BunitTestBase
     {
         var item = new ItemQuantity(new Item("Test Item", "Description", ItemType.Material), 1);
         var cut = RenderComponent<InventoryItem>(parameters => parameters.Add(p => p.Item, item));
-        Assert.IsTrue(cut.Markup.Contains("Test Item"));
+        Assert.Contains("Test Item", cut.Markup);
     }
 
     [TestMethod]
@@ -101,7 +97,7 @@ public class AdditionalUIComponentTests : BunitTestBase
             .Add(p => p.QuestProgresses, [])
             .Add(p => p.Accepts, (obj) => true)
         );
-        Assert.IsTrue(cut.Markup.Contains("Party"));
+        Assert.Contains("Party", cut.Markup);
     }
 
     [TestMethod]
@@ -111,9 +107,9 @@ public class AdditionalUIComponentTests : BunitTestBase
         var detail = new QuestDetail(10, [], [], QuestType.Single);
         var questData = new QuestData(quest, detail);
         var cut = RenderComponent<QuestCard>(parameters => parameters.Add(p => p.QuestData, questData));
-        Assert.IsTrue(cut.Markup.Contains("Test Quest"));
-        Assert.IsFalse(cut.Markup.Contains("In Progress"));
-        Assert.IsFalse(cut.Markup.Contains("locked"));
+        Assert.Contains("Test Quest", cut.Markup);
+        Assert.DoesNotContain("In Progress", cut.Markup);
+        Assert.DoesNotContain("locked", cut.Markup);
     }
 
     [TestMethod]
@@ -123,16 +119,16 @@ public class AdditionalUIComponentTests : BunitTestBase
         var detail = new QuestDetail(10, [], [], QuestType.Single);
         var questData = new QuestData(quest, detail);
         var character = new Character("Hero");
-        
+
         // Mocking the progress in ResourceManager
         var resourceManager = Services.GetRequiredService<ResourceManager>();
         resourceManager.StartQuest(questData, character);
 
         var cut = RenderComponent<QuestCard>(parameters => parameters.Add(p => p.QuestData, questData));
-        
-        Assert.IsTrue(cut.Markup.Contains("Test Quest"));
-        Assert.IsTrue(cut.Markup.Contains("In Progress"));
-        Assert.IsTrue(cut.Markup.Contains("locked"));
+
+        Assert.Contains("Test Quest", cut.Markup);
+        Assert.Contains("In Progress", cut.Markup);
+        Assert.Contains("locked", cut.Markup);
     }
 
     [TestMethod]
@@ -145,8 +141,8 @@ public class AdditionalUIComponentTests : BunitTestBase
         var questData = new QuestData(quest, detail);
         var progress1 = new QuestProgress(questData, "Desc", 1, character);
         var progress2 = new QuestProgress(questData, "Desc", 1, character);
-        
-        int completionCount = 0;
+
+        var completionCount = 0;
         var cut = RenderComponent<QuestProgressCard>(parameters => parameters
             .Add(p => p.QuestProgress, progress1)
             .Add(p => p.OnCompletionAnimationEnd, () => completionCount++)
@@ -156,7 +152,7 @@ public class AdditionalUIComponentTests : BunitTestBase
         progress1.SecondsElapsed = 1;
         cut.SetParametersAndRender(parameters => parameters.Add(p => p.QuestProgress, progress1));
         await Task.Delay(1100); // Wait for the 1s delay in component
-        
+
         // Assert
         Assert.AreEqual(1, completionCount);
 
@@ -174,42 +170,42 @@ public class AdditionalUIComponentTests : BunitTestBase
     public void Snackbar_RendersCorrectly()
     {
         var cut = RenderComponent<Snackbar>();
-        Assert.IsTrue(cut.Markup.Contains("snackbar-container"));
+        Assert.Contains("snackbar-container", cut.Markup);
     }
 
     [TestMethod]
     public void ThemeDiagnostics_RendersCorrectly()
     {
         var cut = RenderComponent<ThemeDiagnostics>();
-        Assert.IsTrue(cut.Markup.Contains("Theme Self-Diagnostic"));
+        Assert.Contains("Theme Self-Diagnostic", cut.Markup);
     }
 
     [TestMethod]
     public void Workshop_RendersCorrectly()
     {
         var cut = RenderComponent<Workshop>();
-        Assert.IsTrue(cut.Markup.Contains("workshop-panel"));
+        Assert.Contains("workshop-panel", cut.Markup);
     }
 
     [TestMethod]
     public void MainLayout_RendersCorrectly()
     {
         var cut = RenderComponent<MainLayout>();
-        Assert.IsTrue(cut.Markup.Contains("main"));
+        Assert.Contains("main", cut.Markup);
     }
 
     [TestMethod]
     public void Home_RendersCorrectly()
     {
         var cut = RenderComponent<Home>();
-        Assert.IsTrue(cut.Markup.Contains("theme-toggle"));
+        Assert.Contains("theme-toggle", cut.Markup);
     }
 
     [TestMethod]
     public void TestRunner_RendersCorrectly()
     {
         var cut = RenderComponent<TestRunner>();
-        Assert.IsTrue(cut.Markup.Contains("AI-Driven Live Testing"));
+        Assert.Contains("AI-Driven Live Testing", cut.Markup);
     }
 
     [TestMethod]
@@ -229,11 +225,11 @@ public class AdditionalUIComponentTests : BunitTestBase
         // Assert
         var toggle = cut.Find("[data-testid='autoquest-toggle']");
         Assert.IsNotNull(toggle);
-        Assert.IsTrue(toggle.TextContent.Contains("Auto: OFF"));
+        Assert.Contains("Auto: OFF", toggle.TextContent);
 
         // Toggle
         toggle.Click();
-        Assert.IsTrue(toggle.TextContent.Contains("Auto: ON"));
+        Assert.Contains("Auto: ON", toggle.TextContent);
         Assert.IsTrue(ResourceManager.IsAutoQuestEnabled(character));
     }
 

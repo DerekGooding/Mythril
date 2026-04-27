@@ -21,8 +21,5 @@ public class AuthService(IJSRuntime js)
         _isAuthenticated = enabled;
     }
 
-    public async Task Logout()
-    {
-        await SetDevMode(false);
-    }
+    public async Task Logout() => await SetDevMode(false);
 }

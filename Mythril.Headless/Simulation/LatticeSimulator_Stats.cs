@@ -1,8 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Linq;
 using Mythril.Data;
+using System.Collections.Immutable;
 
 namespace Mythril.Headless.Simulation;
 
@@ -10,16 +7,16 @@ public partial class LatticeSimulator
 {
     private (bool, GameState) UpdateStat(string name, GameState state)
     {
-        int bestVal = state.StatMax.GetValueOrDefault(name, 10);
-        string abilityName = name switch { "Strength" => "J-Str", "Magic" => "J-Magic", "Vitality" => "J-Vit", "Speed" => "J-Speed", _ => "J-" + name };
-        
-        bool hasAbility = state.UnlockedAbilities.Any(ua => ua.EndsWith($":{abilityName}"));
+        var bestVal = state.StatMax.GetValueOrDefault(name, 10);
+        var abilityName = name switch { "Strength" => "J-Str", "Magic" => "J-Magic", "Vitality" => "J-Vit", "Speed" => "J-Speed", _ => "J-" + name };
+
+        var hasAbility = state.UnlockedAbilities.Any(ua => ua.EndsWith($":{abilityName}"));
         if (!hasAbility) return (false, state);
 
         foreach (var itemKvp in state.ResourceTime)
         {
             if (itemKvp.Value == double.PositiveInfinity) continue;
-            
+
             var item = items.All.First(i => i.Name == itemKvp.Key);
             if (item.ItemType != ItemType.Spell) continue;
 
@@ -27,7 +24,7 @@ public partial class LatticeSimulator
             var augment = augments.FirstOrDefault(a => a.Stat.Name == name);
             if (augment.Stat.Name != null)
             {
-                int val = 10 + (int)(state.MagicCapacity * (augment.ModifierAtFull / 100.0));
+                var val = 10 + (int)(state.MagicCapacity * (augment.ModifierAtFull / 100.0));
                 bestVal = Math.Max(bestVal, Math.Min(255, val));
             }
         }
@@ -45,7 +42,7 @@ public partial class LatticeSimulator
         if (name == "HIDDEN")
         {
             var nextCadences = state.UnlockedCadences;
-            bool changed = false;
+            var changed = false;
 
             void Check(string cad, bool condition)
             {
@@ -74,13 +71,13 @@ public partial class LatticeSimulator
 
     private (bool, GameState) UpdateCapacity(GameState state)
     {
-        int bestCap = 30;
+        var bestCap = 30;
         foreach (var abilityKey in state.UnlockedAbilities)
         {
             var parts = abilityKey.Split(':');
             var cadenceName = parts[0];
             var abilityName = parts[1];
-            
+
             var cadence = cadences.All.FirstOrDefault(c => c.Name == cadenceName);
             if (cadence.Name == null) continue;
             var unlock = cadence.Abilities.FirstOrDefault(a => a.Ability.Name == abilityName);

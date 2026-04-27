@@ -1,5 +1,4 @@
 using Microsoft.JSInterop;
-using Microsoft.Extensions.Logging;
 
 namespace Mythril.Blazor.Services;
 

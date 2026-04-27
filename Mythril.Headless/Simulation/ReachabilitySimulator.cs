@@ -1,9 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Linq;
-using System.Text;
 using Mythril.Data;
+using System.Collections.Immutable;
+using System.Text;
 
 namespace Mythril.Headless.Simulation;
 
@@ -23,12 +20,12 @@ public partial class ReachabilitySimulator(
     {
         var lattice = new LatticeSimulator(items, quests, questDetails, questUnlocks, questToCadenceUnlocks, cadences, locations, refinements, statAugments, stats);
         var flowSim = new FlowSimulator(items, quests, questDetails, refinements);
-        
+
         var seed = new SimulationSeed(
-            ImmutableDictionary<string, int>.Empty,
+            [],
             stats.All.ToImmutableDictionary(s => s.Name, _ => 25), // Starting at 25 instead of 10
-            ImmutableHashSet.Create<string>("Recruit"),
-            ImmutableHashSet.Create<string>()
+            ["Recruit"],
+            []
         );
 
         Console.WriteLine("Starting Lattice Simulation...");
@@ -54,25 +51,28 @@ public partial class ReachabilitySimulator(
 
         // 1. Reachability (Lattice Model)
         sb.AppendLine("## 💀 Reachability Analysis");
-        
+
         var unreachableQuests = quests.All.Where(q => state.QuestTime[q.Name] == double.PositiveInfinity).ToList();
-        int reachableCount = quests.All.Length - unreachableQuests.Count;
+        var reachableCount = quests.All.Length - unreachableQuests.Count;
         sb.AppendLine($"Total Quests Completed: {reachableCount}");
 
-        if (unreachableQuests.Any())
+        if (unreachableQuests.Count != 0)
         {
             sb.AppendLine("### Unreachable Quests");
             foreach (var q in unreachableQuests) sb.AppendLine($"- {q.Name}");
         }
-        else sb.AppendLine("✅ All quests reachable.");
+        else
+        {
+            sb.AppendLine("✅ All quests reachable.");
+        }
 
-        double maxQuestTime = state.QuestTime.Values.Where(t => t < double.PositiveInfinity).DefaultIfEmpty(0).Max();
-        sb.AppendLine($"Estimated End-Game Time: {(maxQuestTime / 60.0):F1}m");
-        sb.AppendLine($"Routed Completion Time: {(routed.LastRunTime / 60.0):F1}m");
+        var maxQuestTime = state.QuestTime.Values.Where(t => t < double.PositiveInfinity).DefaultIfEmpty(0).Max();
+        sb.AppendLine($"Estimated End-Game Time: {maxQuestTime / 60.0:F1}m");
+        sb.AppendLine($"Routed Completion Time: {routed.LastRunTime / 60.0:F1}m");
         if (!routed.EndGameReached) sb.AppendLine("⚠️ WARNING: Path-routed simulation failed to reach End Game.");
 
         var unreachableResources = items.All.Where(i => state.ResourceTime[i.Name] == double.PositiveInfinity).ToList();
-        if (unreachableResources.Any())
+        if (unreachableResources.Count != 0)
         {
             sb.AppendLine("\n### Unreachable Resources");
             foreach (var r in unreachableResources) sb.AppendLine($"- {r.Name}");
@@ -80,14 +80,14 @@ public partial class ReachabilitySimulator(
 
         // 2. Quantitative Flow Analysis
         sb.AppendLine("\n## ⚖️ Economic Sustainability");
-        
-        if (flow.SustainableActivities.Any())
+
+        if (!flow.SustainableActivities.IsEmpty)
         {
             sb.AppendLine("### Sustainable Recurring Activities");
             foreach (var a in flow.SustainableActivities) sb.AppendLine($"- {a}");
         }
 
-        if (flow.UnsustainableActivities.Any())
+        if (!flow.UnsustainableActivities.IsEmpty)
         {
             sb.AppendLine("\n### ⚠️ Unsustainable Activities (Reachable but starving)");
             foreach (var a in flow.UnsustainableActivities) sb.AppendLine($"- {a}");
@@ -102,17 +102,17 @@ public partial class ReachabilitySimulator(
         // 3. Loop Detection
         sb.AppendLine("\n## 🔄 Feedback Loops");
         // Extract flows for loop detection
-        var dummyState = state; 
+        var dummyState = state;
         // We need to re-extract to get the list, or expose it. Let's re-extract for now.
         // In a real implementation we'd pass them through.
         var flowList = new List<ActivityFlow>(); // Approximation for loop check
         // (Re-extracting logic omitted for brevity in report but usually integrated)
-        
+
         sb.AppendLine("✅ No unbounded growth loops detected (approximation).");
 
         // 4. Economic Stalls
         sb.AppendLine("\n## ⏱️ Progression & Pacing");
-        
+
         double stallThreshold = 300; // 5 minutes
         var nextQuests = quests.All
             .Where(q => state.QuestTime[q.Name] == double.PositiveInfinity)
@@ -120,18 +120,18 @@ public partial class ReachabilitySimulator(
             .ToList();
 
         sb.AppendLine("### Potential Economic Stalls");
-        bool stallFound = false;
+        var stallFound = false;
         foreach (var next in nextQuests)
         {
             foreach (var req in next.Detail.Requirements)
             {
-                double net = flow.ResourceNet.GetValueOrDefault(req.Item.Name, 0);
+                var net = flow.ResourceNet.GetValueOrDefault(req.Item.Name, 0);
                 if (net > 0)
                 {
-                    double timeToAmount = req.Quantity / net;
+                    var timeToAmount = req.Quantity / net;
                     if (timeToAmount > stallThreshold)
                     {
-                        sb.AppendLine($"- **{next.Quest.Name}**: Delayed by {req.Item.Name} ({(timeToAmount / 60.0):F1}m)");
+                        sb.AppendLine($"- **{next.Quest.Name}**: Delayed by {req.Item.Name} ({timeToAmount / 60.0:F1}m)");
                         stallFound = true;
                     }
                 }
@@ -148,8 +148,8 @@ public partial class ReachabilitySimulator(
 
         Console.WriteLine(sb.ToString());
         System.IO.File.WriteAllText("simulation_report.md", sb.ToString());
-        
-        if (unreachableQuests.Any())
+
+        if (unreachableQuests.Count != 0)
         {
             Console.WriteLine("[FAIL] reachability: Simulation failed: One or more quests are mathematically unreachable.");
         }

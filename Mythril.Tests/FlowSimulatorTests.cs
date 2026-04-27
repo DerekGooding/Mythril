@@ -1,10 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Mythril.Data;
 using Mythril.Headless.Simulation;
+using System.Collections.Immutable;
 
 namespace Mythril.Tests;
 
@@ -24,15 +20,15 @@ public class FlowSimulatorTests : BunitTestBase
         var cadences = ContentHost.GetContent<Cadences>();
 
         _flow = new FlowSimulator(items, quests, details, refinements);
-        
+
         _lattice = new LatticeSimulator(
-            items, quests, details, 
-            ContentHost.GetContent<QuestUnlocks>(), 
-            ContentHost.GetContent<QuestToCadenceUnlocks>(), 
-            cadences, 
-            ContentHost.GetContent<Locations>(), 
-            refinements, 
-            ContentHost.GetContent<StatAugments>(), 
+            items, quests, details,
+            ContentHost.GetContent<QuestUnlocks>(),
+            ContentHost.GetContent<QuestToCadenceUnlocks>(),
+            cadences,
+            ContentHost.GetContent<Locations>(),
+            refinements,
+            ContentHost.GetContent<StatAugments>(),
             ContentHost.GetContent<Stats>()
         );
     }
@@ -42,10 +38,10 @@ public class FlowSimulatorTests : BunitTestBase
     {
         // 1. Get a reachability result
         var seed = new SimulationSeed(
-            ImmutableDictionary<string, int>.Empty,
+            [],
             Stats.All.ToImmutableDictionary(s => s.Name, _ => 10),
-            ImmutableHashSet.Create("Recruit"),
-            ImmutableHashSet<string>.Empty
+            ["Recruit"],
+            []
         );
         var reachability = _lattice!.Solve(seed);
 
@@ -53,7 +49,7 @@ public class FlowSimulatorTests : BunitTestBase
         var flowResult = _flow!.Solve(reachability, seed);
 
         // Assert: Basic items should be sustainable (like Chop Wood which has no inputs)
-        Assert.IsTrue(flowResult.SustainableActivities.Contains("Chop Wood"), "Basic no-input activities should be sustainable.");
+        Assert.Contains("Chop Wood", flowResult.SustainableActivities, "Basic no-input activities should be sustainable.");
     }
 
     [TestMethod]
@@ -62,12 +58,12 @@ public class FlowSimulatorTests : BunitTestBase
         // Setup a case where a refinement exists but the input is never produced
         // In Greenwood Forest, "Purify the Grove" is reachable but maybe starving if inputs missing.
         // Actually, let's just check the result structure.
-        
+
         var seed = new SimulationSeed(
-            ImmutableDictionary<string, int>.Empty,
+            [],
             Stats.All.ToImmutableDictionary(s => s.Name, _ => 10),
-            ImmutableHashSet.Create("Recruit"),
-            ImmutableHashSet<string>.Empty
+            ["Recruit"],
+            []
         );
         var reachability = _lattice!.Solve(seed);
         var flowResult = _flow!.Solve(reachability, seed);

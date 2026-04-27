@@ -1,6 +1,4 @@
 using Mythril.Data;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Mythril.Tests;
 
@@ -149,16 +147,16 @@ public static class SandboxContent
             new(Student, abilities.First(a => a.Name == RefineFire), [], Magic),
             new(Student, abilities.First(a => a.Name == JSpd), [], Speed)
         };
-        
+
         var cadences = new List<Cadence>
         {
-            new(Recruit, "Entry level cadence", recruitUnlocks.ToArray()),
-            new(Apprentice, "Apprentice level cadence", apprenticeUnlocks.ToArray()),
-            new(Arcanist, "Magic user", arcanistUnlocks.ToArray()),
-            new(Sentinel, "Defender", sentinelUnlocks.ToArray()),
-            new(Weaver, "Advanced craft cadence", weaverUnlocks.ToArray()),
-            new(Scholar, "Master of systems", scholarUnlocks.ToArray()),
-            new(Student, "Eager learner", studentUnlocks.ToArray()),
+            new(Recruit, "Entry level cadence", [.. recruitUnlocks]),
+            new(Apprentice, "Apprentice level cadence", [.. apprenticeUnlocks]),
+            new(Arcanist, "Magic user", [.. arcanistUnlocks]),
+            new(Sentinel, "Defender", [.. sentinelUnlocks]),
+            new(Weaver, "Advanced craft cadence", [.. weaverUnlocks]),
+            new(Scholar, "Master of systems", [.. scholarUnlocks]),
+            new(Student, "Eager learner", [.. studentUnlocks]),
             new(Geologist, "Rock expert", []),
             new(Slayer, "Monster hunter", []),
             new(TideCaller, "Ocean mage", [])
@@ -180,9 +178,11 @@ public static class SandboxContent
         ContentHost.GetContent<Quests>().Load(qs);
 
         // 6. Quest Details
+#pragma warning disable TND001
         var details = new Dictionary<Quest, QuestDetail>();
         var qMap = qs.ToDictionary(q => q.Name);
         var iMap = items.ToDictionary(i => i.Name);
+#pragma warning restore TND001
 
         details[qMap[Prologue]] = new QuestDetail(5, [], [], QuestType.Single, Vitality);
         details[qMap[Tutorial]] = new QuestDetail(10, [], [new ItemQuantity(iMap[Scrap], 5)], QuestType.Single, Vitality);
@@ -193,7 +193,7 @@ public static class SandboxContent
         details[qMap[HuntGoblins]] = new QuestDetail(60, [], [new ItemQuantity(iMap[Slime], 1)], QuestType.Recurring, Strength);
         details[qMap[HuntBats]] = new QuestDetail(45, [], [], QuestType.Recurring, Speed);
         details[qMap[HuntSpiders]] = new QuestDetail(75, [], [], QuestType.Recurring, Vitality);
-        
+
         ContentHost.GetContent<QuestDetails>().Load(details);
 
         // 7. Quest Unlocks (Dependencies)
@@ -226,7 +226,7 @@ public static class SandboxContent
         {
             { iMap[Scrap], new Recipe(5, iMap[Gold], 10) }
         });
-        
+
         var refineFireAb = abilities.First(a => a.Name == RefineFire);
         refinementDict[refineFireAb] = (Magic, new Dictionary<Item, Recipe>
         {
@@ -235,8 +235,8 @@ public static class SandboxContent
         ContentHost.GetContent<ItemRefinements>().Load(refinementDict);
 
         // 11. Stat Augments (Empty for now)
-        ContentHost.GetContent<StatAugments>().Load(new Dictionary<Item, StatAugment[]>());
-        
+        ContentHost.GetContent<StatAugments>().Load([]);
+
         // 12. Ability Augments
         var abAugDict = new Dictionary<CadenceAbility, Stat>
         {

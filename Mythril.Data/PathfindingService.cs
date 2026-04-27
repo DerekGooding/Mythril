@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
-
 namespace Mythril.Data;
 
 public class PathfindingService(
@@ -36,7 +33,7 @@ public class PathfindingService(
                 }
 
                 // Location Requirement
-                var loc = locations.All.FirstOrDefault(l => l.Quests != null && l.Quests.Any(q => q.Name == quest.Name));
+                var loc = locations.All.FirstOrDefault(l => l.Quests?.Any(q => q.Name == quest.Name) == true);
                 if (loc.Name != null && !string.IsNullOrEmpty(loc.RequiredQuest) && !completedSet.Contains(loc.RequiredQuest))
                 {
                     queue.Enqueue(loc.RequiredQuest);
@@ -100,10 +97,9 @@ public class PathfindingService(
 
     private string? FindSourceForItem(string itemName, IEnumerable<string> completedQuests)
     {
+        ArgumentNullException.ThrowIfNull(completedQuests);
         // Try to find a quest that rewards it
-        var sourceQuest = questDetails.ByKey.FirstOrDefault(kv => kv.Value.Rewards != null && kv.Value.Rewards.Any(r => r.Item.Name == itemName)).Key;
-        if (sourceQuest.Name != null) return sourceQuest.Name;
-
-        return null;
+        var sourceQuest = questDetails.ByKey.FirstOrDefault(kv => kv.Value.Rewards?.Any(r => r.Item.Name == itemName) == true).Key;
+        return sourceQuest.Name != null ? sourceQuest.Name : null;
     }
 }

@@ -2,7 +2,8 @@ using System.Collections.Immutable;
 
 namespace Mythril.Data;
 
-public interface IGameAction { }
+public interface IGameAction
+{ }
 
 public record AddResourceAction(string ItemName, int Quantity) : IGameAction;
 public record SpendResourceAction(string ItemName, int Quantity) : IGameAction;

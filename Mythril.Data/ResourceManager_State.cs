@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Linq;
-
 namespace Mythril.Data;
 
 public partial class ResourceManager
@@ -22,10 +17,10 @@ public partial class ResourceManager
 
     public ResourceManager(
         GameStore gameStore,
-        Items items, 
+        Items items,
         Quests quests,
-        QuestUnlocks questUnlocks, 
-        QuestToCadenceUnlocks questToCadenceUnlocks, 
+        QuestUnlocks questUnlocks,
+        QuestToCadenceUnlocks questToCadenceUnlocks,
         QuestDetails questDetails,
         Cadences cadences,
         Locations locations,
@@ -52,90 +47,87 @@ public partial class ResourceManager
         _gameStore.OnItemOverflow += (name, qty) => OnItemOverflow?.Invoke(name, qty);
     }
 
-    private readonly object _questLock = new();
+    private readonly Lock _questLock = new();
 
     public QuestDetail GetQuestDetails(Quest quest) => _questDetails[quest];
 
     public readonly Character[] Characters = [new Character("Protagonist"), new Character("Wifu"), new Character("Himbo")];
 
-    public List<LocationData> UsableLocations => _locations.All
+    public List<LocationData> UsableLocations => [.. _locations.All
         .Where(l => string.IsNullOrEmpty(l.RequiredQuest) || _gameStore.State.CompletedQuests.Contains(l.RequiredQuest))
         .Select(l => new LocationData(
             l,
             l.Quests.Where(q => {
                 var detail = _questDetails[q];
-                bool meetsPrereqs = _questUnlocks[q].All(req => _gameStore.State.CompletedQuests.Contains(req.Name));
-                bool alreadyCompleted = _gameStore.State.CompletedQuests.Contains(q.Name);
-                bool isSingle = detail.Type == QuestType.Single || detail.Type == QuestType.Unlock;
+                var meetsPrereqs = _questUnlocks[q].All(req => _gameStore.State.CompletedQuests.Contains(req.Name));
+                var alreadyCompleted = _gameStore.State.CompletedQuests.Contains(q.Name);
+                var isSingle = detail.Type is QuestType.Single or QuestType.Unlock;
                 return meetsPrereqs && !(isSingle && alreadyCompleted);
             })
-        )).ToList();
+        ))];
 
-    public HashSet<string> UnlockedLocationNames => _gameStore.State.UnlockedLocationNames.ToHashSet();
+    public HashSet<string> UnlockedLocationNames => [.. _gameStore.State.UnlockedLocationNames];
 
-    public List<Cadence> UnlockedCadences => _gameStore.State.UnlockedCadenceNames.Select(name => _cadences.All.First(c => c.Name == name)).ToList();
-    public List<string> UnlockedCadenceNames => _gameStore.State.UnlockedCadenceNames.ToList();
-    public HashSet<string> UnlockedAbilities => _gameStore.State.UnlockedAbilities.ToHashSet();
+    public List<Cadence> UnlockedCadences => [.. _gameStore.State.UnlockedCadenceNames.Select(name => _cadences.All.First(c => c.Name == name))];
+    public List<string> UnlockedCadenceNames => [.. _gameStore.State.UnlockedCadenceNames];
+    public HashSet<string> UnlockedAbilities => [.. _gameStore.State.UnlockedAbilities];
 
-    public HashSet<string> HighlightedPath => _gameStore.State.HighlightedPath.ToHashSet();
+    public HashSet<string> HighlightedPath => [.. _gameStore.State.HighlightedPath];
 
     public void HighlightPath(string targetId)
     {
         var path = _pathfinding.GetPrerequisitePath(targetId, [.. _gameStore.State.CompletedQuests], _gameStore.State.UnlockedAbilities);
-        _gameStore.Dispatch(new SetHighlightedPathAction(path.ToImmutableHashSet()));
+        _gameStore.Dispatch(new SetHighlightedPathAction([.. path]));
     }
 
-    public void ClearHighlight()
-    {
-        _gameStore.Dispatch(new ClearHighlightedPathAction());
-    }
+    public void ClearHighlight() => _gameStore.Dispatch(new ClearHighlightedPathAction());
 
-    public List<QuestProgress> ActiveQuests => _gameStore.State.ActiveQuests.ToList();
+    public List<QuestProgress> ActiveQuests => [.. _gameStore.State.ActiveQuests];
 
     public IReadOnlyDictionary<string, bool> AutoQuestEnabled => _gameStore.State.AutoQuestEnabled;
 
-    public HashSet<string> StarredRecipes => _gameStore.State.StarredRecipes.ToHashSet();
+    public HashSet<string> StarredRecipes => [.. _gameStore.State.StarredRecipes];
 
-    public void ToggleRecipeStar(string recipeKey)
+    public void ToggleRecipeStar(string recipeKey) => _gameStore.Dispatch(new ToggleRecipeStarAction(recipeKey));
+
+    public bool IsTestMode
     {
-        _gameStore.Dispatch(new ToggleRecipeStarAction(recipeKey));
+        get => _gameStore.State.IsTestMode;
+        set => _gameStore.Dispatch(new SetTestModeAction(value));
     }
 
-    public bool IsTestMode 
-    { 
-        get => _gameStore.State.IsTestMode; 
-        set => _gameStore.Dispatch(new SetTestModeAction(value)); 
+    public bool HasUnseenCadence
+    {
+        get => _gameStore.State.HasUnseenCadence;
+        set => _gameStore.Dispatch(new SetUnseenFlagsAction(value, HasUnseenWorkshop));
     }
 
-    public bool HasUnseenCadence 
-    { 
-        get => _gameStore.State.HasUnseenCadence; 
-        set => _gameStore.Dispatch(new SetUnseenFlagsAction(value, HasUnseenWorkshop)); 
+    public bool HasUnseenWorkshop
+    {
+        get => _gameStore.State.HasUnseenWorkshop;
+        set => _gameStore.Dispatch(new SetUnseenFlagsAction(HasUnseenCadence, value));
     }
-    public bool HasUnseenWorkshop 
-    { 
-        get => _gameStore.State.HasUnseenWorkshop; 
-        set => _gameStore.Dispatch(new SetUnseenFlagsAction(HasUnseenCadence, value)); 
-    }
-    public string ActiveTab 
-    { 
-        get => _gameStore.State.ActiveTab; 
-        set => _gameStore.Dispatch(new SetActiveTabAction(value)); 
+
+    public string ActiveTab
+    {
+        get => _gameStore.State.ActiveTab;
+        set => _gameStore.Dispatch(new SetActiveTabAction(value));
     }
 
     public double CurrentTime => _gameStore.State.CurrentTime;
-    public string CurrentTimeFormatted 
+
+    public string CurrentTimeFormatted
     {
         get
         {
             var ts = TimeSpan.FromSeconds(CurrentTime);
-            return ts.TotalHours >= 1 
-                ? $"{(int)ts.TotalHours}:{ts.Minutes:D2}:{ts.Seconds:D2}" 
+            return ts.TotalHours >= 1
+                ? $"{(int)ts.TotalHours}:{ts.Minutes:D2}:{ts.Seconds:D2}"
                 : $"{ts.Minutes}:{ts.Seconds:D2}";
         }
     }
 
-    public HashSet<string> SeenContent => _gameStore.State.SeenContent.ToHashSet();
+    public HashSet<string> SeenContent => [.. _gameStore.State.SeenContent];
 
     public void MarkSeen(string contentId) => _gameStore.Dispatch(new MarkContentSeenAction(contentId));
 
@@ -176,10 +168,10 @@ public partial class ResourceManager
     {
         Console.WriteLine("ResourceManager initializing...");
         _gameStore.Dispatch(new SetStateAction(GameState.Initial));
-        
+
         Console.WriteLine("Initializing Locations...");
         UpdateUsableLocations();
-        
+
         Console.WriteLine("ResourceManager initialized.");
     }
 
@@ -195,11 +187,12 @@ public partial class ResourceManager
     }
 
     public IEnumerable<Quest> GetCompletedQuests() => _gameStore.State.CompletedQuests.Select(name => _quests.All.FirstOrDefault(q => q.Name == name) is var q && q.Name != null ? q : new Quest(name, ""));
+
     public bool IsCompleted(string questName) => _gameStore.State.CompletedQuests.Contains(questName);
-    
-    public void ClearCompletedQuests() 
+
+    public void ClearCompletedQuests()
     {
-        foreach(var q in _gameStore.State.CompletedQuests)
+        foreach (var q in _gameStore.State.CompletedQuests)
         {
             _gameStore.Dispatch(new LockQuestAction(new Quest(q, "")));
         }

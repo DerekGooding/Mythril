@@ -1,13 +1,13 @@
 using Microsoft.JSInterop;
-using System.Text.Json;
 using Mythril.Data;
 using System.Collections.Immutable;
+using System.Text.Json;
 
 namespace Mythril.Blazor.Services;
 
 public class PersistenceService(
-    IJSRuntime js, 
-    ResourceManager resourceManager, 
+    IJSRuntime js,
+    ResourceManager resourceManager,
     GameStore gameStore)
 {
     private const string STORAGE_KEY = "mythril_save_v3"; // Bump version since format changed
@@ -71,12 +71,15 @@ public class PersistenceService(
         if (string.IsNullOrEmpty(json)) return;
 
         SaveData? saveData = null;
-        try {
+        try
+        {
             saveData = JsonSerializer.Deserialize<SaveData>(json, _options);
-        } catch {
+        }
+        catch
+        {
             return;
         }
-        
+
         if (saveData == null) return;
 
         // Reconstruct GameState from DTOs
@@ -89,8 +92,9 @@ public class PersistenceService(
 
         var inventory = saveData.Inventory.ToImmutableDictionary();
         var pinnedItems = saveData.PinnedItems.ToImmutableHashSet();
-        
-        var junctions = saveData.Junctions.Select(j => {
+
+        var junctions = saveData.Junctions.Select(j =>
+        {
             var character = resourceManager.Characters.FirstOrDefault(c => c.Name == j.CharacterName);
             var stat = stats.All.FirstOrDefault(s => s.Name == j.StatName);
             var magic = items.All.FirstOrDefault(i => i.Name == j.MagicName);
@@ -98,25 +102,28 @@ public class PersistenceService(
             return new Junction(character, stat, magic);
         }).Where(j => j != null).Select(j => j!).ToImmutableList();
 
-        var activeQuests = saveData.ActiveQuests.Select(dto => {
+        var activeQuests = saveData.ActiveQuests.Select(dto =>
+        {
             var character = resourceManager.Characters.FirstOrDefault(c => c.Name == dto.CharacterName);
             if (character.Name == null) return null;
 
-            object? item = dto.ItemType switch {
+            object? item = dto.ItemType switch
+            {
                 "Quest" => quests.All.FirstOrDefault(q => q.Name == dto.ItemName) is var q && q.Name != null ? new QuestData(q, details[q]) : null,
                 "CadenceUnlock" => cadences.All.SelectMany(c => c.Abilities).FirstOrDefault(u => u.Ability.Name == dto.ItemName && u.CadenceName == dto.AbilityName),
                 "Refinement" => refinements.ByKey.SelectMany(kvp => kvp.Value.Recipes.Select(r => new RefinementData(kvp.Key, r.Key, r.Value, kvp.Value.PrimaryStat))).FirstOrDefault(r => r.Name == dto.ItemName),
                 _ => null
             };
             if (item == null) return null;
-            return new QuestProgress(item, dto.Description, dto.DurationSeconds, character, dto.SlotIndex) {
+            return new QuestProgress(item, dto.Description, dto.DurationSeconds, character, dto.SlotIndex)
+            {
                 StartTime = dto.StartTime,
                 SecondsElapsed = dto.SecondsElapsed
             };
         }).Where(q => q != null).Select(q => q!).ToImmutableList();
 
         // Calculate bonus time since last save
-        double bonusSeconds = (DateTime.Now - saveData.LastSaveTime).TotalSeconds;
+        var bonusSeconds = (DateTime.Now - saveData.LastSaveTime).TotalSeconds;
         var activeQuestsWithBonus = activeQuests.Select(q => q with { SecondsElapsed = q.SecondsElapsed + Math.Max(0, bonusSeconds) }).ToImmutableList();
 
         var state = new GameState(
@@ -147,15 +154,12 @@ public class PersistenceService(
         gameStore.Dispatch(new SetStateAction(state));
         resourceManager.UpdateUsableLocations();
     }
-    
+
     public async Task<bool> HasSave()
     {
         var json = await js.InvokeAsync<string>("localStorage.getItem", STORAGE_KEY);
         return !string.IsNullOrEmpty(json);
     }
 
-    public async Task ClearSaveAsync()
-    {
-        await js.InvokeVoidAsync("localStorage.removeItem", STORAGE_KEY);
-    }
+    public async Task ClearSaveAsync() => await js.InvokeVoidAsync("localStorage.removeItem", STORAGE_KEY);
 }

@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Components;
-using Mythril.Data;
 using Mythril.Blazor.Services;
+using Mythril.Data;
 
 namespace Mythril.Blazor.Components;
 
@@ -22,18 +22,13 @@ public partial class CharacterDisplay : IDisposable
     private bool _showJunctionMenu = false;
     private bool _isRemovalMode = false;
 
-    protected override void OnInitialized()
-    {
-        DragDropService.OnHoverChanged += HandleHoverChanged;
-    }
+    protected override void OnInitialized() => DragDropService.OnHoverChanged += HandleHoverChanged;
 
     public void Dispose()
     {
+        GC.SuppressFinalize(this);
         DragDropService.OnHoverChanged -= HandleHoverChanged;
     }
 
-    private void HandleHoverChanged()
-    {
-        InvokeAsync(StateHasChanged);
-    }
+    private void HandleHoverChanged() => InvokeAsync(StateHasChanged);
 }

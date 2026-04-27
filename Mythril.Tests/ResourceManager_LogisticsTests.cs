@@ -1,7 +1,4 @@
 using Mythril.Data;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Mythril.Tests;
 
@@ -16,27 +13,27 @@ public class ResourceManager_LogisticsTests : ResourceManagerTestBase
         _resourceManager.UnlockCadence(scholar);
         _resourceManager.UnlockAbility(SandboxContent.Scholar, SandboxContent.LogisticsII);
         _resourceManager.JunctionManager.AssignCadence(scholar, character, _resourceManager.UnlockedAbilities);
-        
+
         // Initial limit is 1. With Logistics II (Effect Logistics, 2), it should be 1 + 2 = 3.
         Assert.AreEqual(3, _resourceManager.GetTaskLimit(character));
-        
+
         var q1 = new QuestData(_quests!.All.First(q => q.Name == SandboxContent.HuntGoblins), _questDetails![_quests.All.First(q => q.Name == SandboxContent.HuntGoblins)]);
         var q2 = new QuestData(_quests.All.First(q => q.Name == SandboxContent.HuntBats), _questDetails[_quests.All.First(q => q.Name == SandboxContent.HuntBats)]);
         var q3 = new QuestData(_quests.All.First(q => q.Name == SandboxContent.HuntSpiders), _questDetails[_quests.All.First(q => q.Name == SandboxContent.HuntSpiders)]);
-        
+
         _resourceManager.StartQuest(q1, character);
         _resourceManager.StartQuest(q2, character);
         _resourceManager.StartQuest(q3, character);
-        
-        Assert.AreEqual(3, _resourceManager.ActiveQuests.Count);
-        
+
+        Assert.HasCount(3, _resourceManager.ActiveQuests);
+
         // Remove assignment
         _resourceManager.JunctionManager.Unassign(scholar, _resourceManager.UnlockedAbilities);
-        
+
         // Manual call or via event
         _resourceManager.ReevaluateActiveQuests(character);
-        
-        Assert.AreEqual(1, _resourceManager.ActiveQuests.Count);
+
+        Assert.HasCount(1, _resourceManager.ActiveQuests);
     }
 
     [TestMethod]
@@ -64,10 +61,10 @@ public class ResourceManager_LogisticsTests : ResourceManagerTestBase
 
         _resourceManager.StartQuest(questData, character);
         // StartQuest should fail because 16 < 17.
-        
+
         var quest16 = new QuestData(quest, new QuestDetail(10, [], [], QuestType.Recurring, RequiredStats: new Dictionary<string, int> { { SandboxContent.Strength, 16 } }));
         _resourceManager.StartQuest(quest16, character);
-        Assert.AreEqual(1, _resourceManager.ActiveQuests.Count, "Quest should start with 16 Strength.");
+        Assert.HasCount(1, _resourceManager.ActiveQuests, "Quest should start with 16 Strength.");
 
         // Remove magic junction -> strength falls to 11 (base 10 + 1 boost)
         _resourceManager.JunctionManager.JunctionMagic(character, new Stat(SandboxContent.Strength, ""), new Item(), _resourceManager.UnlockedAbilities);
@@ -75,7 +72,7 @@ public class ResourceManager_LogisticsTests : ResourceManagerTestBase
 
         // Reevaluate should cancel the quest
         _resourceManager.ReevaluateActiveQuests(character);
-        Assert.AreEqual(0, _resourceManager.ActiveQuests.Count, "Quest should be cancelled after Strength drop.");
+        Assert.IsEmpty(_resourceManager.ActiveQuests, "Quest should be cancelled after Strength drop.");
     }
 
     [TestMethod]
@@ -83,7 +80,7 @@ public class ResourceManager_LogisticsTests : ResourceManagerTestBase
     {
         var character = _resourceManager!.Characters[0];
         var refData = _resourceManager.Refinements.GetRefinement(SandboxContent.RefineFire, SandboxContent.BasicGem)!.Value;
-        
+
         // Need ability to start refinement
         var student = _cadences!.All.First(c => c.Name == SandboxContent.Student);
         _resourceManager.UnlockCadence(student);
@@ -92,14 +89,14 @@ public class ResourceManager_LogisticsTests : ResourceManagerTestBase
 
         _resourceManager.Inventory.Add(refData.InputItem, refData.Recipe.InputQuantity);
         _resourceManager.StartQuest(refData, character);
-        
-        Assert.AreEqual(1, _resourceManager.ActiveQuests.Count);
+
+        Assert.HasCount(1, _resourceManager.ActiveQuests);
 
         // Remove assignment -> loses ability
         _resourceManager.JunctionManager.Unassign(student, _resourceManager.UnlockedAbilities);
-        
+
         // Reevaluate should cancel the refinement
         _resourceManager.ReevaluateActiveQuests(character);
-        Assert.AreEqual(0, _resourceManager.ActiveQuests.Count);
+        Assert.IsEmpty(_resourceManager.ActiveQuests);
     }
 }

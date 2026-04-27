@@ -1,7 +1,5 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Mythril.Data;
 using Mythril.Headless.Simulation;
-using System.Linq;
 
 namespace Mythril.Tests;
 
@@ -9,10 +7,7 @@ namespace Mythril.Tests;
 public class SimulationTests
 {
     [TestInitialize]
-    public void Setup()
-    {
-        SandboxContent.Load();
-    }
+    public void Setup() => SandboxContent.Load();
 
     [TestMethod]
     public void RoutedSimulator_Step_Works()
@@ -29,13 +24,13 @@ public class SimulationTests
         var stats = ContentHost.GetContent<Stats>();
 
         var simulator = new RoutedSimulator(items, quests, questDetails, questUnlocks, questToCadenceUnlocks, cadences, locations, refinements, statAugments, stats);
-        
+
         // Use a quest that is reachable in Sandbox
         simulator.EndQuest = SandboxContent.BuyPotion;
 
         // This is a complex method, we just want to ensure it runs without crashing and covers lines
         simulator.Run();
-        
+
         Assert.IsTrue(simulator.EndGameReached, "End Game node (Buy Potion) should be reached in Sandbox.");
     }
 }

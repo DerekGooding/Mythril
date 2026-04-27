@@ -1,6 +1,5 @@
-using Mythril.Data;
 using Microsoft.Extensions.DependencyInjection;
-using System.Linq;
+using Mythril.Data;
 
 namespace Mythril.Tests;
 
@@ -19,7 +18,7 @@ public class RewardTests : BunitTestBase
 
         // Start it so it's in ActiveQuests (needed for character name in journal)
         ResourceManager.StartQuest(questData, character);
-        var progress = ResourceManager.ActiveQuests.First();
+        var progress = ResourceManager.ActiveQuests[0];
 
         // Act
         await ResourceManager.ReceiveRewards(progress);
@@ -37,13 +36,13 @@ public class RewardTests : BunitTestBase
         var character = new Character("Hero");
 
         ResourceManager.StartQuest(unlock, character);
-        var progress = ResourceManager.ActiveQuests.First();
+        var progress = ResourceManager.ActiveQuests[0];
 
         // Act
         await ResourceManager.ReceiveRewards(progress);
 
         // Assert
-        Assert.IsTrue(ResourceManager.UnlockedAbilities.Contains("Mage:Fire Ball"));
+        Assert.Contains("Mage:Fire Ball", ResourceManager.UnlockedAbilities);
     }
 
     [TestMethod]
@@ -62,14 +61,14 @@ public class RewardTests : BunitTestBase
         var cadence = new Cadence("Refiner", "Desc", [new CadenceUnlock("Refiner", ability, [], "Strength")]);
         var cadences = ContentHost.GetContent<Cadences>();
         cadences.Load(cadences.All.Concat([cadence]));
-        
+
         ResourceManager.UnlockCadence(cadence);
         ResourceManager.UnlockAbility("Refiner", "Refine");
         JunctionManager.AssignCadence(cadence, character, ResourceManager.UnlockedAbilities);
         InventoryManager.Add(input, 1);
 
         ResourceManager.StartQuest(refinement, character);
-        var progress = ResourceManager.ActiveQuests.First();
+        var progress = ResourceManager.ActiveQuests[0];
 
         // Act
         await ResourceManager.ReceiveRewards(progress);
@@ -85,10 +84,10 @@ public class RewardTests : BunitTestBase
         var quest = new Quest("Unlock Quest", "Desc");
         var quests = TestContext!.Services.GetRequiredService<Quests>();
         quests.Load(quests.All.Concat([quest]));
-        
+
         var cadence = new Cadence("Secret Cadence", "Desc", []);
         Cadences.Load(Cadences.All.Concat([cadence]));
-        
+
         // This is a bit internal, but we need to set up the mapping
         // In a real scenario, this is loaded from JSON
         var questToCadence = TestContext!.Services.GetRequiredService<QuestToCadenceUnlocks>();
@@ -99,6 +98,6 @@ public class RewardTests : BunitTestBase
 
         // Assert
         Assert.IsTrue(ResourceManager.GetCompletedQuests().Contains(quest));
-        Assert.IsTrue(ResourceManager.UnlockedCadences.Any(c => c.Name == "Secret Cadence"));
+        Assert.Contains(c => c.Name == "Secret Cadence", ResourceManager.UnlockedCadences);
     }
 }

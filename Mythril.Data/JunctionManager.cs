@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
 namespace Mythril.Data;
 
 public class JunctionManager(
@@ -15,22 +11,26 @@ public class JunctionManager(
     private readonly StatAugments _statAugments = statAugments;
     private readonly Cadences _cadences = cadences;
 
-    public List<Junction> Junctions => _gameStore.State.Junctions.ToList();
-    public Dictionary<string, Dictionary<string, int>> CharacterStatBoosts 
+    public List<Junction> Junctions => [.. _gameStore.State.Junctions];
+
+    public Dictionary<string, Dictionary<string, int>> CharacterStatBoosts
         => _gameStore.State.CharacterPermanentStatBoosts.ToDictionary(k => k.Key, v => v.Value.ToDictionary(ik => ik.Key, iv => iv.Value));
 
     public event Action<Character>? OnCadenceUnassigned;
+
     public event Action<Character>? OnJunctionChanged;
 
-    public void Initialize() { }
+    public void Initialize()
+    { }
 
-    public void UpdatePassiveBoosts(Character character, HashSet<string> unlockedAbilities) { }
+    public void UpdatePassiveBoosts(Character character, HashSet<string> unlockedAbilities)
+    { }
 
     public void AssignCadence(Cadence cadence, Character character, HashSet<string> unlockedAbilities)
     {
         var prevOwner = GetAssignedCharacter(cadence);
         _gameStore.Dispatch(new AssignCadenceAction(cadence.Name, character.Name));
-        
+
         if (prevOwner.HasValue && prevOwner.Value.Name != character.Name)
         {
             OnCadenceUnassigned?.Invoke(prevOwner.Value);
@@ -47,7 +47,7 @@ public class JunctionManager(
         }
     }
 
-    public Character? GetAssignedCharacter(Cadence cadence) 
+    public Character? GetAssignedCharacter(Cadence cadence)
     {
         var name = _gameStore.State.AssignedCadences.GetValueOrDefault(cadence.Name);
         return name != null ? new Character(name) : null;
@@ -60,7 +60,7 @@ public class JunctionManager(
 
     public void JunctionMagic(Character character, Stat stat, Item magic, HashSet<string> unlockedAbilities)
     {
-        string abilityName = GetJunctionAbilityName(stat.Name);
+        var abilityName = GetJunctionAbilityName(stat.Name);
         var cadencesWithAbility = CurrentlyAssigned(character)
             .Where(c => c.Abilities.Any(a => a.Ability.Name == abilityName && unlockedAbilities.Contains($"{c.Name}:{a.Ability.Name}")));
 
@@ -77,26 +77,20 @@ public class JunctionManager(
         OnJunctionChanged?.Invoke(character);
     }
 
-    private string GetJunctionAbilityName(string statName)
+    private string GetJunctionAbilityName(string statName) => statName switch
     {
-        return statName switch
-        {
-            "Strength" => "J-Str",
-            "Magic" => "J-Magic",
-            "Vitality" => "J-Vit",
-            "Speed" => "J-Speed",
-            _ => "J-" + statName
-        };
-    }
+        "Strength" => "J-Str",
+        "Magic" => "J-Magic",
+        "Vitality" => "J-Vit",
+        "Speed" => "J-Speed",
+        _ => "J-" + statName
+    };
 
-    public void AddStatBoost(Character character, string statName, int amount)
-    {
-        _gameStore.Dispatch(new AddStatBoostAction(character.Name, statName, amount));
-    }
+    public void AddStatBoost(Character character, string statName, int amount) => _gameStore.Dispatch(new AddStatBoostAction(character.Name, statName, amount));
 
     public int GetStatValue(Character character, string statName)
     {
-        int baseValue = 10;
+        var baseValue = 10;
 
         // Apply permanent boosts
         if (_gameStore.State.CharacterPermanentStatBoosts.TryGetValue(character.Name, out var boosts))
@@ -124,9 +118,9 @@ public class JunctionManager(
         }
 
         var junction = _gameStore.State.Junctions.FirstOrDefault(j => j.Character.Name == character.Name && j.Stat.Name == statName);
-        if (junction != null && junction.Magic.Name != null)
+        if (junction?.Magic.Name != null)
         {
-            int qty = _inventory.GetQuantity(junction.Magic);
+            var qty = _inventory.GetQuantity(junction.Magic);
             var augments = _statAugments[junction.Magic];
             var augment = augments.FirstOrDefault(a => a.Stat.Name == statName);
             if (augment.Stat.Name != null)
@@ -141,9 +135,6 @@ public class JunctionManager(
 
         return Math.Min(255, baseValue);
     }
-    
-    public void RestoreAssignment(Cadence cadence, Character character)
-    {
-        _gameStore.Dispatch(new AssignCadenceAction(cadence.Name, character.Name));
-    }
+
+    public void RestoreAssignment(Cadence cadence, Character character) => _gameStore.Dispatch(new AssignCadenceAction(cadence.Name, character.Name));
 }

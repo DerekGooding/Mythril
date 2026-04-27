@@ -1,6 +1,4 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Mythril.Data;
-using System.Linq;
 
 namespace Mythril.Tests;
 
@@ -27,7 +25,7 @@ public class InventoryManagerTests
         var basicGem = _items!.All.First(x => x.Name == SandboxContent.BasicGem);
 
         // Act
-        _inventoryManager!.Add(potion ,5);
+        _inventoryManager!.Add(potion, 5);
         _inventoryManager.Add(basicGem);
 
         // Assert
@@ -63,7 +61,7 @@ public class InventoryManagerTests
         _inventoryManager.Remove(potion, 5);
 
         Assert.AreEqual(0, _inventoryManager.GetQuantity(potion));
-        Assert.IsFalse(_inventoryManager.GetItems().Any(i => i.Item == potion));
+        Assert.DoesNotContain(i => i.Item == potion, _inventoryManager.GetItems());
     }
 
     [TestMethod]
@@ -104,10 +102,10 @@ public class InventoryManagerTests
         var items = _inventoryManager.GetItems().ToList();
         var spells = _inventoryManager.GetSpells().ToList();
 
-        Assert.IsTrue(items.Any(i => i.Item == potion));
-        Assert.IsFalse(items.Any(i => i.Item == fire));
-        Assert.IsTrue(spells.Any(i => i.Item == fire));
-        Assert.IsFalse(spells.Any(i => i.Item == potion));
+        Assert.Contains(i => i.Item == potion, items);
+        Assert.DoesNotContain(i => i.Item == fire, items);
+        Assert.Contains(i => i.Item == fire, spells);
+        Assert.DoesNotContain(i => i.Item == potion, spells);
     }
 
     [TestMethod]
@@ -166,18 +164,18 @@ public class InventoryManagerTests
     public void InventoryManager_Pinning_Works()
     {
         var potion = _items!.All.First(x => x.Name == SandboxContent.Potion);
-        
+
         Assert.IsFalse(_inventoryManager!.IsPinned(SandboxContent.Potion));
-        
+
         _inventoryManager.TogglePin(SandboxContent.Potion);
         Assert.IsTrue(_inventoryManager.IsPinned(SandboxContent.Potion));
-        
+
         _inventoryManager.Add(potion, 5);
         var pinned = _inventoryManager.GetPinnedItems().ToList();
-        Assert.AreEqual(1, pinned.Count);
+        Assert.HasCount(1, pinned);
         Assert.AreEqual(SandboxContent.Potion, pinned[0].Item.Name);
         Assert.AreEqual(5, pinned[0].Quantity);
-        
+
         _inventoryManager.TogglePin(SandboxContent.Potion);
         Assert.IsFalse(_inventoryManager.IsPinned(SandboxContent.Potion));
         Assert.AreEqual(0, _inventoryManager.GetPinnedItems().Count());
@@ -187,10 +185,10 @@ public class InventoryManagerTests
     public void InventoryManager_Clear_Works()
     {
         var potion = _items!.All.First(x => x.Name == SandboxContent.Potion);
-        
+
         _inventoryManager!.Add(potion, 5);
         Assert.AreEqual(5, _inventoryManager.GetQuantity(potion));
-        
+
         _inventoryManager.Clear();
         Assert.AreEqual(0, _inventoryManager.GetQuantity(potion));
         Assert.AreEqual(0, _inventoryManager.GetAll().Count());
@@ -200,11 +198,11 @@ public class InventoryManagerTests
     public void InventoryManager_Subtract_Works()
     {
         var potion = _items!.All.First(x => x.Name == SandboxContent.Potion);
-        
+
         _inventoryManager!.Add(potion, 10);
         _inventoryManager.Remove(potion, 4);
         Assert.AreEqual(6, _inventoryManager.GetQuantity(potion));
-        
+
         var result = _inventoryManager.Remove(potion, 10); // Should return false
         Assert.IsFalse(result);
         Assert.AreEqual(6, _inventoryManager.GetQuantity(potion));

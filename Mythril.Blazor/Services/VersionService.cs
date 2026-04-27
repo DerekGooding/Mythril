@@ -1,5 +1,4 @@
 using System.Net.Http.Json;
-using System.Timers;
 
 namespace Mythril.Blazor.Services;
 
@@ -14,7 +13,7 @@ public class VersionService(HttpClient http) : IDisposable
     private readonly System.Timers.Timer _timer = new(TimeSpan.FromMinutes(5).TotalMilliseconds);
     public string? CurrentVersion { get; private set; }
     public bool IsUpdateAvailable { get; private set; } = false;
-    
+
     public event Action? OnUpdateAvailable;
 
     public void Initialize()
@@ -22,7 +21,7 @@ public class VersionService(HttpClient http) : IDisposable
         _timer.Elapsed += async (s, e) => await CheckVersion();
         _timer.AutoReset = true;
         _timer.Start();
-        
+
         // Initial check
         _ = Task.Run(CheckVersion);
     }
@@ -57,6 +56,7 @@ public class VersionService(HttpClient http) : IDisposable
 
     public void Dispose()
     {
+        GC.SuppressFinalize(this);
         _timer.Dispose();
     }
 }

@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
-
 namespace Mythril.Data;
 
 public partial class ResourceManager
@@ -27,6 +24,6 @@ public partial class ResourceManager
             unlocks.Add("unlock new location");
         }
 
-        return unlocks.Distinct().ToList();
+        return [.. unlocks.Distinct()];
     }
 }

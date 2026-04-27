@@ -1,8 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Linq;
 using Mythril.Data;
+using System.Collections.Immutable;
 
 namespace Mythril.Headless.Simulation;
 
@@ -12,7 +9,7 @@ public partial class LatticeSimulator
     {
         var quest = quests.All.First(q => q.Name == name);
         var detail = questDetails[quest];
-        
+
         // 1. Location requirement
         double locTime = 0;
         var loc = locations.All.FirstOrDefault(l => l.Quests.Contains(quest));
@@ -26,7 +23,7 @@ public partial class LatticeSimulator
         double prereqTime = 0;
         foreach (var reqQ in questUnlocks[quest])
         {
-            double t = state.QuestTime.GetValueOrDefault(reqQ.Name, double.PositiveInfinity);
+            var t = state.QuestTime.GetValueOrDefault(reqQ.Name, double.PositiveInfinity);
             if (t == double.PositiveInfinity) return (false, state);
             prereqTime = Math.Max(prereqTime, t);
         }
@@ -35,7 +32,7 @@ public partial class LatticeSimulator
         double itemTime = 0;
         foreach (var reqI in detail.Requirements)
         {
-            double t = state.ResourceTime.GetValueOrDefault(reqI.Item.Name, double.PositiveInfinity);
+            var t = state.ResourceTime.GetValueOrDefault(reqI.Item.Name, double.PositiveInfinity);
             if (t == double.PositiveInfinity) return (false, state);
             itemTime = Math.Max(itemTime, t);
         }
@@ -49,12 +46,12 @@ public partial class LatticeSimulator
             }
         }
 
-        double startTime = Math.Max(locTime, Math.Max(prereqTime, itemTime));
+        var startTime = Math.Max(locTime, Math.Max(prereqTime, itemTime));
         double statValue = state.StatMax.GetValueOrDefault(detail.PrimaryStat, 10);
-        double duration = detail.DurationSeconds * Math.Pow(0.75, (statValue - 10) / 10.0);
-        double completionTime = startTime + duration;
+        var duration = detail.DurationSeconds * Math.Pow(0.75, (statValue - 10) / 10.0);
+        var completionTime = startTime + duration;
 
-        bool changed = false;
+        var changed = false;
         var nextQuestTime = state.QuestTime;
         if (completionTime < state.QuestTime.GetValueOrDefault(name, double.PositiveInfinity))
         {
@@ -92,7 +89,7 @@ public partial class LatticeSimulator
                 {
                     if (effect.Type == EffectType.StatBoost && !string.IsNullOrEmpty(effect.Target))
                     {
-                        int current = nextStatMax.GetValueOrDefault(effect.Target, 10);
+                        var current = nextStatMax.GetValueOrDefault(effect.Target, 10);
                         nextStatMax = nextStatMax.SetItem(effect.Target, current + effect.Value);
                         changed = true;
                     }
@@ -102,8 +99,9 @@ public partial class LatticeSimulator
 
         if (changed)
         {
-            return (true, state with { 
-                QuestTime = nextQuestTime, 
+            return (true, state with
+            {
+                QuestTime = nextQuestTime,
                 ResourceTime = nextResourceTime,
                 UnlockedCadences = nextCadences,
                 StatMax = nextStatMax
@@ -121,23 +119,24 @@ public partial class LatticeSimulator
         var inputItemName = parts[1];
 
         var ability = refinements.ByKey.Keys.First(a => a.Name == abilityName);
-        var refinementData = refinements.ByKey[ability];
+        var (PrimaryStat, Recipes) = refinements.ByKey[ability];
         var inputItem = items.All.First(i => i.Name == inputItemName);
-        var recipe = refinementData.Recipes[inputItem];
+        var recipe = Recipes[inputItem];
 
         if (!state.UnlockedAbilities.Any(ua => ua.EndsWith($":{abilityName}"))) return (false, state);
 
-        double inputTime = state.ResourceTime.GetValueOrDefault(inputItemName, double.PositiveInfinity);
+        var inputTime = state.ResourceTime.GetValueOrDefault(inputItemName, double.PositiveInfinity);
         if (inputTime == double.PositiveInfinity) return (false, state);
 
-        double statValue = state.StatMax.GetValueOrDefault(refinementData.PrimaryStat, 10);
-        double duration = 15.0 * Math.Pow(0.75, (statValue - 10) / 10.0);
-        double outputTime = inputTime + duration;
+        double statValue = state.StatMax.GetValueOrDefault(PrimaryStat, 10);
+        var duration = 15.0 * Math.Pow(0.75, (statValue - 10) / 10.0);
+        var outputTime = inputTime + duration;
 
         if (outputTime < state.ResourceTime.GetValueOrDefault(recipe.OutputItem.Name, double.PositiveInfinity))
         {
-            return (true, state with { 
-                ResourceTime = state.ResourceTime.SetItem(recipe.OutputItem.Name, outputTime) 
+            return (true, state with
+            {
+                ResourceTime = state.ResourceTime.SetItem(recipe.OutputItem.Name, outputTime)
             });
         }
 
@@ -146,16 +145,16 @@ public partial class LatticeSimulator
 
     private (bool, GameState) UpdateAbility(string name, GameState state)
     {
-        bool changed = false;
+        var changed = false;
         var nextAbilities = state.UnlockedAbilities;
-        int nextCapacity = state.MagicCapacity;
+        var nextCapacity = state.MagicCapacity;
 
         foreach (var cadence in cadences.All)
         {
             var unlock = cadence.Abilities.FirstOrDefault(a => a.Ability.Name == name);
             if (string.IsNullOrEmpty(unlock.Ability.Name)) continue;
 
-            string key = $"{cadence.Name}:{unlock.Ability.Name}";
+            var key = $"{cadence.Name}:{unlock.Ability.Name}";
             if (!state.UnlockedCadences.Contains(cadence.Name)) continue;
 
             // metadata capacity check
@@ -176,7 +175,7 @@ public partial class LatticeSimulator
 
             if (state.UnlockedAbilities.Contains(key)) continue;
 
-            bool canAfford = true;
+            var canAfford = true;
             foreach (var req in unlock.Requirements)
             {
                 if (state.ResourceTime.GetValueOrDefault(req.Item.Name, double.PositiveInfinity) == double.PositiveInfinity)

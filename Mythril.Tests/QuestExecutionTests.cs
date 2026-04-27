@@ -1,6 +1,4 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Mythril.Data;
-using System.Linq;
 
 namespace Mythril.Tests;
 
@@ -19,7 +17,7 @@ public class QuestExecutionTests
         _items = ContentHost.GetContent<Items>();
         _quests = ContentHost.GetContent<Quests>();
         _questDetails = ContentHost.GetContent<QuestDetails>();
-        
+
         var gameStore = new GameStore();
         var inventory = new InventoryManager(gameStore);
         var cadences = ContentHost.GetContent<Cadences>();
@@ -34,11 +32,11 @@ public class QuestExecutionTests
             ContentHost.GetContent<QuestToCadenceUnlocks>()
         );
 
-        _resourceManager = new ResourceManager(gameStore, _items, _quests, 
-            ContentHost.GetContent<QuestUnlocks>(), 
-            ContentHost.GetContent<QuestToCadenceUnlocks>(), 
-            _questDetails, 
-            cadences, 
+        _resourceManager = new ResourceManager(gameStore, _items, _quests,
+            ContentHost.GetContent<QuestUnlocks>(),
+            ContentHost.GetContent<QuestToCadenceUnlocks>(),
+            _questDetails,
+            cadences,
             ContentHost.GetContent<Locations>(),
             junctionManager,
             inventory,
@@ -57,10 +55,10 @@ public class QuestExecutionTests
 
         _resourceManager.Inventory.Clear();
         _resourceManager.Inventory.Add(_items!.All.First(x => x.Name == SandboxContent.Gold), 1000);
-        
+
         _resourceManager.StartQuest(questData, character);
-        
-        Assert.AreEqual(1, _resourceManager.ActiveQuests.Count);
+
+        Assert.HasCount(1, _resourceManager.ActiveQuests);
         Assert.AreEqual(SandboxContent.BuyPotion, _resourceManager.ActiveQuests[0].Name);
     }
 
@@ -75,11 +73,11 @@ public class QuestExecutionTests
         _resourceManager.Inventory.Clear();
         _resourceManager.Inventory.Add(_items!.All.First(x => x.Name == SandboxContent.Gold), 1000);
         _resourceManager.StartQuest(questData, character);
-        
+
         var progress = _resourceManager.ActiveQuests[0];
         Assert.AreEqual(0, progress.SecondsElapsed);
 
-        _resourceManager.Tick(1.0); 
+        _resourceManager.Tick(1.0);
         progress = _resourceManager.ActiveQuests[0];
         Assert.AreEqual(1.0, progress.SecondsElapsed);
     }
@@ -94,23 +92,23 @@ public class QuestExecutionTests
 
         _resourceManager.Inventory.Clear();
         _resourceManager.Inventory.Add(_items!.All.First(x => x.Name == SandboxContent.Gold), 1000);
-        
+
         // Start with -1.5s delay
         _resourceManager.StartQuest(questData, character, -1.5);
-        
+
         var progress = _resourceManager.ActiveQuests[0];
         Assert.AreEqual(-1.5, progress.SecondsElapsed);
         Assert.AreEqual(0, progress.Progress, "Progress should be 0 during delay.");
 
-        _resourceManager.Tick(1.0); 
+        _resourceManager.Tick(1.0);
         progress = _resourceManager.ActiveQuests[0];
         Assert.AreEqual(-0.5, progress.SecondsElapsed);
         Assert.AreEqual(0, progress.Progress, "Progress should still be 0 during delay.");
 
-        _resourceManager.Tick(1.0); 
+        _resourceManager.Tick(1.0);
         progress = _resourceManager.ActiveQuests[0];
         Assert.AreEqual(0.5, progress.SecondsElapsed);
-        Assert.IsTrue(progress.Progress > 0, "Progress should be positive after delay.");
+        Assert.IsGreaterThan(0, progress.Progress, "Progress should be positive after delay.");
     }
 
     [TestMethod]
@@ -119,11 +117,11 @@ public class QuestExecutionTests
         var quest = _quests!.All.First(x => x.Name == SandboxContent.ChopWood);
         var detail = _questDetails![quest];
         var questData = new QuestData(quest, detail);
-        
+
         var himbo = _resourceManager!.Characters.First(c => c.Name == "Himbo");
-        
+
         _resourceManager.StartQuest(questData, himbo);
-        
+
         var progress = _resourceManager.ActiveQuests[0];
         // ChopWood base is 20. Baseline stat is 10.
         Assert.AreEqual(20, progress.DurationSeconds);
@@ -135,12 +133,12 @@ public class QuestExecutionTests
         var quest = _quests!.All.First(x => x.Name == SandboxContent.ChopWood);
         var detail = _questDetails![quest];
         var questData = new QuestData(quest, detail);
-        
+
         var himbo = _resourceManager!.Characters.First(c => c.Name == "Himbo");
         _resourceManager.JunctionManager.AddStatBoost(himbo, SandboxContent.Strength, 10); // 10 + 10 = 20
-        
+
         _resourceManager.StartQuest(questData, himbo);
-        
+
         var progress = _resourceManager.ActiveQuests[0];
         // 20 * 0.75 = 15
         Assert.AreEqual(15, progress.DurationSeconds);
@@ -151,12 +149,12 @@ public class QuestExecutionTests
     {
         var cadence = ContentHost.GetContent<Cadences>().All.First(c => c.Name == SandboxContent.Recruit);
         var unlock = cadence.Abilities[0];
-        
+
         var wifu = _resourceManager!.Characters.First(c => c.Name == "Wifu");
-        
-        foreach(var req in unlock.Requirements) _resourceManager.Inventory.Add(req.Item, req.Quantity);
+
+        foreach (var req in unlock.Requirements) _resourceManager.Inventory.Add(req.Item, req.Quantity);
         _resourceManager.StartQuest(unlock, wifu);
-        
+
         var progress = _resourceManager.ActiveQuests[0];
         // Base for cadences in current engine is 30, but let's check what it actually is in QuestData for CadenceUnlock
         // The duration comes from the character's base stats.
@@ -169,25 +167,25 @@ public class QuestExecutionTests
         var cadences = ContentHost.GetContent<Cadences>();
         var recruit = cadences.All.First(c => c.Name == SandboxContent.Recruit);
         var apprentice = cadences.All.First(c => c.Name == SandboxContent.Apprentice);
-        
+
         var recruitAutoQuest = recruit.Abilities.First(a => a.Ability.Name == SandboxContent.AutoQuestI);
         var apprenticeAutoQuest = apprentice.Abilities.First(a => a.Ability.Name == SandboxContent.AutoQuestI);
-        
+
         var character1 = _resourceManager!.Characters[0];
         var character2 = _resourceManager!.Characters[1];
 
         _resourceManager.Inventory.Add(_items!.All.First(x => x.Name == SandboxContent.Gold), 1000);
-        
+
         // Start Recruit research
         _resourceManager.StartQuest(recruitAutoQuest, character1);
-        Assert.AreEqual(1, _resourceManager.ActiveQuests.Count);
-        
+        Assert.HasCount(1, _resourceManager.ActiveQuests);
+
         // Try starting Recruit research AGAIN (should fail)
         _resourceManager.StartQuest(recruitAutoQuest, character2);
-        Assert.AreEqual(1, _resourceManager.ActiveQuests.Count, "Should NOT start the same cadence's research twice.");
-        
+        Assert.HasCount(1, _resourceManager.ActiveQuests, "Should NOT start the same cadence's research twice.");
+
         // Start Apprentice research (should succeed)
         _resourceManager.StartQuest(apprenticeAutoQuest, character2);
-        Assert.AreEqual(2, _resourceManager.ActiveQuests.Count, "Should allow different cadences to research same ability name.");
+        Assert.HasCount(2, _resourceManager.ActiveQuests, "Should allow different cadences to research same ability name.");
     }
 }

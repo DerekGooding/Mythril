@@ -1,7 +1,4 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Mythril.Data;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Mythril.Tests;
 
@@ -20,10 +17,10 @@ public class InventoryOverflowTests
         _items = ContentHost.GetContent<Items>();
         _gameStore = new GameStore();
         _inventory = new InventoryManager(_gameStore);
-        
+
         var cadences = ContentHost.GetContent<Cadences>();
         var junctionManager = new JunctionManager(_gameStore, _inventory, ContentHost.GetContent<StatAugments>(), cadences);
-        
+
         var pathfinding = new PathfindingService(
             ContentHost.GetContent<Locations>(),
             ContentHost.GetContent<Quests>(),
@@ -35,11 +32,11 @@ public class InventoryOverflowTests
 
         var quests = ContentHost.GetContent<Quests>();
 
-        _resourceManager = new ResourceManager(_gameStore, _items, quests, 
-            ContentHost.GetContent<QuestUnlocks>(), 
-            ContentHost.GetContent<QuestToCadenceUnlocks>(), 
-            ContentHost.GetContent<QuestDetails>(), 
-            cadences, 
+        _resourceManager = new ResourceManager(_gameStore, _items, quests,
+            ContentHost.GetContent<QuestUnlocks>(),
+            ContentHost.GetContent<QuestToCadenceUnlocks>(),
+            ContentHost.GetContent<QuestDetails>(),
+            cadences,
             ContentHost.GetContent<Locations>(),
             junctionManager,
             _inventory,
@@ -54,8 +51,8 @@ public class InventoryOverflowTests
         var fireMagic = _items!.All.First(i => i.Name == SandboxContent.FireI);
         _gameStore!.Dispatch(new SetMagicCapacityAction(30));
 
-        int overflow = 0;
-        _gameStore.OnItemOverflow += (name, qty) => 
+        var overflow = 0;
+        _gameStore.OnItemOverflow += (name, qty) =>
         {
             if (name == fireMagic.Name) overflow = qty;
         };
@@ -75,10 +72,10 @@ public class InventoryOverflowTests
     public async Task ReceiveRewards_TriggersOverflowEvent_ForQuests()
     {
         var quest = ContentHost.GetContent<Quests>().All.First(q => q.Name == SandboxContent.Prologue);
-        
+
         string? overflowItem = null;
-        int overflowQty = 0;
-        _resourceManager!.OnItemOverflow += (name, qty) => 
+        var overflowQty = 0;
+        _resourceManager!.OnItemOverflow += (name, qty) =>
         {
             overflowItem = name;
             overflowQty = qty;
@@ -100,12 +97,12 @@ public class InventoryOverflowTests
     {
         var basicGem = _items!.All.First(i => i.Name == SandboxContent.BasicGem);
         var student = ContentHost.GetContent<Cadences>().All.First(c => c.Name == SandboxContent.Student);
-        
+
         // Find the specific ability object from the cadence content
         var ability = student.Abilities.First(a => a.Ability.Name == SandboxContent.RefineFire).Ability;
         var recipe = ContentHost.GetContent<ItemRefinements>().ByKey[ability].Recipes[basicGem];
         // Recipe produces 5x Fire I
-        
+
         var refinement = new RefinementData(ability, basicGem, recipe, SandboxContent.Magic);
 
         string? overflowItem = null;

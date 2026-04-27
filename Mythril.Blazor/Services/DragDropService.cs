@@ -6,6 +6,7 @@ public class DragDropService
 {
     public object? Data { get; set; }
     public (Character character, Stat stat)? HoveredTarget { get; set; }
+
     public event Action? OnHoverChanged;
 
     public void SetHoveredTarget(Character? character, Stat? stat)
@@ -21,7 +22,7 @@ public class DragDropService
         else
         {
             var target = (character.Value, stat.Value);
-            if (HoveredTarget == null || !HoveredTarget.Value.Equals(target))
+            if (HoveredTarget?.Equals(target) != true)
             {
                 HoveredTarget = target;
                 OnHoverChanged?.Invoke();

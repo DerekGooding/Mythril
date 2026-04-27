@@ -1,8 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Linq;
 using Mythril.Data;
+using System.Collections.Immutable;
 
 namespace Mythril.Headless.Simulation;
 
@@ -27,23 +24,22 @@ public class FlowSimulator(
     {
         var flows = ExtractFlows(reachabilityResult);
         var flowMap = flows.ToDictionary(f => f.Name);
-        
+
         var state = new QuantitativeFlowState(
             items.All.ToImmutableDictionary(i => i.Name, _ => 0.0),
-            ImmutableHashSet<string>.Empty,
-            ImmutableHashSet<string>.Empty
+            [],
+            []
         );
 
-        int iterations = 0;
-        while (true)
+        var iterations = 0;
+        do
         {
             iterations++;
             var next = Step(state, flows, flowMap, seed);
             if (next.SustainableActivities.Count == state.SustainableActivities.Count) break;
             state = next;
-            
-            if (iterations > 1000) break; // Safety break
         }
+        while (iterations <= 1000);
 
         // Identify reachable but unsustainable activities
         var allReachableRecurring = flows.Select(f => f.Name).ToHashSet();
@@ -61,7 +57,7 @@ public class FlowSimulator(
         foreach (var qTime in reachabilityResult.QuestTime)
         {
             if (qTime.Value == double.PositiveInfinity) continue;
-            
+
             if (questMap.TryGetValue(qTime.Key, out var quest))
             {
                 var detail = questDetails[quest];
@@ -81,8 +77,8 @@ public class FlowSimulator(
         foreach (var refinementKvp in refinements.ByKey)
         {
             var ability = refinementKvp.Key;
-            bool unlocked = reachabilityResult.UnlockedAbilities.Any(ua => ua.EndsWith($":{ability.Name}"));
-            if (!unlocked) 
+            var unlocked = reachabilityResult.UnlockedAbilities.Any(ua => ua.EndsWith($":{ability.Name}"));
+            if (!unlocked)
             {
                 // Console.WriteLine($"DEBUG: Ability {ability.Name} not unlocked in reachability result.");
                 continue;
@@ -93,7 +89,7 @@ public class FlowSimulator(
                 var inputItem = recipeKvp.Key;
                 var recipe = recipeKvp.Value;
 
-                string flowName = $"{ability.Name}:{inputItem.Name}->{recipe.OutputItem.Name}";
+                var flowName = $"{ability.Name}:{inputItem.Name}->{recipe.OutputItem.Name}";
 
                 double statValue = reachabilityResult.StatMax.GetValueOrDefault(refinementKvp.Value.PrimaryStat, 10);
                 flows.Add(new ActivityFlow(
@@ -134,7 +130,7 @@ public class FlowSimulator(
         {
             if (state.SustainableActivities.Contains(flow.Name)) continue;
 
-            bool canSustain = true;
+            var canSustain = true;
             foreach (var input in flow.Inputs)
             {
                 // Must be produced at a higher rate than consumed

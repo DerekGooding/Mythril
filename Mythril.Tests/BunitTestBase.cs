@@ -5,7 +5,6 @@ using Microsoft.JSInterop;
 using Moq;
 using Mythril.Blazor.Services;
 using Mythril.Data;
-using System.Net.Http;
 
 namespace Mythril.Tests;
 
@@ -27,9 +26,9 @@ public abstract class BunitTestBase : TestContextWrapper
     public void Setup()
     {
         TestContext = new Bunit.TestContext();
-        
+
         SandboxContent.Load();
-        
+
         GameStore = new GameStore();
         InventoryManager = new InventoryManager(GameStore);
         Stats = ContentHost.GetContent<Stats>();
@@ -44,7 +43,7 @@ public abstract class BunitTestBase : TestContextWrapper
             cadences,
             ContentHost.GetContent<QuestToCadenceUnlocks>()
         );
-        
+
         JunctionManager = new JunctionManager(GameStore, InventoryManager, statAugments, cadences);
         JunctionManager.Initialize();
 
@@ -60,13 +59,13 @@ public abstract class BunitTestBase : TestContextWrapper
             pathfinding
         );
         ResourceManager.Initialize();
-        
+
         DragDropService = new DragDropService();
         JSRuntimeMock = new Mock<IJSRuntime>();
         SnackbarService = new SnackbarService();
         AuthService = new AuthService(JSRuntimeMock.Object);
         var httpClient = new HttpClient();
-        
+
         ContentLoaderMock = new Mock<ContentLoader>(
             httpClient,
             ContentHost.GetContent<Items>(),
@@ -89,7 +88,7 @@ public abstract class BunitTestBase : TestContextWrapper
         TestContext.Services.AddSingleton(ContentHost.GetContent<CadenceAbilities>());
         TestContext.Services.AddSingleton(ContentHost.GetContent<Quests>());
         TestContext.Services.AddSingleton(ContentHost.GetContent<Stats>());
-        
+
         TestContext.Services.AddSingleton(ResourceManager);
         TestContext.Services.AddSingleton(JunctionManager);
         TestContext.Services.AddSingleton(InventoryManager);
@@ -105,7 +104,7 @@ public abstract class BunitTestBase : TestContextWrapper
         TestContext.Services.AddSingleton(ContentLoaderMock.Object);
         TestContext.Services.AddSingleton(new InventoryService());
         TestContext.Services.AddSingleton(new ThemeService(JSRuntimeMock.Object, new Mock<ILogger<ThemeService>>().Object));
-        
+
         TestContext.Services.AddSingleton(new Mock<PersistenceService>(
             JSRuntimeMock.Object,
             ResourceManager,
@@ -119,5 +118,3 @@ public abstract class BunitTestBase : TestContextWrapper
     [TestCleanup]
     public void TearDown() => TestContext?.Dispose();
 }
-
-

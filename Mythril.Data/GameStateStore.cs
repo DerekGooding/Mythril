@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -16,10 +12,13 @@ public partial class GameStore
     };
 
     public GameState State { get; private set; } = GameState.Initial;
+
     public event Action<GameState>? OnStateChanged;
+
     public event Action<string, int>? OnItemOverflow;
 
     public string ExportState() => JsonSerializer.Serialize(State, _options);
+
     public void ImportState(string json)
     {
         try

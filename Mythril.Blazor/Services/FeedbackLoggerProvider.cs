@@ -1,5 +1,3 @@
-using Microsoft.Extensions.Logging;
-
 namespace Mythril.Blazor.Services;
 
 public class FeedbackLoggerProvider(FeedbackService feedbackService, AuthService authService) : ILoggerProvider
@@ -9,7 +7,7 @@ public class FeedbackLoggerProvider(FeedbackService feedbackService, AuthService
 
     public ILogger CreateLogger(string categoryName) => new FeedbackLogger(_feedbackService, _authService);
 
-    public void Dispose() { }
+    public void Dispose() => GC.SuppressFinalize(this);
 
     private class FeedbackLogger(FeedbackService feedbackService, AuthService authService) : ILogger
     {

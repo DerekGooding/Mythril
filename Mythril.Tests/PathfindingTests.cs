@@ -1,7 +1,4 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Mythril.Data;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Mythril.Tests;
 
@@ -16,7 +13,7 @@ public class PathfindingTests
     {
         SandboxContent.Load();
         _quests = ContentHost.GetContent<Quests>();
-        
+
         _pathfinding = new PathfindingService(
             ContentHost.GetContent<Locations>(),
             _quests,
@@ -32,8 +29,8 @@ public class PathfindingTests
     {
         var target = SandboxContent.Prologue;
         var path = _pathfinding!.GetPrerequisitePath(target, [], []);
-        
-        Assert.IsTrue(path.Contains(target));
+
+        Assert.Contains(target, path);
     }
 
     [TestMethod]
@@ -42,10 +39,10 @@ public class PathfindingTests
         // Buy Potion -> Tutorial -> Prologue
         var target = SandboxContent.BuyPotion;
         var path = _pathfinding!.GetPrerequisitePath(target, [], []);
-        
-        Assert.IsTrue(path.Contains(target));
-        Assert.IsTrue(path.Contains(SandboxContent.Tutorial));
-        Assert.IsTrue(path.Contains(SandboxContent.Prologue), "Path should contain prerequisite quest.");
+
+        Assert.Contains(target, path);
+        Assert.Contains(SandboxContent.Tutorial, path);
+        Assert.Contains(SandboxContent.Prologue, path, "Path should contain prerequisite quest.");
     }
 
     [TestMethod]
@@ -54,9 +51,9 @@ public class PathfindingTests
         var target = SandboxContent.BuyPotion;
         var completed = new HashSet<string> { SandboxContent.Tutorial };
         var path = _pathfinding!.GetPrerequisitePath(target, completed, []);
-        
-        Assert.IsTrue(path.Contains(target));
-        Assert.IsFalse(path.Contains(SandboxContent.Prologue), "Should not contain quests before already completed ones.");
+
+        Assert.Contains(target, path);
+        Assert.DoesNotContain(SandboxContent.Prologue, path, "Should not contain quests before already completed ones.");
     }
 
     [TestMethod]
@@ -64,9 +61,9 @@ public class PathfindingTests
     {
         var target = $"{SandboxContent.Recruit}:{SandboxContent.AutoQuestI}";
         var path = _pathfinding!.GetPrerequisitePath(target, [], []);
-        
-        Assert.IsTrue(path.Contains(target));
+
+        Assert.Contains(target, path);
         // Recruit is unlocked by Prologue
-        Assert.IsTrue(path.Contains(SandboxContent.Prologue), "Should contain the quest that unlocks the cadence.");
+        Assert.Contains(SandboxContent.Prologue, path, "Should contain the quest that unlocks the cadence.");
     }
 }

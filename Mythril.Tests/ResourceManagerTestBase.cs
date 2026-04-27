@@ -1,7 +1,4 @@
 using Mythril.Data;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Mythril.Tests;
 
@@ -22,7 +19,7 @@ public abstract class ResourceManagerTestBase
         _quests = ContentHost.GetContent<Quests>();
         _questDetails = ContentHost.GetContent<QuestDetails>();
         _cadences = ContentHost.GetContent<Cadences>();
-        
+
         _gameStore = new GameStore();
         var inventory = new InventoryManager(_gameStore);
         var junctionManager = new JunctionManager(_gameStore, inventory, ContentHost.GetContent<StatAugments>(), _cadences);
@@ -36,12 +33,12 @@ public abstract class ResourceManagerTestBase
         );
         _resourceManager = new ResourceManager(
             _gameStore,
-            _items, 
+            _items,
             _quests!,
-            ContentHost.GetContent<QuestUnlocks>(), 
-            ContentHost.GetContent<QuestToCadenceUnlocks>(), 
-            _questDetails, 
-            _cadences, 
+            ContentHost.GetContent<QuestUnlocks>(),
+            ContentHost.GetContent<QuestToCadenceUnlocks>(),
+            _questDetails,
+            _cadences,
             ContentHost.GetContent<Locations>(),
             junctionManager,
             inventory,
