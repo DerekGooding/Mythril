@@ -311,7 +311,7 @@
     "type": "Stat",
     "name": "Vitality",
     "data": {
-      "description": "Affects the speed and evasion of a character."
+      "description": "Affects the robust physical defense of a character."
     },
     "in_edges": {},
     "out_edges": {}
@@ -332,6 +332,16 @@
     "name": "Speed",
     "data": {
       "description": "Determines the frequency of character actions."
+    },
+    "in_edges": {},
+    "out_edges": {}
+  },
+  {
+    "id": "stat_spirit",
+    "type": "Stat",
+    "name": "Spirit",
+    "data": {
+      "description": "The ability to defend against magical afflictions."
     },
     "in_edges": {},
     "out_edges": {}
@@ -475,11 +485,11 @@
     }
   },
   {
-    "id": "quest_learn_about_the_dark_forest",
+    "id": "quest_learn_about_greenwood_forest",
     "type": "Quest",
-    "name": "Learn about the Dark Forest",
+    "name": "Learn about Greenwood Forest",
     "data": {
-      "description": "Hear the rumors of the corrupted forest.",
+      "description": "Hear the rumors of the local forest.",
       "duration": 30,
       "quest_type": "Single",
       "primary_stat": "Vitality",
@@ -663,7 +673,7 @@
       "rewards": [
         {
           "targetId": "item_slime",
-          "quantity": 50
+          "quantity": 5
         }
       ]
     }
@@ -956,7 +966,7 @@
       "description": "Find the legendary sanctuary in the waste.",
       "duration": 300,
       "quest_type": "Single",
-      "primary_stat": "Vitality",
+      "primary_stat": "Speed",
       "required_stats": {
         "Speed": 25
       },
@@ -1354,7 +1364,7 @@
           "quantity": 1
         },
         {
-          "targetId": "quest_learn_about_the_dark_forest",
+          "targetId": "quest_learn_about_greenwood_forest",
           "quantity": 1
         },
         {
@@ -1384,10 +1394,6 @@
         },
         {
           "targetId": "quest_chop_wood",
-          "quantity": 1
-        },
-        {
-          "targetId": "quest_hunt_spiders",
           "quantity": 1
         },
         {
@@ -1437,10 +1443,6 @@
     "out_edges": {
       "contains": [
         {
-          "targetId": "quest_hunt_slimes",
-          "quantity": 1
-        },
-        {
           "targetId": "quest_hunt_sand_sharks",
           "quantity": 1
         },
@@ -1467,6 +1469,18 @@
       "contains": [
         {
           "targetId": "quest_hunt_bats",
+          "quantity": 1
+        },
+        {
+          "targetId": "quest_hunt_spiders",
+          "quantity": 1
+        },
+        {
+          "targetId": "quest_hunt_slimes",
+          "quantity": 1
+        },
+        {
+          "targetId": "quest_unlock_mining",
           "quantity": 1
         },
         {
@@ -2518,7 +2532,7 @@
       "produces": [
         {
           "targetId": "item_fire_i",
-          "quantity": 5
+          "quantity": 10
         }
       ]
     }

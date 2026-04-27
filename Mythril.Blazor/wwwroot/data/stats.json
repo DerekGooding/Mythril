@@ -5,7 +5,7 @@
   },
   {
     "Name": "Vitality",
-    "Description": "Affects the speed and evasion of a character."
+    "Description": "Affects the robust physical defense of a character."
   },
   {
     "Name": "Magic",
@@ -14,5 +14,9 @@
   {
     "Name": "Speed",
     "Description": "Determines the frequency of character actions."
+  },
+  {
+    "Name": "Spirit",
+    "Description": "The ability to defend against magical afflictions."
   }
 ]

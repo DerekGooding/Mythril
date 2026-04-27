@@ -8,7 +8,7 @@
       "Visit Starting Town",
       "Recover the Ancient Tome",
       "Learn About Cadences",
-      "Learn about the Dark Forest",
+      "Learn about Greenwood Forest",
       "Learn about the Mines"
     ]
   },
@@ -19,7 +19,6 @@
     "Quests": [
       "Hunt Goblins",
       "Chop Wood",
-      "Hunt Spiders",
       "Gather Moonberries"
     ]
   },
@@ -37,7 +36,6 @@
     "Type": "Plains",
     "RequiredQuest": "Visit Starting Town",
     "Quests": [
-      "Hunt Slimes",
       "Hunt Sand-Sharks",
       "Locate the Hidden Oasis"
     ]
@@ -48,6 +46,9 @@
     "RequiredQuest": "Learn about the Mines",
     "Quests": [
       "Hunt Bats",
+      "Hunt Spiders",
+      "Hunt Slimes",
+      "Unlock Mining",
       "Mine Iron Ore",
       "Scavenge Scrap",
       "Power the Forge"

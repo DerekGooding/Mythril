@@ -75,7 +75,7 @@
     "StatRewards": {}
   },
   {
-    "Quest": "Learn about the Dark Forest",
+    "Quest": "Learn about Greenwood Forest",
     "DurationSeconds": 30,
     "Type": "Single",
     "Requirements": [],
@@ -174,7 +174,7 @@
     "Rewards": [
       {
         "Item": "Slime",
-        "Quantity": 50
+        "Quantity": 5
       }
     ],
     "PrimaryStat": "Strength",
@@ -369,7 +369,7 @@
         "Quantity": 20
       }
     ],
-    "PrimaryStat": "Vitality",
+    "PrimaryStat": "Speed",
     "RequiredStats": {
       "Speed": 25
     },
