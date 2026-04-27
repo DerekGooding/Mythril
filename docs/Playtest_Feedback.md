@@ -58,14 +58,9 @@
 
 **In processes**
 
-- Relabel "Spells" as "Magic" in the Workshop tab to match inventory sorting
-
 - Consider an appendix tab that lists and explains all unlocked items, locations, cadences and abilities. Make it searchable. 
 
-- remove the "last 3 completed quests" feature
-- remove the journal tab
-
-**Next prompt**
+**Next prompt (confirm, might already be complete)**
 - Add a UI Toggle in Cadence menu to hide all learned abilities
 - Add a UI Toggle in Cadence menu to hide all fully learned Cadences
 - Add a UI Toggle in Locations to hide once-completed quests
