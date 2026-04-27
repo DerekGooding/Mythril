@@ -1,0 +1,109 @@
+[
+  {
+    "Name": "Village",
+    "Type": "Plains",
+    "Quests": [
+      "Prologue",
+      "Tutorial Section",
+      "Visit Starting Town",
+      "Recover the Ancient Tome",
+      "Learn About Cadences",
+      "Learn about the Dark Forest",
+      "Learn about the Mines"
+    ]
+  },
+  {
+    "Name": "Greenwood Forest",
+    "Type": "Forest",
+    "RequiredQuest": "Tutorial Section",
+    "Quests": [
+      "Hunt Goblins",
+      "Chop Wood",
+      "Hunt Spiders",
+      "Gather Moonberries"
+    ]
+  },
+  {
+    "Name": "Sacred Grove",
+    "Type": "Forest",
+    "RequiredQuest": "Defeat Treant Guardian",
+    "Quests": [
+      "Defeat Treant Guardian",
+      "Purify the Grove"
+    ]
+  },
+  {
+    "Name": "Sun-drenched Plains",
+    "Type": "Plains",
+    "RequiredQuest": "Visit Starting Town",
+    "Quests": [
+      "Hunt Slimes",
+      "Hunt Sand-Sharks",
+      "Locate the Hidden Oasis"
+    ]
+  },
+  {
+    "Name": "Forgotten Mines",
+    "Type": "Mine",
+    "RequiredQuest": "Learn about the Mines",
+    "Quests": [
+      "Hunt Bats",
+      "Mine Iron Ore",
+      "Scavenge Scrap",
+      "Power the Forge"
+    ]
+  },
+  {
+    "Name": "Crystal Peaks",
+    "Type": "Mine",
+    "RequiredQuest": "Power the Forge",
+    "Quests": [
+      "Shatter the Crystals",
+      "High Altitude Survey"
+    ]
+  },
+  {
+    "Name": "Tidal Caverns",
+    "Type": "Water",
+    "RequiredQuest": "Hunt Sand-Sharks",
+    "Quests": [
+      "Harvest Sea-Life",
+      "Deep Sea Scavenge"
+    ]
+  },
+  {
+    "Name": "Hidden Oasis",
+    "Type": "Water",
+    "RequiredQuest": "Locate the Hidden Oasis",
+    "Quests": []
+  },
+  {
+    "Name": "Ancient Library",
+    "Type": "Library",
+    "RequiredQuest": "Ancient Inscriptions",
+    "Quests": [
+      "Archive Sifting",
+      "Study Ancient Texts"
+    ]
+  },
+  {
+    "Name": "Ancient Ruins",
+    "Type": "Library",
+    "RequiredQuest": "Recover the Ancient Tome",
+    "Quests": [
+      "Ancient Inscriptions",
+      "Finding the Hearth",
+      "Rekindling the Spark"
+    ]
+  },
+  {
+    "Name": "Mythril Sanctum",
+    "Type": "Library",
+    "RequiredQuest": "Rekindling the Spark",
+    "Quests": [
+      "Defeat the Mythril Construct",
+      "Ascetic Meditation",
+      "Heavy Training"
+    ]
+  }
+]

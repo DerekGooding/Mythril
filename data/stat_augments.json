@@ -1,0 +1,102 @@
+[
+  {
+    "Item": "Potion",
+    "Augments": [
+      {
+        "Stat": "Vitality",
+        "ModifierAtFull": 20
+      }
+    ]
+  },
+  {
+    "Item": "Fire I",
+    "Augments": [
+      {
+        "Stat": "Strength",
+        "ModifierAtFull": 50
+      },
+      {
+        "Stat": "Magic",
+        "ModifierAtFull": 20
+      }
+    ]
+  },
+  {
+    "Item": "Ice I",
+    "Augments": [
+      {
+        "Stat": "Magic",
+        "ModifierAtFull": 100
+      },
+      {
+        "Stat": "Speed",
+        "ModifierAtFull": 100
+      },
+      {
+        "Stat": "Vitality",
+        "ModifierAtFull": 50
+      }
+    ]
+  },
+  {
+    "Item": "Lightning I",
+    "Augments": [
+      {
+        "Stat": "Magic",
+        "ModifierAtFull": 150
+      },
+      {
+        "Stat": "Speed",
+        "ModifierAtFull": 100
+      }
+    ]
+  },
+  {
+    "Item": "Earth I",
+    "Augments": [
+      {
+        "Stat": "Strength",
+        "ModifierAtFull": 150
+      },
+      {
+        "Stat": "Vitality",
+        "ModifierAtFull": 100
+      }
+    ]
+  },
+  {
+    "Item": "Water I",
+    "Augments": [
+      {
+        "Stat": "Vitality",
+        "ModifierAtFull": 150
+      },
+      {
+        "Stat": "Speed",
+        "ModifierAtFull": 100
+      }
+    ]
+  },
+  {
+    "Item": "Haste I",
+    "Augments": [
+      {
+        "Stat": "Speed",
+        "ModifierAtFull": 200
+      }
+    ]
+  },
+  {
+    "Item": "Cure I",
+    "Augments": [
+      {
+        "Stat": "Magic",
+        "ModifierAtFull": 150
+      },
+      {
+        "Stat": "Vitality",
+        "ModifierAtFull": 200
+      }
+    ]
+  }
+]
