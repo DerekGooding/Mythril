@@ -48,8 +48,4 @@
 
 - Refine Wood and Mixology are on the same Cadence, making it difficult to mass produce potions automatically. Consider giving Mixology to another cadence also. 
 
-- Lost Parchment does nothing. 
-
-- Gather moonberries isn't unlocking a futher quest line (Treant)
-
 - Consider an appendix tab that lists and explains all unlocked items, locations, cadences and abilities. Make it searchable.  

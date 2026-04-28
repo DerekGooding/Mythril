@@ -11,9 +11,9 @@
         "stale_docs": 1,
         "reachability_passed": {
             "passed": true,
-            "time": "87.8m",
-            "sustainable": 31,
-            "unsustainable": 4
+            "time": "81.1m",
+            "sustainable": 30,
+            "unsustainable": 5
         },
         "pending_feedback": 0,
         "test_passed": true
