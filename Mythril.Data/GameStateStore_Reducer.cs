@@ -187,7 +187,8 @@ public partial class GameStore
         // Remove from active quests
         return nextState with
         {
-            ActiveQuests = nextState.ActiveQuests.RemoveAll(q => q.StartTime == progress.StartTime && q.Character.Name == progress.Character.Name)
+            ActiveQuests = nextState.ActiveQuests.RemoveAll(q => q.StartTime == progress.StartTime && q.Character.Name == progress.Character.Name),
+            LastFinishedActivity = nextState.LastFinishedActivity.SetItem(characterName, taskName)
         };
     }
 

@@ -106,4 +106,88 @@ public class JunctionManagementTests : ResourceManagerTestBase
         _resourceManager!.JunctionManager.JunctionMagic(character, strStat, fire, _resourceManager!.UnlockedAbilities);
         Assert.IsEmpty(_resourceManager.JunctionManager.Junctions);
     }
+
+    [TestMethod]
+    public void JunctionManager_Unassign_OnlyClearsInvalidJunctions()
+    {
+        var character = _resourceManager!.Characters[0];
+        var abilities = ContentHost.GetContent<CadenceAbilities>();
+        var stats = ContentHost.GetContent<Stats>();
+        var abilityJStr = abilities.All.First(a => a.Name == SandboxContent.JStr);
+        var cadence1 = _cadences!.All.First(c => c.Abilities.Any(a => a.Ability.Name == SandboxContent.JStr));
+        var cadence2 = new Cadence("Extra Cadence", "Desc", [new CadenceUnlock("Extra Cadence", abilityJStr, [])]);
+        _cadences.Load(_cadences.All.Concat([cadence2]));
+        var strengthStat = stats.All.First(s => s.Name == SandboxContent.Strength);
+        var fireMagic = _items!.All.First(i => i.Name == SandboxContent.FireI);
+
+        _resourceManager!.UnlockAbility("Extra Cadence", SandboxContent.JStr);
+        _resourceManager.UnlockAbility(cadence1.Name, SandboxContent.JStr);
+        _resourceManager.JunctionManager.AssignCadence(cadence1, character, _resourceManager.UnlockedAbilities);
+        _resourceManager.JunctionManager.AssignCadence(cadence2, character, _resourceManager.UnlockedAbilities);
+
+        _resourceManager.JunctionManager.JunctionMagic(character, strengthStat, fireMagic, _resourceManager.UnlockedAbilities);
+        Assert.HasCount(1, _resourceManager.JunctionManager.Junctions);
+
+        // Unassign one cadence with the ability, but the other still has it
+        _resourceManager.JunctionManager.Unassign(cadence1, _resourceManager.UnlockedAbilities);
+        Assert.HasCount(1, _resourceManager.JunctionManager.Junctions);
+
+        // Unassign the last cadence with the ability, junction should be gone
+        _resourceManager.JunctionManager.Unassign(cadence2, _resourceManager.UnlockedAbilities);
+        Assert.IsEmpty(_resourceManager.JunctionManager.Junctions);
+    }
+
+    [TestMethod]
+    public void JunctionManager_JunctionMagic_ChecksAllAssignedCadences()
+    {
+        var character = _resourceManager!.Characters[0];
+        var stats = ContentHost.GetContent<Stats>();
+        var cadenceWithoutJStr = _cadences!.All.First(c => c.Name == SandboxContent.Apprentice);
+        var cadenceWithJStr = _cadences!.All.First(c => c.Abilities.Any(a => a.Ability.Name == SandboxContent.JStr));
+        var strengthStat = stats.All.First(s => s.Name == SandboxContent.Strength);
+        var fireMagic = _items!.All.First(i => i.Name == SandboxContent.FireI);
+
+        _resourceManager!.UnlockAbility(cadenceWithJStr.Name, SandboxContent.JStr);
+        _resourceManager.JunctionManager.AssignCadence(cadenceWithoutJStr, character, _resourceManager.UnlockedAbilities);
+        _resourceManager.JunctionManager.AssignCadence(cadenceWithJStr, character, _resourceManager.UnlockedAbilities);
+
+        _resourceManager.JunctionManager.JunctionMagic(character, strengthStat, fireMagic, _resourceManager.UnlockedAbilities);
+        Assert.HasCount(1, _resourceManager.JunctionManager.Junctions);
+    }
+
+    [TestMethod]
+    public void ResourceManager_CanAutoQuest_ChecksAllAssignedCadences()
+    {
+        var character = _resourceManager!.Characters[0];
+        var cadenceWithoutAuto = _cadences!.All.First(c => c.Name == SandboxContent.Arcanist);
+        var cadenceWithAuto = _cadences!.All.First(c => c.Abilities.Any(a => a.Ability.Name == SandboxContent.AutoQuestI));
+
+        _resourceManager!.UnlockAbility(cadenceWithAuto.Name, SandboxContent.AutoQuestI);
+
+        Assert.IsFalse(_resourceManager.CanAutoQuest(character));
+
+        _resourceManager.JunctionManager.AssignCadence(cadenceWithoutAuto, character, _resourceManager.UnlockedAbilities);
+        Assert.IsFalse(_resourceManager.CanAutoQuest(character));
+
+        _resourceManager.JunctionManager.AssignCadence(cadenceWithAuto, character, _resourceManager.UnlockedAbilities);
+        Assert.IsTrue(_resourceManager.CanAutoQuest(character));
+    }
+
+    [TestMethod]
+    public void ResourceManager_UnlockedAbilities_ArePerCadence()
+    {
+        var character = _resourceManager!.Characters[0];
+        var recruit = _cadences!.All.First(c => c.Name == SandboxContent.Recruit);
+        var apprentice = _cadences!.All.First(c => c.Name == SandboxContent.Apprentice);
+
+        _resourceManager!.UnlockAbility(SandboxContent.Recruit, SandboxContent.AutoQuestI);
+
+        _resourceManager.JunctionManager.AssignCadence(recruit, character, _resourceManager.UnlockedAbilities);
+        Assert.IsTrue(_resourceManager.CanAutoQuest(character));
+
+        _resourceManager.JunctionManager.Unassign(recruit, _resourceManager.UnlockedAbilities);
+        _resourceManager.JunctionManager.AssignCadence(apprentice, character, _resourceManager.UnlockedAbilities);
+
+        Assert.IsFalse(_resourceManager.CanAutoQuest(character));
+    }
 }

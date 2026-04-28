@@ -46,6 +46,8 @@
 
 - Consider a stats page that includes historical production rates
 
+- Timer only saves 30 second incriments. Needs to be more accurate. Down to the second or, depending on how saving works, immediately after a task is completed. 
+
 **In processes**
 
 - Consider an appendix tab that lists and explains all unlocked items, locations, cadences and abilities. Make it searchable. 
