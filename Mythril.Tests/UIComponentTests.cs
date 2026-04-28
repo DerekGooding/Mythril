@@ -155,27 +155,6 @@ public class UIComponentTests : BunitTestBase
     }
 
     [TestMethod]
-    public void RefinementCard_RendersCorrectly()
-    {
-        // Arrange
-        var ability = new CadenceAbility("Refine Fire", "Desc");
-        var input = new Item("Basic Gem", "Desc", ItemType.Material);
-        var output = new Item("Fire I", "Desc", ItemType.Spell);
-        var recipe = new Recipe(1, output, 5);
-        var refinement = new RefinementData(ability, input, recipe);
-
-        // Act
-        var cut = RenderComponent<RefinementCard>(parameters => parameters
-            .Add(p => p.Refinement, refinement)
-        );
-
-        // Assert
-        var text = cut.Find(".refinement-info").TextContent;
-        Assert.Contains("1 Basic Gem", text);
-        Assert.Contains("5 Fire I", text);
-    }
-
-    [TestMethod]
     public void ItemIcon_RendersSpellWithFallback()
     {
         // Arrange

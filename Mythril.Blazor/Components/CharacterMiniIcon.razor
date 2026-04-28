@@ -1,0 +1,12 @@
+@using Mythril.Data
+
+<span class="material-icons character-mini-icon" 
+      style="color: @Character.Color; font-size: 14px; cursor: default;" 
+      title="@Character.Name"
+      data-testid="character-mini-icon-@Character.Name.ToLower()">
+    @Character.Icon
+</span>
+
+@code {
+    [Parameter] public Character Character { get; set; }
+}

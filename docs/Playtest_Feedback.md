@@ -9,8 +9,6 @@
 - Rework lightning. Currently it's only unlockable very late in the game and the magic itself is vastly outclassed by other options by that point, making it a chain of orphaned content. => Fire and Ice shards both being part of this chain and also pointless. 
 - Review and rework the entire stats system related to task performance. Right now, it's relatively random what requires vitality or speed, etc. I need to map things out and make larger design choices with intention. Just map for now. 
 
-- **j-str on Apprentice needs a second requirement. !!!major error. Secondary requirements aren't being heard!!!**
-
 - Magic Pocket needs to be a benefit just to that character and more cadences need to have a magic pocket I and II unlock (enough so everyone could have it). Review. If we're leaving it as a global unlock, it needs to be properly illustrated in the UI as such. 
 
 - Consider junctioning magic on multiple characters/stats. FF8 would limit a single magic to a single stat and each character had their own magic inventory. Review and plan. 

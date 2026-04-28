@@ -19,9 +19,17 @@
                 <span class="arrow text-muted mx-1">→</span>
                 <span class="output fw-bold small">@Refinement.Recipe.OutputQuantity @Refinement.Recipe.OutputItem.Name</span>
             </div>
-            <div class="duration x-small-text">
-                <span>@(ResourceManager.IsTestMode ? "2s" : "15s")</span>
-                <span class="text-info ms-2">⚡ @Refinement.PrimaryStat</span>
+            <div class="duration x-small-text d-flex align-items-center justify-content-between">
+                <div>
+                    <span>@(ResourceManager.IsTestMode ? "2s" : "15s")</span>
+                    <span class="text-info ms-2">⚡ @Refinement.PrimaryStat</span>
+                </div>
+                <div class="character-access d-flex gap-1">
+                    @foreach (var character in charactersWithAccess)
+                    {
+                        <CharacterMiniIcon @key="character.Name" Character="character" />
+                    }
+                </div>
             </div>
         </div>
     </div>
@@ -32,6 +40,8 @@
 
     private bool canAfford => ResourceManager.Inventory.Has(Refinement.InputItem, Refinement.Recipe.InputQuantity);
     private bool isStarred => ResourceManager.StarredRecipes.Contains(Refinement.Name);
+
+    private IEnumerable<Character> charactersWithAccess => ResourceManager.Characters.Where(c => ResourceManager.HasAbility(c, Refinement.Ability));
 
     private void ToggleStar()
     {
