@@ -1646,7 +1646,7 @@
     }
   },
   {
-    "id": "ability_autoquest_i",
+    "id": "ability_recruit_autoquest_i",
     "type": "Ability",
     "name": "AutoQuest I",
     "data": {
@@ -1672,7 +1672,7 @@
     ]
   },
   {
-    "id": "ability_j_str",
+    "id": "ability_recruit_j_str",
     "type": "Ability",
     "name": "J-Str",
     "data": {
@@ -1692,7 +1692,7 @@
     "effects": []
   },
   {
-    "id": "ability_alchemy_i",
+    "id": "ability_recruit_alchemy_i",
     "type": "Ability",
     "name": "Alchemy I",
     "data": {
@@ -1722,22 +1722,22 @@
     "out_edges": {
       "provides_ability": [
         {
-          "targetId": "ability_autoquest_i",
+          "targetId": "ability_recruit_autoquest_i",
           "quantity": 1
         },
         {
-          "targetId": "ability_j_str",
+          "targetId": "ability_recruit_j_str",
           "quantity": 1
         },
         {
-          "targetId": "ability_alchemy_i",
+          "targetId": "ability_recruit_alchemy_i",
           "quantity": 1
         }
       ]
     }
   },
   {
-    "id": "ability_refine_ice",
+    "id": "ability_arcanist_refine_ice",
     "type": "Ability",
     "name": "Refine Ice",
     "data": {
@@ -1756,7 +1756,7 @@
     }
   },
   {
-    "id": "ability_j_magic",
+    "id": "ability_arcanist_j_magic",
     "type": "Ability",
     "name": "J-Magic",
     "data": {
@@ -1779,7 +1779,7 @@
     }
   },
   {
-    "id": "ability_magic_pocket_i",
+    "id": "ability_arcanist_magic_pocket_i",
     "type": "Ability",
     "name": "Magic Pocket I",
     "data": {
@@ -1808,7 +1808,7 @@
     ]
   },
   {
-    "id": "ability_refine_lightning",
+    "id": "ability_arcanist_refine_lightning",
     "type": "Ability",
     "name": "Refine Lightning",
     "data": {
@@ -1841,26 +1841,52 @@
     "out_edges": {
       "provides_ability": [
         {
-          "targetId": "ability_refine_ice",
+          "targetId": "ability_arcanist_refine_ice",
           "quantity": 1
         },
         {
-          "targetId": "ability_j_magic",
+          "targetId": "ability_arcanist_j_magic",
           "quantity": 1
         },
         {
-          "targetId": "ability_magic_pocket_i",
+          "targetId": "ability_arcanist_magic_pocket_i",
           "quantity": 1
         },
         {
-          "targetId": "ability_refine_lightning",
+          "targetId": "ability_arcanist_refine_lightning",
           "quantity": 1
         }
       ]
     }
   },
   {
-    "id": "ability_refine_wood",
+    "id": "ability_apprentice_autoquest_i",
+    "type": "Ability",
+    "name": "AutoQuest I",
+    "data": {
+      "description": "Allows a Quest to be looped indefinitely",
+      "primary_stat": "Vitality",
+      "metadata": {}
+    },
+    "in_edges": {},
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_gold",
+          "quantity": 100
+        }
+      ]
+    },
+    "effects": [
+      {
+        "Type": "AutoQuest",
+        "Value": 1,
+        "Target": ""
+      }
+    ]
+  },
+  {
+    "id": "ability_apprentice_refine_wood",
     "type": "Ability",
     "name": "Refine Wood",
     "data": {
@@ -1880,7 +1906,7 @@
     "effects": []
   },
   {
-    "id": "ability_refine_scrap",
+    "id": "ability_apprentice_refine_scrap",
     "type": "Ability",
     "name": "Refine Scrap",
     "data": {
@@ -1900,7 +1926,7 @@
     "effects": []
   },
   {
-    "id": "ability_refine_mixology",
+    "id": "ability_apprentice_refine_mixology",
     "type": "Ability",
     "name": "Refine Mixology",
     "data": {
@@ -1924,7 +1950,31 @@
     "effects": []
   },
   {
-    "id": "ability_alchemy_ii",
+    "id": "ability_apprentice_j_str",
+    "type": "Ability",
+    "name": "J-Str",
+    "data": {
+      "description": "Allows junctioning magic to the Strength stat",
+      "primary_stat": "Magic",
+      "metadata": {}
+    },
+    "in_edges": {},
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_iron_ore",
+          "quantity": 10
+        },
+        {
+          "targetId": "item_herb",
+          "quantity": 5
+        }
+      ]
+    },
+    "effects": []
+  },
+  {
+    "id": "ability_apprentice_alchemy_ii",
     "type": "Ability",
     "name": "Alchemy II",
     "data": {
@@ -1958,34 +2008,59 @@
     "out_edges": {
       "provides_ability": [
         {
-          "targetId": "ability_autoquest_i",
+          "targetId": "ability_apprentice_autoquest_i",
           "quantity": 1
         },
         {
-          "targetId": "ability_refine_wood",
+          "targetId": "ability_apprentice_refine_wood",
           "quantity": 1
         },
         {
-          "targetId": "ability_refine_scrap",
+          "targetId": "ability_apprentice_refine_scrap",
           "quantity": 1
         },
         {
-          "targetId": "ability_refine_mixology",
+          "targetId": "ability_apprentice_refine_mixology",
           "quantity": 1
         },
         {
-          "targetId": "ability_j_str",
+          "targetId": "ability_apprentice_j_str",
           "quantity": 1
         },
         {
-          "targetId": "ability_alchemy_ii",
+          "targetId": "ability_apprentice_alchemy_ii",
           "quantity": 1
         }
       ]
     }
   },
   {
-    "id": "ability_refine_fire",
+    "id": "ability_student_autoquest_i",
+    "type": "Ability",
+    "name": "AutoQuest I",
+    "data": {
+      "description": "Allows a Quest to be looped indefinitely",
+      "primary_stat": "Vitality",
+      "metadata": {}
+    },
+    "in_edges": {},
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_gold",
+          "quantity": 100
+        }
+      ]
+    },
+    "effects": [
+      {
+        "Type": "AutoQuest",
+        "Value": 1
+      }
+    ]
+  },
+  {
+    "id": "ability_student_refine_fire",
     "type": "Ability",
     "name": "Refine Fire",
     "data": {
@@ -2004,7 +2079,7 @@
     }
   },
   {
-    "id": "ability_j_speed",
+    "id": "ability_student_j_speed",
     "type": "Ability",
     "name": "J-Speed",
     "data": {
@@ -2033,22 +2108,22 @@
     "out_edges": {
       "provides_ability": [
         {
-          "targetId": "ability_autoquest_i",
+          "targetId": "ability_student_autoquest_i",
           "quantity": 1
         },
         {
-          "targetId": "ability_refine_fire",
+          "targetId": "ability_student_refine_fire",
           "quantity": 1
         },
         {
-          "targetId": "ability_j_speed",
+          "targetId": "ability_student_j_speed",
           "quantity": 1
         }
       ]
     }
   },
   {
-    "id": "ability_logistics_i",
+    "id": "ability_mythril_weaver_logistics_i",
     "type": "Ability",
     "name": "Logistics I",
     "data": {
@@ -2073,7 +2148,7 @@
     ]
   },
   {
-    "id": "ability_mass_refine",
+    "id": "ability_mythril_weaver_mass_refine",
     "type": "Ability",
     "name": "Mass Refine",
     "data": {
@@ -2096,7 +2171,7 @@
     }
   },
   {
-    "id": "ability_essence_harvest",
+    "id": "ability_mythril_weaver_essence_harvest",
     "type": "Ability",
     "name": "Essence Harvest",
     "data": {
@@ -2119,7 +2194,7 @@
     }
   },
   {
-    "id": "ability_j_vit",
+    "id": "ability_mythril_weaver_j_vit",
     "type": "Ability",
     "name": "J-Vit",
     "data": {
@@ -2138,7 +2213,7 @@
     }
   },
   {
-    "id": "ability_refine_life",
+    "id": "ability_mythril_weaver_refine_life",
     "type": "Ability",
     "name": "Refine Life",
     "data": {
@@ -2167,30 +2242,57 @@
     "out_edges": {
       "provides_ability": [
         {
-          "targetId": "ability_logistics_i",
+          "targetId": "ability_mythril_weaver_logistics_i",
           "quantity": 1
         },
         {
-          "targetId": "ability_mass_refine",
+          "targetId": "ability_mythril_weaver_mass_refine",
           "quantity": 1
         },
         {
-          "targetId": "ability_essence_harvest",
+          "targetId": "ability_mythril_weaver_essence_harvest",
           "quantity": 1
         },
         {
-          "targetId": "ability_j_vit",
+          "targetId": "ability_mythril_weaver_j_vit",
           "quantity": 1
         },
         {
-          "targetId": "ability_refine_life",
+          "targetId": "ability_mythril_weaver_refine_life",
           "quantity": 1
         }
       ]
     }
   },
   {
-    "id": "ability_magic_pocket_ii",
+    "id": "ability_the_sentinel_j_vit",
+    "type": "Ability",
+    "name": "J-Vit",
+    "data": {
+      "description": "Allows junctioning magic to the Vitality stat",
+      "primary_stat": "Vitality",
+      "metadata": {}
+    },
+    "in_edges": {},
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_iron_ore",
+          "quantity": 50
+        },
+        {
+          "targetId": "item_ancient_bark",
+          "quantity": 20
+        },
+        {
+          "targetId": "item_gold",
+          "quantity": 2000
+        }
+      ]
+    }
+  },
+  {
+    "id": "ability_the_sentinel_magic_pocket_ii",
     "type": "Ability",
     "name": "Magic Pocket II",
     "data": {
@@ -2225,18 +2327,18 @@
     "out_edges": {
       "provides_ability": [
         {
-          "targetId": "ability_j_vit",
+          "targetId": "ability_the_sentinel_j_vit",
           "quantity": 1
         },
         {
-          "targetId": "ability_magic_pocket_ii",
+          "targetId": "ability_the_sentinel_magic_pocket_ii",
           "quantity": 1
         }
       ]
     }
   },
   {
-    "id": "ability_logistics_ii",
+    "id": "ability_scholar_logistics_ii",
     "type": "Ability",
     "name": "Logistics II",
     "data": {
@@ -2261,7 +2363,7 @@
     ]
   },
   {
-    "id": "ability_autoquest_ii",
+    "id": "ability_scholar_autoquest_ii",
     "type": "Ability",
     "name": "AutoQuest II",
     "data": {
@@ -2286,7 +2388,7 @@
     ]
   },
   {
-    "id": "ability_refine_haste",
+    "id": "ability_scholar_refine_haste",
     "type": "Ability",
     "name": "Refine Haste",
     "data": {
@@ -2315,22 +2417,22 @@
     "out_edges": {
       "provides_ability": [
         {
-          "targetId": "ability_logistics_ii",
+          "targetId": "ability_scholar_logistics_ii",
           "quantity": 1
         },
         {
-          "targetId": "ability_autoquest_ii",
+          "targetId": "ability_scholar_autoquest_ii",
           "quantity": 1
         },
         {
-          "targetId": "ability_refine_haste",
+          "targetId": "ability_scholar_refine_haste",
           "quantity": 1
         }
       ]
     }
   },
   {
-    "id": "ability_mountain_crush",
+    "id": "ability_geologist_mountain_crush",
     "type": "Ability",
     "name": "Mountain Crush",
     "data": {
@@ -2349,7 +2451,7 @@
     }
   },
   {
-    "id": "ability_refine_earth",
+    "id": "ability_geologist_refine_earth",
     "type": "Ability",
     "name": "Refine Earth",
     "data": {
@@ -2378,18 +2480,18 @@
     "out_edges": {
       "provides_ability": [
         {
-          "targetId": "ability_mountain_crush",
+          "targetId": "ability_geologist_mountain_crush",
           "quantity": 1
         },
         {
-          "targetId": "ability_refine_earth",
+          "targetId": "ability_geologist_refine_earth",
           "quantity": 1
         }
       ]
     }
   },
   {
-    "id": "ability_deep_dive",
+    "id": "ability_tide_caller_deep_dive",
     "type": "Ability",
     "name": "Deep Dive",
     "data": {
@@ -2408,7 +2510,7 @@
     }
   },
   {
-    "id": "ability_refine_water",
+    "id": "ability_tide_caller_refine_water",
     "type": "Ability",
     "name": "Refine Water",
     "data": {
@@ -2437,18 +2539,18 @@
     "out_edges": {
       "provides_ability": [
         {
-          "targetId": "ability_deep_dive",
+          "targetId": "ability_tide_caller_deep_dive",
           "quantity": 1
         },
         {
-          "targetId": "ability_refine_water",
+          "targetId": "ability_tide_caller_refine_water",
           "quantity": 1
         }
       ]
     }
   },
   {
-    "id": "ability_master_slayer",
+    "id": "ability_slayer_master_slayer",
     "type": "Ability",
     "name": "Master Slayer",
     "data": {
@@ -2477,7 +2579,7 @@
     "out_edges": {
       "provides_ability": [
         {
-          "targetId": "ability_master_slayer",
+          "targetId": "ability_slayer_master_slayer",
           "quantity": 1
         }
       ]
@@ -2492,7 +2594,7 @@
     },
     "in_edges": {
       "requires_ability": [
-        "ability_refine_fire"
+        "ability_student_refine_fire"
       ]
     },
     "out_edges": {
@@ -2519,7 +2621,7 @@
     },
     "in_edges": {
       "requires_ability": [
-        "ability_refine_fire"
+        "ability_student_refine_fire"
       ]
     },
     "out_edges": {
@@ -2546,7 +2648,7 @@
     },
     "in_edges": {
       "requires_ability": [
-        "ability_refine_ice"
+        "ability_arcanist_refine_ice"
       ]
     },
     "out_edges": {
@@ -2573,7 +2675,7 @@
     },
     "in_edges": {
       "requires_ability": [
-        "ability_refine_ice"
+        "ability_arcanist_refine_ice"
       ]
     },
     "out_edges": {
@@ -2600,7 +2702,7 @@
     },
     "in_edges": {
       "requires_ability": [
-        "ability_refine_wood"
+        "ability_apprentice_refine_wood"
       ]
     },
     "out_edges": {
@@ -2627,7 +2729,7 @@
     },
     "in_edges": {
       "requires_ability": [
-        "ability_refine_mixology"
+        "ability_apprentice_refine_mixology"
       ]
     },
     "out_edges": {
@@ -2654,7 +2756,7 @@
     },
     "in_edges": {
       "requires_ability": [
-        "ability_refine_scrap"
+        "ability_apprentice_refine_scrap"
       ]
     },
     "out_edges": {
@@ -2681,7 +2783,7 @@
     },
     "in_edges": {
       "requires_ability": [
-        "ability_refine_scrap"
+        "ability_apprentice_refine_scrap"
       ]
     },
     "out_edges": {
@@ -2708,7 +2810,7 @@
     },
     "in_edges": {
       "requires_ability": [
-        "ability_refine_life"
+        "ability_mythril_weaver_refine_life"
       ]
     },
     "out_edges": {
@@ -2735,7 +2837,7 @@
     },
     "in_edges": {
       "requires_ability": [
-        "ability_refine_life"
+        "ability_mythril_weaver_refine_life"
       ]
     },
     "out_edges": {
@@ -2762,7 +2864,7 @@
     },
     "in_edges": {
       "requires_ability": [
-        "ability_refine_lightning"
+        "ability_arcanist_refine_lightning"
       ]
     },
     "out_edges": {
@@ -2789,7 +2891,7 @@
     },
     "in_edges": {
       "requires_ability": [
-        "ability_refine_lightning"
+        "ability_arcanist_refine_lightning"
       ]
     },
     "out_edges": {
@@ -2816,7 +2918,7 @@
     },
     "in_edges": {
       "requires_ability": [
-        "ability_refine_earth"
+        "ability_geologist_refine_earth"
       ]
     },
     "out_edges": {
@@ -2843,7 +2945,7 @@
     },
     "in_edges": {
       "requires_ability": [
-        "ability_refine_water"
+        "ability_tide_caller_refine_water"
       ]
     },
     "out_edges": {
@@ -2870,7 +2972,7 @@
     },
     "in_edges": {
       "requires_ability": [
-        "ability_refine_haste"
+        "ability_scholar_refine_haste"
       ]
     },
     "out_edges": {
@@ -2897,7 +2999,7 @@
     },
     "in_edges": {
       "requires_ability": [
-        "ability_alchemy_i"
+        "ability_recruit_alchemy_i"
       ]
     },
     "out_edges": {
@@ -2924,7 +3026,7 @@
     },
     "in_edges": {
       "requires_ability": [
-        "ability_alchemy_ii"
+        "ability_apprentice_alchemy_ii"
       ]
     },
     "out_edges": {
@@ -2951,7 +3053,7 @@
     },
     "in_edges": {
       "requires_ability": [
-        "ability_alchemy_ii"
+        "ability_apprentice_alchemy_ii"
       ]
     },
     "out_edges": {
