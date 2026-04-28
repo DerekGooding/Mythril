@@ -2511,7 +2511,8 @@
           "quantity": 5000
         }
       ]
-    }
+    },
+    "effects": []
   },
   {
     "id": "ability_tide_caller_refine_water",
@@ -2530,7 +2531,68 @@
           "quantity": 10
         }
       ]
-    }
+    },
+    "effects": []
+  },
+  {
+    "id": "ability_tide_caller_refine_ice",
+    "type": "Ability",
+    "name": "Refine Ice",
+    "data": {
+      "description": "Refine items into ice magic",
+      "primary_stat": "Magic",
+      "metadata": {}
+    },
+    "in_edges": {},
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_leather",
+          "quantity": 2
+        }
+      ]
+    },
+    "effects": []
+  },
+  {
+    "id": "ability_tide_caller_j_str",
+    "type": "Ability",
+    "name": "J-Str",
+    "data": {
+      "description": "Allows junctioning magic to the Strength stat",
+      "primary_stat": "Magic",
+      "metadata": {}
+    },
+    "in_edges": {},
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_leather",
+          "quantity": 2
+        }
+      ]
+    },
+    "effects": []
+  },
+  {
+    "id": "ability_tide_caller_j_magic",
+    "type": "Ability",
+    "name": "J-Magic",
+    "data": {
+      "description": "Allows junctioning magic to the Magic stat",
+      "primary_stat": "Magic",
+      "metadata": {}
+    },
+    "in_edges": {},
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_blue_coral",
+          "quantity": 5
+        }
+      ]
+    },
+    "effects": []
   },
   {
     "id": "cadence_tide_caller",
@@ -2548,6 +2610,18 @@
         },
         {
           "targetId": "ability_tide_caller_refine_water",
+          "quantity": 1
+        },
+        {
+          "targetId": "ability_tide_caller_refine_ice",
+          "quantity": 1
+        },
+        {
+          "targetId": "ability_tide_caller_j_str",
+          "quantity": 1
+        },
+        {
+          "targetId": "ability_tide_caller_j_magic",
           "quantity": 1
         }
       ]
@@ -2652,7 +2726,8 @@
     },
     "in_edges": {
       "requires_ability": [
-        "ability_arcanist_refine_ice"
+        "ability_arcanist_refine_ice",
+        "ability_tide_caller_refine_ice"
       ]
     },
     "out_edges": {
@@ -2679,7 +2754,8 @@
     },
     "in_edges": {
       "requires_ability": [
-        "ability_arcanist_refine_ice"
+        "ability_arcanist_refine_ice",
+        "ability_tide_caller_refine_ice"
       ]
     },
     "out_edges": {
