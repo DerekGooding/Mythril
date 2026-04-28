@@ -54,6 +54,8 @@
 
 - Archive Sifting gives too many Lost Parchment. Lost Parchment does nothing. 
 
+- Gather moonberries isn't unlocking a futher quest line
+
 - Consider an appendix tab that lists and explains all unlocked items, locations, cadences and abilities. Make it searchable. 
 
 - UI quick reference in the Workshop to remind who has access to craft what. Character icons but will need to function differently than cadence equip UI because multiple characters can have access to the same refinement recipes. 

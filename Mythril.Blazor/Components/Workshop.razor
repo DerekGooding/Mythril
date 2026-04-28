@@ -37,19 +37,25 @@
                     .Where(rd => {
                         if (_activeFilter == "All") return true;
                         
-                        // Check if output matches filter
-                        var outType = rd.Recipe.OutputItem.ItemType.ToString() + "s";
-                        if (outType.Contains(_activeFilter, StringComparison.OrdinalIgnoreCase)) return true;
+                        // Map filter to ItemType string
+                        var filterType = _activeFilter switch {
+                            "Magic" => "Spell",
+                            "Materials" => "Material",
+                            _ => _activeFilter
+                        };
+
+                        var outType = rd.Recipe.OutputItem.ItemType.ToString();
+                        if (outType.Equals(filterType, StringComparison.OrdinalIgnoreCase)) return true;
                         
                         // If output is NOT a standard Material/Spell category (e.g. Currency like Gold)
                         // then check if the INPUT matches the filter.
-                        bool outputIsStandard = outType.Contains("Material", StringComparison.OrdinalIgnoreCase) || 
-                                              outType.Contains("Spell", StringComparison.OrdinalIgnoreCase);
+                        bool outputIsStandard = outType.Equals("Material", StringComparison.OrdinalIgnoreCase) || 
+                                              outType.Equals("Spell", StringComparison.OrdinalIgnoreCase);
                                               
                         if (!outputIsStandard)
                         {
-                            var inType = rd.InputItem.ItemType.ToString() + "s";
-                            return inType.Contains(_activeFilter, StringComparison.OrdinalIgnoreCase);
+                            var inType = rd.InputItem.ItemType.ToString();
+                            return inType.Equals(filterType, StringComparison.OrdinalIgnoreCase);
                         }
                         
                         return false;
