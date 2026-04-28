@@ -11,8 +11,8 @@
         "stale_docs": 0,
         "reachability_passed": {
             "passed": true,
-            "time": "81.1m",
-            "sustainable": 30,
+            "time": "84.4m",
+            "sustainable": 31,
             "unsustainable": 5
         },
         "pending_feedback": 0,
@@ -21,9 +21,9 @@
     "failures": [
         {
             "category": "reachability",
-            "message": "Content regression: Reachable quests dropped from 34 to 31",
+            "message": "Content regression: Reachable quests dropped from 34 to 33",
             "metadata": {
-                "actual": 31,
+                "actual": 33,
                 "baseline": 34
             }
         }

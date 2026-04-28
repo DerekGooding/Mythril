@@ -25,7 +25,7 @@
   {
     "Name": "Sacred Grove",
     "Type": "Forest",
-    "RequiredQuest": "Defeat Treant Guardian",
+    "RequiredQuest": "Gather Moonberries",
     "Quests": [
       "Defeat Treant Guardian",
       "Purify the Grove"
