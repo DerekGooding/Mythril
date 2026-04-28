@@ -648,6 +648,10 @@
         {
           "targetId": "item_web",
           "quantity": 5
+        },
+        {
+          "targetId": "item_ice_shard",
+          "quantity": 1
         }
       ]
     }
@@ -710,7 +714,7 @@
     "name": "Mine Iron Ore",
     "data": {
       "description": "Extract precious metals from the earth.",
-      "duration": 180,
+      "duration": 100,
       "quest_type": "Recurring",
       "primary_stat": "Strength",
       "required_stats": {
@@ -727,7 +731,7 @@
       "rewards": [
         {
           "targetId": "item_iron_ore",
-          "quantity": 5
+          "quantity": 10
         }
       ]
     }
@@ -1137,7 +1141,7 @@
       "rewards": [
         {
           "targetId": "item_gold",
-          "quantity": 10
+          "quantity": 200
         },
         {
           "targetId": "item_leather",
@@ -1197,7 +1201,7 @@
       "rewards": [
         {
           "targetId": "item_lost_parchment",
-          "quantity": 20
+          "quantity": 5
         }
       ]
     }

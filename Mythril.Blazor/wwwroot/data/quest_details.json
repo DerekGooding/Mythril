@@ -160,6 +160,10 @@
       {
         "Item": "Web",
         "Quantity": 5
+      },
+      {
+        "Item": "Ice Shard",
+        "Quantity": 1
       }
     ],
     "PrimaryStat": "Vitality",
@@ -198,13 +202,13 @@
   },
   {
     "Quest": "Mine Iron Ore",
-    "DurationSeconds": 180,
+    "DurationSeconds": 100,
     "Type": "Recurring",
     "Requirements": [],
     "Rewards": [
       {
         "Item": "Iron Ore",
-        "Quantity": 5
+        "Quantity": 10
       }
     ],
     "PrimaryStat": "Strength",
@@ -463,7 +467,7 @@
     "Rewards": [
       {
         "Item": "Gold",
-        "Quantity": 10
+        "Quantity": 200
       },
       {
         "Item": "Leather",
@@ -499,7 +503,7 @@
     "Rewards": [
       {
         "Item": "Lost Parchment",
-        "Quantity": 20
+        "Quantity": 5
       }
     ],
     "PrimaryStat": "Magic",

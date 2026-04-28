@@ -46,16 +46,10 @@
 
 **In processes**
 
-- Mine Iron Ore quest is too long. Even with strength junction, it's less effecient than gathering scrap. 100s, 10 ore. 
-
 - Refine Wood and Mixology are on the same Cadence, making it difficult to mass produce potions automatically. Consider giving Mixology to another cadence also. 
 
-- Harvest Sea Life giving 10 gold is almost insultingly pointless
+- Lost Parchment does nothing. 
 
-- Archive Sifting gives too many Lost Parchment. Lost Parchment does nothing. 
+- Gather moonberries isn't unlocking a futher quest line (Treant)
 
-- Gather moonberries isn't unlocking a futher quest line
-
-- Consider an appendix tab that lists and explains all unlocked items, locations, cadences and abilities. Make it searchable. 
-
-- UI quick reference in the Workshop to remind who has access to craft what. Character icons but will need to function differently than cadence equip UI because multiple characters can have access to the same refinement recipes. 
+- Consider an appendix tab that lists and explains all unlocked items, locations, cadences and abilities. Make it searchable.  
