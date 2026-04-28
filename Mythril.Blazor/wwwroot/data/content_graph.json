@@ -1416,7 +1416,7 @@
     },
     "in_edges": {
       "requires_quest": [
-        "quest_defeat_treant_guardian"
+        "quest_gather_moonberries"
       ]
     },
     "out_edges": {

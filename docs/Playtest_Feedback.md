@@ -48,4 +48,6 @@
 
 - Refine Wood and Mixology are on the same Cadence, making it difficult to mass produce potions automatically. Consider giving Mixology to another cadence also. 
 
+- Scavenge Scrap description needs attention
+
 - Consider an appendix tab that lists and explains all unlocked items, locations, cadences and abilities. Make it searchable.  
