@@ -16,7 +16,11 @@ public partial class GameStore
             CompleteQuestAction a => state with { CompletedQuests = state.CompletedQuests.Add(a.Quest.Name) },
             LockQuestAction a => state with { CompletedQuests = state.CompletedQuests.Remove(a.Quest.Name) },
             StartQuestAction a => StartQuest(state, a),
-            CancelQuestAction a => state with { ActiveQuests = state.ActiveQuests.RemoveAll(q => q.StartTime == a.Progress.StartTime && q.Character.Name == a.Progress.Character.Name) },
+            CancelQuestAction a => state with 
+            { 
+                ActiveQuests = state.ActiveQuests.RemoveAll(q => q.StartTime == a.Progress.StartTime && q.Character.Name == a.Progress.Character.Name),
+                LastFinishedActivity = state.LastFinishedActivity.Remove(a.Progress.Character.Name)
+            },
             AssignCadenceAction a => AssignCadence(state, a),
             UnassignCadenceAction a => UnassignCadence(state, a),
             JunctionMagicAction a => state with
