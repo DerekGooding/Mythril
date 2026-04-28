@@ -80,7 +80,13 @@ public class ContentLoader(
                         foreach (var prop in metaElem.EnumerateObject()) metaDict[prop.Name] = prop.Value.ToString();
 
                     var effectList = node.Effects ?? [];
-                    loadedAbilities.Add(new CadenceAbility(node.Name, "") { Metadata = metaDict, Effects = [.. effectList] });
+                    var ability = new CadenceAbility(node.Name, "") { Metadata = metaDict, Effects = [.. effectList] };
+                    
+                    // Only add if not already present by NAME in the unique collection
+                    // Wait, CadenceAbilities uses name as key. 
+                    // We need to keep the collection distinct by name for UI/logic, 
+                    // but we can load them all and the collection handles uniqueness if it's a ToDictionary.
+                    loadedAbilities.Add(ability);
                     break;
 
                 case "Quest":

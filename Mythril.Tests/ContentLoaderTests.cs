@@ -67,6 +67,24 @@ public class ContentLoaderTests
         // 4. Assert
         Assert.IsNotEmpty(ContentHost.GetContent<Items>().All);
         Assert.IsNotEmpty(ContentHost.GetContent<Quests>().All);
+
+        // Verify requirements for J-Str on different cadences
+        var cadences = ContentHost.GetContent<Cadences>();
+        var recruit = cadences.All.First(c => c.Name == "Recruit");
+        var apprentice = cadences.All.First(c => c.Name == "Apprentice");
+
+        var recruitJStr = recruit.Abilities.First(a => a.Ability.Name == "J-Str");
+        var apprenticeJStr = apprentice.Abilities.First(a => a.Ability.Name == "J-Str");
+
+        // Recruit J-Str: 10 Iron Ore
+        Assert.HasCount(1, recruitJStr.Requirements);
+        Assert.AreEqual("Iron Ore", recruitJStr.Requirements[0].Item.Name);
+        Assert.AreEqual(10, recruitJStr.Requirements[0].Quantity);
+
+        // Apprentice J-Str: 10 Iron Ore + 5 Herb
+        Assert.HasCount(2, apprenticeJStr.Requirements);
+        Assert.AreEqual(10, apprenticeJStr.Requirements.First(r => r.Item.Name == "Iron Ore").Quantity);
+        Assert.AreEqual(5, apprenticeJStr.Requirements.First(r => r.Item.Name == "Herb").Quantity);
     }
 
     private string GetTestDataDir()

@@ -160,8 +160,8 @@ def migrate():
         }
 
         for abil in cad.get("Abilities", []):
-            # Ability Node
-            ab_id = generate_id("ability", abil["Ability"])
+            # Ability Node - now unique per cadence to preserve specific requirements
+            ab_id = generate_id("ability", f"{cad['Name']}_{abil['Ability']}")
             ab_info = ab_map.get(abil["Ability"], {})
 
             ab_node = {
@@ -187,9 +187,8 @@ def migrate():
             if consumes:
                 ab_node["out_edges"]["consumes"] = consumes
 
-            # Shared ability node check
-            if not any(n["id"] == ab_id for n in nodes):
-                nodes.append(ab_node)
+            # Every instance of an ability is now a unique node in the graph
+            nodes.append(ab_node)
             
             node["out_edges"]["provides_ability"].append({ "targetId": ab_id, "quantity": 1 })
 
@@ -197,7 +196,8 @@ def migrate():
 
     # 6. Refinements (Workshop)
     for ref in refinements:
-        ab_id = generate_id("ability", ref["Ability"])
+        # Find ALL ability nodes that match this ability name
+        matching_abilities = [n["id"] for n in nodes if n["type"] == "Ability" and n["name"] == ref["Ability"]]
         
         for recipe in ref["Recipes"]:
             r_name = f"{ref['Ability']} - {recipe['OutputItem']}"
@@ -209,7 +209,7 @@ def migrate():
                 "name": r_name,
                 "data": { "primary_stat": ref.get("PrimaryStat", "Strength") },
                 "in_edges": {
-                    "requires_ability": [ab_id]
+                    "requires_ability": matching_abilities
                 },
                 "out_edges": {
                     "consumes": [{ "targetId": generate_id("item", recipe["InputItem"]), "quantity": recipe["InputQuantity"] }],

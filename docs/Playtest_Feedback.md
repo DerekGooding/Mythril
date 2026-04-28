@@ -44,27 +44,10 @@
 
 - review mass Refine and Essence Harvest
 
-- Consider a stats page that includes historical production rates
-
-- Timer only saves 30 second incriments. Needs to be more accurate. Down to the second or, depending on how saving works, immediately after a task is completed. 
+- Consider a stats page that includes predicted production rates
 
 **In processes**
 
 - Consider an appendix tab that lists and explains all unlocked items, locations, cadences and abilities. Make it searchable. 
 
-**Next prompt (confirm, might already be complete)**
-- Add a UI Toggle in Cadence menu to hide all learned abilities
-- Add a UI Toggle in Cadence menu to hide all fully learned Cadences
-- Add a UI Toggle in Locations to hide once-completed quests
-- Add a UI Toggle in Locations to hide once-completed locations
-- Remove Sort by Duration toggle in Locations
-
-
-- Quest "Locate the Hidden Oasis" should be driven by speed, not vitality.
-- Add a Spirit Stat
-- review fire refinement. Basic gem is more effecient to farm than iron ore, making the ore variant basically pointless. It should become better to mine ore via Strength and then refine it. 
-- Question "learn about the dark forest" should be renamed to Greenwood Forest
-- hunt spiders should be in the mines, not the forest
-- hunt slimes should be in the mines, not the plains
-
-- *** Something is broken in the mining quest line. Cannot access the ability mine ore. ***
+- UI quick reference in the Workshop to remind who has access to craft what. Character icons but will need to function differently than cadence equip UI because multiple characters can have access to the same refinement recipes. 
