@@ -436,7 +436,8 @@
             "Quantity": 5000
           }
         ],
-        "PrimaryStat": "Speed"
+        "PrimaryStat": "Speed",
+        "Effects": []
       },
       {
         "Ability": "Refine Water",
@@ -446,7 +447,41 @@
             "Quantity": 10
           }
         ],
-        "PrimaryStat": "Speed"
+        "PrimaryStat": "Speed",
+        "Effects": []
+      },
+      {
+        "Ability": "Refine Ice",
+        "Requirements": [
+          {
+            "Item": "Leather",
+            "Quantity": 2
+          }
+        ],
+        "PrimaryStat": "Magic",
+        "Effects": []
+      },
+      {
+        "Ability": "J-Str",
+        "Requirements": [
+          {
+            "Item": "Leather",
+            "Quantity": 2
+          }
+        ],
+        "PrimaryStat": "Magic",
+        "Effects": []
+      },
+      {
+        "Ability": "J-Magic",
+        "Requirements": [
+          {
+            "Item": "Blue Coral",
+            "Quantity": 5
+          }
+        ],
+        "PrimaryStat": "Magic",
+        "Effects": []
       }
     ]
   },
