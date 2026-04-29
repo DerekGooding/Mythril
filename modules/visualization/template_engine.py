@@ -41,6 +41,8 @@ def get_css():
 
         button.active { background-color: var(--accent-color); color: white; border-color: var(--accent-color); }
         button:hover { background-color: #30363d; }
+        
+        button.toggle-btn.on { border-color: var(--ability-color); box-shadow: 0 0 5px rgba(126, 231, 135, 0.3); }
 
         .main-container { flex: 1; position: relative; display: flex; }
         #view-canvas { flex: 1; position: relative; overflow: hidden; }
@@ -57,11 +59,17 @@ def get_css():
         .cluster-label { font-size: 14px; font-weight: bold; fill: rgba(255, 255, 255, 0.3); text-transform: uppercase; pointer-events: none; }
 
         .node circle, .node rect, .node polygon { stroke-width: 2px; stroke: rgba(0,0,0,0.5); }
-        .node.dimmed { opacity: 0.2; }
+        .node.dimmed { opacity: 0.15; pointer-events: none; }
         .node.highlighted { opacity: 1; stroke: #fff; stroke-width: 3px; }
+        .node.milestone { stroke: gold; stroke-width: 3px; filter: drop-shadow(0 0 8px rgba(210, 153, 34, 0.6)); }
+        .node.sustainable { filter: drop-shadow(0 0 5px var(--ability-color)); }
+        .node.unsustainable { filter: drop-shadow(0 0 5px var(--location-color)); }
 
-        .edge { fill: none; stroke: #30363d; stroke-width: 1.5px; marker-end: url(#arrowhead); }
-        .edge.dimmed { opacity: 0.1; }
+        .edge { fill: none; stroke: #30363d; stroke-width: 1.5px; marker-end: url(#arrowhead); opacity: 0.6; }
+        .edge.progression { stroke: var(--accent-color); stroke-width: 2px; opacity: 0.8; }
+        .edge.economy { stroke: #484f58; stroke-dasharray: 2,2; }
+        .edge.dimmed { opacity: 0.05; }
+        .edge.hidden { display: none; }
         .edge.highlighted-up { stroke: #ff7b72; stroke-width: 3px; opacity: 1; }
         .edge.highlighted-down { stroke: #7ee787; stroke-width: 3px; opacity: 1; }
 
@@ -100,6 +108,10 @@ def get_html_skeleton(nodes_json, clusters_json, css_content, js_content):
                     <button id="btn-lattice" class="active">Lattice View</button>
                     <button id="btn-hierarchy">Hierarchy View</button>
                     <button id="btn-reset">Reset Layout</button>
+                    <div style="width: 1px; background: var(--border-color); margin: 0 5px;"></div>
+                    <button id="toggle-progression" class="toggle-btn on">Progression Only</button>
+                    <button id="toggle-hubs" class="toggle-btn">Show Hubs</button>
+                    <button id="toggle-sim" class="toggle-btn">Sim Overlay</button>
                 </div>
             </div>
             <div id="stats" style="font-size: 12px; color: #8b949e; font-family: monospace;"></div>

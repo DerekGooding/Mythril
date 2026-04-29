@@ -13,12 +13,13 @@ function simulationStep() {
     const clusters = new Map();
 
     nodes.forEach(n => {
+        if (!n.visible) return;
         if (n === draggedNode) return;
         n.vx += (n.tier * TIER_WIDTH - n.x) * 0.05;
         n.vy += (window.innerHeight / 2 - n.y) * 0.01;
 
         nodes.forEach(m => {
-            if (n === m) return;
+            if (n === m || !m.visible) return;
             const dx = n.x - m.x, dy = n.y - m.y;
             const distSq = dx * dx + dy * dy || 1;
             if (distSq < 3600) { 

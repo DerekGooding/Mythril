@@ -1,6 +1,7 @@
 import json
 import os
 import sys
+import re
 from collections import deque
 from .constants import GRAPH_FILE
 
@@ -16,24 +17,81 @@ def load_graph():
     with open(GRAPH_FILE, 'r', encoding='utf-8') as f:
         return json.load(f)
 
+def parse_simulation_report():
+    report_path = "simulation_report.md"
+    if not os.path.exists(report_path):
+        return {}
+    
+    data = {
+        "sustainable": set(),
+        "unsustainable": set(),
+        "rates": {}
+    }
+    
+    try:
+        with open(report_path, "r", encoding="utf-8") as f:
+            content = f.read()
+            
+            # Parse sustainable
+            sust_match = re.search(r"### Sustainable Recurring Activities\n(.*?)\n\n", content, re.DOTALL)
+            if sust_match:
+                for line in sust_match.group(1).split("\n"):
+                    if line.strip().startswith("- "):
+                        data["sustainable"].add(line.strip()[2:])
+            
+            # Parse unsustainable
+            unsust_match = re.search(r"### ⚠️ Unsustainable Activities.*?\n(.*?)\n\n", content, re.DOTALL)
+            if unsust_match:
+                for line in unsust_match.group(1).split("\n"):
+                    if line.strip().startswith("- "):
+                        data["unsustainable"].add(line.strip()[2:])
+            
+            # Parse rates
+            rates_match = re.search(r"### Net Resource Rates \(per second\)\n(.*?)\n\n", content, re.DOTALL)
+            if rates_match:
+                for line in rates_match.group(1).split("\n"):
+                    m = re.match(r"- \*\*(.*?)\*\*: ([\d.]+)/s", line.strip())
+                    if m:
+                        data["rates"][m.group(1)] = float(m.group(2))
+    except Exception as e:
+        print(f"Warning: Failed to parse simulation report: {e}")
+        
+    return data
+
+def _matches_activity(node_name, activity_names):
+    if node_name in activity_names:
+        return True
+    
+    # Try normalization for refinements
+    # node: "Refine Wood - Herb"
+    # activity: "Refine Wood:Log->Herb"
+    norm_node = node_name.lower().replace(" ", "").replace("-", "")
+    for act in activity_names:
+        norm_act = act.lower().replace(" ", "").replace(":", "").replace("->", "")
+        if norm_node in norm_act or norm_act in norm_node:
+            return True
+    return False
+
 def enrich_data(nodes):
     """Calculate tiers and clusters in Python for better performance."""
     node_map = {n["id"]: n for n in nodes}
+    sim_data = parse_simulation_report()
     
-    # 1. Build Adjacency
+    # 1. Build Adjacency and Edge Counts
     adj = {n["id"]: [] for n in nodes}
+    edge_counts = {n["id"]: 0 for n in nodes}
+    
     for n in nodes:
-        if "out_edges" in n:
-            for target_list in n["out_edges"].values():
-                for target in target_list:
-                    target_id = target if isinstance(target, str) else target.get("targetId")
-                    if target_id in adj:
-                        adj[n["id"]].append(target_id)
-        if "in_edges" in n:
-            for source_list in n["in_edges"].values():
-                for source_id in source_list:
-                    if source_id in adj:
-                        adj[source_id].append(n["id"])
+        for direction in ["out_edges", "in_edges"]:
+            if direction in n:
+                for rel_type, targets in n[direction].items():
+                    for target in targets:
+                        target_id = target if isinstance(target, str) else target.get("targetId")
+                        if target_id in node_map:
+                            edge_counts[n["id"]] += 1
+                            edge_counts[target_id] += 1
+                            if direction == "out_edges":
+                                adj[n["id"]].append(target_id)
 
     # 2. BFS for Tiers
     tiers = {n["id"]: 0 for n in nodes}
@@ -61,9 +119,34 @@ def enrich_data(nodes):
     # 3. Clusters
     clusters, cluster_names = _identify_clusters(nodes)
 
+    # Hub Detection Threshold
+    HUB_THRESHOLD = 10
+
+    sust_names = sim_data.get("sustainable", set())
+    unsust_names = sim_data.get("unsustainable", set())
+
     for n in nodes:
         n["tier"] = tiers.get(n["id"], 0)
         n["cluster_id"] = clusters.get(n["id"], "cluster_none")
+        n["is_hub"] = edge_counts[n["id"]] > HUB_THRESHOLD
+        
+        # Milestone Detection
+        is_milestone = False
+        if n["type"] == "Quest":
+            # Unlocks something important
+            out = n.get("out_edges", {})
+            if "unlocks_cadence" in out or "unlocks_location" in out:
+                is_milestone = True
+            if n["id"] == "quest_prologue":
+                is_milestone = True
+        n["is_milestone"] = is_milestone
+
+        # Simulation Integration
+        n["simulation"] = {
+            "sustainable": _matches_activity(n["name"], sust_names),
+            "unsustainable": _matches_activity(n["name"], unsust_names),
+            "net_rate": sim_data.get("rates", {}).get(n["name"], 0)
+        }
     
     return nodes, cluster_names
 

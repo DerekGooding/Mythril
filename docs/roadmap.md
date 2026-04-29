@@ -1,20 +1,19 @@
-# Mythril Project Roadmap: Simulation & Architecture Maturity
+# Visualization Noise Reduction Roadmap
 
-This roadmap focuses on refining the game's economic balance, optimizing the core simulation engines, and enhancing the UI with predictive data.
+## Goal
+Transform the Mythril Lattice visualization from a cluttered "hairball" into a clear progression and economic map by gating high-frequency resource nodes and highlighting simulation milestones.
 
-## Phase 1: Economic & Simulation Hardening
-- [x] **Economic Equilibrium Refinement**: Achieve 100% sustainability for all reachable recurring activities.
-- [x] **Dependency-Tracked Fixpoint Solver**: Implement a worklist-based `LatticeSimulator` for $O(I \cdot \text{avg\_out\_degree})$ performance.
-- [x] **Simulation-Driven Regression Assertions**: Integrate end-game pacing checks into `check_health.py`.
+## Phase 1: Data Architecture & Gating
+- [ ] Implement hub detection in `data_processor.py` (Frequency thresholding).
+- [ ] Categorize edges into `Core` (Progression) vs `Auxiliary` (Economy).
+- [ ] Integrate simulation results for `Sustainability` and `Milestone` flagging.
 
-## Phase 2: UI & UX Predictive Intelligence
-- [x] **Eliminate "Magic String" Metadata**: Refactor ability/quest effects into a typed `EffectDefinition` schema.
-- [x] **Predictive Resource Highlighting**: Visual indicators for unaffordable quest requirements in real-time.
-- [x] **Effect-Driven UI Logic**: Passive stat boosts and magic capacity now driven by typed effects.
-- [x] **Predictive Dependency Overlay**: Implement "Prerequisite Path" highlighting in the `CadenceTree` and `QuestPanel`.
+## Phase 2: Visual Logic & Interactivity
+- [ ] Add filtering logic to `lattice_data.js`.
+- [ ] Implement milestone-specific rendering styles in `lattice_rendering.js`.
+- [ ] Add hover-driven edge visibility for auxiliary links.
 
-## Phase 3: State & Runtime Consolidation
-- [x] **Unified Deterministic State Store**: Implement a central Reducer-based `GameStateStore` for full simulation/runtime parity.
-
----
-*Last Updated: 2026-04-08*
+## Phase 3: UI/UX Controls
+- [ ] Add Dashboard controls for "Progression Only" and "Hide Resource Hubs".
+- [ ] Implement sustainability overlays based on health check metrics.
+- [ ] Final validation with `scripts/check_health.py`.

@@ -4,15 +4,23 @@ function selectNode(node) {
     document.getElementById('side-type').innerText = node.type;
     document.getElementById('side-type').style.color = getCategoryColor(node.type);
     let content = `<p style="line-height:1.6; font-size: 14px;">${node.data.description || 'No description available.'}</p>`;
+    
+    if (node.simulation) {
+        if (node.simulation.sustainable) content += `<div style="margin: 10px 0; background: rgba(126, 231, 135, 0.1); border-left: 3px solid var(--ability-color); padding: 8px; border-radius: 4px;"><strong>Simulation:</strong> Sustainable</div>`;
+        if (node.simulation.unsustainable) content += `<div style="margin: 10px 0; background: rgba(255, 123, 114, 0.1); border-left: 3px solid var(--location-color); padding: 8px; border-radius: 4px;"><strong>Simulation:</strong> Unsustainable</div>`;
+        if (node.simulation.net_rate > 0) content += `<div style="margin: 10px 0; background: rgba(210, 153, 34, 0.1); border-left: 3px solid var(--stat-color); padding: 8px; border-radius: 4px;"><strong>Net Rate:</strong> ${node.simulation.net_rate.toFixed(4)}/s</div>`;
+    }
+
     if (node.data.quest_type) content += `<div style="margin: 10px 0; background: rgba(255,255,255,0.05); padding: 8px; border-radius: 4px;"><strong>Quest Type:</strong> ${node.data.quest_type}</div>`;
     if (node.data.primary_stat) content += `<div style="margin: 10px 0; background: rgba(255,255,255,0.05); padding: 8px; border-radius: 4px;"><strong>Primary Stat:</strong> ${node.data.primary_stat}</div>`;
-    const upstream = edges.filter(e => e.target === node.id);
+    
+    const upstream = allEdges.filter(e => e.target === node.id);
     if (upstream.length > 0) {
         content += '<h4 style="border-bottom: 1px solid #30363d;">Requirements</h4><ul>';
         upstream.forEach(r => { const src = nodeMap.get(r.source); content += `<li>${src ? src.name : r.source} <span style="font-size:11px;">(${r.type})</span></li>`; });
         content += '</ul>';
     }
-    const downstream = edges.filter(e => e.source === node.id);
+    const downstream = allEdges.filter(e => e.source === node.id);
     if (downstream.length > 0) {
         content += '<h4 style="border-bottom: 1px solid #30363d;">Unlocks</h4><ul>';
         downstream.forEach(u => { const tgt = nodeMap.get(u.target); content += `<li>${tgt ? tgt.name : u.target} <span style="font-size:11px;">(${u.type})</span></li>`; });
@@ -24,8 +32,8 @@ function selectNode(node) {
 
 function highlightPaths(targetId) {
     const upN = new Set(), downN = new Set(), upE = new Set(), downE = new Set();
-    const traceUp = (id) => { edges.forEach(e => { if (e.target === id && !upE.has(e.id)) { upE.add(e.id); upN.add(e.source); traceUp(e.source); } }); };
-    const traceDown = (id) => { edges.forEach(e => { if (e.source === id && !downE.has(e.id)) { downE.add(e.id); downN.add(e.target); traceDown(e.target); } }); };
+    const traceUp = (id) => { allEdges.forEach(e => { if (e.target === id && !upE.has(e.id)) { upE.add(e.id); upN.add(e.source); traceUp(e.source); } }); };
+    const traceDown = (id) => { allEdges.forEach(e => { if (e.source === id && !downE.has(e.id)) { downE.add(e.id); downN.add(e.target); traceDown(e.target); } }); };
     traceUp(targetId); traceDown(targetId);
     nodes.forEach(n => {
         n.el.classList.remove('dimmed', 'highlighted');
@@ -41,13 +49,22 @@ function highlightPaths(targetId) {
 }
 
 function setupInteractions() {
-    document.querySelectorAll('.node').forEach(nodeEl => {
-        nodeEl.addEventListener('mousedown', e => {
-            if (currentView !== 'lattice') return;
-            e.stopPropagation();
-            draggedNode = nodeMap.get(nodeEl.id.replace('node-', ''));
-            isSimulating = true; svg.style.cursor = 'grabbing';
-        });
+    document.getElementById('toggle-progression').addEventListener('click', (e) => {
+        showProgressionOnly = !showProgressionOnly;
+        e.target.classList.toggle('on', showProgressionOnly);
+        filterEdges(); renderLattice();
+    });
+
+    document.getElementById('toggle-hubs').addEventListener('click', (e) => {
+        showHubs = !showHubs;
+        e.target.classList.toggle('on', showHubs);
+        filterEdges(); renderLattice();
+    });
+
+    document.getElementById('toggle-sim').addEventListener('click', (e) => {
+        showSimOverlay = !showSimOverlay;
+        e.target.classList.toggle('on', showSimOverlay);
+        renderLattice();
     });
 
     document.getElementById('btn-lattice').addEventListener('click', () => {
@@ -118,10 +135,20 @@ function getCategoryColor(type) {
 
 function showTooltip(e, node) {
     tooltip.style.display = 'block';
-    tooltip.innerHTML = `<div style="color: ${getCategoryColor(node.type)}; font-size: 10px; font-weight: bold; text-transform: uppercase;">${node.type}</div>
+    let html = `<div style="color: ${getCategoryColor(node.type)}; font-size: 10px; font-weight: bold; text-transform: uppercase;">${node.type}</div>
         <div style="font-weight: bold; font-size: 15px; margin: 4px 0;">${node.name}</div>
-        <div style="opacity: 0.7; font-size: 12px;">${node.data.description || ''}</div>
-        <div style="margin-top: 8px; font-size: 11px; color: var(--accent-color);">Tier ${node.tier}</div>`;
+        <div style="opacity: 0.7; font-size: 12px;">${node.data.description || ''}</div>`;
+    
+    if (node.simulation && (node.simulation.sustainable || node.simulation.unsustainable || node.simulation.net_rate > 0)) {
+        html += `<div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.1);">`;
+        if (node.simulation.sustainable) html += `<div style="color: var(--ability-color); font-size: 11px;">● Sustainable</div>`;
+        if (node.simulation.unsustainable) html += `<div style="color: var(--location-color); font-size: 11px;">● Unsustainable</div>`;
+        if (node.simulation.net_rate > 0) html += `<div style="color: var(--stat-color); font-size: 11px;">Net Rate: ${node.simulation.net_rate.toFixed(4)}/s</div>`;
+        html += `</div>`;
+    }
+
+    html += `<div style="margin-top: 8px; font-size: 11px; color: var(--accent-color);">Tier ${node.tier}</div>`;
+    tooltip.innerHTML = html;
 }
 
 function hideTooltip() { tooltip.style.display = 'none'; }

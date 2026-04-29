@@ -24,7 +24,8 @@ function renderLattice() {
 
     edges.forEach(edge => {
         const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-        path.setAttribute('class', 'edge');
+        let cls = `edge ${edge.category}`;
+        path.setAttribute('class', cls);
         path.setAttribute('id', edge.id);
         edgesLayer.appendChild(path);
         edge.el = path;
@@ -32,7 +33,15 @@ function renderLattice() {
 
     nodes.forEach(node => {
         const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
-        g.setAttribute('class', 'node');
+        let cls = 'node';
+        if (!node.visible) cls += ' dimmed';
+        if (node.is_milestone) cls += ' milestone';
+        if (showSimOverlay) {
+            if (node.simulation.sustainable) cls += ' sustainable';
+            if (node.simulation.unsustainable) cls += ' unsustainable';
+        }
+        
+        g.setAttribute('class', cls);
         g.setAttribute('id', `node-${node.id}`);
         
         let shape;
@@ -67,9 +76,11 @@ function renderLattice() {
         text.textContent = node.name;
         g.appendChild(text);
 
-        g.addEventListener('mouseenter', (e) => showTooltip(e, node));
-        g.addEventListener('mouseleave', hideTooltip);
-        g.addEventListener('click', () => selectNode(node));
+        if (node.visible) {
+            g.addEventListener('mouseenter', (e) => showTooltip(e, node));
+            g.addEventListener('mouseleave', hideTooltip);
+            g.addEventListener('click', () => selectNode(node));
+        }
 
         nodesLayer.appendChild(g);
         node.el = g;

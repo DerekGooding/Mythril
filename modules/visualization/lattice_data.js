@@ -7,6 +7,9 @@ function processData() {
     }));
 
     nodeMap = new Map(nodes.map(n => [n.id, n]));
+    allEdges = [];
+
+    const progressionTypes = ['unlocks_cadence', 'unlocks_location', 'requires_quest', 'contains', 'provides_ability', 'requires_ability'];
 
     nodes.forEach(node => {
         if (node.out_edges) {
@@ -14,9 +17,11 @@ function processData() {
                 targetList.forEach(target => {
                     const targetId = typeof target === 'string' ? target : target.targetId;
                     if (nodeMap.has(targetId)) {
-                        edges.push({
+                        allEdges.push({
                             id: `edge-${node.id}-${targetId}`,
-                            source: node.id, target: targetId, type: type
+                            source: node.id, target: targetId, 
+                            type: type,
+                            category: progressionTypes.includes(type) ? 'progression' : 'economy'
                         });
                     }
                 });
@@ -26,9 +31,11 @@ function processData() {
             Object.entries(node.in_edges).forEach(([type, sourceList]) => {
                 sourceList.forEach(sourceId => {
                     if (nodeMap.has(sourceId)) {
-                        edges.push({
+                        allEdges.push({
                             id: `edge-${sourceId}-${node.id}`,
-                            source: sourceId, target: node.id, type: type
+                            source: sourceId, target: node.id, 
+                            type: type,
+                            category: progressionTypes.includes(type) ? 'progression' : 'economy'
                         });
                     }
                 });
@@ -37,14 +44,41 @@ function processData() {
     });
     
     const seenEdges = new Set();
-    edges = edges.filter(e => {
-        const key = `${e.source}-${e.target}`;
+    allEdges = allEdges.filter(e => {
+        const key = `${e.source}-${e.target}-${e.type}`;
         if (seenEdges.has(key)) return false;
         seenEdges.add(key);
         return true;
     });
+
+    filterEdges();
+}
+
+function filterEdges() {
+    edges = allEdges.filter(e => {
+        const sourceNode = nodeMap.get(e.source);
+        const targetNode = nodeMap.get(e.target);
+
+        // Hub filtering
+        if (!showHubs) {
+            if (sourceNode.is_hub || targetNode.is_hub) return false;
+        }
+
+        // Progression Only filtering
+        if (showProgressionOnly) {
+            if (e.category !== 'progression') return false;
+        }
+
+        return true;
+    });
+
+    // Handle node visibility (dimming)
+    nodes.forEach(n => {
+        n.visible = true;
+        if (!showHubs && n.is_hub) n.visible = false;
+    });
 }
 
 function updateStats() {
-    document.getElementById('stats').innerText = `NODES: ${nodes.length} | EDGES: ${edges.length} | TIERS: ${Math.max(...nodes.map(n=>n.tier))+1}`;
+    document.getElementById('stats').innerText = `NODES: ${nodes.filter(n=>n.visible).length}/${nodes.length} | EDGES: ${edges.length} | TIERS: ${Math.max(...nodes.map(n=>n.tier))+1}`;
 }
