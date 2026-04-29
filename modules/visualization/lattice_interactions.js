@@ -73,7 +73,17 @@ function setupInteractions() {
         document.getElementById('btn-hierarchy').classList.remove('active');
         document.getElementById('graph-svg').style.display = 'block';
         document.getElementById('hierarchy-view').style.display = 'none';
-        requestAnimationFrame(simulationStep);
+        updateLayout();
+    });
+
+    document.getElementById('btn-quest-flow').addEventListener('click', () => {
+        currentView = 'quest-flow';
+        document.getElementById('btn-lattice').classList.remove('active');
+        document.getElementById('btn-quest-flow').classList.add('active');
+        document.getElementById('btn-hierarchy').classList.remove('active');
+        document.getElementById('graph-svg').style.display = 'block';
+        document.getElementById('hierarchy-view').style.display = 'none';
+        renderQuestFlow();
     });
 
     document.getElementById('btn-hierarchy').addEventListener('click', () => {
@@ -86,11 +96,9 @@ function setupInteractions() {
     });
 
     document.getElementById('btn-reset').addEventListener('click', () => {
-        nodes.forEach(n => {
-            n.x = n.tier * TIER_WIDTH + (Math.random() - 0.5) * 100;
-            n.y = window.innerHeight / 2 + (Math.random() - 0.5) * 400;
-            n.vx = 0; n.vy = 0;
-        });
+        // Reload original coordinates from data
+        processData();
+        renderLattice();
         transform = { x: 50, y: 50, k: 0.6 }; updateTransform();
     });
 
@@ -107,6 +115,7 @@ function setupInteractions() {
             const r = svg.getBoundingClientRect();
             draggedNode.x = (e.clientX - r.left - transform.x) / transform.k;
             draggedNode.y = (e.clientY - r.top - transform.y) / transform.k;
+            updateLayout();
         } else if (isDragging) {
             transform.x = e.clientX - startPos.x; transform.y = e.clientY - startPos.y;
             updateTransform();

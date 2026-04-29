@@ -10,8 +10,6 @@ let edges = [];
 let allEdges = [];
 let transform = { x: 50, y: 50, k: 0.6 };
 let nodeMap = new Map();
-let simulationFrame = 0;
-let isSimulating = true;
 let draggedNode = null;
 
 let showProgressionOnly = true;

@@ -1,9 +1,6 @@
 function processData() {
     nodes = nodesData.map(d => ({
-        ...d,
-        x: d.tier * TIER_WIDTH + (Math.random() - 0.5) * 50,
-        y: (window.innerHeight / 2) + (Math.random() - 0.5) * 100,
-        vx: 0, vy: 0
+        ...d
     }));
 
     nodeMap = new Map(nodes.map(n => [n.id, n]));

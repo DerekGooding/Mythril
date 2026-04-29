@@ -60,8 +60,9 @@ def get_css():
 
         .node circle, .node rect, .node polygon { stroke-width: 2px; stroke: rgba(0,0,0,0.5); }
         .node.dimmed { opacity: 0.15; pointer-events: none; }
-        .node.highlighted { opacity: 1; stroke: #fff; stroke-width: 3px; }
-        .node.milestone { stroke: gold; stroke-width: 3px; filter: drop-shadow(0 0 8px rgba(210, 153, 34, 0.6)); }
+        .node.highlighted { opacity: 1; }
+        .node.highlighted circle, .node.highlighted rect, .node.highlighted polygon { stroke: #fff; stroke-width: 3px; }
+        .node.milestone circle, .node.milestone rect, .node.milestone polygon { stroke: gold; stroke-width: 3px; filter: drop-shadow(0 0 8px rgba(210, 153, 34, 0.6)); }
         .node.sustainable { filter: drop-shadow(0 0 5px var(--ability-color)); }
         .node.unsustainable { filter: drop-shadow(0 0 5px var(--location-color)); }
 
@@ -106,6 +107,7 @@ def get_html_skeleton(nodes_json, clusters_json, css_content, js_content):
                 <h2 style="margin:0; letter-spacing: -0.5px;">Mythril <span style="color:var(--accent-color)">Lattice</span></h2>
                 <div class="controls">
                     <button id="btn-lattice" class="active">Lattice View</button>
+                    <button id="btn-quest-flow">Quest Flow</button>
                     <button id="btn-hierarchy">Hierarchy View</button>
                     <button id="btn-reset">Reset Layout</button>
                     <div style="width: 1px; background: var(--border-color); margin: 0 5px;"></div>

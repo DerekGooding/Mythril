@@ -86,7 +86,7 @@ function renderLattice() {
         node.el = g;
     });
 
-    requestAnimationFrame(simulationStep);
+    updateLayout();
 }
 
 function renderClusterBoxes(clusters) {
@@ -116,27 +116,159 @@ function renderClusterBoxes(clusters) {
     }
 }
 
-function renderHierarchy() {
-    const container = document.getElementById('hierarchy-view');
-    container.innerHTML = '';
-    const maxTier = Math.max(...nodes.map(n => n.tier));
-    const tiers = Array.from({ length: maxTier + 1 }, () => []);
-    nodes.forEach(n => tiers[n.tier].push(n));
-    tiers.forEach((tierNodes, i) => {
-        const col = document.createElement('div');
-        col.className = 'tier-column';
-        col.innerHTML = `<div class="tier-header">Tier ${i}</div>`;
-        tierNodes.sort((a,b) => a.type.localeCompare(b.type));
-        tierNodes.forEach(node => {
-            const card = document.createElement('div');
-            card.className = 'card';
-            card.style.borderLeft = `5px solid ${getCategoryColor(node.type)}`;
-            card.innerHTML = `<div class="card-type" style="color: ${getCategoryColor(node.type)}">${node.type}</div>
-                <div class="card-name">${node.name}</div>
-                <div style="font-size: 11px; opacity: 0.6; height: 32px; overflow: hidden;">${node.data.description || ''}</div>`;
-            card.addEventListener('click', () => selectNode(node));
-            col.appendChild(card);
+function renderQuestFlow() {
+    const nodesLayer = document.getElementById('nodes-layer');
+    const edgesLayer = document.getElementById('edges-layer');
+    nodesLayer.innerHTML = ''; edgesLayer.innerHTML = '';
+    document.getElementById('clusters-layer').innerHTML = '';
+
+    // 1. Filter to Quests
+    const quests = nodesData.filter(n => n.type === 'Quest');
+    const questMap = new Map(quests.map(n => [n.id, n]));
+    
+    // 2. Build Quest-Only Dependency Graph
+    const adj = new Map();
+    const revAdj = new Map();
+    quests.forEach(q => {
+        adj.set(q.id, []);
+        revAdj.set(q.id, []);
+    });
+
+    quests.forEach(q => {
+        if (q.in_edges && q.in_edges.requires_quest) {
+            q.in_edges.requires_quest.forEach(reqId => {
+                if (questMap.has(reqId)) {
+                    adj.get(reqId).push(q.id);
+                    revAdj.get(q.id).push(reqId);
+                }
+            });
+        }
+    });
+
+    // 3. Calculate Quest-Only Tiers (BFS/Topological)
+    const questTiers = new Map();
+    const roots = quests.filter(q => revAdj.get(q.id).length === 0);
+    const queue = roots.map(r => ({ id: r.id, depth: 0 }));
+    
+    roots.forEach(r => questTiers.set(r.id, 0));
+
+    while (queue.length > 0) {
+        const { id, depth } = queue.shift();
+        adj.get(id).forEach(neighborId => {
+            const currentTier = questTiers.get(neighborId) || 0;
+            if (depth + 1 > currentTier) {
+                questTiers.set(neighborId, depth + 1);
+                queue.push({ id: neighborId, depth: depth + 1 });
+            }
         });
-        container.appendChild(col);
+    }
+
+    // 4. Position Quests
+    const FLOW_TIER_WIDTH = 500;
+    const FLOW_VERTICAL_SPACING = 120;
+    const tierCounts = {};
+    const flowNodes = [];
+    const flowEdges = [];
+
+    quests.forEach(q => {
+        const t = questTiers.get(q.id) || 0;
+        tierCounts[t] = (tierCounts[t] || 0) + 1;
+        const qNode = {
+            ...q,
+            fx: t * FLOW_TIER_WIDTH,
+            fy: (tierCounts[t] - 1) * FLOW_VERTICAL_SPACING,
+            isTerminal: false
+        };
+        flowNodes.push(qNode);
+    });
+
+    // 5. Add Terminal Items & Edges
+    const flowNodeMap = new Map(flowNodes.map(n => [n.id, n]));
+    
+    flowNodes.forEach(qNode => {
+        // Quest -> Quest Edges
+        adj.get(qNode.id).forEach(targetId => {
+            flowEdges.push({
+                id: `flow-${qNode.id}-${targetId}`,
+                source: qNode.id,
+                target: targetId,
+                category: 'progression'
+            });
+        });
+
+        // Terminal Resources
+        if (qNode.data.quest_type === 'Repeatable' && qNode.out_edges && qNode.out_edges.rewards) {
+            qNode.out_edges.rewards.forEach((rew, idx) => {
+                const itemData = nodesData.find(n => n.id === rew.targetId);
+                if (itemData) {
+                    const rate = (rew.quantity * 60) / (qNode.data.duration || 10);
+                    const terminalId = `terminal-${qNode.id}-${itemData.id}`;
+                    const tNode = {
+                        ...itemData,
+                        id: terminalId,
+                        name: `${itemData.name} (${rate.toFixed(1)}/m)`,
+                        fx: qNode.fx + 200,
+                        fy: qNode.fy + (idx * 35) + 30,
+                        isTerminal: true
+                    };
+                    flowNodes.push(tNode);
+                    flowEdges.push({
+                        id: `flow-reward-${qNode.id}-${terminalId}`,
+                        source: qNode.id,
+                        target: terminalId,
+                        category: 'economy'
+                    });
+                }
+            });
+        }
+    });
+
+    // 6. Render
+    flowEdges.forEach(edge => {
+        const s = flowNodes.find(n => n.id === edge.source);
+        const t = flowNodes.find(n => n.id === edge.target);
+        if (s && t) {
+            const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+            path.setAttribute('class', `edge ${edge.category}`);
+            const midX = (s.fx + t.fx) / 2;
+            const d = `M ${s.fx} ${s.fy} Q ${midX} ${s.fy + (t.fy - s.fy) * 0.1} ${t.fx} ${t.fy}`;
+            path.setAttribute('d', d);
+            edgesLayer.appendChild(path);
+        }
+    });
+
+    flowNodes.forEach(node => {
+        const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+        g.setAttribute('class', `node ${node.is_milestone ? 'milestone' : ''}`);
+        g.setAttribute('transform', `translate(${node.fx}, ${node.fy})`);
+        
+        let shape;
+        if (node.isTerminal) {
+            shape = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+            shape.setAttribute('r', '8');
+            shape.setAttribute('fill', 'var(--item-color)');
+        } else {
+            shape = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+            shape.setAttribute('points', '-14,-7 -14,7 0,14 14,7 14,-7 0,-14');
+            shape.setAttribute('fill', 'var(--quest-color)');
+        }
+        g.appendChild(shape);
+
+        const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        text.setAttribute('class', 'label');
+        text.setAttribute('y', node.isTerminal ? '5' : '28');
+        text.setAttribute('x', node.isTerminal ? '15' : '0');
+        text.setAttribute('text-anchor', node.isTerminal ? 'start' : 'middle');
+        text.style.fontSize = node.isTerminal ? '10px' : '12px';
+        text.textContent = node.name;
+        g.appendChild(text);
+
+        g.addEventListener('mouseenter', (e) => {
+            const tempNode = {...node, x: node.fx, y: node.fy}; // Tooltip expects x/y
+            showTooltip(e, tempNode);
+        });
+        g.addEventListener('mouseleave', hideTooltip);
+        g.addEventListener('click', () => selectNode(node));
+        nodesLayer.appendChild(g);
     });
 }

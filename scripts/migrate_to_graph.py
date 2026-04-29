@@ -158,6 +158,15 @@ def migrate():
             "in_edges": {},
             "out_edges": { "provides_ability": [] }
         }
+        
+        # Hardcoded Stat Requirements (from Discovery logic)
+        if cad["Name"] == "Tide-Caller":
+            node["in_edges"]["requires_stat"] = [{ "targetId": generate_id("stat", "Speed"), "quantity": 60 }]
+        elif cad["Name"] == "Slayer":
+            node["in_edges"]["requires_stat"] = [
+                { "targetId": generate_id("stat", "Strength"), "quantity": 100 },
+                { "targetId": generate_id("stat", "Speed"), "quantity": 100 }
+            ]
 
         for abil in cad.get("Abilities", []):
             # Ability Node - now unique per cadence to preserve specific requirements

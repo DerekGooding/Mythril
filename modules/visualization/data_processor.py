@@ -81,6 +81,7 @@ def enrich_data(nodes):
     adj = {n["id"]: [] for n in nodes}
     edge_counts = {n["id"]: 0 for n in nodes}
     for n in nodes:
+        # Forward edges
         if "out_edges" in n:
             for rel_type, targets in n["out_edges"].items():
                 for target in targets:
@@ -88,13 +89,16 @@ def enrich_data(nodes):
                     if target_id in node_map:
                         edge_counts[n["id"]] += 1
                         edge_counts[target_id] += 1
-                        if rel_type in ["consumes", "requires_quest", "requires_ability"]:
+                        
+                        if rel_type in ["consumes", "requires_quest", "requires_ability", "requires_stat"]:
                             adj[target_id].append(n["id"])
                         else:
                             adj[n["id"]].append(target_id)
+        
         if "in_edges" in n:
             for rel_type, sources in n["in_edges"].items():
-                for source_id in sources:
+                for source in sources:
+                    source_id = source if isinstance(source, str) else source.get("targetId")
                     if source_id in node_map:
                         edge_counts[n["id"]] += 1
                         edge_counts[source_id] += 1
@@ -163,19 +167,38 @@ def enrich_data(nodes):
     clusters, cluster_names = _identify_clusters(nodes)
     nodes.sort(key=lambda x: (x.get("tier", 0), x["type"], x["name"]))
     
+    # Constants for static layout
+    TIER_WIDTH = 800
+    VERTICAL_SPACING = 100
+    
     type_counts = {}
     HUB_THRESHOLD = 10
     hubs = {n["id"] for n in nodes if edge_counts.get(n.get("original_id", n["id"]), 0) > HUB_THRESHOLD}
+
+    # Track how many nodes are in each tier to center them
+    tier_counts = {}
+    for n in nodes:
+        t = n.get("tier", 0)
+        tier_counts[t] = tier_counts.get(t, 0) + 1
+
+    current_tier_indices = {}
 
     for n in nodes:
         t = n.get("tier", 0)
         n["cluster_id"] = clusters.get(n["id"], "cluster_none")
         n["is_hub"] = n["id"] in hubs or n.get("original_id") in hubs
         
-        tier_type = (t, n["type"])
-        type_counts[tier_type] = type_counts.get(tier_type, 0) + 1
-        n["tier_index"] = type_counts[tier_type]
-
+        # Deterministic Grid Position
+        idx = current_tier_indices.get(t, 0)
+        current_tier_indices[t] = idx + 1
+        
+        # Calculate Y to center the tier column
+        total_in_tier = tier_counts[t]
+        start_y = - (total_in_tier * VERTICAL_SPACING) / 2
+        
+        n["x"] = t * TIER_WIDTH
+        n["y"] = start_y + (idx * VERTICAL_SPACING)
+        
         n["simulation"] = {
             "sustainable": _matches_activity(n["name"], sust_names) or n.get("is_sustainable_instance"),
             "unsustainable": _matches_activity(n["name"], sim_data.get("unsustainable", set())),
@@ -195,13 +218,6 @@ def _identify_clusters(nodes):
             cluster_names[c_id] = n["name"]
             if "out_edges" in n and "contains" in n["out_edges"]:
                 for target in n["out_edges"]["contains"]:
-                    clusters[target["targetId"]] = c_id
-            clusters[n["id"]] = c_id
-        elif n["type"] == "Cadence":
-            c_id = f"cluster_cad_{n['id']}"
-            cluster_names[c_id] = n["name"]
-            if "out_edges" in n and "provides_ability" in n["out_edges"]:
-                for target in n["out_edges"]["provides_ability"]:
                     clusters[target["targetId"]] = c_id
             clusters[n["id"]] = c_id
         elif n["type"] == "Refinement":

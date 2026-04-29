@@ -6,7 +6,7 @@ OUTPUT_DIR = "output"
 OUTPUT_FILE = "visual_dashboard.html"
 
 # Simulation Constants
-MAX_SIM_FRAMES = 300
+MAX_SIM_FRAMES = 0 # Disabled for static layout
 TIER_WIDTH = 800
 NODE_RADIUS = 15
-MIN_NODE_SEPARATION = 60 # Vertical
+MIN_NODE_SEPARATION = 80 # Vertical spacing
