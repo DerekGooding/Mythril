@@ -2601,7 +2601,14 @@
     "data": {
       "description": "A speed-based specialist focused on exploring deep waters."
     },
-    "in_edges": {},
+    "in_edges": {
+      "requires_stat": [
+        {
+          "targetId": "stat_speed",
+          "quantity": 60
+        }
+      ]
+    },
     "out_edges": {
       "provides_ability": [
         {
@@ -2653,7 +2660,18 @@
     "data": {
       "description": "An elite combatant unlocked through mastery of both strength and speed."
     },
-    "in_edges": {},
+    "in_edges": {
+      "requires_stat": [
+        {
+          "targetId": "stat_strength",
+          "quantity": 100
+        },
+        {
+          "targetId": "stat_speed",
+          "quantity": 100
+        }
+      ]
+    },
     "out_edges": {
       "provides_ability": [
         {
