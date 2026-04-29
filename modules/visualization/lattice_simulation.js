@@ -56,7 +56,9 @@ function simulationStep() {
     });
 
     nodes.forEach(n => {
-        n.x += n.vx; n.y += n.vy; n.vx *= 0.7; n.vy *= 0.7;
+        n.x += n.vx; n.y += n.vy; 
+        // Higher damping (0.5 instead of 0.7) for more stability
+        n.vx *= 0.5; n.vy *= 0.5;
         n.el.setAttribute('transform', `translate(${n.x}, ${n.y})`);
     });
 

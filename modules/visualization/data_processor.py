@@ -77,77 +77,113 @@ def enrich_data(nodes):
     node_map = {n["id"]: n for n in nodes}
     sim_data = parse_simulation_report()
     
-    # 1. Build Adjacency and Edge Counts
+    # 1. Build Adjacency for Tiering
     adj = {n["id"]: [] for n in nodes}
     edge_counts = {n["id"]: 0 for n in nodes}
-    
     for n in nodes:
-        for direction in ["out_edges", "in_edges"]:
-            if direction in n:
-                for rel_type, targets in n[direction].items():
-                    for target in targets:
-                        target_id = target if isinstance(target, str) else target.get("targetId")
-                        if target_id in node_map:
-                            edge_counts[n["id"]] += 1
-                            edge_counts[target_id] += 1
-                            if direction == "out_edges":
-                                adj[n["id"]].append(target_id)
+        if "out_edges" in n:
+            for rel_type, targets in n["out_edges"].items():
+                for target in targets:
+                    target_id = target if isinstance(target, str) else target.get("targetId")
+                    if target_id in node_map:
+                        edge_counts[n["id"]] += 1
+                        edge_counts[target_id] += 1
+                        if rel_type in ["consumes", "requires_quest", "requires_ability"]:
+                            adj[target_id].append(n["id"])
+                        else:
+                            adj[n["id"]].append(target_id)
+        if "in_edges" in n:
+            for rel_type, sources in n["in_edges"].items():
+                for source_id in sources:
+                    if source_id in node_map:
+                        edge_counts[n["id"]] += 1
+                        edge_counts[source_id] += 1
+                        adj[source_id].append(n["id"])
 
     # 2. BFS for Tiers
-    tiers = {n["id"]: 0 for n in nodes}
-    roots = [n["id"] for n in nodes if n["id"] == "quest_prologue"]
-    if not roots:
-        roots = [n["id"] for n in nodes if not n.get("in_edges")]
-    
+    tiers = {n["id"]: 999 for n in nodes}
+    prologue_node = next((n for n in nodes if n["id"] == "quest_prologue"), None)
+    roots = [prologue_node["id"]] if prologue_node else [n["id"] for n in nodes if n["type"] == "Quest" and not n.get("in_edges", {}).get("requires_quest")]
+    if not roots: roots = [n["id"] for n in nodes if not n.get("in_edges")]
+
     queue = deque([(root, 0) for root in roots])
-    visited_depth = {r: 0 for r in roots}
+    for r in roots: tiers[r] = 0
     
     while queue:
         curr_id, d = queue.popleft()
         for neighbor in adj[curr_id]:
-            if neighbor not in visited_depth or visited_depth[neighbor] < d + 1:
-                visited_depth[neighbor] = d + 1
+            if tiers[neighbor] > d + 1:
                 tiers[neighbor] = d + 1
                 queue.append((neighbor, d + 1))
 
+    for n in nodes:
+        if tiers[n["id"]] == 999: tiers[n["id"]] = 0
+
+    # 3. Node Splitting for Sustainable Resources
+    sust_names = sim_data.get("sustainable", set())
+    new_nodes = []
+    for n in nodes:
+        if n["type"] == "Item" and n["name"] in sust_names:
+            # Find producers (refinements/recurring quests) that are sustainable
+            producers = [m for m in nodes if m["type"] in ["Refinement", "Quest"] and _matches_activity(m["name"], sust_names)]
+            sust_producers = [p for p in producers if any(e.get("targetId") == n["id"] for e in p.get("out_edges", {}).get("produces", []) + p.get("out_edges", {}).get("rewards", []))]
+            
+            if sust_producers:
+                min_sust_tier = min(tiers[p["id"]] for p in sust_producers)
+                if min_sust_tier > tiers[n["id"]] + 1:
+                    # Create a "Sustainable" variant
+                    sust_node = n.copy()
+                    sust_node["id"] = f"{n['id']}_sustainable"
+                    sust_node["name"] = f"{n['name']} (Sustainable)"
+                    sust_node["tier"] = min_sust_tier + 1
+                    sust_node["is_sustainable_instance"] = True
+                    sust_node["original_id"] = n["id"]
+                    # Redirect edges from sustainable producers to this new node
+                    for p in sust_producers:
+                        if "out_edges" in p:
+                            for rel in ["produces", "rewards"]:
+                                if rel in p["out_edges"]:
+                                    for edge in p["out_edges"][rel]:
+                                        if edge.get("targetId") == n["id"]:
+                                            edge["targetId"] = sust_node["id"]
+                    new_nodes.append(sust_node)
+        
+    nodes.extend(new_nodes)
+    node_map = {n["id"]: n for n in nodes}
+
     # Force Slayer to end
-    max_bfs_tier = max(tiers.values()) if tiers else 0
+    max_bfs_tier = max(t for t in tiers.values() if t < 999) if any(t < 999 for t in tiers.values()) else 0
     for n in nodes:
         if n["id"] == "cadence_slayer" or "slayer" in n["id"].lower():
-            tiers[n["id"]] = max_bfs_tier + 1
+            n["tier"] = max_bfs_tier + 1
+        else:
+            n["tier"] = tiers.get(n["id"], 0)
 
-    # 3. Clusters
+    # 4. Final Enrichment & Stable Ordering
     clusters, cluster_names = _identify_clusters(nodes)
-
-    # Hub Detection Threshold
+    nodes.sort(key=lambda x: (x.get("tier", 0), x["type"], x["name"]))
+    
+    type_counts = {}
     HUB_THRESHOLD = 10
-
-    sust_names = sim_data.get("sustainable", set())
-    unsust_names = sim_data.get("unsustainable", set())
+    hubs = {n["id"] for n in nodes if edge_counts.get(n.get("original_id", n["id"]), 0) > HUB_THRESHOLD}
 
     for n in nodes:
-        n["tier"] = tiers.get(n["id"], 0)
+        t = n.get("tier", 0)
         n["cluster_id"] = clusters.get(n["id"], "cluster_none")
-        n["is_hub"] = edge_counts[n["id"]] > HUB_THRESHOLD
+        n["is_hub"] = n["id"] in hubs or n.get("original_id") in hubs
         
-        # Milestone Detection
-        is_milestone = False
-        if n["type"] == "Quest":
-            # Unlocks something important
-            out = n.get("out_edges", {})
-            if "unlocks_cadence" in out or "unlocks_location" in out:
-                is_milestone = True
-            if n["id"] == "quest_prologue":
-                is_milestone = True
-        n["is_milestone"] = is_milestone
+        tier_type = (t, n["type"])
+        type_counts[tier_type] = type_counts.get(tier_type, 0) + 1
+        n["tier_index"] = type_counts[tier_type]
 
-        # Simulation Integration
         n["simulation"] = {
-            "sustainable": _matches_activity(n["name"], sust_names),
-            "unsustainable": _matches_activity(n["name"], unsust_names),
+            "sustainable": _matches_activity(n["name"], sust_names) or n.get("is_sustainable_instance"),
+            "unsustainable": _matches_activity(n["name"], sim_data.get("unsustainable", set())),
             "net_rate": sim_data.get("rates", {}).get(n["name"], 0)
         }
-    
+        
+        n["is_milestone"] = (n["type"] == "Quest" and (n["id"] == "quest_prologue" or "unlocks_cadence" in n.get("out_edges", {}) or "unlocks_location" in n.get("out_edges", {})))
+
     return nodes, cluster_names
 
 def _identify_clusters(nodes):
