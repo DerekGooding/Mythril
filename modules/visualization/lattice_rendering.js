@@ -28,34 +28,30 @@ function renderQuestFlow() {
     // 2. Filter to Quests and (in Advanced) quest-unlocked Cadences + their Abilities
     const quests = nodesData.filter(n => n.type === 'Quest');
     
-    // Find cadences that are unlocked by quests
-    const questUnlockedCadenceIds = new Set();
-    quests.forEach(q => {
-        if (q.out_edges && q.out_edges.unlocks_cadence) {
-            q.out_edges.unlocks_cadence.forEach(t => questUnlockedCadenceIds.add(t.targetId));
-        }
-    });
-
-    const cadences = currentView === 'advanced' 
-        ? nodesData.filter(n => n.type === 'Cadence' && questUnlockedCadenceIds.has(n.id))
-        : [];
-
-    // Find abilities provided by those cadences
-    const cadenceProvidedAbilityIds = new Set();
-    cadences.forEach(c => {
-        if (c.out_edges && c.out_edges.provides_ability) {
-            c.out_edges.provides_ability.forEach(t => cadenceProvidedAbilityIds.add(t.targetId));
-        }
-    });
-
-    const abilities = currentView === 'advanced'
-        ? nodesData.filter(n => n.type === 'Ability' && cadenceProvidedAbilityIds.has(n.id))
-        : [];
+    let cadences = [];
+    let abilities = [];
+    if (currentView === 'advanced') {
+        const questUnlockedCadenceIds = new Set();
+        quests.forEach(q => {
+            if (q.out_edges && q.out_edges.unlocks_cadence) {
+                q.out_edges.unlocks_cadence.forEach(t => questUnlockedCadenceIds.add(t.targetId));
+            }
+        });
+        cadences = nodesData.filter(n => n.type === 'Cadence' && questUnlockedCadenceIds.has(n.id));
+        
+        const cadenceProvidedAbilityIds = new Set();
+        cadences.forEach(c => {
+            if (c.out_edges && c.out_edges.provides_ability) {
+                c.out_edges.provides_ability.forEach(t => cadenceProvidedAbilityIds.add(t.targetId));
+            }
+        });
+        abilities = nodesData.filter(n => n.type === 'Ability' && cadenceProvidedAbilityIds.has(n.id));
+    }
 
     const flowEntities = [...quests, ...cadences, ...abilities];
     const entityMap = new Map(flowEntities.map(n => [n.id, n]));
 
-    // 3. Build Dependency Graph for Layout
+    // 3. Build Dependency Graph for Layout (Base Progression)
     const adj = new Map();
     const revAdj = new Map();
     flowEntities.forEach(q => {
@@ -75,7 +71,6 @@ function renderQuestFlow() {
         }
         // Cadence Unlocks (Quest -> Cadence)
         if (q.type === 'Cadence') {
-            // Find which quests unlock this cadence
             quests.forEach(otherQ => {
                 if (otherQ.out_edges && otherQ.out_edges.unlocks_cadence) {
                     if (otherQ.out_edges.unlocks_cadence.some(t => t.targetId === q.id)) {
@@ -87,7 +82,6 @@ function renderQuestFlow() {
         }
         // Ability Unlocks (Cadence -> Ability)
         if (q.type === 'Ability') {
-            // Find which cadences provide this ability
             cadences.forEach(otherC => {
                 if (otherC.out_edges && otherC.out_edges.provides_ability) {
                     if (otherC.out_edges.provides_ability.some(t => t.targetId === q.id)) {
@@ -99,7 +93,7 @@ function renderQuestFlow() {
         }
     });
 
-    // 3. Calculate Tiers
+    // 4. Calculate Tiers for Core Entities
     const entityTiers = new Map();
     const roots = flowEntities.filter(q => revAdj.get(q.id).length === 0);
     const queue = roots.map(r => ({ id: r.id, depth: 0 }));
@@ -117,13 +111,46 @@ function renderQuestFlow() {
         });
     }
 
-    // 4. Group by Tiers and Order
-    const FLOW_TIER_WIDTH = 550;
-    const FLOW_VERTICAL_SPACING = 150;
+    // 5. Add Non-Shared Item Nodes (Local to producing quest)
+    const productionNodes = [];
+    const productionEdges = [];
+    
+    if (currentView === 'advanced') {
+        quests.forEach(q => {
+            if (q.data.quest_type === 'Recurring' && q.out_edges && q.out_edges.rewards) {
+                const questTier = entityTiers.get(q.id) || 0;
+                q.out_edges.rewards.forEach(rew => {
+                    const itemTemplate = nodesData.find(n => n.id === rew.targetId);
+                    if (itemTemplate) {
+                        const uniqueId = `prod-${q.id}-${itemTemplate.id}`;
+                        const rate = (rew.quantity * 60) / (q.data.duration || 10);
+                        
+                        const itemNode = {
+                            ...itemTemplate,
+                            id: uniqueId,
+                            baseId: itemTemplate.id, // For selection/sidebar
+                            name: `${itemTemplate.name} (${rate.toFixed(1)}/m)`,
+                            tier: questTier + 1,
+                            isProduction: true
+                        };
+                        productionNodes.push(itemNode);
+                        productionEdges.push({
+                            id: `edge-${q.id}-${uniqueId}`,
+                            source: q.id,
+                            target: uniqueId,
+                            category: 'economy'
+                        });
+                    }
+                });
+            }
+        });
+    }
+
+    const finalFlowEntities = [...flowEntities, ...productionNodes];
     const tierGroups = [];
     
-    flowEntities.forEach(q => {
-        const t = entityTiers.get(q.id) || 0;
+    finalFlowEntities.forEach(q => {
+        const t = q.isProduction ? q.tier : (entityTiers.get(q.id) || 0);
         if (!tierGroups[t]) tierGroups[t] = [];
         tierGroups[t].push(q);
     });
@@ -132,11 +159,20 @@ function renderQuestFlow() {
     const flowEdges = [];
     const nodeYPositions = new Map();
 
+    const FLOW_TIER_WIDTH = 700;
+    const FLOW_VERTICAL_SPACING = 160;
+
     tierGroups.forEach((tierEntities, t) => {
         if (t > 0) {
             tierEntities.sort((a, b) => {
-                const parentsA = revAdj.get(a.id);
-                const parentsB = revAdj.get(b.id);
+                const getParents = (id) => {
+                    const p = revAdj.get(id) || [];
+                    // Check production edges too
+                    productionEdges.forEach(pe => { if (pe.target === id) p.push(pe.source); });
+                    return p;
+                };
+                const parentsA = getParents(a.id);
+                const parentsB = getParents(b.id);
                 const getAvgY = (parents) => {
                     if (parents.length === 0) return 0;
                     let sum = 0;
@@ -152,32 +188,23 @@ function renderQuestFlow() {
         tierEntities.forEach((q, idx) => {
             const fy = idx * FLOW_VERTICAL_SPACING;
             nodeYPositions.set(q.id, idx);
-            flowNodes.push({ ...q, fx: t * FLOW_TIER_WIDTH, fy: fy, isTerminal: false });
+            flowNodes.push({ ...q, fx: t * FLOW_TIER_WIDTH, fy: fy });
         });
     });
 
-    // 5. Edges and Terminals
+    // 6. Build Final Edges for Rendering
     flowNodes.forEach(qNode => {
-        adj.get(qNode.id).forEach(targetId => {
-            flowEdges.push({ id: `flow-${qNode.id}-${targetId}`, source: qNode.id, target: targetId, category: 'progression' });
-        });
-
-        if (qNode.type === 'Quest' && qNode.data.quest_type === 'Repeatable' && qNode.out_edges && qNode.out_edges.rewards) {
-            const rewardCount = qNode.out_edges.rewards.length;
-            qNode.out_edges.rewards.forEach((rew, idx) => {
-                const itemData = nodesData.find(n => n.id === rew.targetId);
-                if (itemData) {
-                    const rate = (rew.quantity * 60) / (qNode.data.duration || 10);
-                    const terminalId = `terminal-${qNode.id}-${itemData.id}`;
-                    const verticalOffset = (idx - (rewardCount - 1) / 2) * 35;
-                    flowNodes.push({ ...itemData, id: terminalId, name: `${itemData.name} (${rate.toFixed(1)}/m)`, fx: qNode.fx + 250, fy: qNode.fy + verticalOffset, isTerminal: true });
-                    flowEdges.push({ id: `flow-reward-${qNode.id}-${terminalId}`, source: qNode.id, target: terminalId, category: 'economy' });
-                }
+        if (adj.has(qNode.id)) {
+            adj.get(qNode.id).forEach(targetId => {
+                flowEdges.push({ id: `flow-${qNode.id}-${targetId}`, source: qNode.id, target: targetId, category: 'progression' });
             });
         }
     });
+    productionEdges.forEach(pe => {
+        flowEdges.push({ ...pe, category: 'economy' });
+    });
 
-    // 6. Final Render
+    // 7. Final Render
     const flowNodeIdMap = new Map(flowNodes.map(n => [n.id, n]));
     flowEdges.forEach(edge => {
         const s = flowNodeIdMap.get(edge.source);
@@ -199,41 +226,45 @@ function renderQuestFlow() {
         g.setAttribute('id', `node-${node.id}`);
         
         let shape;
-        if (node.isTerminal) {
+        if (node.type === 'Item') {
             shape = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-            shape.setAttribute('r', '8');
+            shape.setAttribute('r', '14');
             shape.setAttribute('fill', 'var(--item-color)');
+        } else if (node.type === 'Cadence') {
+            shape = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+            shape.setAttribute('x', '-14'); shape.setAttribute('y', '-14');
+            shape.setAttribute('width', '28'); shape.setAttribute('height', '28');
+            shape.setAttribute('rx', '4');
+            shape.setAttribute('fill', 'var(--cadence-color)');
+        } else if (node.type === 'Ability') {
+            shape = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+            shape.setAttribute('points', '0,-14 14,0 0,14 -14,0');
+            shape.setAttribute('fill', 'var(--ability-color)');
         } else {
-            if (node.type === 'Cadence') {
-                shape = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-                shape.setAttribute('x', '-14'); shape.setAttribute('y', '-14');
-                shape.setAttribute('width', '28'); shape.setAttribute('height', '28');
-                shape.setAttribute('rx', '4');
-                shape.setAttribute('fill', 'var(--cadence-color)');
-            } else if (node.type === 'Ability') {
-                shape = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
-                shape.setAttribute('points', '0,-14 14,0 0,14 -14,0');
-                shape.setAttribute('fill', 'var(--ability-color)');
-            } else {
-                shape = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
-                shape.setAttribute('points', '-14,-7 -14,7 0,14 14,7 14,-7 0,-14');
-                shape.setAttribute('fill', 'var(--quest-color)');
-            }
+            shape = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+            shape.setAttribute('points', '-14,-7 -14,7 0,14 14,7 14,-7 0,-14');
+            shape.setAttribute('fill', 'var(--quest-color)');
         }
         g.appendChild(shape);
 
         const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
         text.setAttribute('class', 'label');
-        text.setAttribute('y', node.isTerminal ? '5' : '28');
-        text.setAttribute('x', node.isTerminal ? '15' : '0');
-        text.setAttribute('text-anchor', node.isTerminal ? 'start' : 'middle');
-        text.style.fontSize = node.isTerminal ? '10px' : '12px';
+        text.setAttribute('y', '32');
+        text.setAttribute('text-anchor', 'middle');
+        text.style.fontSize = '12px';
         text.textContent = node.name;
         g.appendChild(text);
 
-        g.addEventListener('mouseenter', (e) => showTooltip(e, node));
+        g.addEventListener('mouseenter', (e) => {
+            const tempNode = {...node, x: node.fx, y: node.fy};
+            showTooltip(e, tempNode);
+        });
         g.addEventListener('mouseleave', hideTooltip);
-        g.addEventListener('click', () => selectNode(node));
+        g.addEventListener('click', () => {
+            // Use baseId for sidebar consistency if it's a production node
+            const selectData = node.isProduction ? window.nodeMap.get(node.baseId) : node;
+            selectNode(selectData);
+        });
         nodesLayer.appendChild(g);
     });
 }

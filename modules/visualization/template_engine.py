@@ -68,7 +68,7 @@ def get_css():
 
         .edge { fill: none; stroke: #30363d; stroke-width: 1.5px; marker-end: url(#arrowhead); opacity: 0.6; }
         .edge.progression { stroke: var(--accent-color); stroke-width: 2px; opacity: 0.8; }
-        .edge.economy { stroke: #484f58; stroke-dasharray: 2,2; }
+        .edge.economy { stroke: var(--item-color); stroke-width: 1.5px; opacity: 0.6; }
         .edge.dimmed { opacity: 0.05; }
         .edge.hidden { display: none; }
         .edge.highlighted-up { stroke: #ff7b72; stroke-width: 3px; opacity: 1; }
