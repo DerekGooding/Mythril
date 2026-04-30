@@ -59,7 +59,7 @@ def get_css():
         .cluster-label { font-size: 14px; font-weight: bold; fill: rgba(255, 255, 255, 0.3); text-transform: uppercase; pointer-events: none; }
 
         .node circle, .node rect, .node polygon { stroke-width: 2px; stroke: rgba(0,0,0,0.5); }
-        .node.dimmed { opacity: 0.15; pointer-events: none; }
+        .node.dimmed { opacity: 0.15; pointer-events: auto; }
         .node.highlighted { opacity: 1; }
         .node.highlighted circle, .node.highlighted rect, .node.highlighted polygon { stroke: #fff; stroke-width: 3px; }
         .node.milestone circle, .node.milestone rect, .node.milestone polygon { stroke: gold; stroke-width: 3px; filter: drop-shadow(0 0 8px rgba(210, 153, 34, 0.6)); }
@@ -105,6 +105,10 @@ def get_html_skeleton(nodes_json, clusters_json, css_content, js_content):
         <header>
             <div style="display: flex; align-items: center; gap: 20px;">
                 <h2 style="margin:0; letter-spacing: -0.5px;">Mythril <span style="color:var(--accent-color)">Quest Flow</span></h2>
+                <div class="controls">
+                    <button id="btn-standard" class="active">Standard</button>
+                    <button id="btn-advanced">Advanced</button>
+                </div>
             </div>
             <div id="stats" style="font-size: 12px; color: #8b949e; font-family: monospace;"></div>
         </header>

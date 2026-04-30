@@ -816,7 +816,7 @@
     },
     "in_edges": {
       "requires_quest": [
-        "quest_learn_about_cadences"
+        "quest_recover_the_ancient_tome"
       ]
     },
     "out_edges": {

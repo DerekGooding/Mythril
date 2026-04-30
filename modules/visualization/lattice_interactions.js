@@ -12,25 +12,45 @@ function selectNode(node) {
     }
 
     if (node.data.quest_type) content += `<div style="margin: 10px 0; background: rgba(255,255,255,0.05); padding: 8px; border-radius: 4px;"><strong>Quest Type:</strong> ${node.data.quest_type}</div>`;
-    if (node.data.primary_stat) content += `<div style="margin: 10px 0; background: rgba(255,255,255,0.05); padding: 8px; border-radius: 4px;"><strong>Primary Stat:</strong> ${node.data.primary_stat}</div>`;
     
+    // Categorize Edges
+    const consumeTypes = ['consumes', 'requires_stat', 'requires_ability', 'requires_quest'];
+    const produceTypes = ['rewards', 'stat_rewards', 'provides_ability', 'unlocks_cadence', 'unlocks_location'];
+
     const upstream = allEdges.filter(e => e.target === node.id);
-    if (upstream.length > 0) {
-        content += '<h4 style="border-bottom: 1px solid #30363d;">Requirements</h4><ul>';
-        upstream.forEach(r => { const src = nodeMap.get(r.source); content += `<li>${src ? src.name : r.source} <span style="font-size:11px;">(${r.type})</span></li>`; });
-        content += '</ul>';
-    }
     const downstream = allEdges.filter(e => e.source === node.id);
-    if (downstream.length > 0) {
-        content += '<h4 style="border-bottom: 1px solid #30363d;">Unlocks</h4><ul>';
-        downstream.forEach(u => { const tgt = nodeMap.get(u.target); content += `<li>${tgt ? tgt.name : u.target} <span style="font-size:11px;">(${u.type})</span></li>`; });
+
+    // Sidebar: Requirements / Consumes
+    const consumes = upstream.filter(e => consumeTypes.includes(e.type));
+    if (consumes.length > 0) {
+        content += '<h4 style="border-bottom: 1px solid #30363d; margin-bottom: 10px;">Consumes / Requires</h4><ul>';
+        consumes.forEach(e => {
+            const src = nodeMap.get(e.source);
+            content += `<li style="margin-bottom: 4px;">${src ? src.name : e.source} <span style="font-size:11px; opacity:0.6;">(${e.type})</span></li>`;
+        });
         content += '</ul>';
     }
+
+    // Sidebar: Produces / Unlocks
+    const produces = downstream.filter(e => produceTypes.includes(e.type));
+    if (produces.length > 0) {
+        content += '<h4 style="border-bottom: 1px solid #30363d; margin-bottom: 10px;">Produces / Unlocks</h4><ul>';
+        produces.forEach(e => {
+            const tgt = nodeMap.get(e.target);
+            content += `<li style="margin-bottom: 4px;">${tgt ? tgt.name : e.target} <span style="font-size:11px; opacity:0.6;">(${e.type})</span></li>`;
+        });
+        content += '</ul>';
+    }
+
     document.getElementById('side-content').innerHTML = content;
     highlightPaths(node.id);
 }
 
 function highlightPaths(targetId) {
+    // Reset all previous highlights
+    document.querySelectorAll('.node').forEach(el => el.classList.remove('dimmed', 'highlighted'));
+    document.querySelectorAll('.edge').forEach(el => el.classList.remove('dimmed', 'highlighted-up', 'highlighted-down'));
+
     const upN = new Set(), downN = new Set(), upE = new Set(), downE = new Set();
     const traceUp = (id) => { allEdges.forEach(e => { if (e.target === id && !upE.has(e.id)) { upE.add(e.id); upN.add(e.source); traceUp(e.source); } }); };
     const traceDown = (id) => { allEdges.forEach(e => { if (e.source === id && !downE.has(e.id)) { downE.add(e.id); downN.add(e.target); traceDown(e.target); } }); };
@@ -41,7 +61,6 @@ function highlightPaths(targetId) {
         const idAttr = el.getAttribute('id');
         const nodeId = idAttr.replace('node-', '');
         
-        el.classList.remove('dimmed', 'highlighted');
         if (nodeId === targetId || nodeId.includes(targetId) || upN.has(nodeId) || downN.has(nodeId)) {
              el.classList.add('highlighted');
         } else {
@@ -52,14 +71,29 @@ function highlightPaths(targetId) {
     const visibleEdges = document.querySelectorAll('.edge');
     visibleEdges.forEach(el => {
         const edgeId = el.getAttribute('id');
-        el.classList.remove('dimmed', 'highlighted-up', 'highlighted-down');
+        // Check if edge is part of the flow
         if (upE.has(edgeId) || upE.some(ue => edgeId.includes(ue))) el.classList.add('highlighted-up');
         else if (downE.has(edgeId) || downE.some(de => edgeId.includes(de))) el.classList.add('highlighted-down');
         else el.classList.add('dimmed');
     });
 }
 
+
 function setupInteractions() {
+    document.getElementById('btn-standard').addEventListener('click', () => {
+        currentView = 'standard';
+        document.getElementById('btn-standard').classList.add('active');
+        document.getElementById('btn-advanced').classList.remove('active');
+        renderQuestFlow();
+    });
+
+    document.getElementById('btn-advanced').addEventListener('click', () => {
+        currentView = 'advanced';
+        document.getElementById('btn-advanced').classList.add('active');
+        document.getElementById('btn-standard').classList.remove('active');
+        renderQuestFlow();
+    });
+
     let isDragging = false, startPos = { x: 0, y: 0 };
     svg.addEventListener('mousedown', e => {
         if (e.target === svg || e.target.closest('#tiers-layer')) {
