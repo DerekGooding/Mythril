@@ -35,101 +35,54 @@ function highlightPaths(targetId) {
     const traceUp = (id) => { allEdges.forEach(e => { if (e.target === id && !upE.has(e.id)) { upE.add(e.id); upN.add(e.source); traceUp(e.source); } }); };
     const traceDown = (id) => { allEdges.forEach(e => { if (e.source === id && !downE.has(e.id)) { downE.add(e.id); downN.add(e.target); traceDown(e.target); } }); };
     traceUp(targetId); traceDown(targetId);
-    nodes.forEach(n => {
-        n.el.classList.remove('dimmed', 'highlighted');
-        if (n.id === targetId || upN.has(n.id) || downN.has(n.id)) n.el.classList.add('highlighted');
-        else n.el.classList.add('dimmed');
+    
+    const visibleNodes = document.querySelectorAll('.node');
+    visibleNodes.forEach(el => {
+        const idAttr = el.getAttribute('id');
+        const nodeId = idAttr.replace('node-', '');
+        
+        el.classList.remove('dimmed', 'highlighted');
+        if (nodeId === targetId || nodeId.includes(targetId) || upN.has(nodeId) || downN.has(nodeId)) {
+             el.classList.add('highlighted');
+        } else {
+             el.classList.add('dimmed');
+        }
     });
-    edges.forEach(e => {
-        e.el.classList.remove('dimmed', 'highlighted-up', 'highlighted-down');
-        if (upE.has(e.id)) e.el.classList.add('highlighted-up');
-        else if (downE.has(e.id)) e.el.classList.add('highlighted-down');
-        else e.el.classList.add('dimmed');
+
+    const visibleEdges = document.querySelectorAll('.edge');
+    visibleEdges.forEach(el => {
+        const edgeId = el.getAttribute('id');
+        el.classList.remove('dimmed', 'highlighted-up', 'highlighted-down');
+        if (upE.has(edgeId) || upE.some(ue => edgeId.includes(ue))) el.classList.add('highlighted-up');
+        else if (downE.has(edgeId) || downE.some(de => edgeId.includes(de))) el.classList.add('highlighted-down');
+        else el.classList.add('dimmed');
     });
 }
 
 function setupInteractions() {
-    document.getElementById('toggle-progression').addEventListener('click', (e) => {
-        showProgressionOnly = !showProgressionOnly;
-        e.target.classList.toggle('on', showProgressionOnly);
-        filterEdges(); renderLattice();
-    });
-
-    document.getElementById('toggle-hubs').addEventListener('click', (e) => {
-        showHubs = !showHubs;
-        e.target.classList.toggle('on', showHubs);
-        filterEdges(); renderLattice();
-    });
-
-    document.getElementById('toggle-sim').addEventListener('click', (e) => {
-        showSimOverlay = !showSimOverlay;
-        e.target.classList.toggle('on', showSimOverlay);
-        renderLattice();
-    });
-
-    document.getElementById('btn-lattice').addEventListener('click', () => {
-        currentView = 'lattice';
-        document.getElementById('btn-lattice').classList.add('active');
-        document.getElementById('btn-hierarchy').classList.remove('active');
-        document.getElementById('graph-svg').style.display = 'block';
-        document.getElementById('hierarchy-view').style.display = 'none';
-        updateLayout();
-    });
-
-    document.getElementById('btn-quest-flow').addEventListener('click', () => {
-        currentView = 'quest-flow';
-        document.getElementById('btn-lattice').classList.remove('active');
-        document.getElementById('btn-quest-flow').classList.add('active');
-        document.getElementById('btn-hierarchy').classList.remove('active');
-        document.getElementById('graph-svg').style.display = 'block';
-        document.getElementById('hierarchy-view').style.display = 'none';
-        renderQuestFlow();
-    });
-
-    document.getElementById('btn-hierarchy').addEventListener('click', () => {
-        currentView = 'hierarchy';
-        document.getElementById('btn-hierarchy').classList.add('active');
-        document.getElementById('btn-lattice').classList.remove('active');
-        document.getElementById('graph-svg').style.display = 'none';
-        document.getElementById('hierarchy-view').style.display = 'flex';
-        renderHierarchy();
-    });
-
-    document.getElementById('btn-reset').addEventListener('click', () => {
-        // Reload original coordinates from data
-        processData();
-        renderLattice();
-        transform = { x: 50, y: 50, k: 0.6 }; updateTransform();
-    });
-
     let isDragging = false, startPos = { x: 0, y: 0 };
     svg.addEventListener('mousedown', e => {
-        if (e.target === svg || e.target.closest('#clusters-layer') || e.target.closest('#tiers-layer')) {
+        if (e.target === svg || e.target.closest('#tiers-layer')) {
             isDragging = true; startPos = { x: e.clientX - transform.x, y: e.clientY - transform.y };
             svg.style.cursor = 'grabbing';
         }
     });
 
     window.addEventListener('mousemove', e => {
-        if (draggedNode) {
-            const r = svg.getBoundingClientRect();
-            draggedNode.x = (e.clientX - r.left - transform.x) / transform.k;
-            draggedNode.y = (e.clientY - r.top - transform.y) / transform.k;
-            updateLayout();
-        } else if (isDragging) {
+        if (isDragging) {
             transform.x = e.clientX - startPos.x; transform.y = e.clientY - startPos.y;
             updateTransform();
         }
         if (tooltip.style.display === 'block') { tooltip.style.left = (e.pageX + 15) + 'px'; tooltip.style.top = (e.pageY + 15) + 'px'; }
     });
 
-    window.addEventListener('mouseup', () => { isDragging = false; draggedNode = null; svg.style.cursor = 'grab'; });
+    window.addEventListener('mouseup', () => { isDragging = false; svg.style.cursor = 'grab'; });
 
     svg.addEventListener('wheel', e => {
         e.preventDefault();
         const delta = e.deltaY > 0 ? 0.9 : 1.1;
         const bX = (e.clientX - transform.x) / transform.k, bY = (e.clientY - transform.y) / transform.k;
-        transform.k = Math.max(0.1, Math.min(transform.k * delta, 3));
+        transform.k = Math.max(0.05, Math.min(transform.k * delta, 5));
         transform.x = e.clientX - bX * transform.k; transform.y = e.clientY - bY * transform.k;
         updateTransform();
     }, { passive: false });

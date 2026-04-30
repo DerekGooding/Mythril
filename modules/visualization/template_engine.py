@@ -97,24 +97,14 @@ def get_html_skeleton(nodes_json, clusters_json, css_content, js_content):
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mythril Visual Dashboard V2</title>
+    <title>Mythril Quest Flow</title>
     <style>{css_content}</style>
 </head>
 <body>
     <div class="dashboard">
         <header>
             <div style="display: flex; align-items: center; gap: 20px;">
-                <h2 style="margin:0; letter-spacing: -0.5px;">Mythril <span style="color:var(--accent-color)">Lattice</span></h2>
-                <div class="controls">
-                    <button id="btn-lattice" class="active">Lattice View</button>
-                    <button id="btn-quest-flow">Quest Flow</button>
-                    <button id="btn-hierarchy">Hierarchy View</button>
-                    <button id="btn-reset">Reset Layout</button>
-                    <div style="width: 1px; background: var(--border-color); margin: 0 5px;"></div>
-                    <button id="toggle-progression" class="toggle-btn on">Progression Only</button>
-                    <button id="toggle-hubs" class="toggle-btn">Show Hubs</button>
-                    <button id="toggle-sim" class="toggle-btn">Sim Overlay</button>
-                </div>
+                <h2 style="margin:0; letter-spacing: -0.5px;">Mythril <span style="color:var(--accent-color)">Quest Flow</span></h2>
             </div>
             <div id="stats" style="font-size: 12px; color: #8b949e; font-family: monospace;"></div>
         </header>
@@ -128,12 +118,10 @@ def get_html_skeleton(nodes_json, clusters_json, css_content, js_content):
                     </defs>
                     <g id="viewport">
                         <g id="tiers-layer"></g>
-                        <g id="clusters-layer"></g>
                         <g id="edges-layer"></g>
                         <g id="nodes-layer"></g>
                     </g>
                 </svg>
-                <div id="hierarchy-view"></div>
             </div>
             <div id="sidebar" class="sidebar">
                 <div style="display:flex; justify-content: space-between; align-items: flex-start;">

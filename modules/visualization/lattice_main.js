@@ -2,8 +2,7 @@
 function init() {
     processData();
     setupInteractions();
-    renderTiers();
-    renderLattice();
+    renderQuestFlow();
     updateStats();
     updateTransform();
 }
