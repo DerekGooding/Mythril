@@ -108,6 +108,7 @@ def get_html_skeleton(nodes_json, clusters_json, css_content, js_content):
                 <div class="controls">
                     <button id="btn-standard" class="active">Standard</button>
                     <button id="btn-advanced">Advanced</button>
+                    <button id="btn-progressive">Progressive</button>
                 </div>
             </div>
             <div id="stats" style="font-size: 12px; color: #8b949e; font-family: monospace;"></div>

@@ -91,6 +91,15 @@ function setupInteractions() {
         currentView = 'advanced';
         document.getElementById('btn-advanced').classList.add('active');
         document.getElementById('btn-standard').classList.remove('active');
+        document.getElementById('btn-progressive').classList.remove('active');
+        renderQuestFlow();
+    });
+
+    document.getElementById('btn-progressive').addEventListener('click', () => {
+        currentView = 'progressive';
+        document.getElementById('btn-progressive').classList.add('active');
+        document.getElementById('btn-standard').classList.remove('active');
+        document.getElementById('btn-advanced').classList.remove('active');
         renderQuestFlow();
     });
 

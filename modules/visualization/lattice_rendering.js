@@ -25,12 +25,12 @@ function renderQuestFlow() {
         }
     });
 
-    // 2. Filter to Quests and (in Advanced) quest-unlocked Cadences + their Abilities
+    // 2. Filter to Quests and (in Advanced/Progressive) quest-unlocked Cadences + their Abilities
     const quests = nodesData.filter(n => n.type === 'Quest');
     
     let cadences = [];
     let abilities = [];
-    if (currentView === 'advanced') {
+    if (currentView === 'advanced' || currentView === 'progressive') {
         const questUnlockedCadenceIds = new Set();
         quests.forEach(q => {
             if (q.out_edges && q.out_edges.unlocks_cadence) {
@@ -115,7 +115,7 @@ function renderQuestFlow() {
     const productionNodes = [];
     const productionEdges = [];
     
-    if (currentView === 'advanced') {
+    if (currentView === 'advanced' || currentView === 'progressive') {
         quests.forEach(q => {
             if (q.data.quest_type === 'Recurring' && q.out_edges && q.out_edges.rewards) {
                 const questTier = entityTiers.get(q.id) || 0;
