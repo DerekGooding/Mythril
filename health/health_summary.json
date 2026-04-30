@@ -28,7 +28,7 @@
             "category": "monolith",
             "message": "modules/visualization/lattice_rendering.js exceeds 250 lines",
             "metadata": {
-                "lines": 274
+                "lines": 317
             }
         },
         {
