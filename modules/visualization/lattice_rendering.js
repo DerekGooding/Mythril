@@ -163,29 +163,67 @@ function renderQuestFlow() {
         });
     }
 
-    // 4. Position Quests
+    // 4. Group by Tiers and Order for Crossing Minimization
     const FLOW_TIER_WIDTH = 500;
-    const FLOW_VERTICAL_SPACING = 120;
-    const tierCounts = {};
-    const flowNodes = [];
-    const flowEdges = [];
-
+    const FLOW_VERTICAL_SPACING = 140;
+    const tierGroups = [];
+    
+    // Fill tier groups
     quests.forEach(q => {
         const t = questTiers.get(q.id) || 0;
-        tierCounts[t] = (tierCounts[t] || 0) + 1;
-        const qNode = {
-            ...q,
-            fx: t * FLOW_TIER_WIDTH,
-            fy: (tierCounts[t] - 1) * FLOW_VERTICAL_SPACING,
-            isTerminal: false
-        };
-        flowNodes.push(qNode);
+        if (!tierGroups[t]) tierGroups[t] = [];
+        tierGroups[t].push(q);
+    });
+
+    const flowNodes = [];
+    const flowEdges = [];
+    const nodeYPositions = new Map(); // Store assigned Y index for barycenter calculation
+
+    // Process tiers sequentially
+    tierGroups.forEach((tierQuests, t) => {
+        if (t > 0) {
+            // Sort by Barycenter (average Y position of parents)
+            tierQuests.sort((a, b) => {
+                const parentsA = revAdj.get(a.id);
+                const parentsB = revAdj.get(b.id);
+                
+                const getAvgY = (parents) => {
+                    if (parents.length === 0) return 0;
+                    let sum = 0;
+                    parents.forEach(pId => {
+                        sum += nodeYPositions.get(pId) || 0;
+                    });
+                    return sum / parents.length;
+                };
+
+                return getAvgY(parentsA) - getAvgY(parentsB);
+            });
+        } else {
+            // Initial sort for roots
+            tierQuests.sort((a, b) => a.name.localeCompare(b.name));
+        }
+
+        // Assign positions
+        tierQuests.forEach((q, idx) => {
+            const fy = idx * FLOW_VERTICAL_SPACING;
+            nodeYPositions.set(q.id, idx);
+            
+            const qNode = {
+                ...q,
+                fx: t * FLOW_TIER_WIDTH,
+                fy: fy,
+                isTerminal: false
+            };
+            flowNodes.push(qNode);
+        });
     });
 
     // 5. Add Terminal Items & Edges
     const flowNodeMap = new Map(flowNodes.map(n => [n.id, n]));
     
     flowNodes.forEach(qNode => {
+        if (qNode.isTerminal) return;
+
         // Quest -> Quest Edges
         adj.get(qNode.id).forEach(targetId => {
             flowEdges.push({
@@ -198,17 +236,22 @@ function renderQuestFlow() {
 
         // Terminal Resources
         if (qNode.data.quest_type === 'Repeatable' && qNode.out_edges && qNode.out_edges.rewards) {
+            const rewardCount = qNode.out_edges.rewards.length;
             qNode.out_edges.rewards.forEach((rew, idx) => {
                 const itemData = nodesData.find(n => n.id === rew.targetId);
                 if (itemData) {
                     const rate = (rew.quantity * 60) / (qNode.data.duration || 10);
                     const terminalId = `terminal-${qNode.id}-${itemData.id}`;
+                    
+                    // Offset rewards vertically so they don't overlap, centering them on the quest
+                    const verticalOffset = (idx - (rewardCount - 1) / 2) * 35;
+                    
                     const tNode = {
                         ...itemData,
                         id: terminalId,
                         name: `${itemData.name} (${rate.toFixed(1)}/m)`,
-                        fx: qNode.fx + 200,
-                        fy: qNode.fy + (idx * 35) + 30,
+                        fx: qNode.fx + 250,
+                        fy: qNode.fy + verticalOffset,
                         isTerminal: true
                     };
                     flowNodes.push(tNode);
