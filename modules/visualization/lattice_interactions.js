@@ -13,6 +13,15 @@ function selectNode(node) {
 
     if (node.data.quest_type) content += `<div style="margin: 10px 0; background: rgba(255,255,255,0.05); padding: 8px; border-radius: 4px;"><strong>Quest Type:</strong> ${node.data.quest_type}</div>`;
     
+    if (currentView === 'progressive' && !node.isSustainablyActive && node.missingSustainable && node.missingSustainable.length > 0) {
+        content += `<div style="margin: 10px 0; background: rgba(255, 123, 114, 0.1); border-left: 3px solid var(--location-color); padding: 8px; border-radius: 4px;"><strong>Locked:</strong> Missing sustainable supply of:<br/>`;
+        node.missingSustainable.forEach(itemId => {
+            const item = nodeMap.get(itemId);
+            content += `- ${item ? item.name : itemId}<br/>`;
+        });
+        content += `</div>`;
+    }
+
     if (node.availableSustainable && node.availableSustainable.size > 0) {
         content += '<h4 style="border-bottom: 1px solid #30363d; margin-bottom: 10px;">Sustainable Pipeline</h4><div style="display:flex; flex-wrap:wrap; gap:5px; margin-bottom: 15px;">';
         node.availableSustainable.forEach(itemId => {
@@ -93,6 +102,7 @@ function setupInteractions() {
         currentView = 'standard';
         document.getElementById('btn-standard').classList.add('active');
         document.getElementById('btn-advanced').classList.remove('active');
+        document.getElementById('btn-progressive').classList.remove('active');
         renderQuestFlow();
     });
 
@@ -162,6 +172,14 @@ function showTooltip(e, node) {
     }
 
     html += `<div style="margin-top: 8px; font-size: 11px; color: var(--accent-color);">Tier ${node.tier}</div>`;
+    
+    if (currentView === 'progressive' && !node.isSustainablyActive) {
+        html += `<div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.1); color: var(--location-color); font-weight: bold; font-size: 11px;">🔒 LOCKED</div>`;
+        if (node.missingSustainable && node.missingSustainable.length > 0) {
+            html += `<div style="font-size: 10px; opacity: 0.8;">Missing: ${node.missingSustainable.map(id => nodeMap.get(id)?.name || id).join(', ')}</div>`;
+        }
+    }
+
     tooltip.innerHTML = html;
 }
 

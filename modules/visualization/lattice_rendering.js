@@ -133,47 +133,126 @@ function renderQuestFlow() {
         });
     }
 
-    // 5. Intelligence: Sustainability Propagation
-    const sustainablyAvailable = new Map();
+    // 5. Intelligence: Reachability & Milestone System
+    const nodeAncestry = new Map();
     const sortedEntities = [...flowEntities].sort((a, b) => (entityTiers.get(a.id) || 0) - (entityTiers.get(b.id) || 0));
 
+    // Pass 1: Progression Ancestry Mapping
     sortedEntities.forEach(node => {
-        node.sustainableOutputs = new Set();
-        node.availableSustainable = new Set();
-        
+        const ancestors = new Set();
         const parents = revAdj.get(node.id) || [];
         parents.forEach(pId => {
-            const pAvailable = sustainablyAvailable.get(pId);
-            if (pAvailable) {
-                pAvailable.forEach(itemId => node.availableSustainable.add(itemId));
+            ancestors.add(pId);
+            const pAncestors = nodeAncestry.get(pId);
+            if (pAncestors) pAncestors.forEach(aId => ancestors.add(aId));
+        });
+        nodeAncestry.set(node.id, ancestors);
+    });
+
+    // Pass 2: Identify Sustainable Producers
+    const sustainableProducers = new Map(); // itemId -> Set of producerIds
+    nodesData.forEach(n => {
+        if (n.type === 'Quest' && n.data.quest_type === 'Recurring' && n.out_edges && n.out_edges.rewards) {
+            n.out_edges.rewards.forEach(rew => {
+                if (!sustainableProducers.has(rew.targetId)) sustainableProducers.set(rew.targetId, new Set());
+                sustainableProducers.get(rew.targetId).add(n.id);
+            });
+        }
+        if (n.type === 'Refinement' && n.out_edges && n.out_edges.produces) {
+            n.out_edges.produces.forEach(prod => {
+                if (!sustainableProducers.has(prod.targetId)) sustainableProducers.set(prod.targetId, new Set());
+                sustainableProducers.get(prod.targetId).add(n.id);
+            });
+        }
+    });
+
+    // Pass 3: Gate Detection & Milestone Tiers
+    const milestoneTiers = new Set();
+    const gateNodes = new Set();
+    
+    if (currentView === 'progressive') {
+        sortedEntities.forEach(node => {
+            if (node.out_edges && node.out_edges.consumes) {
+                const ancestors = nodeAncestry.get(node.id);
+                node.out_edges.consumes.forEach(cons => {
+                    const producers = sustainableProducers.get(cons.targetId);
+                    if (producers) {
+                        let isCrossBranch = true;
+                        producers.forEach(pId => {
+                            if (pId === node.id || ancestors.has(pId)) isCrossBranch = false;
+                        });
+                        
+                        if (isCrossBranch) {
+                            gateNodes.add(node.id);
+                            milestoneTiers.add(entityTiers.get(node.id));
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    // Pass 4: Global Sustainability Propagation
+    const globalSustainablePool = new Set();
+    const tierSustainableOutputs = new Map(); // tier -> Set of itemIds
+
+    sortedEntities.forEach(node => {
+        const tier = entityTiers.get(node.id) || 0;
+        if (!tierSustainableOutputs.has(tier)) tierSustainableOutputs.set(tier, new Set());
+        
+        node.sustainableOutputs = new Set();
+        node.availableSustainable = new Set(globalSustainablePool);
+        
+        // Add resources from progression ancestry
+        const ancestors = nodeAncestry.get(node.id);
+        ancestors.forEach(aId => {
+            const aNode = entityMap.get(aId);
+            if (aNode && aNode.sustainableOutputs) {
+                aNode.sustainableOutputs.forEach(itemId => node.availableSustainable.add(itemId));
             }
         });
 
-        if (node.type === 'Quest' && node.data.quest_type === 'Recurring') {
-            if (node.out_edges && node.out_edges.rewards) {
-                node.out_edges.rewards.forEach(rew => node.sustainableOutputs.add(rew.targetId));
-            }
-        } else if (node.type === 'Refinement' && currentView === 'progressive') {
-            let canRun = true;
-            if (node.out_edges && node.out_edges.consumes) {
-                node.out_edges.consumes.forEach(cons => {
-                    if (!node.availableSustainable.has(cons.targetId)) canRun = false;
-                });
-            } else {
-                canRun = false; // Refinement without inputs?
-            }
+        // Check Reachability
+        node.missingSustainable = [];
+        let isReachable = true;
+        
+        if (node.out_edges && node.out_edges.consumes) {
+            node.out_edges.consumes.forEach(cons => {
+                if (!node.availableSustainable.has(cons.targetId)) {
+                    isReachable = false;
+                    node.missingSustainable.push(cons.targetId);
+                }
+            });
+        }
 
-            if (canRun) {
-                node.isSustainablyActive = true;
+        node.isSustainablyActive = isReachable;
+
+        if (node.isSustainablyActive) {
+            if (node.type === 'Quest' && node.data.quest_type === 'Recurring') {
+                if (node.out_edges && node.out_edges.rewards) {
+                    node.out_edges.rewards.forEach(rew => {
+                        node.sustainableOutputs.add(rew.targetId);
+                        tierSustainableOutputs.get(tier).add(rew.targetId);
+                    });
+                }
+            } else if (node.type === 'Refinement') {
                 if (node.out_edges && node.out_edges.produces) {
-                    node.out_edges.produces.forEach(prod => node.sustainableOutputs.add(prod.targetId));
+                    node.out_edges.produces.forEach(prod => {
+                        node.sustainableOutputs.add(prod.targetId);
+                        tierSustainableOutputs.get(tier).add(prod.targetId);
+                    });
                 }
             }
         }
 
-        const nodeTotalAvailable = new Set(node.availableSustainable);
-        node.sustainableOutputs.forEach(itemId => nodeTotalAvailable.add(itemId));
-        sustainablyAvailable.set(node.id, nodeTotalAvailable);
+        // If we just passed a milestone, integrate ALL previous sustainability into the global pool
+        if (milestoneTiers.has(tier)) {
+            for (let t = 0; t <= tier; t++) {
+                if (tierSustainableOutputs.has(t)) {
+                    tierSustainableOutputs.get(t).forEach(itemId => globalSustainablePool.add(itemId));
+                }
+            }
+        }
     });
 
     // 6. Add Non-Shared Item Nodes (Local to producing entity)
@@ -202,7 +281,8 @@ function renderQuestFlow() {
                             baseId: itemTemplate.id,
                             name: `${itemTemplate.name}${rateInfo}`,
                             tier: nodeTier + 1,
-                            isProduction: true
+                            isProduction: true,
+                            isSustainablyActive: node.isSustainablyActive
                         };
                         productionNodes.push(itemNode);
                         productionEdges.push({
@@ -232,6 +312,29 @@ function renderQuestFlow() {
 
     const FLOW_TIER_WIDTH = 700;
     const FLOW_VERTICAL_SPACING = 160;
+
+    // 7. Render Milestone Lines
+    if (currentView === 'progressive') {
+        const tiersLayer = document.getElementById('tiers-layer');
+        tiersLayer.innerHTML = '';
+        milestoneTiers.forEach(t => {
+            const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+            const x = t * FLOW_TIER_WIDTH - (FLOW_TIER_WIDTH / 2);
+            line.setAttribute('x1', x); line.setAttribute('y1', -5000);
+            line.setAttribute('x2', x); line.setAttribute('y2', 5000);
+            line.setAttribute('class', 'tier-line');
+            line.setAttribute('style', 'stroke: var(--accent-color); stroke-width: 2px; stroke-dasharray: none; opacity: 0.3;');
+            tiersLayer.appendChild(line);
+
+            const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
+            label.setAttribute('x', x); label.setAttribute('y', -300);
+            label.setAttribute('class', 'tier-label');
+            label.setAttribute('style', 'fill: var(--accent-color); font-weight: bold; font-size: 14px; text-transform: uppercase;');
+            label.setAttribute('transform', `rotate(-90, ${x}, -300)`);
+            label.textContent = "Milestone: Resource Integration";
+            tiersLayer.appendChild(label);
+        });
+    }
 
     tierGroups.forEach((tierEntities, t) => {
         if (t > 0) {
@@ -263,7 +366,7 @@ function renderQuestFlow() {
         });
     });
 
-    // 6. Build Final Edges for Rendering
+    // 8. Build Final Edges for Rendering
     flowNodes.forEach(qNode => {
         if (adj.has(qNode.id)) {
             adj.get(qNode.id).forEach(targetId => {
@@ -275,7 +378,7 @@ function renderQuestFlow() {
         flowEdges.push({ ...pe, category: 'economy' });
     });
 
-    // 7. Final Render
+    // 9. Final Render
     const flowNodeIdMap = new Map(flowNodes.map(n => [n.id, n]));
     flowEdges.forEach(edge => {
         const s = flowNodeIdMap.get(edge.source);
@@ -292,39 +395,43 @@ function renderQuestFlow() {
 
     flowNodes.forEach(node => {
         const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
-        g.setAttribute('class', `node ${node.is_milestone ? 'milestone' : ''}`);
+        const isLocked = currentView === 'progressive' && !node.isSustainablyActive;
+        g.setAttribute('class', `node ${node.is_milestone ? 'milestone' : ''} ${isLocked ? 'locked' : ''}`);
         g.setAttribute('transform', `translate(${node.fx}, ${node.fy})`);
         g.setAttribute('id', `node-${node.id}`);
         
         let shape;
+        const color = isLocked ? '#333' : getCategoryColor(node.type);
+        
         if (node.type === 'Item') {
             shape = document.createElementNS("http://www.w3.org/2000/svg", "circle");
             shape.setAttribute('r', '14');
-            shape.setAttribute('fill', 'var(--item-color)');
+            shape.setAttribute('fill', color);
         } else if (node.type === 'Cadence') {
             shape = document.createElementNS("http://www.w3.org/2000/svg", "rect");
             shape.setAttribute('x', '-14'); shape.setAttribute('y', '-14');
             shape.setAttribute('width', '28'); shape.setAttribute('height', '28');
             shape.setAttribute('rx', '4');
-            shape.setAttribute('fill', 'var(--cadence-color)');
+            shape.setAttribute('fill', color);
         } else if (node.type === 'Ability') {
             shape = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
             shape.setAttribute('points', '0,-14 14,0 0,14 -14,0');
-            shape.setAttribute('fill', 'var(--ability-color)');
+            shape.setAttribute('fill', color);
         } else if (node.type === 'Refinement') {
             shape = document.createElementNS("http://www.w3.org/2000/svg", "rect");
             shape.setAttribute('x', '-12'); shape.setAttribute('y', '-12');
             shape.setAttribute('width', '24'); shape.setAttribute('height', '24');
             shape.setAttribute('rx', '8');
-            shape.setAttribute('fill', node.isSustainablyActive ? 'var(--refinement-color)' : '#333');
-            if (!node.isSustainablyActive && currentView === 'progressive') {
-                shape.setAttribute('stroke', '#666');
-                shape.setAttribute('stroke-dasharray', '2,2');
-            }
+            shape.setAttribute('fill', color);
         } else {
             shape = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
             shape.setAttribute('points', '-14,-7 -14,7 0,14 14,7 14,-7 0,-14');
-            shape.setAttribute('fill', 'var(--quest-color)');
+            shape.setAttribute('fill', color);
+        }
+
+        if (isLocked) {
+            shape.setAttribute('stroke', '#666');
+            shape.setAttribute('stroke-dasharray', '2,2');
         }
         g.appendChild(shape);
 
