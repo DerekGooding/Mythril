@@ -13,6 +13,15 @@ function selectNode(node) {
 
     if (node.data.quest_type) content += `<div style="margin: 10px 0; background: rgba(255,255,255,0.05); padding: 8px; border-radius: 4px;"><strong>Quest Type:</strong> ${node.data.quest_type}</div>`;
     
+    if (node.availableSustainable && node.availableSustainable.size > 0) {
+        content += '<h4 style="border-bottom: 1px solid #30363d; margin-bottom: 10px;">Sustainable Pipeline</h4><div style="display:flex; flex-wrap:wrap; gap:5px; margin-bottom: 15px;">';
+        node.availableSustainable.forEach(itemId => {
+            const item = nodeMap.get(itemId);
+            content += `<span style="background: rgba(126, 231, 135, 0.1); color: var(--ability-color); border: 1px solid rgba(126, 231, 135, 0.3); padding: 2px 6px; border-radius: 4px; font-size: 11px;">${item ? item.name : itemId}</span>`;
+        });
+        content += '</div>';
+    }
+
     // Categorize Edges
     const consumeTypes = ['consumes', 'requires_stat', 'requires_ability', 'requires_quest'];
     const produceTypes = ['rewards', 'stat_rewards', 'provides_ability', 'unlocks_cadence', 'unlocks_location'];

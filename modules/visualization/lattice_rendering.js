@@ -48,7 +48,18 @@ function renderQuestFlow() {
         abilities = nodesData.filter(n => n.type === 'Ability' && cadenceProvidedAbilityIds.has(n.id));
     }
 
-    const flowEntities = [...quests, ...cadences, ...abilities];
+    let refinements = [];
+    if (currentView === 'progressive') {
+        const abilityIds = new Set(abilities.map(a => a.id));
+        refinements = nodesData.filter(n => 
+            n.type === 'Refinement' && 
+            n.in_edges && 
+            n.in_edges.requires_ability && 
+            n.in_edges.requires_ability.some(aId => abilityIds.has(aId))
+        );
+    }
+
+    const flowEntities = [...quests, ...cadences, ...abilities, ...refinements];
     const entityMap = new Map(flowEntities.map(n => [n.id, n]));
 
     // 3. Build Dependency Graph for Layout (Base Progression)
@@ -91,6 +102,17 @@ function renderQuestFlow() {
                 }
             });
         }
+        // Refinement Dependencies (Ability -> Refinement)
+        if (q.type === 'Refinement') {
+            if (q.in_edges && q.in_edges.requires_ability) {
+                q.in_edges.requires_ability.forEach(reqId => {
+                    if (entityMap.has(reqId)) {
+                        adj.get(reqId).push(q.id);
+                        revAdj.get(q.id).push(reqId);
+                    }
+                });
+            }
+        }
     });
 
     // 4. Calculate Tiers for Core Entities
@@ -111,32 +133,81 @@ function renderQuestFlow() {
         });
     }
 
-    // 5. Add Non-Shared Item Nodes (Local to producing quest)
+    // 5. Intelligence: Sustainability Propagation
+    const sustainablyAvailable = new Map();
+    const sortedEntities = [...flowEntities].sort((a, b) => (entityTiers.get(a.id) || 0) - (entityTiers.get(b.id) || 0));
+
+    sortedEntities.forEach(node => {
+        node.sustainableOutputs = new Set();
+        node.availableSustainable = new Set();
+        
+        const parents = revAdj.get(node.id) || [];
+        parents.forEach(pId => {
+            const pAvailable = sustainablyAvailable.get(pId);
+            if (pAvailable) {
+                pAvailable.forEach(itemId => node.availableSustainable.add(itemId));
+            }
+        });
+
+        if (node.type === 'Quest' && node.data.quest_type === 'Recurring') {
+            if (node.out_edges && node.out_edges.rewards) {
+                node.out_edges.rewards.forEach(rew => node.sustainableOutputs.add(rew.targetId));
+            }
+        } else if (node.type === 'Refinement' && currentView === 'progressive') {
+            let canRun = true;
+            if (node.out_edges && node.out_edges.consumes) {
+                node.out_edges.consumes.forEach(cons => {
+                    if (!node.availableSustainable.has(cons.targetId)) canRun = false;
+                });
+            } else {
+                canRun = false; // Refinement without inputs?
+            }
+
+            if (canRun) {
+                node.isSustainablyActive = true;
+                if (node.out_edges && node.out_edges.produces) {
+                    node.out_edges.produces.forEach(prod => node.sustainableOutputs.add(prod.targetId));
+                }
+            }
+        }
+
+        const nodeTotalAvailable = new Set(node.availableSustainable);
+        node.sustainableOutputs.forEach(itemId => nodeTotalAvailable.add(itemId));
+        sustainablyAvailable.set(node.id, nodeTotalAvailable);
+    });
+
+    // 6. Add Non-Shared Item Nodes (Local to producing entity)
     const productionNodes = [];
     const productionEdges = [];
     
     if (currentView === 'advanced' || currentView === 'progressive') {
-        quests.forEach(q => {
-            if (q.data.quest_type === 'Recurring' && q.out_edges && q.out_edges.rewards) {
-                const questTier = entityTiers.get(q.id) || 0;
-                q.out_edges.rewards.forEach(rew => {
-                    const itemTemplate = nodesData.find(n => n.id === rew.targetId);
+        sortedEntities.forEach(node => {
+            if (node.sustainableOutputs.size > 0) {
+                const nodeTier = entityTiers.get(node.id) || 0;
+                node.sustainableOutputs.forEach(itemId => {
+                    const itemTemplate = nodesData.find(n => n.id === itemId);
                     if (itemTemplate) {
-                        const uniqueId = `prod-${q.id}-${itemTemplate.id}`;
-                        const rate = (rew.quantity * 60) / (q.data.duration || 10);
+                        const uniqueId = `prod-${node.id}-${itemTemplate.id}`;
                         
+                        let rateInfo = "";
+                        if (node.type === 'Quest') {
+                            const rew = node.out_edges.rewards.find(r => r.targetId === itemId);
+                            const rate = (rew.quantity * 60) / (node.data.duration || 10);
+                            rateInfo = ` (${rate.toFixed(1)}/m)`;
+                        }
+
                         const itemNode = {
                             ...itemTemplate,
                             id: uniqueId,
-                            baseId: itemTemplate.id, // For selection/sidebar
-                            name: `${itemTemplate.name} (${rate.toFixed(1)}/m)`,
-                            tier: questTier + 1,
+                            baseId: itemTemplate.id,
+                            name: `${itemTemplate.name}${rateInfo}`,
+                            tier: nodeTier + 1,
                             isProduction: true
                         };
                         productionNodes.push(itemNode);
                         productionEdges.push({
-                            id: `edge-${q.id}-${uniqueId}`,
-                            source: q.id,
+                            id: `edge-${node.id}-${uniqueId}`,
+                            source: node.id,
                             target: uniqueId,
                             category: 'economy'
                         });
@@ -240,6 +311,16 @@ function renderQuestFlow() {
             shape = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
             shape.setAttribute('points', '0,-14 14,0 0,14 -14,0');
             shape.setAttribute('fill', 'var(--ability-color)');
+        } else if (node.type === 'Refinement') {
+            shape = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+            shape.setAttribute('x', '-12'); shape.setAttribute('y', '-12');
+            shape.setAttribute('width', '24'); shape.setAttribute('height', '24');
+            shape.setAttribute('rx', '8');
+            shape.setAttribute('fill', node.isSustainablyActive ? 'var(--refinement-color)' : '#333');
+            if (!node.isSustainablyActive && currentView === 'progressive') {
+                shape.setAttribute('stroke', '#666');
+                shape.setAttribute('stroke-dasharray', '2,2');
+            }
         } else {
             shape = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
             shape.setAttribute('points', '-14,-7 -14,7 0,14 14,7 14,-7 0,-14');
