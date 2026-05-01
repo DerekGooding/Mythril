@@ -5,6 +5,16 @@ function selectNode(node) {
     document.getElementById('side-type').style.color = getCategoryColor(node.type);
     let content = `<p style="line-height:1.6; font-size: 14px;">${node.data.description || 'No description available.'}</p>`;
     
+    if (node.type === 'Milestone') {
+        content += `<div style="margin: 15px 0; background: rgba(56, 139, 253, 0.1); border: 1px solid var(--accent-color); padding: 12px; border-radius: 8px;">
+            <h4 style="margin-top:0; color: var(--accent-color);">Milestone Analytics</h4>
+            <div style="margin-bottom:8px;"><strong>Gated Resources:</strong> ${Array.from(node.data.resources).map(id => nodeMap.get(id)?.name || id).join(', ')}</div>
+            <div style="margin-bottom:8px;"><strong>Unlocks Waiting:</strong> ${node.data.gateNodes.map(id => nodeMap.get(id)?.name || id).join(', ')}</div>
+            <div style="font-size: 1.2em; font-weight: bold; margin-top: 10px; color: var(--ability-color);">${node.data.globalCoverage}% Global Coverage</div>
+            <div style="font-size: 10px; opacity: 0.6;">Percentage of total game automation integrated by this point.</div>
+        </div>`;
+    }
+
     if (node.simulation) {
         if (node.simulation.sustainable) content += `<div style="margin: 10px 0; background: rgba(126, 231, 135, 0.1); border-left: 3px solid var(--ability-color); padding: 8px; border-radius: 4px;"><strong>Simulation:</strong> Sustainable</div>`;
         if (node.simulation.unsustainable) content += `<div style="margin: 10px 0; background: rgba(255, 123, 114, 0.1); border-left: 3px solid var(--location-color); padding: 8px; border-radius: 4px;"><strong>Simulation:</strong> Unsustainable</div>`;
