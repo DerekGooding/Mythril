@@ -1,8 +1,8 @@
 {
     "is_healthy": false,
-    "failure_count": 6,
+    "failure_count": 5,
     "metrics": {
-        "monoliths": 2,
+        "monoliths": 0,
         "coverage": 70.51,
         "mutation_score": 0.0,
         "missing_tests": 0,
@@ -15,6 +15,7 @@
             "sustainable": 31,
             "unsustainable": 5
         },
+        "visualization_passed": false,
         "pending_feedback": 0,
         "test_passed": false
     },
@@ -23,20 +24,6 @@
             "category": "tests",
             "message": "dotnet test failed",
             "metadata": {}
-        },
-        {
-            "category": "monolith",
-            "message": "modules/visualization/lattice_rendering copy.js exceeds 250 lines",
-            "metadata": {
-                "lines": 287
-            }
-        },
-        {
-            "category": "monolith",
-            "message": "modules/visualization/lattice_rendering.js exceeds 250 lines",
-            "metadata": {
-                "lines": 419
-            }
         },
         {
             "category": "file_coverage",
@@ -60,6 +47,13 @@
             "metadata": {
                 "actual": 0.0,
                 "required": 25.0
+            }
+        },
+        {
+            "category": "visualization",
+            "message": "UI tests failed",
+            "metadata": {
+                "output": "node:internal/modules/cjs/loader:1210\n  throw err;\n  ^\n\nError: Cannot find module 'playwright'\nRequire stack:\n- /home/runner/work/Mythril/Mythril/modules/visualization/tests/test_ui.js\n    at Module._resolveFilename (node:internal/modules/cjs/loader:1207:15)\n    at Module._load (node:internal/modules/cjs/loader:1038:27)\n    at Module.require (node:internal/modules/cjs/loader:1289:19)\n    at require (node:internal/modules/helpers:182:18)\n    at Object.<anonymous> (/home/runner/work/Mythril/Mythril/modules/visualization/tests/test_ui.js:1:22)\n    at Module._compile (node:internal/modules/cjs/loader:1521:14)\n    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)\n    at Module.load (node:internal/modules/cjs/loader:1266:32)\n    at Module._load (node:internal/modules/cjs/loader:1091:12)\n    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:164:12) {\n  code: 'MODULE_NOT_FOUND',\n  requireStack: [\n    '/home/runner/work/Mythril/Mythril/modules/visualization/tests/test_ui.js'\n  ]\n}\n\nNode.js v20.20.2\n"
             }
         }
     ]
