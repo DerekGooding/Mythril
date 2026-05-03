@@ -406,6 +406,33 @@ def check_content_graph():
         record_failure("content_graph", f"Error running verification script: {e}")
         return False
 
+def check_visualization():
+    print("--- Verifying Visualization Module ---")
+    try:
+        # 1. Run Unit/Integration Tests
+        print("Running Python tests...")
+        result = subprocess.run([sys.executable, "-m", "unittest", "discover", "modules/visualization/tests/"], capture_output=True, text=True)
+        if result.returncode != 0:
+            record_failure("visualization", "Python tests failed", {"output": result.stderr})
+            return False
+        
+        # 2. Generate Dashboard
+        print("Generating Dashboard...")
+        subprocess.check_call([sys.executable, "scripts/visualize.py", "--no-serve"])
+        
+        # 3. Run UI Tests
+        print("Running UI tests...")
+        result = subprocess.run(["node", "modules/visualization/tests/test_ui.js"], capture_output=True, text=True)
+        if result.returncode != 0:
+            record_failure("visualization", "UI tests failed", {"output": result.stdout + result.stderr})
+            return False
+            
+        print("[SUCCESS] Visualization health verified.")
+        return True
+    except Exception as e:
+        record_failure("visualization", f"Error during visualization check: {e}")
+        return False
+
 # -----------------------
 # Feedback Check
 # -----------------------
@@ -535,6 +562,7 @@ if __name__ == "__main__":
     testid_violations = check_data_testid()
     stale_docs = check_docs_staleness()
     reachability_passed = check_reachability()
+    visualization_passed = check_visualization()
     pending_feedback = check_feedback()
 
     metrics = {
@@ -546,6 +574,7 @@ if __name__ == "__main__":
         "testid_violations": testid_violations,
         "stale_docs": stale_docs,
         "reachability_passed": reachability_passed,
+        "visualization_passed": visualization_passed,
         "pending_feedback": pending_feedback,
         "test_passed": test_passed
     }

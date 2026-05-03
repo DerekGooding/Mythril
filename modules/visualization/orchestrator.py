@@ -17,6 +17,8 @@ def run_visualization(no_serve=False):
             "lattice_config.js",
             "lattice_state.js",
             "lattice_data.js",
+            "lattice_rendering_logic.js",
+            "lattice_rendering_milestones.js",
             "lattice_rendering.js",
             "lattice_interactions.js",
             "lattice_main.js"

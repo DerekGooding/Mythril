@@ -160,6 +160,9 @@ def enrich_data(nodes):
     for n in nodes:
         if n["id"] == "cadence_slayer" or "slayer" in n["id"].lower():
             n["tier"] = max_bfs_tier + 1
+        elif n["id"] not in tiers and "tier" in n:
+            # Preserve tier for newly created nodes (like sustainable variants)
+            pass
         else:
             n["tier"] = tiers.get(n["id"], 0)
 
