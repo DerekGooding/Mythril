@@ -22,11 +22,16 @@ public partial class LatticeSimulator
 
             var augments = statAugments[item];
             var augment = augments.FirstOrDefault(a => a.Stat.Name == name);
+            int val;
             if (augment.Stat.Name != null)
             {
-                var val = 10 + (int)(state.MagicCapacity * (augment.ModifierAtFull / 100.0));
-                bestVal = Math.Max(bestVal, Math.Min(255, val));
+                val = 10 + (int)(state.MagicCapacity * (augment.ModifierAtFull / 100.0));
             }
+            else
+            {
+                val = 10 + state.MagicCapacity / 10;
+            }
+            bestVal = Math.Max(bestVal, Math.Min(255, val));
         }
 
         if (bestVal > state.StatMax.GetValueOrDefault(name, 10))

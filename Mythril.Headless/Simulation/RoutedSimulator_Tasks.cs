@@ -81,7 +81,7 @@ public partial class RoutedSimulator
                 // Proactively try to farm the BEST spell we can eventually afford for this stat
                 var potentialSpells = items.All.Where(i => i.ItemType == ItemType.Spell)
                     .Select(i => (Item: i, Augment: statAugments[i].FirstOrDefault(a => a.Stat.Name == stat.Name)))
-                    .Where(x => x.Augment.Stat.Name != null).OrderByDescending(x => x.Augment.ModifierAtFull).ToList();
+                    .OrderByDescending(x => x.Augment.Stat.Name != null ? x.Augment.ModifierAtFull : 10.0).ToList();
 
                 foreach (var spell in potentialSpells)
                 {
@@ -96,11 +96,11 @@ public partial class RoutedSimulator
 
                 var bestSpells = items.All.Where(i => i.ItemType == ItemType.Spell && GetFromInventory(state, i.Name) > 0)
                     .Select(i => (Item: i, Augment: statAugments[i].FirstOrDefault(a => a.Stat.Name == stat.Name)))
-                    .Where(x => x.Augment.Stat.Name != null).OrderByDescending(x => x.Augment.ModifierAtFull).Take(jAbilitiesCount).ToList();
+                    .OrderByDescending(x => x.Augment.Stat.Name != null ? x.Augment.ModifierAtFull : 10.0).Take(jAbilitiesCount).ToList();
 
                 if (bestSpells.Count > 0)
                 {
-                    var totalBonus = bestSpells.Sum(s => (int)(state.MagicCapacity * (s.Augment.ModifierAtFull / 100.0)));
+                    var totalBonus = bestSpells.Sum(s => s.Augment.Stat.Name != null ? (int)(state.MagicCapacity * (s.Augment.ModifierAtFull / 100.0)) : state.MagicCapacity / 10);
                     var val = 10 + totalBonus;
                     state.CurrentStats[stat.Name] = Math.Max(state.CurrentStats.GetValueOrDefault(stat.Name, 25), Math.Min(255, val));
                 }
