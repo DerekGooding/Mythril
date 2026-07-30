@@ -86,6 +86,13 @@ public partial class ResourceManager
         else if (item is RefinementData refinement)
         {
             if (!Inventory.Has(refinement.InputItem, refinement.Recipe.InputQuantity)) return false;
+            if (refinement.Recipe.AdditionalInputs != null)
+            {
+                foreach (var req in refinement.Recipe.AdditionalInputs)
+                {
+                    if (Inventory.GetQuantity(req.Item) < req.Quantity) return false;
+                }
+            }
 
             // If it produces a spell, check against Magic Capacity
             if (refinement.Recipe.OutputItem.ItemType == ItemType.Spell)
@@ -113,6 +120,10 @@ public partial class ResourceManager
         else if (item is RefinementData refinement)
         {
             Inventory.Remove(refinement.InputItem, refinement.Recipe.InputQuantity);
+            if (refinement.Recipe.AdditionalInputs != null)
+            {
+                foreach (var req in refinement.Recipe.AdditionalInputs) Inventory.Remove(req.Item, req.Quantity);
+            }
         }
     }
 
@@ -129,6 +140,10 @@ public partial class ResourceManager
         else if (item is RefinementData refinement)
         {
             Inventory.Add(refinement.InputItem, refinement.Recipe.InputQuantity);
+            if (refinement.Recipe.AdditionalInputs != null)
+            {
+                foreach (var req in refinement.Recipe.AdditionalInputs) Inventory.Add(req.Item, req.Quantity);
+            }
         }
     }
 

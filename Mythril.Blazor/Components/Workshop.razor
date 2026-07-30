@@ -33,7 +33,7 @@
             var filteredGroups = discoveredRefinements.Select(g => new {
                 Ability = g.Key,
                 Recipes = g.Value.Recipes.Select(r => new RefinementData(g.Key, r.Key, r.Value, g.Value.PrimaryStat))
-                    .Where(rd => !_showAffordableOnly || resourceManager.Inventory.Has(rd.InputItem, rd.Recipe.InputQuantity))
+                    .Where(rd => !_showAffordableOnly || (resourceManager.Inventory.Has(rd.InputItem, rd.Recipe.InputQuantity) && (rd.Recipe.AdditionalInputs == null || rd.Recipe.AdditionalInputs.All(i => resourceManager.Inventory.GetQuantity(i.Item) >= i.Quantity))))
                     .Where(rd => {
                         if (_activeFilter == "All") return true;
                         

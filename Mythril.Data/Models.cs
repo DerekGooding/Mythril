@@ -137,12 +137,14 @@ public readonly record struct StatAugment(Stat Stat, int ModifierAtFull);
 public readonly record struct QuestDetail(int DurationSeconds, ItemQuantity[] Requirements, ItemQuantity[] Rewards, QuestType Type, string PrimaryStat = "Vitality", Dictionary<string, int>? RequiredStats = null, Dictionary<string, int>? StatRewards = null, EffectDefinition[]? Effects = null);
 
 // Refinements
-public readonly record struct Recipe(int InputQuantity, Item OutputItem, int OutputQuantity);
+public readonly record struct Recipe(int InputQuantity, Item OutputItem, int OutputQuantity, ItemQuantity[]? AdditionalInputs = null);
 
 public readonly record struct RefinementData(CadenceAbility Ability, Item InputItem, Recipe Recipe, string PrimaryStat = "Strength")
 {
     public string Name => $"{Ability.Name} ({InputItem.Name}): {Recipe.OutputItem.Name}";
-    public string Description => $"Refine {Recipe.InputQuantity}x {InputItem.Name} into {Recipe.OutputQuantity}x {Recipe.OutputItem.Name}";
+    public string Description => Recipe.AdditionalInputs != null && Recipe.AdditionalInputs.Length > 0
+        ? $"Refine {Recipe.InputQuantity}x {InputItem.Name} + {string.Join(", ", Recipe.AdditionalInputs.Select(i => $"{i.Quantity}x {i.Item.Name}"))} into {Recipe.OutputQuantity}x {Recipe.OutputItem.Name}"
+        : $"Refine {Recipe.InputQuantity}x {InputItem.Name} into {Recipe.OutputQuantity}x {Recipe.OutputItem.Name}";
 }
 
 // Unified Content Graph
