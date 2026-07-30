@@ -45,8 +45,13 @@
 }
 
 .btn-xs {
-    padding: 1px 4px;
-    font-size: 0.7rem;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    min-height: 28px !important;
+    min-width: 28px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
 }
 
 .notification-dot {

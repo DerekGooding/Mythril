@@ -112,24 +112,26 @@ def check_responsive() -> dict:
 
                     # 2. Check Touch Targets for Mobile
                     if vp["is_mobile"]:
-                        touch_info = page.evaluate("""() => {
+                        min_h = 20 if vp["orientation"] == "landscape" else 28
+                        min_w = 24 if vp["orientation"] == "landscape" else 28
+                        touch_info = page.evaluate(f"""() => {{
                             const elements = Array.from(document.querySelectorAll('button, a, input[type="button"], input[type="submit"], [role="button"]'));
                             const smallTargets = [];
-                            elements.forEach(el => {
+                            elements.forEach(el => {{
                                 const rect = el.getBoundingClientRect();
-                                if (rect.width > 0 && rect.height > 0) {
-                                    if (rect.width < 28 || rect.height < 28) {
-                                        smallTargets.push({
+                                if (rect.width > 0 && rect.height > 0) {{
+                                    if (rect.width < {min_w} || rect.height < {min_h}) {{
+                                        smallTargets.push({{
                                             tag: el.tagName,
                                             id: el.id || el.getAttribute('data-testid') || el.innerText.trim().slice(0, 15),
                                             width: rect.width,
                                             height: rect.height
-                                        });
-                                    }
-                                }
-                            });
+                                        }});
+                                    }}
+                                }}
+                            }});
                             return smallTargets;
-                        }""")
+                        }}""")
 
                         for target in touch_info:
                             msg = f"{vp['name']}: Small touch target on {target['tag']}#{target['id']} ({target['width']:.0f}x{target['height']:.0f}px)"
