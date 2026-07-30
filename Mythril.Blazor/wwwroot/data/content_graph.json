@@ -944,7 +944,7 @@
       "quest_type": "Recurring",
       "primary_stat": "Strength",
       "required_stats": {
-        "Strength": 20
+        "Strength": 15
       },
       "stat_rewards": {}
     },
@@ -957,7 +957,7 @@
       "rewards": [
         {
           "targetId": "item_sun_baked_scale",
-          "quantity": 1
+          "quantity": 2
         }
       ]
     }
@@ -1184,7 +1184,7 @@
     "name": "Archive Sifting",
     "data": {
       "description": "Search through stacks of ancient writings.",
-      "duration": 180,
+      "duration": 120,
       "quest_type": "Recurring",
       "primary_stat": "Magic",
       "required_stats": {
@@ -1201,7 +1201,7 @@
       "rewards": [
         {
           "targetId": "item_lost_parchment",
-          "quantity": 5
+          "quantity": 2
         }
       ]
     }
@@ -1403,6 +1403,10 @@
         {
           "targetId": "quest_gather_moonberries",
           "quantity": 1
+        },
+        {
+          "targetId": "quest_forage_for_reagents",
+          "quantity": 1
         }
       ]
     }
@@ -1523,6 +1527,14 @@
         {
           "targetId": "quest_high_altitude_survey",
           "quantity": 1
+        },
+        {
+          "targetId": "quest_harvest_geodes",
+          "quantity": 1
+        },
+        {
+          "targetId": "quest_defeat_crystal_warden",
+          "quantity": 1
         }
       ]
     }
@@ -1564,7 +1576,22 @@
         "quest_locate_the_hidden_oasis"
       ]
     },
-    "out_edges": {}
+    "out_edges": {
+      "contains": [
+        {
+          "targetId": "quest_gather_luminous_algae",
+          "quantity": 1
+        },
+        {
+          "targetId": "quest_oasis_guardian_hunt",
+          "quantity": 1
+        },
+        {
+          "targetId": "quest_channel_oasis_waters",
+          "quantity": 1
+        }
+      ]
+    }
   },
   {
     "id": "location_ancient_library",
@@ -1644,6 +1671,14 @@
         },
         {
           "targetId": "quest_heavy_training",
+          "quantity": 1
+        },
+        {
+          "targetId": "quest_spirit_walk",
+          "quantity": 1
+        },
+        {
+          "targetId": "quest_master_the_void",
           "quantity": 1
         }
       ]
@@ -1858,6 +1893,10 @@
         },
         {
           "targetId": "ability_arcanist_refine_lightning",
+          "quantity": 1
+        },
+        {
+          "targetId": "ability_arcanist_j_spirit",
           "quantity": 1
         }
       ]
@@ -2264,6 +2303,10 @@
         {
           "targetId": "ability_mythril_weaver_refine_life",
           "quantity": 1
+        },
+        {
+          "targetId": "ability_mythril_weaver_synthesis_i",
+          "quantity": 1
         }
       ]
     }
@@ -2490,6 +2533,10 @@
         {
           "targetId": "ability_geologist_refine_earth",
           "quantity": 1
+        },
+        {
+          "targetId": "ability_geologist_j_speed",
+          "quantity": 1
         }
       ]
     }
@@ -2676,6 +2723,18 @@
       "provides_ability": [
         {
           "targetId": "ability_slayer_master_slayer",
+          "quantity": 1
+        },
+        {
+          "targetId": "ability_slayer_j_spirit",
+          "quantity": 1
+        },
+        {
+          "targetId": "ability_slayer_refine_shadow",
+          "quantity": 1
+        },
+        {
+          "targetId": "ability_slayer_lethal_cadence",
           "quantity": 1
         }
       ]
@@ -3165,6 +3224,659 @@
         {
           "targetId": "item_gold",
           "quantity": 800
+        }
+      ]
+    }
+  },
+  {
+    "id": "quest_forage_for_reagents",
+    "type": "Quest",
+    "name": "Forage for Reagents",
+    "data": {
+      "description": "Gather wild herbs and roots usable for basic potions.",
+      "duration": 90,
+      "quest_type": "Recurring",
+      "primary_stat": "Speed",
+      "required_stats": {},
+      "stat_rewards": {}
+    },
+    "in_edges": {
+      "requires_quest": [
+        "quest_chop_wood"
+      ]
+    },
+    "out_edges": {
+      "rewards": [
+        {
+          "targetId": "item_potion",
+          "quantity": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "item_luminous_algae",
+    "type": "Item",
+    "name": "Luminous Algae",
+    "data": {
+      "description": "A glowing aquatic plant with magical properties.",
+      "item_type": "Material"
+    },
+    "in_edges": {},
+    "out_edges": {}
+  },
+  {
+    "id": "item_oasis_scale",
+    "type": "Item",
+    "name": "Oasis Scale",
+    "data": {
+      "description": "A shimmering scale from a desert lizard.",
+      "item_type": "Material"
+    },
+    "in_edges": {},
+    "out_edges": {}
+  },
+  {
+    "id": "item_pure_water_crystal",
+    "type": "Item",
+    "name": "Pure Water Crystal",
+    "data": {
+      "description": "Crystallized essence of the sacred springs.",
+      "item_type": "Material"
+    },
+    "in_edges": {},
+    "out_edges": {}
+  },
+  {
+    "id": "quest_gather_luminous_algae",
+    "type": "Quest",
+    "name": "Gather Luminous Algae",
+    "data": {
+      "description": "Harvest the glowing plants of the hidden springs.",
+      "duration": 75,
+      "quest_type": "Recurring",
+      "primary_stat": "Speed",
+      "required_stats": {
+        "Speed": 25
+      },
+      "stat_rewards": {}
+    },
+    "in_edges": {
+      "requires_quest": [
+        "quest_locate_the_hidden_oasis"
+      ]
+    },
+    "out_edges": {
+      "rewards": [
+        {
+          "targetId": "item_luminous_algae",
+          "quantity": 2
+        }
+      ]
+    }
+  },
+  {
+    "id": "quest_oasis_guardian_hunt",
+    "type": "Quest",
+    "name": "Hunt Oasis Guardians",
+    "data": {
+      "description": "Cull the fierce lizard sentinels of the springs.",
+      "duration": 120,
+      "quest_type": "Recurring",
+      "primary_stat": "Strength",
+      "required_stats": {
+        "Strength": 35,
+        "Speed": 25
+      },
+      "stat_rewards": {}
+    },
+    "in_edges": {
+      "requires_quest": [
+        "quest_gather_luminous_algae"
+      ]
+    },
+    "out_edges": {
+      "rewards": [
+        {
+          "targetId": "item_oasis_scale",
+          "quantity": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "quest_channel_oasis_waters",
+    "type": "Quest",
+    "name": "Channel Oasis Waters",
+    "data": {
+      "description": "Redirect the sacred springs to power the forge network.",
+      "duration": 600,
+      "quest_type": "Single",
+      "primary_stat": "Magic",
+      "required_stats": {
+        "Magic": 50
+      },
+      "stat_rewards": {}
+    },
+    "in_edges": {
+      "requires_quest": [
+        "quest_locate_the_hidden_oasis"
+      ]
+    },
+    "out_edges": {
+      "rewards": [
+        {
+          "targetId": "item_pure_water_crystal",
+          "quantity": 3
+        }
+      ]
+    }
+  },
+  {
+    "id": "ability_slayer_j_spirit",
+    "type": "Ability",
+    "name": "J-Spirit",
+    "data": {
+      "description": "Allows junctioning magic to the Spirit stat",
+      "primary_stat": "Spirit",
+      "metadata": {}
+    },
+    "in_edges": {},
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_sun_baked_scale",
+          "quantity": 20
+        },
+        {
+          "targetId": "item_gold",
+          "quantity": 3000
+        }
+      ]
+    },
+    "effects": []
+  },
+  {
+    "id": "ability_slayer_refine_shadow",
+    "type": "Ability",
+    "name": "Refine Shadow",
+    "data": {
+      "description": "Distil the essence of slain foes into Shadow magic",
+      "primary_stat": "Spirit",
+      "metadata": {}
+    },
+    "in_edges": {},
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_oasis_scale",
+          "quantity": 10
+        },
+        {
+          "targetId": "item_gold",
+          "quantity": 2000
+        }
+      ]
+    },
+    "effects": []
+  },
+  {
+    "id": "ability_slayer_lethal_cadence",
+    "type": "Ability",
+    "name": "Lethal Cadence",
+    "data": {
+      "description": "Enhances combat quest speed through perfected technique",
+      "primary_stat": "Strength",
+      "metadata": {}
+    },
+    "in_edges": {},
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_gold",
+          "quantity": 20000
+        },
+        {
+          "targetId": "item_mythril_spark",
+          "quantity": 1
+        }
+      ]
+    },
+    "effects": []
+  },
+  {
+    "id": "item_shadow_i",
+    "type": "Item",
+    "name": "Shadow I",
+    "data": {
+      "description": "A spirit-attuned shadow spell.",
+      "item_type": "Spell"
+    },
+    "in_edges": {},
+    "out_edges": {}
+  },
+  {
+    "id": "recipe_refine_shadow_oasis_scale_shadow_i",
+    "type": "Refinement",
+    "name": "Refine Shadow - Shadow I",
+    "data": {
+      "primary_stat": "Spirit"
+    },
+    "in_edges": {
+      "requires_ability": [
+        "ability_slayer_refine_shadow"
+      ]
+    },
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_oasis_scale",
+          "quantity": 3
+        }
+      ],
+      "produces": [
+        {
+          "targetId": "item_shadow_i",
+          "quantity": 5
+        }
+      ]
+    }
+  },
+  {
+    "id": "ability_arcanist_j_spirit",
+    "type": "Ability",
+    "name": "J-Spirit",
+    "data": {
+      "description": "Allows junctioning magic to the Spirit stat",
+      "primary_stat": "Spirit",
+      "metadata": {}
+    },
+    "in_edges": {},
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_mana_leaf",
+          "quantity": 30
+        },
+        {
+          "targetId": "item_gold",
+          "quantity": 5000
+        }
+      ]
+    },
+    "effects": []
+  },
+  {
+    "id": "quest_spirit_walk",
+    "type": "Quest",
+    "name": "Spirit Walk",
+    "data": {
+      "description": "Commune with the ancient energies of the Sanctum.",
+      "duration": 300,
+      "quest_type": "Recurring",
+      "primary_stat": "Spirit",
+      "required_stats": {
+        "Spirit": 50
+      },
+      "stat_rewards": {}
+    },
+    "in_edges": {
+      "requires_quest": [
+        "quest_rekindling_the_spark"
+      ]
+    },
+    "out_edges": {
+      "rewards": [
+        {
+          "targetId": "item_shadow_i",
+          "quantity": 3
+        }
+      ]
+    }
+  },
+  {
+    "id": "quest_master_the_void",
+    "type": "Quest",
+    "name": "Master the Void",
+    "data": {
+      "description": "Channel void energy through the Mythril conduit.",
+      "duration": 900,
+      "quest_type": "Single",
+      "primary_stat": "Spirit",
+      "required_stats": {
+        "Spirit": 100
+      },
+      "stat_rewards": {}
+    },
+    "in_edges": {
+      "requires_quest": [
+        "quest_spirit_walk"
+      ]
+    },
+    "out_edges": {
+      "rewards": [
+        {
+          "targetId": "item_shadow_i",
+          "quantity": 20
+        }
+      ]
+    }
+  },
+  {
+    "id": "ability_geologist_j_speed",
+    "type": "Ability",
+    "name": "J-Speed",
+    "data": {
+      "description": "Allows junctioning magic to the Speed stat",
+      "primary_stat": "Speed",
+      "metadata": {}
+    },
+    "in_edges": {},
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_crystal_shards",
+          "quantity": 30
+        },
+        {
+          "targetId": "item_gold",
+          "quantity": 3000
+        }
+      ]
+    },
+    "effects": []
+  },
+  {
+    "id": "item_fire_ii",
+    "type": "Item",
+    "name": "Fire II",
+    "data": {
+      "description": "A concentrated fire spell.",
+      "item_type": "Spell"
+    },
+    "in_edges": {},
+    "out_edges": {}
+  },
+  {
+    "id": "item_ice_ii",
+    "type": "Item",
+    "name": "Ice II",
+    "data": {
+      "description": "A piercing ice spell.",
+      "item_type": "Spell"
+    },
+    "in_edges": {},
+    "out_edges": {}
+  },
+  {
+    "id": "item_lightning_ii",
+    "type": "Item",
+    "name": "Lightning II",
+    "data": {
+      "description": "A volatile lightning spell.",
+      "item_type": "Spell"
+    },
+    "in_edges": {},
+    "out_edges": {}
+  },
+  {
+    "id": "item_earth_ii",
+    "type": "Item",
+    "name": "Earth II",
+    "data": {
+      "description": "A tectonic earth spell.",
+      "item_type": "Spell"
+    },
+    "in_edges": {},
+    "out_edges": {}
+  },
+  {
+    "id": "item_water_ii",
+    "type": "Item",
+    "name": "Water II",
+    "data": {
+      "description": "A surging water spell.",
+      "item_type": "Spell"
+    },
+    "in_edges": {},
+    "out_edges": {}
+  },
+  {
+    "id": "ability_mythril_weaver_synthesis_i",
+    "type": "Ability",
+    "name": "Synthesis I",
+    "data": {
+      "description": "Master the art of compounding elemental spells into Tier 2 magic",
+      "primary_stat": "Magic",
+      "metadata": {}
+    },
+    "in_edges": {},
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_mythril_spark",
+          "quantity": 1
+        },
+        {
+          "targetId": "item_gold",
+          "quantity": 10000
+        }
+      ]
+    },
+    "effects": []
+  },
+  {
+    "id": "recipe_synthesis_fire_ii",
+    "type": "Refinement",
+    "name": "Synthesis - Fire II",
+    "data": {
+      "primary_stat": "Magic"
+    },
+    "in_edges": {
+      "requires_ability": [
+        "ability_mythril_weaver_synthesis_i"
+      ]
+    },
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_fire_i",
+          "quantity": 5
+        },
+        {
+          "targetId": "item_crystal_shards",
+          "quantity": 10
+        }
+      ],
+      "produces": [
+        {
+          "targetId": "item_fire_ii",
+          "quantity": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "recipe_synthesis_ice_ii",
+    "type": "Refinement",
+    "name": "Synthesis - Ice II",
+    "data": {
+      "primary_stat": "Magic"
+    },
+    "in_edges": {
+      "requires_ability": [
+        "ability_mythril_weaver_synthesis_i"
+      ]
+    },
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_ice_i",
+          "quantity": 5
+        },
+        {
+          "targetId": "item_moonberry",
+          "quantity": 20
+        }
+      ],
+      "produces": [
+        {
+          "targetId": "item_ice_ii",
+          "quantity": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "recipe_synthesis_lightning_ii",
+    "type": "Refinement",
+    "name": "Synthesis - Lightning II",
+    "data": {
+      "primary_stat": "Magic"
+    },
+    "in_edges": {
+      "requires_ability": [
+        "ability_mythril_weaver_synthesis_i"
+      ]
+    },
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_lightning_i",
+          "quantity": 5
+        },
+        {
+          "targetId": "item_iron_ore",
+          "quantity": 15
+        }
+      ],
+      "produces": [
+        {
+          "targetId": "item_lightning_ii",
+          "quantity": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "recipe_synthesis_earth_ii",
+    "type": "Refinement",
+    "name": "Synthesis - Earth II",
+    "data": {
+      "primary_stat": "Magic"
+    },
+    "in_edges": {
+      "requires_ability": [
+        "ability_mythril_weaver_synthesis_i"
+      ]
+    },
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_earth_i",
+          "quantity": 5
+        },
+        {
+          "targetId": "item_ancient_bark",
+          "quantity": 10
+        }
+      ],
+      "produces": [
+        {
+          "targetId": "item_earth_ii",
+          "quantity": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "recipe_synthesis_water_ii",
+    "type": "Refinement",
+    "name": "Synthesis - Water II",
+    "data": {
+      "primary_stat": "Magic"
+    },
+    "in_edges": {
+      "requires_ability": [
+        "ability_mythril_weaver_synthesis_i"
+      ]
+    },
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_water_i",
+          "quantity": 5
+        },
+        {
+          "targetId": "item_blue_coral",
+          "quantity": 15
+        }
+      ],
+      "produces": [
+        {
+          "targetId": "item_water_ii",
+          "quantity": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "quest_harvest_geodes",
+    "type": "Quest",
+    "name": "Harvest Geodes",
+    "data": {
+      "description": "Crack open crystal formations for their raw magical cores.",
+      "duration": 150,
+      "quest_type": "Recurring",
+      "primary_stat": "Strength",
+      "required_stats": {
+        "Strength": 40
+      },
+      "stat_rewards": {}
+    },
+    "in_edges": {
+      "requires_quest": [
+        "quest_power_the_forge"
+      ]
+    },
+    "out_edges": {
+      "rewards": [
+        {
+          "targetId": "item_crystal_shards",
+          "quantity": 3
+        }
+      ]
+    }
+  },
+  {
+    "id": "quest_defeat_crystal_warden",
+    "type": "Quest",
+    "name": "Defeat the Crystal Warden",
+    "data": {
+      "description": "An ancient golem formed from the peak's own minerals stands guard.",
+      "duration": 1200,
+      "quest_type": "Single",
+      "primary_stat": "Strength",
+      "required_stats": {
+        "Strength": 60,
+        "Magic": 40
+      },
+      "stat_rewards": {}
+    },
+    "in_edges": {
+      "requires_quest": [
+        "quest_shatter_the_crystals"
+      ]
+    },
+    "out_edges": {
+      "rewards": [
+        {
+          "targetId": "item_mythril_spark",
+          "quantity": 1
+        },
+        {
+          "targetId": "item_crystal_shards",
+          "quantity": 20
         }
       ]
     }

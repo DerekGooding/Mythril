@@ -98,5 +98,83 @@
         "ModifierAtFull": 200
       }
     ]
+  },
+  {
+    "Item": "Shadow I",
+    "Augments": [
+      {
+        "Stat": "Spirit",
+        "ModifierAtFull": 200
+      },
+      {
+        "Stat": "Speed",
+        "ModifierAtFull": 50
+      }
+    ]
+  },
+  {
+    "Item": "Fire II",
+    "Augments": [
+      {
+        "Stat": "Strength",
+        "ModifierAtFull": 200
+      },
+      {
+        "Stat": "Magic",
+        "ModifierAtFull": 100
+      }
+    ]
+  },
+  {
+    "Item": "Ice II",
+    "Augments": [
+      {
+        "Stat": "Magic",
+        "ModifierAtFull": 220
+      },
+      {
+        "Stat": "Speed",
+        "ModifierAtFull": 180
+      }
+    ]
+  },
+  {
+    "Item": "Lightning II",
+    "Augments": [
+      {
+        "Stat": "Magic",
+        "ModifierAtFull": 250
+      },
+      {
+        "Stat": "Speed",
+        "ModifierAtFull": 150
+      }
+    ]
+  },
+  {
+    "Item": "Earth II",
+    "Augments": [
+      {
+        "Stat": "Strength",
+        "ModifierAtFull": 250
+      },
+      {
+        "Stat": "Vitality",
+        "ModifierAtFull": 200
+      }
+    ]
+  },
+  {
+    "Item": "Water II",
+    "Augments": [
+      {
+        "Stat": "Vitality",
+        "ModifierAtFull": 255
+      },
+      {
+        "Stat": "Speed",
+        "ModifierAtFull": 180
+      }
+    ]
   }
 ]

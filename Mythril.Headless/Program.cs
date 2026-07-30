@@ -122,10 +122,12 @@ internal static class Program
         ));
 
         var statAugmentDTOs = JsonConvert.DeserializeObject<List<StatAugmentItemDTO>>(File.ReadAllText(Path.Combine(dataDir, "stat_augments.json"))) ?? [];
-        statAugments.Load(statAugmentDTOs.ToDictionary(
-            d => items.All.First(i => i.Name == d.Item),
-            d => d.Augments.Select(a => new StatAugment(stats.All.First(s => s.Name == a.Stat), a.ModifierAtFull)).ToArray()
-        ));
+        statAugments.Load(statAugmentDTOs
+            .Where(d => items.All.Any(i => i.Name == d.Item))
+            .ToDictionary(
+                d => items.All.First(i => i.Name == d.Item),
+                d => d.Augments.Select(a => new StatAugment(stats.All.First(s => s.Name == a.Stat), a.ModifierAtFull)).ToArray()
+            ));
 
         var refinements = ContentHost.GetContent<ItemRefinements>();
         var refinementDTOs = JsonConvert.DeserializeObject<List<RefinementDTO>>(File.ReadAllText(Path.Combine(dataDir, "refinements.json"))) ?? [];
