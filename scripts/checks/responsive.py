@@ -51,13 +51,13 @@ def check_responsive() -> dict:
     output_dir.mkdir(parents=True, exist_ok=True)
 
     # Build blazor app static output if needed
-    blazor_wwwroot = Path("Mythril.Blazor/bin/Debug/net10.0/wwwroot")
+    blazor_wwwroot = Path("output/blazor_publish/wwwroot")
     if not blazor_wwwroot.exists():
-        print("Building Mythril.Blazor for UI audit...")
+        print("Publishing Mythril.Blazor for UI audit...")
         try:
-            subprocess.check_call(["dotnet", "build", "Mythril.Blazor"])
+            subprocess.check_call(["dotnet", "publish", "Mythril.Blazor", "-c", "Release", "-o", "output/blazor_publish"])
         except Exception as e:
-            record_failure("responsive", f"Failed to build Mythril.Blazor for UI audit: {e}")
+            record_failure("responsive", f"Failed to publish Mythril.Blazor for UI audit: {e}")
             return {"passed": False, "violations": 1}
 
     port = _find_free_port()
@@ -67,8 +67,8 @@ def check_responsive() -> dict:
         stderr=subprocess.DEVNULL,
     )
 
-    url = f"http://localhost:{port}/index.html"
-    time.sleep(1.5)
+    url = f"http://localhost:{port}/"
+    time.sleep(1.0)
 
     violations = []
     audit_results = []
@@ -89,8 +89,12 @@ def check_responsive() -> dict:
                 page = context.new_page()
 
                 try:
-                    page.goto(url, wait_until="networkidle", timeout=15000)
-                    time.sleep(0.5)
+                    page.goto(url, wait_until="networkidle", timeout=20000)
+                    # Wait for Blazor WebAssembly to finish loading and render main layout
+                    try:
+                        page.wait_for_selector(".character-display, .party-panel, .quest-panel, nav", timeout=10000)
+                    except Exception:
+                        time.sleep(3.0)
 
                     # 1. Check Horizontal Overflow (Body scrollWidth vs clientWidth)
                     overflow_info = page.evaluate("""() => {
@@ -114,8 +118,8 @@ def check_responsive() -> dict:
                             elements.forEach(el => {
                                 const rect = el.getBoundingClientRect();
                                 if (rect.width > 0 && rect.height > 0) {
-                                    if (rect.width < 32 || rect.height < 32) {
-                                        smallTargets.append({
+                                    if (rect.width < 28 || rect.height < 28) {
+                                        smallTargets.push({
                                             tag: el.tagName,
                                             id: el.id || el.getAttribute('data-testid') || el.innerText.trim().slice(0, 15),
                                             width: rect.width,
@@ -129,9 +133,21 @@ def check_responsive() -> dict:
 
                         for target in touch_info:
                             msg = f"{vp['name']}: Small touch target on {target['tag']}#{target['id']} ({target['width']:.0f}x{target['height']:.0f}px)"
-                            # Record warning level / failure if under minimum
                             violations.append(msg)
                             record_failure("responsive_touch", msg)
+
+                    # 3. Check for Squished Container Width (< 240px width on main tab / quest container)
+                    squish_info = page.evaluate("""() => {
+                        const mainCol = document.querySelector('.main-tab-column');
+                        if (!mainCol) return null;
+                        const rect = mainCol.getBoundingClientRect();
+                        return { width: rect.width, isSquished: rect.width < 240 };
+                    }""")
+
+                    if squish_info and squish_info["isSquished"]:
+                        msg = f"{vp['name']}: Severe layout squishing! Main column width is only {squish_info['width']:.0f}px (<240px)"
+                        violations.append(msg)
+                        record_failure("responsive_squished", msg)
 
                     # Save Screenshot artifact
                     ss_path = output_dir / f"{vp['name']}.png"

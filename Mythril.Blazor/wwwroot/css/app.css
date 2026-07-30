@@ -46,6 +46,59 @@ main, .content {
     min-height: 0;
 }
 
+/* 📱 Responsive Mobile Layout Rules (screen width <= 768px) */
+@media (max-width: 768px) {
+    .home-columns-row {
+        flex-wrap: wrap !important;
+        flex-direction: column !important;
+        overflow-y: auto !important;
+    }
+
+    /* Override Bootstrap col-8 / col-4 side-by-side grid */
+    .col-8.main-tab-column,
+    .main-tab-column {
+        width: 100% !important;
+        max-width: 100% !important;
+        flex: 0 0 100% !important;
+        border-end: none !important;
+        border-right: none !important;
+    }
+
+    .col-4.party-column,
+    .party-column {
+        width: 100% !important;
+        max-width: 100% !important;
+        flex: 0 0 100% !important;
+        border-start: none !important;
+        margin-top: 1rem;
+    }
+
+    .header-row {
+        flex-wrap: wrap !important;
+        padding: 0.4rem !important;
+        gap: 0.5rem !important;
+    }
+
+    .header-row button {
+        padding: 0.2rem 0.5rem !important;
+        font-size: 0.75rem !important;
+    }
+
+    .inventory-panel {
+        font-size: 0.75rem !important;
+    }
+
+    .nav-tabs .nav-link {
+        padding: 0.4rem 0.6rem !important;
+        font-size: 0.8rem !important;
+    }
+
+    .quest-card {
+        min-width: 100% !important;
+        font-size: 0.85rem !important;
+    }
+}
+
 .hand-panel,
 .party-panel {
     flex-grow: 1;
