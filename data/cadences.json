@@ -105,6 +105,20 @@
           }
         ],
         "PrimaryStat": "Magic"
+      },
+      {
+        "Ability": "J-Spirit",
+        "PrimaryStat": "Spirit",
+        "Requirements": [
+          {
+            "Item": "Mana Leaf",
+            "Quantity": 30
+          },
+          {
+            "Item": "Gold",
+            "Quantity": 5000
+          }
+        ]
       }
     ]
   },
@@ -307,6 +321,20 @@
           }
         ],
         "PrimaryStat": "Magic"
+      },
+      {
+        "Ability": "Synthesis I",
+        "PrimaryStat": "Magic",
+        "Requirements": [
+          {
+            "Item": "Mythril Spark",
+            "Quantity": 1
+          },
+          {
+            "Item": "Gold",
+            "Quantity": 10000
+          }
+        ]
       }
     ]
   },
@@ -421,6 +449,20 @@
           }
         ],
         "PrimaryStat": "Strength"
+      },
+      {
+        "Ability": "J-Speed",
+        "PrimaryStat": "Speed",
+        "Requirements": [
+          {
+            "Item": "Crystal Shards",
+            "Quantity": 30
+          },
+          {
+            "Item": "Gold",
+            "Quantity": 3000
+          }
+        ]
       }
     ]
   },
@@ -498,6 +540,48 @@
           }
         ],
         "PrimaryStat": "Strength"
+      },
+      {
+        "Ability": "J-Spirit",
+        "PrimaryStat": "Spirit",
+        "Requirements": [
+          {
+            "Item": "Sun-baked Scale",
+            "Quantity": 20
+          },
+          {
+            "Item": "Gold",
+            "Quantity": 3000
+          }
+        ]
+      },
+      {
+        "Ability": "Refine Shadow",
+        "PrimaryStat": "Spirit",
+        "Requirements": [
+          {
+            "Item": "Oasis Scale",
+            "Quantity": 10
+          },
+          {
+            "Item": "Gold",
+            "Quantity": 2000
+          }
+        ]
+      },
+      {
+        "Ability": "Lethal Cadence",
+        "PrimaryStat": "Strength",
+        "Requirements": [
+          {
+            "Item": "Gold",
+            "Quantity": 20000
+          },
+          {
+            "Item": "Mythril Spark",
+            "Quantity": 1
+          }
+        ]
       }
     ]
   }

@@ -3,7 +3,7 @@
     "failure_count": 1,
     "metrics": {
         "monoliths": 0,
-        "coverage": 75.04,
+        "coverage": 75.02,
         "mutation_score": 0.0,
         "missing_tests": 0,
         "key_violations": 0,
@@ -12,11 +12,11 @@
         "stale_mutation": 0,
         "reachability_passed": {
             "passed": true,
-            "time": "84.4m",
-            "sustainable": 31,
+            "time": "116.1m",
+            "sustainable": 43,
             "unsustainable": 5,
-            "completed": 33,
-            "total": 33
+            "completed": 43,
+            "total": 48
         },
         "visualization_passed": false,
         "pending_feedback": 0,

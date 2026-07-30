@@ -133,5 +133,57 @@
     "Name": "Cure I",
     "Description": "A basic healing spell.",
     "ItemType": "Spell"
+  },
+  {
+    "Name": "Void Shard",
+    "Type": "Material"
+  },
+  {
+    "Name": "Void Essence",
+    "Type": "Material"
+  },
+  {
+    "Name": "Mythril Aegis",
+    "Type": "KeyItem"
+  },
+  {
+    "Name": "Sovereign Core",
+    "Type": "KeyItem"
+  },
+  {
+    "Name": "Luminous Algae",
+    "Type": "Material"
+  },
+  {
+    "Name": "Oasis Scale",
+    "Type": "Material"
+  },
+  {
+    "Name": "Pure Water Crystal",
+    "Type": "Material"
+  },
+  {
+    "Name": "Shadow I",
+    "Type": "Spell"
+  },
+  {
+    "Name": "Fire II",
+    "Type": "Spell"
+  },
+  {
+    "Name": "Ice II",
+    "Type": "Spell"
+  },
+  {
+    "Name": "Lightning II",
+    "Type": "Spell"
+  },
+  {
+    "Name": "Earth II",
+    "Type": "Spell"
+  },
+  {
+    "Name": "Water II",
+    "Type": "Spell"
   }
 ]

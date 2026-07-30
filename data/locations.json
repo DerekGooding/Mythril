@@ -19,7 +19,8 @@
     "Quests": [
       "Hunt Goblins",
       "Chop Wood",
-      "Gather Moonberries"
+      "Gather Moonberries",
+      "Forage for Reagents"
     ]
   },
   {
@@ -60,7 +61,9 @@
     "RequiredQuest": "Power the Forge",
     "Quests": [
       "Shatter the Crystals",
-      "High Altitude Survey"
+      "High Altitude Survey",
+      "Harvest Geodes",
+      "Defeat the Crystal Warden"
     ]
   },
   {
@@ -76,7 +79,11 @@
     "Name": "Hidden Oasis",
     "Type": "Water",
     "RequiredQuest": "Locate the Hidden Oasis",
-    "Quests": []
+    "Quests": [
+      "Gather Luminous Algae",
+      "Hunt Oasis Guardians",
+      "Channel Oasis Waters"
+    ]
   },
   {
     "Name": "Ancient Library",
@@ -104,7 +111,23 @@
     "Quests": [
       "Defeat the Mythril Construct",
       "Ascetic Meditation",
-      "Heavy Training"
+      "Heavy Training",
+      "Spirit Walk",
+      "Master the Void"
+    ]
+  },
+  {
+    "Name": "Void Rift",
+    "Type": "Library",
+    "RequiredQuest": "Defeat the Mythril Construct",
+    "Quests": [
+      "Breach the Rift",
+      "Attune Void Crystals",
+      "Harvest Void Essence",
+      "Seal Lesser Rift Nodes",
+      "Commune with the Fallen",
+      "Forge the Mythril Aegis",
+      "Defeat the Void Sovereign"
     ]
   }
 ]
