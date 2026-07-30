@@ -1,0 +1,40 @@
+Starting Custom Mutation Testing Pipeline...
+Building project...
+[001] JunctionManager.cs:34 | == -> [SURVIVED]
+[002] JunctionManager.cs:43 | == -> [KILLED]
+[003] JunctionManager.cs:53 | == -> [SURVIVED]
+[004] JunctionManager.cs:57 | != -> [KILLED]
+[005] JunctionManager.cs:58 | != -> [KILLED]
+[006] JunctionManager.cs:59 | == -> [KILLED]
+[007] JunctionManager.cs:65 | != -> [KILLED]
+[008] JunctionManager.cs:69 | == -> [KILLED]
+[009] JunctionManager.cs:107 | == -> [KILLED]
+[010] JunctionManager.cs:111 | != -> [KILLED]
+[011] JunctionManager.cs:120 | != -> [KILLED]
+[012] JunctionManager.cs:121 | == -> [KILLED]
+[013] JunctionManager.cs:125 | != -> [SURVIVED]
+[014] JunctionManager.cs:126 | == -> [KILLED]
+[015] JunctionManager.cs:128 | / -> [SURVIVED]
+[016] ResourceManager_Quests.cs:9 | != -> [KILLED]
+[017] ResourceManager_Quests.cs:9 | < -> [KILLED]
+[018] ResourceManager_Quests.cs:12 | != -> [KILLED]
+[019] ResourceManager_Quests.cs:31 | + -> [KILLED]
+[020] ResourceManager_Quests.cs:31 | / -> [KILLED]
+[021] ResourceManager_Quests.cs:34 | != -> [KILLED]
+[022] ResourceManager_Quests.cs:59 | == -> [KILLED]
+[023] ResourceManager_Quests.cs:63 | > -> [KILLED]
+[024] ResourceManager_Quests.cs:66 | == -> [KILLED]
+[025] ResourceManager_Quests.cs:70 | > -> [KILLED]
+[026] ResourceManager_Quests.cs:77 | == -> [KILLED]
+[027] ResourceManager_Quests.cs:81 | > -> [KILLED]
+[028] ResourceManager_Quests.cs:89 | == -> [KILLED]
+[029] ResourceManager_Quests.cs:93 | > -> [SURVIVED]
+[030] ResourceManager_Quests.cs:98 | != -> [SURVIVED]
+
+========================================
+Mutation Report Summary
+Total Mutants:  80
+Killed:         24
+Survived:       6
+Mutation Score: 30.00%
+========================================
