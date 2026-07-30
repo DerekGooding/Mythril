@@ -146,6 +146,14 @@
                     <div class="tab-pane @(resourceManager.ActiveTab == "workshop" ? "active" : "")" id="workshop" role="tabpanel">
                         <Workshop UnlockedAbilities="resourceManager.UnlockedAbilities" @key="@resourceManager.UnlockedAbilities.Count" />
                     </div>
+                    <div class="tab-pane @(resourceManager.ActiveTab == "party" ? "active" : "")" id="party" role="tabpanel">
+                        <PartyPanel Party="resourceManager.Characters"
+                                    QuestProgresses="resourceManager.ActiveQuests"
+                                    OnQuestDrop="EventCallback.Factory.Create<(object, Character)>(this, TaskDropped)"
+                                    OnCompletionAnimationEnd="EventCallback.Factory.Create<QuestProgress>(this, OnCompletionAnimationEnd)"
+                                    Accepts="(item) => resourceManager.CanAfford(item)"
+                                    OnUnequip="UnassignCadence" />
+                    </div>
                 </div>
             }
             else
