@@ -992,6 +992,39 @@
     background-color: var(--panel-bg);
     color: var(--text-color);
 }
+/* /Components/PwaInstallButton.razor.rz.scp.css */
+.pwa-install-btn[b-07tm8s4m8x] {
+    background: linear-gradient(135deg, #00adb5 0%, #00757a 100%);
+    color: #ffffff;
+    border: 1px solid #00fff2;
+    border-radius: 6px;
+    font-weight: 600;
+    transition: all 0.2s ease-in-out;
+}
+
+.pwa-install-btn:hover[b-07tm8s4m8x] {
+    background: linear-gradient(135deg, #00c4ce 0%, #009197 100%);
+    color: #ffffff;
+    box-shadow: 0 0 10px rgba(0, 255, 242, 0.4);
+    transform: translateY(-1px);
+}
+
+.pwa-icon[b-07tm8s4m8x] {
+    font-size: 1.1rem;
+    animation: bounce-b-07tm8s4m8x 2s infinite;
+}
+
+@keyframes bounce-b-07tm8s4m8x {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-3px);
+    }
+    60% {
+        transform: translateY(-1px);
+    }
+}
 /* /Components/QuestCard.razor.rz.scp.css */
 .card[b-mekdh8e00x] {
     border: 1px solid var(--card-border);

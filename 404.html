@@ -38,6 +38,8 @@
         }
         document.write('<base href="' + base + '" />');
     </script>
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" content="#00adb5" />
     <link rel="stylesheet" href="lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="css/app.css" />
     <link rel="stylesheet" href="css/completion-effects.css" />
@@ -121,6 +123,45 @@
             var savedTheme = localStorage.getItem('theme') || 'dark-theme';
             window.setTheme(savedTheme);
         })();
+
+        // PWA Installation & Service Worker Registration
+        window.deferredPwaPrompt = null;
+
+        window.addEventListener('beforeinstallprompt', function (e) {
+            e.preventDefault();
+            window.deferredPwaPrompt = e;
+        });
+
+        window.addEventListener('appinstalled', function () {
+            window.deferredPwaPrompt = null;
+        });
+
+        window.pwaInstall = {
+            canInstall: function () {
+                return !!window.deferredPwaPrompt;
+            },
+            isStandalone: function () {
+                return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+            },
+            promptInstall: async function () {
+                if (!window.deferredPwaPrompt) {
+                    return false;
+                }
+                window.deferredPwaPrompt.prompt();
+                const choice = await window.deferredPwaPrompt.userChoice;
+                if (choice && choice.outcome === 'accepted') {
+                    window.deferredPwaPrompt = null;
+                    return true;
+                }
+                return false;
+            }
+        };
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('service-worker.js').catch(function (err) {
+                console.warn('[SW] ServiceWorker registration failed:', err);
+            });
+        }
     </script>
 </body>
 </html>
