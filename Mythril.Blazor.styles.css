@@ -1073,6 +1073,13 @@
     gap: 1rem; /* spacing between main info and side info */
 }
 
+@media (max-width: 768px) {
+    .card-content[b-mekdh8e00x] {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+}
+
 .card-main[b-mekdh8e00x] {
     flex: 2; /* takes more space */
 }
