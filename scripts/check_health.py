@@ -52,12 +52,32 @@ def run_tests():
     if RESULTS_DIR.exists():
         shutil.rmtree(RESULTS_DIR, ignore_errors=True)
 
+    cmd = list(TEST_COMMAND)
+    if not any("trx" in arg for arg in cmd):
+        cmd.extend(["--logger", "trx;LogFileName=test_results.trx"])
+
     try:
-        subprocess.check_call(TEST_COMMAND)
+        subprocess.check_call(cmd)
         return True
     except subprocess.CalledProcessError:
         record_failure("tests", "dotnet test failed")
         return False
+
+def parse_trx_results():
+    total, passed, failed = 0, 0, 0
+    for trx_path in Path(".").rglob("*.trx"):
+        try:
+            tree = ET.parse(trx_path)
+            root = tree.getroot()
+            counters = root.find(".//{*}Counters")
+            if counters is not None:
+                total = int(counters.attrib.get("total", 0))
+                passed = int(counters.attrib.get("passed", 0))
+                failed = int(counters.attrib.get("failed", 0))
+                return {"total": total, "passed": passed, "failed": failed}
+        except Exception as e:
+            print(f"Error parsing TRX file {trx_path}: {e}")
+    return {"total": total, "passed": passed, "failed": failed}
 
 # -----------------------
 # Mutation Testing
@@ -467,12 +487,21 @@ def write_shield(name, label, message, color):
         json.dump(shield, f, indent=4)
 
 def generate_shields(metrics):
-    # Tests Shield
-    test_fail_count = len([f for f in FAILURES if f['category'] == 'tests'])
-    if test_fail_count == 0:
-        write_shield("tests", "tests", "passed", "brightgreen")
+    # Tests Shield - report exact pass/total count
+    test_counts = metrics.get('test_counts', {})
+    total = test_counts.get('total', 0)
+    passed = test_counts.get('passed', 0)
+    failed = test_counts.get('failed', 0)
+    test_passed = metrics.get('test_passed', False)
+
+    if total > 0 and failed == 0 and test_passed:
+        write_shield("tests", "tests", f"{passed}/{total} passed", "brightgreen")
+    elif total > 0:
+        write_shield("tests", "tests", f"{failed}/{total} failed", "red")
     else:
-        write_shield("tests", "tests", "failed", "red")
+        status_msg = "passed" if test_passed else "failed"
+        color = "brightgreen" if test_passed else "red"
+        write_shield("tests", "tests", status_msg, color)
         
     # Coverage Shield
     cov = metrics.get('coverage', 0.0)
@@ -502,8 +531,10 @@ def generate_shields(metrics):
     # Simulation Shield
     sim = metrics.get('reachability_passed', {})
     sim_passed = sim.get('passed', False)
+    completed = sim.get('completed', 0)
+    total_quests = sim.get('total', 0)
     color = "brightgreen" if sim_passed else "red"
-    message = "passed" if sim_passed else "failed"
+    message = f"{completed}/{total_quests} quests" if total_quests > 0 else ("passed" if sim_passed else "failed")
     write_shield("simulation", "reachability", message, color)
 
     # Game Time Shield
@@ -513,9 +544,9 @@ def generate_shields(metrics):
     # Sustainability Shield
     sust = sim.get('sustainable', 0)
     unsust = sim.get('unsustainable', 0)
-    total = sust + unsust
-    if total > 0:
-        pct = (sust / total) * 100
+    total_activities = sust + unsust
+    if total_activities > 0:
+        pct = (sust / total_activities) * 100
         color = "brightgreen" if pct == 100 else "green" if pct >= 80 else "orange" if pct >= 50 else "red"
         write_shield("sustainability", "economy", f"{pct:.0f}% sustainable", color)
     else:
@@ -549,6 +580,8 @@ if __name__ == "__main__":
     if not skip_tests:
         test_passed = run_tests()
 
+    test_counts = parse_trx_results()
+
     mutation_score = 0.0
     if run_mutation:
         mutation_score = check_mutation()
@@ -576,7 +609,8 @@ if __name__ == "__main__":
         "reachability_passed": reachability_passed,
         "visualization_passed": visualization_passed,
         "pending_feedback": pending_feedback,
-        "test_passed": test_passed
+        "test_passed": test_passed,
+        "test_counts": test_counts
     }
 
     export_results(metrics)
