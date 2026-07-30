@@ -9,6 +9,7 @@
         "key_violations": 0,
         "testid_violations": 0,
         "stale_docs": 0,
+        "stale_mutation": 0,
         "reachability_passed": {
             "passed": true,
             "time": "84.4m",
