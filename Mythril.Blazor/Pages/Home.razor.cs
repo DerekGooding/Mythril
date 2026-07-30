@@ -78,6 +78,7 @@ public partial class Home : IDisposable
     }
 
     private void MarkLocationsAsSeen() => resourceManager.ActiveTab = "hand";
+    private void MarkPartyAsSeen() => resourceManager.ActiveTab = "party";
 
     private async Task ToggleTheme() => await themeService.ToggleTheme();
 

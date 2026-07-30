@@ -94,10 +94,10 @@
         </div>
     </div>
 
-    <!-- Main Content Area: Two Columns -->
-    <div class="row flex-grow-1 min-height-0 m-0 overflow-hidden">
+    <!-- Main Content Area: Two Columns on Desktop, Single Responsive Column on Mobile -->
+    <div class="row flex-grow-1 min-height-0 m-0 overflow-hidden @(resourceManager?.ActiveTab == "party" ? "party-active-mobile" : "")">
         <!-- Left column with tabs -->
-        <div class="col-8 p-2 border-end">
+        <div class="col-8 p-2 border-end main-tab-column">
             @if (resourceManager is not null)
             {
                 <ul class="nav nav-tabs flex-shrink-0" id="myTab" role="tablist">
@@ -128,6 +128,11 @@
                             }
                         </button>
                     </li>
+                    <li class="nav-item mobile-party-tab" role="presentation">
+                        <button class="nav-link @(resourceManager.ActiveTab == "party" ? "active" : "")" id="party-tab" data-testid="party-tab" data-bs-toggle="tab" data-bs-target="#party" type="button" role="tab" @onclick="MarkPartyAsSeen">
+                            Party
+                        </button>
+                    </li>
                 </ul>
                 <div class="tab-content border border-top-0">
                     <div class="tab-pane @(resourceManager.ActiveTab == "hand" ? "active" : "")" id="hand" role="tabpanel">
@@ -135,8 +140,8 @@
                     </div>
                     <div class="tab-pane @(resourceManager.ActiveTab == "cadence" ? "active" : "")" id="cadence" role="tabpanel">
                         <CadencePanel UnlockedCadences="resourceManager.UnlockedCadences" 
-                                      UnlockedCadenceNamesCount="resourceManager.UnlockedCadenceNames.Count"
-                                      OnUnequip="UnassignCadence" />
+                                       UnlockedCadenceNamesCount="resourceManager.UnlockedCadenceNames.Count"
+                                       OnUnequip="UnassignCadence" />
                     </div>
                     <div class="tab-pane @(resourceManager.ActiveTab == "workshop" ? "active" : "")" id="workshop" role="tabpanel">
                         <Workshop UnlockedAbilities="resourceManager.UnlockedAbilities" @key="@resourceManager.UnlockedAbilities.Count" />

@@ -10,7 +10,10 @@
 ![Economy](https://img.shields.io/endpoint?url=https://DerekGooding.github.io/Mythril/health/shield_sustainability.json)
 ![Optimal Completion](https://img.shields.io/endpoint?url=https://DerekGooding.github.io/Mythril/health/shield_game_time.json)
 
-[**Live Website**](https://DerekGooding.Github.io/Mythril) | [**How to Play**](docs/instructions.md)
+[**🎮 Play Game Live**](https://DerekGooding.github.io/Mythril) | [**📱 Install Mobile App (PWA)**](https://DerekGooding.github.io/Mythril) | [**📖 How to Play**](docs/instructions.md)
+
+> [!TIP]
+> **Mobile App Installation**: Mythril is a Progressive Web App (PWA). Open [https://DerekGooding.github.io/Mythril](https://DerekGooding.github.io/Mythril) on your phone (iOS Safari or Android Chrome) and tap **Install App** or **Add to Home Screen** to play locally offline!
 
 Mythril is a .NET 10 Blazor-based incremental RPG designed as a **sandbox for Agentic Software Engineering**. 
 
