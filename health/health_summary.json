@@ -17,7 +17,12 @@
         },
         "visualization_passed": false,
         "pending_feedback": 0,
-        "test_passed": true
+        "test_passed": true,
+        "test_counts": {
+            "total": 0,
+            "passed": 0,
+            "failed": 0
+        }
     },
     "failures": [
         {
