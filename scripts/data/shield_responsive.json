@@ -1,6 +1,6 @@
 {
     "schemaVersion": 1,
     "label": "mobile responsive",
-    "message": "10 viewports ok",
-    "color": "brightgreen"
+    "message": "violations",
+    "color": "red"
 }

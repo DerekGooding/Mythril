@@ -1,6 +1,6 @@
 {
-    "is_healthy": true,
-    "failure_count": 0,
+    "is_healthy": false,
+    "failure_count": 30,
     "metrics": {
         "monoliths": 0,
         "coverage": 75.1,
@@ -12,7 +12,7 @@
         "stale_mutation": 0,
         "reachability_passed": {
             "passed": true,
-            "time": "116.1m",
+            "time": "110.7m",
             "sustainable": 43,
             "unsustainable": 5,
             "completed": 43,
@@ -21,9 +21,9 @@
         "visualization_passed": true,
         "pending_feedback": 0,
         "responsive_passed": {
-            "passed": true,
+            "passed": false,
             "viewports_tested": 10,
-            "violations": 0,
+            "violations": 30,
             "details": [
                 {
                     "viewport": "iPhone_SE_Portrait",
@@ -105,5 +105,156 @@
         },
         "self_integrity": 0
     },
-    "failures": []
+    "failures": [
+        {
+            "category": "responsive_touch",
+            "message": "iPhone_SE_Portrait: Small touch target on BUTTON#theme-toggle (93x26px)",
+            "metadata": {}
+        },
+        {
+            "category": "responsive_touch",
+            "message": "iPhone_SE_Portrait: Small touch target on BUTTON#pwa-install-button (34x24px)",
+            "metadata": {}
+        },
+        {
+            "category": "responsive_touch",
+            "message": "iPhone_SE_Portrait: Small touch target on BUTTON#reset-game (81x26px)",
+            "metadata": {}
+        },
+        {
+            "category": "responsive_touch",
+            "message": "iPhone_SE_Portrait: Small touch target on BUTTON#inventory-sort-toggle (32x26px)",
+            "metadata": {}
+        },
+        {
+            "category": "responsive_touch",
+            "message": "iPhone_14_Portrait: Small touch target on BUTTON#theme-toggle (93x26px)",
+            "metadata": {}
+        },
+        {
+            "category": "responsive_touch",
+            "message": "iPhone_14_Portrait: Small touch target on BUTTON#pwa-install-button (34x24px)",
+            "metadata": {}
+        },
+        {
+            "category": "responsive_touch",
+            "message": "iPhone_14_Portrait: Small touch target on BUTTON#reset-game (81x26px)",
+            "metadata": {}
+        },
+        {
+            "category": "responsive_touch",
+            "message": "iPhone_14_Portrait: Small touch target on BUTTON#inventory-sort-toggle (32x26px)",
+            "metadata": {}
+        },
+        {
+            "category": "responsive_touch",
+            "message": "Pixel_7_Portrait: Small touch target on BUTTON#theme-toggle (93x26px)",
+            "metadata": {}
+        },
+        {
+            "category": "responsive_touch",
+            "message": "Pixel_7_Portrait: Small touch target on BUTTON#pwa-install-button (34x24px)",
+            "metadata": {}
+        },
+        {
+            "category": "responsive_touch",
+            "message": "Pixel_7_Portrait: Small touch target on BUTTON#reset-game (81x26px)",
+            "metadata": {}
+        },
+        {
+            "category": "responsive_touch",
+            "message": "Pixel_7_Portrait: Small touch target on BUTTON#inventory-sort-toggle (32x26px)",
+            "metadata": {}
+        },
+        {
+            "category": "responsive_touch",
+            "message": "iPhone_SE_Landscape: Small touch target on BUTTON#theme-toggle (93x26px)",
+            "metadata": {}
+        },
+        {
+            "category": "responsive_touch",
+            "message": "iPhone_SE_Landscape: Small touch target on BUTTON#pwa-install-button (57x24px)",
+            "metadata": {}
+        },
+        {
+            "category": "responsive_touch",
+            "message": "iPhone_SE_Landscape: Small touch target on BUTTON#reset-game (81x26px)",
+            "metadata": {}
+        },
+        {
+            "category": "responsive_touch",
+            "message": "iPhone_SE_Landscape: Small touch target on BUTTON#inventory-tab-materials (66x26px)",
+            "metadata": {}
+        },
+        {
+            "category": "responsive_touch",
+            "message": "iPhone_SE_Landscape: Small touch target on BUTTON#inventory-tab-magic (50x26px)",
+            "metadata": {}
+        },
+        {
+            "category": "responsive_touch",
+            "message": "iPhone_SE_Landscape: Small touch target on BUTTON#inventory-tab-key-items (69x26px)",
+            "metadata": {}
+        },
+        {
+            "category": "responsive_touch",
+            "message": "iPhone_SE_Landscape: Small touch target on BUTTON#inventory-tab-all (32x26px)",
+            "metadata": {}
+        },
+        {
+            "category": "responsive_touch",
+            "message": "iPhone_SE_Landscape: Small touch target on BUTTON#inventory-sort-toggle (32x26px)",
+            "metadata": {}
+        },
+        {
+            "category": "responsive_touch",
+            "message": "iPhone_14_Landscape: Small touch target on BUTTON#inventory-tab-materials (55x21px)",
+            "metadata": {}
+        },
+        {
+            "category": "responsive_touch",
+            "message": "iPhone_14_Landscape: Small touch target on BUTTON#inventory-tab-magic (40x21px)",
+            "metadata": {}
+        },
+        {
+            "category": "responsive_touch",
+            "message": "iPhone_14_Landscape: Small touch target on BUTTON#inventory-tab-key-items (58x21px)",
+            "metadata": {}
+        },
+        {
+            "category": "responsive_touch",
+            "message": "iPhone_14_Landscape: Small touch target on BUTTON#inventory-tab-all (23x21px)",
+            "metadata": {}
+        },
+        {
+            "category": "responsive_touch",
+            "message": "iPhone_14_Landscape: Small touch target on BUTTON#inventory-sort-toggle (24x23px)",
+            "metadata": {}
+        },
+        {
+            "category": "responsive_touch",
+            "message": "Pixel_7_Landscape: Small touch target on BUTTON#inventory-tab-materials (55x21px)",
+            "metadata": {}
+        },
+        {
+            "category": "responsive_touch",
+            "message": "Pixel_7_Landscape: Small touch target on BUTTON#inventory-tab-magic (40x21px)",
+            "metadata": {}
+        },
+        {
+            "category": "responsive_touch",
+            "message": "Pixel_7_Landscape: Small touch target on BUTTON#inventory-tab-key-items (58x21px)",
+            "metadata": {}
+        },
+        {
+            "category": "responsive_touch",
+            "message": "Pixel_7_Landscape: Small touch target on BUTTON#inventory-tab-all (23x21px)",
+            "metadata": {}
+        },
+        {
+            "category": "responsive_touch",
+            "message": "Pixel_7_Landscape: Small touch target on BUTTON#inventory-sort-toggle (24x23px)",
+            "metadata": {}
+        }
+    ]
 }
