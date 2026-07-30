@@ -22,6 +22,7 @@ MIN_FILE_COVERAGE = config.get("MIN_FILE_COVERAGE", 25.0)
 MIN_BRANCH_COVERAGE = config.get("MIN_BRANCH_COVERAGE", 50.0)
 MIN_MUTATION_SCORE = config.get("MIN_MUTATION_SCORE", 60.0)
 DOCS_STALENESS_THRESHOLD = config.get("DOCS_STALENESS_THRESHOLD", 10)
+MUTATION_STALENESS_THRESHOLD = config.get("MUTATION_STALENESS_THRESHOLD", 5)
 
 SOURCE_DIR = Path(config.get("SOURCE_DIR", "."))
 RESULTS_DIR = Path(config.get("RESULTS_DIR", "TestResults"))
@@ -302,6 +303,39 @@ def check_docs_staleness():
             print(f"Error checking staleness for {doc}: {e}")
             
     return stale_count
+
+def check_mutation_staleness():
+    print("--- Checking Mutation Staleness ---")
+    reports_dir = Path("docs/mutation_reports")
+    if not reports_dir.exists():
+        return 0
+
+    report_dirs = [d for d in reports_dir.iterdir() if d.is_dir()]
+    if not report_dirs:
+        return 0
+
+    latest_report = max(report_dirs, key=lambda p: p.stat().st_mtime)
+
+    try:
+        subprocess.check_call(["git", "rev-parse", "--is-inside-work-tree"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        last_commit = subprocess.check_output(["git", "log", "-1", "--format=%ct", str(latest_report)], text=True).strip()
+        if not last_commit:
+            return 0
+
+        changed_files = subprocess.check_output(["git", "diff", "--name-only", f"HEAD@{{{last_commit}}}"], text=True).splitlines()
+        test_changes = [f for f in changed_files if ("Mythril.Tests" in f or "Tests.cs" in f) and f.endswith(".cs")]
+
+        if len(test_changes) >= MUTATION_STALENESS_THRESHOLD:
+            record_failure(
+                "mutation_stale",
+                f"Mutation test report is stale ({len(test_changes)} test files modified since last mutation run). Run 'python scripts/archive_mutation.py' to update.",
+                {"stale_test_files": len(test_changes), "threshold": MUTATION_STALENESS_THRESHOLD}
+            )
+            return len(test_changes)
+    except Exception as e:
+        print(f"Notice: Could not check mutation staleness: {e}")
+
+    return 0
 
 # -----------------------
 # Reachability Simulation
@@ -594,6 +628,7 @@ if __name__ == "__main__":
     key_violations = check_key_usage()
     testid_violations = check_data_testid()
     stale_docs = check_docs_staleness()
+    stale_mutation = check_mutation_staleness()
     reachability_passed = check_reachability()
     visualization_passed = check_visualization()
     pending_feedback = check_feedback()
@@ -606,6 +641,7 @@ if __name__ == "__main__":
         "key_violations": key_violations,
         "testid_violations": testid_violations,
         "stale_docs": stale_docs,
+        "stale_mutation": stale_mutation,
         "reachability_passed": reachability_passed,
         "visualization_passed": visualization_passed,
         "pending_feedback": pending_feedback,

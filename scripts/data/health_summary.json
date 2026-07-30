@@ -1,6 +1,6 @@
 {
-    "is_healthy": true,
-    "failure_count": 0,
+    "is_healthy": false,
+    "failure_count": 1,
     "metrics": {
         "monoliths": 0,
         "coverage": 75.1,
@@ -9,6 +9,7 @@
         "key_violations": 0,
         "testid_violations": 0,
         "stale_docs": 1,
+        "stale_mutation": 43,
         "reachability_passed": {
             "passed": true,
             "time": "84.4m",
@@ -24,5 +25,14 @@
             "failed": 0
         }
     },
-    "failures": []
+    "failures": [
+        {
+            "category": "mutation_stale",
+            "message": "Mutation test report is stale (43 test files modified since last mutation run). Run 'python scripts/archive_mutation.py' to update.",
+            "metadata": {
+                "stale_test_files": 43,
+                "threshold": 5
+            }
+        }
+    ]
 }
