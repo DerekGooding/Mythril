@@ -76,6 +76,13 @@ def generate_shields(metrics: dict) -> None:
     else:
         write_shield("sustainability", "economy", "N/A", "inactive")
 
+    # Responsive Viewport shield
+    resp = metrics.get("responsive_passed", {})
+    resp_ok = resp.get("passed", False)
+    v_count = resp.get("viewports_tested", 0)
+    write_shield("responsive", "mobile responsive", f"{v_count} viewports ok" if resp_ok else "violations",
+                 "brightgreen" if resp_ok else "red")
+
     # Self-integrity shield
     si_violations = metrics.get("self_integrity", 0)
     write_shield("self_integrity", "script health",

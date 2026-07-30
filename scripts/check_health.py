@@ -21,6 +21,7 @@ from checks.docs_staleness import check_docs_staleness
 from checks.reachability   import check_reachability
 from checks.content        import check_content_graph, check_visualization
 from checks.feedback       import check_feedback
+from checks.responsive     import check_responsive
 from checks.self_integrity import check_self_integrity
 from checks.reporting      import generate_shields, export_results
 
@@ -52,6 +53,7 @@ def main() -> None:
     reachability_result  = check_reachability()
     visualization_passed = check_visualization()
     pending_feedback     = check_feedback()
+    responsive_result    = check_responsive()
 
     # --- Self-referential: health scripts must obey their own rules ---
     self_integrity_violations = check_self_integrity()
@@ -68,6 +70,7 @@ def main() -> None:
         "reachability_passed": reachability_result,
         "visualization_passed": visualization_passed,
         "pending_feedback":   pending_feedback,
+        "responsive_passed":  responsive_result,
         "test_passed":        test_passed,
         "test_counts":        test_counts,
         "self_integrity":     self_integrity_violations,

@@ -20,6 +20,83 @@
         },
         "visualization_passed": true,
         "pending_feedback": 0,
+        "responsive_passed": {
+            "passed": true,
+            "viewports_tested": 10,
+            "violations": 0,
+            "details": [
+                {
+                    "viewport": "iPhone_SE_Portrait",
+                    "resolution": "375x667",
+                    "orientation": "portrait",
+                    "overflow": false,
+                    "screenshot": "output\\responsive_audit\\iPhone_SE_Portrait.png"
+                },
+                {
+                    "viewport": "iPhone_14_Portrait",
+                    "resolution": "390x844",
+                    "orientation": "portrait",
+                    "overflow": false,
+                    "screenshot": "output\\responsive_audit\\iPhone_14_Portrait.png"
+                },
+                {
+                    "viewport": "Pixel_7_Portrait",
+                    "resolution": "412x915",
+                    "orientation": "portrait",
+                    "overflow": false,
+                    "screenshot": "output\\responsive_audit\\Pixel_7_Portrait.png"
+                },
+                {
+                    "viewport": "iPhone_SE_Landscape",
+                    "resolution": "667x375",
+                    "orientation": "landscape",
+                    "overflow": false,
+                    "screenshot": "output\\responsive_audit\\iPhone_SE_Landscape.png"
+                },
+                {
+                    "viewport": "iPhone_14_Landscape",
+                    "resolution": "844x390",
+                    "orientation": "landscape",
+                    "overflow": false,
+                    "screenshot": "output\\responsive_audit\\iPhone_14_Landscape.png"
+                },
+                {
+                    "viewport": "Pixel_7_Landscape",
+                    "resolution": "915x412",
+                    "orientation": "landscape",
+                    "overflow": false,
+                    "screenshot": "output\\responsive_audit\\Pixel_7_Landscape.png"
+                },
+                {
+                    "viewport": "iPad_Air_Portrait",
+                    "resolution": "820x1180",
+                    "orientation": "portrait",
+                    "overflow": false,
+                    "screenshot": "output\\responsive_audit\\iPad_Air_Portrait.png"
+                },
+                {
+                    "viewport": "iPad_Air_Landscape",
+                    "resolution": "1180x820",
+                    "orientation": "landscape",
+                    "overflow": false,
+                    "screenshot": "output\\responsive_audit\\iPad_Air_Landscape.png"
+                },
+                {
+                    "viewport": "Laptop_HD",
+                    "resolution": "1366x768",
+                    "orientation": "landscape",
+                    "overflow": false,
+                    "screenshot": "output\\responsive_audit\\Laptop_HD.png"
+                },
+                {
+                    "viewport": "Desktop_FHD",
+                    "resolution": "1920x1080",
+                    "orientation": "landscape",
+                    "overflow": false,
+                    "screenshot": "output\\responsive_audit\\Desktop_FHD.png"
+                }
+            ]
+        },
         "test_passed": true,
         "test_counts": {
             "total": 206,

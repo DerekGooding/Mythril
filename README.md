@@ -9,6 +9,7 @@
 ![Reachability](https://img.shields.io/endpoint?url=https://DerekGooding.github.io/Mythril/health/shield_simulation.json)
 ![Economy](https://img.shields.io/endpoint?url=https://DerekGooding.github.io/Mythril/health/shield_sustainability.json)
 ![Optimal Completion](https://img.shields.io/endpoint?url=https://DerekGooding.github.io/Mythril/health/shield_game_time.json)
+![Mobile Responsive](https://img.shields.io/endpoint?url=https://DerekGooding.github.io/Mythril/health/shield_responsive.json)
 
 [**🎮 Play Game Live**](https://DerekGooding.github.io/Mythril) | [**📱 Install Mobile App (PWA)**](https://DerekGooding.github.io/Mythril) | [**📖 How to Play**](docs/instructions.md)
 
