@@ -14,7 +14,9 @@
             "passed": true,
             "time": "84.4m",
             "sustainable": 31,
-            "unsustainable": 5
+            "unsustainable": 5,
+            "completed": 33,
+            "total": 33
         },
         "visualization_passed": false,
         "pending_feedback": 0,
@@ -23,7 +25,8 @@
             "total": 0,
             "passed": 0,
             "failed": 0
-        }
+        },
+        "self_integrity": 0
     },
     "failures": [
         {
