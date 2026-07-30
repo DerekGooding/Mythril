@@ -94,3 +94,18 @@ The game is inspired by the **FF8 Junction System** and the **FF Tactics Job Sys
 ### **Visual Aesthetic**
 - **Minimalism**: Maintain the clean, minimalist dashboard look.
 - **Visual Cues**: Expand the use of icons for quest requirements. In addition to the "shield" for stats, introduce a "bullet point" or similar icon for item requirements.
+
+---
+## [2026-07-30] Content Vector, Cadence Depth & Pacing Expansion
+
+### **Content Expansion Vector**
+- **Compound Alchemy & Multi-Step Synthesis**: Prioritize multi-stage Workshop refinement chains (raw materials -> Tier 1 Magic -> Tier 2/Compound Spells/Elixirs) rather than adding complex standalone subsystems.
+- **No Equipment or Prestige**: Content expansion strictly adheres to FF8 Junctioning & FF Tactics Job paradigms. No equipment slots, no hard prestige resets.
+
+### **Cadence & Junction Depth**
+- **Deepening Existing Cadences**: Expand existing Cadences with additional unlockable abilities instead of overwhelming the player with excessive superficial Cadences.
+- **Abundant Junction Distribution**: Ensure Junction abilities (`J-Str`, `J-Vit`, `J-Magic`, `J-Speed`, `J-Spirit`) are widely distributed across the existing Cadence pool so a fully equipped 4-character party can junction every stat by mid-to-late game.
+
+### **Pacing & Runtime Target**
+- **Scope Target**: Target a mid-game expansion extending optimal completion time from **84.4 minutes to ~3-4 hours** with Tier 2 Cadence abilities, multi-step Workshop refinements, and stat-gated boss quests.
+
