@@ -74,7 +74,7 @@ public partial class RoutedSimulator
 
         foreach (var stat in stats.All)
         {
-            var jAbil = stat.Name switch { "Strength" => "J-Str", "Magic" => "J-Magic", "Vitality" => "J-Vit", "Speed" => "J-Speed", _ => "J-" + stat.Name };
+            var jAbil = stat.Name switch { "Strength" => "J-Str", "Magic" => "J-Magic", "Vitality" => "J-Vit", "Speed" => "J-Speed", "Spirit" => "J-Spirit", _ => "J-" + stat.Name };
             var jAbilitiesCount = state.UnlockedAbilities.Count(ua => ua.EndsWith($":{jAbil}"));
             if (jAbilitiesCount > 0)
             {

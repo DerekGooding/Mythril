@@ -8,7 +8,7 @@ public partial class LatticeSimulator
     private (bool, GameState) UpdateStat(string name, GameState state)
     {
         var bestVal = state.StatMax.GetValueOrDefault(name, 10);
-        var abilityName = name switch { "Strength" => "J-Str", "Magic" => "J-Magic", "Vitality" => "J-Vit", "Speed" => "J-Speed", _ => "J-" + name };
+        var abilityName = name switch { "Strength" => "J-Str", "Magic" => "J-Magic", "Vitality" => "J-Vit", "Speed" => "J-Speed", "Spirit" => "J-Spirit", _ => "J-" + name };
 
         var hasAbility = state.UnlockedAbilities.Any(ua => ua.EndsWith($":{abilityName}"));
         if (!hasAbility) return (false, state);
