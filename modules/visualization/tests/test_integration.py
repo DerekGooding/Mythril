@@ -24,13 +24,15 @@ class TestIntegration(unittest.TestCase):
         self.assertIn("<!DOCTYPE html>", html)
 
     @patch("modules.visualization.data_processor.load_graph")
-    @patch("modules.visualization.data_processor.parse_simulation_report")
+    @patch("modules.visualization.simulation_parser.parse_simulation_report")
+    @patch("modules.visualization.simulation_parser.load_simulation_data")
     @patch("builtins.open", new_callable=MagicMock)
     @patch("os.path.exists")
     @patch("os.makedirs")
-    def test_orchestrator_run(self, mock_makedirs, mock_exists, mock_open, mock_parse, mock_load):
+    def test_orchestrator_run(self, mock_makedirs, mock_exists, mock_open, mock_load_sim, mock_parse, mock_load):
         mock_load.return_value = [{"id": "q1", "name": "Q1", "type": "Quest"}]
         mock_parse.return_value = {"sustainable": set(), "unsustainable": set(), "rates": {}}
+        mock_load_sim.return_value = {}
         mock_exists.return_value = True
         
         # Mock reading JS files

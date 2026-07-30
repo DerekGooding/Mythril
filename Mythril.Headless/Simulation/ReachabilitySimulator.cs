@@ -1,6 +1,7 @@
 using Mythril.Data;
 using System.Collections.Immutable;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace Mythril.Headless.Simulation;
 
@@ -148,6 +149,20 @@ public partial class ReachabilitySimulator(
 
         Console.WriteLine(sb.ToString());
         System.IO.File.WriteAllText("simulation_report.md", sb.ToString());
+
+        // Export JSON for Visualization
+        var reportData = new
+        {
+            QuestTime = state.QuestTime,
+            ResourceTime = state.ResourceTime,
+            StatMax = state.StatMax,
+            SustainableActivities = flow.SustainableActivities,
+            UnsustainableActivities = flow.UnsustainableActivities,
+            ResourceNet = flow.ResourceNet,
+            RoutedCompletionTime = routed.LastRunTime,
+            EndGameReached = routed.EndGameReached
+        };
+        System.IO.File.WriteAllText("simulation_report.json", JsonConvert.SerializeObject(reportData, Formatting.Indented));
 
         if (unreachableQuests.Count != 0)
         {

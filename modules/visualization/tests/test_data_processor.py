@@ -7,20 +7,21 @@ from unittest.mock import patch, MagicMock
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../..")))
 
 from modules.visualization import data_processor
+from modules.visualization import simulation_parser
 
 class TestDataProcessor(unittest.TestCase):
     def test_matches_activity(self):
         # Basic exact match
-        self.assertTrue(data_processor._matches_activity("Refine Wood - Herb", ["Refine Wood - Herb"]))
+        self.assertTrue(simulation_parser.matches_activity("Refine Wood - Herb", ["Refine Wood - Herb"]))
         # Normalized match (stripping spaces, dashes, colons, arrows)
-        # "Refine Wood - Herb" -> "refinewoodherb"
-        # "Refine Wood:Herb" -> "refinewoodherb"
-        self.assertTrue(data_processor._matches_activity("Refine Wood - Herb", ["Refine Wood:Herb"]))
-        self.assertFalse(data_processor._matches_activity("Refine Wood - Herb", ["Refine Stone"]))
+        self.assertTrue(simulation_parser.matches_activity("Refine Wood - Herb", ["Refine Wood:Herb"]))
+        self.assertFalse(simulation_parser.matches_activity("Refine Wood - Herb", ["Refine Stone"]))
 
-    @patch("modules.visualization.data_processor.parse_simulation_report")
-    def test_bfs_tiering_complex(self, mock_parse):
+    @patch("modules.visualization.simulation_parser.parse_simulation_report")
+    @patch("modules.visualization.simulation_parser.load_simulation_data")
+    def test_bfs_tiering_complex(self, mock_load_json, mock_parse):
         mock_parse.return_value = {"sustainable": set(), "unsustainable": set(), "rates": {}}
+        mock_load_json.return_value = {}
         
         # Linear dependency
         nodes = [
@@ -36,13 +37,17 @@ class TestDataProcessor(unittest.TestCase):
         self.assertEqual(node_tiers["q2"], 1)
         self.assertEqual(node_tiers["q3"], 2)
 
-    @patch("modules.visualization.data_processor.parse_simulation_report")
-    def test_sustainable_node_splitting(self, mock_parse):
+    @patch("modules.visualization.simulation_parser.parse_simulation_report")
+    @patch("modules.visualization.simulation_parser.load_simulation_data")
+    def test_sustainable_node_splitting(self, mock_load_json, mock_parse):
         # Mock simulation saying "Wood" and "Sustainable Quest" are sustainable
         mock_parse.return_value = {
             "sustainable": {"Wood", "Sustainable Quest"},
             "unsustainable": set(),
             "rates": {}
+        }
+        mock_load_json.return_value = {
+            "SustainableActivities": ["Wood", "Sustainable Quest"]
         }
         
         # We need an initial producer and a much later sustainable producer
@@ -69,9 +74,11 @@ class TestDataProcessor(unittest.TestCase):
         # q_sust tier should be 3. sust_node tier should be 3 + 1 = 4.
         self.assertEqual(sust_node["tier"], 4)
 
-    @patch("modules.visualization.data_processor.parse_simulation_report")
-    def test_clustering(self, mock_parse):
+    @patch("modules.visualization.simulation_parser.parse_simulation_report")
+    @patch("modules.visualization.simulation_parser.load_simulation_data")
+    def test_clustering(self, mock_load_json, mock_parse):
         mock_parse.return_value = {"sustainable": set(), "unsustainable": set(), "rates": {}}
+        mock_load_json.return_value = {}
         
         nodes = [
             {"id": "loc1", "name": "Forest", "type": "Location", "out_edges": {"contains": [{"targetId": "quest1"}]}},

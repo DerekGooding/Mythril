@@ -19,7 +19,18 @@ function renderQuestFlow() {
             path.setAttribute('id', edge.id);
             const midX = (s.fx + t.fx) / 2;
             path.setAttribute('d', `M ${s.fx} ${s.fy} Q ${midX} ${s.fy + (t.fy - s.fy) * 0.1} ${t.fx} ${t.fy}`);
-            if (isMilestoneEdge) path.setAttribute('style', 'stroke: var(--accent-color); stroke-width: 3px; opacity: 0.5;');
+            
+            if (isMilestoneEdge) {
+                path.setAttribute('style', 'stroke: var(--accent-color); stroke-width: 3px; opacity: 0.5;');
+            } else if (edge.magnitude !== undefined) {
+                path.style.strokeWidth = `${1.5 + edge.magnitude}px`;
+                path.style.opacity = Math.min(1, 0.4 + (edge.magnitude / 10));
+            }
+
+            const title = document.createElementNS("http://www.w3.org/2000/svg", "title");
+            title.textContent = `${edge.category}${edge.magnitude ? ` (Weight: ${edge.magnitude.toFixed(1)})` : ''}`;
+            path.appendChild(title);
+
             edgesLayer.appendChild(path);
         }
     });

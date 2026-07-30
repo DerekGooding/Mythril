@@ -171,54 +171,7 @@ function calculateEnhancedFlow(nodesData, currentView, baseEntities, entityMap, 
         });
     }
 
-    // 7. Physical Layout
+    // 7. Physical Layout (Delegated to lattice_layout.js)
     const layoutNodes = [...finalFlowEntities, ...productionNodes];
-    const tierGroups = [];
-    layoutNodes.forEach(q => {
-        let t = 0;
-        if (q.type === 'Milestone') t = q.tier * 2 - 1;
-        else if (q.isProduction) t = q.tier * 2;
-        else t = (entityTiers.get(q.id) || 0) * 2;
-        if (!tierGroups[t]) tierGroups[t] = [];
-        tierGroups[t].push(q);
-    });
-
-    const flowNodes = [];
-    const flowEdges = [];
-    const nodeYPositions = new Map();
-    const FLOW_TIER_WIDTH = 450;
-    const FLOW_VERTICAL_SPACING = 160;
-
-    tierGroups.forEach((tierEntities, t) => {
-        if (t > 0) {
-            tierEntities.sort((a, b) => {
-                const getAvgY = (id) => {
-                    const parents = finalRevAdj.get(id) || [];
-                    productionEdges.forEach(pe => { if (pe.target === id) parents.push(pe.source); });
-                    if (parents.length === 0) return 0;
-                    let sum = 0; parents.forEach(pId => sum += nodeYPositions.get(pId) || 0);
-                    return sum / parents.length;
-                };
-                return getAvgY(a.id) - getAvgY(b.id);
-            });
-        } else {
-            tierEntities.sort((a, b) => a.name.localeCompare(b.name));
-        }
-        tierEntities.forEach((q, idx) => {
-            const fy = idx * FLOW_VERTICAL_SPACING;
-            nodeYPositions.set(q.id, fy);
-            flowNodes.push({ ...q, fx: t * FLOW_TIER_WIDTH, fy: fy });
-        });
-    });
-
-    flowNodes.forEach(qNode => {
-        if (finalAdj.has(qNode.id)) {
-            finalAdj.get(qNode.id).forEach(targetId => {
-                flowEdges.push({ id: `flow-${qNode.id}-${targetId}`, source: qNode.id, target: targetId, category: 'progression' });
-            });
-        }
-    });
-    productionEdges.forEach(pe => flowEdges.push({ ...pe, category: 'economy' }));
-
-    return { flowNodes, flowEdges };
+    return calculatePhysicalLayout(currentView, layoutNodes, productionEdges, finalRevAdj, finalAdj, entityTiers);
 }

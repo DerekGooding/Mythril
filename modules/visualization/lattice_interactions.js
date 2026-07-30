@@ -108,28 +108,22 @@ function highlightPaths(targetId) {
 
 
 function setupInteractions() {
-    document.getElementById('btn-standard').addEventListener('click', () => {
-        currentView = 'standard';
-        document.getElementById('btn-standard').classList.add('active');
-        document.getElementById('btn-advanced').classList.remove('active');
-        document.getElementById('btn-progressive').classList.remove('active');
-        renderQuestFlow();
-    });
+    const btnIds = ['btn-standard', 'btn-advanced', 'btn-progressive', 'btn-chrono', 'btn-quantitative'];
+    const viewMap = { 'btn-standard': 'standard', 'btn-advanced': 'advanced', 'btn-progressive': 'progressive', 'btn-chrono': 'chrono', 'btn-quantitative': 'quantitative' };
 
-    document.getElementById('btn-advanced').addEventListener('click', () => {
-        currentView = 'advanced';
-        document.getElementById('btn-advanced').classList.add('active');
-        document.getElementById('btn-standard').classList.remove('active');
-        document.getElementById('btn-progressive').classList.remove('active');
-        renderQuestFlow();
-    });
-
-    document.getElementById('btn-progressive').addEventListener('click', () => {
-        currentView = 'progressive';
-        document.getElementById('btn-progressive').classList.add('active');
-        document.getElementById('btn-standard').classList.remove('active');
-        document.getElementById('btn-advanced').classList.remove('active');
-        renderQuestFlow();
+    btnIds.forEach(id => {
+        const btn = document.getElementById(id);
+        if (btn) {
+            btn.addEventListener('click', () => {
+                currentView = viewMap[id];
+                btnIds.forEach(bid => {
+                    const b = document.getElementById(bid);
+                    if (b) b.classList.remove('active');
+                });
+                btn.classList.add('active');
+                renderQuestFlow();
+            });
+        }
     });
 
     let isDragging = false, startPos = { x: 0, y: 0 };
