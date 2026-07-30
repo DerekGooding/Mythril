@@ -67,7 +67,7 @@ Mythril features a job-based progression system where you manage a party of char
 5. **Run Game**: `dotnet run --project Mythril.Blazor`
 
 ---
-*Developed with 💖 by Gemini CLI.*
+*Originally developed with 💖 by Gemini CLI, now powered by Antigravity and Gemini models.*
 
 ---  
 
