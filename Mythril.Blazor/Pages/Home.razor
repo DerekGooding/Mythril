@@ -50,7 +50,10 @@
     <!-- Header Row -->
     <div class="header-row flex-shrink-0 p-2 d-flex align-items-center gap-3">
         <div class="d-flex flex-column gap-1">
-            <button class="btn btn-sm btn-primary" data-testid="theme-toggle" @onclick="ToggleTheme">Toggle Theme</button>
+            <div class="d-flex align-items-center gap-2">
+                <button class="btn btn-sm btn-primary" data-testid="theme-toggle" @onclick="ToggleTheme">Toggle Theme</button>
+                <PwaInstallButton />
+            </div>
             <div class="d-flex align-items-center gap-2">
                 <button class="btn btn-sm btn-outline-danger" data-testid="reset-game" @onclick="ResetGame">Reset Game</button>
                 @if (resourceManager is not null)

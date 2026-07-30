@@ -1,0 +1,119 @@
+@using Microsoft.JSInterop
+@inject IJSRuntime JSRuntime
+
+@if (_isStandalone)
+{
+    <span class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-50 d-inline-flex align-items-center gap-1 px-2 py-1"
+          data-testid="pwa-install-button"
+          title="Mythril is installed as a PWA">
+        <span class="material-icons text-success" style="font-size: 1rem;">check_circle</span>
+        <span class="small font-monospace">Installed</span>
+    </span>
+}
+else if (_canInstall)
+{
+    <button class="btn btn-sm pwa-install-btn d-inline-flex align-items-center gap-1 shadow-sm"
+            data-testid="pwa-install-button"
+            @onclick="InstallPwa"
+            title="Install Mythril locally on your device">
+        <span class="material-icons pwa-icon">download</span>
+        <span class="pwa-text">Install App</span>
+    </button>
+}
+else
+{
+    <button class="btn btn-sm btn-outline-info d-inline-flex align-items-center gap-1"
+            data-testid="pwa-install-button"
+            @onclick="ToggleInfo"
+            title="PWA Info / Mobile Installation">
+        <span class="material-icons" style="font-size: 1rem;">phone_android</span>
+        <span class="small d-none d-sm-inline">App</span>
+    </button>
+
+    @if (_showInfoModal)
+    {
+        <div class="modal fade show d-block" tabindex="-1" style="background: rgba(0,0,0,0.7);">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content bg-dark text-light border border-info shadow-lg">
+                    <div class="modal-header border-secondary">
+                        <h5 class="modal-title d-flex align-items-center gap-2">
+                            <span class="material-icons text-info">install_mobile</span>
+                            Install Mythril RPG
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" @onclick="ToggleInfo" data-testid="pwa-modal-close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Mythril is a Progressive Web App (PWA) that can be installed on your mobile or desktop device for offline access and native app integration.</p>
+                        
+                        <div class="alert alert-dark border border-secondary text-light small">
+                            <h6>📱 iOS Safari Instructions:</h6>
+                            <ol class="mb-0 ps-3">
+                                <li>Tap the <strong>Share</strong> button in Safari (<span class="material-icons align-middle small">ios_share</span>).</li>
+                                <li>Scroll down and select <strong>Add to Home Screen</strong>.</li>
+                            </ol>
+                        </div>
+
+                        <div class="alert alert-dark border border-secondary text-light small mb-0">
+                            <h6>💻 Android / Chrome / Edge Instructions:</h6>
+                            <p class="mb-0">Look for the install prompt icon in your browser's address bar or menu, or tap Install App when prompted.</p>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-secondary">
+                        <button type="button" class="btn btn-secondary" @onclick="ToggleInfo">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+
+@code {
+    private bool _canInstall = false;
+    private bool _isStandalone = false;
+    private bool _showInfoModal = false;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await CheckPwaState();
+        }
+    }
+
+    public async Task CheckPwaState()
+    {
+        try
+        {
+            _isStandalone = await JSRuntime.InvokeAsync<bool>("window.pwaInstall.isStandalone");
+            _canInstall = await JSRuntime.InvokeAsync<bool>("window.pwaInstall.canInstall");
+            StateHasChanged();
+        }
+        catch
+        {
+            // Fallback for non-JS or test environment
+        }
+    }
+
+    private async Task InstallPwa()
+    {
+        try
+        {
+            var outcome = await JSRuntime.InvokeAsync<bool>("window.pwaInstall.promptInstall");
+            if (outcome)
+            {
+                _canInstall = false;
+                _isStandalone = true;
+            }
+            StateHasChanged();
+        }
+        catch
+        {
+            _showInfoModal = true;
+        }
+    }
+
+    private void ToggleInfo()
+    {
+        _showInfoModal = !_showInfoModal;
+    }
+}
