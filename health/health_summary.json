@@ -1,6 +1,6 @@
 {
     "is_healthy": false,
-    "failure_count": 2,
+    "failure_count": 1,
     "metrics": {
         "monoliths": 0,
         "coverage": 75.09,
@@ -21,10 +21,81 @@
         "visualization_passed": false,
         "pending_feedback": 0,
         "responsive_passed": {
-            "passed": false,
+            "passed": true,
             "viewports_tested": 10,
-            "violations": 1,
-            "details": []
+            "violations": 0,
+            "details": [
+                {
+                    "viewport": "iPhone_SE_Portrait",
+                    "resolution": "375x667",
+                    "orientation": "portrait",
+                    "overflow": false,
+                    "screenshot": "output/responsive_audit/iPhone_SE_Portrait.png"
+                },
+                {
+                    "viewport": "iPhone_14_Portrait",
+                    "resolution": "390x844",
+                    "orientation": "portrait",
+                    "overflow": false,
+                    "screenshot": "output/responsive_audit/iPhone_14_Portrait.png"
+                },
+                {
+                    "viewport": "Pixel_7_Portrait",
+                    "resolution": "412x915",
+                    "orientation": "portrait",
+                    "overflow": false,
+                    "screenshot": "output/responsive_audit/Pixel_7_Portrait.png"
+                },
+                {
+                    "viewport": "iPhone_SE_Landscape",
+                    "resolution": "667x375",
+                    "orientation": "landscape",
+                    "overflow": false,
+                    "screenshot": "output/responsive_audit/iPhone_SE_Landscape.png"
+                },
+                {
+                    "viewport": "iPhone_14_Landscape",
+                    "resolution": "844x390",
+                    "orientation": "landscape",
+                    "overflow": false,
+                    "screenshot": "output/responsive_audit/iPhone_14_Landscape.png"
+                },
+                {
+                    "viewport": "Pixel_7_Landscape",
+                    "resolution": "915x412",
+                    "orientation": "landscape",
+                    "overflow": false,
+                    "screenshot": "output/responsive_audit/Pixel_7_Landscape.png"
+                },
+                {
+                    "viewport": "iPad_Air_Portrait",
+                    "resolution": "820x1180",
+                    "orientation": "portrait",
+                    "overflow": false,
+                    "screenshot": "output/responsive_audit/iPad_Air_Portrait.png"
+                },
+                {
+                    "viewport": "iPad_Air_Landscape",
+                    "resolution": "1180x820",
+                    "orientation": "landscape",
+                    "overflow": false,
+                    "screenshot": "output/responsive_audit/iPad_Air_Landscape.png"
+                },
+                {
+                    "viewport": "Laptop_HD",
+                    "resolution": "1366x768",
+                    "orientation": "landscape",
+                    "overflow": false,
+                    "screenshot": "output/responsive_audit/Laptop_HD.png"
+                },
+                {
+                    "viewport": "Desktop_FHD",
+                    "resolution": "1920x1080",
+                    "orientation": "landscape",
+                    "overflow": false,
+                    "screenshot": "output/responsive_audit/Desktop_FHD.png"
+                }
+            ]
         },
         "test_passed": true,
         "test_counts": {
@@ -41,11 +112,6 @@
             "metadata": {
                 "output": "node:internal/modules/cjs/loader:1433\n  throw err;\n  ^\n\nError: Cannot find module 'playwright'\nRequire stack:\n- /home/runner/work/Mythril/Mythril/modules/visualization/tests/test_ui.js\n    at Function._resolveFilename (node:internal/modules/cjs/loader:1430:15)\n    at defaultResolveImpl (node:internal/modules/cjs/loader:1040:19)\n    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1045:22)\n    at Function._load (node:internal/modules/cjs/loader:1216:25)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:254:19)\n    at Module.require (node:internal/modules/cjs/loader:1527:12)\n    at require (node:internal/modules/helpers:147:16)\n    at Object.<anonymous> (/home/runner/work/Mythril/Mythril/modules/visualization/tests/test_ui.js:1:22)\n    at Module._compile (node:internal/modules/cjs/loader:1781:14)\n    at Object..js (node:internal/modules/cjs/loader:1913:10) {\n  code: 'MODULE_NOT_FOUND',\n  requireStack: [\n    '/home/runner/work/Mythril/Mythril/modules/visualization/tests/test_ui.js'\n  ]\n}\n\nNode.js v22.23.1\n"
             }
-        },
-        {
-            "category": "responsive",
-            "message": "Playwright audit execution error: No module named 'playwright'",
-            "metadata": {}
         }
     ]
 }
