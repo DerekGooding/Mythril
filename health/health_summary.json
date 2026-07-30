@@ -1,6 +1,6 @@
 {
     "is_healthy": false,
-    "failure_count": 1,
+    "failure_count": 2,
     "metrics": {
         "monoliths": 0,
         "coverage": 75.02,
@@ -20,6 +20,12 @@
         },
         "visualization_passed": false,
         "pending_feedback": 0,
+        "responsive_passed": {
+            "passed": false,
+            "viewports_tested": 10,
+            "violations": 1,
+            "details": []
+        },
         "test_passed": true,
         "test_counts": {
             "total": 0,
@@ -35,6 +41,11 @@
             "metadata": {
                 "output": "node:internal/modules/cjs/loader:1433\n  throw err;\n  ^\n\nError: Cannot find module 'playwright'\nRequire stack:\n- /home/runner/work/Mythril/Mythril/modules/visualization/tests/test_ui.js\n    at Function._resolveFilename (node:internal/modules/cjs/loader:1430:15)\n    at defaultResolveImpl (node:internal/modules/cjs/loader:1040:19)\n    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1045:22)\n    at Function._load (node:internal/modules/cjs/loader:1216:25)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:254:19)\n    at Module.require (node:internal/modules/cjs/loader:1527:12)\n    at require (node:internal/modules/helpers:147:16)\n    at Object.<anonymous> (/home/runner/work/Mythril/Mythril/modules/visualization/tests/test_ui.js:1:22)\n    at Module._compile (node:internal/modules/cjs/loader:1781:14)\n    at Object..js (node:internal/modules/cjs/loader:1913:10) {\n  code: 'MODULE_NOT_FOUND',\n  requireStack: [\n    '/home/runner/work/Mythril/Mythril/modules/visualization/tests/test_ui.js'\n  ]\n}\n\nNode.js v22.23.1\n"
             }
+        },
+        {
+            "category": "responsive",
+            "message": "Playwright audit execution error: No module named 'playwright'",
+            "metadata": {}
         }
     ]
 }
