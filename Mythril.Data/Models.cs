@@ -1,3 +1,4 @@
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Mythril.Data;
@@ -145,6 +146,48 @@ public readonly record struct RefinementData(CadenceAbility Ability, Item InputI
 }
 
 // Unified Content Graph
+public class FlexibleInEdgesConverter : JsonConverter<Dictionary<string, List<string>>>
+{
+    public override Dictionary<string, List<string>> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        var result = new Dictionary<string, List<string>>();
+        if (reader.TokenType != JsonTokenType.StartObject)
+            return result;
+
+        using var doc = JsonDocument.ParseValue(ref reader);
+        foreach (var prop in doc.RootElement.EnumerateObject())
+        {
+            var list = new List<string>();
+            if (prop.Value.ValueKind == JsonValueKind.Array)
+            {
+                foreach (var item in prop.Value.EnumerateArray())
+                {
+                    if (item.ValueKind == JsonValueKind.String)
+                    {
+                        var str = item.GetString();
+                        if (str != null) list.Add(str);
+                    }
+                    else if (item.ValueKind == JsonValueKind.Object)
+                    {
+                        if (item.TryGetProperty("targetId", out var targetProp) && targetProp.ValueKind == JsonValueKind.String)
+                        {
+                            var targetId = targetProp.GetString();
+                            if (targetId != null) list.Add(targetId);
+                        }
+                    }
+                }
+            }
+            result[prop.Name] = list;
+        }
+        return result;
+    }
+
+    public override void Write(Utf8JsonWriter writer, Dictionary<string, List<string>> value, JsonSerializerOptions options)
+    {
+        JsonSerializer.Serialize(writer, value, options);
+    }
+}
+
 public class ContentNode
 {
     [JsonPropertyName("id")]
@@ -160,6 +203,7 @@ public class ContentNode
     public Dictionary<string, object> Data { get; set; } = [];
 
     [JsonPropertyName("in_edges")]
+    [JsonConverter(typeof(FlexibleInEdgesConverter))]
     public Dictionary<string, List<string>> InEdges { get; set; } = []; // RelationType -> [NodeIds]
 
     [JsonPropertyName("out_edges")]

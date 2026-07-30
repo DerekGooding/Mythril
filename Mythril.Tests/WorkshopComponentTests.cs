@@ -22,7 +22,7 @@ public class WorkshopComponentTests : BunitTestBase
         // Assert
         var icon = cut.Find("[data-testid='character-mini-icon-protagonist']");
         Assert.AreEqual("person", icon.TextContent.Trim());
-        Assert.Contains("#ff4444", icon.GetAttribute("style"));
+        Assert.Contains("#ff4444", icon.GetAttribute("style")!);
     }
 
     [TestMethod]

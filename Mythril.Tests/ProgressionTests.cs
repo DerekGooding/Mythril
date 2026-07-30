@@ -207,5 +207,5 @@ public class ProgressionTests : BunitTestBase
         Assert.IsTrue(ResourceManager.IsInProgress(data));
     }
 
-    public TestContext TestContext { get; set; }
+    public new TestContext TestContext { get; set; }
 }

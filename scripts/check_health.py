@@ -91,7 +91,7 @@ def check_mutation():
 def check_monoliths():
     print("--- Checking Monoliths ---")
     count = 0
-    exclude_dirs = {"bin", "obj", "node_modules", "lib", "scripts"}
+    exclude_dirs = {"bin", "obj", "node_modules", "lib", "scripts", "output"}
     ignored_files = ["Models.cs", "Cadences.cs", "Program.cs", "ReachabilitySimulator.cs", "FlowSimulator.cs", "LatticeSimulator.cs", "RoutedSimulator.cs", "GameStateStore.cs", "GameStateStore_Reducer.cs", "GameState.cs", "GameActions.cs", "AdditionalUIComponentTests.cs", "ResourceManager_Inventory.cs"]
     
     for path in SOURCE_DIR.rglob("*"):
