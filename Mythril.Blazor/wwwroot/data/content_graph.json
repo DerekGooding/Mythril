@@ -3880,5 +3880,320 @@
         }
       ]
     }
+  },
+  {
+    "id": "location_void_rift",
+    "type": "Location",
+    "name": "Void Rift",
+    "data": {
+      "region_type": "Library"
+    },
+    "in_edges": {
+      "requires_quest": [
+        "quest_defeat_the_mythril_construct"
+      ]
+    },
+    "out_edges": {
+      "contains": [
+        {
+          "targetId": "quest_breach_the_rift",
+          "quantity": 1
+        },
+        {
+          "targetId": "quest_attune_void_crystals",
+          "quantity": 1
+        },
+        {
+          "targetId": "quest_harvest_void_essence",
+          "quantity": 1
+        },
+        {
+          "targetId": "quest_seal_lesser_rift_nodes",
+          "quantity": 1
+        },
+        {
+          "targetId": "quest_commune_with_the_fallen",
+          "quantity": 1
+        },
+        {
+          "targetId": "quest_forge_the_mythril_aegis",
+          "quantity": 1
+        },
+        {
+          "targetId": "quest_defeat_the_void_sovereign",
+          "quantity": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "item_void_shard",
+    "type": "Item",
+    "name": "Void Shard",
+    "data": {
+      "description": "A fragment of crystallised void energy. Extremely unstable.",
+      "item_type": "Material"
+    },
+    "in_edges": {},
+    "out_edges": {}
+  },
+  {
+    "id": "item_void_essence",
+    "type": "Item",
+    "name": "Void Essence",
+    "data": {
+      "description": "Pure distilled void energy, refined from Void Shards.",
+      "item_type": "Material"
+    },
+    "in_edges": {},
+    "out_edges": {}
+  },
+  {
+    "id": "item_mythril_aegis",
+    "type": "Item",
+    "name": "Mythril Aegis",
+    "data": {
+      "description": "An ancient ward forged from Mythril and void energy. Required to face the Sovereign.",
+      "item_type": "KeyItem"
+    },
+    "in_edges": {},
+    "out_edges": {}
+  },
+  {
+    "id": "item_sovereign_core",
+    "type": "Item",
+    "name": "Sovereign Core",
+    "data": {
+      "description": "The crystallised essence of the Void Sovereign — the true source of Mythril power.",
+      "item_type": "KeyItem"
+    },
+    "in_edges": {},
+    "out_edges": {}
+  },
+  {
+    "id": "quest_breach_the_rift",
+    "type": "Quest",
+    "name": "Breach the Rift",
+    "data": {
+      "description": "The Mythril Construct's defeat has torn reality. Step through the rift before it closes.",
+      "duration": 300,
+      "quest_type": "Single",
+      "primary_stat": "Magic",
+      "required_stats": {},
+      "stat_rewards": {}
+    },
+    "in_edges": {
+      "requires_quest": [
+        "quest_defeat_the_mythril_construct"
+      ]
+    },
+    "out_edges": {
+      "rewards": [
+        {
+          "targetId": "item_void_shard",
+          "quantity": 5
+        }
+      ]
+    }
+  },
+  {
+    "id": "quest_attune_void_crystals",
+    "type": "Quest",
+    "name": "Attune Void Crystals",
+    "data": {
+      "description": "The Void Rift pulses with latent energy. Careful attuning yields fragments of its power.",
+      "duration": 180,
+      "quest_type": "Recurring",
+      "primary_stat": "Magic",
+      "required_stats": {
+        "Magic": 150
+      },
+      "stat_rewards": {}
+    },
+    "in_edges": {
+      "requires_quest": [
+        "quest_breach_the_rift"
+      ]
+    },
+    "out_edges": {
+      "rewards": [
+        {
+          "targetId": "item_void_shard",
+          "quantity": 2
+        }
+      ]
+    }
+  },
+  {
+    "id": "quest_harvest_void_essence",
+    "type": "Quest",
+    "name": "Harvest Void Essence",
+    "data": {
+      "description": "Deep within the rift, pure void energy coalesces into harvestable form — but only the spiritually attuned can safely collect it.",
+      "duration": 240,
+      "quest_type": "Recurring",
+      "primary_stat": "Spirit",
+      "required_stats": {
+        "Spirit": 25,
+        "Magic": 100
+      },
+      "stat_rewards": {}
+    },
+    "in_edges": {
+      "requires_quest": [
+        "quest_attune_void_crystals"
+      ]
+    },
+    "out_edges": {
+      "rewards": [
+        {
+          "targetId": "item_void_essence",
+          "quantity": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "quest_seal_lesser_rift_nodes",
+    "type": "Quest",
+    "name": "Seal Lesser Rift Nodes",
+    "data": {
+      "description": "Smaller rifts spawn void creatures that threaten the surrounding lands. Hunt them down and seal each breach.",
+      "duration": 150,
+      "quest_type": "Recurring",
+      "primary_stat": "Strength",
+      "required_stats": {
+        "Strength": 180,
+        "Speed": 150
+      },
+      "stat_rewards": {}
+    },
+    "in_edges": {
+      "requires_quest": [
+        "quest_breach_the_rift"
+      ]
+    },
+    "out_edges": {
+      "rewards": [
+        {
+          "targetId": "item_void_shard",
+          "quantity": 3
+        },
+        {
+          "targetId": "item_shadow_i",
+          "quantity": 2
+        }
+      ]
+    }
+  },
+  {
+    "id": "quest_commune_with_the_fallen",
+    "type": "Quest",
+    "name": "Commune with the Fallen",
+    "data": {
+      "description": "Fragments of the Mythril Construct's consciousness linger in the rift. Commune with them to learn the Sovereign's weakness.",
+      "duration": 900,
+      "quest_type": "Single",
+      "primary_stat": "Spirit",
+      "required_stats": {
+        "Spirit": 25,
+        "Magic": 120
+      },
+      "stat_rewards": {}
+    },
+    "in_edges": {
+      "requires_quest": [
+        "quest_harvest_void_essence"
+      ]
+    },
+    "out_edges": {
+      "rewards": [
+        {
+          "targetId": "item_void_essence",
+          "quantity": 10
+        }
+      ]
+    }
+  },
+  {
+    "id": "quest_forge_the_mythril_aegis",
+    "type": "Quest",
+    "name": "Forge the Mythril Aegis",
+    "data": {
+      "description": "The Fallen's knowledge reveals an ancient forging ritual. Combine void essence with Mythril to create a ward strong enough to face the Sovereign.",
+      "duration": 1800,
+      "quest_type": "Single",
+      "primary_stat": "Magic",
+      "required_stats": {
+        "Magic": 200,
+        "Strength": 180
+      },
+      "stat_rewards": {}
+    },
+    "in_edges": {
+      "requires_quest": [
+        "quest_commune_with_the_fallen"
+      ]
+    },
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_void_essence",
+          "quantity": 2
+        },
+        {
+          "targetId": "item_mythril_spark",
+          "quantity": 1
+        },
+        {
+          "targetId": "item_pure_water_crystal",
+          "quantity": 2
+        }
+      ],
+      "rewards": [
+        {
+          "targetId": "item_mythril_aegis",
+          "quantity": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "quest_defeat_the_void_sovereign",
+    "type": "Quest",
+    "name": "Defeat the Void Sovereign",
+    "data": {
+      "description": "The Sovereign of the Void — the primordial force that created Mythril and now seeks to unmake the world. Only those who have mastered every art of magic and combat can hope to stand against it.",
+      "duration": 3600,
+      "quest_type": "Single",
+      "primary_stat": "Vitality",
+      "required_stats": {
+        "Strength": 180,
+        "Vitality": 180,
+        "Magic": 180,
+        "Speed": 150,
+        "Spirit": 25
+      },
+      "stat_rewards": {}
+    },
+    "in_edges": {
+      "requires_quest": [
+        "quest_forge_the_mythril_aegis"
+      ]
+    },
+    "out_edges": {
+      "consumes": [
+        {
+          "targetId": "item_mythril_aegis",
+          "quantity": 1
+        }
+      ],
+      "rewards": [
+        {
+          "targetId": "item_sovereign_core",
+          "quantity": 1
+        }
+      ]
+    }
   }
 ]

@@ -597,5 +597,307 @@
       "Strength": 50
     },
     "StatRewards": {}
+  },
+  {
+    "Quest": "Breach the Rift",
+    "DurationSeconds": 300,
+    "Type": "Single",
+    "PrimaryStat": "Magic",
+    "RequiredStats": {},
+    "StatRewards": {},
+    "Requirements": [],
+    "Rewards": [
+      {
+        "Item": "Void Shard",
+        "Quantity": 5
+      }
+    ],
+    "Effects": []
+  },
+  {
+    "Quest": "Attune Void Crystals",
+    "DurationSeconds": 180,
+    "Type": "Recurring",
+    "PrimaryStat": "Magic",
+    "RequiredStats": {
+      "Magic": 150
+    },
+    "StatRewards": {},
+    "Requirements": [],
+    "Rewards": [
+      {
+        "Item": "Void Shard",
+        "Quantity": 2
+      }
+    ],
+    "Effects": []
+  },
+  {
+    "Quest": "Harvest Void Essence",
+    "DurationSeconds": 240,
+    "Type": "Recurring",
+    "PrimaryStat": "Spirit",
+    "RequiredStats": {
+      "Spirit": 25,
+      "Magic": 100
+    },
+    "StatRewards": {},
+    "Requirements": [],
+    "Rewards": [
+      {
+        "Item": "Void Essence",
+        "Quantity": 1
+      }
+    ],
+    "Effects": []
+  },
+  {
+    "Quest": "Seal Lesser Rift Nodes",
+    "DurationSeconds": 150,
+    "Type": "Recurring",
+    "PrimaryStat": "Strength",
+    "RequiredStats": {
+      "Strength": 180,
+      "Speed": 150
+    },
+    "StatRewards": {},
+    "Requirements": [],
+    "Rewards": [
+      {
+        "Item": "Void Shard",
+        "Quantity": 3
+      },
+      {
+        "Item": "Shadow I",
+        "Quantity": 2
+      }
+    ],
+    "Effects": []
+  },
+  {
+    "Quest": "Commune with the Fallen",
+    "DurationSeconds": 900,
+    "Type": "Single",
+    "PrimaryStat": "Spirit",
+    "RequiredStats": {
+      "Spirit": 25,
+      "Magic": 120
+    },
+    "StatRewards": {},
+    "Requirements": [],
+    "Rewards": [
+      {
+        "Item": "Void Essence",
+        "Quantity": 10
+      }
+    ],
+    "Effects": []
+  },
+  {
+    "Quest": "Forge the Mythril Aegis",
+    "DurationSeconds": 1800,
+    "Type": "Single",
+    "PrimaryStat": "Magic",
+    "RequiredStats": {
+      "Magic": 200,
+      "Strength": 180
+    },
+    "StatRewards": {},
+    "Requirements": [
+      {
+        "Item": "Void Essence",
+        "Quantity": 2
+      },
+      {
+        "Item": "Mythril Spark",
+        "Quantity": 1
+      },
+      {
+        "Item": "Pure Water Crystal",
+        "Quantity": 2
+      }
+    ],
+    "Rewards": [
+      {
+        "Item": "Mythril Aegis",
+        "Quantity": 1
+      }
+    ],
+    "Effects": []
+  },
+  {
+    "Quest": "Defeat the Void Sovereign",
+    "DurationSeconds": 3600,
+    "Type": "Single",
+    "PrimaryStat": "Vitality",
+    "RequiredStats": {
+      "Strength": 180,
+      "Vitality": 180,
+      "Magic": 180,
+      "Speed": 150,
+      "Spirit": 25
+    },
+    "StatRewards": {},
+    "Requirements": [
+      {
+        "Item": "Mythril Aegis",
+        "Quantity": 1
+      }
+    ],
+    "Rewards": [
+      {
+        "Item": "Sovereign Core",
+        "Quantity": 1
+      }
+    ],
+    "Effects": []
+  },
+  {
+    "Quest": "Forage for Reagents",
+    "DurationSeconds": 90,
+    "Type": "Recurring",
+    "PrimaryStat": "Speed",
+    "RequiredStats": {},
+    "StatRewards": {},
+    "Requirements": [],
+    "Rewards": [
+      {
+        "Item": "Potion",
+        "Quantity": 1
+      }
+    ],
+    "Effects": []
+  },
+  {
+    "Quest": "Gather Luminous Algae",
+    "DurationSeconds": 75,
+    "Type": "Recurring",
+    "PrimaryStat": "Speed",
+    "RequiredStats": {
+      "Speed": 25
+    },
+    "StatRewards": {},
+    "Requirements": [],
+    "Rewards": [
+      {
+        "Item": "Luminous Algae",
+        "Quantity": 2
+      }
+    ],
+    "Effects": []
+  },
+  {
+    "Quest": "Hunt Oasis Guardians",
+    "DurationSeconds": 120,
+    "Type": "Recurring",
+    "PrimaryStat": "Strength",
+    "RequiredStats": {
+      "Strength": 35,
+      "Speed": 25
+    },
+    "StatRewards": {},
+    "Requirements": [],
+    "Rewards": [
+      {
+        "Item": "Oasis Scale",
+        "Quantity": 1
+      }
+    ],
+    "Effects": []
+  },
+  {
+    "Quest": "Channel Oasis Waters",
+    "DurationSeconds": 600,
+    "Type": "Single",
+    "PrimaryStat": "Magic",
+    "RequiredStats": {
+      "Magic": 50
+    },
+    "StatRewards": {},
+    "Requirements": [],
+    "Rewards": [
+      {
+        "Item": "Pure Water Crystal",
+        "Quantity": 3
+      }
+    ],
+    "Effects": []
+  },
+  {
+    "Quest": "Spirit Walk",
+    "DurationSeconds": 300,
+    "Type": "Recurring",
+    "PrimaryStat": "Spirit",
+    "RequiredStats": {
+      "Spirit": 50
+    },
+    "StatRewards": {},
+    "Requirements": [],
+    "Rewards": [
+      {
+        "Item": "Shadow I",
+        "Quantity": 3
+      }
+    ],
+    "Effects": []
+  },
+  {
+    "Quest": "Master the Void",
+    "DurationSeconds": 900,
+    "Type": "Single",
+    "PrimaryStat": "Spirit",
+    "RequiredStats": {
+      "Spirit": 100
+    },
+    "StatRewards": {},
+    "Requirements": [],
+    "Rewards": [
+      {
+        "Item": "Shadow I",
+        "Quantity": 20
+      }
+    ],
+    "Effects": []
+  },
+  {
+    "Quest": "Harvest Geodes",
+    "DurationSeconds": 150,
+    "Type": "Recurring",
+    "PrimaryStat": "Strength",
+    "RequiredStats": {
+      "Strength": 40
+    },
+    "StatRewards": {},
+    "Requirements": [],
+    "Rewards": [
+      {
+        "Item": "Crystal Shards",
+        "Quantity": 3
+      }
+    ],
+    "Effects": []
+  },
+  {
+    "Quest": "Defeat the Crystal Warden",
+    "DurationSeconds": 1200,
+    "Type": "Single",
+    "PrimaryStat": "Strength",
+    "RequiredStats": {
+      "Strength": 60,
+      "Magic": 40
+    },
+    "StatRewards": {},
+    "Requirements": [],
+    "Rewards": [
+      {
+        "Item": "Mythril Spark",
+        "Quantity": 1
+      },
+      {
+        "Item": "Crystal Shards",
+        "Quantity": 20
+      }
+    ],
+    "Effects": []
   }
 ]

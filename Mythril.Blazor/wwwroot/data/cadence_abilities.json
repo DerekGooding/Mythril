@@ -122,5 +122,21 @@
   {
     "Name": "Alchemy II",
     "Description": "Convert advanced items into gold. Think of it like selling your goods. "
+  },
+  {
+    "Name": "J-Spirit",
+    "Description": "Allows junctioning magic to the Spirit stat"
+  },
+  {
+    "Name": "Refine Shadow",
+    "Description": "Distil the essence of slain foes into Shadow magic"
+  },
+  {
+    "Name": "Lethal Cadence",
+    "Description": "Enhances combat quest speed through perfected technique"
+  },
+  {
+    "Name": "Synthesis I",
+    "Description": "Master the art of compounding elemental spells into Tier 2 magic"
   }
 ]

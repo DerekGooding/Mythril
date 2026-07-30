@@ -8,7 +8,7 @@ public partial class RoutedSimulator(
     ItemRefinements refinements, StatAugments statAugments, Stats stats)
 {
     private readonly HashSet<string> _farmingStack = [];
-    public string EndQuest { get; set; } = "Defeat the Mythril Construct";
+    public string EndQuest { get; set; } = "Defeat the Void Sovereign";
 
     public void Run(SimulationSeed? seed = null)
     {

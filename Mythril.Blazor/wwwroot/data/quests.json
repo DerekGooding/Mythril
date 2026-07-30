@@ -130,5 +130,50 @@
   {
     "Name": "Heavy Training",
     "Description": "Push your body to achieve permanent physical growth."
+  },
+  {
+    "Name": "Breach the Rift"
+  },
+  {
+    "Name": "Attune Void Crystals"
+  },
+  {
+    "Name": "Harvest Void Essence"
+  },
+  {
+    "Name": "Seal Lesser Rift Nodes"
+  },
+  {
+    "Name": "Commune with the Fallen"
+  },
+  {
+    "Name": "Forge the Mythril Aegis"
+  },
+  {
+    "Name": "Defeat the Void Sovereign"
+  },
+  {
+    "Name": "Forage for Reagents"
+  },
+  {
+    "Name": "Gather Luminous Algae"
+  },
+  {
+    "Name": "Hunt Oasis Guardians"
+  },
+  {
+    "Name": "Channel Oasis Waters"
+  },
+  {
+    "Name": "Spirit Walk"
+  },
+  {
+    "Name": "Master the Void"
+  },
+  {
+    "Name": "Harvest Geodes"
+  },
+  {
+    "Name": "Defeat the Crystal Warden"
   }
 ]

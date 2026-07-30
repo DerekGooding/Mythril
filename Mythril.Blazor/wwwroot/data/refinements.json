@@ -178,5 +178,53 @@
       }
     ],
     "Ability": "Alchemy II"
+  },
+  {
+    "Ability": "Refine Shadow",
+    "PrimaryStat": "Spirit",
+    "Recipes": [
+      {
+        "InputItem": "Oasis Scale",
+        "InputQuantity": 3,
+        "OutputItem": "Shadow I",
+        "OutputQuantity": 5
+      }
+    ]
+  },
+  {
+    "Ability": "Synthesis I",
+    "PrimaryStat": "Magic",
+    "Recipes": [
+      {
+        "InputItem": "Fire I",
+        "InputQuantity": 5,
+        "OutputItem": "Fire II",
+        "OutputQuantity": 1
+      },
+      {
+        "InputItem": "Ice I",
+        "InputQuantity": 5,
+        "OutputItem": "Ice II",
+        "OutputQuantity": 1
+      },
+      {
+        "InputItem": "Lightning I",
+        "InputQuantity": 5,
+        "OutputItem": "Lightning II",
+        "OutputQuantity": 1
+      },
+      {
+        "InputItem": "Earth I",
+        "InputQuantity": 5,
+        "OutputItem": "Earth II",
+        "OutputQuantity": 1
+      },
+      {
+        "InputItem": "Water I",
+        "InputQuantity": 5,
+        "OutputItem": "Water II",
+        "OutputQuantity": 1
+      }
+    ]
   }
 ]

@@ -190,5 +190,95 @@
     "Requires": [
       "Defeat the Mythril Construct"
     ]
+  },
+  {
+    "Quest": "Breach the Rift",
+    "Requires": [
+      "Defeat the Mythril Construct"
+    ]
+  },
+  {
+    "Quest": "Attune Void Crystals",
+    "Requires": [
+      "Breach the Rift"
+    ]
+  },
+  {
+    "Quest": "Harvest Void Essence",
+    "Requires": [
+      "Attune Void Crystals"
+    ]
+  },
+  {
+    "Quest": "Seal Lesser Rift Nodes",
+    "Requires": [
+      "Breach the Rift"
+    ]
+  },
+  {
+    "Quest": "Commune with the Fallen",
+    "Requires": [
+      "Harvest Void Essence"
+    ]
+  },
+  {
+    "Quest": "Forge the Mythril Aegis",
+    "Requires": [
+      "Commune with the Fallen"
+    ]
+  },
+  {
+    "Quest": "Defeat the Void Sovereign",
+    "Requires": [
+      "Forge the Mythril Aegis"
+    ]
+  },
+  {
+    "Quest": "Forage for Reagents",
+    "Requires": [
+      "Chop Wood"
+    ]
+  },
+  {
+    "Quest": "Gather Luminous Algae",
+    "Requires": [
+      "Locate the Hidden Oasis"
+    ]
+  },
+  {
+    "Quest": "Hunt Oasis Guardians",
+    "Requires": [
+      "Gather Luminous Algae"
+    ]
+  },
+  {
+    "Quest": "Channel Oasis Waters",
+    "Requires": [
+      "Locate the Hidden Oasis"
+    ]
+  },
+  {
+    "Quest": "Spirit Walk",
+    "Requires": [
+      "Rekindling the Spark"
+    ]
+  },
+  {
+    "Quest": "Master the Void",
+    "Requires": [
+      "Spirit Walk"
+    ]
+  },
+  {
+    "Quest": "Harvest Geodes",
+    "Requires": [
+      "Power the Forge"
+    ]
+  },
+  {
+    "Quest": "Defeat the Crystal Warden",
+    "Requires": [
+      "Shatter the Crystals"
+    ]
   }
 ]
