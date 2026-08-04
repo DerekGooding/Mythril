@@ -2,7 +2,7 @@ namespace Mythril.Data;
 
 public partial class ResourceManager
 {
-    public void StartQuest(object item, Character character, double initialSecondsElapsed = 0)
+    public void StartQuest(object item, Character character, double initialSecondsElapsed = 0, int? targetSlot = null)
     {
         lock (_questLock)
         {
@@ -31,9 +31,12 @@ public partial class ResourceManager
             var duration = Math.Max(1, (int)(baseDuration * Math.Pow(0.75, (statValue - 10) / 10.0)));
 
             // Find free slot
-            var usedSlots = ActiveQuests.Where(p => p.Character.Name == character.Name).Select(p => p.SlotIndex).ToHashSet();
-            var slot = 0;
-            while (usedSlots.Contains(slot)) slot++;
+            var slot = targetSlot ?? 0;
+            if (targetSlot == null)
+            {
+                var usedSlots = ActiveQuests.Where(p => p.Character.Name == character.Name).Select(p => p.SlotIndex).ToHashSet();
+                while (usedSlots.Contains(slot)) slot++;
+            }
 
             var progress = new QuestProgress(item, description, duration, character, slot) { SecondsElapsed = initialSecondsElapsed };
             _gameStore.Dispatch(new StartQuestAction(progress));

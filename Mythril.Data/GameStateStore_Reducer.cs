@@ -19,7 +19,7 @@ public partial class GameStore
             CancelQuestAction a => state with 
             { 
                 ActiveQuests = state.ActiveQuests.RemoveAll(q => q.StartTime == a.Progress.StartTime && q.Character.Name == a.Progress.Character.Name),
-                LastFinishedActivity = state.LastFinishedActivity.Remove(a.Progress.Character.Name)
+                LastFinishedActivity = state.LastFinishedActivity.Remove($"{a.Progress.Character.Name}_{a.Progress.SlotIndex}")
             },
             AssignCadenceAction a => AssignCadence(state, a),
             UnassignCadenceAction a => UnassignCadence(state, a),
@@ -188,11 +188,10 @@ public partial class GameStore
             if (oI != null) { overflowItem = oI; overflowQty = oQ; }
         }
 
-        // Remove from active quests
         return nextState with
         {
             ActiveQuests = nextState.ActiveQuests.RemoveAll(q => q.StartTime == progress.StartTime && q.Character.Name == progress.Character.Name),
-            LastFinishedActivity = nextState.LastFinishedActivity.SetItem(characterName, taskName)
+            LastFinishedActivity = nextState.LastFinishedActivity.SetItem($"{characterName}_{progress.SlotIndex}", taskName)
         };
     }
 
