@@ -12,9 +12,9 @@
         "stale_mutation": 0,
         "reachability_passed": {
             "passed": true,
-            "time": "110.7m",
-            "sustainable": 43,
-            "unsustainable": 5,
+            "time": "114.4m",
+            "sustainable": 44,
+            "unsustainable": 4,
             "completed": 43,
             "total": 48
         },
