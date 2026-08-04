@@ -6,7 +6,7 @@
     <div class="hand-controls p-2 d-flex justify-content-end gap-3 border-bottom">
         <div class="form-check form-switch">
             <input class="form-check-input" type="checkbox" id="hideCompletedQuests" @bind="_hideCompletedQuests" data-testid="hide-completed-quests" />
-            <label class="form-check-label small ms-1" for="hideCompletedQuests">Hide Done Quests</label>
+            <label class="form-check-label small ms-1" for="hideCompletedQuests">Hide Done One-Time Quests</label>
         </div>
         <div class="form-check form-switch">
             <input class="form-check-input" type="checkbox" id="hideCompletedLocations" @bind="_hideCompletedLocations" data-testid="hide-completed-locations" />
@@ -32,7 +32,12 @@
                         var quests = location.Quests.ToList();
                         if (_hideCompletedQuests)
                         {
-                            quests = quests.Where(q => !ResourceManager.IsCompleted(q.Name)).ToList();
+                            quests = quests.Where(q => 
+                            {
+                                var detail = ResourceManager.GetQuestDetails(q);
+                                var isOneTime = detail.Type == QuestType.Single || detail.Type == QuestType.Unlock;
+                                return !(isOneTime && ResourceManager.IsCompleted(q.Name));
+                            }).ToList();
                         }
                         var sortedQuests = quests.OrderBy(q => ResourceManager.GetQuestDetails(q).Type == QuestType.Recurring).ToList();
                     }

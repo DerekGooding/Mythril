@@ -70,7 +70,7 @@ public partial class RoutedSimulator
             foreach (var req in unlock.Requirements) FarmResource(state, req.Item, req.Quantity, steps);
             foreach (var req in unlock.Requirements) SubtractFromInventory(state, req.Item.Name, req.Quantity);
         }
-        state.CurrentTime += 30.0 * Math.Pow(0.75, (state.CurrentStats.GetValueOrDefault(unlock.PrimaryStat ?? "Magic", 10) - 10) / 10.0);
+        state.CurrentTime += Math.Max(0.5, 30.0 * Math.Pow(0.75, (state.CurrentStats.GetValueOrDefault(unlock.PrimaryStat ?? "Magic", 10) - 10) / 10.0));
         state.UnlockedAbilities.Add($"{unlock.CadenceName}:{unlock.Ability.Name}");
         Console.WriteLine($"[DEBUG] Unlocked Ability: {unlock.CadenceName}:{unlock.Ability.Name} at {state.CurrentTime / 60.0:F1}m");
         UpdateStats(state, steps);
@@ -133,7 +133,7 @@ public partial class RoutedSimulator
             foreach (var req in detail.Requirements) FarmResource(state, req.Item, req.Quantity, steps);
             foreach (var req in detail.Requirements) SubtractFromInventory(state, req.Item.Name, req.Quantity);
         }
-        state.CurrentTime += detail.DurationSeconds * Math.Pow(0.75, (state.CurrentStats.GetValueOrDefault(detail.PrimaryStat ?? "Vitality", 10) - 10) / 10.0);
+        state.CurrentTime += Math.Max(0.5, detail.DurationSeconds * Math.Pow(0.75, (state.CurrentStats.GetValueOrDefault(detail.PrimaryStat ?? "Vitality", 10) - 10) / 10.0));
         state.CompletedQuests.Add(q.Name);
         if (detail.Rewards != null) foreach (var rew in detail.Rewards) state.Inventory[rew.Item.Name] = GetFromInventory(state, rew.Item.Name) + rew.Quantity;
         var cads = questToCadenceUnlocks[q];

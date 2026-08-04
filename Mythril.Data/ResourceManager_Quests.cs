@@ -28,7 +28,7 @@ public partial class ResourceManager
             // Apply stat-based duration scaling
             var primaryStat = item is QuestData q2 ? q2.PrimaryStat : (item is CadenceUnlock u2 ? u2.PrimaryStat : (item is RefinementData r2 ? r2.PrimaryStat : "Vitality"));
             double statValue = JunctionManager.GetStatValue(character, primaryStat);
-            var duration = (int)(baseDuration * Math.Pow(0.75, (statValue - 10) / 10.0));
+            var duration = Math.Max(1, (int)(baseDuration * Math.Pow(0.75, (statValue - 10) / 10.0)));
 
             // Find free slot
             var usedSlots = ActiveQuests.Where(p => p.Character.Name == character.Name).Select(p => p.SlotIndex).ToHashSet();

@@ -8,7 +8,7 @@ public partial class RoutedSimulator
     {
         FarmResource(state, input, recipe.InputQuantity, steps);
         SubtractFromInventory(state, input.Name, recipe.InputQuantity);
-        state.CurrentTime += 15.0 * Math.Pow(0.75, (state.CurrentStats.GetValueOrDefault(primaryStat, 10) - 10) / 10.0);
+        state.CurrentTime += Math.Max(0.5, 15.0 * Math.Pow(0.75, (state.CurrentStats.GetValueOrDefault(primaryStat, 10) - 10) / 10.0));
         state.Inventory[recipe.OutputItem.Name] = GetFromInventory(state, recipe.OutputItem.Name) + recipe.OutputQuantity;
         UpdateStats(state, steps);
     }

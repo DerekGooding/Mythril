@@ -66,7 +66,7 @@ public class FlowSimulator(
                 double statValue = reachabilityResult.StatMax.GetValueOrDefault(detail.PrimaryStat, 10);
                 flows.Add(new ActivityFlow(
                     quest.Name,
-                    detail.DurationSeconds * Math.Pow(0.75, (statValue - 10) / 10.0),
+                    Math.Max(0.5, detail.DurationSeconds * Math.Pow(0.75, (statValue - 10) / 10.0)),
                     detail.Requirements.ToImmutableDictionary(r => r.Item.Name, r => r.Quantity),
                     detail.Rewards.ToImmutableDictionary(r => r.Item.Name, r => r.Quantity)
                 ));
@@ -94,7 +94,7 @@ public class FlowSimulator(
                 double statValue = reachabilityResult.StatMax.GetValueOrDefault(refinementKvp.Value.PrimaryStat, 10);
                 flows.Add(new ActivityFlow(
                     flowName,
-                    15.0 * Math.Pow(0.75, (statValue - 10) / 10.0),
+                    Math.Max(0.5, 15.0 * Math.Pow(0.75, (statValue - 10) / 10.0)),
                     new Dictionary<string, int> { { inputItem.Name, recipe.InputQuantity } }.ToImmutableDictionary(),
                     new Dictionary<string, int> { { recipe.OutputItem.Name, recipe.OutputQuantity } }.ToImmutableDictionary()
                 ));
